@@ -81,7 +81,7 @@ struct EQVEC< VecTyp, 0> {
 };
 
 template<int N, class T>
-bool operator==(MVector<N, T>& v1, MVector<N, T>& v2) {
+bool operator==(MVector<N, T> v1, MVector<N, T> v2) {
 	return EQVEC<MVector<N, T>, N - 1>::com( v1, v2);
 }
 
@@ -98,7 +98,7 @@ struct DIFVEC< VecTyp, 0> {
 	}
 };
 template<int N, class T>
-bool operator!=(MVector<N, T>& v1, MVector<N, T>& v2) {
+bool operator!=(MVector<N, T> v1, MVector<N, T> v2) {
 	return DIFVEC<MVector<N, T>, N - 1>::com(v1, v2);
 }
 
@@ -243,19 +243,19 @@ struct DOT< VecTyp, 0, T> {
 	}
 };
 template<int N, class T>
-inline T operator*(MVector<N, T>& v1, MVector<N, T>& v2) {
+inline T dot(MVector<N, T>& v1, MVector<N, T>& v2) {
 	return DOT<MVector<N, T>, N - 1, T>::mul(v1, v2);
 }
 
 
 template<int N, class T>
-inline T length(MVector<N, T>& v1) {
-	return Sqrt(v1*v1);
+inline T length(MVector<N, T> v1) {
+	return Sqrt(dot(v1,v1));
 }
 
 template<int N, class T>
-inline MVector<N, T> normalize(MVector<N, T>& v1) {
-	return v1*InvSqrt(v1 * v1);
+inline MVector<N, T> normalize(MVector<N, T> v1) {
+	return v1*InvSqrt(dot(v1 , v1));
 }
 
 }
