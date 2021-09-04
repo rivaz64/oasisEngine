@@ -36,8 +36,8 @@ TEST(vectors, vector2) {
   EXPECT_EQ(vec2 - v2, Vector2f(2.f, 8.f));
   EXPECT_EQ(v2 * 7.f, Vector2f(21.f, 28.f));
   EXPECT_EQ(dot(v2, vec2), 63.f);
-  EXPECT_EQ(length(v2),5.f);
-  EXPECT_NEAR(length(normalize(v2)),1.f,.0001f);
+  EXPECT_EQ(lenght(v2),5.f);
+  EXPECT_NEAR(lenght(normalize(v2)),1.f,.0001f);
 }
 TEST(vectors, vector3) {
   EXPECT_EQ(12, sizeof(Vector3f));
@@ -47,8 +47,8 @@ TEST(vectors, vector3) {
   EXPECT_EQ(vec3 - v3, Vector3f(1.f, 2.f,4.f));
   EXPECT_EQ(vec3 * 7.f, Vector3f(14.f, 21.f,42.f));
   EXPECT_EQ(dot(v3, vec3), 17.f);
-  EXPECT_EQ(length(vec3), 7.f);
-  EXPECT_NEAR(length(normalize(vec3)), 1.f, .0001f);
+  EXPECT_EQ(lenght(vec3), 7.f);
+  EXPECT_NEAR(lenght(normalize(vec3)), 1.f, .0001f);
 }
 TEST(vectors, vector4) {
   EXPECT_EQ(16, sizeof(Vector4f));
@@ -58,6 +58,6 @@ TEST(vectors, vector4) {
   EXPECT_EQ(vec4 - v4, Vector4f(2.f, 2.f, 9.f,80.f));
   EXPECT_EQ(vec4 * 7.f, Vector4f(21.f, 28.f, 84.f,588.f));
   EXPECT_EQ(dot(v4, vec4), 383.f);
-  EXPECT_EQ(length(vec4), 85.f);
-  EXPECT_NEAR(length(normalize(vec4)), 1.f, .0001f);
+  EXPECT_EQ(lenght(vec4), 85.f);
+  EXPECT_NEAR(lenght(normalize(vec4)), 1.f, .0001f);
 }

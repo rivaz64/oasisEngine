@@ -242,17 +242,31 @@ struct DOT< VecTyp, 0, T> {
 		return v1[0] * v2[0];
 	}
 };
+/**
+ * @brief dot producct of 2 vectors of the same dimencion
+ * @param v1 
+ * @param v2 
+ * @return 
+*/
 template<int N, class T>
 inline T dot(MVector<N, T>& v1, MVector<N, T>& v2) {
 	return DOT<MVector<N, T>, N - 1, T>::mul(v1, v2);
 }
 
-
+/**
+ * @brief for calculating the lenght of a vector of any dimencion
+ * @param v1
+ * @return
+*/
 template<int N, class T>
-inline T length(MVector<N, T> v1) {
+inline T lenght(MVector<N, T> v1) {
 	return Sqrt(dot(v1,v1));
 }
-
+/**
+ * @brief calculates the unitary form of a vector of any dimencion
+ * @param v1
+ * @return
+*/
 template<int N, class T>
 inline MVector<N, T> normalize(MVector<N, T> v1) {
 	return v1*InvSqrt(dot(v1 , v1));
