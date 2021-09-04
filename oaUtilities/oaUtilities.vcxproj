@@ -174,14 +174,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\oaMath.h" />
+    <ClInclude Include="Include\oaMatrix.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformTypes.h" />
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
-    <ClInclude Include="Include\oaVector.h" />
+    <ClInclude Include="Include\oaVector2f.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Include\oaMath.cpp" />
+    <ClCompile Include="Source\oaMath.cpp" />
+    <ClCompile Include="Source\oaVector2f.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

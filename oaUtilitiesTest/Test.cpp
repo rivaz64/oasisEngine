@@ -1,6 +1,7 @@
 #include<gtest\gtest.h>
 #include"../oaUtilities/Include/oaMath.h"
-#include"../oaUtilities/Include/oaVector.h"
+#include"../oaUtilities/Include/oaVector2f.h"
+//#include"../oaUtilities/Include/oaMatrix.h"
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
@@ -31,15 +32,14 @@ TEST(math, basic) {
 TEST(vectors, vector2) {
   EXPECT_EQ(8, sizeof(Vector2f));
   Vector2f v2 = { 3.f,4.f }, vec2 = { 5.f,12.f };
-  EXPECT_TRUE(v2 != vec2);
   EXPECT_EQ(v2+vec2,Vector2f(8.f,16.f));
   EXPECT_EQ(vec2 - v2, Vector2f(2.f, 8.f));
   EXPECT_EQ(v2 * 7.f, Vector2f(21.f, 28.f));
-  EXPECT_EQ(dot(v2, vec2), 63.f);
-  EXPECT_EQ(lenght(v2),5.f);
-  EXPECT_NEAR(lenght(normalize(v2)),1.f,.0001f);
+  EXPECT_EQ(v2.dot(vec2), 63.f);
+  EXPECT_EQ(v2.len(),5.f);
+  EXPECT_NEAR(v2.normal().len(),1.f,.0001f);
 }
-TEST(vectors, vector3) {
+/*TEST(vectors, vector3) {
   EXPECT_EQ(12, sizeof(Vector3f));
   Vector3f v3 = { 1.f,1.f,2.f }, vec3 = { 2.f,3.f,6.f };
   EXPECT_TRUE(v3 != vec3);
@@ -61,3 +61,34 @@ TEST(vectors, vector4) {
   EXPECT_EQ(lenght(vec4), 85.f);
   EXPECT_NEAR(lenght(normalize(vec4)), 1.f, .0001f);
 }
+
+/*TEST(Matrix, basic) {
+  Matrix2f m2 = { {1.f,2.f},{3.f,4.f} };
+  EXPECT_TRUE(m2==m2);
+}
+TEST(Matrix, Matrix3) {
+  Matrix3f m(3.f);
+  EXPECT_TRUE(m == Matrix3f({ 3.f,0.f,0.f }, 
+                            { 0.f,3.f,0.f }, 
+                            { 0.f,0.f,3.f }));
+  Matrix3f m1 = {
+    {2.f,3.f,5.f},
+    {7.f,11.f,13.f},
+    {17.f,19.f,23.f}
+  };
+  Matrix3f m2 = {
+    {1.f,1.f,2.f},
+    {3.f,5.f,8.f},
+    {13.f,21.f,34.f}
+  };
+  EXPECT_EQ(m1+m2, Matrix3f({ 3.f,4.f,7.f },
+                            { 10.f,16.f,21.f },
+                            { 30.f,40.f,57.f }));
+}
+TEST(Matrix, Matrix4) {
+  Matrix4f m(5.f);
+  EXPECT_TRUE(m == Matrix4f({ 5.f,0.f,0.f,0.f },
+                            { 0.f,5.f,0.f,0.f },
+                            { 0.f,0.f,5.f,0.f },
+                            { 0.f,0.f,0.f,5.f }));
+}*/

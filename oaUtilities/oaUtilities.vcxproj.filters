@@ -30,12 +30,18 @@
     <ClInclude Include="Include\oaMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaVector.h">
+    <ClInclude Include="Include\oaMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\oaVector2f.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Include\oaMath.cpp">
+    <ClCompile Include="Source\oaMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaVector2f.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
