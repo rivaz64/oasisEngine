@@ -39,13 +39,13 @@ void Vector2f::operator*=(float v)
 	y *= v;
 }
 
-Vector2f Vector2f::operator/(float& v)
+Vector2f Vector2f::operator/(float v)
 {
 	v = 1.f / v;
 	return { x * v , y * v };
 }
 
-void Vector2f::operator/=(float& v)
+void Vector2f::operator/=(float v)
 {
 	v = 1.f / v;
 	x *= v;
@@ -67,10 +67,6 @@ Vector2f Vector2f::normal()
 	return *this*InvSqrt(x * x + y * y);
 }
 
-bool operator==(Vector2f& v1, Vector2f& v2)
-{
-	return false;
-}
 
 bool operator==(Vector2f v1, Vector2f v2)
 {

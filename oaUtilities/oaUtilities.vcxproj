@@ -180,10 +180,12 @@
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
     <ClInclude Include="Include\oaVector2f.h" />
+    <ClInclude Include="Include\oaVector3f.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
+    <ClCompile Include="Source\oaVector3f.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

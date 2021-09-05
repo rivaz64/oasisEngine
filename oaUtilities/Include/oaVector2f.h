@@ -19,8 +19,8 @@ class OA_UTILITY_EXPORT Vector2f
 	void operator-=(Vector2f& v);
 	Vector2f operator*(float v);
 	void operator*=(float v);
-	Vector2f operator/(float& v);
-	void operator/=(float& v);
+	Vector2f operator/(float v);
+	void operator/=(float v);
 	/**
 	 * @brief el producto punto de dos vectores
 	 * @param v 
@@ -40,5 +40,3 @@ class OA_UTILITY_EXPORT Vector2f
 };
 bool OA_UTILITY_EXPORT operator==(Vector2f v1, Vector2f v2);
 }
-
-
