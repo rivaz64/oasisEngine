@@ -6,7 +6,7 @@
 #include <deque>
 #include <string>
 #include <memory>
-#include <type_traits>
+#include<algorithm>
 namespace oaEngineSDK {
 /**
  * @brief wraper of the std::vector, can be changed in the future
@@ -68,11 +68,5 @@ using WString = std::wstring;
 */
 template <class T>
 using SPTr = std::shared_ptr<T>;
-/**
- * @brief wraper of the std::enable_if, can be changed in the future
- * @tparam B
- * @tparam T
-*/
-template< bool B, class T>
-using enableIf = std::enable_if<B, T>;
+
 }

@@ -3,6 +3,7 @@
 #include"../oaUtilities/Include/oaVector2f.h"
 #include"../oaUtilities/Include/oaVector3f.h"
 #include"../oaUtilities/Include/oaVector4f.h"
+#include"../oaUtilities/Include/oaMatrix3f.h"
 //#include"../oaUtilities/Include/oaMatrix.h"
 int main(int argc, char** argv)
 {
@@ -66,11 +67,8 @@ TEST(vectors, vector4) {
   EXPECT_NEAR(v4.normal().len(), 1.f, .0001f);
 }
 
-/*TEST(Matrix, basic) {
-  Matrix2f m2 = { {1.f,2.f},{3.f,4.f} };
-  EXPECT_TRUE(m2==m2);
-}
 TEST(Matrix, Matrix3) {
+  Vector3f v3 = { 1.f,1.f,2.f }, vec3 = { 2.f,3.f,6.f };
   Matrix3f m(3.f);
   EXPECT_TRUE(m == Matrix3f({ 3.f,0.f,0.f }, 
                             { 0.f,3.f,0.f }, 
@@ -88,8 +86,22 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(m1+m2, Matrix3f({ 3.f,4.f,7.f },
                             { 10.f,16.f,21.f },
                             { 30.f,40.f,57.f }));
+  EXPECT_EQ(m1 - m2, Matrix3f({ 1.f,2.f,3.f },
+                              { 4.f,6.f,5.f },
+                              { 4.f,-2.f,-11.f }));
+  EXPECT_EQ(m1 *11.f, Matrix3f({ 22.f,33.f,55.f },
+                             { 77.f,121.f,143.f },
+                             { 187.f,209.f,253.f }));
+  EXPECT_EQ(m1 * vec3, Vector3f(43,125,229));
+  EXPECT_EQ(m1 * m2, Matrix3f({ {76.f, 122.f, 198.f}, 
+                                {209.f, 335.f, 544.f}, 
+                                {373.f, 595.f, 968.f} }));
+  m1.transpose();
+  EXPECT_EQ(m1, Matrix3f({ {2.f, 7.f, 17.f},
+                           {3.f, 11.f, 19.f},
+                           {5.f, 13.f, 23.f} }));
 }
-TEST(Matrix, Matrix4) {
+/*TEST(Matrix, Matrix4) {
   Matrix4f m(5.f);
   EXPECT_TRUE(m == Matrix4f({ 5.f,0.f,0.f,0.f },
                             { 0.f,5.f,0.f,0.f },
