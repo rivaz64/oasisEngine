@@ -2,6 +2,7 @@
 #include"../oaUtilities/Include/oaMath.h"
 #include"../oaUtilities/Include/oaVector2f.h"
 #include"../oaUtilities/Include/oaVector3f.h"
+#include"../oaUtilities/Include/oaVector4f.h"
 //#include"../oaUtilities/Include/oaMatrix.h"
 int main(int argc, char** argv)
 {
@@ -53,16 +54,16 @@ TEST(vectors, vector3) {
   EXPECT_EQ(vec3.len(), 7.f);
   EXPECT_NEAR(v3.normal().len(), 1.f, .0001f);
 }
-/*TEST(vectors, vector4) {
+TEST(vectors, vector4) {
   EXPECT_EQ(16, sizeof(Vector4f));
   Vector4f v4 = { 1.f,2.f,3.f,4.f }, vec4 = { 3.f,4.f,12.f,84.f };
-  EXPECT_TRUE(v4 != vec4);
   EXPECT_EQ(v4 + vec4, Vector4f(4.f, 6.f, 15.f,88.f));
   EXPECT_EQ(vec4 - v4, Vector4f(2.f, 2.f, 9.f,80.f));
   EXPECT_EQ(vec4 * 7.f, Vector4f(21.f, 28.f, 84.f,588.f));
-  EXPECT_EQ(dot(v4, vec4), 383.f);
-  EXPECT_EQ(lenght(vec4), 85.f);
-  EXPECT_NEAR(lenght(normalize(vec4)), 1.f, .0001f);
+  EXPECT_EQ(vec4 / 2.f, Vector4f(1.5, 2.f, 6.f, 42.f));
+  EXPECT_EQ(v4.dot(vec4), 383.f);
+  EXPECT_EQ(vec4.len(), 85.f);
+  EXPECT_NEAR(v4.normal().len(), 1.f, .0001f);
 }
 
 /*TEST(Matrix, basic) {

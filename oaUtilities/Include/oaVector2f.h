@@ -3,7 +3,7 @@
 
 namespace oaEngineSDK {
 /**
- * @brief vector vidimensional de flotantes
+ * @brief bidimencional vector of floats
 */
 class OA_UTILITY_EXPORT Vector2f
 {
@@ -22,18 +22,18 @@ class OA_UTILITY_EXPORT Vector2f
 	Vector2f operator/(float v);
 	void operator/=(float v);
 	/**
-	 * @brief el producto punto de dos vectores
+	 * @brief dot product of to vector
 	 * @param v 
 	 * @return 
 	*/
 	float dot(Vector2f& v);
 	/**
-	 * @brief calcula la longitud del vector
+	 * @brief the lenght of the vector
 	 * @return 
 	*/
 	float len();
 	/**
-	 * @brief te regresa el vector en su forma unitaria
+	 * @brief the unitary form of the vector
 	 * @return 
 	*/
 	Vector2f normal();
