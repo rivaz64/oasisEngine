@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
+    <ClInclude Include="Include\oaMatrix4f.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformTypes.h" />
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
@@ -186,6 +187,7 @@
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />
+    <ClCompile Include="Source\oaMatrix4f.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />
     <ClCompile Include="Source\oaVector4f.cpp" />

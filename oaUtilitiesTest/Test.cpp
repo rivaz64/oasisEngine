@@ -4,7 +4,7 @@
 #include"../oaUtilities/Include/oaVector3f.h"
 #include"../oaUtilities/Include/oaVector4f.h"
 #include"../oaUtilities/Include/oaMatrix3f.h"
-//#include"../oaUtilities/Include/oaMatrix.h"
+#include"../oaUtilities/Include/oaMatrix4f.h"
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
@@ -101,10 +101,46 @@ TEST(Matrix, Matrix3) {
                            {3.f, 11.f, 19.f},
                            {5.f, 13.f, 23.f} }));
 }
-/*TEST(Matrix, Matrix4) {
+TEST(Matrix, Matrix4) {
+  Vector4f v4 = { 1.f,2.f,3.f,4.f }, vec4 = { 3.f,4.f,12.f,84.f };
   Matrix4f m(5.f);
   EXPECT_TRUE(m == Matrix4f({ 5.f,0.f,0.f,0.f },
                             { 0.f,5.f,0.f,0.f },
                             { 0.f,0.f,5.f,0.f },
                             { 0.f,0.f,0.f,5.f }));
-}*/
+  Matrix4f m1 = {
+    {1.f,2.f,3.f,4.f},
+    {2.f,5.f,7.f,3.f},
+    {4.f,10.f,14.f,6.f},
+    {3.f,4.f,2.f,7.f},
+  };
+  Matrix4f m2 = {
+    {1.f,2.f,-1.f,3.f},
+    {2.f,1.f,-2.f,3.f},
+    {3.f,1.f,2.f,1.f},
+    {1.f,-1.f,0.f,2.f},
+  };
+  EXPECT_EQ(m1 + m2, Matrix4f({ {2.f,4.f,2.f,7.f},
+                                {4.f,6.f,5.f,6.f},
+                                {7.f,11.f,16.f,7.f},
+                                {4.f,3.f,2.f,9.f}, }));
+  EXPECT_EQ(m1 - m2, Matrix4f({ {0.f,0.f,4.f,1.f},
+                                {0.f,4.f,9.f,0.f},
+                                {1.f,9.f,12.f,5.f},
+                                {2.f,5.f,2.f,5.f}, }));
+  EXPECT_EQ(m1 * 7.f, Matrix4f({ {7.f,14.f,21.f,28.f},
+                                 {14.f,35.f,49.f,21.f},
+                                 {28.f,70.f,98.f,42.f},
+                                 {21.f,28.f,14.f,49.f}, }));
+  EXPECT_EQ(m1 * vec4, Vector4f(383.f, 362.f, 724.f, 637.f));
+  EXPECT_EQ(m1 * m2, Matrix4f({ {18.f,3.f,1.f,20.f},
+                                {36.f,13.f,2.f,34.f},
+                                {72.f,26.f,4.f,68.f},
+                                {24.f,5.f,-7.f,37.f}, }));
+  m1.transpose();
+  EXPECT_EQ(m1, Matrix4f({ {1.f,2.f,4.f,3.f},
+                           {2.f,5.f,10.f,4.f},
+                           {3.f,7.f,14.f,2.f},
+                           {4.f,3.f,6.f,7.f}, }));
+
+}
