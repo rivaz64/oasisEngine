@@ -41,7 +41,9 @@ TEST(vectors, vector2) {
   EXPECT_EQ(v2 / 2.f, Vector2f(1.5f, 2.f));
   EXPECT_EQ(v2.dot(vec2), 63.f);
   EXPECT_EQ(v2.len(), 5.f);
-  EXPECT_NEAR(v2.normal().len(), 1.f, .0001f);
+  EXPECT_NEAR(v2.normal().len(), 1.f, .00001f);
+  EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .00001f);
+  EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .00001f);
 }
 
 TEST(vectors, vector3) {
@@ -54,6 +56,10 @@ TEST(vectors, vector3) {
   EXPECT_EQ(v3.dot(vec3), 17.f);
   EXPECT_EQ(vec3.len(), 7.f);
   EXPECT_NEAR(v3.normal().len(), 1.f, .0001f);
+  EXPECT_EQ(v3.cross(vec3), Vector3f(0.f, -2.f, 1.f));
+  EXPECT_NEAR(v3.project(vec3).x, 0.693878f, .00001f);
+  EXPECT_NEAR(v3.project(vec3).y, 1.04082f, .00001f);
+  EXPECT_NEAR(v3.project(vec3).z, 2.08163f, .00001f);
 }
 TEST(vectors, vector4) {
   EXPECT_EQ(16, sizeof(Vector4f));
@@ -65,6 +71,10 @@ TEST(vectors, vector4) {
   EXPECT_EQ(v4.dot(vec4), 383.f);
   EXPECT_EQ(vec4.len(), 85.f);
   EXPECT_NEAR(v4.normal().len(), 1.f, .0001f);
+  EXPECT_NEAR(v4.project(vec4).x, 0.159031f, .00001f);
+  EXPECT_NEAR(v4.project(vec4).y, 0.212042f, .00001f);
+  EXPECT_NEAR(v4.project(vec4).z, 0.636125f, .00001f);
+  EXPECT_NEAR(v4.project(vec4).w, 4.45287f, .00001f);
 }
 
 TEST(Matrix, Matrix3) {

@@ -52,19 +52,24 @@ void Vector2f::operator/=(float v)
 	y *= v;
 }
 
-float Vector2f::dot(Vector2f& v)
+inline float Vector2f::dot(Vector2f& v)
 {
 	return x*v.x+y*v.y;
 }
 
-float Vector2f::len()
+inline float Vector2f::len()
 {
 	return Sqrt(x * x + y * y);
 }
 
-Vector2f Vector2f::normal()
+inline Vector2f Vector2f::normal()
 {
 	return *this*InvSqrt(x * x + y * y);
+}
+
+inline Vector2f Vector2f::project(Vector2f& v)
+{
+	return v * (dot(v)/v.dot(v));
 }
 
 

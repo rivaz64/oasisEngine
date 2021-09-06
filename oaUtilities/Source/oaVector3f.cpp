@@ -57,7 +57,7 @@ void Vector3f::operator/=(float v)
 	z *= v;
 }
 
-float Vector3f::dot(Vector3f& v)
+inline float Vector3f::dot(Vector3f& v)
 {
 	return x * v.x + y * v.y + z * v.z;
 }
@@ -70,6 +70,16 @@ float Vector3f::len()
 Vector3f Vector3f::normal()
 {
 	return *this * InvSqrt(x * x + y * y + z * z);
+}
+
+Vector3f Vector3f::cross(Vector3f& v)
+{
+	return Vector3f(y*v.z-z*v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+}
+
+inline Vector3f Vector3f::project(Vector3f& v)
+{
+	return v * (dot(v) / v.dot(v));
 }
 
 

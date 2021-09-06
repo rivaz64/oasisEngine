@@ -23,11 +23,11 @@ public:
 	Vector3f operator/(float v);
 	void operator/=(float v);
 	/**
-	 * @brief dot product of to vector
+	 * @brief dot product of two vector
 	 * @param v
 	 * @return
 	*/
-	float dot(Vector3f& v);
+	inline float dot(Vector3f& v);
 	/**
 	 * @brief the lenght of the vector
 	 * @return
@@ -38,6 +38,18 @@ public:
 	 * @return
 	*/
 	Vector3f normal();
+	/**
+	 * @brief cross product of two vectors
+	 * @param v 
+	 * @return 
+	*/
+	Vector3f cross(Vector3f& v);
+	/**
+	 * @brief proyects this vector into v
+	 * @param v
+	 * @return
+	*/
+	inline Vector3f project(Vector3f& v);
 };
 bool OA_UTILITY_EXPORT operator==(Vector3f v1, Vector3f v2);
 }
