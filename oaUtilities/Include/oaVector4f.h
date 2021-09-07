@@ -8,10 +8,17 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector4f
 {
 public:
-	float x;
-	float y;
-	float z;
-	float w;
+	union {
+		float data[3];
+		struct {
+			float x;
+			float y;
+			float z;
+			float w;
+		};
+	};
+
+
 	Vector4f() = default;
 	Vector4f(float _x, float _y, float _z, float _w);
 	float& operator[](uint8 i);

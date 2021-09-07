@@ -8,8 +8,15 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector2f
 {
  public:
-	float x;
-	float y;
+
+	 union {
+		 float data[2];
+		 struct {
+			 float x;
+			 float y;
+		 };
+	 };
+	
 	Vector2f() = default;
 	Vector2f(float _x, float _y);
 	float& operator[](uint8 i);

@@ -1,4 +1,5 @@
 #include "..\Include\oaMatrix4f.h"
+#include "../Include/oaMatrix3f.h"
 namespace oaEngineSDK {
 Matrix4f::Matrix4f(Vector4f _a, Vector4f _b, Vector4f _c, Vector4f _d)
 {
@@ -118,6 +119,20 @@ void Matrix4f::transpose()
 	std::swap(a.w, d.x);
 	std::swap(b.w, d.y);
 	std::swap(c.w, d.z);
+}
+float Matrix4f::determinant()
+{
+	float ans=0;
+	Matrix3f tempMatrix;
+	tempMatrix = { { b.x,b.y,b.z }, { c.x,c.y,c.z }, { d.x,d.y,d.z } };
+	ans -= tempMatrix.determinant() * a.w;
+	tempMatrix.a = { a.x,a.y,a.z };
+	ans += tempMatrix.determinant() * b.w;
+	tempMatrix.b = { b.x,b.y,b.z };
+	ans -= tempMatrix.determinant() * c.w;
+	tempMatrix.c = { c.x,c.y,c.z };
+	ans += tempMatrix.determinant() * d.w;
+	return ans;
 }
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2)
 {

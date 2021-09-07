@@ -38,6 +38,11 @@ public:
 	 * @brief changes the rows for the columns
 	*/
 	void transpose();
+	/**
+	 * @brief calculates the determinant of the matrix
+	 * @return 
+	*/
+	float determinant();
 };
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2);
 }

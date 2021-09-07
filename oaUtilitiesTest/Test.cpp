@@ -110,6 +110,7 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(m1, Matrix3f({ {2.f, 7.f, 17.f},
                            {3.f, 11.f, 19.f},
                            {5.f, 13.f, 23.f} }));
+  EXPECT_EQ(m1.determinant(), -78.f);
 }
 TEST(Matrix, Matrix4) {
   Vector4f v4 = { 1.f,2.f,3.f,4.f }, vec4 = { 3.f,4.f,12.f,84.f };
@@ -152,5 +153,6 @@ TEST(Matrix, Matrix4) {
                            {2.f,5.f,10.f,4.f},
                            {3.f,7.f,14.f,2.f},
                            {4.f,3.f,6.f,7.f}, }));
+  EXPECT_EQ(m2.determinant(),-39.f);
 
 }

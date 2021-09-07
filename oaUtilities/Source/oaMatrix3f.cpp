@@ -94,6 +94,11 @@ void Matrix3f::transpose()
 	std::swap(a.z, c.x);
 	std::swap(b.z, c.y);
 }
+float Matrix3f::determinant()
+{
+	return a.x*b.y*c.z+a.y*b.z*c.x+a.z*b.x*c.y
+		-a.z*b.y*c.x-a.y*b.x*c.z-a.x*b.z*c.y;
+}
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;

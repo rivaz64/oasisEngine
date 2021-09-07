@@ -8,9 +8,15 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector3f
 {
 public:
-	float x;
-	float y;
-	float z;
+	union {
+		float data[3];
+		struct {
+			float x;
+			float y;
+			float z;
+		};
+	};
+	
 	Vector3f() = default;
 	Vector3f(float _x, float _y, float _z);
 	float& operator[](uint8 i);
