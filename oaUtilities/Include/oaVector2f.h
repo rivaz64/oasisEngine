@@ -33,23 +33,23 @@ class OA_UTILITY_EXPORT Vector2f
 	 * @param v 
 	 * @return 
 	*/
-	inline float dot(Vector2f& v);
+	float dot(Vector2f& v);
 	/**
 	 * @brief the lenght of the vector
 	 * @return 
 	*/
-	inline float len();
+	float len();
 	/**
 	 * @brief the unitary form of the vector
 	 * @return 
 	*/
-	inline Vector2f normal();
+	Vector2f normal();
 	/**
 	 * @brief proyects this vector into v
 	 * @param v 
 	 * @return 
 	*/
-	inline Vector2f project(Vector2f& v);
+	Vector2f project(Vector2f& v);
 };
 bool OA_UTILITY_EXPORT operator==(Vector2f v1, Vector2f v2);
 }

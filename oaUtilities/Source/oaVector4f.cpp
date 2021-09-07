@@ -63,7 +63,7 @@ void Vector4f::operator/=(float v)
 	w *= v;
 }
 
-inline float Vector4f::dot(Vector4f& v)
+float Vector4f::dot(Vector4f& v)
 {
 	return x * v.x + y * v.y + z * v.z+ w * v.w;
 }
@@ -78,7 +78,7 @@ Vector4f Vector4f::normal()
 	return *this * InvSqrt(x * x + y * y + z * z + w * w);
 }
 
-inline Vector4f Vector4f::project(Vector4f& v)
+Vector4f Vector4f::project(Vector4f& v)
 {
 	return v * (dot(v) / v.dot(v));
 }

@@ -35,7 +35,7 @@ public:
 	 * @param v
 	 * @return
 	*/
-	inline float dot(Vector4f& v);
+	float dot(Vector4f& v);
 	/**
 	 * @brief the lenght of the vector
 	 * @return
@@ -51,7 +51,7 @@ public:
 	 * @param v
 	 * @return
 	*/
-	inline Vector4f project(Vector4f& v);
+	Vector4f project(Vector4f& v);
 };
 bool OA_UTILITY_EXPORT operator==(Vector4f v1, Vector4f v2);
 }
