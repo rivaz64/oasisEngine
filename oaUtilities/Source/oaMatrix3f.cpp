@@ -125,6 +125,13 @@ Matrix3f Matrix3f::translateMatrix(Vector2f v)
 									{ 0.f,0.f,1.f });
 }
 
+Matrix3f Matrix3f::scaleMatrix(Vector2f v)
+{
+	return Matrix3f({ v.x,0.f,0.f },
+									{ 0.f,v.y,0.f },
+									{ 0.f,0.f,1.f });
+}
+
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;

@@ -125,6 +125,9 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(Matrix3f::translateMatrix(v2), Matrix3f({ {1.f, 0.f, 3.f},
                                                       {0.f, 1.f, 4.f},
                                                       {0.f, 0.f, 1.f} }));
+  EXPECT_EQ(Matrix3f::scaleMatrix(v2), Matrix3f({ {3.f, 0.f, 0.f},
+                                                      {0.f, 4.f, 0.f},
+                                                      {0.f, 0.f, 1.f} }));
 
 }
 TEST(Matrix, Matrix4) {
@@ -184,5 +187,9 @@ TEST(Matrix, Matrix4) {
                                                         {0.f, 1.f, 0.f,3.f},
                                                         {0.f, 0.f, 1.f,6.f},
                                                         {0.f, 0.f, 0.f,1.f} }));
+  EXPECT_EQ(Matrix4f::scaleMatrix(vec3), Matrix4f({ {2.f, 0.f, 0.f,0.f},
+                                                    {0.f, 3.f, 0.f,0.f},
+                                                    {0.f, 0.f, 6.f,0.f},
+                                                    {0.f, 0.f, 0.f,1.f} }));
 
 }

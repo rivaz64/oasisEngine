@@ -37,14 +37,55 @@ public:
 	*/
 	Matrix3f(float f);
 	Vector3f& operator[](uint8 i);
+	/**
+	 * @brief adds the matrix m and this one
+	 * @param m
+	 * @return
+	*/
 	Matrix3f operator+(Matrix3f& m);
+	/**
+	 * @brief adds the matrix m to this one
+	 * @param m
+	*/
 	void operator+=(Matrix3f& m);
+	/**
+	 * @brief this matrix minus m
+	 * @param m
+	 * @return
+	*/
 	Matrix3f operator-(Matrix3f& m);
+	/**
+	 * @brief subtracts m from this matrix
+	 * @param m
+	*/
 	void operator-=(Matrix3f& m);
+	/**
+	 * @brief the multiplication of this matrix times m
+	 * @param m
+	 * @return
+	*/
 	Matrix3f operator*(float m);
+	/**
+	 * @brief multiplies this matrix times m
+	 * @param m
+	*/
 	void operator*=(float m);
+	/**
+	 * @brief the multiplication of this matrix and the vector v
+	 * @param v
+	 * @return
+	*/
 	Vector3f operator*(Vector3f& v);
+	/**
+	 * @brief the multiplication of this matrix and the matrix m
+	 * @param v
+	 * @return
+	*/
 	Matrix3f operator*(Matrix3f& m);
+	/**
+	 * @brief multiplies this matrix times the matrix m
+	 * @param m 
+	*/
 	void operator*=(Matrix3f& m);
 	/**
 	 * @brief changes the rows for the columns
@@ -75,6 +116,10 @@ public:
 	 * @brief creates a translate matrix for the given position
 	*/
 	static Matrix3f translateMatrix(Vector2f v);
+	/**
+	 * @brief creates a scale matrix for the given size
+	*/
+	static Matrix3f scaleMatrix(Vector2f v);
 };
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2);
 }

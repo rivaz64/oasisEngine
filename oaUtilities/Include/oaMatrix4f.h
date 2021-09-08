@@ -75,6 +75,10 @@ public:
 	 * @brief creates a translate matrix for the given position
 	*/
 	static Matrix4f translateMatrix(Vector3f v);
+	/**
+	 * @brief creates a scale matrix for the given size
+	*/
+	static Matrix4f scaleMatrix(Vector3f v);
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);
 }
