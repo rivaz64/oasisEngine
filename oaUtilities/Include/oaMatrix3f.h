@@ -56,13 +56,15 @@ public:
 	float determinant();
 private:
 	/**
-	 * @brief calculates the determinant of a minor matrix thah is not in the row and in the column
-	 * @param row 
-	 * @param col 
+	 * @brief calculates the determinant of a minor matrix that is in the rows and colums 
+	 * @param r1 first row of the minor matrix
+	 * @param r2 second row of the minor matrix
+	 * @param c1 first column of the minor matrix
+	 * @param c2 second column of the minor matrix
 	 * @return 
 	*/
+	float minorDet(uint8 r1, uint8 r2, uint8 c1, uint8 c2);
 public:
-	float minorDet(uint8 r1, uint8 r2,uint8 c1, uint8 c2);
 	/**
 	 * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
 	 * @return 
