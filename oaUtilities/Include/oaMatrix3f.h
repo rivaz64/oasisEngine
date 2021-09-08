@@ -1,7 +1,17 @@
+/**
+ * @file oaVector2f.h
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/07/2021
+ */
+
 #pragma once
 #include"oaPrerequisitesUtilities.h"
-#include"oaVector3f.h"
+
+
+
 namespace oaEngineSDK {
+
+class Vector3f;
 
 /**
  * @brief Matrix 3x3 of floats
@@ -11,6 +21,7 @@ class OA_UTILITY_EXPORT Matrix3f
 public:
 	union {
 		float data[9];
+		Vector3f vectors[3];
 		struct {
 			Vector3f a;
 			Vector3f b;
@@ -43,6 +54,20 @@ public:
 	 * @return 
 	*/
 	float determinant();
+private:
+	/**
+	 * @brief calculates the determinant of a minor matrix thah is not in the row and in the column
+	 * @param row 
+	 * @param col 
+	 * @return 
+	*/
+public:
+	float minorDet(uint8 r1, uint8 r2,uint8 c1, uint8 c2);
+	/**
+	 * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
+	 * @return 
+	*/
+	Matrix3f inverse();
 };
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2);
 }

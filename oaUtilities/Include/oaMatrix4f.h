@@ -1,7 +1,14 @@
+/**
+ * @file oaVector2f.h
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/07/2021
+ */
 #pragma once
 #include"oaPrerequisitesUtilities.h"
-#include"oaVector4f.h"
+
 namespace oaEngineSDK {
+
+class Vector4f;
 
 /**
  * @brief Matrix 3x3 of floats
@@ -11,6 +18,7 @@ class OA_UTILITY_EXPORT Matrix4f
 public:
 	union {
 		float data[16];
+		Vector4f vectors[4];
 		struct {
 			Vector4f a;
 			Vector4f b;
@@ -44,6 +52,8 @@ public:
 	 * @return
 	*/
 	float determinant();
+	float minorDet(uint8 r1, uint8 r2, uint8 r3, uint8 c1, uint8 c2, uint8 c3);
+	Matrix4f inverse();
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);
 }

@@ -1,5 +1,8 @@
+#include"oaVector4f.h"
+#include"oaVector3f.h"
+#include"oaMatrix3f.h"
 #include "..\Include\oaMatrix4f.h"
-#include "../Include/oaMatrix3f.h"
+
 namespace oaEngineSDK {
 Matrix4f::Matrix4f(Vector4f _a, Vector4f _b, Vector4f _c, Vector4f _d)
 {
@@ -133,6 +136,23 @@ float Matrix4f::determinant()
 	tempMatrix.c = { c.x,c.y,c.z };
 	ans += tempMatrix.determinant() * d.w;
 	return ans;
+}
+float Matrix4f::minorDet(uint8 r1, uint8 r2, uint8 r3, uint8 c1, uint8 c2, uint8 c3)
+{
+	Matrix3f temp = { {vectors[r1][c1],vectors[r1][c2],vectors[r1][c3]},
+	{vectors[r2][c1],vectors[r2][c2],vectors[r2][c3]},
+	{vectors[r3][c1],vectors[r3][c2],vectors[r3][c3]} };
+	return temp.determinant();
+}
+Matrix4f Matrix4f::inverse()
+{
+	float det = determinant();
+	OA_ASSERT(det != 0);
+	Matrix4f Adjugate = { { minorDet(1,2,3,1,2,3),-minorDet(0,2,3,1,2,3),minorDet(0,1,3,1,2,3),-minorDet(0,1,2,1,2,3) },
+		{ -minorDet(1,2,3,0,2,3),minorDet(0,2,3,0,2,3),-minorDet(0,1,3,0,2,3),minorDet(0,1,2,0,2,3) },
+		{ minorDet(1,2,3,0,1,3),-minorDet(0,2,3,0,1,3),minorDet(0,1,3,0,1,3),-minorDet(0,1,2,0,1,3) },
+		{ -minorDet(1,2,3,0,1,2),minorDet(0,2,3,0,1,2),-minorDet(0,1,3,0,1,2),minorDet(0,1,2,0,1,2) }, };
+	return Adjugate * (1.f / det);
 }
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2)
 {
