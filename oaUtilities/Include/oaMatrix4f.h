@@ -8,6 +8,7 @@
 
 namespace oaEngineSDK {
 
+class Vector3f;
 class Vector4f;
 
 /**
@@ -70,6 +71,10 @@ public:
 	 * @return
 	*/
 	Matrix4f inverse();
+	/**
+	 * @brief creates a translate matrix for the given position
+	*/
+	static Matrix4f translateMatrix(Vector3f v);
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);
 }

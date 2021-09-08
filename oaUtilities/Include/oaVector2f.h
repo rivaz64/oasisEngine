@@ -26,13 +26,49 @@ class OA_UTILITY_EXPORT Vector2f
 	Vector2f() = default;
 	Vector2f(float _x, float _y);
 	float& operator[](uint8 i);
+	/**
+	 * @brief adds the vector v and this one
+	 * @param v 
+	 * @return 
+	*/
 	Vector2f operator+(Vector2f& v);
+	/**
+	 * @brief adds the vector v to this one
+	 * @param v 
+	*/
 	void operator+=(Vector2f& v);
+	/**
+	 * @brief this vector minus vector v
+	 * @param v 
+	 * @return 
+	*/
 	Vector2f operator-(Vector2f& v);
+	/**
+	 * @brief substract vector v from this
+	 * @param v 
+	*/
 	void operator-=(Vector2f& v);
+	/**
+	 * @brief calculates a vector with the same direction as this and a lenght multiplied by v
+	 * @param v 
+	 * @return 
+	*/
 	Vector2f operator*(float v);
+	/**
+	 * @brief multiply the length vector the vector by v
+	 * @param v 
+	*/
 	void operator*=(float v);
+	/**
+	 * @brief calculates a vector with the same direction as this and a lenght divided by v
+	 * @param v
+	 * @return
+	*/
 	Vector2f operator/(float v);
+	/**
+	 * @brief divide the length vector the vector by v
+	 * @param v
+	*/
 	void operator/=(float v);
 	/**
 	 * @brief dot product of to vector

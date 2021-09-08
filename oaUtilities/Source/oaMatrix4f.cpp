@@ -154,6 +154,13 @@ Matrix4f Matrix4f::inverse()
 		{ -minorDet(1,2,3,0,1,2),minorDet(0,2,3,0,1,2),-minorDet(0,1,3,0,1,2),minorDet(0,1,2,0,1,2) }, };
 	return Adjugate * (1.f / det);
 }
+Matrix4f Matrix4f::translateMatrix(Vector3f v)
+{
+	return Matrix4f({ 1.f,0.f,0.f,v.x },
+									{ 0.f,1.f,0.f,v.y },
+									{ 0.f,0.f,1.f,v.z },
+									{ 0.f,0.f,0.f,1.f });
+}
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;

@@ -1,3 +1,4 @@
+#include"oaVector2f.h"
 #include"oaVector3f.h"
 #include "..\Include\oaMatrix3f.h"
 
@@ -115,6 +116,13 @@ Matrix3f Matrix3f::inverse()
 					 { -minorDet(1,2,0,2), minorDet(0,2,0,2), -minorDet(0,1,0,2) },
 					 { minorDet(1,2,0,1), -minorDet(0,2,0,1), minorDet(0,1,0,1) } };
 	return Adjugate*(1.f/det);
+}
+
+Matrix3f Matrix3f::translateMatrix(Vector2f v)
+{
+	return Matrix3f({ 1.f,0.f,v.x },
+									{ 0.f,1.f,v.y },
+									{ 0.f,0.f,1.f });
 }
 
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)

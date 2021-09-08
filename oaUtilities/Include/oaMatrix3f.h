@@ -11,6 +11,7 @@
 
 namespace oaEngineSDK {
 
+class Vector2f;
 class Vector3f;
 
 /**
@@ -70,6 +71,10 @@ public:
 	 * @return 
 	*/
 	Matrix3f inverse();
+	/**
+	 * @brief creates a translate matrix for the given position
+	*/
+	static Matrix3f translateMatrix(Vector2f v);
 };
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2);
 }
