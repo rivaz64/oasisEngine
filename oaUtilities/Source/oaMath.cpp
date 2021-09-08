@@ -21,3 +21,39 @@ float oaEngineSDK::InvSqrt(float number)
 	y = y * (threehalfs - (x2 * y * y));
 	return y;
 }
+
+float oaEngineSDK::Cos(float x)
+{
+	return cos(x);
+}
+
+float oaEngineSDK::Sin(float x)
+{
+	return sin(x);
+	
+}
+
+float OA_UTILITY_EXPORT oaEngineSDK::Tan(float x)
+{
+	return tan(x);
+}
+
+float OA_UTILITY_EXPORT oaEngineSDK::aCos(float x)
+{
+	return acos(x);
+}
+
+float OA_UTILITY_EXPORT oaEngineSDK::aSin(float x)
+{
+	return asin(x);
+}
+
+float OA_UTILITY_EXPORT oaEngineSDK::aTan(float x)
+{
+	return atan(x);
+}
+
+float OA_UTILITY_EXPORT oaEngineSDK::aTan2(float x, float y)
+{
+	return atan2(y,x);
+}

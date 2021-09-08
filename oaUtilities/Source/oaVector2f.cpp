@@ -72,6 +72,18 @@ Vector2f Vector2f::project(Vector2f& v)
 	return v * (dot(v)/v.dot(v));
 }
 
+float Vector2f::getDirection()
+{
+	return aTan2(x,y);
+}
+
+void Vector2f::setDirection(float r)
+{
+	float l = len();
+	x = l * Cos(r);
+	y = l * Sin(r);
+}
+
 
 bool operator==(Vector2f v1, Vector2f v2)
 {

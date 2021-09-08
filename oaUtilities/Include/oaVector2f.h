@@ -92,6 +92,16 @@ class OA_UTILITY_EXPORT Vector2f
 	 * @return 
 	*/
 	Vector2f project(Vector2f& v);
+	/**
+	 * @brief the direction in radians of the vector
+	 * @return 
+	*/
+	float getDirection();
+	/**
+	 * @brief changes the direction of the vector to r in radians and the lenght stays the same
+	 * @return
+	*/
+	void setDirection(float r);
 };
 bool OA_UTILITY_EXPORT operator==(Vector2f v1, Vector2f v2);
 }

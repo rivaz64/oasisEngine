@@ -41,9 +41,21 @@ TEST(vectors, vector2) {
   EXPECT_EQ(v2 / 2.f, Vector2f(1.5f, 2.f));
   EXPECT_EQ(v2.dot(vec2), 63.f);
   EXPECT_EQ(v2.len(), 5.f);
+  EXPECT_NEAR(v2.getDirection(), 53.1301 * degreesToRadians, .00001f);
+  v2.x *= -1;
+  EXPECT_NEAR(v2.getDirection(), 126.87 * degreesToRadians, .00001f);
+  v2.y *= -1;
+  EXPECT_NEAR(v2.getDirection(), -126.87 * degreesToRadians, .00001f);
+  v2.x *= -1;
+  EXPECT_NEAR(v2.getDirection(), -53.1301 * degreesToRadians, .00001f);
+  v2.y *= -1;
   EXPECT_NEAR(v2.normal().len(), 1.f, .00001f);
+  EXPECT_NEAR(v2.normal().getDirection(), v2.getDirection(), .0000001f);
   EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .00001f);
   EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .00001f);
+  v2.setDirection(0.6435011087932843868);
+  EXPECT_NEAR(v2.x, 4.f, .0000001f);
+  EXPECT_NEAR(v2.y, 3.f, .0000001f);
 }
 
 TEST(vectors, vector3) {
