@@ -136,6 +136,9 @@ public:
 	*/
 	static Matrix3f 
 	scaleMatrix(Vector2f v);
+	/**
+	 * @brief creates a rotation matrix for the given angle r in radians
+	*/
 	static Matrix3f
 	rotationMatrix(float r);
 };

@@ -190,6 +190,22 @@ Matrix4f Matrix4f::rotationMatrixY(float r)
 									{ -Sin(r),0.f,Cos(r),0.f },
 									{ 0.f,0.f,0.f,1.f });
 }
+Matrix4f Matrix4f::rotationMatrix(float r, Vector3f v)
+{
+	float c = Cos(r);
+	float s = Sin(r);
+	float mc = 1 - c;
+	float xy = v.x * v.y*mc;
+	float xz = v.x * v.z*mc;
+	float yz = v.y * v.z*mc;
+	float sx = s*v.x;
+	float sy = s*v.y;
+	float sz = s*v.z;
+	return  Matrix4f({ c + mc * v.x * v.x,xy-sz , xz+sy,0.f },
+									 { xz+sz ,c + mc * v.y * v.y,yz-sx,0.f },
+									 { xz-sy,yz+sx,c + mc * v.y * v.y,0.f },
+									 { 0.f,0.f,0.f,1.f });
+}
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;

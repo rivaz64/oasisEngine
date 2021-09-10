@@ -94,6 +94,12 @@ public:
 	*/
 	static Matrix4f
 	rotationMatrixY(float r);
+	/**
+	 * @brief creates a rotation matrix for the given angle r in radians rotating in the arbitrary axis v
+	*/
+	static Matrix4f
+	rotationMatrix(float r,Vector3f v);
+
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);
 }

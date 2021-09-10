@@ -207,4 +207,5 @@ TEST(Matrix, Matrix4) {
   EXPECT_NEAR(Matrix4f::rotationMatrixZ(pi / 4.f).determinant(), 1, .0001f);
   EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f*pi / 4.f).determinant(), 1, .0001f);
   EXPECT_NEAR(Matrix4f::rotationMatrixY(-pi / 4.f).determinant(), 1, .0001f);
+
 }
