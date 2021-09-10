@@ -79,6 +79,21 @@ public:
 	 * @brief creates a scale matrix for the given size
 	*/
 	static Matrix4f scaleMatrix(Vector3f v);
+	/**
+	 * @brief creates a rotation matrix for the given angle r in radians rotating in the Z axis
+	*/
+	static Matrix4f
+	rotationMatrixZ(float r);
+	/**
+	 * @brief creates a rotation matrix for the given angle r in radians rotating in the X axis
+	*/
+	static Matrix4f
+	rotationMatrixX(float r);
+	/**
+	 * @brief creates a rotation matrix for the given angle r in radians rotating in the Y axis
+	*/
+	static Matrix4f
+	rotationMatrixY(float r);
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);
 }

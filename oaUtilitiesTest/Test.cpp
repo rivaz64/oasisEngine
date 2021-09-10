@@ -140,6 +140,7 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(Matrix3f::scaleMatrix(v2), Matrix3f({ {3.f, 0.f, 0.f},
                                                       {0.f, 4.f, 0.f},
                                                       {0.f, 0.f, 1.f} }));
+  EXPECT_NEAR(Matrix3f::rotationMatrix(pi / 2.f).determinant(), 1,.0001f);
 
 }
 TEST(Matrix, Matrix4) {
@@ -203,5 +204,7 @@ TEST(Matrix, Matrix4) {
                                                     {0.f, 3.f, 0.f,0.f},
                                                     {0.f, 0.f, 6.f,0.f},
                                                     {0.f, 0.f, 0.f,1.f} }));
-
+  EXPECT_NEAR(Matrix4f::rotationMatrixZ(pi / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f*pi / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixY(-pi / 4.f).determinant(), 1, .0001f);
 }

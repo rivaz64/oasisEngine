@@ -168,6 +168,28 @@ Matrix4f Matrix4f::scaleMatrix(Vector3f v)
 									{ 0.f,0.f,v.z,0.f },
 									{ 0.f,0.f,0.f,1.f });
 }
+Matrix4f 
+Matrix4f::rotationMatrixZ(float r)
+{
+	return Matrix4f({ Cos(r),-Sin(r),0.f,0.f },
+									{ Sin(r),Cos(r),0.f,0.f },
+									{ 0.f,0.f,1.f,0.f },
+									{ 0.f,0.f,0.f,1.f });
+}
+Matrix4f Matrix4f::rotationMatrixX(float r)
+{
+	return Matrix4f({ 1.f,0.f,0.f,0.f },
+									{0.f,Cos(r),-Sin(r),0.f },
+									{ 0.f,Sin(r),Cos(r),0.f },
+									{ 0.f,0.f,0.f,1.f });
+}
+Matrix4f Matrix4f::rotationMatrixY(float r)
+{
+	return Matrix4f({ Cos(r),0.f,Sin(r),0.f },
+									{ 0.f,1.f,0.f,0.f },
+									{ -Sin(r),0.f,Cos(r),0.f },
+									{ 0.f,0.f,0.f,1.f });
+}
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;

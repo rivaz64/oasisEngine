@@ -27,73 +27,87 @@ public:
 
 	Vector4f() = default;
 	Vector4f(float _x, float _y, float _z, float _w);
-	float& operator[](uint8 i);
+	float& 
+	operator[](uint8 i);
 	/**
 	 * @brief adds the vector v and this one
 	 * @param v
 	 * @return
 	*/
-	Vector4f operator+(Vector4f& v);
+	Vector4f 
+	operator+(Vector4f& v);
 	/**
 	 * @brief adds the vector v to this one
 	 * @param v
 	*/
-	void operator+=(Vector4f& v);
+	void 
+	operator+=(Vector4f& v);
 	/**
 	 * @brief this vector minus vector v
 	 * @param v
 	 * @return
 	*/
-	Vector4f operator-(Vector4f& v);
+	Vector4f 
+	operator-(Vector4f& v);
 	/**
 	 * @brief substract vector v from this
 	 * @param v
 	*/
-	void operator-=(Vector4f& v);
+	void 
+	operator-=(Vector4f& v);
 	/**
 	 * @brief calculates a vector with the same direction as this and a lenght multiplied by v
 	 * @param v
 	 * @return
 	*/
-	Vector4f operator*(float v);
+	Vector4f 
+	operator*(float v);
 	/**
 	 * @brief multiply the length vector the vector by v
 	 * @param v
 	*/
-	void operator*=(float v);
+	void 
+	operator*=(float v);
 	/**
 	 * @brief calculates a vector with the same direction as this and a lenght divided by v
 	 * @param v
 	 * @return
 	*/
-	Vector4f operator/(float v);
+	Vector4f 
+	operator/(float v);
 	/**
 	 * @brief divide the length vector the vector by v
 	 * @param v
 	*/
-	void operator/=(float v);
+	void 
+	operator/=(float v);
 	/**
 	 * @brief dot product of to vector
 	 * @param v
 	 * @return
 	*/
-	float dot(Vector4f& v);
+	float 
+	dot(Vector4f& v);
 	/**
 	 * @brief the lenght of the vector
 	 * @return
 	*/
-	float len();
+	float
+	len();
 	/**
 	 * @brief the unitary form of the vector
 	 * @return
 	*/
-	Vector4f normal();
+	Vector4f 
+	normal();
 	/**
 	 * @brief proyects this vector into v
 	 * @param v
 	 * @return
 	*/
-	Vector4f project(Vector4f& v);
+	Vector4f 
+	project(Vector4f& v);
 };
-bool OA_UTILITY_EXPORT operator==(Vector4f v1, Vector4f v2);
+bool OA_UTILITY_EXPORT 
+operator==(Vector4f v1, Vector4f v2);
 }

@@ -17,47 +17,56 @@ Matrix3f::Matrix3f(float f)
 	c = { 0.f,0.f,f };
 }
 
-Vector3f& Matrix3f::operator[](uint8 i)
+Vector3f& 
+Matrix3f::operator[](uint8 i)
 {
 	return ((&a)[i]);
 }
 
-Matrix3f oaEngineSDK::Matrix3f::operator+(Matrix3f& m)
+Matrix3f 
+Matrix3f::operator+(Matrix3f& m)
 {
 	return { m.a + a,m.b + b,m.c + c };
 }
 
-void oaEngineSDK::Matrix3f::operator+=(Matrix3f& m)
+void 
+Matrix3f::operator+=(Matrix3f& m)
 {
 	a += m.a;
 	b += m.b;
 	c += m.c;
 }
-Matrix3f Matrix3f::operator-(Matrix3f& m)
+Matrix3f 
+Matrix3f::operator-(Matrix3f& m)
 {
 	return {a - m.a,b - m.b,c - m.c };
 }
-void Matrix3f::operator-=(Matrix3f& m)
+void 
+Matrix3f::operator-=(Matrix3f& m)
 {
 	a -= m.a;
 	b -= m.b;
 	c -= m.c;
 }
-Matrix3f Matrix3f::operator*(float m)
+Matrix3f 
+Matrix3f::operator*(float m)
 {
 	return { a * m,b * m,c * m };
 }
-void Matrix3f::operator*=(float m)
+void 
+Matrix3f::operator*=(float m)
 {
 	a *= m;
 	b *= m;
 	c *= m;
 }
-Vector3f Matrix3f::operator*(Vector3f& v)
+Vector3f 
+Matrix3f::operator*(Vector3f& v)
 {
 	return { a.dot(v),b.dot(v),c.dot(v) };
 }
-Matrix3f Matrix3f::operator*(Matrix3f& m)
+Matrix3f 
+Matrix3f::operator*(Matrix3f& m)
 {
 	return { {
 			a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
@@ -73,7 +82,8 @@ Matrix3f Matrix3f::operator*(Matrix3f& m)
 			c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
 			} };
 }
-void Matrix3f::operator*=(Matrix3f& m)
+void 
+Matrix3f::operator*=(Matrix3f& m)
 {
 	a = {
 		a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
@@ -91,24 +101,28 @@ void Matrix3f::operator*=(Matrix3f& m)
 	c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
 	};
 }
-void Matrix3f::transpose()
+void 
+Matrix3f::transpose()
 {
 	std::swap(a.y,b.x);
 	std::swap(a.z, c.x);
 	std::swap(b.z, c.y);
 }
-float Matrix3f::determinant()
+float
+Matrix3f::determinant()
 {
 	return a.x*b.y*c.z+a.y*b.z*c.x+a.z*b.x*c.y
 		-a.z*b.y*c.x-a.y*b.x*c.z-a.x*b.z*c.y;
 }
 
-float Matrix3f::minorDet(uint8 r1, uint8 r2, uint8 c1, uint8 c2)
+float
+Matrix3f::minorDet(uint8 r1, uint8 r2, uint8 c1, uint8 c2)
 {
 	return vectors[r1][c1] * vectors[r2][c2] - vectors[r2][c1] * vectors[r1][c2];
 }
 
-Matrix3f Matrix3f::inverse()
+Matrix3f 
+Matrix3f::inverse()
 {
 	float det = determinant();
 	OA_ASSERT(det != 0);
@@ -118,21 +132,32 @@ Matrix3f Matrix3f::inverse()
 	return Adjugate*(1.f/det);
 }
 
-Matrix3f Matrix3f::translateMatrix(Vector2f v)
+Matrix3f 
+Matrix3f::translateMatrix(Vector2f v)
 {
 	return Matrix3f({ 1.f,0.f,v.x },
 									{ 0.f,1.f,v.y },
 									{ 0.f,0.f,1.f });
 }
 
-Matrix3f Matrix3f::scaleMatrix(Vector2f v)
+Matrix3f 
+Matrix3f::scaleMatrix(Vector2f v)
 {
 	return Matrix3f({ v.x,0.f,0.f },
 									{ 0.f,v.y,0.f },
 									{ 0.f,0.f,1.f });
 }
 
-bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)
+Matrix3f 
+Matrix3f::rotationMatrix(float r)
+{
+	return Matrix3f({ Cos(r),-Sin(r),0.f },
+									{ Sin(r), -Cos(r), 0.f },
+									{ 0.f,0.f,1.f });
+}
+
+bool 
+OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)
 {
 	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;
 }
