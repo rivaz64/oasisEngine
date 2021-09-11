@@ -129,7 +129,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);C:\Users\roriv\source\repos\oaUtilities\lib/$(PlatformTarget);C:\Users\roriv\source\repos\oaUtilities/bin/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(MSBuildStartupDirectory)/lib/$(PlatformTarget);$(MSBuildStartupDirectory)/bin/$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

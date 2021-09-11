@@ -29,8 +29,8 @@ TEST(basic, basic_types) {
   EXPECT_EQ(8, sizeof(double));
 }
 TEST(math, basic) {
-  EXPECT_EQ(Sqrt(49), 7);
-  EXPECT_EQ(InvSqrt(49), 1.f/7.f);
+  EXPECT_EQ(Math::Sqrt(49), 7);
+  EXPECT_EQ(Math::InvSqrt(49), 1.f/7.f);
 }
 TEST(vectors, vector2) {
   EXPECT_EQ(8, sizeof(Vector2f));
@@ -41,13 +41,13 @@ TEST(vectors, vector2) {
   EXPECT_EQ(v2 / 2.f, Vector2f(1.5f, 2.f));
   EXPECT_EQ(v2.dot(vec2), 63.f);
   EXPECT_EQ(v2.len(), 5.f);
-  EXPECT_NEAR(v2.getDirection(), 53.1301 * degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), 53.1301 * Math::degreesToRadians, .00001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), 126.87 * degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), 126.87 * Math::degreesToRadians, .00001f);
   v2.y *= -1;
-  EXPECT_NEAR(v2.getDirection(), -126.87 * degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -126.87 * Math::degreesToRadians, .00001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), -53.1301 * degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::degreesToRadians, .00001f);
   v2.y *= -1;
   EXPECT_NEAR(v2.normal().len(), 1.f, .00001f);
   EXPECT_NEAR(v2.normal().getDirection(), v2.getDirection(), .0000001f);
@@ -140,7 +140,7 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(Matrix3f::scaleMatrix(v2), Matrix3f({ {3.f, 0.f, 0.f},
                                                       {0.f, 4.f, 0.f},
                                                       {0.f, 0.f, 1.f} }));
-  EXPECT_NEAR(Matrix3f::rotationMatrix(pi / 2.f).determinant(), 1,.0001f);
+  EXPECT_NEAR(Matrix3f::rotationMatrix(Math::pi / 2.f).determinant(), 1,.0001f);
 
 }
 TEST(Matrix, Matrix4) {
@@ -204,8 +204,8 @@ TEST(Matrix, Matrix4) {
                                                     {0.f, 3.f, 0.f,0.f},
                                                     {0.f, 0.f, 6.f,0.f},
                                                     {0.f, 0.f, 0.f,1.f} }));
-  EXPECT_NEAR(Matrix4f::rotationMatrixZ(pi / 4.f).determinant(), 1, .0001f);
-  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f*pi / 4.f).determinant(), 1, .0001f);
-  EXPECT_NEAR(Matrix4f::rotationMatrixY(-pi / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixZ(Math::pi / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::pi / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixY(-Math::pi / 4.f).determinant(), 1, .0001f);
 
 }

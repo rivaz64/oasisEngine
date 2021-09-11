@@ -14,100 +14,112 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector4f
 {
 public:
-	union {
-		float data[3];
-		struct {
-			float x;
-			float y;
-			float z;
-			float w;
-		};
-	};
+  union {
+    float data[4];
+    struct {
+      /**
+       * @brief the x component of the vector
+      */
+      float x;
+      /**
+       * @brief the y component of the vector
+      */
+      float y;
+      /**
+       * @brief the z component of the vector
+      */
+      float z;
+      /**
+       * @brief the w component of the vector
+      */
+      float w;
+    };
+  };
 
 
-	Vector4f() = default;
-	Vector4f(float _x, float _y, float _z, float _w);
-	float& 
-	operator[](uint8 i);
-	/**
-	 * @brief adds the vector v and this one
-	 * @param v
-	 * @return
-	*/
-	Vector4f 
-	operator+(Vector4f& v);
-	/**
-	 * @brief adds the vector v to this one
-	 * @param v
-	*/
-	void 
-	operator+=(Vector4f& v);
-	/**
-	 * @brief this vector minus vector v
-	 * @param v
-	 * @return
-	*/
-	Vector4f 
-	operator-(Vector4f& v);
-	/**
-	 * @brief substract vector v from this
-	 * @param v
-	*/
-	void 
-	operator-=(Vector4f& v);
-	/**
-	 * @brief calculates a vector with the same direction as this and a lenght multiplied by v
-	 * @param v
-	 * @return
-	*/
-	Vector4f 
-	operator*(float v);
-	/**
-	 * @brief multiply the length vector the vector by v
-	 * @param v
-	*/
-	void 
-	operator*=(float v);
-	/**
-	 * @brief calculates a vector with the same direction as this and a lenght divided by v
-	 * @param v
-	 * @return
-	*/
-	Vector4f 
-	operator/(float v);
-	/**
-	 * @brief divide the length vector the vector by v
-	 * @param v
-	*/
-	void 
-	operator/=(float v);
-	/**
-	 * @brief dot product of to vector
-	 * @param v
-	 * @return
-	*/
-	float 
-	dot(Vector4f& v);
-	/**
-	 * @brief the lenght of the vector
-	 * @return
-	*/
-	float
-	len();
-	/**
-	 * @brief the unitary form of the vector
-	 * @return
-	*/
-	Vector4f 
-	normal();
-	/**
-	 * @brief proyects this vector into v
-	 * @param v
-	 * @return
-	*/
-	Vector4f 
-	project(Vector4f& v);
+  Vector4f() = default;
+  Vector4f(float _x, float _y, float _z, float _w) :x(_x), y(_y), z(_z), w(_w) {}
+  float&
+    operator[](uint8 i);
+  /**
+   * @brief adds the vector v and this one
+   * @param v
+   * @return
+  */
+  Vector4f
+    operator+(Vector4f& v);
+  /**
+   * @brief adds the vector v to this one
+   * @param v
+  */
+  void
+    operator+=(Vector4f& v);
+  /**
+   * @brief this vector minus vector v
+   * @param v
+   * @return
+  */
+  Vector4f
+    operator-(Vector4f& v);
+  /**
+   * @brief substract vector v from this
+   * @param v
+  */
+  void
+    operator-=(Vector4f& v);
+  /**
+   * @brief calculates a vector with the same direction as this and a lenght multiplied by v
+   * @param v
+   * @return
+  */
+  Vector4f
+    operator*(float v);
+  /**
+   * @brief multiply the length vector the vector by v
+   * @param v
+  */
+  void
+    operator*=(float v);
+  /**
+   * @brief calculates a vector with the same direction as this and a lenght divided by v
+   * @param v
+   * @return
+  */
+  Vector4f
+    operator/(float v);
+  /**
+   * @brief divide the length vector the vector by v
+   * @param v
+  */
+  void
+    operator/=(float v);
+  /**
+   * @brief dot product of to vector
+   * @param v
+   * @return
+  */
+  float
+    dot(Vector4f& v);
+  /**
+   * @brief the lenght of the vector
+   * @return
+  */
+  float
+    len();
+  /**
+   * @brief the unitary form of the vector
+   * @return
+  */
+  Vector4f
+    normal();
+  /**
+   * @brief proyects this vector into v
+   * @param v
+   * @return
+  */
+  Vector4f
+    project(Vector4f& v);
 };
-bool OA_UTILITY_EXPORT 
+bool OA_UTILITY_EXPORT
 operator==(Vector4f v1, Vector4f v2);
 }

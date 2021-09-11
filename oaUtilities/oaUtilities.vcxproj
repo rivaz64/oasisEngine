@@ -177,8 +177,10 @@
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
+    <ClInclude Include="Include\oaPlatformMath.h" />
     <ClInclude Include="Include\oaPlatformTypes.h" />
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
+    <ClInclude Include="Include\oaQuaternion.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
     <ClInclude Include="Include\oaVector2f.h" />
     <ClInclude Include="Include\oaVector3f.h" />
@@ -188,6 +190,8 @@
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />
     <ClCompile Include="Source\oaMatrix4f.cpp" />
+    <ClCompile Include="Source\oaPlatformMath.cpp" />
+    <ClCompile Include="Source\oaQuaternion.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />
     <ClCompile Include="Source\oaVector4f.cpp" />

@@ -10,35 +10,35 @@
 namespace oaEngineSDK {
 /**
  * @brief wraper of the std::vector, can be changed in the future
- * @tparam T 
+ * @tparam T
 */
 template <class T>
 using Vector = std::vector<T>;
 
 /**
  * @brief wraper of the std::list, can be changed in the future
- * @tparam T 
+ * @tparam T
 */
 template <class T>
 using List = std::list<T>;
 
 /**
  * @brief wraper of the std::stack, can be changed in the future
- * @tparam T 
+ * @tparam T
 */
 template <class T>
 using Stack = std::stack<T>;
 
 /**
  * @brief wraper of the std::queue, can be changed in the future
- * @tparam T 
+ * @tparam T
 */
 template <class T>
 using Queue = std::queue<T>;
 
 /**
  * @brief wraper of the std::priority_queue, can be changed in the future
- * @tparam T 
+ * @tparam T
 */
 template <class T>
 using PriorityQueue = std::priority_queue<T>;
@@ -68,5 +68,14 @@ using WString = std::wstring;
 */
 template <class T>
 using SPTr = std::shared_ptr<T>;
-
+/**
+ * @brief wraper of the std::swap
+ * @tparam T
+ * @param a
+ * @param b
+*/
+template <class T>
+FORCEINLINE void swap(T& a, T& b) {
+  std::swap(a, b);
+}
 }

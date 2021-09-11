@@ -1,165 +1,160 @@
 #include"oaVector2f.h"
 #include"oaVector3f.h"
-#include "..\Include\oaMatrix3f.h"
+#include "oaMatrix3f.h"
 
 namespace oaEngineSDK {
-Matrix3f::Matrix3f(Vector3f _a, Vector3f _b, Vector3f _c)
-{
-	a = _a;
-	b = _b;
-	c = _c;
-}
-
 Matrix3f::Matrix3f(float f)
 {
-	a = { f,0.f,0.f };
-	b = { 0.f,f,0.f };
-	c = { 0.f,0.f,f };
+  a = { f,0.f,0.f };
+  b = { 0.f,f,0.f };
+  c = { 0.f,0.f,f };
 }
 
-Vector3f& 
+Vector3f&
 Matrix3f::operator[](uint8 i)
 {
-	return ((&a)[i]);
+  return ((&a)[i]);
 }
 
-Matrix3f 
+Matrix3f
 Matrix3f::operator+(Matrix3f& m)
 {
-	return { m.a + a,m.b + b,m.c + c };
+  return { m.a + a,m.b + b,m.c + c };
 }
 
-void 
+void
 Matrix3f::operator+=(Matrix3f& m)
 {
-	a += m.a;
-	b += m.b;
-	c += m.c;
+  a += m.a;
+  b += m.b;
+  c += m.c;
 }
-Matrix3f 
+Matrix3f
 Matrix3f::operator-(Matrix3f& m)
 {
-	return {a - m.a,b - m.b,c - m.c };
+  return { a - m.a,b - m.b,c - m.c };
 }
-void 
+void
 Matrix3f::operator-=(Matrix3f& m)
 {
-	a -= m.a;
-	b -= m.b;
-	c -= m.c;
+  a -= m.a;
+  b -= m.b;
+  c -= m.c;
 }
-Matrix3f 
+Matrix3f
 Matrix3f::operator*(float m)
 {
-	return { a * m,b * m,c * m };
+  return { a * m,b * m,c * m };
 }
-void 
+void
 Matrix3f::operator*=(float m)
 {
-	a *= m;
-	b *= m;
-	c *= m;
+  a *= m;
+  b *= m;
+  c *= m;
 }
-Vector3f 
+Vector3f
 Matrix3f::operator*(Vector3f& v)
 {
-	return { a.dot(v),b.dot(v),c.dot(v) };
+  return { a.dot(v),b.dot(v),c.dot(v) };
 }
-Matrix3f 
+Matrix3f
 Matrix3f::operator*(Matrix3f& m)
 {
-	return { {
-			a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
-			a.x * m.a.y + a.y * m.b.y + a.z * m.c.y,
-			a.x * m.a.z + a.y * m.b.z + a.z * m.c.z
-			},{
-			b.x * m.a.x + b.y * m.b.x + b.z * m.c.x,
-			b.x * m.a.y + b.y * m.b.y + b.z * m.c.y,
-			b.x * m.a.z + b.y * m.b.z + b.z * m.c.z
-			},{
-			c.x * m.a.x + c.y * m.b.x + c.z * m.c.x,
-			c.x * m.a.y + c.y * m.b.y + c.z * m.c.y,
-			c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
-			} };
+  return { {
+      a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
+      a.x * m.a.y + a.y * m.b.y + a.z * m.c.y,
+      a.x * m.a.z + a.y * m.b.z + a.z * m.c.z
+      },{
+      b.x * m.a.x + b.y * m.b.x + b.z * m.c.x,
+      b.x * m.a.y + b.y * m.b.y + b.z * m.c.y,
+      b.x * m.a.z + b.y * m.b.z + b.z * m.c.z
+      },{
+      c.x * m.a.x + c.y * m.b.x + c.z * m.c.x,
+      c.x * m.a.y + c.y * m.b.y + c.z * m.c.y,
+      c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
+      } };
 }
-void 
+void
 Matrix3f::operator*=(Matrix3f& m)
 {
-	a = {
-		a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
-			a.x * m.a.y + a.y * m.b.y + a.z * m.c.y,
-			a.x * m.a.z + a.y * m.b.z + a.z * m.c.z
-	};
-	b = {
-	b.x * m.a.x + b.y * m.b.x + b.z * m.c.x,
-	b.x * m.a.y + b.y * m.b.y + b.z * m.c.y,
-	b.x * m.a.z + b.y * m.b.z + b.z * m.c.z
-	};
-	c = {
-	c.x * m.a.x + c.y * m.b.x + c.z * m.c.x,
-	c.x * m.a.y + c.y * m.b.y + c.z * m.c.y,
-	c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
-	};
+  a = {
+    a.x * m.a.x + a.y * m.b.x + a.z * m.c.x,
+      a.x * m.a.y + a.y * m.b.y + a.z * m.c.y,
+      a.x * m.a.z + a.y * m.b.z + a.z * m.c.z
+  };
+  b = {
+  b.x * m.a.x + b.y * m.b.x + b.z * m.c.x,
+  b.x * m.a.y + b.y * m.b.y + b.z * m.c.y,
+  b.x * m.a.z + b.y * m.b.z + b.z * m.c.z
+  };
+  c = {
+  c.x * m.a.x + c.y * m.b.x + c.z * m.c.x,
+  c.x * m.a.y + c.y * m.b.y + c.z * m.c.y,
+  c.x * m.a.z + c.y * m.b.z + c.z * m.c.z
+  };
 }
-void 
+void
 Matrix3f::transpose()
 {
-	std::swap(a.y,b.x);
-	std::swap(a.z, c.x);
-	std::swap(b.z, c.y);
+  swap(a.y, b.x);
+  swap(a.z, c.x);
+  swap(b.z, c.y);
 }
 float
 Matrix3f::determinant()
 {
-	return a.x*b.y*c.z+a.y*b.z*c.x+a.z*b.x*c.y
-		-a.z*b.y*c.x-a.y*b.x*c.z-a.x*b.z*c.y;
+  return a.x * b.y * c.z + a.y * b.z * c.x + a.z * b.x * c.y
+    - a.z * b.y * c.x - a.y * b.x * c.z - a.x * b.z * c.y;
 }
 
 float
 Matrix3f::minorDet(uint8 r1, uint8 r2, uint8 c1, uint8 c2)
 {
-	return vectors[r1][c1] * vectors[r2][c2] - vectors[r2][c1] * vectors[r1][c2];
+  return vectors[r1][c1] * vectors[r2][c2] - vectors[r2][c1] * vectors[r1][c2];
 }
 
-Matrix3f 
+Matrix3f
 Matrix3f::inverse()
 {
-	float det = determinant();
-	OA_ASSERT(det != 0);
-	Matrix3f Adjugate = { { minorDet(1,2,1,2),-minorDet(0,2,1,2),minorDet(0,1,1,2) },
-					 { -minorDet(1,2,0,2), minorDet(0,2,0,2), -minorDet(0,1,0,2) },
-					 { minorDet(1,2,0,1), -minorDet(0,2,0,1), minorDet(0,1,0,1) } };
-	return Adjugate*(1.f/det);
+  float det = determinant();
+  OA_ASSERT(det != 0);
+  Matrix3f Adjugate = { { minorDet(1,2,1,2),-minorDet(0,2,1,2),minorDet(0,1,1,2) },
+           { -minorDet(1,2,0,2), minorDet(0,2,0,2), -minorDet(0,1,0,2) },
+           { minorDet(1,2,0,1), -minorDet(0,2,0,1), minorDet(0,1,0,1) } };
+  return Adjugate * (1.f / det);
 }
 
-Matrix3f 
-Matrix3f::translateMatrix(Vector2f v)
+Matrix3f
+Matrix3f::translateMatrix(Vector2f& v)
 {
-	return Matrix3f({ 1.f,0.f,v.x },
-									{ 0.f,1.f,v.y },
-									{ 0.f,0.f,1.f });
+  return Matrix3f({ 1.f,0.f,v.x },
+                  { 0.f,1.f,v.y },
+                  { 0.f,0.f,1.f });
 }
 
-Matrix3f 
-Matrix3f::scaleMatrix(Vector2f v)
+Matrix3f
+Matrix3f::scaleMatrix(Vector2f& v)
 {
-	return Matrix3f({ v.x,0.f,0.f },
-									{ 0.f,v.y,0.f },
-									{ 0.f,0.f,1.f });
+  return Matrix3f({ v.x,0.f,0.f },
+                  { 0.f,v.y,0.f },
+                  { 0.f,0.f,1.f });
 }
 
-Matrix3f 
+Matrix3f
 Matrix3f::rotationMatrix(float r)
 {
-	return Matrix3f({ Cos(r),-Sin(r),0.f },
-									{ Sin(r), -Cos(r), 0.f },
-									{ 0.f,0.f,1.f });
+  float c = Math::cos(r);
+  float s = Math::sin(r);
+  return Matrix3f({ c,-s,0.f },
+                  { s, -c, 0.f },
+                  { 0.f,0.f,1.f });
 }
 
-bool 
+bool
 OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2)
 {
-	return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;
+  return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;
 }
 }
 
