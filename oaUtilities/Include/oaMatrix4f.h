@@ -3,13 +3,11 @@
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/07/2021
  */
+
 #pragma once
 #include"oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
-
-class Vector3f;
-class Vector4f;
 
 /**
  * @brief Matrix 3x3 of floats
@@ -111,6 +109,11 @@ public:
   */
   static Matrix4f
     rotationMatrix(float r, Vector3f& v);
+  /**
+   * @brief creates a rotation matrix for the given the quaternion q
+  */
+  static Matrix4f
+    rotationMatrix(float r, Quaternion& v);
 
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);

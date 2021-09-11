@@ -3,3 +3,4 @@
 #include "oaPlatformTypes.h"
 #include "oaStdHeaders.h"
 #include "oaMath.h"
+#include "oaForDecUtilities.h"

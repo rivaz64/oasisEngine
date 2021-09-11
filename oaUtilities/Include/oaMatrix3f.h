@@ -7,12 +7,7 @@
 #pragma once
 #include"oaPrerequisitesUtilities.h"
 
-
-
 namespace oaEngineSDK {
-
-class Vector2f;
-class Vector3f;
 
 /**
  * @brief Matrix 3x3 of floats

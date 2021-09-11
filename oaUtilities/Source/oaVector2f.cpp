@@ -1,41 +1,41 @@
 #include "oaVector2f.h"
 namespace oaEngineSDK {
 float&
-Vector2f::operator[](uint8 i) {
+Vector2f::operator[](const uint8 i) {
   return ((&x)[i]);
 }
 Vector2f
-Vector2f::operator+(Vector2f& v)
+Vector2f::operator+(const Vector2f& v)
 {
   return { x + v.x , y + v.y };
 }
 void
-Vector2f::operator+=(Vector2f& v)
+Vector2f::operator+=(const Vector2f& v)
 {
   x += v.x;
   y += v.y;
 }
 Vector2f
-Vector2f::operator-(Vector2f& v)
+Vector2f::operator-(const Vector2f& v)
 {
   return { x - v.x , y - v.y };
 }
 
 void
-Vector2f::operator-=(Vector2f& v)
+Vector2f::operator-=(const Vector2f& v)
 {
   x -= v.x;
   y -= v.y;
 }
 
 Vector2f
-Vector2f::operator*(float v)
+Vector2f::operator*(const float v) const
 {
   return { x * v , y * v };
 }
 
 void
-Vector2f::operator*=(float v)
+Vector2f::operator*=(const float v)
 {
   x *= v;
   y *= v;
@@ -56,7 +56,7 @@ Vector2f::operator/=(float v)
 }
 
 float
-Vector2f::dot(Vector2f& v)
+Vector2f::dot(const Vector2f& v) const
 {
   return x * v.x + y * v.y;
 }
@@ -74,7 +74,7 @@ Vector2f::normal()
 }
 
 Vector2f
-Vector2f::project(Vector2f& v)
+Vector2f::project(const Vector2f& v)
 {
   return v * (dot(v) / v.dot(v));
 }
@@ -87,7 +87,7 @@ Vector2f::getDirection()
 }
 
 void
-Vector2f::setDirection(float r)
+Vector2f::setDirection(const float r)
 {
   float l = len();
   x = l * Math::cos(r);
@@ -95,8 +95,8 @@ Vector2f::setDirection(float r)
 }
 
 
-bool
-operator==(Vector2f v1, Vector2f v2)
+
+bool OA_UTILITY_EXPORT operator==(const Vector2f& v1, const Vector2f& v2)
 {
   return v1.x == v2.x && v1.y == v2.y;
 }

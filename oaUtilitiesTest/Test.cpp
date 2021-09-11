@@ -74,6 +74,7 @@ TEST(vectors, vector3) {
   EXPECT_NEAR(v3.project(vec3).y, 1.04082f, .00001f);
   EXPECT_NEAR(v3.project(vec3).z, 2.08163f, .00001f);
 }
+/*
 TEST(vectors, vector4) {
   EXPECT_EQ(16, sizeof(Vector4f));
   Vector4f v4 = { 1.f,2.f,3.f,4.f }, vec4 = { 3.f,4.f,12.f,84.f };
@@ -214,4 +215,4 @@ TEST(Quaternions, basic) {
   Quaternion q = { 1,2,3,4 },qua = q.conjugate();
   EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
   EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
-}
+}*/

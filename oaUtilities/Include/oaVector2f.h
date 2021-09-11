@@ -32,40 +32,40 @@ public:
   Vector2f() = default;
   Vector2f(float _x, float _y) :x(_x), y(_y) {}
   float&
-    operator[](uint8 i);
+    operator[](const uint8 i);
   /**
   * @brief adds the vector v and this one
    * @param v
    * @return
   */
   Vector2f
-    operator+(Vector2f& v);
+    operator+(const Vector2f& v);
   /**
    * @brief adds the vector v to this one
    * @param v
   */
   void
-    operator+=(Vector2f& v);
+    operator+=(const Vector2f& v);
   /**
    * @brief this vector minus vector v
    * @param v
    * @return
   */
   Vector2f
-    operator-(Vector2f& v);
+    operator-(const Vector2f& v);
   /**
    * @brief substract vector v from this
    * @param v
   */
   void
-    operator-=(Vector2f& v);
+    operator-=(const Vector2f& v);
   /**
    * @brief calculates a vector with the same direction as this and a lenght multiplied by v
    * @param v
    * @return
   */
   Vector2f
-    operator*(float v);
+    operator*(float v) const;
   /**
    * @brief multiply the length vector the vector by v
    * @param v
@@ -91,7 +91,7 @@ public:
    * @return
   */
   float
-    dot(Vector2f& v);
+    dot (const Vector2f& v) const;
   /**
    * @brief the lenght of the vector
    * @return
@@ -110,7 +110,7 @@ public:
    * @return
   */
   Vector2f
-    project(Vector2f& v);
+    project(const Vector2f& v);
   /**
    * @brief the direction in radians of the vector
    * @return
@@ -125,5 +125,5 @@ public:
     setDirection(float r);
 };
 bool OA_UTILITY_EXPORT
-operator==(Vector2f v1, Vector2f v2);
+operator==(const Vector2f& v1, const  Vector2f& v2);
 }

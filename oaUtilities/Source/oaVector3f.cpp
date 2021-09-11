@@ -11,26 +11,31 @@ float&
 Vector3f::operator[](uint8 i) {
   return ((&x)[i]);
 }
+bool 
+Vector3f::operator==(const Vector3f& v)
+{
+  return x == v.x && y == v.y && z == v.z;
+}
 Vector3f
-Vector3f::operator+(Vector3f& v)
+Vector3f::operator+(const Vector3f& v)
 {
   return { x + v.x , y + v.y, z + v.z };
 }
 void
-Vector3f::operator+=(Vector3f& v)
+Vector3f::operator+=(const Vector3f& v)
 {
   x += v.x;
   y += v.y;
   z += v.z;
 }
 Vector3f
-Vector3f::operator-(Vector3f& v)
+Vector3f::operator-(const Vector3f& v)
 {
   return { x - v.x , y - v.y, z - v.z };
 }
 
 void
-Vector3f::operator-=(Vector3f& v)
+Vector3f::operator-=(const Vector3f& v)
 {
   x -= v.x;
   y -= v.y;
@@ -38,7 +43,7 @@ Vector3f::operator-=(Vector3f& v)
 }
 
 Vector3f
-Vector3f::operator*(float v)
+Vector3f::operator*(float v) const
 {
   return { x * v , y * v , z * v };
 }
@@ -68,7 +73,7 @@ Vector3f::operator/=(float v)
 }
 
 float
-Vector3f::dot(Vector3f& v)
+Vector3f::dot(const Vector3f& v) const
 {
   return x * v.x + y * v.y + z * v.z;
 }
@@ -86,23 +91,32 @@ Vector3f::normal()
 }
 
 Vector3f
-Vector3f::cross(Vector3f& v)
+Vector3f::cross(const Vector3f& v)
 {
   return Vector3f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 }
 
 Vector3f
-Vector3f::project(Vector3f& v)
+Vector3f::project(const Vector3f& v)
 {
   return v * (dot(v) / v.dot(v));
 }
 
+void Vector3f::rotate(Quaternion q)
+{
+  q = q.normal();
+  Vector3f b = { q.i,q.j,q.k };
+  float b2 = b.x * b.x + b.y * b.y + b.z * b.z;
+  float thisdot = dot(b);
+  *this = (*this * (q.r * q.r - b2) + b * (dot(b) * 2.0f)+ cross(b) * (q.r * 2.0f));
+}
 
 bool
-operator==(Vector3f v1, Vector3f v2)
+operator==(const Vector3f& v1, const Vector3f& v2)
 {
   return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
 }
+
 
 }
 

@@ -47,33 +47,33 @@ public:
    * @return
   */
   Vector4f
-    operator+(Vector4f& v);
+    operator+(const Vector4f& v);
   /**
    * @brief adds the vector v to this one
    * @param v
   */
   void
-    operator+=(Vector4f& v);
+    operator+=(const Vector4f& v);
   /**
    * @brief this vector minus vector v
    * @param v
    * @return
   */
   Vector4f
-    operator-(Vector4f& v);
+    operator-(const Vector4f& v);
   /**
    * @brief substract vector v from this
    * @param v
   */
   void
-    operator-=(Vector4f& v);
+    operator-=(const Vector4f& v);
   /**
    * @brief calculates a vector with the same direction as this and a lenght multiplied by v
    * @param v
    * @return
   */
   Vector4f
-    operator*(float v);
+    operator*(float v) const;
   /**
    * @brief multiply the length vector the vector by v
    * @param v
@@ -99,7 +99,7 @@ public:
    * @return
   */
   float
-    dot(Vector4f& v);
+    dot(const Vector4f& v) const;
   /**
    * @brief the lenght of the vector
    * @return
@@ -118,8 +118,8 @@ public:
    * @return
   */
   Vector4f
-    project(Vector4f& v);
+    project(const Vector4f& v);
 };
 bool OA_UTILITY_EXPORT
-operator==(Vector4f v1, Vector4f v2);
+operator==(const Vector4f& v1, const Vector4f& v2);
 }
