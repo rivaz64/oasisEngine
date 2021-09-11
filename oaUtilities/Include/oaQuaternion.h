@@ -61,7 +61,21 @@ public:
   */
   void
     operator*=(Quaternion& q);
+  /**
+   * @brief gives the conjugate of this quaternion
+   * @return r-i-j-k
+  */
+  Quaternion
+    conjugate();
+  /**
+   * @brief gives the inverse of this quaternion
+   * @return 
+  */
+  Quaternion
+    inverse();
 };
+bool OA_UTILITY_EXPORT
+operator==(Quaternion q1, Quaternion q2);
 }
 
 

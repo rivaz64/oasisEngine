@@ -1,10 +1,11 @@
 #include<gtest\gtest.h>
-#include"../oaUtilities/Include/oaMath.h"
-#include"../oaUtilities/Include/oaVector2f.h"
-#include"../oaUtilities/Include/oaVector3f.h"
-#include"../oaUtilities/Include/oaVector4f.h"
-#include"../oaUtilities/Include/oaMatrix3f.h"
-#include"../oaUtilities/Include/oaMatrix4f.h"
+#include"oaMath.h"
+#include"oaVector2f.h"
+#include"oaVector3f.h"
+#include"oaVector4f.h"
+#include"oaMatrix3f.h"
+#include"oaMatrix4f.h"
+#include"oaQuaternion.h"
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
@@ -208,4 +209,9 @@ TEST(Matrix, Matrix4) {
   EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::pi / 4.f).determinant(), 1, .0001f);
   EXPECT_NEAR(Matrix4f::rotationMatrixY(-Math::pi / 4.f).determinant(), 1, .0001f);
 
+}
+TEST(Quaternions, basic) {
+  Quaternion q = { 1,2,3,4 },qua = q.conjugate();
+  EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
+  EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
 }
