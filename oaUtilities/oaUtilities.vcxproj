@@ -174,9 +174,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\oaForDecUtilities.h" />
+    <ClInclude Include="include\oaLine.h" />
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
+    <ClInclude Include="Include\oaMesh.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformMath.h" />
     <ClInclude Include="Include\oaPlatformTypes.h" />
@@ -186,13 +188,13 @@
     <ClInclude Include="Include\oaVector2f.h" />
     <ClInclude Include="Include\oaVector3f.h" />
     <ClInclude Include="Include\oaVector4f.h" />
-    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="source\oaLine.cpp" />
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />
     <ClCompile Include="Source\oaMatrix4f.cpp" />
+    <ClCompile Include="Source\oaMesh.cpp" />
     <ClCompile Include="Source\oaPlatformMath.cpp" />
     <ClCompile Include="Source\oaQuaternion.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />

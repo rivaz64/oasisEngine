@@ -17,15 +17,15 @@ public:
    * @param x
    * @return
   */
-  static FORCEINLINE float Sqrt(float x) {
-    return sqrtf(x);
+  static FORCEINLINE float sqrt(float x) {
+    return std::sqrtf(x);
   }
   /**
    * @brief the infamous Q_rsqrt by sir John Karmak
    * @param number
    * @return 1/sqrt(x)d
   */
-  static float InvSqrt(float number);
+  static float invSqrt(float number);
   /**
    * @brief wraper of the cmath cos
    * @param x

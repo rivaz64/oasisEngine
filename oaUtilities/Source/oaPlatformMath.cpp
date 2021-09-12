@@ -2,7 +2,7 @@
 const float oaEngineSDK::PlatformMath::pi = 3.1415926535897932384626433832795f;
 const float oaEngineSDK::PlatformMath::radiansToDegrees = 180.f / pi;
 const float oaEngineSDK::PlatformMath::degreesToRadians = pi / 180.f;
-float OA_UTILITY_EXPORT oaEngineSDK::PlatformMath::InvSqrt(float number)
+float OA_UTILITY_EXPORT oaEngineSDK::PlatformMath::invSqrt(float number)
 {
   long i;
   float x2, y;

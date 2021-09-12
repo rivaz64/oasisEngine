@@ -77,13 +77,13 @@ Vector3f::dot(const Vector3f& v) const
 float
 Vector3f::len()
 {
-  return Math::Sqrt(x * x + y * y + z * z);
+  return Math::sqrt(x * x + y * y + z * z);
 }
 
 Vector3f
 Vector3f::normal()
 {
-  return *this * Math::InvSqrt(x * x + y * y + z * z);
+  return *this * Math::invSqrt(x * x + y * y + z * z);
 }
 
 Vector3f

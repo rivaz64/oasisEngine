@@ -64,13 +64,13 @@ Vector2f::dot(const Vector2f& v) const
 float
 Vector2f::len()
 {
-  return Math::Sqrt(x * x + y * y);
+  return Math::sqrt(x * x + y * y);
 }
 
 Vector2f
 Vector2f::normal()
 {
-  return *this * Math::InvSqrt(x * x + y * y);
+  return *this * Math::invSqrt(x * x + y * y);
 }
 
 Vector2f

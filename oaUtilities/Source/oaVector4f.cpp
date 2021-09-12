@@ -74,13 +74,13 @@ Vector4f::dot(const Vector4f& v) const
 float
 Vector4f::len()
 {
-  return Math::Sqrt(x * x + y * y + z * z + w * w);
+  return Math::sqrt(x * x + y * y + z * z + w * w);
 }
 
 Vector4f
 Vector4f::normal()
 {
-  return *this * Math::InvSqrt(x * x + y * y + z * z + w * w);
+  return *this * Math::invSqrt(x * x + y * y + z * z + w * w);
 }
 
 Vector4f
