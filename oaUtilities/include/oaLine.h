@@ -40,7 +40,12 @@ public:
    * @return 
   */
   float distance(Vector3f& p);
-  float distance(Line& L);
+  /**
+   * @brief calculates the distance between the line l and this line
+   * @param l 
+   * @return 
+  */
+  float distance(Line& l);
 };
 }
 

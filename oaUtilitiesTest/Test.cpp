@@ -217,7 +217,7 @@ TEST(Quaternions, basic) {
   EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
   EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
 }
-TEST(line, distanceFromPoint) {
+TEST(line, basic) {
   Vector3f A = { 1.f,1.f,2.f }, B = { 2.f,3.f,6.f }, C = { 5.f,5.f,5.f };
   Line stick = { A,B };
   EXPECT_EQ(stick.getStaringPoint(), A);
@@ -230,4 +230,10 @@ TEST(line, distanceFromPoint) {
   EXPECT_NEAR(midpoint.y, 2.f, .000001f);
   EXPECT_NEAR(midpoint.z, 4.f, .000001f);
   EXPECT_NEAR(stick.distance(C), 3.68394f, .00001f);
+  Vector3f D = { 1.f,2.f,3.f }, E = { 2.f,3.f,5.f };
+  Line l = { D,E };
+  EXPECT_NEAR(stick.distance(l), 0.447214f,.000001f);
+  Vector3f F = { 2.f,2.f,3.f }, G = { 3.f,4.f,7.f };
+  Line parallel = { F,G };
+  EXPECT_NEAR(stick.distance(parallel), 0.816497f,.00001f);
 }

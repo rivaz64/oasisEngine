@@ -82,6 +82,11 @@ public:
   static FORCEINLINE float atan2(float x, float y) {
     return std::atan2(y, x);
   }
+
+  template<class T>
+  static FORCEINLINE T abs(T v) {
+    return std::abs(v);
+  }
 };
 
 
