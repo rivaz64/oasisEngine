@@ -229,5 +229,5 @@ TEST(line, distanceFromPoint) {
   EXPECT_NEAR(midpoint.x, 1.5f, .000001f);
   EXPECT_NEAR(midpoint.y, 2.f, .000001f);
   EXPECT_NEAR(midpoint.z, 4.f, .000001f);
-  //EXPECT_NEAR(stick.distance(C), 2.87f, .01f);
+  EXPECT_NEAR(stick.distance(C), 3.68394f, .00001f);
 }

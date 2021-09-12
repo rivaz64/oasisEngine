@@ -19,11 +19,6 @@ class OA_UTILITY_EXPORT Line
 public:
   Line() = default;
   Line(Vector3f& A, Vector3f& B);
-  /**
-   * @brief gives the point at a certain place in the line, o veing the begining and 1 the end of the line
-   * @param f 
-   * @return 
-  */
   FORCEINLINE Vector3f getStaringPoint() {
     return startingPoint;
   }
@@ -33,13 +28,19 @@ public:
   FORCEINLINE float getLenght() {
     return lenght;
   }
+  /**
+   * @brief gives the point at a certain place in the line, o veing the begining and 1 the end of the line
+   * @param f
+   * @return
+  */
   Vector3f pointAt(float f);
   /**
    * @brief calculates the distance between the point p and this line
    * @param p 
    * @return 
   */
-  float distance(Vector3f p);
+  float distance(Vector3f& p);
+  float distance(Line& L);
 };
 }
 

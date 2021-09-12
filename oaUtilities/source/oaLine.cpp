@@ -2,7 +2,7 @@
 #include "oaLine.h"
 namespace oaEngineSDK {
 
-oaEngineSDK::Line::Line(Vector3f& A, Vector3f& B)
+Line::Line(Vector3f& A, Vector3f& B)
 {
   startingPoint = A;
   Vector3f difference = B - A;
@@ -10,12 +10,12 @@ oaEngineSDK::Line::Line(Vector3f& A, Vector3f& B)
   lenght = difference.len();
 }
 
-Vector3f oaEngineSDK::Line::pointAt(float f)
+Vector3f Line::pointAt(float f)
 {
   return startingPoint+direction*lenght*f;
 }
 
-float Line::distance(Vector3f p)
+float Line::distance(Vector3f& p)
 {
   Vector3f u = p - startingPoint;
   return direction.cross(u).len();
