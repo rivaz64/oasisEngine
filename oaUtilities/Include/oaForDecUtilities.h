@@ -13,4 +13,5 @@ class Vector4f;
 class Matrix3f;
 class Matrix4f;
 class Quaternion;
+class Mesh;
 }

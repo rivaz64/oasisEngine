@@ -11,11 +11,7 @@ float&
 Vector3f::operator[](uint8 i) {
   return ((&x)[i]);
 }
-bool 
-Vector3f::operator==(const Vector3f& v)
-{
-  return x == v.x && y == v.y && z == v.z;
-}
+
 Vector3f
 Vector3f::operator+(const Vector3f& v)
 {

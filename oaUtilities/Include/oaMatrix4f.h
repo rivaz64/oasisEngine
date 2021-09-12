@@ -112,8 +112,7 @@ public:
   /**
    * @brief creates a rotation matrix for the given the quaternion q
   */
-  static Matrix4f
-    rotationMatrix(float r, Quaternion& v);
+  
 
 };
 bool OA_UTILITY_EXPORT operator==(Matrix4f m1, Matrix4f m2);

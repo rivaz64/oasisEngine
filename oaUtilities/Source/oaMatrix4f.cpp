@@ -223,6 +223,7 @@ Matrix4f::rotationMatrix(float r, Vector3f& v)
                    { xz - sy,yz + sx,c + mc * v.y * v.y,0.f },
                    { 0.f,0.f,0.f,1.f });
 }
+
 bool OA_UTILITY_EXPORT 
 operator==(Matrix4f m1, Matrix4f m2)
 {

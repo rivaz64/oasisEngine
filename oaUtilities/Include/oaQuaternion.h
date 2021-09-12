@@ -8,7 +8,9 @@
 #include"oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
-
+/**
+ * @brief a class for quaternion numbers
+*/
 class OA_UTILITY_EXPORT Quaternion
 {
 public:
@@ -87,6 +89,12 @@ public:
   */
   Quaternion 
     normal();
+  /**
+   * @brief gives the rotation matrix of this quaternion
+   * @return
+  */
+  Matrix4f 
+    toMatrix();
 };
 bool OA_UTILITY_EXPORT
 operator==(Quaternion q1, Quaternion q2);

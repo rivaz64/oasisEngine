@@ -1,4 +1,7 @@
 #include "oaQuaternion.h"
+#include "oaVector4f.h"
+#include "oaMatrix4f.h"
+
 namespace oaEngineSDK {
 Quaternion oaEngineSDK::Quaternion::operator+(Quaternion& q)
 {
@@ -49,6 +52,22 @@ Quaternion Quaternion::normal()
 {
   float absVal = r * r + i * i + j * j + k * k;
   return { r / absVal,i / absVal,j / absVal,k / absVal };
+}
+Matrix4f Quaternion::toMatrix()
+{
+  float i2 = 2*i * i;
+  float j2 = 2 * j * j;
+  float k2 = 2 * k * k;
+  float ij = 2 * i * j;
+  float jk = 2 * j * k;
+  float ik = 2 * i * k;
+  float ri = 2 * r * i;
+  float rj = 2 * r * j;
+  float rk = 2 * r * k;
+  return { {1.f - j2 + k2,ij - rk,ik + rj,0.0f},
+          {ij + rk,1.f - i2 + k2,jk - ri,0.0f},
+          {ik - rj,jk + ri,1.f - i2 + j2,0.0f},
+          {0.0f,0.0f,0.0f,1.0f} };
 }
 bool OA_UTILITY_EXPORT operator==(Quaternion q1, Quaternion q2)
 {
