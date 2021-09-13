@@ -8,7 +8,7 @@
 #include"oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
-class Mesh
+class OA_UTILITY_EXPORT Mesh
 {
   /**
    * @brief the number of tris of the mesh
