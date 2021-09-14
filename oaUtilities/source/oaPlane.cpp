@@ -33,7 +33,30 @@ bool Plane::intersect(Line& l,Vector3f& point)
 {
   float fv = normal.dot(l.getDirection());
   if (Math::abs(fv) > FLT_MIN) {
-    point = l.getStaringPoint() - l.getDirection() * normal.dot(l.getStaringPoint() / fv);
+    point = l.getStaringPoint() - l.getDirection() * ((normal.dot(l.getStaringPoint())+d) / fv);
+    return true;
+  }
+  return false;
+}
+
+bool Plane::intersect(Plane& p1, Plane& p2, Vector3f& point)
+{
+  auto n = p1.normal.cross(p2.normal);
+  float det = n.dot(normal);
+  if (det > FLT_MIN) {
+    point = (normal.cross(p1.normal) * p2.d + normal.cross(p2.normal) * p1.d - n * d) / det;
+    return true;
+  }
+  return false;
+}
+
+bool Plane::intersect(Plane& p, Line& intersection)
+{
+  auto dir = normal.cross(p.normal);
+  intersection.setDirection(dir);
+  float det = dir.dot(dir);
+  if (det > FLT_MIN) {
+    intersection.setStaringPoint((dir.cross(normal) * p.d + dir.cross(p.normal) * d) / det);
     return true;
   }
   return false;

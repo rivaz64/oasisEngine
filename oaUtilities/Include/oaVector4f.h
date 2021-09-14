@@ -6,7 +6,7 @@
 
 #pragma once
 #include"oaPrerequisitesUtilities.h"
-
+#include "oaVector3f.h"
 namespace oaEngineSDK {
 /**
  * @brief tetradimencional vector of floats
@@ -17,18 +17,24 @@ public:
   union {
     float data[4];
     struct {
-      /**
-       * @brief the x component of the vector
-      */
-      float x;
-      /**
-       * @brief the y component of the vector
-      */
-      float y;
-      /**
-       * @brief the z component of the vector
-      */
-      float z;
+      union {
+        struct {
+          /**
+            * @brief the x component of the vector
+          */
+          float x;
+          /**
+           * @brief the y component of the vector
+          */
+          float y;
+          /**
+           * @brief the z component of the vector
+          */
+          float z;
+        };
+        Vector3f xyz;
+      };
+      
       /**
        * @brief the w component of the vector
       */

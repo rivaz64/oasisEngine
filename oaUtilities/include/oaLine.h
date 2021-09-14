@@ -37,7 +37,9 @@ public:
    * @param B 
   */
   Line(Vector3f& A, Vector3f& B);
-  FORCEINLINE Vector3f getStaringPoint() {
+
+  FORCEINLINE Vector3f 
+    getStaringPoint() {
     return startingPoint;
   }
 
@@ -49,6 +51,21 @@ public:
   FORCEINLINE float 
     getLenght() {
     return lenght;
+  }
+
+  FORCEINLINE void 
+    setStaringPoint(const Vector3f& _startingPoint) {
+    startingPoint = _startingPoint;
+  }
+
+  FORCEINLINE void
+    setDirection(const Vector3f& _direction) {
+    direction = _direction;
+  }
+
+  FORCEINLINE void
+    setLenght(float _lenght) {
+    lenght = _lenght;
   }
 
   /**

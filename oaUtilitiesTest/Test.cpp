@@ -239,18 +239,26 @@ TEST(geometry, line) {
   EXPECT_NEAR(stick.distance(parallel), 0.816497f,.00001f);
 }
 TEST(geometry, plane) {
-  Vector3f A = { 1.f,2.f,1.f }, B = { 6.f,3.f,2.f }, C = { 2.f,3.f,5.f }, D = { 4.f,4.f,4.f };
-  Vector4f E = { 4.f,4.f,4.f,1.f };
+  Vector3f A = { 1.f,2.f,1.f }, B = { 6.f,3.f,2.f }, C = { 2.f,3.f,5.f };
+  Vector4f D = { 4.f,4.f,4.f,1.f };
   Plane paper = { A,B,C };
   EXPECT_EQ(paper.getNormal(), Vector3f(3, -19, 4).normal());
   EXPECT_NEAR(paper.getD(), 1.57785F,.00001f);
-  EXPECT_NEAR(paper.distance(D), .865277, .000001f);
+  EXPECT_NEAR(paper.distance(D.xyz), .865277, .000001f);
   Matrix4f refMat = paper.reflection();
-  Vector4f refpoint = refMat * E;
+  Vector4f refpoint = refMat * D;
   EXPECT_NEAR(refpoint.x, 4.26f, .01f);
   EXPECT_NEAR(refpoint.y, 2.33f, .01f);
   EXPECT_NEAR(refpoint.z, 4.35f, .01f);
 
-  Line = { E,refpoint };
-
+  Line arrow = Line(D.xyz,refpoint.xyz);
+  Vector3f intersection;
+  EXPECT_TRUE(paper.intersect(arrow, intersection));
+  EXPECT_NEAR(intersection.x, 4.13, 0.01f);
+  
+  Plane paper1 = { A,D.xyz,refpoint.xyz };
+  Plane paper2 = { C,D.xyz,refpoint.xyz };
+  Line cut;
+  paper.intersect(paper1,paper2, intersection);
+  EXPECT_EQ(intersection, arrow.pointAt(.5));
 }

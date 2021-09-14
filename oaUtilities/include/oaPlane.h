@@ -73,6 +73,25 @@ public:
   */
   bool
     intersect(Line& l,Vector3f& point);
+
+  /**
+   * @brief calculates the point where 3 planes intersect
+   * @param p1 
+   * @param p2 
+   * @param point 
+   * @return if it intersects or not
+  */
+  bool
+    intersect(Plane& p1, Plane& p2, Vector3f& point);
+
+  /**
+   * @brief calculates the line where 2 planes intersect
+   * @param p 
+   * @param intersection 
+   * @return 
+  */
+  bool
+    intersect(Plane& p, Line& intersection);
 };
 
 }

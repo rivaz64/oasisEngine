@@ -5,7 +5,7 @@ namespace oaEngineSDK {
 Line::Line(Vector3f& A, Vector3f& B)
 {
   startingPoint = A;
-  Vector3f difference = B - A;
+  auto difference = B - A;
   direction = difference.normal();
   lenght = difference.len();
 }
@@ -17,13 +17,13 @@ Vector3f Line::pointAt(float f)
 
 float Line::distance(Vector3f& p)
 {
-  Vector3f u = p - startingPoint;
+  auto u = p - startingPoint;
   return direction.cross(u).len();
 }
 
 float Line::distance(Line& l)
 {
-  Vector3f dif = l.startingPoint - startingPoint;
+  auto dif = l.startingPoint - startingPoint;
   float v12 = direction.dot(direction);
   float v22 = l.direction.dot(l.direction);
   float v1v2 = direction.dot(l.direction);
