@@ -64,6 +64,15 @@ public:
   */
   Matrix4f
     reflection();
+
+  /**
+   * @brief calculates the point where a line intersects a plane
+   * @param l 
+   * @param point where the line intersects
+   * @return if it intersects or not
+  */
+  bool
+    intersect(Line& l,Vector3f& point);
 };
 
 }

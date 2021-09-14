@@ -250,4 +250,7 @@ TEST(geometry, plane) {
   EXPECT_NEAR(refpoint.x, 4.26f, .01f);
   EXPECT_NEAR(refpoint.y, 2.33f, .01f);
   EXPECT_NEAR(refpoint.z, 4.35f, .01f);
+
+  Line = { E,refpoint };
+
 }

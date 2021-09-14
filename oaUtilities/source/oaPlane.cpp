@@ -1,6 +1,7 @@
 #include "oaVector3f.h"
 #include"oaVector4f.h"
 #include "oaMatrix4f.h"
+#include "oaLine.h"
 #include "oaPlane.h"
 namespace oaEngineSDK {
 
@@ -26,6 +27,16 @@ Matrix4f Plane::reflection()
     {xz,yz,1.f - 2.f * normal.z * normal.z,-2.f * normal.z*d },
     {0.f,0.f,0.f,1.f}
     );
+}
+
+bool Plane::intersect(Line& l,Vector3f& point)
+{
+  float fv = normal.dot(l.getDirection());
+  if (Math::abs(fv) > FLT_MIN) {
+    point = l.getStaringPoint() - l.getDirection() * normal.dot(l.getStaringPoint() / fv);
+    return true;
+  }
+  return false;
 }
 
 }
