@@ -1,5 +1,12 @@
-#include"oaVector3f.h"
+/**
+ * @file oaLine.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/12/2021
+ */
+
+#include "oaVector3f.h"
 #include "oaLine.h"
+
 namespace oaEngineSDK {
 
 Line::Line(Vector3f& A, Vector3f& B)

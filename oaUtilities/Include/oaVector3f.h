@@ -5,7 +5,8 @@
  */
 
 #pragma once
-#include"oaPrerequisitesUtilities.h"
+#include "oaPrerequisitesUtilities.h"
+#include "oaVector2f.h"
 #include "oaQuaternion.h"
 
 namespace oaEngineSDK {
@@ -16,28 +17,10 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector3f
 {
 public:
-  union {
-    float data[3];
-    struct {
-      /**
-       * @brief the x component of the vector
-      */
-      float x;
-      /**
-       * @brief the y component of the vector
-      */
-      float y;
-      /**
-       * @brief the z component of the vector
-      */
-      float z;
-    };
-  };
 
   Vector3f() = default;
   Vector3f(float _x, float _y, float _z) :x(_x), y(_y), z(_z) {}
-  float&
-    operator[](uint8 i);
+  ~Vector3f() = default;
 
   /**
    * @brief adds the vector v and this one
@@ -132,12 +115,42 @@ public:
   void
     rotate(Quaternion q);
 
+ private:
+  float&
+    operator[](uint8 i);
+
+ public:
   static const Vector3f RIGHT;
   static const Vector3f LEFT;
   static const Vector3f UP;
   static const Vector3f DOWN;
   static const Vector3f FRONT;
   static const Vector3f BACK;
+
+  union {
+    /**
+     * @brief the x and y components of the vector
+    */
+    Vector2f xy;
+    struct {
+      /**
+       * @brief the x component of the vector
+      */
+      float x;
+      /**
+       * @brief the y component of the vector
+      */
+      float y;
+
+    };
+  };
+  /**
+       * @brief the z component of the vector
+      */
+  float z;
+
+ private:
+   friend class Matrix3f;
 };
 bool OA_UTILITY_EXPORT
 operator==(const Vector3f& v1,const Vector3f& v2);

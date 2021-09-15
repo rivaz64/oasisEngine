@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include"oaPrerequisitesUtilities.h"
+#include "oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
 /**
@@ -13,16 +13,8 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Plane
 {
-  /**
-   * @brief the normal of the plane
-  */
-  Vector3f normal;
-
-  /**
-   * @brief the result of the dot product betweeen the normal and any vector in the plane
-  */
-  float d;
-public:
+  
+ public:
 
   Plane() = default;
   /**
@@ -40,11 +32,21 @@ public:
   */
   Plane(Vector3f& A, Vector3f& B, Vector3f& C);
 
+  ~Plane() = default;
+
+  /**
+   * @brief getter for the normal
+   * @return 
+  */
   FORCEINLINE Vector3f 
     getNormal() {
     return normal;
   }
   
+  /**
+   * @brief getter for the member d
+   * @return 
+  */
   FORCEINLINE float 
     getD() {
     return d;
@@ -92,6 +94,16 @@ public:
   */
   bool
     intersect(Plane& p, Line& intersection);
+ 
+  /**
+    * @brief the normal of the plane
+   */
+  Vector3f normal;
+
+  /**
+   * @brief the result of the dot product betweeen the normal and any vector in the plane
+  */
+  float d;
 };
 
 }

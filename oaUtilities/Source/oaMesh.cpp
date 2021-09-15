@@ -1,5 +1,12 @@
+/**
+ * @file oaMesh.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/12/2021
+ */
+
 #include "oaMesh.h"
 #include "oaVector3f.h"
+
 void oaEngineSDK::Mesh::generateNormals()
 {
   normals.clear();

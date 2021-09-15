@@ -1,9 +1,15 @@
+/**
+ * @file oaVector2f.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/07/2021
+ */
 #include "oaVector2f.h"
 namespace oaEngineSDK {
 float&
 Vector2f::operator[](const uint8 i) {
   return ((&x)[i]);
 }
+
 Vector2f
 Vector2f::operator+(const Vector2f& v)
 {

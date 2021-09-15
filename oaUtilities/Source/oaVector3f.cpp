@@ -1,4 +1,13 @@
+/**
+ * @file oaVector3f.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/07/2021
+ */
+
+#include "oaVector2f.h"
 #include "oaVector3f.h"
+
+
 namespace oaEngineSDK {
 const Vector3f Vector3f::RIGHT = Vector3f(1, 0, 0);
 const Vector3f Vector3f::LEFT = Vector3f(-1, 0, 0);

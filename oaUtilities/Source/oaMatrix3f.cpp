@@ -1,6 +1,13 @@
+/**
+ * @file oaMatrix3f.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/07/2021
+ */
+
 #include"oaVector2f.h"
 #include"oaVector3f.h"
 #include "oaMatrix3f.h"
+
 
 namespace oaEngineSDK {
 Matrix3f::Matrix3f(float f)
@@ -111,7 +118,7 @@ Matrix3f::determinant()
 float
 Matrix3f::minorDet(uint8 r1, uint8 r2, uint8 c1, uint8 c2)
 {
-  return vectors[r1][c1] * vectors[r2][c2] - vectors[r2][c1] * vectors[r1][c2];
+  return (*this)[r1][c1] * (*this)[r2][c2] - (*this)[r2][c1] * (*this)[r1][c2];
 }
 
 Matrix3f

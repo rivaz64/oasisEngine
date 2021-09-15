@@ -5,7 +5,7 @@
  */
 
 #pragma once
-#include"oaPrerequisitesUtilities.h"
+#include "oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
 /**
@@ -15,24 +15,9 @@ class OA_UTILITY_EXPORT Vector2f
 {
 public:
 
-  union {
-    float data[2];
-    struct {
-      /**
-       * @brief the x component of the vector
-      */
-      float x;
-      /**
-       * @brief the y component of the vector
-      */
-      float y;
-    };
-  };
-
   Vector2f() = default;
   Vector2f(float _x, float _y) :x(_x), y(_y) {}
-  float&
-    operator[](const uint8 i);
+  ~Vector2f() = default;
   /**
   * @brief adds the vector v and this one
    * @param v
@@ -123,6 +108,20 @@ public:
   */
   void
     setDirection(float r);
+
+  private:
+  float&
+    operator[](const uint8 i);
+
+  public:
+  /**
+   * @brief the x component of the vector
+  */
+  float x;
+  /**
+   * @brief the y component of the vector
+  */
+  float y;
 };
 bool OA_UTILITY_EXPORT
 operator==(const Vector2f& v1, const  Vector2f& v2);

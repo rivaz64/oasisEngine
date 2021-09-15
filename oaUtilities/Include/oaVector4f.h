@@ -7,6 +7,7 @@
 #pragma once
 #include"oaPrerequisitesUtilities.h"
 #include "oaVector3f.h"
+
 namespace oaEngineSDK {
 /**
  * @brief tetradimencional vector of floats
@@ -14,39 +15,11 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector4f
 {
 public:
-  union {
-    float data[4];
-    struct {
-      union {
-        struct {
-          /**
-            * @brief the x component of the vector
-          */
-          float x;
-          /**
-           * @brief the y component of the vector
-          */
-          float y;
-          /**
-           * @brief the z component of the vector
-          */
-          float z;
-        };
-        Vector3f xyz;
-      };
-      
-      /**
-       * @brief the w component of the vector
-      */
-      float w;
-    };
-  };
-
 
   Vector4f() = default;
   Vector4f(float _x, float _y, float _z, float _w) :x(_x), y(_y), z(_z), w(_w) {}
-  float&
-    operator[](uint8 i);
+  ~Vector4f() = default;
+  
   /**
    * @brief adds the vector v and this one
    * @param v
@@ -125,6 +98,40 @@ public:
   */
   Vector4f
     project(const Vector4f& v);
+
+ private:
+  float&
+    operator[](uint8 i);
+public:
+  union {
+    /**
+      * @brief the x, y, and z components of the vector
+    */
+    Vector3f xyz;
+    struct {
+      /**
+        * @brief the x component of the vector
+      */
+      float x;
+      /**
+       * @brief the y component of the vector
+      */
+      float y;
+      /**
+       * @brief the z component of the vector
+      */
+      float z;
+    };
+
+  };
+
+  /**
+   * @brief the w component of the vector
+  */
+  float w;
+
+ private:
+  friend class Matrix4f;
 };
 bool OA_UTILITY_EXPORT
 operator==(const Vector4f& v1, const Vector4f& v2);

@@ -1,8 +1,15 @@
+/**
+ * @file oaPlane.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/12/2021
+ */
+
 #include "oaVector3f.h"
-#include"oaVector4f.h"
+#include "oaVector4f.h"
 #include "oaMatrix4f.h"
 #include "oaLine.h"
 #include "oaPlane.h"
+
 namespace oaEngineSDK {
 
 Plane::Plane(Vector3f& A, Vector3f& B, Vector3f& C)

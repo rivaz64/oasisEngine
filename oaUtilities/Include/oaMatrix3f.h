@@ -1,5 +1,5 @@
 /**
- * @file oaVector2f.h
+ * @file oaMatrix3f.h
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/07/2021
  */
@@ -15,26 +15,11 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Matrix3f
 {
 public:
-  union {
-    float data[9];
-    Vector3f vectors[3];
-    struct {
-      /**
-       * @brief the first row of the matrix
-      */
-      Vector3f a;
-      /**
-       * @brief the second row of the matrix
-      */
-      Vector3f b;
-      /**
-       * @brief the third row of the matrix
-      */
-      Vector3f c;
-    };
-  };
+  
   Matrix3f() = default;
-  Matrix3f(Vector3f _a, Vector3f _b, Vector3f _c) :a(std::move(_a)), b(std::move(_b)), c(std::move(_c)) {}
+  Matrix3f(const Vector3f& _a, const Vector3f& _b, const Vector3f& _c) :
+    a(_a), b(_b), c(_c) {}
+  ~Matrix3f() = default;
   /**
    * @brief constructor for an identity matrix
    * @param f the idnetity matrix is going to be multiplied by f
@@ -145,6 +130,19 @@ public:
   */
   static Matrix3f
     rotationMatrix(float r);
+
+  /**
+   * @brief the first row of the matrix
+  */
+  Vector3f a;
+  /**
+   * @brief the second row of the matrix
+  */
+  Vector3f b;
+  /**
+   * @brief the third row of the matrix
+  */
+  Vector3f c;
 };
 bool OA_UTILITY_EXPORT operator==(Matrix3f m1, Matrix3f m2);
 }

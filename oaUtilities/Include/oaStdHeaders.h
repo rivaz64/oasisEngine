@@ -1,3 +1,8 @@
+/**
+ * @file oaStdHeaders.h
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/11/2021
+ */
 #pragma once
 #include<vector>
 #include<list>

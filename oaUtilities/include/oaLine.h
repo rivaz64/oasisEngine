@@ -13,9 +13,6 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Line
 {
-  Vector3f startingPoint;
-  Vector3f direction;
-  float lenght;
 public:
 
   Line() = default;
@@ -31,6 +28,7 @@ public:
     direction(_direction),
     lenght(_lenght) {}
 
+  ~Line() = default;
   /**
    * @brief a line that goes from point A to point B
    * @param A 
@@ -38,31 +36,55 @@ public:
   */
   Line(Vector3f& A, Vector3f& B);
 
+  /**
+   * @brief getter for the starting point
+   * @return 
+  */
   FORCEINLINE Vector3f 
     getStaringPoint() {
     return startingPoint;
   }
 
+  /**
+   * @brief getter for the direction
+   * @return 
+  */
   FORCEINLINE Vector3f 
     getDirection() {
     return direction;
   }
 
+  /**
+   * @brief getter for the lenght
+   * @return 
+  */
   FORCEINLINE float 
     getLenght() {
     return lenght;
   }
 
+  /**
+   * @brief setter for the starting point
+   * @param _startingPoint 
+  */
   FORCEINLINE void 
     setStaringPoint(const Vector3f& _startingPoint) {
     startingPoint = _startingPoint;
   }
 
+  /**
+   * @brief setter for the direction
+   * @param _direction 
+  */
   FORCEINLINE void
     setDirection(const Vector3f& _direction) {
     direction = _direction;
   }
 
+  /**
+   * @brief setter for the lenght
+   * @param _lenght 
+  */
   FORCEINLINE void
     setLenght(float _lenght) {
     lenght = _lenght;
@@ -91,6 +113,20 @@ public:
   */
   float 
     distance(Line& l);
+
+ private:
+   /**
+    * @brief the point where the line starts
+   */
+   Vector3f startingPoint;
+   /**
+    * @brief the direction where the line goes 
+   */
+   Vector3f direction;
+   /**
+    * @brief the lenght of the line
+   */
+   float lenght;
 };
 }
 

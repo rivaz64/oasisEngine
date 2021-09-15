@@ -1,5 +1,5 @@
 /**
- * @file oaVector2f.h
+ * @file oaQuaternion.h
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/11/2021
  */
@@ -14,24 +14,9 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Quaternion
 {
 public:
-  /**
-   * @brief real part of the quaternion
-  */
-  float r;
-  /**
-   * @brief the i component of the quaternion
-  */
-  float i;
-  /**
-   * @brief the j component of the quaternion
-  */
-  float j;
-  /**
-   * @brief the k component of the quaternion
-  */
-  float k;
   Quaternion() = default;
   Quaternion(float _r, float _i, float _j, float _k) :r(_r), i(_i), j(_j), k(_k) {}
+  ~Quaternion() = default;
   /**
    * @brief adds the quaternion q and this one
    * @param q
@@ -95,6 +80,23 @@ public:
   */
   Matrix4f 
     toMatrix();
+
+  /**
+   * @brief real part of the quaternion
+  */
+  float r;
+  /**
+   * @brief the i component of the quaternion
+  */
+  float i;
+  /**
+   * @brief the j component of the quaternion
+  */
+  float j;
+  /**
+   * @brief the k component of the quaternion
+  */
+  float k;
 };
 bool OA_UTILITY_EXPORT
 operator==(Quaternion q1, Quaternion q2);

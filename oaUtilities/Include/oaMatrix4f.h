@@ -1,5 +1,5 @@
 /**
- * @file oaVector2f.h
+ * @file oaMatrix4f.h
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/07/2021
  */
@@ -38,7 +38,12 @@ public:
     };
   };
   Matrix4f() = default;
-  Matrix4f(Vector4f _a, Vector4f _b, Vector4f _c, Vector4f _d) :a(std::move(_a)), b(std::move(_b)), c(std::move(_c)), d(std::move(_d)) {}
+  Matrix4f(const Vector4f& _a, 
+           const Vector4f& _b, 
+           const Vector4f& _c, 
+           const Vector4f& _d) 
+    :a(_a), b(_b), c(_c), d(_d) {}
+  ~Matrix4f() = default;
   /**
    * @brief constructor for an identity matrix
    * @param f the idnetity matrix is going to be multiplied by f

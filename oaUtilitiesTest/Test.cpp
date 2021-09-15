@@ -35,6 +35,7 @@ TEST(math, basic) {
   EXPECT_EQ(Math::sqrt(49), 7);
   EXPECT_EQ(Math::invSqrt(49), 1.f/7.f);
 }
+
 TEST(vectors, vector2) {
   EXPECT_EQ(8, sizeof(Vector2f));
   Vector2f v2 = { 3.f,4.f }, vec2 = { 5.f,12.f };
@@ -214,11 +215,13 @@ TEST(Matrix, Matrix4) {
 
 }
 TEST(Quaternions, basic) {
+  EXPECT_EQ(sizeof(Quaternion), 16);
   Quaternion q = { 1,2,3,4 },qua = q.conjugate();
   EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
   EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
 }
 TEST(geometry, line) {
+  EXPECT_EQ(sizeof(Line), 28);
   Vector3f A = { 1.f,1.f,2.f }, B = { 2.f,3.f,6.f }, C = { 5.f,5.f,5.f };
   Line stick = { A,B };
   EXPECT_EQ(stick.getStaringPoint(), A);
@@ -239,6 +242,7 @@ TEST(geometry, line) {
   EXPECT_NEAR(stick.distance(parallel), 0.816497f,.00001f);
 }
 TEST(geometry, plane) {
+  EXPECT_EQ(sizeof(Plane), 16);
   Vector3f A = { 1.f,2.f,1.f }, B = { 6.f,3.f,2.f }, C = { 2.f,3.f,5.f };
   Vector4f D = { 4.f,4.f,4.f,1.f };
   Plane paper = { A,B,C };

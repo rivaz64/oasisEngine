@@ -1,3 +1,9 @@
+/**
+ * @file oaQuaternion.cpp
+ * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+ * @date 9/11/2021
+ */
+
 #include "oaQuaternion.h"
 #include "oaVector4f.h"
 #include "oaMatrix4f.h"

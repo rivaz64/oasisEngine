@@ -63,6 +63,9 @@
     <ClInclude Include="include\oaPlane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -96,6 +99,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaPlane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
