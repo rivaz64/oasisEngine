@@ -16,4 +16,5 @@ class Quaternion;
 class Mesh;
 class Line;
 class Plane;
+class Sphere;
 }

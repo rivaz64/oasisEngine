@@ -11,12 +11,24 @@ namespace oaEngineSDK {
 /**
  * @brief class for a mathematical shpere
 */
-class Sphere
+class OA_UTILITY_EXPORT Sphere
 {
  public:
   Sphere() = default;
   Sphere(const Vector3f& _center, float _radius) :center(_center), radius(_radius) {}
   ~Sphere() = default;
+
+  /**
+   * @brief getter for the center
+   * @return 
+  */
+  FORCEINLINE const Vector3f& const getCenter() const {
+    return center;
+  }
+
+  FORCEINLINE const float& const getRadius() const {
+    return radius;
+  }
 
   /**
    * @brief checks if the point is inside the sphere
@@ -33,6 +45,14 @@ class Sphere
   */
   bool
     collides(Line& l);
+
+  /**
+   * @brief checks if 2 spheres are colliding
+   * @param s 
+   * @return 
+  */
+  bool
+    collides(const Sphere& s);
 
  private:
    /**

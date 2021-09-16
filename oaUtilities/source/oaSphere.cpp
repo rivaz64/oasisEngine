@@ -17,3 +17,8 @@ bool oaEngineSDK::Sphere::collides(Line& l)
 {
   return l.distance(center) < radius && l.getDirection().dot(center-l.getStaringPoint())<l.getLenght();
 }
+
+bool oaEngineSDK::Sphere::collides(const Sphere& s)
+{
+    return (center-s.center).len()<(radius+s.radius);
+}

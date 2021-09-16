@@ -8,6 +8,7 @@
 #include "oaQuaternion.h"
 #include "oaLine.h"
 #include "oaPlane.h"
+#include "oaSphere.h"
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
@@ -265,4 +266,15 @@ TEST(geometry, plane) {
   Line cut;
   paper.intersect(paper1,paper2, intersection);
   EXPECT_EQ(intersection, arrow.pointAt(.5));
+}
+
+TEST(collicions, shpere) {
+  Sphere ball({ 2,3,6 }, 4);
+  Vector3f A = { 1.f,1.f,7.f };
+  Vector3f B = { 7.f,8.f,9.f };
+  EXPECT_TRUE(ball.isInside(A));
+  EXPECT_FALSE(ball.isInside(B));
+  EXPECT_TRUE(ball.collides(Sphere(A, 1)));
+  EXPECT_FALSE(ball.collides(Sphere(B, 1)));
+  EXPECT_TRUE(ball.collides(Sphere(B, 5)));
 }

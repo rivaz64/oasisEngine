@@ -173,6 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\oaBoxAABB.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
     <ClInclude Include="include\oaLine.h" />
     <ClInclude Include="Include\oaMath.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Include\oaVector4f.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaLine.cpp" />
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />

@@ -77,15 +77,46 @@ public:
   /**
    * @brief wraper of the cmath atan2
    * @param x
+   * @param y
    * @return
   */
   static FORCEINLINE float atan2(float x, float y) {
     return std::atan2(y, x);
   }
 
+  /**
+   * @brief wraper of the std::abs
+   * @tparam T 
+   * @param v 
+   * @return 
+  */
   template<class T>
   static FORCEINLINE T abs(T v) {
     return std::abs(v);
+  }
+
+  /**
+   * @brief wraper of the std::max
+   * @tparam T
+   * @param v1
+   * @param v2
+   * @return
+  */
+  template<class T>
+  static FORCEINLINE T max(T v1,T v2) {
+    return std::max(v1,v2);
+  }
+
+  /**
+   * @brief wraper of the std::min
+   * @tparam T
+   * @param v1
+   * @param v2
+   * @return
+  */
+  template<class T>
+  static FORCEINLINE T min(T v1, T v2) {
+    return std::min(v1, v2);
   }
 };
 
