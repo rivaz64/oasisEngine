@@ -7,17 +7,17 @@
 #pragma once
 #include"oaPrerequisitesUtilities.h"
 
+
 namespace oaEngineSDK {
 
 /**
- * @brief Matrix 3x3 of floats
+ * @brief Matrix 4x4 of floats
 */
 class OA_UTILITY_EXPORT Matrix4f
 {
 public:
   union {
     float data[16];
-    Vector4f vectors[4];
     struct {
       /**
        * @brief the first row of the matrix

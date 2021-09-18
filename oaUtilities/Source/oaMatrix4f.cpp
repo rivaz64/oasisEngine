@@ -4,20 +4,21 @@
  * @date 9/07/2021
  */
 
+
+#include "oaMatrix4f.h"
 #include "oaVector3f.h"
 #include "oaVector4f.h"
 #include "oaMatrix3f.h"
-#include "oaMatrix4f.h"
 
 namespace oaEngineSDK {
-Matrix4f::Matrix4f(float f)
+/*Matrix4f::Matrix4f(float f)
 {
   a = { f,0.f,0.f,0.f };
   b = { 0.f,f,0.f,0.f };
   c = { 0.f,0.f,f,0.f };
   d = { 0.f,0.f,0.f,f };
 }
-
+*/
 Vector4f& 
 Matrix4f::operator[](uint8 i)
 {
