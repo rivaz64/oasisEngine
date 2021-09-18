@@ -16,35 +16,34 @@ const Vector3f Vector3f::DOWN = Vector3f(0, -1, 0);
 const Vector3f Vector3f::FRONT = Vector3f(0, 0, 1);
 const Vector3f Vector3f::BACK = Vector3f(0, 0, -1);
 
-float&
-Vector3f::operator[](uint8 i) {
-  return ((&x)[i]);
-}
-
 Vector3f
 Vector3f::operator+(const Vector3f& v)
 {
   return { x + v.x , y + v.y, z + v.z };
 }
-void
+
+Vector3f&
 Vector3f::operator+=(const Vector3f& v)
 {
   x += v.x;
   y += v.y;
   z += v.z;
+  return *this;
 }
+
 Vector3f
 Vector3f::operator-(const Vector3f& v)
 {
   return { x - v.x , y - v.y, z - v.z };
 }
 
-void
+Vector3f&
 Vector3f::operator-=(const Vector3f& v)
 {
   x -= v.x;
   y -= v.y;
   z -= v.z;
+  return *this;
 }
 
 Vector3f
@@ -53,12 +52,13 @@ Vector3f::operator*(float v) const
   return { x * v , y * v , z * v };
 }
 
-void
+Vector3f&
 Vector3f::operator*=(float v)
 {
   x *= v;
   y *= v;
   z *= v;
+  return *this;
 }
 
 Vector3f
@@ -68,13 +68,14 @@ Vector3f::operator/(float v)
   return { x * v , y * v, z * v };
 }
 
-void
+Vector3f&
 Vector3f::operator/=(float v)
 {
   v = 1.f / v;
   x *= v;
   y *= v;
   z *= v;
+  return *this;
 }
 
 float

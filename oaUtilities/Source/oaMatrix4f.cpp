@@ -8,131 +8,171 @@
 #include "oaMatrix4f.h"
 #include "oaVector3f.h"
 #include "oaVector4f.h"
-#include "oaMatrix3f.h"
 
 namespace oaEngineSDK {
-/*Matrix4f::Matrix4f(float f)
+
+Matrix4f 
+oaEngineSDK::Matrix4f::operator+(const Matrix4f& m)
 {
-  a = { f,0.f,0.f,0.f };
-  b = { 0.f,f,0.f,0.f };
-  c = { 0.f,0.f,f,0.f };
-  d = { 0.f,0.f,0.f,f };
+  return {
+    m11 + m.m11,m12 + m.m12,m13 + m.m13,m14 + m.m14,
+    m21 + m.m21,m22 + m.m22,m23 + m.m23,m24 + m.m24,
+    m31 + m.m31,m32 + m.m32,m33 + m.m33,m34 + m.m34,
+    m41 + m.m41,m42 + m.m42,m43 + m.m43,m44 + m.m44
+  };
 }
-*/
-Vector4f& 
-Matrix4f::operator[](uint8 i)
+
+Matrix4f&
+oaEngineSDK::Matrix4f::operator+=(const Matrix4f& m)
 {
-  return ((&a)[i]);
+  m11 += m.m11;
+  m12 += m.m12;
+  m13 += m.m13;
+  m14 += m.m14;
+  m21 += m.m21;
+  m22 += m.m22;
+  m23 += m.m23;
+  m24 += m.m24;
+  m31 += m.m31;
+  m32 += m.m32;
+  m33 += m.m33;
+  m34 += m.m34;
+  m41 += m.m41;
+  m42 += m.m42;
+  m43 += m.m43;
+  m44 += m.m44;
+  return *this;
 }
 
 Matrix4f 
-oaEngineSDK::Matrix4f::operator+(Matrix4f& m)
+Matrix4f::operator-(const Matrix4f& m)
 {
-  return { m.a + a,m.b + b,m.c + c,m.d + d };
+  return { 
+    m11 - m.m11,m12 - m.m12,m13 - m.m13,m14 - m.m14,
+    m21 - m.m21,m22 - m.m22,m23 - m.m23,m24 - m.m24,
+    m31 - m.m31,m32 - m.m32,m33 - m.m33,m34 - m.m34,
+    m41 - m.m41,m42 - m.m42,m43 - m.m43,m44 - m.m44
+  };
 }
 
-void 
-oaEngineSDK::Matrix4f::operator+=(Matrix4f& m)
+Matrix4f&
+Matrix4f::operator-=(const Matrix4f& m)
 {
-  a += m.a;
-  b += m.b;
-  c += m.c;
-  d += m.d;
+  m11 -= m.m11;
+  m12 -= m.m12;
+  m13 -= m.m13;
+  m14 -= m.m14;
+  m21 -= m.m21;
+  m22 -= m.m22;
+  m23 -= m.m23;
+  m24 -= m.m24;
+  m31 -= m.m31;
+  m32 -= m.m32;
+  m33 -= m.m33;
+  m34 -= m.m34;
+  m41 -= m.m41;
+  m42 -= m.m42;
+  m43 -= m.m43;
+  m44 -= m.m44;
+  return *this;
 }
+
 Matrix4f 
-Matrix4f::operator-(Matrix4f& m)
+Matrix4f::operator*(const float m)
 {
-  return { a - m.a,b - m.b,c - m.c,d - m.d };
+  return { 
+    m11 * m,m12 * m,m13 * m,m14 * m,
+    m21 * m,m22 * m,m23 * m,m24 * m,
+    m31 * m,m32 * m,m33 * m,m34 * m,
+    m41 * m,m42 * m,m43 * m,m44 * m
+  };
 }
-void 
-Matrix4f::operator-=(Matrix4f& m)
-{
-  a -= m.a;
-  b -= m.b;
-  c -= m.c;
-  d -= m.d;
-}
-Matrix4f 
-Matrix4f::operator*(float m)
-{
-  return { a * m,b * m,c * m,d * m };
-}
-void
+
+Matrix4f&
 Matrix4f::operator*=(float m)
 {
-  a *= m;
-  b *= m;
-  c *= m;
-  d *= m;
+  m11 *= m;
+  m12 *= m;
+  m13 *= m;
+  m14 *= m;
+  m21 *= m;
+  m22 *= m;
+  m23 *= m;
+  m24 *= m;
+  m31 *= m;
+  m32 *= m;
+  m33 *= m;
+  m34 *= m;
+  m41 *= m;
+  m42 *= m;
+  m43 *= m;
+  m44 *= m;
+  return *this;
 }
 Vector4f 
-Matrix4f::operator*(Vector4f& v)
+Matrix4f::operator*(const Vector4f& v)
 {
-  return { a.dot(v),b.dot(v),c.dot(v),d.dot(v) };
+  return {
+  m11 * v.x + m12 * v.y + m13 * v.z + m14 * v.w,
+  m21 * v.x + m22 * v.y + m23 * v.z + m24 * v.w,
+  m31 * v.x + m32 * v.y + m33 * v.z + m34 * v.w,
+  m41 * v.x + m42 * v.y + m43 * v.z + m44 * v.w, };
 }
 Matrix4f 
-Matrix4f::operator*(Matrix4f& m)
+Matrix4f::operator*(const Matrix4f& m)
 {
-  return { {
-      a.x * m.a.x + a.y * m.b.x + a.z * m.c.x + a.w * m.d.x,
-      a.x * m.a.y + a.y * m.b.y + a.z * m.c.y + a.w * m.d.y,
-      a.x * m.a.z + a.y * m.b.z + a.z * m.c.z + a.w * m.d.z,
-      a.x * m.a.w + a.y * m.b.w + a.z * m.c.w + a.w * m.d.w
-      },{
-      b.x * m.a.x + b.y * m.b.x + b.z * m.c.x + b.w * m.d.x,
-      b.x * m.a.y + b.y * m.b.y + b.z * m.c.y + b.w * m.d.y,
-      b.x * m.a.z + b.y * m.b.z + b.z * m.c.z + b.w * m.d.z,
-      b.x * m.a.w + b.y * m.b.w + b.z * m.c.w + b.w * m.d.w
-      },{
-      c.x * m.a.x + c.y * m.b.x + c.z * m.c.x + c.w * m.d.x,
-      c.x * m.a.y + c.y * m.b.y + c.z * m.c.y + c.w * m.d.y,
-      c.x * m.a.z + c.y * m.b.z + c.z * m.c.z + c.w * m.d.z,
-      c.x * m.a.w + c.y * m.b.w + c.z * m.c.w + c.w * m.d.w
-      },{
-      d.x * m.a.x + d.y * m.b.x + d.z * m.c.x + d.w * m.d.x,
-      d.x * m.a.y + d.y * m.b.y + d.z * m.c.y + d.w * m.d.y,
-      d.x * m.a.z + d.y * m.b.z + d.z * m.c.z + d.w * m.d.z,
-      d.x * m.a.w + d.y * m.b.w + d.z * m.c.w + d.w * m.d.w
-      } };
+  return {
+    m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41,
+    m11 * m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42,
+    m11 * m.m13 + m12 * m.m23 + m13 * m.m33 + m14 * m.m43,
+    m11 * m.m14 + m12 * m.m24 + m13 * m.m34 + m14 * m.m44,
+    m21 * m.m11 + m22 * m.m21 + m23 * m.m31 + m24 * m.m41,
+    m21 * m.m12 + m22 * m.m22 + m23 * m.m32 + m24 * m.m42,
+    m21 * m.m13 + m22 * m.m23 + m23 * m.m33 + m24 * m.m43,
+    m21 * m.m14 + m22 * m.m24 + m23 * m.m34 + m24 * m.m44,
+    m31 * m.m11 + m32 * m.m21 + m33 * m.m31 + m34 * m.m41,
+    m31 * m.m12 + m32 * m.m22 + m33 * m.m32 + m34 * m.m42,
+    m31 * m.m13 + m32 * m.m23 + m33 * m.m33 + m34 * m.m43,
+    m31 * m.m14 + m32 * m.m24 + m33 * m.m34 + m34 * m.m44,
+    m41 * m.m11 + m42 * m.m21 + m43 * m.m31 + m44 * m.m41,
+    m41 * m.m12 + m42 * m.m22 + m43 * m.m32 + m44 * m.m42,
+    m41 * m.m13 + m42 * m.m23 + m43 * m.m33 + m44 * m.m43,
+    m41 * m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44,
+  };
 }
-void 
-Matrix4f::operator*=(Matrix4f& m)
+
+Matrix4f&
+Matrix4f::operator*=(const Matrix4f& m)
 {
-  a = {
-      a.x * m.a.x + a.y * m.b.x + a.z * m.c.x + a.w * m.d.x,
-      a.x * m.a.y + a.y * m.b.y + a.z * m.c.y + a.w * m.d.y,
-      a.x * m.a.z + a.y * m.b.z + a.z * m.c.z + a.w * m.d.z,
-      a.x * m.a.w + a.y * m.b.w + a.z * m.c.w + a.w * m.d.w
-  };
-  b = {
-      b.x * m.a.x + b.y * m.b.x + b.z * m.c.x + b.w * m.d.x,
-      b.x * m.a.y + b.y * m.b.y + b.z * m.c.y + b.w * m.d.y,
-      b.x * m.a.z + b.y * m.b.z + b.z * m.c.z + b.w * m.d.z,
-      b.x * m.a.w + b.y * m.b.w + b.z * m.c.w + b.w * m.d.w
-  };
-  c = {
-      c.x * m.a.x + c.y * m.b.x + c.z * m.c.x + c.w * m.d.x,
-      c.x * m.a.y + c.y * m.b.y + c.z * m.c.y + c.w * m.d.y,
-      c.x * m.a.z + c.y * m.b.z + c.z * m.c.z + c.w * m.d.z,
-      c.x * m.a.w + c.y * m.b.w + c.z * m.c.w + c.w * m.d.w
-  };
-  d = {
-      d.x * m.a.x + d.y * m.b.x + d.z * m.c.x + d.w * m.d.x,
-      d.x * m.a.y + d.y * m.b.y + d.z * m.c.y + d.w * m.d.y,
-      d.x * m.a.z + d.y * m.b.z + d.z * m.c.z + d.w * m.d.z,
-      d.x * m.a.w + d.y * m.b.w + d.z * m.c.w + d.w * m.d.w
-  };
+  m11 = m11* m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41;
+  m12 = m11* m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42;
+  m13 = m11* m.m13 + m12 * m.m23 + m13 * m.m33 + m14 * m.m43;
+  m14 = m11* m.m14 + m12 * m.m24 + m13 * m.m34 + m14 * m.m44;
+  m21 = m21* m.m11 + m22 * m.m21 + m23 * m.m31 + m24 * m.m41;
+  m22 = m21* m.m12 + m22 * m.m22 + m23 * m.m32 + m24 * m.m42;
+  m23 = m21* m.m13 + m22 * m.m23 + m23 * m.m33 + m24 * m.m43;
+  m24 = m21* m.m14 + m22 * m.m24 + m23 * m.m34 + m24 * m.m44;
+  m31 = m31* m.m11 + m32 * m.m21 + m33 * m.m31 + m34 * m.m41;
+  m32 = m31* m.m12 + m32 * m.m22 + m33 * m.m32 + m34 * m.m42;
+  m33 = m31* m.m13 + m32 * m.m23 + m33 * m.m33 + m34 * m.m43;
+  m34 = m31* m.m14 + m32 * m.m24 + m33 * m.m34 + m34 * m.m44;
+  m41 = m41* m.m11 + m42 * m.m21 + m43 * m.m31 + m44 * m.m41;
+  m42 = m41* m.m12 + m42 * m.m22 + m43 * m.m32 + m44 * m.m42;
+  m43 = m41* m.m13 + m42 * m.m23 + m43 * m.m33 + m44 * m.m43;
+  m44 = m41* m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44;
+  return *this;
 }
 void 
 Matrix4f::transpose()
 {
-  swap(a.y, b.x);
-  swap(a.z, c.x);
-  swap(b.z, c.y);
-  swap(a.w, d.x);
-  swap(b.w, d.y);
-  swap(c.w, d.z);
+  swap(m12, m21);
+  swap(m13, m31);
+  swap(m14, m41);
+  swap(m23, m32);
+  swap(m24, m42);
+  swap(m34, m43);
 }
+/*
 float 
 Matrix4f::determinant()
 {
@@ -148,70 +188,94 @@ Matrix4f::determinant()
   ans += tempMatrix.determinant() * d.w;
   return ans;
 }
-float 
-Matrix4f::minorDet(uint8 r1, uint8 r2, uint8 r3, uint8 c1, uint8 c2, uint8 c3)
-{
-  Matrix3f temp = { {vectors[r1][c1],vectors[r1][c2],vectors[r1][c3]},
-  {vectors[r2][c1],vectors[r2][c2],vectors[r2][c3]},
-  {vectors[r3][c1],vectors[r3][c2],vectors[r3][c3]} };
-  return temp.determinant();
-}
+*/
+
 Matrix4f 
 Matrix4f::inverse()
 {
-  float det = determinant();
-  OA_ASSERT(det != 0);
-  Matrix4f Adjugate = { { minorDet(1,2,3,1,2,3),-minorDet(0,2,3,1,2,3),minorDet(0,1,3,1,2,3),-minorDet(0,1,2,1,2,3) },
-    { -minorDet(1,2,3,0,2,3),minorDet(0,2,3,0,2,3),-minorDet(0,1,3,0,2,3),minorDet(0,1,2,0,2,3) },
-    { minorDet(1,2,3,0,1,3),-minorDet(0,2,3,0,1,3),minorDet(0,1,3,0,1,3),-minorDet(0,1,2,0,1,3) },
-    { -minorDet(1,2,3,0,1,2),minorDet(0,2,3,0,1,2),-minorDet(0,1,3,0,1,2),minorDet(0,1,2,0,1,2) }, };
-  return Adjugate * (1.f / det);
+  Vector3f a = { m11,m12,m13 };
+  Vector3f b = { m21,m22,m23 };
+  Vector3f c = { m31,m32,m33 };
+  Vector3f d = { m41,m42,m43 };
+
+  Vector3f s = a.cross(b);
+  Vector3f t = c.cross(d);
+  Vector3f u = a * m42 - b * m41;
+  Vector3f v = c * m44 - d * m43;
+
+  float invDet = 1.f / (s.dot(v)+ t.dot(u));
+
+  s *= invDet;
+  t *= invDet;
+  u *= invDet;
+  v *= invDet;
+
+  Vector3f r0 = b.cross(v) + t * m42;
+  Vector3f r1 = v.cross(a) - t * m41;
+  Vector3f r2 = d.cross(u) + s * m44;
+  Vector3f r3 = u.cross(c) - s * m43;
+
+  return {
+    r0.x ,r0.y ,r0.z ,-t.dot(b),
+    r1.x ,r1.y ,r1.z ,t.dot(a),
+    r2.x ,r2.y ,r2.z ,-s.dot(d),
+    r3.x ,r3.y ,r3.z ,s.dot(c) };
 }
 Matrix4f 
-Matrix4f::translateMatrix(Vector3f& v)
+Matrix4f::translateMatrix(const Vector3f& v)
 {
-  return Matrix4f({ 1.f,0.f,0.f,v.x },
-                  { 0.f,1.f,0.f,v.y },
-                  { 0.f,0.f,1.f,v.z },
-                  { 0.f,0.f,0.f,1.f });
+  return {
+    1.f,0.f,0.f,v.x,
+    0.f,1.f,0.f,v.y,
+    0.f,0.f,1.f,v.z,
+    0.f,0.f,0.f,1.f,
+  };
 }
 Matrix4f 
-Matrix4f::scaleMatrix(Vector3f& v)
+Matrix4f::scaleMatrix(const Vector3f& v)
 {
-  return Matrix4f({ v.x,0.f,0.f,0.f },
-                  { 0.f,v.y,0.f,0.f },
-                  { 0.f,0.f,v.z,0.f },
-                  { 0.f,0.f,0.f,1.f });
+  return {
+    v.x,0.f,0.f,0.f,
+    0.f,v.y,0.f,0.f,
+    0.f,0.f,v.z,0.f,
+    0.f,0.f,0.f,1.f
+  };
 }
 Matrix4f
 Matrix4f::rotationMatrixZ(float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
-  return Matrix4f({ c,-s,0.f,0.f },
-                  { s,c,0.f,0.f },
-                  { 0.f,0.f,1.f,0.f },
-                  { 0.f,0.f,0.f,1.f });
+  return {
+    c,-s,0.f,0.f,
+    s,c,0.f,0.f,
+    0.f,0.f,1.f,0.f,
+    0.f,0.f,0.f,1.f
+  };
 }
 Matrix4f 
 Matrix4f::rotationMatrixX(float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
-  return Matrix4f({ 1.f,0.f,0.f,0.f },
-                  { 0.f,c,-s,0.f },
-                  { 0.f,s,c,0.f },
-                  { 0.f,0.f,0.f,1.f });
+  return {
+    1.f,0.f,0.f,0.f,
+    0.f,c,-s,0.f,
+    0.f,s,c,0.f,
+    0.f,0.f,0.f,1.f
+  };
 }
 Matrix4f 
 Matrix4f::rotationMatrixY(float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
-  return Matrix4f({ c,0.f,s,0.f },
-                  { 0.f,1.f,0.f,0.f },
-                  { -s,0.f,c,0.f },
-                  { 0.f,0.f,0.f,1.f });
+  return {
+    c,0.f,s,0.f,
+    0.f,1.f,0.f,0.f,
+    -s,0.f,c,0.f,
+    0.f,0.f,0.f,1.f,
+  };
 }
 Matrix4f 
 Matrix4f::rotationMatrix(float r, Vector3f& v)
@@ -225,15 +289,33 @@ Matrix4f::rotationMatrix(float r, Vector3f& v)
   float sx = s * v.x;
   float sy = s * v.y;
   float sz = s * v.z;
-  return  Matrix4f({ c + mc * v.x * v.x,xy - sz , xz + sy,0.f },
-                   { xz + sz ,c + mc * v.y * v.y,yz - sx,0.f },
-                   { xz - sy,yz + sx,c + mc * v.y * v.y,0.f },
-                   { 0.f,0.f,0.f,1.f });
+  return  {
+    c + mc * v.x * v.x,xy - sz , xz + sy,0.f,
+    xz + sz ,c + mc * v.y * v.y,yz - sx,0.f ,
+    xz - sy,yz + sx,c + mc * v.y * v.y,0.f  ,
+    0.f,0.f,0.f,1.f                         ,
+  };
 }
 
 bool OA_UTILITY_EXPORT 
-operator==(Matrix4f m1, Matrix4f m2)
+operator==(const Matrix4f& m1, const Matrix4f& m2)
 {
-  return m1.a == m2.a && m1.b == m2.b && m1.c == m2.c;
+  return 
+    m1.m11 == m2.m11 &&
+    m1.m12 == m2.m12 &&
+    m1.m13 == m2.m13 &&
+    m1.m14 == m2.m14 &&
+    m1.m21 == m2.m21 &&
+    m1.m22 == m2.m22 &&
+    m1.m23 == m2.m23 &&
+    m1.m24 == m2.m24 &&
+    m1.m31 == m2.m31 &&
+    m1.m32 == m2.m32 &&
+    m1.m33 == m2.m33 &&
+    m1.m34 == m2.m34 &&
+    m1.m41 == m2.m41 &&
+    m1.m42 == m2.m42 &&
+    m1.m43 == m2.m43 &&
+    m1.m44 == m2.m44;
 }
 }

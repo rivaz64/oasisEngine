@@ -9,14 +9,20 @@
 
 namespace oaEngineSDK {
 
-class BoxAABB
+class OA_UTILITY_EXPORT BoxAABB
 {
 public:
+  /**
+   * @brief default constructor for the AABB box
+  */
   BoxAABB()=default;
 
-  BoxAABB(const Vector3f& _minPoint, const Vector3f& _maxPoint) :
-    minPoint(_minPoint),
-    maxPoint(_maxPoint) {}
+  /**
+   * @brief constuctor for a box from 2 points
+   * @param A
+   * @param B 
+  */
+  BoxAABB(const Vector3f& A, const Vector3f& B);
 
   ~BoxAABB() = default;
 
@@ -59,7 +65,7 @@ public:
    * @param s 
    * @return 
   */
-  bool overlapp(const Sphere& s);
+  bool overlap(const Sphere& s);
 
 private:
 

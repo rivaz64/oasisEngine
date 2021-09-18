@@ -7,37 +7,37 @@
 #include "oaVector4f.h"
 
 namespace oaEngineSDK {
-float&
-Vector4f::operator[](uint8 i) {
-  return ((&x)[i]);
-}
+
 Vector4f
 Vector4f::operator+(const Vector4f& v)
 {
   return { x + v.x , y + v.y, z + v.z, w + v.w };
 }
-void
+
+Vector4f&
 Vector4f::operator+=(const Vector4f& v)
 {
   x += v.x;
   y += v.y;
   z += v.z;
   w += v.w;
-
+  return *this;
 }
+
 Vector4f
 Vector4f::operator-(const Vector4f& v)
 {
   return { x - v.x , y - v.y, z - v.z, w - v.w };
 }
 
-void
+Vector4f&
 Vector4f::operator-=(const Vector4f& v)
 {
   x -= v.x;
   y -= v.y;
   z -= v.z;
   w -= v.w;
+  return *this;
 }
 
 Vector4f
@@ -46,13 +46,14 @@ Vector4f::operator*(float v) const
   return { x * v , y * v , z * v, w * v };
 }
 
-void
+Vector4f&
 Vector4f::operator*=(float v)
 {
   x *= v;
   y *= v;
   z *= v;
   w *= v;
+  return *this;
 }
 
 Vector4f
@@ -62,7 +63,7 @@ Vector4f::operator/(float v)
   return { x * v , y * v, z * v , w * v };
 }
 
-void
+Vector4f&
 Vector4f::operator/=(float v)
 {
   v = 1.f / v;
@@ -70,6 +71,7 @@ Vector4f::operator/=(float v)
   y *= v;
   z *= v;
   w *= v;
+  return *this;
 }
 
 float

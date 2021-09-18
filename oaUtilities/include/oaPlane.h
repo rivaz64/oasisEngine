@@ -13,9 +13,10 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Plane
 {
-  
  public:
-
+  /**
+   * @brief default constructor for a plane
+  */
   Plane() = default;
   /**
    * @brief gives directly the variables needed for a plane

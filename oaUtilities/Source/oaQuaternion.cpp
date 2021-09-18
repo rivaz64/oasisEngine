@@ -70,10 +70,10 @@ Matrix4f Quaternion::toMatrix()
   float ri = 2 * r * i;
   float rj = 2 * r * j;
   float rk = 2 * r * k;
-  return { {1.f - j2 + k2,ij - rk,ik + rj,0.0f},
-          {ij + rk,1.f - i2 + k2,jk - ri,0.0f},
-          {ik - rj,jk + ri,1.f - i2 + j2,0.0f},
-          {0.0f,0.0f,0.0f,1.0f} };
+  return { 1.f - j2 + k2,ij - rk,ik + rj,0.0f,
+          ij + rk,1.f - i2 + k2,jk - ri,0.0f,
+          ik - rj,jk + ri,1.f - i2 + j2,0.0f,
+          0.0f,0.0f,0.0f,1.0f};
 }
 bool OA_UTILITY_EXPORT operator==(Quaternion q1, Quaternion q2)
 {

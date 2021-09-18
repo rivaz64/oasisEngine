@@ -5,21 +5,18 @@
  */
 #include "oaVector2f.h"
 namespace oaEngineSDK {
-float&
-Vector2f::operator[](const uint8 i) {
-  return ((&x)[i]);
-}
 
 Vector2f
 Vector2f::operator+(const Vector2f& v)
 {
   return { x + v.x , y + v.y };
 }
-void
+Vector2f&
 Vector2f::operator+=(const Vector2f& v)
 {
   x += v.x;
   y += v.y;
+  return *this;
 }
 Vector2f
 Vector2f::operator-(const Vector2f& v)
@@ -27,11 +24,12 @@ Vector2f::operator-(const Vector2f& v)
   return { x - v.x , y - v.y };
 }
 
-void
+Vector2f&
 Vector2f::operator-=(const Vector2f& v)
 {
   x -= v.x;
   y -= v.y;
+  return *this;
 }
 
 Vector2f
@@ -40,25 +38,28 @@ Vector2f::operator*(const float v) const
   return { x * v , y * v };
 }
 
-void
+Vector2f&
 Vector2f::operator*=(const float v)
 {
   x *= v;
   y *= v;
+  return *this;
 }
 
-Vector2f Vector2f::operator/(float v)
+Vector2f 
+Vector2f::operator/(float v)
 {
   v = 1.f / v;
   return { x * v , y * v };
 }
 
-void
+Vector2f&
 Vector2f::operator/=(float v)
 {
   v = 1.f / v;
   x *= v;
   y *= v;
+  return *this;
 }
 
 float

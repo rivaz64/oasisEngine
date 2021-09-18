@@ -14,7 +14,9 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Line
 {
 public:
-
+  /**
+   * @brief default constructor for the Line
+  */
   Line() = default;
 
   /**

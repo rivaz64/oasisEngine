@@ -14,7 +14,17 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Quaternion
 {
 public:
+  /**
+   * @brief default constructor for the Quaternions
+  */
   Quaternion() = default;
+  /**
+   * @brief parametrized constructor for the Quaternion
+   * @param _r 
+   * @param _i 
+   * @param _j 
+   * @param _k 
+  */
   Quaternion(float _r, float _i, float _j, float _k) :r(_r), i(_i), j(_j), k(_k) {}
   ~Quaternion() = default;
   /**

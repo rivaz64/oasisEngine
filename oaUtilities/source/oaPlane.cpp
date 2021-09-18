@@ -29,10 +29,10 @@ Matrix4f Plane::reflection()
   float xz = -2.f * normal.x * normal.z;
   float yz = -2.f * normal.y * normal.z;
   return Matrix4f(
-    {1.f-2.f*normal.x*normal.x,xy,xz,-2.f*normal.x*d},
-    {xy,1.f - 2.f * normal.y * normal.y, yz,-2.f * normal.y*d},
-    {xz,yz,1.f - 2.f * normal.z * normal.z,-2.f * normal.z*d },
-    {0.f,0.f,0.f,1.f}
+    1.f-2.f*normal.x*normal.x,xy,xz,-2.f*normal.x*d,
+    xy,1.f - 2.f * normal.y * normal.y, yz,-2.f * normal.y*d,
+    xz,yz,1.f - 2.f * normal.z * normal.z,-2.f * normal.z*d ,
+    0.f,0.f,0.f,1.f
     );
 }
 

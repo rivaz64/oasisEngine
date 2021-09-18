@@ -13,12 +13,12 @@ bool oaEngineSDK::Sphere::isInside(const Vector3f& point)
   return (center-point).len()<radius;
 }
 
-bool oaEngineSDK::Sphere::collides(Line& l)
+bool oaEngineSDK::Sphere::overlap(Line& l)
 {
   return l.distance(center) < radius && l.getDirection().dot(center-l.getStaringPoint())<l.getLenght();
 }
 
-bool oaEngineSDK::Sphere::collides(const Sphere& s)
+bool oaEngineSDK::Sphere::overlap(const Sphere& s)
 {
     return (center-s.center).len()<(radius+s.radius);
 }

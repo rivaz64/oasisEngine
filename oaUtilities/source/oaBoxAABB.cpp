@@ -8,6 +8,12 @@
 #include "oaBoxAABB.h"
 #include "oaSphere.h"
 
+oaEngineSDK::BoxAABB::BoxAABB(const Vector3f& A, const Vector3f& B)
+{
+  minPoint = { Math::min(A.x,B.x),Math::min(A.y,B.y) ,Math::min(A.z,B.z) };
+  maxPoint = { Math::max(A.x,B.x),Math::max(A.y,B.y) ,Math::max(A.z,B.z) };
+}
+
 bool oaEngineSDK::BoxAABB::isPointInside(const Vector3f& point)
 {
   return point.x>minPoint.x && point.x < maxPoint.x &&
@@ -22,11 +28,11 @@ bool oaEngineSDK::BoxAABB::overlap(const BoxAABB& box)
          box.maxPoint.z > minPoint.z && box.minPoint.z < maxPoint.z;
 }
 
-bool oaEngineSDK::BoxAABB::overlapp(const Sphere& s)
+bool oaEngineSDK::BoxAABB::overlap(const Sphere& s)
 {
   Vector3f point = { Math::max(minPoint.x, Math::min(s.getCenter().x, maxPoint.x)),
                      Math::max(minPoint.y, Math::min(s.getCenter().y, maxPoint.y)),
                      Math::max(minPoint.z, Math::min(s.getCenter().z, maxPoint.z)) };
 
-  return point.len() < s.getRadius();
+  return (point- s.getCenter()).len() < s.getRadius();
 }

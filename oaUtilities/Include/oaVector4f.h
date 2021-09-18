@@ -15,9 +15,22 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Vector4f
 {
 public:
-
+  /**
+   * @brief default constructor for the Vector4f
+  */
   Vector4f() = default;
-  Vector4f(float _x, float _y, float _z, float _w) :x(_x), y(_y), z(_z), w(_w) {}
+
+  /**
+   * @brief parametrized constructor for the Vector4f
+   * @param _x 
+   * @param _y 
+   * @param _z 
+   * @param _w 
+  */
+
+  Vector4f(float _x, float _y, float _z, float _w) :
+    x(_x), y(_y), z(_z), w(_w) {}
+
   ~Vector4f() = default;
   
   /**
@@ -26,82 +39,90 @@ public:
    * @return
   */
   Vector4f
-    operator+(const Vector4f& v);
+  operator+(const Vector4f& v);
+
   /**
    * @brief adds the vector v to this one
    * @param v
   */
-  void
-    operator+=(const Vector4f& v);
+  Vector4f&
+  operator+=(const Vector4f& v);
+
   /**
    * @brief this vector minus vector v
    * @param v
    * @return
   */
   Vector4f
-    operator-(const Vector4f& v);
+  operator-(const Vector4f& v);
+
   /**
    * @brief substract vector v from this
    * @param v
   */
-  void
-    operator-=(const Vector4f& v);
+  Vector4f&
+  operator-=(const Vector4f& v);
+
   /**
    * @brief calculates a vector with the same direction as this and a lenght multiplied by v
    * @param v
    * @return
   */
   Vector4f
-    operator*(float v) const;
+  operator*(float v) const;
+
   /**
    * @brief multiply the length vector the vector by v
    * @param v
   */
-  void
-    operator*=(float v);
+  Vector4f&
+  operator*=(float v);
+
   /**
    * @brief calculates a vector with the same direction as this and a lenght divided by v
    * @param v
    * @return
   */
   Vector4f
-    operator/(float v);
+  operator/(float v);
+
   /**
    * @brief divide the length vector the vector by v
    * @param v
   */
-  void
-    operator/=(float v);
+  Vector4f&
+  operator/=(float v);
+
   /**
    * @brief dot product of to vector
    * @param v
    * @return
   */
   float
-    dot(const Vector4f& v) const;
+  dot(const Vector4f& v) const;
+
   /**
    * @brief the lenght of the vector
    * @return
   */
   float
-    len();
+  len();
+
   /**
    * @brief the unitary form of the vector
    * @return
   */
   Vector4f
-    normal();
+  normal();
+
   /**
    * @brief proyects this vector into v
    * @param v
    * @return
   */
   Vector4f
-    project(const Vector4f& v);
+  project(const Vector4f& v);
 
- private:
-  float&
-    operator[](uint8 i);
 public:
   union {
     /**

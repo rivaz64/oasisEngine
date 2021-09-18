@@ -14,8 +14,18 @@ namespace oaEngineSDK {
 class OA_UTILITY_EXPORT Sphere
 {
  public:
+  /**
+   * @brief default constructor for the Sphere
+  */
   Sphere() = default;
+
+  /**
+   * @brief parametrized construcrtor for the Sphere
+   * @param _center 
+   * @param _radius 
+  */
   Sphere(const Vector3f& _center, float _radius) :center(_center), radius(_radius) {}
+
   ~Sphere() = default;
 
   /**
@@ -39,20 +49,20 @@ class OA_UTILITY_EXPORT Sphere
     isInside(const Vector3f& point);
 
   /**
-   * @brief checks if the line collides with the sphere
+   * @brief checks if the line overlap with the sphere
    * @param l 
    * @return 
   */
   bool
-    collides(Line& l);
+    overlap(Line& l);
 
   /**
-   * @brief checks if 2 spheres are colliding
+   * @brief checks if 2 spheres are overlaping
    * @param s 
    * @return 
   */
   bool
-    collides(const Sphere& s);
+    overlap(const Sphere& s);
 
  private:
    /**
