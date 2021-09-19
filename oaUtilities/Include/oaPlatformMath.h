@@ -161,7 +161,7 @@ public:
   template<class T>
   static FORCEINLINE T 
   exp(T v) {
-    return std::exp(v1, v2);
+    return std::exp(v);
   }
 
   /**
@@ -198,7 +198,7 @@ public:
   static FORCEINLINE T
   log(T v)
   {
-    return std::log(v1);
+    return std::log(v);
   }
 
   /**
@@ -230,7 +230,83 @@ public:
   symmetricRandom() {
     return ((float)std::rand() / RAND_MAX)*2.f-1.f;
   }
+
+  /**
+   * @brief fast aproximation to sin
+   * @param x 
+   * @return 
+  */
+  static FORCEINLINE float
+  fastSin(float x) 
+  {
+    float x2 = x * x;
+    return (1.f - .16605f * x2 + .00761f*x2*x2) * x;
+  }
+
+  /**
+   * @brief fast aproximate to cos
+   * @param x 
+   * @return 
+  */
+  static FORCEINLINE float
+  fastCos(float x)
+  {
+    float x2 = x * x;
+    return 1.f - .4967f * x2 + .03705f * x2 * x2;
+  }
+
+  /**
+   * @brief fast aproximate to tan
+   * @param x
+   * @return
+  */
+  static FORCEINLINE float
+  fastTan(float x)
+  {
+    float x2 = x * x;
+    return (1.f + .31755f * x2 + .20330f * x2 * x2) * x;
+  }
+
+  /**
+   * @brief fast aproximation to acos
+   * @param x
+   * @return
+  */
+  static FORCEINLINE float
+  fastAcos(float x)
+  {
+    float x2 = x * x;
+    return sqrt(1 - x) * 
+      (1.5707288f - .2121144f * x + 0.074261f * x2 - .0187293f * x2 * x);
+  }
+
+  /**
+   * @brief fast aproximation to asin
+   * @param x
+   * @return
+  */
+  static FORCEINLINE float
+  fastAsin(float x)
+  {
+    float x2 = x * x;
+    return HALF_PI - sqrt(1 - x) *
+      (1.5707288f - .2121144f * x + 0.074261f * x2 - .0187293f * x2 * x);
+  }
+
+  /**
+   * @brief fast aproximation to atan
+   * @param x
+   * @return
+  */
+  static FORCEINLINE float
+  fastAtan(float x)
+  {
+    float x2 = x * x;
+    float x4 = x2 * x2;
+    float x6 = x4 * x2;
+    return (0.9998660f - .3302995*x2 + .18014f*x4 - .085133*x6 + .0208351*x6*x2) * x;
+  }
 };
 
-
+  
 }

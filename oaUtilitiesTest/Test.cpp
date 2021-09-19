@@ -37,6 +37,14 @@ TEST(math, basic) {
   EXPECT_EQ(Math::sqrt(49), 7);
   EXPECT_EQ(Math::invSqrt(49), 1.f/7.f);
 }
+TEST(math, trigonometry) {
+  EXPECT_NEAR(Math::sin(.5f), Math::fastSin(.5f), .001f);
+  EXPECT_NEAR(Math::cos(.5f), Math::fastCos(.5f), .001f);
+  EXPECT_NEAR(Math::tan(.5f), Math::fastTan(.5f), .001f);
+  EXPECT_NEAR(Math::asin(.5f), Math::fastAsin(.5f), .001f);
+  EXPECT_NEAR(Math::acos(.5f), Math::fastAcos(.5f), .001f);
+  EXPECT_NEAR(Math::atan(.5f), Math::fastAtan(.5f), .001f);
+}
 
 TEST(vectors, vector2) {
   EXPECT_EQ(8, sizeof(Vector2f));
@@ -47,13 +55,13 @@ TEST(vectors, vector2) {
   EXPECT_EQ(v2 / 2.f, Vector2f(1.5f, 2.f));
   EXPECT_EQ(v2.dot(vec2), 63.f);
   EXPECT_EQ(v2.len(), 5.f);
-  EXPECT_NEAR(v2.getDirection(), 53.1301 * Math::degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), 53.1301 * Math::DEG_TO_RAD, .00001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), 126.87 * Math::degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), 126.87 * Math::DEG_TO_RAD, .00001f);
   v2.y *= -1;
-  EXPECT_NEAR(v2.getDirection(), -126.87 * Math::degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -126.87 * Math::DEG_TO_RAD, .00001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::degreesToRadians, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::DEG_TO_RAD, .00001f);
   v2.y *= -1;
   EXPECT_NEAR(v2.normal().len(), 1.f, .00001f);
   EXPECT_NEAR(v2.normal().getDirection(), v2.getDirection(), .0000001f);
@@ -147,7 +155,7 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(Matrix3f::scaleMatrix(v2), Matrix3f({ 3.f, 0.f, 0.f,
                                                       0.f, 4.f, 0.f,
                                                       0.f, 0.f, 1.f }));
-  EXPECT_NEAR(Matrix3f::rotationMatrix(Math::pi / 2.f).determinant(), 1,.0001f);
+  EXPECT_NEAR(Matrix3f::rotationMatrix(Math::HALF_PI).determinant(), 1,.0001f);
 
 }
 TEST(Matrix, Matrix4) {
