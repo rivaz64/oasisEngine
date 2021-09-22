@@ -45,7 +45,7 @@ public:
   static FORCEINLINE float 
   cos(float x) 
   {
-    return std::cos(x);
+    return std::cosf(x);
   }
 
   /**
@@ -55,7 +55,7 @@ public:
   */
   static FORCEINLINE float 
   sin(float x) {
-    return std::sin(x);
+    return std::sinf(x);
   }
 
   /**
@@ -65,7 +65,7 @@ public:
   */
   static FORCEINLINE float 
   tan(float x) {
-    return std::tan(x);
+    return std::tanf(x);
   }
 
   /**
@@ -76,7 +76,7 @@ public:
   static FORCEINLINE float 
   acos(float x) 
   {
-    return std::acos(x);
+    return std::acosf(x);
   }
 
   /**
@@ -87,7 +87,7 @@ public:
   static FORCEINLINE float 
   asin(float x) 
   {
-    return std::asin(x);
+    return std::asinf(x);
   }
 
   /**
@@ -98,7 +98,7 @@ public:
   static FORCEINLINE float 
   atan(float x) 
   {
-    return std::atan(x);
+    return std::atanf(x);
   }
 
   /**
@@ -109,7 +109,7 @@ public:
   */
   static FORCEINLINE float 
   atan2(float x, float y) {
-    return std::atan2(y, x);
+    return std::atan2f(y, x);
   }
 
   /**
@@ -158,10 +158,9 @@ public:
    * @tparam T
    * @param v
   */
-  template<class T>
-  static FORCEINLINE T 
-  exp(T v) {
-    return std::exp(v);
+  static FORCEINLINE float 
+  exp(float v) {
+    return std::expf(v);
   }
 
   /**
@@ -170,9 +169,8 @@ public:
    * @param v1 
    * @param v2 
   */
-  template<class T>
-  static FORCEINLINE T
-  mod(T v1, T v2)
+  static FORCEINLINE float
+  mod(float v1, float v2)
   {
     return std::fmod(v1, v2);
   }
@@ -184,9 +182,8 @@ public:
    * @param v2 
    * @return 
   */
-  template<class T>
-  static FORCEINLINE T
-  pow(T v1, T v2)
+  static FORCEINLINE float
+  pow(float v1, float v2)
   {
     return std::pow(v1, v2);
   }
@@ -194,9 +191,8 @@ public:
   /**
    * @brief wraper of the std::log
   */
-  template<class T>
-  static FORCEINLINE T
-  log(T v)
+  static FORCEINLINE float
+  log(float v)
   {
     return std::log(v);
   }
@@ -207,10 +203,9 @@ public:
    * @param val 
    * @return 
   */
-  template <typename T>
-  static FORCEINLINE int
-  sign(T v) {
-    return (T(0) < v) - (v < T(0));
+  static FORCEINLINE float
+  sign(float v) {
+    return float((0.f < v) - (v < 0));
   }
 
   /**
@@ -304,7 +299,7 @@ public:
     float x2 = x * x;
     float x4 = x2 * x2;
     float x6 = x4 * x2;
-    return (0.9998660f - .3302995*x2 + .18014f*x4 - .085133*x6 + .0208351*x6*x2) * x;
+    return (0.9998660f - .3302995*x2 + .1801f*x4 - .085133*x6 + .0208351*x6*x2) * x;
   }
 };
 

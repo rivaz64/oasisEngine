@@ -201,12 +201,14 @@ TEST(Matrix, Matrix4) {
                            2.f,5.f,10.f,4.f,
                            3.f,7.f,14.f,2.f,
                            4.f,3.f,6.f,7.f, }));
+  m1.transpose();
   Matrix4f m3 = {
    1.f,0.f,0.f,1.f,
    0.f,2.f,1.f,2.f,
    2.f,1.f,0.f,1.f,
    2.f,0.f,1.f,4.f,
   };
+  m3.transpose();
   EXPECT_EQ(m3.inverse(), Matrix4f({ -2.f,-.5f,1.f,.5f,
                                      1.f,.5f,0.f,-.5f,
                                      -8.f,-1.f,2.f,2.f,
