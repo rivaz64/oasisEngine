@@ -94,6 +94,14 @@ public:
   operator/=(float v);
 
   /**
+   * @brief multiplies each parameter for its congruent in the other vector
+   * @param v
+   * @return
+  */
+  Vector4f
+    operator*(const Vector4f& v);
+
+  /**
    * @brief dot product of to vector
    * @param v
    * @return

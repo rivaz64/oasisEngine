@@ -91,6 +91,14 @@ class OA_UTILITY_EXPORT Vector2f
   operator/=(float v);
 
   /**
+   * @brief multiplies each parameter for its congruent in the other vector
+   * @param v 
+   * @return 
+  */
+  Vector2f
+  operator*(const Vector2f& v);
+
+  /**
    * @brief dot product of to vector
    * @param v
    * @return

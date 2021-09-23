@@ -62,6 +62,11 @@ Vector2f::operator/=(float v)
   return *this;
 }
 
+Vector2f Vector2f::operator*(const Vector2f& v)
+{
+  return { x * v.x,y * v.y };
+}
+
 float
 Vector2f::dot(const Vector2f& v) const
 {

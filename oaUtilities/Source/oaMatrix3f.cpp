@@ -144,17 +144,12 @@ Matrix3f::determinant()
 Matrix3f
 Matrix3f::inverse()
 {
-  Vector3f a = { m11,m12,m13 };
-  Vector3f b = { m21,m22,m23 };
-  Vector3f c = { m31,m32,m33 };
-  Vector3f r0 = b.cross(c);
-  Vector3f r1 = c.cross(a);
-  Vector3f r2 = a.cross(b);
-  float invDet = 1.f / c.dot(r2);
+  float invDet = 1.f / determinant();
   return {
-    r0.x * invDet,r1.x * invDet,r2.x * invDet,
-    r0.y * invDet,r1.y * invDet,r2.y * invDet,
-    r0.z * invDet,r1.z * invDet,r2.z * invDet };
+    +(m22 * m33 - m32 * m23) * invDet,-(m12 * m33 - m32 * m13) * invDet,+(m12 * m23 - m22 * m13) * invDet,
+    -(m21 * m33 - m31 * m23) * invDet,+(m11 * m33 - m31 * m13) * invDet,-(m11 * m23 - m21 * m13) * invDet,
+    +(m21 * m32 - m31 * m22) * invDet,-(m11 * m32 - m31 * m12) * invDet,+(m11 * m22 - m21 * m12) * invDet,
+  };
 }
 
 Matrix3f

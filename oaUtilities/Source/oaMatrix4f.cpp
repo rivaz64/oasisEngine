@@ -11,7 +11,7 @@
 
 namespace oaEngineSDK {
 
-Matrix4f 
+Matrix4f
 oaEngineSDK::Matrix4f::operator+(const Matrix4f& m)
 {
   return {
@@ -44,10 +44,10 @@ oaEngineSDK::Matrix4f::operator+=(const Matrix4f& m)
   return *this;
 }
 
-Matrix4f 
+Matrix4f
 Matrix4f::operator-(const Matrix4f& m)
 {
-  return { 
+  return {
     m11 - m.m11,m12 - m.m12,m13 - m.m13,m14 - m.m14,
     m21 - m.m21,m22 - m.m22,m23 - m.m23,m24 - m.m24,
     m31 - m.m31,m32 - m.m32,m33 - m.m33,m34 - m.m34,
@@ -77,10 +77,10 @@ Matrix4f::operator-=(const Matrix4f& m)
   return *this;
 }
 
-Matrix4f 
+Matrix4f
 Matrix4f::operator*(const float m)
 {
-  return { 
+  return {
     m11 * m,m12 * m,m13 * m,m14 * m,
     m21 * m,m22 * m,m23 * m,m24 * m,
     m31 * m,m32 * m,m33 * m,m34 * m,
@@ -109,7 +109,7 @@ Matrix4f::operator*=(float m)
   m44 *= m;
   return *this;
 }
-Vector4f 
+Vector4f
 Matrix4f::operator*(const Vector4f& v)
 {
   return {
@@ -118,7 +118,7 @@ Matrix4f::operator*(const Vector4f& v)
   m31 * v.x + m32 * v.y + m33 * v.z + m34 * v.w,
   m41 * v.x + m42 * v.y + m43 * v.z + m44 * v.w, };
 }
-Matrix4f 
+Matrix4f
 Matrix4f::operator*(const Matrix4f& m)
 {
   return {
@@ -144,25 +144,25 @@ Matrix4f::operator*(const Matrix4f& m)
 Matrix4f&
 Matrix4f::operator*=(const Matrix4f& m)
 {
-  m11 = m11* m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41;
-  m12 = m11* m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42;
-  m13 = m11* m.m13 + m12 * m.m23 + m13 * m.m33 + m14 * m.m43;
-  m14 = m11* m.m14 + m12 * m.m24 + m13 * m.m34 + m14 * m.m44;
-  m21 = m21* m.m11 + m22 * m.m21 + m23 * m.m31 + m24 * m.m41;
-  m22 = m21* m.m12 + m22 * m.m22 + m23 * m.m32 + m24 * m.m42;
-  m23 = m21* m.m13 + m22 * m.m23 + m23 * m.m33 + m24 * m.m43;
-  m24 = m21* m.m14 + m22 * m.m24 + m23 * m.m34 + m24 * m.m44;
-  m31 = m31* m.m11 + m32 * m.m21 + m33 * m.m31 + m34 * m.m41;
-  m32 = m31* m.m12 + m32 * m.m22 + m33 * m.m32 + m34 * m.m42;
-  m33 = m31* m.m13 + m32 * m.m23 + m33 * m.m33 + m34 * m.m43;
-  m34 = m31* m.m14 + m32 * m.m24 + m33 * m.m34 + m34 * m.m44;
-  m41 = m41* m.m11 + m42 * m.m21 + m43 * m.m31 + m44 * m.m41;
-  m42 = m41* m.m12 + m42 * m.m22 + m43 * m.m32 + m44 * m.m42;
-  m43 = m41* m.m13 + m42 * m.m23 + m43 * m.m33 + m44 * m.m43;
-  m44 = m41* m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44;
+  m11 = m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41;
+  m12 = m11 * m.m12 + m12 * m.m22 + m13 * m.m32 + m14 * m.m42;
+  m13 = m11 * m.m13 + m12 * m.m23 + m13 * m.m33 + m14 * m.m43;
+  m14 = m11 * m.m14 + m12 * m.m24 + m13 * m.m34 + m14 * m.m44;
+  m21 = m21 * m.m11 + m22 * m.m21 + m23 * m.m31 + m24 * m.m41;
+  m22 = m21 * m.m12 + m22 * m.m22 + m23 * m.m32 + m24 * m.m42;
+  m23 = m21 * m.m13 + m22 * m.m23 + m23 * m.m33 + m24 * m.m43;
+  m24 = m21 * m.m14 + m22 * m.m24 + m23 * m.m34 + m24 * m.m44;
+  m31 = m31 * m.m11 + m32 * m.m21 + m33 * m.m31 + m34 * m.m41;
+  m32 = m31 * m.m12 + m32 * m.m22 + m33 * m.m32 + m34 * m.m42;
+  m33 = m31 * m.m13 + m32 * m.m23 + m33 * m.m33 + m34 * m.m43;
+  m34 = m31 * m.m14 + m32 * m.m24 + m33 * m.m34 + m34 * m.m44;
+  m41 = m41 * m.m11 + m42 * m.m21 + m43 * m.m31 + m44 * m.m41;
+  m42 = m41 * m.m12 + m42 * m.m22 + m43 * m.m32 + m44 * m.m42;
+  m43 = m41 * m.m13 + m42 * m.m23 + m43 * m.m33 + m44 * m.m43;
+  m44 = m41 * m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44;
   return *this;
 }
-void 
+void
 Matrix4f::transpose()
 {
   swap(m12, m21);
@@ -173,7 +173,7 @@ Matrix4f::transpose()
   swap(m34, m43);
 }
 /*
-float 
+float
 Matrix4f::determinant()
 {
   float ans = 0;
@@ -190,36 +190,54 @@ Matrix4f::determinant()
 }
 */
 
-Matrix4f 
+Matrix4f
 Matrix4f::inverse()
 {
-  Vector3f a = { m11,m12,m13 };
-  Vector3f b = { m21,m22,m23 };
-  Vector3f c = { m31,m32,m33 };
-  Vector3f d = { m41,m42,m43 };
+  float a3434 = m33 * m44 - m34 * m43;
+  float a2434 = m32 * m44 - m34 * m42;
+  float a2334 = m32 * m43 - m33 * m42;
+  float a1434 = m31 * m44 - m34 * m41;
+  float a1334 = m31 * m43 - m33 * m41;
+  float a1234 = m31 * m42 - m32 * m41;
+  float a3424 = m23 * m44 - m24 * m43;
+  float a2424 = m22 * m44 - m24 * m42;
+  float a2324 = m22 * m43 - m23 * m42;
+  float a3423 = m23 * m34 - m24 * m33;
+  float a2423 = m22 * m34 - m24 * m32;
+  float a2323 = m22 * m33 - m23 * m32;
+  float a1424 = m21 * m44 - m24 * m41;
+  float a1324 = m21 * m43 - m23 * m41;
+  float a1423 = m21 * m34 - m24 * m31;
+  float a1323 = m21 * m33 - m23 * m31;
+  float a1224 = m21 * m41 - m22 * m41;
+  float a1223 = m21 * m31 - m22 * m31;
 
-  Vector3f s = a.cross(b);
-  Vector3f t = c.cross(d);
-  Vector3f u = a * m42 - b * m41;
-  Vector3f v = c * m44 - d * m43;
+  float det = m11 * (m22 * a3434 - m23 * a2434 + m24 * a2334)
+    - m12 * (m21 * a3434 - m23 * a1434 + m24 * a1334)
+    + m13 * (m21 * a2434 - m22 * a1434 + m24 * a1234)
+    - m14 * (m21 * a2334 - m22 * a1334 + m23 * a1234);
+  float invDet = 1.f / det;
 
-  float invDet = 1.f / (s.dot(v)+ t.dot(u));
-
-  s *= invDet;
-  t *= invDet;
-  u *= invDet;
-  v *= invDet;
-
-  Vector3f r0 = b.cross(v) + t * m42;
-  Vector3f r1 = v.cross(a) - t * m41;
-  Vector3f r2 = d.cross(u) + s * m44;
-  Vector3f r3 = u.cross(c) - s * m43;
-
-  return {
-    r0.x ,r0.y ,r0.z ,-t.dot(b),
-    r1.x ,r1.y ,r1.z ,t.dot(a),
-    r2.x ,r2.y ,r2.z ,-s.dot(d),
-    r3.x ,r3.y ,r3.z ,s.dot(c) };
+  Matrix4f inv = {
+    invDet *  (m22 * a3434 - m23 * a2434 + m24 * a2334),
+    invDet * -(m21 * a3434 - m23 * a1434 + m24 * a1334),
+    invDet *  (m21 * a2434 - m22 * a1434 + m24 * a1234),
+    invDet * -(m21 * a2334 - m22 * a1334 + m23 * a1234),
+    invDet * -(m12 * a3434 - m13 * a2434 + m14 * a2334),
+    invDet *  (m11 * a3434 - m13 * a1434 + m14 * a1334),
+    invDet * -(m11 * a2434 - m12 * a1434 + m14 * a1234),
+    invDet *  (m11 * a2334 - m12 * a1334 + m13 * a1234),
+    invDet *  (m12 * a3424 - m13 * a2424 + m14 * a2324),
+    invDet * -(m11 * a3424 - m13 * a1424 + m14 * a1324),
+    invDet *  (m11 * a2424 - m12 * a1424 + m14 * a1224),
+    invDet * -(m11 * a2324 - m12 * a1324 + m13 * a1224),
+    invDet * -(m12 * a3423 - m13 * a2423 + m14 * a2323),
+    invDet *  (m11 * a3423 - m13 * a1423 + m14 * a1323),
+    invDet * -(m11 * a2423 - m12 * a1423 + m14 * a1223),
+    invDet *  (m11 * a2323 - m12 * a1323 + m13 * a1223)
+    
+  };
+  return inv;
 }
 Matrix4f 
 Matrix4f::translateMatrix(const Vector3f& v)

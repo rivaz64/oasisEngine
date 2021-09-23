@@ -78,6 +78,11 @@ Vector3f::operator/=(float v)
   return *this;
 }
 
+Vector3f Vector3f::operator*(const Vector3f& v)
+{
+    return { x * v.x,y * v.y,z * v.z };
+}
+
 float
 Vector3f::dot(const Vector3f& v) const
 {

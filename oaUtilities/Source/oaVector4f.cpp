@@ -74,6 +74,11 @@ Vector4f::operator/=(float v)
   return *this;
 }
 
+Vector4f Vector4f::operator*(const Vector4f& v)
+{
+  return { x * v.x,y * v.y,z * v.z,w * v.w };
+}
+
 float
 Vector4f::dot(const Vector4f& v) const
 {

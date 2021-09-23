@@ -123,13 +123,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(MSBuildStartupDirectory)/oaUtilities/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(SolutionDir)oaUtilities/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(MSBuildStartupDirectory)/lib/$(PlatformTarget);$(MSBuildStartupDirectory)/bin/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
