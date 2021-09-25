@@ -5,7 +5,7 @@
  */
 #pragma once
 #include "oaPlatformDefines.h"
-#include<cmath>
+#include "oaStdHeaders.h"
 namespace oaEngineSDK {
 class OA_UTILITY_EXPORT PlatformMath {
 public:
@@ -38,38 +38,38 @@ public:
   invSqrt(float number);
 
   /**
-   * @brief wraper of the cmath cos
-   * @param x
+   * @brief cosine function in radians
+   * @param r
    * @return
   */
   static FORCEINLINE float 
-  cos(float x) 
+  cos(float r) 
   {
-    return std::cosf(x);
+    return std::cosf(r);
   }
 
   /**
-   * @brief wraper of the cmath sin
-   * @param x
+   * @brief sine function in radians
+   * @param r
    * @return
   */
   static FORCEINLINE float 
-  sin(float x) {
-    return std::sinf(x);
+  sin(float r) {
+    return std::sinf(r);
   }
 
   /**
-   * @brief wraper of the cmath tan
-   * @param x
+   * @brief tangent function in radians
+   * @param r
    * @return
   */
   static FORCEINLINE float 
-  tan(float x) {
-    return std::tanf(x);
+  tan(float r) {
+    return std::tanf(r);
   }
 
   /**
-   * @brief wraper of the cmath acos
+   * @brief arc cosine function in radians
    * @param x
    * @return
   */
@@ -80,7 +80,7 @@ public:
   }
 
   /**
-   * @brief wraper of the cmath asin
+   * @brief arc sine function in radians
    * @param x
    * @return
   */
@@ -91,7 +91,7 @@ public:
   }
 
   /**
-   * @brief wraper of the cmath atan
+   * @brief arc tangent in radians 
    * @param x
    * @return
   */
@@ -102,7 +102,7 @@ public:
   }
 
   /**
-   * @brief wraper of the cmath atan2
+   * @brief arc tangent from y/x
    * @param x
    * @param y
    * @return
@@ -113,7 +113,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::abs
+   * @brief absolute value of a value
    * @tparam T 
    * @param v 
    * @return 
@@ -126,7 +126,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::max
+   * @brief the maximum value between two value
    * @tparam T
    * @param v1
    * @param v2
@@ -140,7 +140,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::min
+   * @brief the minimum value between two value
    * @tparam T
    * @param v1
    * @param v2
@@ -154,7 +154,7 @@ public:
   }
 
   /**
-   * @brief wraper for the std::exp
+   * @brief e to the poewr of v
    * @tparam T
    * @param v
   */
@@ -164,7 +164,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::fmod
+   * @brief modular function for floats
    * @tparam T 
    * @param v1 
    * @param v2 
@@ -176,7 +176,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::pow
+   * @brief the first value tho the power of the second one
    * @tparam T 
    * @param v1 
    * @param v2 
@@ -189,7 +189,7 @@ public:
   }
 
   /**
-   * @brief wraper of the std::log
+   * @brief logaritmic function of the value
   */
   static FORCEINLINE float
   log(float v)

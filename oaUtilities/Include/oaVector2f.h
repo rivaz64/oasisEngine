@@ -34,16 +34,23 @@ class OA_UTILITY_EXPORT Vector2f
    * @param v
    * @return
   */
+  FORCEINLINE Vector2f
+  operator+(const Vector2f& v) 
+  {
+    return { x + v.x , y + v.y };
+  }
 
-  Vector2f
-  operator+(const Vector2f& v);
   /**
    * @brief adds the vector v to this one
    * @param v
   */
+  FORCEINLINE Vector2f&
+  operator+=(const Vector2f& v) {
+    x += v.x;
+    y += v.y;
+    return *this;
+  }
 
-  Vector2f&
-  operator+=(const Vector2f& v);
   /**
    * @brief this vector minus vector v
    * @param v

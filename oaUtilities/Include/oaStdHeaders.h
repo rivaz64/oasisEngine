@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 #include<algorithm>
+#include<cmath>
 namespace oaEngineSDK {
 /**
  * @brief wraper of the std::vector, can be changed in the future
