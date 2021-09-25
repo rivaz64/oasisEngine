@@ -6,6 +6,7 @@
 
 #pragma once
 #include "oaPrerequisitesUtilities.h"
+#include "oaVector3f.h"
 
 namespace oaEngineSDK {
 /**
@@ -36,8 +37,28 @@ class OA_UTILITY_EXPORT Sphere
     return center;
   }
 
-  FORCEINLINE const float& const getRadius() const {
+  /**
+  * @brief getter for the radius
+  * @return 
+  */
+  FORCEINLINE float const getRadius() const {
     return radius;
+  }
+
+  /**
+   * @brief setter for the center
+   * @param _center 
+  */
+  FORCEINLINE void setCenter(Vector3f& const _center) {
+    center = _center;
+  }
+
+  /**
+   * @brief setter for the radius
+   * @param _radius 
+  */
+  FORCEINLINE void setRadius(float _radius) {
+    radius = _radius;
   }
 
   /**
@@ -46,7 +67,7 @@ class OA_UTILITY_EXPORT Sphere
    * @return 
   */
   bool
-    isInside(const Vector3f& point);
+  isInside(const Vector3f& point);
 
   /**
    * @brief checks if the line overlap with the sphere
@@ -54,7 +75,7 @@ class OA_UTILITY_EXPORT Sphere
    * @return 
   */
   bool
-    overlap(Line& l);
+  overlap(Line& l);
 
   /**
    * @brief checks if 2 spheres are overlaping
@@ -62,7 +83,7 @@ class OA_UTILITY_EXPORT Sphere
    * @return 
   */
   bool
-    overlap(const Sphere& s);
+  overlap(const Sphere& s);
 
  private:
    /**

@@ -4,7 +4,6 @@
  * @date 9/15/2021
  */
 
-#include "oaVector3f.h"
 #include "oaSphere.h"
 #include "oaLine.h"
 
