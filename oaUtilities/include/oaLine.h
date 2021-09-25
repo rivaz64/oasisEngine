@@ -43,7 +43,7 @@ public:
    * @return 
   */
   FORCEINLINE Vector3f 
-    getStaringPoint() {
+  getStaringPoint() {
     return startingPoint;
   }
 
@@ -52,7 +52,7 @@ public:
    * @return 
   */
   FORCEINLINE Vector3f 
-    getDirection() {
+  getDirection() {
     return direction;
   }
 
@@ -61,7 +61,7 @@ public:
    * @return 
   */
   FORCEINLINE float 
-    getLenght() {
+  getLenght() {
     return lenght;
   }
 
@@ -70,7 +70,7 @@ public:
    * @param _startingPoint 
   */
   FORCEINLINE void 
-    setStaringPoint(const Vector3f& _startingPoint) {
+  setStaringPoint(const Vector3f& _startingPoint) {
     startingPoint = _startingPoint;
   }
 
@@ -79,7 +79,7 @@ public:
    * @param _direction 
   */
   FORCEINLINE void
-    setDirection(const Vector3f& _direction) {
+  setDirection(const Vector3f& _direction) {
     direction = _direction;
   }
 
@@ -88,7 +88,7 @@ public:
    * @param _lenght 
   */
   FORCEINLINE void
-    setLenght(float _lenght) {
+  setLenght(float _lenght) {
     lenght = _lenght;
   }
 
@@ -98,7 +98,7 @@ public:
    * @return
   */
   Vector3f 
-    pointAt(float f);
+  pointAt(float f);
 
   /**
    * @brief calculates the distance between the point p and this line
@@ -106,7 +106,7 @@ public:
    * @return 
   */
   float 
-    distance(Vector3f& p);
+  distance(Vector3f& p);
 
   /**
    * @brief calculates the distance between the line l and this line
@@ -114,7 +114,7 @@ public:
    * @return 
   */
   float 
-    distance(Line& l);
+  distance(Line& l);
 
  private:
    /**

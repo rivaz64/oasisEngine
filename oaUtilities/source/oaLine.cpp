@@ -12,9 +12,9 @@ namespace oaEngineSDK {
 Line::Line(Vector3f& A, Vector3f& B)
 {
   startingPoint = A;
-  auto difference = B - A;
-  direction = difference.normal();
-  lenght = difference.len();
+  Vector3f difference = B - A;
+  direction = difference.normalized();
+  lenght = difference.magnitud();
 }
 
 Vector3f Line::pointAt(float f)
@@ -24,27 +24,27 @@ Vector3f Line::pointAt(float f)
 
 float Line::distance(Vector3f& p)
 {
-  auto u = p - startingPoint;
-  return direction.cross(u).len();
+  Vector3f u = p - startingPoint;
+  return Vector3f::cross(direction,u).magnitud();
 }
 
 float Line::distance(Line& l)
 {
   auto dif = l.startingPoint - startingPoint;
-  float v12 = direction.dot(direction);
-  float v22 = l.direction.dot(l.direction);
-  float v1v2 = direction.dot(l.direction);
+  float v12 = Vector3f::dot(direction,direction);
+  float v22 = Vector3f::dot(l.direction,l.direction);
+  float v1v2 = Vector3f::dot(direction,l.direction);
   float det = v1v2 * v1v2 - v12 * v22;
   if (Math::abs(det) > FLT_MIN) {
     det = 1.f / det;
-    float dpvl = dif.dot(direction);
-    float dpv2 = dif.dot(l.direction);
+    float dpvl = Vector3f::dot(dif,direction);
+    float dpv2 = Vector3f::dot(dif,l.direction);
     float t1 = (v1v2 * dpv2 - v22 * dpvl)* det;
     float t2 = (v12 * dpv2 - v1v2 * dpvl) * det;
-    return (dif + l.direction * t2 - direction * t1).len();
+    return (dif + l.direction * t2 - direction * t1).magnitud();
   }
-  Vector3f a = dif.cross(direction);
-  return (sqrt( a.dot(a) / v12));
+  Vector3f a = Vector3f::cross(dif,direction);
+  return (sqrt( Vector3f::dot(a,a) / v12));
 }
 
 }

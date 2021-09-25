@@ -63,8 +63,8 @@ TEST(vectors, vector2) {
   v2.x *= -1;
   EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::DEG_TO_RAD, .00001f);
   v2.y *= -1;
-  EXPECT_NEAR(v2.normal().magnitud(), 1.f, .00001f);
-  EXPECT_NEAR(v2.normal().getDirection(), v2.getDirection(), .0000001f);
+  EXPECT_NEAR(v2.normalized().magnitud(), 1.f, .00001f);
+  EXPECT_NEAR(v2.normalized().getDirection(), v2.getDirection(), .0000001f);
   EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .00001f);
   EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .00001f);
   v2.setDirection(0.6435011087932843868);
@@ -79,10 +79,10 @@ TEST(vectors, vector3) {
   EXPECT_EQ(vec3 - v3, Vector3f(1.f, 2.f,4.f));
   EXPECT_EQ(vec3 * 7.f, Vector3f(14.f, 21.f,42.f));
   EXPECT_EQ(vec3 /2.f, Vector3f(1.f, 1.5f, 3.f));
-  EXPECT_EQ(v3.dot(vec3), 17.f);
-  EXPECT_EQ(vec3.len(), 7.f);
-  EXPECT_NEAR(v3.normal().len(), 1.f, .0001f);
-  EXPECT_EQ(v3.cross(vec3), Vector3f(0.f, -2.f, 1.f));
+  EXPECT_EQ(Vector3f::dot(v3,vec3), 17.f);
+  EXPECT_EQ(vec3.magnitud(), 7.f);
+  EXPECT_NEAR(v3.normalized().magnitud(), 1.f, .0001f);
+  EXPECT_EQ(Vector3f::cross(v3,vec3), Vector3f(0.f, -2.f, 1.f));
   EXPECT_NEAR(v3.project(vec3).x, 0.693878f, .00001f);
   EXPECT_NEAR(v3.project(vec3).y, 1.04082f, .00001f);
   EXPECT_NEAR(v3.project(vec3).z, 2.08163f, .00001f);
@@ -95,9 +95,9 @@ TEST(vectors, vector4) {
   EXPECT_EQ(vec4 - v4, Vector4f(2.f, 2.f, 9.f,80.f));
   EXPECT_EQ(vec4 * 7.f, Vector4f(21.f, 28.f, 84.f,588.f));
   EXPECT_EQ(vec4 / 2.f, Vector4f(1.5, 2.f, 6.f, 42.f));
-  EXPECT_EQ(v4.dot(vec4), 383.f);
-  EXPECT_EQ(vec4.len(), 85.f);
-  EXPECT_NEAR(v4.normal().len(), 1.f, .0001f);
+  EXPECT_EQ(Vector4f::dot(v4,vec4), 383.f);
+  EXPECT_EQ(vec4.magnitud(), 85.f);
+  EXPECT_NEAR(v4.normalized().magnitud(), 1.f, .0001f);
   EXPECT_NEAR(v4.project(vec4).x, 0.159031f, .00001f);
   EXPECT_NEAR(v4.project(vec4).y, 0.212042f, .00001f);
   EXPECT_NEAR(v4.project(vec4).z, 0.636125f, .00001f);
@@ -258,7 +258,7 @@ TEST(geometry, plane) {
   Vector3f A = { 1.f,2.f,1.f }, B = { 6.f,3.f,2.f }, C = { 2.f,3.f,5.f };
   Vector4f D = { 4.f,4.f,4.f,1.f };
   Plane paper = { A,B,C };
-  EXPECT_EQ(paper.getNormal(), Vector3f(3, -19, 4).normal());
+  EXPECT_EQ(paper.getNormal(), Vector3f(3, -19, 4).normalized());
   EXPECT_NEAR(paper.getD(), 1.57785F,.00001f);
   EXPECT_NEAR(paper.distance(D.xyz), .865277, .000001f);
   Matrix4f refMat = paper.reflection();

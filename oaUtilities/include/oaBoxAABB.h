@@ -65,7 +65,8 @@ class OA_UTILITY_EXPORT BoxAABB
    * @param s 
    * @return 
   */
-  bool overlap(const Sphere& s);
+  bool 
+  overlap(const Sphere& s);
 
 private:
 

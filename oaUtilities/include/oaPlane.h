@@ -31,7 +31,7 @@ class OA_UTILITY_EXPORT Plane
    * @param B 
    * @param C 
   */
-  Plane(Vector3f& A, Vector3f& B, Vector3f& C);
+  Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C);
 
   ~Plane() = default;
 
@@ -40,7 +40,7 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   FORCEINLINE Vector3f 
-    getNormal() {
+  getNormal() {
     return normal;
   }
   
@@ -49,7 +49,7 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   FORCEINLINE float 
-    getD() {
+  getD() {
     return d;
   }
 
@@ -59,14 +59,14 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   float 
-    distance(Vector3f& p);
+  distance(Vector3f& p);
 
   /**
    * @brief calculates the transform matrix for reflecting an object in this plane
    * @return 
   */
   Matrix4f
-    reflection();
+  reflection();
 
   /**
    * @brief calculates the point where a line intersects a plane
@@ -75,7 +75,7 @@ class OA_UTILITY_EXPORT Plane
    * @return if it intersects or not
   */
   bool
-    intersect(Line& l,Vector3f& point);
+  intersect(Line& l,Vector3f& point);
 
   /**
    * @brief calculates the point where 3 planes intersect
@@ -85,7 +85,7 @@ class OA_UTILITY_EXPORT Plane
    * @return if it intersects or not
   */
   bool
-    intersect(Plane& p1, Plane& p2, Vector3f& point);
+  intersect(Plane& p1, Plane& p2, Vector3f& point);
 
   /**
    * @brief calculates the line where 2 planes intersect
@@ -94,7 +94,7 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   bool
-    intersect(Plane& p, Line& intersection);
+  intersect(Plane& p, Line& intersection);
  
   /**
     * @brief the normal of the plane

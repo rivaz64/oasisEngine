@@ -147,18 +147,6 @@ public:
   }
 
   /**
-   * @brief dot product of two vectors
-   * @param v1
-   * @param v2
-   * @return
-  */
-  FORCEINLINE static float
-  dot(const Vector2f& v1, const Vector2f& v2)
-  {
-    return v1.x * v2.x + v1.y * v2.y;
-  }
-
-  /**
    * @brief the lenght of the vector
    * @return
   */
@@ -173,9 +161,19 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  normal() const
+  normalized() const
   {
     return *this * Math::invSqrt(x * x + y * y);
+  }
+
+  /**
+  * @brief makes this vector have a magnitud of 1
+  * @return
+  */
+  FORCEINLINE void
+  normalize()
+  {
+    *this *= Math::invSqrt(x * x + y * y);
   }
 
   /**
@@ -209,6 +207,18 @@ public:
     float l = magnitud();
     x = l * Math::cos(r);
     y = l * Math::sin(r);
+  }
+
+  /**
+   * @brief dot product of two vectors
+   * @param v1
+   * @param v2
+   * @return
+  */
+  FORCEINLINE static float
+  dot(const Vector2f& v1, const Vector2f& v2)
+  {
+    return v1.x * v2.x + v1.y * v2.y;
   }
 
  public:
