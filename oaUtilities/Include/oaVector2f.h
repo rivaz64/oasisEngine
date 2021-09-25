@@ -14,7 +14,7 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Vector2f
 {
- public:
+public:
   /**
    * @brief default constructor for the vector2f
   */
@@ -22,20 +22,31 @@ class OA_UTILITY_EXPORT Vector2f
 
   /**
    * @brief constructor with parameters
-   * @param _x 
-   * @param _y 
+   * @param _x
+   * @param _y
   */
   Vector2f(float _x, float _y) :x(_x), y(_y) {}
-  
+
   ~Vector2f() = default;
+
+  /**
+   * @brief compares if two vectors are equal
+   * @param v 
+   * @return 
+  */
+  FORCEINLINE bool const
+  operator==(const Vector2f& v) const
+  {
+    return x == v.x && y == v.y;
+  }
 
   /**
   * @brief adds the vector v and this one
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f
-  operator+(const Vector2f& v) 
+  FORCEINLINE Vector2f const
+  operator+(const Vector2f& v) const
   {
     return { x + v.x , y + v.y };
   }
@@ -45,7 +56,8 @@ class OA_UTILITY_EXPORT Vector2f
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator+=(const Vector2f& v) {
+  operator+=(const Vector2f& v)
+  {
     x += v.x;
     y += v.y;
     return *this;
@@ -56,98 +68,148 @@ class OA_UTILITY_EXPORT Vector2f
    * @param v
    * @return
   */
+  FORCEINLINE Vector2f const
+  operator-(const Vector2f& v) const
+  {
+    return { x - v.x , y - v.y };
+  }
 
-  Vector2f
-  operator-(const Vector2f& v);
   /**
    * @brief substract vector v from this
    * @param v
   */
+  FORCEINLINE Vector2f&
+  operator-=(const Vector2f& v)
+  {
+    x -= v.x;
+    y -= v.y;
+    return *this;
+  }
 
-  Vector2f&
-  operator-=(const Vector2f& v);
   /**
    * @brief calculates a vector with the same direction as this and a lenght multiplied by v
    * @param v
    * @return
   */
 
-  Vector2f
-  operator*(float v) const;
+  FORCEINLINE Vector2f const
+  operator*(float v) const
+  {
+    return { x * v , y * v };
+  }
   /**
    * @brief multiply the length vector the vector by v
    * @param v
   */
 
-  Vector2f&
-  operator*=(float v);
+  FORCEINLINE Vector2f&
+  operator*=(float v)
+  {
+    x *= v;
+    y *= v;
+    return *this;
+  }
 
   /**
    * @brief calculates a vector with the same direction as this and a lenght divided by v
    * @param v
    * @return
   */
-  Vector2f
-  operator/(float v);
+  FORCEINLINE Vector2f const
+  operator/(float v) const
+  {
+    v = 1.f / v;
+    return { x * v , y * v };
+  }
 
   /**
    * @brief divide the length vector the vector by v
    * @param v
   */
-  Vector2f&
-  operator/=(float v);
+  FORCEINLINE Vector2f&
+  operator/=(float v)
+  {
+    v = 1.f / v;
+    x *= v;
+    y *= v;
+    return *this;
+  }
 
   /**
    * @brief multiplies each parameter for its congruent in the other vector
    * @param v 
    * @return 
   */
-  Vector2f
-  operator*(const Vector2f& v);
+  FORCEINLINE Vector2f
+  operator*(const Vector2f& v)
+  {
+    return { x * v.x,y * v.y };
+  }
 
   /**
-   * @brief dot product of to vector
-   * @param v
+   * @brief dot product of two vectors
+   * @param v1
+   * @param v2
    * @return
   */
-  float
-  dot (const Vector2f& v) const;
+  FORCEINLINE static float
+  dot(const Vector2f& v1, const Vector2f& v2)
+  {
+    return v1.x * v2.x + v1.y * v2.y;
+  }
 
   /**
    * @brief the lenght of the vector
    * @return
   */
-  float
-  len();
+  FORCEINLINE float  const
+  magnitud() const
+  {
+    return Math::sqrt(x * x + y * y);
+  }
 
   /**
    * @brief the unitary form of the vector
    * @return
   */
-  Vector2f
-  normal();
+  FORCEINLINE Vector2f const
+  normal() const
+  {
+    return *this * Math::invSqrt(x * x + y * y);
+  }
 
   /**
    * @brief proyects this vector into v
    * @param v
    * @return
   */
-  Vector2f
-  project(const Vector2f& v);
+  FORCEINLINE Vector2f const
+  project(const Vector2f& v) const
+  {
+    return v * (dot(*this,v) / dot(v,v));
+  }
 
   /**
    * @brief the direction in radians of the vector
    * @return
   */
-  float
-  getDirection();
+  FORCEINLINE float const
+  getDirection() const
+  {
+    return Math::atan2(x, y);
+  }
 
   /**
    * @brief changes the direction of the vector to r in radians and the lenght stays the same
    * @return
   */
-  void
-  setDirection(float r);
+  FORCEINLINE void 
+  setDirection(float r) 
+  {
+    float l = magnitud();
+    x = l * Math::cos(r);
+    y = l * Math::sin(r);
+  }
 
  public:
   /**
@@ -162,6 +224,5 @@ class OA_UTILITY_EXPORT Vector2f
 
 };
 
-bool OA_UTILITY_EXPORT
-operator==(const Vector2f& v1, const  Vector2f& v2);
+
 }

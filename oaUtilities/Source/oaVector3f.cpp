@@ -16,41 +16,11 @@ const Vector3f Vector3f::DOWN = Vector3f(0, -1, 0);
 const Vector3f Vector3f::FRONT = Vector3f(0, 0, 1);
 const Vector3f Vector3f::BACK = Vector3f(0, 0, -1);
 
-Vector3f
-Vector3f::operator+(const Vector3f& v)
-{
-  return { x + v.x , y + v.y, z + v.z };
-}
 
-Vector3f&
-Vector3f::operator+=(const Vector3f& v)
-{
-  x += v.x;
-  y += v.y;
-  z += v.z;
-  return *this;
-}
 
-Vector3f
-Vector3f::operator-(const Vector3f& v)
-{
-  return { x - v.x , y - v.y, z - v.z };
-}
 
-Vector3f&
-Vector3f::operator-=(const Vector3f& v)
-{
-  x -= v.x;
-  y -= v.y;
-  z -= v.z;
-  return *this;
-}
 
-Vector3f
-Vector3f::operator*(float v) const
-{
-  return { x * v , y * v , z * v };
-}
+
 
 Vector3f&
 Vector3f::operator*=(float v)

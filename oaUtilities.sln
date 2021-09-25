@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaUtilities", "oaUtilities\oaUtilities.vcxproj", "{B245B1E0-0384-4FB1-BDD0-1C596B0323B0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaUtilitiesTest", "oaUtilitiesTest\oaUtilitiesTest.vcxproj", "{4435F278-9243-46E8-B09B-26AE0A5184D4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B245B1E0-0384-4FB1-BDD0-1C596B0323B0} = {B245B1E0-0384-4FB1-BDD0-1C596B0323B0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

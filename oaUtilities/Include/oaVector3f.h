@@ -37,44 +37,65 @@ public:
    * @param v
    * @return
   */
-  Vector3f
-  operator+(const Vector3f& v);
+  FORCEINLINE Vector3f const 
+  operator+(const Vector3f& v) const
+  {
+    return { x + v.x , y + v.y, z + v.z };
+  }
 
   /**
    * @brief adds the vector v to this one
    * @param v
   */
-  Vector3f&
-  operator+=(const Vector3f& v);
+  FORCEINLINE Vector3f&
+  operator+=(const Vector3f& v)
+  {
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    return *this;
+  }
 
   /**
    * @brief this vector minus vector v
    * @param v
    * @return
   */
-  Vector3f
-  operator-(const Vector3f& v);
+  FORCEINLINE Vector3f const
+  operator-(const Vector3f& v) const
+  {
+    return { x - v.x , y - v.y, z - v.z };
+  }
 
   /**
    * @brief substract vector v from this
    * @param v
   */
-  Vector3f&
-  operator-=(const Vector3f& v);
+  FORCEINLINE Vector3f&
+  operator-=(const Vector3f& v)
+  {
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    return *this;
+  }
 
   /**
    * @brief calculates a vector with the same direction as this and a lenght multiplied by v
    * @param v
    * @return
   */
-  Vector3f
-  operator*(float v) const;
+  FORCEINLINE Vector3f const
+  operator*(float v) const
+  {
+    return { x * v , y * v , z * v };
+  }
 
   /**
    * @brief multiply the length vector the vector by v
    * @param v
   */
-  Vector3f&
+  FORCEINLINE Vector3f&
   operator*=(float v);
 
   /**
@@ -82,14 +103,14 @@ public:
    * @param v
    * @return
   */
-  Vector3f
+  FORCEINLINE Vector3f
   operator/(float v);
 
   /**
    * @brief divide the length vector the vector by v
    * @param v
   */
-  Vector3f&
+  FORCEINLINE Vector3f&
   operator/=(float v);
 
   /**
@@ -97,7 +118,7 @@ public:
    * @param v
    * @return
   */
-  Vector3f
+  FORCEINLINE Vector3f
   operator*(const Vector3f& v);
 
   /**
@@ -105,21 +126,21 @@ public:
    * @param v
    * @return
   */
-  float
+  FORCEINLINE float
   dot(const Vector3f& v) const;
 
   /**
    * @brief the lenght of the vector
    * @return
   */
-  float
+  FORCEINLINE float
   len();
 
   /**
    * @brief the unitary form of the vector
    * @return
   */
-  Vector3f
+  FORCEINLINE Vector3f
   normal();
 
   /**
@@ -127,7 +148,7 @@ public:
    * @param v
    * @return
   */
-  Vector3f
+  FORCEINLINE Vector3f
   cross(const Vector3f& v);
 
   /**
@@ -135,14 +156,14 @@ public:
    * @param v
    * @return
   */
-  Vector3f
+  FORCEINLINE Vector3f
   project(const Vector3f& v);
 
   /**
    * @brief rotates the vector with the quaternion q
    * @param q
   */
-  void
+  FORCEINLINE void
   rotate(Quaternion q);
 
  public:

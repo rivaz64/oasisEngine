@@ -11,7 +11,7 @@ namespace oaEngineSDK {
 
 class OA_UTILITY_EXPORT BoxAABB
 {
-public:
+ public:
   /**
    * @brief default constructor for the AABB box
   */
@@ -31,7 +31,7 @@ public:
    * @param _minPoint 
   */
   FORCEINLINE void 
-    setMinPoint(const Vector3f& _minPoint) {
+  setMinPoint(const Vector3f& _minPoint) {
     minPoint = _minPoint;
   }
 
@@ -40,7 +40,7 @@ public:
    * @param _maxPoint
   */
   FORCEINLINE void 
-    setMaxPoint(const Vector3f& _maxPoint) {
+  setMaxPoint(const Vector3f& _maxPoint) {
     maxPoint = _maxPoint;
   }
 
@@ -50,7 +50,7 @@ public:
    * @return 
   */
   bool 
-    isPointInside(const Vector3f& point);
+  isPointInside(const Vector3f& point);
 
   /**
    * @brief if the 2 boxes are overlapping
@@ -58,7 +58,7 @@ public:
    * @return 
   */
   bool
-    overlap(const BoxAABB& box);
+  overlap(const BoxAABB& box);
 
   /**
    * @brief checks if the sphere and this box collides
