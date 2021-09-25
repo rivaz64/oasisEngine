@@ -1,7 +1,7 @@
 /**
-* @file oaVector2f.h
+* @file oaVector2I.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 9/07/2021
+* @date 9/25/2021
 */
 
 #pragma once

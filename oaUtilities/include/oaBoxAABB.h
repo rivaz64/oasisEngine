@@ -6,9 +6,12 @@
 
 #pragma once
 #include"oaPrerequisitesUtilities.h"
+#include "oaVector3f.h"
 
 namespace oaEngineSDK {
-
+/**
+ * @brief a bounding box aligned to the axis
+*/
 class OA_UTILITY_EXPORT BoxAABB
 {
  public:
@@ -25,24 +28,6 @@ class OA_UTILITY_EXPORT BoxAABB
   BoxAABB(const Vector3f& A, const Vector3f& B);
 
   ~BoxAABB() = default;
-
-  /**
-   * @brief setter for the minimum points
-   * @param _minPoint 
-  */
-  FORCEINLINE void 
-  setMinPoint(const Vector3f& _minPoint) {
-    minPoint = _minPoint;
-  }
-
-  /**
-   * @brief setter for the maximum points
-   * @param _maxPoint
-  */
-  FORCEINLINE void 
-  setMaxPoint(const Vector3f& _maxPoint) {
-    maxPoint = _maxPoint;
-  }
 
   /**
    * @brief if a point is inside the box
