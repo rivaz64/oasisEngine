@@ -91,12 +91,12 @@ public:
    * @param v
    * @return
   */
-
   FORCEINLINE Vector2f const
   operator*(float v) const
   {
     return { x * v , y * v };
   }
+
   /**
    * @brief multiply the length vector the vector by v
    * @param v
