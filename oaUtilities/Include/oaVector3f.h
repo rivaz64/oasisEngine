@@ -30,6 +30,13 @@ public:
   */
   Vector3f(float _x, float _y, float _z) :x(_x), y(_y), z(_z) {}
 
+  /**
+   * @brief constructor from a vector2 for members x and y
+   * @param _xy 
+   * @param _z
+  */
+  Vector3f(const Vector2f& _xy, float _z):xy(_xy),z(_z){}
+
   ~Vector3f() = default;
 
   /**

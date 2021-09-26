@@ -65,7 +65,7 @@ class OA_UTILITY_EXPORT Sphere
    * @brief checks if the point is inside the sphere
    * @param point 
    * @return 
-  */
+  
   bool
   isInside(const Vector3f& point);
 
@@ -73,7 +73,7 @@ class OA_UTILITY_EXPORT Sphere
    * @brief checks if the line overlap with the sphere
    * @param l 
    * @return 
-  */
+  
   bool
   overlap(Line& l);
 
@@ -81,9 +81,9 @@ class OA_UTILITY_EXPORT Sphere
    * @brief checks if 2 spheres are overlaping
    * @param s 
    * @return 
-  */
+  
   bool
-  overlap(const Sphere& s);
+  overlap(const Sphere& s);*/
 
  private:
    /**
@@ -94,6 +94,8 @@ class OA_UTILITY_EXPORT Sphere
     * @brief the radius of the sphere
    */
    float radius;
+
+   friend class PlatformMath;
 };
 
 }

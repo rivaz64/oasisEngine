@@ -12,7 +12,7 @@
 namespace oaEngineSDK {
 
 Matrix4f
-oaEngineSDK::Matrix4f::operator+(const Matrix4f& m)
+Matrix4f::operator+(const Matrix4f& m)
 {
   return {
     m11 + m.m11,m12 + m.m12,m13 + m.m13,m14 + m.m14,
@@ -23,7 +23,7 @@ oaEngineSDK::Matrix4f::operator+(const Matrix4f& m)
 }
 
 Matrix4f&
-oaEngineSDK::Matrix4f::operator+=(const Matrix4f& m)
+Matrix4f::operator+=(const Matrix4f& m)
 {
   m11 += m.m11;
   m12 += m.m12;

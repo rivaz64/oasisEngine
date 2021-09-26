@@ -17,4 +17,6 @@ class Mesh;
 class Line;
 class Plane;
 class Sphere;
+class BoxAABB;
+class Capsule;
 }

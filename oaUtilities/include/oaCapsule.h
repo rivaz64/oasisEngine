@@ -31,7 +31,9 @@ public:
    * @brief getter for the base point
    * @return 
   */
-  FORCEINLINE const Vector3f& const getBase() const {
+  FORCEINLINE const Vector3f& const 
+  getBase() const 
+  {
     return base;
   }
 
@@ -39,7 +41,9 @@ public:
   * @brief getter for the radius
   * @return 
   */
-  FORCEINLINE float const getRadius() const {
+  FORCEINLINE float const 
+  getRadius() const 
+  {
     return radius;
   }
 
@@ -47,7 +51,9 @@ public:
   * @brief getter for the height
   * @return 
   */
-  FORCEINLINE float const getHeight() const {
+  FORCEINLINE float const 
+  getHeight() const 
+  {
     return height;
   }
 
@@ -55,7 +61,9 @@ public:
   * @brief setter for the base
   * @param _center 
   */
-  FORCEINLINE void setBase(Vector3f& const _base) {
+  FORCEINLINE void 
+  setBase(Vector3f& const _base) 
+  {
     base = _base;
   }
 
@@ -63,7 +71,9 @@ public:
   * @brief setter for the radius
   * @param _radius 
   */
-  FORCEINLINE void setRadius(float _radius) {
+  FORCEINLINE void 
+  setRadius(float _radius) 
+  {
     radius = _radius;
   }
 
@@ -71,7 +81,9 @@ public:
   * @brief setter for the height
   * @param _radius 
   */
-  FORCEINLINE void setHeight(float _height) {
+  FORCEINLINE void 
+  setHeight(float _height) 
+  {
     height = _height;
   }
  private:
@@ -87,6 +99,8 @@ public:
   * @brief the height of the capsule
   */
   float height;
+
+  friend class PlatformMath;
 };
 
 }

@@ -10,6 +10,8 @@
 #include "oaPlane.h"
 #include "oaSphere.h"
 #include "oaBoxAABB.h"
+#include "oaCapsule.h"
+
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
@@ -283,19 +285,28 @@ TEST(overlaps, shpere) {
   Sphere ball({ 2,3,6 }, 4);
   Vector3f A = { 1.f,1.f,7.f };
   Vector3f B = { 7.f,8.f,9.f };
-  EXPECT_TRUE(ball.isInside(A));
-  EXPECT_FALSE(ball.isInside(B));
-  EXPECT_TRUE(ball.overlap(Sphere(A, 1)));
-  EXPECT_FALSE(ball.overlap(Sphere(B, 1)));
-  EXPECT_TRUE(ball.overlap(Sphere(B, 5)));
+  EXPECT_TRUE(Math::overlap(A,ball));
+  EXPECT_FALSE(Math::overlap(B,ball));
+  EXPECT_TRUE(Math::overlap(Sphere(A, 1),ball));
+  EXPECT_FALSE(Math::overlap(Sphere(B, 1),ball));
+  EXPECT_TRUE(Math::overlap(Sphere(B, 5),ball));
 }
 
 TEST(overlaps, AABBbox) {
   BoxAABB box = BoxAABB({ 1.f,3.f,5.f }, { 6.f,4.f,2.f });
-  EXPECT_TRUE(box.isPointInside({ 3.f,3.5f,4.f }));
-  EXPECT_FALSE(box.isPointInside({ 0.f,3.5f,4.f }));
-  EXPECT_TRUE(box.overlap(Sphere({ 3.f,3.5f,4.f }, 12.f)));
-  EXPECT_TRUE(box.overlap(Sphere({ 3.f,3.5f,4.f }, .1f)));
-  EXPECT_TRUE(box.overlap(Sphere({ 0.f,3.5f,4.f }, 7.f)));
-  EXPECT_FALSE(box.overlap(Sphere({ 0.f,3.5f,4.f }, .5f)));
+  BoxAABB box1 = BoxAABB({ -1.f,-3.f,-5.f }, { -6.f,-4.f,-2.f });
+  BoxAABB box2= BoxAABB({ 3.f,3.5f,4.f }, { -6.f,-4.f,-2.f });
+  EXPECT_TRUE(Math::overlap({ 3.f,3.5f,4.f },box));
+  EXPECT_FALSE(Math::overlap({ 0.f,3.5f,4.f },box));
+  EXPECT_TRUE(Math::overlap(Sphere({ 3.f,3.5f,4.f }, 12.f),box));
+  EXPECT_TRUE(Math::overlap(Sphere({ 3.f,3.5f,4.f }, .1f),box));
+  EXPECT_TRUE(Math::overlap(Sphere({ 0.f,3.5f,4.f }, 7.f),box));
+  EXPECT_FALSE(Math::overlap(Sphere({ 0.f,3.5f,4.f }, .5f),box));
+  EXPECT_FALSE(Math::overlap(box,box1));
+}
+
+TEST(overlaps, capsule) {
+  Capsule player({1.f,2.f,3.f},1.5f,5.f);
+  EXPECT_TRUE(Math::overlap({1.75f,2.75f,5.25f},player));
+  EXPECT_FALSE(Math::overlap({1.75f,2.75f,3.f},player));
 }

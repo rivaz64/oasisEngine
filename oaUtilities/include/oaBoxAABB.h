@@ -63,6 +63,8 @@ private:
    * @brief the maximum values of the box in each axis
   */
   Vector3f maxPoint;
+
+  friend class PlatformMath;
 };
 
 }

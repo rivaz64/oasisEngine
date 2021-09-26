@@ -9,7 +9,8 @@
 #include "oaMatrix4f.h"
 
 namespace oaEngineSDK {
-Quaternion oaEngineSDK::Quaternion::operator+(Quaternion& q)
+
+Quaternion Quaternion::operator+(Quaternion& q)
 {
   return { r + q.r,i+q.i,j+q.j,k+q.k };
 }
@@ -79,5 +80,6 @@ bool OA_UTILITY_EXPORT operator==(Quaternion q1, Quaternion q2)
 {
   return q1.r==q2.r&& q1.i == q2.i&& q1.j == q2.j&& q1.k == q2.k;
 }
+
 }
 

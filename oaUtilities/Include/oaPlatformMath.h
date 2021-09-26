@@ -1,14 +1,24 @@
 /**
- * @file oaMath.h
+ * @file oaPlatformMath.h
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/07/2021
  */
+
 #pragma once
 #include "oaPlatformDefines.h"
 #include "oaStdHeaders.h"
+#include "oaForDecUtilities.h"
+
 namespace oaEngineSDK {
+
+/**
+ * @brief math from this platform
+*/
+
 class OA_UTILITY_EXPORT PlatformMath {
+
 public:
+
   static const float PI;
   static const float HALF_PI;
   static const float TWO_PI;
@@ -299,9 +309,71 @@ public:
     float x2 = x * x;
     float x4 = x2 * x2;
     float x6 = x4 * x2;
-    return (0.9998660f - .3302995*x2 + .1801f*x4 - .085133*x6 + .0208351*x6*x2) * x;
+    return (0.9998660f - .3302995f*x2 + .180141f*x4 - .085133*x6 + .0208351*x6*x2) * x;
   }
+
+  /**
+   * @brief if a point is inside a sphere
+   * @param _point 
+   * @param _sphere 
+   * @return 
+  */
+  static bool
+  overlap(const Vector3f& _point,const Sphere& _sphere);
+
+  /**
+   * @brief if two spheres are intersecting
+   * @param _sphere1 
+   * @param _sphere2 
+   * @return 
+  */
+  static bool
+  overlap(const Sphere& _sphere1,const Sphere& _sphere2);
+
+  /**
+   * @brief checks if a point is inside a box
+   * @param _point 
+   * @param _box 
+   * @return 
+  */
+  static bool
+  overlap(const Vector3f& _point,const BoxAABB& _box);
+
+  /**
+   * @brief checks if a shpere overlaps a box
+   * @param _sphere 
+   * @param _box 
+   * @return 
+  */
+  static bool
+  overlap(const Sphere& _sphere,const BoxAABB& _box);
+
+  /**
+   * @brief checks if two boxes overlap
+   * @param _box1 
+   * @param _box2 
+   * @return 
+  */
+  static bool
+  overlap(const BoxAABB& _box1,const BoxAABB& _box2);
+
+  /**
+   * @brief checks if a point is inside a capsule
+   * @param _point 
+   * @param _capsule 
+   * @return 
+  */
+  static bool
+  overlap(const Vector3f& _point,const Capsule& _capsule);
+
+  /**
+   * @brief checks if a capsule and a sphere overlap
+   * @param _sphere 
+   * @param _capsule 
+   * @return 
+  */
+  static bool
+  overlap(const Sphere& _sphere,const Capsule& _capsule);
 };
 
-  
 }
