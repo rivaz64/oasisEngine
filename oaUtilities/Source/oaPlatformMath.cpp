@@ -98,4 +98,44 @@ bool PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
   ||(Vector3f(_capsule.base.xy,height2) - _sphere.center).magnitud() < radius;
 }
 
+bool PlatformMath::overlap(const BoxAABB& _box, const Capsule& _capsule)
+{
+  Vector2f point = 
+  { Math::max(_box.minPoint.x, Math::min(_capsule.base.x, _box.maxPoint.x)),
+    Math::max(_box.minPoint.y, Math::min(_capsule.base.y, _box.maxPoint.y))};
+
+  if ((point- _capsule.base.xy).magnitud() < _capsule.radius){
+    return true;
+  }
+  Sphere s1(Vector3f(_capsule.base.xy,
+            _capsule.base.z+_capsule.radius),_capsule.radius);
+  Sphere s2(Vector3f(_capsule.base.xy,
+            _capsule.base.z+_capsule.height-_capsule.radius),_capsule.radius);
+  return overlap(s1,_box) || overlap(s2,_box);
+}
+
+bool PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
+{
+  float height11 = _capsule1.base.z+_capsule1.radius;
+  float height21 = _capsule1.base.z+_capsule1.height-_capsule1.radius;
+  float height12 = _capsule2.base.z+_capsule2.radius;
+  float height22 = _capsule2.base.z+_capsule2.height-_capsule1.radius;
+  if((_capsule1.base.xy-_capsule2.base.xy).magnitud()
+     < _capsule1.radius+_capsule2.radius
+     && height11<height22 && height21 > height12)
+  {
+    return true;
+  }
+  Sphere s11(Vector3f(_capsule1.base.xy,
+            _capsule1.base.z+_capsule1.radius),_capsule1.radius);
+  Sphere s21(Vector3f(_capsule1.base.xy,
+            _capsule1.base.z+_capsule1.height-_capsule1.radius),_capsule1.radius);
+  Sphere s12(Vector3f(_capsule2.base.xy,
+             _capsule2.base.z+_capsule2.radius),_capsule2.radius);
+  Sphere s22(Vector3f(_capsule2.base.xy,
+             _capsule2.base.z+_capsule2.height-_capsule2.radius),_capsule2.radius);
+
+  return overlap(s11,s22) || overlap(s12,s21);
+}
+
 }

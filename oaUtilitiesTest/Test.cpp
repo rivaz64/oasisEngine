@@ -309,4 +309,9 @@ TEST(overlaps, capsule) {
   Capsule player({1.f,2.f,3.f},1.5f,5.f);
   EXPECT_TRUE(Math::overlap({1.75f,2.75f,5.25f},player));
   EXPECT_FALSE(Math::overlap({1.75f,2.75f,3.f},player));
+  EXPECT_TRUE(Math::overlap(Sphere({-1.75f,2.75f,5.25f},2),player));
+  EXPECT_TRUE(Math::overlap(Sphere({1.75f,2.75f,3.f},1.5f),player));
+  EXPECT_TRUE(Math::overlap(BoxAABB({1.75f,2.75f,5.25f},{0.0f,0.0f,3.f}),player));
+  Capsule player2({1.f,1.f,0.f},1.5f,5.f);
+  EXPECT_TRUE(Math::overlap(player,player2));
 }

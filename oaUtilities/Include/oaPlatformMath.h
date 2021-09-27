@@ -374,6 +374,24 @@ public:
   */
   static bool
   overlap(const Sphere& _sphere,const Capsule& _capsule);
+
+  /**
+   * @brief 
+   * @param _box 
+   * @param _capsule 
+   * @return 
+  */
+  static bool
+  overlap(const BoxAABB& _box, const Capsule& _capsule);
+  /**
+   * @brief checks if two capsules are overlapping
+   * @param _capsule1 
+   * @param _capsule2 
+   * @return 
+  */
+  static bool
+  overlap(const Capsule& _capsule1,const Capsule& _capsule2);
+
 };
 
 }
