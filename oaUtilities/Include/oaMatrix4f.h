@@ -44,8 +44,8 @@ class OA_UTILITY_EXPORT Matrix4f
    * @param m 
    * @return 
   */
-  bool 
-  operator==(const Matrix4f& m);
+  bool const
+  operator==(const Matrix4f& m) const;
 
   /**
    * @brief constructor for an identity matrix

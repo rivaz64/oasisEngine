@@ -10,7 +10,8 @@
 
 namespace oaEngineSDK {
 
-bool Quaternion::operator==(Quaternion q)
+bool const
+Quaternion::operator==(Quaternion q) const
 {
   return r==q.r&& i == q.i&& j == q.j&& k == q.k;
 }
@@ -92,4 +93,3 @@ Matrix4f Quaternion::toMatrix()
 }
 
 }
-

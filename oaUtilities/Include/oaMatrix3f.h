@@ -56,8 +56,8 @@ class OA_UTILITY_EXPORT Matrix3f
    * @param m 
    * @return 
   */
-  bool 
-  operator==(const Matrix3f& m);
+  bool const
+  operator==(const Matrix3f& m) const;
 
   /**
    * @brief adds the matrix m and this one

@@ -11,8 +11,8 @@
 
 namespace oaEngineSDK {
 
-bool 
-Matrix4f::operator==(const Matrix4f& m)
+bool const
+Matrix4f::operator==(const Matrix4f& m) const
 {
   return 
     m11 == m.m11 &&

@@ -13,7 +13,7 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Quaternion
 {
-public:
+ public:
   /**
    * @brief default constructor for the Quaternions
   */
@@ -35,8 +35,8 @@ public:
    * @param q
    * @return 
   */
-  bool 
-  operator==(Quaternion q);
+  bool const
+  operator==(Quaternion q) const;
 
   /**
    * @brief adds the quaternion q and this one
