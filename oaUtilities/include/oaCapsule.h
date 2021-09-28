@@ -32,7 +32,7 @@ class OA_UTILITY_EXPORT Capsule
    * @brief getter for the base point
    * @return 
   */
-  FORCEINLINE const Vector3f& const 
+  FORCEINLINE const Vector3f& 
   getBase() const {
     return base;
   }
@@ -60,7 +60,7 @@ class OA_UTILITY_EXPORT Capsule
   * @param _center 
   */
   FORCEINLINE void 
-  setBase(Vector3f& const _base) {
+  setBase(const Vector3f& _base) {
     base = _base;
   }
 

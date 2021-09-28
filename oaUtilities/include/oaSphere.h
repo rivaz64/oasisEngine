@@ -34,7 +34,8 @@ class OA_UTILITY_EXPORT Sphere
    * @brief getter for the center
    * @return 
   */
-  FORCEINLINE const Vector3f& const getCenter() const {
+  FORCEINLINE const Vector3f& 
+  getCenter() const {
     return center;
   }
 
@@ -42,7 +43,8 @@ class OA_UTILITY_EXPORT Sphere
   * @brief getter for the radius
   * @return 
   */
-  FORCEINLINE float const getRadius() const {
+  FORCEINLINE float const 
+  getRadius() const {
     return radius;
   }
 
@@ -50,7 +52,8 @@ class OA_UTILITY_EXPORT Sphere
    * @brief setter for the center
    * @param _center 
   */
-  FORCEINLINE void setCenter(Vector3f& const _center) {
+  FORCEINLINE void 
+  setCenter(const Vector3f& _center) {
     center = _center;
   }
 
@@ -58,7 +61,8 @@ class OA_UTILITY_EXPORT Sphere
    * @brief setter for the radius
    * @param _radius 
   */
-  FORCEINLINE void setRadius(float _radius) {
+  FORCEINLINE void 
+  setRadius(float _radius) {
     radius = _radius;
   }
 
@@ -100,5 +104,3 @@ class OA_UTILITY_EXPORT Sphere
 };
 
 }
-
-

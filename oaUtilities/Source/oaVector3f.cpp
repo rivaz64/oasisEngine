@@ -22,7 +22,6 @@ void Vector3f::rotate(const Quaternion& q)
   //q.normalize();
   Vector3f b = { q.i,q.j,q.k };
   float b2 = b.x * b.x + b.y * b.y + b.z * b.z;
-  float thisdot = Vector3f::dot(*this,b);
   *this = (*this * (q.r * q.r - b2) + b * (Vector3f::dot(*this,b) * 2.0f)
            + Vector3f::cross(*this,b) * (q.r * 2.0f));
 }

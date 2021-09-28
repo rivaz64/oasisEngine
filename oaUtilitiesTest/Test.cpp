@@ -69,7 +69,7 @@ TEST(vectors, vector2) {
   EXPECT_NEAR(v2.normalized().getDirection(), v2.getDirection(), .0000001f);
   EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .00001f);
   EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .00001f);
-  v2.setDirection(0.6435011087932843868);
+  v2.setDirection(0.6435011087932843868f);
   EXPECT_NEAR(v2.x, 4.f, .0000001f);
   EXPECT_NEAR(v2.y, 3.f, .0000001f);
 }
@@ -276,7 +276,6 @@ TEST(geometry, plane) {
   
   Plane paper1 = { A,D.xyz,refpoint.xyz };
   Plane paper2 = { C,D.xyz,refpoint.xyz };
-  Line cut;
   paper.intersect(paper1,paper2, intersection);
   EXPECT_EQ(intersection, arrow.pointAt(.5));
 }
