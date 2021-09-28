@@ -72,9 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin/$(PlatformTarget)/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin/$(PlatformTarget)/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -82,7 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)bin/$(PlatformTarget)/</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -95,7 +97,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);C:\Users\roriv\source\repos\oaUtilities\lib/$(PlatformTarget);$(SolutionDir)lib/$(PlatformTarget);$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -114,8 +116,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib$(IntDir);C:\Users\roriv\source\repos\oaUtilities\lib/$(PlatformTarget);$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtest.lib;gtest_main.lib;oaUtilities.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,7 +151,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gtest.lib;gtest_main.lib;oaUtilities.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);;$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
