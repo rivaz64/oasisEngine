@@ -5,17 +5,17 @@
  */
 
 #pragma once
+
 #include"oaPrerequisitesUtilities.h"
 
 
 namespace oaEngineSDK {
-
 /**
  * @brief Matrix 4x4 of floats
 */
 class OA_UTILITY_EXPORT Matrix4f
 {
-public:
+ public:
   /**
    * @brief default constructor for the Matrix4f
   */
@@ -38,6 +38,14 @@ public:
     m41(_m41), m42(_m42), m43(_m43), m44(_m44) {}
 
   ~Matrix4f() = default;
+
+  /**
+   * @brief compares if two matrix 4x4 are equal
+   * @param m 
+   * @return 
+  */
+  bool 
+  operator==(const Matrix4f& m);
 
   /**
    * @brief constructor for an identity matrix
@@ -255,5 +263,5 @@ public:
    */
    float m44;
 };
-bool OA_UTILITY_EXPORT operator==(const Matrix4f& m1, const Matrix4f& m2);
+
 }

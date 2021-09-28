@@ -10,13 +10,12 @@
 #include "oaQuaternion.h"
 
 namespace oaEngineSDK {
-
 /**
  * @brief tridimencional vector of floats
 */
 class OA_UTILITY_EXPORT Vector3f
 {
-public:
+ public:
   /**
    * @brief defaault constructor for the Vector3f
   */
@@ -44,9 +43,8 @@ public:
   * @param v 
   * @return 
   */
-  bool const
-  operator==(const Vector3f& v) const
-  {
+  FORCEINLINE bool const
+  operator==(const Vector3f& v) const {
     return x == v.x && y == v.y && z == v.z;
   }
 

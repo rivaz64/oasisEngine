@@ -5,6 +5,7 @@
  */
 
 #pragma once
+
 #include "oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
@@ -13,7 +14,7 @@ namespace oaEngineSDK {
 */
 class OA_UTILITY_EXPORT Line
 {
-public:
+ public:
   /**
    * @brief default constructor for the Line
   */

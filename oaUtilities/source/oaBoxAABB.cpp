@@ -7,7 +7,9 @@
 
 #include "oaBoxAABB.h"
 #include "oaSphere.h"
+
 namespace oaEngineSDK{
+
 BoxAABB::BoxAABB(const Vector3f& A, const Vector3f& B)
 {
   minPoint = { Math::min(A.x,B.x),Math::min(A.y,B.y) ,Math::min(A.z,B.z) };

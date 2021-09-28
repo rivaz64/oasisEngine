@@ -33,8 +33,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return 
   */
   FORCEINLINE bool const
-  operator==(const Vector2I& v) const
-  {
+  operator==(const Vector2I& v) const {
     return x == v.x && y == v.y;
   }
 
@@ -44,8 +43,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return
   */
   FORCEINLINE Vector2I const
-  operator+(const Vector2I& v) const
-  {
+  operator+(const Vector2I& v) const {
     return { x + v.x , y + v.y };
   }
 
@@ -54,8 +52,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   */
   FORCEINLINE Vector2I&
-  operator+=(const Vector2I& v)
-  {
+  operator+=(const Vector2I& v) {
     x += v.x;
     y += v.y;
     return *this;
@@ -67,8 +64,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return
   */
   FORCEINLINE Vector2I const
-  operator-(const Vector2I& v) const
-  {
+  operator-(const Vector2I& v) const {
     return { x - v.x , y - v.y };
   }
 
@@ -77,8 +73,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   */
   FORCEINLINE Vector2I&
-  operator-=(const Vector2I& v)
-  {
+  operator-=(const Vector2I& v) {
     x -= v.x;
     y -= v.y;
     return *this;
@@ -90,8 +85,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return
   */
   FORCEINLINE Vector2I const
-  operator*(int32 v) const
-  {
+  operator*(int32 v) const {
     return { x * v , y * v };
   }
 
@@ -101,8 +95,7 @@ class OA_UTILITY_EXPORT Vector2I
   */
 
   FORCEINLINE Vector2I&
-    operator*=(int32 v)
-  {
+  operator*=(int32 v) {
     x *= v;
     y *= v;
     return *this;

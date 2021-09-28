@@ -5,6 +5,7 @@
 */
 
 #pragma once
+
 #include"oaPrerequisitesUtilities.h"
 #include "oaVector2f.h"
 
@@ -14,7 +15,7 @@ namespace oaEngineSDK{
 */
 class OA_UTILITY_EXPORT Rect
 {
-public:
+ public:
 
   /**
   * @brief default constructor for the rect
@@ -38,7 +39,7 @@ public:
   bool 
   isPointInside(const Vector2f& point);
 
-private:
+ private:
 
   /**
   * @brief the minimum values of the box in each axis

@@ -5,6 +5,7 @@
  */
 
 #pragma once
+
 #include"oaPrerequisitesUtilities.h"
 #include "oaVector3f.h"
 

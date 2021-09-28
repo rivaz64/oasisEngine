@@ -5,16 +5,16 @@
  */
 
 #pragma once
+
 #include "oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
-
 /**
  * @brief bidimencional vector of floats
 */
 class OA_UTILITY_EXPORT Vector2f
 {
-public:
+ public:
   /**
    * @brief default constructor for the vector2f
   */
@@ -35,8 +35,7 @@ public:
    * @return 
   */
   FORCEINLINE bool const
-  operator==(const Vector2f& v) const
-  {
+  operator==(const Vector2f& v) const {
     return x == v.x && y == v.y;
   }
 
@@ -46,8 +45,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  operator+(const Vector2f& v) const
-  {
+  operator+(const Vector2f& v) const {
     return { x + v.x , y + v.y };
   }
 
@@ -56,8 +54,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator+=(const Vector2f& v)
-  {
+  operator+=(const Vector2f& v) {
     x += v.x;
     y += v.y;
     return *this;
@@ -69,8 +66,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  operator-(const Vector2f& v) const
-  {
+  operator-(const Vector2f& v) const {
     return { x - v.x , y - v.y };
   }
 
@@ -79,8 +75,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator-=(const Vector2f& v)
-  {
+  operator-=(const Vector2f& v) {
     x -= v.x;
     y -= v.y;
     return *this;
@@ -92,8 +87,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  operator*(float v) const
-  {
+  operator*(float v) const {
     return { x * v , y * v };
   }
 
@@ -103,8 +97,7 @@ public:
   */
 
   FORCEINLINE Vector2f&
-  operator*=(float v)
-  {
+  operator*=(float v) {
     x *= v;
     y *= v;
     return *this;
@@ -116,8 +109,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  operator/(float v) const
-  {
+  operator/(float v) const {
     v = 1.f / v;
     return { x * v , y * v };
   }
@@ -127,8 +119,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator/=(float v)
-  {
+  operator/=(float v) {
     v = 1.f / v;
     x *= v;
     y *= v;
@@ -141,8 +132,7 @@ public:
    * @return 
   */
   FORCEINLINE Vector2f
-  operator*(const Vector2f& v)
-  {
+  operator*(const Vector2f& v) {
     return { x * v.x,y * v.y };
   }
 
@@ -150,9 +140,8 @@ public:
    * @brief the lenght of the vector
    * @return
   */
-  FORCEINLINE float  const
-  magnitud() const
-  {
+  FORCEINLINE float const
+  magnitud() const {
     return Math::sqrt(x * x + y * y);
   }
 
@@ -161,8 +150,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  normalized() const
-  {
+  normalized() const {
     return *this * Math::invSqrt(x * x + y * y);
   }
 
@@ -171,8 +159,7 @@ public:
   * @return
   */
   FORCEINLINE void
-  normalize()
-  {
+  normalize() {
     *this *= Math::invSqrt(x * x + y * y);
   }
 
@@ -182,8 +169,7 @@ public:
    * @return
   */
   FORCEINLINE Vector2f const
-  project(const Vector2f& v) const
-  {
+  project(const Vector2f& v) const {
     return v * (dot(*this,v) / dot(v,v));
   }
 
@@ -192,8 +178,7 @@ public:
    * @return
   */
   FORCEINLINE float const
-  getDirection() const
-  {
+  getDirection() const {
     return Math::atan2(x, y);
   }
 
@@ -202,8 +187,7 @@ public:
    * @return
   */
   FORCEINLINE void 
-  setDirection(float r) 
-  {
+  setDirection(float r) {
     float l = magnitud();
     x = l * Math::cos(r);
     y = l * Math::sin(r);
@@ -216,8 +200,7 @@ public:
    * @return
   */
   FORCEINLINE static float
-  dot(const Vector2f& v1, const Vector2f& v2)
-  {
+  dot(const Vector2f& v1, const Vector2f& v2) {
     return v1.x * v2.x + v1.y * v2.y;
   }
 

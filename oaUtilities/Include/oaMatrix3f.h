@@ -5,20 +5,22 @@
  */
 
 #pragma once
+
 #include"oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK {
-
 /**
  * @brief Matrix 3x3 of floats
 */
 class OA_UTILITY_EXPORT Matrix3f
 {
-public:
+ public:
+
   /**
    * @brief default constructor for the Matrix3f
   */
   Matrix3f() = default;
+
   /**
    * @brief parametrized constructor for the Matrix3f
    * @param _m11 
@@ -48,6 +50,14 @@ public:
     m11(f), m12(0), m13(0),
     m21(0), m22(f), m23(0),
     m31(0), m32(0), m33(f) {}
+
+  /**
+   * @brief compares if two matrix 3x3 are equal
+   * @param m 
+   * @return 
+  */
+  bool 
+  operator==(const Matrix3f& m);
 
   /**
    * @brief adds the matrix m and this one
@@ -202,7 +212,7 @@ public:
   float m33;
 
 };
-bool OA_UTILITY_EXPORT operator==(const Matrix3f& m1, const Matrix3f& m2);
+
 }
 
 

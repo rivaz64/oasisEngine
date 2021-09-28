@@ -3,7 +3,9 @@
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
  * @date 9/11/2021
  */
+
 #pragma once
+
 #include<vector>
 #include<list>
 #include <stack>
@@ -13,6 +15,7 @@
 #include <memory>
 #include<algorithm>
 #include<cmath>
+
 namespace oaEngineSDK {
 /**
  * @brief wraper of the std::vector, can be changed in the future
@@ -74,6 +77,7 @@ using WString = std::wstring;
 */
 template <class T>
 using SPTr = std::shared_ptr<T>;
+
 /**
  * @brief wraper of the std::swap
  * @tparam T
@@ -84,4 +88,5 @@ template <class T>
 FORCEINLINE void swap(T& a, T& b) {
   std::swap(a, b);
 }
+
 }

@@ -5,29 +5,18 @@
  */
 
 #pragma once
+
 #include "oaPlatformDefines.h"
 #include "oaStdHeaders.h"
 #include "oaForDecUtilities.h"
 
 namespace oaEngineSDK {
-
 /**
  * @brief math from this platform
 */
-
 class OA_UTILITY_EXPORT PlatformMath {
 
-public:
-
-  static const float PI;
-  static const float HALF_PI;
-  static const float TWO_PI;
-  static const float INV_PI;
-  static const float INV_TWO_PI;
-  static const float RAD_TO_DEG;
-  static const float DEG_TO_RAD;
-  
-
+ public:
   /**
    * @brief wraper of the cmath sqrtf
    * @param x
@@ -391,6 +380,14 @@ public:
   */
   static bool
   overlap(const Capsule& _capsule1,const Capsule& _capsule2);
+
+  static const float PI;
+  static const float HALF_PI;
+  static const float TWO_PI;
+  static const float INV_PI;
+  static const float INV_TWO_PI;
+  static const float RAD_TO_DEG;
+  static const float DEG_TO_RAD;
 
 };
 

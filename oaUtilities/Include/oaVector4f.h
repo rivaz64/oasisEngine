@@ -38,9 +38,8 @@ public:
   * @param v 
   * @return 
   */
-  bool const
-  operator==(const Vector4f& v) const
-  {
+  FORCEINLINE bool const
+  operator==(const Vector4f& v) const {
     return x == v.x && y == v.y && z == v.z && w == v.w;
   }
 
@@ -50,8 +49,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  operator+(const Vector4f& v) const
-  {
+  operator+(const Vector4f& v) const {
     return { x + v.x , y + v.y, z + v.z, w + v.w };
   }
 
@@ -60,8 +58,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector4f&
-  operator+=(const Vector4f& v)
-  {
+  operator+=(const Vector4f& v) {
     x += v.x;
     y += v.y;
     z += v.z;
@@ -76,8 +73,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  operator-(const Vector4f& v) const
-  {
+  operator-(const Vector4f& v) const {
     return { x - v.x , y - v.y, z - v.z, w - v.w };
   }
 
@@ -86,8 +82,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector4f&
-  operator-=(const Vector4f& v)
-  {
+  operator-=(const Vector4f& v) {
     x -= v.x;
     y -= v.y;
     z -= v.z;
@@ -101,8 +96,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  operator*(float v) const
-  {
+  operator*(float v) const {
     return { x * v , y * v , z * v, w * v };
   }
 
@@ -111,8 +105,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector4f&
-  operator*=(float v)
-  {
+  operator*=(float v) {
     x *= v;
     y *= v;
     z *= v;
@@ -126,8 +119,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  operator/(float v) const
-  {
+  operator/(float v) const {
     v = 1.f / v;
     return { x * v , y * v, z * v , w * v };
   }
@@ -137,8 +129,7 @@ public:
    * @param v
   */
   FORCEINLINE Vector4f&
-  operator/=(float v)
-  {
+  operator/=(float v) {
     v = 1.f / v;
     x *= v;
     y *= v;
@@ -153,8 +144,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  operator*(const Vector4f& v) const
-  {
+  operator*(const Vector4f& v) const {
     return { x * v.x,y * v.y,z * v.z,w * v.w };
   }
 
@@ -163,8 +153,7 @@ public:
    * @return
   */
   FORCEINLINE float const
-  magnitud() const
-  {
+  magnitud() const {
     return Math::sqrt(x * x + y * y + z * z + w * w);
   }
 
@@ -173,8 +162,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f const
-  normalized() const
-  {
+  normalized() const {
     return *this * Math::invSqrt(x * x + y * y + z * z + w * w);
   }
 
@@ -183,8 +171,7 @@ public:
   * @return
   */
   FORCEINLINE void 
-  normalize()
-  {
+  normalize() {
     *this *= Math::invSqrt(x * x + y * y + z * z + w * w);
   }
 
@@ -194,8 +181,7 @@ public:
    * @return
   */
   FORCEINLINE Vector4f
-  project(const Vector4f& v)
-  {
+  project(const Vector4f& v) {
     return v * (dot(*this,v) / dot(v,v));
   }
 
@@ -206,8 +192,7 @@ public:
   * @return
   */
   FORCEINLINE static float
-  dot(const Vector4f& v1, const Vector4f& v2)
-  {
+  dot(const Vector4f& v1, const Vector4f& v2) {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
   }
 

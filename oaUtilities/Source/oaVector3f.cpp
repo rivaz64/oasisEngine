@@ -9,12 +9,13 @@
 
 
 namespace oaEngineSDK {
-const Vector3f Vector3f::RIGHT = Vector3f(1, 0, 0);
-const Vector3f Vector3f::LEFT = Vector3f(-1, 0, 0);
-const Vector3f Vector3f::UP = Vector3f(0, 1, 0);
-const Vector3f Vector3f::DOWN = Vector3f(0, -1, 0);
-const Vector3f Vector3f::FRONT = Vector3f(0, 0, 1);
-const Vector3f Vector3f::BACK = Vector3f(0, 0, -1);
+
+const Vector3f Vector3f::RIGHT(1, 0, 0);
+const Vector3f Vector3f::LEFT(-1, 0, 0);
+const Vector3f Vector3f::UP(0, 1, 0);
+const Vector3f Vector3f::DOWN(0, -1, 0);
+const Vector3f Vector3f::FRONT(0, 0, 1);
+const Vector3f Vector3f::BACK(0, 0, -1);
 
 void Vector3f::rotate(const Quaternion& q)
 {

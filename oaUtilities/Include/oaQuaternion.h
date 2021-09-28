@@ -25,72 +25,93 @@ public:
    * @param _j 
    * @param _k 
   */
-  Quaternion(float _r, float _i, float _j, float _k) :r(_r), i(_i), j(_j), k(_k) {}
+  Quaternion(float _r, float _i, float _j, float _k) :
+    r(_r), i(_i), j(_j), k(_k) {}
+
   ~Quaternion() = default;
+
+  /**
+   * @brief compares if two quaternions are the same
+   * @param q
+   * @return 
+  */
+  bool 
+  operator==(Quaternion q);
+
   /**
    * @brief adds the quaternion q and this one
    * @param q
    * @return
   */
   Quaternion
-    operator+(Quaternion& q);
+  operator+(Quaternion& q);
+
   /**
    * @brief adds the quaternion q to this one
    * @param q
   */
   void
-    operator+=(Quaternion& q);
+  operator+=(Quaternion& q);
+
   /**
    * @brief this quaternion minus vector q
    * @param q
    * @return
   */
   Quaternion
-    operator-(Quaternion& q);
+  operator-(Quaternion& q);
+
   /**
    * @brief substract the quaternion q from this
    * @param q
   */
   void
-    operator-=(Quaternion& q);
+  operator-=(Quaternion& q);
+
   /**
    * @brief quaternion multiplication
    * @param q 
    * @return 
   */
   Quaternion
-    operator*(Quaternion& q);
+  operator*(Quaternion& q);
+
   /**
    * @brief multiply q to this quaternion
    * @param q
   */
   void
-    operator*=(Quaternion& q);
+  operator*=(Quaternion& q);
+
   /**
    * @brief gives the conjugate of this quaternion
    * @return r-i-j-k
   */
   Quaternion
-    conjugate();
+  conjugate();
+
   /**
    * @brief gives the inverse of this quaternion
    * @return 
   */
   Quaternion
-    inverse();
+  inverse();
+
   /**
    * @brief gives this quaternion in its unitary form
    * @return
   */
   Quaternion 
-    normal();
+  normal();
+
   /**
    * @brief gives the rotation matrix of this quaternion
    * @return
   */
   Matrix4f 
-    toMatrix();
+  toMatrix();
 
+ public:
   /**
    * @brief real part of the quaternion
   */
@@ -108,8 +129,7 @@ public:
   */
   float k;
 };
-bool OA_UTILITY_EXPORT
-operator==(Quaternion q1, Quaternion q2);
+
 }
 
 

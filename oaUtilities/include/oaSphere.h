@@ -5,6 +5,7 @@
  */
 
 #pragma once
+
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector3f.h"
 
@@ -86,16 +87,16 @@ class OA_UTILITY_EXPORT Sphere
   overlap(const Sphere& s);*/
 
  private:
-   /**
-    * @brief the point where the center of the sphere is
-   */
-   Vector3f center;
-   /**
-    * @brief the radius of the sphere
-   */
-   float radius;
+  /**
+   * @brief the point where the center of the sphere is
+  */
+  Vector3f center;
+  /**
+   * @brief the radius of the sphere
+  */
+  float radius;
 
-   friend class PlatformMath;
+  friend class PlatformMath;
 };
 
 }

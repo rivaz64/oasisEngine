@@ -5,6 +5,7 @@
 */
 
 #pragma once
+
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector3f.h"
 
@@ -12,7 +13,7 @@ namespace oaEngineSDK{
 
 class OA_UTILITY_EXPORT Capsule
 {
-public:
+ public:
   /**
   * @brief default constructor for the Sphere
   */
@@ -32,8 +33,7 @@ public:
    * @return 
   */
   FORCEINLINE const Vector3f& const 
-  getBase() const 
-  {
+  getBase() const {
     return base;
   }
 
@@ -42,8 +42,7 @@ public:
   * @return 
   */
   FORCEINLINE float const 
-  getRadius() const 
-  {
+  getRadius() const {
     return radius;
   }
 
@@ -52,8 +51,7 @@ public:
   * @return 
   */
   FORCEINLINE float const 
-  getHeight() const 
-  {
+  getHeight() const {
     return height;
   }
 
@@ -62,8 +60,7 @@ public:
   * @param _center 
   */
   FORCEINLINE void 
-  setBase(Vector3f& const _base) 
-  {
+  setBase(Vector3f& const _base) {
     base = _base;
   }
 
@@ -72,8 +69,7 @@ public:
   * @param _radius 
   */
   FORCEINLINE void 
-  setRadius(float _radius) 
-  {
+  setRadius(float _radius) {
     radius = _radius;
   }
 
@@ -82,8 +78,7 @@ public:
   * @param _radius 
   */
   FORCEINLINE void 
-  setHeight(float _height) 
-  {
+  setHeight(float _height) {
     height = _height;
   }
  private:
