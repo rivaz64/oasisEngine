@@ -389,6 +389,9 @@ class OA_UTILITY_EXPORT PlatformMath {
   static float 
   distance(const Line& _line, const Vector3f& _point);
 
+  static float 
+  distance(const Line& _line1, const Line& _line2);
+
   static const float PI;
   static const float HALF_PI;
   static const float TWO_PI;

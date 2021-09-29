@@ -102,14 +102,6 @@ class OA_UTILITY_EXPORT Line
   Vector3f 
   pointAt(float f);
 
-  /**
-   * @brief calculates the distance between the line l and this line
-   * @param l 
-   * @return 
-  */
-  float 
-  distance(Line& l);
-
  private:
    /**
     * @brief the point where the line starts
