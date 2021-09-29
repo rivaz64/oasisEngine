@@ -58,9 +58,9 @@ bool PlatformMath::overlap(const Vector3f& _point, const BoxAABB& _box)
 bool PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
 {
   Vector3f point = 
-  { Math::max(_box.minPoint.x, Math::min(_sphere.center.x, _box.maxPoint.x)),
-    Math::max(_box.minPoint.y, Math::min(_sphere.center.y, _box.maxPoint.y)),
-    Math::max(_box.minPoint.z, Math::min(_sphere.center.z, _box.maxPoint.z)) };
+  { max(_box.minPoint.x, min(_sphere.center.x, _box.maxPoint.x)),
+    max(_box.minPoint.y, min(_sphere.center.y, _box.maxPoint.y)),
+    max(_box.minPoint.z, min(_sphere.center.z, _box.maxPoint.z)) };
 
   return (point- _sphere.center).magnitud() < _sphere.radius;
 }

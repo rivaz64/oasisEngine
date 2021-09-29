@@ -26,33 +26,11 @@ class OA_UTILITY_EXPORT BoxAABB
    * @param A
    * @param B 
   */
-  BoxAABB(const Vector3f& A, const Vector3f& B);
+  BoxAABB(const Vector3f& A, const Vector3f& B) :
+    minPoint(Math::min(A.x,B.x),Math::min(A.y,B.y) ,Math::min(A.z,B.z)),
+    maxPoint(Math::max(A.x,B.x),Math::max(A.y,B.y) ,Math::max(A.z,B.z)) {}
 
   ~BoxAABB() = default;
-
-  /**
-   * @brief if a point is inside the box
-   * @param point 
-   * @return 
-  */
-  bool 
-  isPointInside(const Vector3f& point);
-
-  /**
-   * @brief if the 2 boxes are overlapping
-   * @param box 
-   * @return 
-  */
-  bool
-  overlap(const BoxAABB& box);
-
-  /**
-   * @brief checks if the sphere and this box collides
-   * @param s 
-   * @return 
-  */
-  bool 
-  overlap(const Sphere& s);
 
 private:
 

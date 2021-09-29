@@ -223,9 +223,9 @@ TEST(Matrix, Matrix4) {
                                                     0.f, 3.f, 0.f,0.f,
                                                     0.f, 0.f, 6.f,0.f,
                                                     0.f, 0.f, 0.f,1.f }));
-  /*EXPECT_NEAR(Matrix4f::rotationMatrixZ(Math::pi / 4.f).determinant(), 1, .0001f);
-  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::pi / 4.f).determinant(), 1, .0001f);
-  EXPECT_NEAR(Matrix4f::rotationMatrixY(-Math::pi / 4.f).determinant(), 1, .0001f);*/
+  EXPECT_NEAR(Matrix4f::rotationMatrixZ(Math::PI / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::PI / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixY(-Math::PI / 4.f).determinant(), 1, .0001f);
 
 }
 TEST(Quaternions, basic) {

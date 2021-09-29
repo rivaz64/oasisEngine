@@ -135,11 +135,8 @@ class OA_UTILITY_EXPORT Matrix4f
    * @brief calculates the determinant of the matrix
    * @return
   */
-  /*float
-  determinant();*/
-
-
-public:
+  float
+  determinant();
 
   /**
    * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
