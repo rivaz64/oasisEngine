@@ -211,9 +211,9 @@ Matrix4f::determinant()
   tempMatrix.m22 = m22;
   tempMatrix.m23 = m23;
   ans -= tempMatrix.determinant() * m34;
-  tempMatrix.m31 = m21;
-  tempMatrix.m32 = m22;
-  tempMatrix.m33 = m23;
+  tempMatrix.m31 = m31;
+  tempMatrix.m32 = m32;
+  tempMatrix.m33 = m33;
   ans += tempMatrix.determinant() * m44;
   return ans;
 }
