@@ -25,7 +25,7 @@ class OA_UTILITY_EXPORT Plane
    * @param _normal 
    * @param _d 
   */
-  Plane(const Vector3f& _normal, float _d) :normal(_normal), d(_d) {}
+  Plane(const Vector3f& _normal, float _d) :normal(_normal.normalized()), d(_d) {}
 
   /**
    * @brief a plane that passes throwth A, B, and C
@@ -61,15 +61,6 @@ class OA_UTILITY_EXPORT Plane
   */
   Matrix4f
   reflection();
-
-  /**
-   * @brief calculates the line where 2 planes intersect
-   * @param p 
-   * @param intersection 
-   * @return 
-  */
-  bool
-  intersect(Plane& p, Line& intersection);
  
   /**
     * @brief the normal of the plane

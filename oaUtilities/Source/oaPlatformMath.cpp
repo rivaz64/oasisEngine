@@ -22,7 +22,8 @@ const float PlatformMath::INV_TWO_PI = 0.159154943091895335768883763372f;
 const float PlatformMath::RAD_TO_DEG = 57.2957795130823208767981548141f;
 const float PlatformMath::DEG_TO_RAD = 0.01745329251994329576923690768f;
 
-float OA_UTILITY_EXPORT PlatformMath::invSqrt(float number)
+float
+PlatformMath::invSqrt(float number)
 {
   long i;
   float x2, y;
@@ -39,25 +40,29 @@ float OA_UTILITY_EXPORT PlatformMath::invSqrt(float number)
   return y;
 }
 
-bool PlatformMath::overlap(const Vector3f& _point, const Sphere& _sphere)
+bool 
+PlatformMath::overlap(const Vector3f& _point, const Sphere& _sphere)
 {
   return (_sphere.center - _point).magnitud() < _sphere.radius;
 }
 
-bool PlatformMath::overlap(const Sphere& _sphere1, const Sphere& _sphere2)
+bool 
+PlatformMath::overlap(const Sphere& _sphere1, const Sphere& _sphere2)
 {
   return (_sphere1.center - _sphere2.center).magnitud()
     < _sphere1.radius+_sphere2.radius;
 }
 
-bool PlatformMath::overlap(const Vector3f& _point, const BoxAABB& _box)
+bool 
+PlatformMath::overlap(const Vector3f& _point, const BoxAABB& _box)
 {
   return _point.x> _box.minPoint.x && _point.x < _box.maxPoint.x &&
     _point.y> _box.minPoint.y && _point.y < _box.maxPoint.y &&
     _point.z> _box.minPoint.z && _point.z < _box.maxPoint.z;
 }
 
-bool PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
+bool 
+PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
 {
   Vector3f point = 
   { max(_box.minPoint.x, min(_sphere.center.x, _box.maxPoint.x)),
@@ -67,7 +72,8 @@ bool PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
   return (point- _sphere.center).magnitud() < _sphere.radius;
 }
 
-bool PlatformMath::overlap(const BoxAABB& _box1, const BoxAABB& _box2)
+bool 
+PlatformMath::overlap(const BoxAABB& _box1, const BoxAABB& _box2)
 {
   return 
     _box1.maxPoint.x > _box2.minPoint.x && 
@@ -78,7 +84,8 @@ bool PlatformMath::overlap(const BoxAABB& _box1, const BoxAABB& _box2)
     _box1.minPoint.z < _box2.maxPoint.z;
 }
 
-bool PlatformMath::overlap(const Vector3f& _point, const Capsule& _capsule)
+bool 
+PlatformMath::overlap(const Vector3f& _point, const Capsule& _capsule)
 {
   float height1 = _capsule.base.z+_capsule.radius;
   float height2 = _capsule.base.z+_capsule.height-_capsule.radius;
@@ -89,7 +96,8 @@ bool PlatformMath::overlap(const Vector3f& _point, const Capsule& _capsule)
   ||(Vector3f(_capsule.base.xy,height2) - _point).magnitud() < _capsule.radius;
 }
 
-bool PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
+bool 
+PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
 {
   float height1 = _capsule.base.z+_capsule.radius;
   float height2 = _capsule.base.z+_capsule.height-_capsule.radius;
@@ -101,7 +109,8 @@ bool PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
   ||(Vector3f(_capsule.base.xy,height2) - _sphere.center).magnitud() < radius;
 }
 
-bool PlatformMath::overlap(const BoxAABB& _box, const Capsule& _capsule)
+bool 
+PlatformMath::overlap(const BoxAABB& _box, const Capsule& _capsule)
 {
   Vector2f point = 
   { Math::max(_box.minPoint.x, Math::min(_capsule.base.x, _box.maxPoint.x)),
@@ -117,7 +126,8 @@ bool PlatformMath::overlap(const BoxAABB& _box, const Capsule& _capsule)
   return overlap(s1,_box) || overlap(s2,_box);
 }
 
-bool PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
+bool 
+PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
 {
   float height11 = _capsule1.base.z+_capsule1.radius;
   float height21 = _capsule1.base.z+_capsule1.height-_capsule1.radius;
@@ -141,13 +151,15 @@ bool PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
   return overlap(s11,s22) || overlap(s12,s21);
 }
 
-float PlatformMath::distance(const Line& _line, const Vector3f& _point)
+float 
+PlatformMath::distance(const Line& _line, const Vector3f& _point)
 {
   Vector3f u = _point - _line.startingPoint;
   return Vector3f::cross(_line.direction,u).magnitud();
 }
 
-float PlatformMath::distance(const Line& _line1, const Line& _line2)
+float 
+PlatformMath::distance(const Line& _line1, const Line& _line2)
 {
   auto dif = _line2.startingPoint - _line1.startingPoint;
   float v12 = Vector3f::dot(_line1.direction,_line1.direction);
@@ -166,12 +178,14 @@ float PlatformMath::distance(const Line& _line1, const Line& _line2)
   return (sqrt( Vector3f::dot(a,a) / v12));
 }
 
-float PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
+float 
+PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
 {
   return abs(Vector3f::dot(_plane.normal,_point)+_plane.d);
 }
 
-bool PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _point)
+bool 
+PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _point)
 {
   float fv = Vector3f::dot(_plane.normal,_line.direction);
   if (Math::abs(fv) > FLT_MIN) {
@@ -183,7 +197,8 @@ bool PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _
   return false;
 }
 
-bool PlatformMath::intersect(const Plane& _plane1, 
+bool 
+PlatformMath::intersect(const Plane& _plane1, 
                              const Plane& _plane2, 
                              const Plane& _plane3, 
                              Vector3f& _point)
@@ -194,6 +209,19 @@ bool PlatformMath::intersect(const Plane& _plane1,
     _point = (Vector3f::cross(_plane3.normal,_plane2.normal) * _plane1.d 
             + Vector3f::cross(_plane1.normal,_plane3.normal) * _plane2.d 
             - n * _plane3.d) / det;
+    return true;
+  }
+  return false;
+}
+
+bool 
+PlatformMath::intersect(const Plane& _plane1, const Plane& _plane2, Line& _line)
+{
+  Vector3f dir = Vector3f::cross(_plane1.normal,_plane2.normal);
+  _line.setDirection(dir);
+  float det = Vector3f::dot(dir,dir);
+  if (det > FLT_MIN) {
+    _line.setStaringPoint((Vector3f::cross(dir,_plane1.normal) * _plane2.d + Vector3f::cross(dir,_plane2.normal) * _plane1.d) / det);
     return true;
   }
   return false;

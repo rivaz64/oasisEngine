@@ -82,7 +82,7 @@ class OA_UTILITY_EXPORT Line
   */
   FORCEINLINE void
   setDirection(const Vector3f& _direction) {
-    direction = _direction;
+    direction = _direction.normalized();
   }
 
   /**

@@ -428,6 +428,16 @@ class OA_UTILITY_EXPORT PlatformMath {
   static bool
   intersect(const Plane& _plane1, const Plane& _plane2,const Plane& _plane3, Vector3f& _point);
 
+  /**
+  * @brief checks if 2 planes intersect
+  * @param _plane1 
+  * @param _plane2 
+  * @param _line the line where the intersection occures
+  * @return 
+  */
+  static bool
+  intersect(const Plane& _plane1, const Plane& _plane2, Line& _line);
+
   static const float PI;
   static const float HALF_PI;
   static const float TWO_PI;

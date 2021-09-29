@@ -280,6 +280,11 @@ TEST(geometry, plane) {
   EXPECT_NEAR(intersection.x, arrow.pointAt(.5).x,.0001);
   EXPECT_NEAR(intersection.y, arrow.pointAt(.5).y,.0001);
   EXPECT_NEAR(intersection.z, arrow.pointAt(.5).z,.0001);
+  Line cut;
+  EXPECT_TRUE(Math::intersect(paper1,paper2,cut));
+  EXPECT_NEAR(-cut.getDirection().x,arrow.getDirection().x,.0001);
+  EXPECT_NEAR(-cut.getDirection().y,arrow.getDirection().y,.0001);
+  EXPECT_NEAR(-cut.getDirection().z,arrow.getDirection().z,.0001);
 }
 
 TEST(overlaps, shpere) {

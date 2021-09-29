@@ -32,18 +32,5 @@ Plane::reflection()
     );
 }
 
-bool 
-Plane::intersect(Plane& p, Line& intersection)
-{
-  Vector3f dir = Vector3f::cross(normal,p.normal);
-  intersection.setDirection(dir);
-  float det = Vector3f::dot(dir,dir);
-  if (det > FLT_MIN) {
-    intersection.setStaringPoint((Vector3f::cross(dir,normal) * p.d + Vector3f::cross(dir,p.normal) * d) / det);
-    return true;
-  }
-  return false;
-}
-
 }
 
