@@ -230,7 +230,7 @@ TEST(Matrix, Matrix4) {
 }
 TEST(Quaternions, basic) {
   EXPECT_EQ(sizeof(Quaternion), 16);
-  Quaternion q = { 1,2,3,4 },qua = q.conjugate();
+  Quaternion q = { 1,2,3,4 },qua = q.conjugated();
   EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
   EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
 }

@@ -66,30 +66,6 @@ class OA_UTILITY_EXPORT Sphere
     radius = _radius;
   }
 
-  /**
-   * @brief checks if the point is inside the sphere
-   * @param point 
-   * @return 
-  
-  bool
-  isInside(const Vector3f& point);
-
-  /**
-   * @brief checks if the line overlap with the sphere
-   * @param l 
-   * @return 
-  
-  bool
-  overlap(Line& l);
-
-  /**
-   * @brief checks if 2 spheres are overlaping
-   * @param s 
-   * @return 
-  
-  bool
-  overlap(const Sphere& s);*/
-
  private:
   /**
    * @brief the point where the center of the sphere is

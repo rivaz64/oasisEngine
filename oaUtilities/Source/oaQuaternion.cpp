@@ -11,17 +11,19 @@
 namespace oaEngineSDK {
 
 bool const
-Quaternion::operator==(Quaternion q) const
+Quaternion::operator==(const Quaternion& q) const
 {
   return r==q.r&& i == q.i&& j == q.j&& k == q.k;
 }
 
-Quaternion Quaternion::operator+(Quaternion& q)
+Quaternion 
+Quaternion::operator+(const Quaternion& q) const
 {
   return { r + q.r,i+q.i,j+q.j,k+q.k };
 }
 
-void Quaternion::operator+=(Quaternion& q)
+void 
+Quaternion::operator+=(const Quaternion& q)
 {
   r += q.r;
   i += q.i;
@@ -29,12 +31,14 @@ void Quaternion::operator+=(Quaternion& q)
   k += q.k;
 }
 
-Quaternion Quaternion::operator-(Quaternion& q)
+Quaternion 
+Quaternion::operator-(const Quaternion& q) const 
 {
   return { r - q.r,i - q.i,j - q.j,k - q.k };
 }
 
-void Quaternion::operator-=(Quaternion& q)
+void 
+Quaternion::operator-=(const Quaternion& q)
 {
   r -= q.r;
   i -= q.i;
@@ -42,7 +46,8 @@ void Quaternion::operator-=(Quaternion& q)
   k -= q.k;
 }
 
-Quaternion Quaternion::operator*(Quaternion& q)
+Quaternion 
+Quaternion::operator*(const Quaternion& q) const
 {
   return { r * q.r - i * q.i - j * q.j - k * q.k,
            i * q.r + j * q.k - k * q.j + r * q.i,
@@ -50,7 +55,8 @@ Quaternion Quaternion::operator*(Quaternion& q)
            k * q.r + r * q.k + i * q.j - j * q.i,};
 }
 
-void Quaternion::operator*=(Quaternion& q)
+void 
+Quaternion::operator*=(const Quaternion& q)
 {
   r = r * q.r - i * q.i - j * q.j - k * q.k;
   i = i * q.r + j * q.k - k * q.j + r * q.i;
@@ -58,24 +64,44 @@ void Quaternion::operator*=(Quaternion& q)
   k = k * q.r + r * q.k + i * q.j - j * q.i;
 }
 
-Quaternion Quaternion::conjugate()
+Quaternion 
+Quaternion::conjugated() const
 {
   return { r,-i,-j,-k };
 }
 
-Quaternion Quaternion::inverse()
+void Quaternion::conjugate()
+{
+  i = -i;
+  j = -j;
+  k = -k;
+}
+
+Quaternion
+Quaternion::inverse() const
 {
   float absVal = r * r + i * i + j * j + k * k;
   return { r / absVal,-i / absVal,-j / absVal,-k / absVal };
 }
 
-Quaternion Quaternion::normal()
+void Quaternion::invert()
+{
+  float absValInv = 1.f / (r * r + i * i + j * j + k * k);
+  r *= absValInv;
+  i *= -absValInv;
+  j *= -absValInv;
+  k *= -absValInv;
+}
+
+Quaternion 
+Quaternion::normal() const
 {
   float absVal = r * r + i * i + j * j + k * k;
   return { r / absVal,i / absVal,j / absVal,k / absVal };
 }
 
-Matrix4f Quaternion::toMatrix()
+Matrix4f 
+Quaternion::toMatrix() const
 {
   float i2 = 2*i * i;
   float j2 = 2 * j * j;

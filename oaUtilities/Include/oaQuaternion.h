@@ -36,7 +36,7 @@ class OA_UTILITY_EXPORT Quaternion
    * @return 
   */
   bool const
-  operator==(Quaternion q) const;
+  operator==(const Quaternion& q) const;
 
   /**
    * @brief adds the quaternion q and this one
@@ -44,14 +44,14 @@ class OA_UTILITY_EXPORT Quaternion
    * @return
   */
   Quaternion
-  operator+(Quaternion& q);
+  operator+(const Quaternion& q) const;
 
   /**
    * @brief adds the quaternion q to this one
    * @param q
   */
   void
-  operator+=(Quaternion& q);
+  operator+=(const Quaternion& q);
 
   /**
    * @brief this quaternion minus vector q
@@ -59,14 +59,14 @@ class OA_UTILITY_EXPORT Quaternion
    * @return
   */
   Quaternion
-  operator-(Quaternion& q);
+  operator-(const Quaternion& q) const;
 
   /**
    * @brief substract the quaternion q from this
    * @param q
   */
   void
-  operator-=(Quaternion& q);
+  operator-=(const Quaternion& q);
 
   /**
    * @brief quaternion multiplication
@@ -74,20 +74,26 @@ class OA_UTILITY_EXPORT Quaternion
    * @return 
   */
   Quaternion
-  operator*(Quaternion& q);
+  operator*(const Quaternion& q) const;
 
   /**
    * @brief multiply q to this quaternion
    * @param q
   */
   void
-  operator*=(Quaternion& q);
+  operator*=(const Quaternion& q);
 
   /**
    * @brief gives the conjugate of this quaternion
    * @return r-i-j-k
   */
   Quaternion
+  conjugated() const;
+
+  /**
+  * @brief conjugates this vector
+  */
+  void 
   conjugate();
 
   /**
@@ -95,21 +101,26 @@ class OA_UTILITY_EXPORT Quaternion
    * @return 
   */
   Quaternion
-  inverse();
+  inverse() const;
+
+  /**
+   * @brief inverts this quaternion
+  */
+  void invert();
 
   /**
    * @brief gives this quaternion in its unitary form
    * @return
   */
   Quaternion 
-  normal();
+  normal() const;
 
   /**
    * @brief gives the rotation matrix of this quaternion
    * @return
   */
   Matrix4f 
-  toMatrix();
+  toMatrix() const;
 
  public:
   /**
