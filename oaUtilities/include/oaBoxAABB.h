@@ -32,12 +32,30 @@ class OA_UTILITY_EXPORT BoxAABB
 
   ~BoxAABB() = default;
 
+  /**
+   * @brief getter for the min point
+   * @return 
+  */
+  FORCEINLINE const Vector3f& 
+  getMinPoint() const {
+    return minPoint;
+  }
+
+  /**
+   * @brief getter for the max point
+   * @return 
+  */
+  FORCEINLINE const Vector3f& 
+  getMaxPoint() const {
+    return maxPoint;
+  }
 private:
 
   /**
    * @brief the minimum values of the box in each axis
   */
   Vector3f minPoint;
+
   /**
    * @brief the maximum values of the box in each axis
   */

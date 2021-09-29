@@ -64,8 +64,8 @@ class OA_UTILITY_EXPORT Matrix3f
    * @param m
    * @return
   */
-  Matrix3f
-  operator+(const Matrix3f& m);
+  Matrix3f 
+  operator+(const Matrix3f& m) const;
 
   /**
    * @brief adds the matrix m to this one
@@ -80,7 +80,7 @@ class OA_UTILITY_EXPORT Matrix3f
    * @return
   */
   Matrix3f
-  operator-(const Matrix3f& m);
+  operator-(const Matrix3f& m) const;
 
   /**
    * @brief subtracts m from this matrix
@@ -95,7 +95,7 @@ class OA_UTILITY_EXPORT Matrix3f
    * @return
   */
   Matrix3f
-  operator*(float m);
+  operator*(float m) const;
 
   /**
    * @brief multiplies this matrix times m
@@ -110,7 +110,7 @@ class OA_UTILITY_EXPORT Matrix3f
    * @return
   */
   Vector3f
-  operator*(const Vector3f& v);
+  operator*(const Vector3f& v) const;
 
   /**
    * @brief the multiplication of this matrix and the matrix m
@@ -118,7 +118,7 @@ class OA_UTILITY_EXPORT Matrix3f
    * @return
   */
   Matrix3f
-  operator*(const Matrix3f& m);
+  operator*(const Matrix3f& m) const;
 
   /**
    * @brief multiplies this matrix times the matrix m
@@ -138,14 +138,21 @@ class OA_UTILITY_EXPORT Matrix3f
    * @return
   */
   float
-  determinant();
+  determinant() const;
 
   /**
    * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
    * @return
   */
   Matrix3f
-  inverse();
+  inverse() const;
+
+  /**
+  * @brief inverts this matrix
+  * @return
+  */
+  void
+  invert();
 
   /**
    * @brief creates a translate matrix for the given position

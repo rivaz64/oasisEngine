@@ -63,7 +63,7 @@ class OA_UTILITY_EXPORT Matrix4f
   * @return
  */
   Matrix4f
-  operator+(const Matrix4f& m);
+  operator+(const Matrix4f& m) const;
 
   /**
    * @brief adds the matrix m to this one
@@ -78,7 +78,7 @@ class OA_UTILITY_EXPORT Matrix4f
    * @return
   */
   Matrix4f
-  operator-(const Matrix4f& m);
+  operator-(const Matrix4f& m) const;
 
   /**
    * @brief subtracts m from this matrix
@@ -94,7 +94,7 @@ class OA_UTILITY_EXPORT Matrix4f
   */
 
   Matrix4f
-  operator*(float m);
+  operator*(float m) const;
   /**
    * @brief multiplies this matrix times m
    * @param m
@@ -108,7 +108,7 @@ class OA_UTILITY_EXPORT Matrix4f
    * @return
   */
   Vector4f
-  operator*(const Vector4f& v);
+  operator*(const Vector4f& v) const;
 
   /**
    * @brief the multiplication of this matrix and the matrix m
@@ -116,7 +116,7 @@ class OA_UTILITY_EXPORT Matrix4f
    * @return
   */
   Matrix4f
-  operator*(const Matrix4f& m);
+  operator*(const Matrix4f& m) const;
 
   /**
    * @brief multiplies this matrix times the matrix m
@@ -136,14 +136,21 @@ class OA_UTILITY_EXPORT Matrix4f
    * @return
   */
   float
-  determinant();
+  determinant() const;
 
   /**
    * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
    * @return
   */
   Matrix4f
-  inverse();
+  inverse() const;
+
+  /**
+  * @brief calculates the inverse of a matrix, the inverse times this matrix is the identity matrix
+  * @return
+  */
+  void
+  invert();
 
   /**
    * @brief creates a translate matrix for the given position
@@ -179,7 +186,7 @@ class OA_UTILITY_EXPORT Matrix4f
    * @brief creates a rotation matrix for the given angle r in radians rotating in the arbitrary axis v
   */
   static Matrix4f
-  rotationMatrix(float r, Vector3f& v);
+  rotationMatrix(float r,const Vector3f& v);
   
    /**
     * @brief value at column 1 row 1

@@ -82,14 +82,17 @@ class OA_UTILITY_EXPORT Capsule
     height = _height;
   }
  private:
+
   /**
   * @brief the lowest point of the capsule
   */
   Vector3f base;
+
   /**
   * @brief the radius of the capsule
   */
   float radius;
+
   /**
   * @brief the height of the capsule
   */

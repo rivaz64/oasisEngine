@@ -9,6 +9,7 @@
 #include "oaSphere.h"
 #include "oaBoxAABB.h"
 #include "oaCapsule.h"
+#include "oaLine.h"
 
 namespace oaEngineSDK{
 
@@ -137,6 +138,12 @@ bool PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
              _capsule2.base.z+_capsule2.height-_capsule2.radius),_capsule2.radius);
 
   return overlap(s11,s22) || overlap(s12,s21);
+}
+
+float PlatformMath::distance(const Line& _line, const Vector3f& _point)
+{
+  Vector3f u = _point - _line.startingPoint;
+  return Vector3f::cross(_line.direction,u).magnitud();
 }
 
 }

@@ -19,7 +19,7 @@ Plane::Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C)
 }
 
 float 
-Plane::distance(Vector3f& p)
+Plane::distance(const Vector3f& p)
 {
   return Math::abs(Vector3f::dot(normal,p)+d);
 }

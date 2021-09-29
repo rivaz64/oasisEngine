@@ -19,13 +19,14 @@ class OA_UTILITY_EXPORT Plane
    * @brief default constructor for a plane
   */
   Plane() = default;
+
   /**
    * @brief gives directly the variables needed for a plane
    * @param _normal 
    * @param _d 
   */
-
   Plane(const Vector3f& _normal, float _d) :normal(_normal), d(_d) {}
+
   /**
    * @brief a plane that passes throwth A, B, and C
    * @param A 
@@ -40,7 +41,7 @@ class OA_UTILITY_EXPORT Plane
    * @brief getter for the normal
    * @return 
   */
-  FORCEINLINE Vector3f 
+  FORCEINLINE const Vector3f&
   getNormal() {
     return normal;
   }
@@ -60,7 +61,7 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   float 
-  distance(Vector3f& p);
+  distance(const Vector3f& p);
 
   /**
    * @brief calculates the transform matrix for reflecting an object in this plane

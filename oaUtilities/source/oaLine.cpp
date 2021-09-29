@@ -4,7 +4,7 @@
  * @date 9/12/2021
  */
 
-#include "oaVector3f.h"
+
 #include "oaLine.h"
 
 namespace oaEngineSDK {
@@ -17,18 +17,14 @@ Line::Line(Vector3f& A, Vector3f& B)
   lenght = difference.magnitud();
 }
 
-Vector3f Line::pointAt(float f)
+Vector3f 
+Line::pointAt(float f)
 {
   return startingPoint+direction*lenght*f;
 }
 
-float Line::distance(Vector3f& p)
-{
-  Vector3f u = p - startingPoint;
-  return Vector3f::cross(direction,u).magnitud();
-}
-
-float Line::distance(Line& l)
+float 
+Line::distance(Line& l)
 {
   auto dif = l.startingPoint - startingPoint;
   float v12 = Vector3f::dot(direction,direction);

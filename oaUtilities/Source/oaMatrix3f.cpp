@@ -27,7 +27,7 @@ Matrix3f::operator==(const Matrix3f& m) const
 }
 
 Matrix3f
-Matrix3f::operator+(const Matrix3f& m)
+Matrix3f::operator+(const Matrix3f& m) const
 {
   return {
     m11 + m.m11,m12 + m.m12,m13 + m.m13,
@@ -52,7 +52,7 @@ Matrix3f::operator+=(const Matrix3f& m)
 }
 
 Matrix3f
-Matrix3f::operator-(const Matrix3f& m)
+Matrix3f::operator-(const Matrix3f& m) const
 {
   return {
     m11 - m.m11,m12 - m.m12,m13 - m.m13,
@@ -77,7 +77,7 @@ Matrix3f::operator-=(const Matrix3f& m)
 }
 
 Matrix3f
-Matrix3f::operator*(float m)
+Matrix3f::operator*(float m) const
 {
   return {
     m11* m,m12* m,m13* m,
@@ -102,7 +102,7 @@ Matrix3f::operator*=(float m)
 }
 
 Vector3f
-Matrix3f::operator*(const Vector3f& v)
+Matrix3f::operator*(const Vector3f& v) const
 {
   return { 
   m11 * v.x + m12 * v.y + m13 * v.z,
@@ -111,7 +111,7 @@ Matrix3f::operator*(const Vector3f& v)
 }
 
 Matrix3f
-Matrix3f::operator*(const Matrix3f& m)
+Matrix3f::operator*(const Matrix3f& m) const
 {
   return {
     m11* m.m11 + m12 * m.m21 + m13 * m.m31,
@@ -148,16 +148,14 @@ Matrix3f::transpose()
   swap(m23, m32);
 }
 float
-Matrix3f::determinant()
+Matrix3f::determinant() const
 {
   return m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32
     - m13 * m22 * m31 - m12 * m21 * m33 - m11 * m23 * m32;
 }
 
-
-
 Matrix3f
-Matrix3f::inverse()
+Matrix3f::inverse() const
 {
   float invDet = 1.f / determinant();
   return {
@@ -165,6 +163,21 @@ Matrix3f::inverse()
     -(m21 * m33 - m31 * m23) * invDet,+(m11 * m33 - m31 * m13) * invDet,-(m11 * m23 - m21 * m13) * invDet,
     +(m21 * m32 - m31 * m22) * invDet,-(m11 * m32 - m31 * m12) * invDet,+(m11 * m22 - m21 * m12) * invDet,
   };
+}
+
+void 
+Matrix3f::invert()
+{
+  float invDet = 1.f / determinant();
+  m11 = +(m22 * m33 - m32 * m23) * invDet;
+  m12 = -(m12 * m33 - m32 * m13) * invDet;
+  m13 = +(m12 * m23 - m22 * m13) * invDet;
+  m21 = -(m21 * m33 - m31 * m23) * invDet;
+  m22 = +(m11 * m33 - m31 * m13) * invDet;
+  m23 = -(m11 * m23 - m21 * m13) * invDet;
+  m31 = +(m21 * m32 - m31 * m22) * invDet;
+  m32 = -(m11 * m32 - m31 * m12) * invDet;
+  m33 = +(m11 * m22 - m21 * m12) * invDet;
 }
 
 Matrix3f

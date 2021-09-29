@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
+#include "oaVector3f.h"
 
 namespace oaEngineSDK {
 /**
@@ -43,8 +44,8 @@ class OA_UTILITY_EXPORT Line
    * @brief getter for the starting point
    * @return 
   */
-  FORCEINLINE Vector3f 
-  getStaringPoint() {
+  FORCEINLINE const Vector3f&
+  getStaringPoint() const {
     return startingPoint;
   }
 
@@ -52,8 +53,8 @@ class OA_UTILITY_EXPORT Line
    * @brief getter for the direction
    * @return 
   */
-  FORCEINLINE Vector3f 
-  getDirection() {
+  FORCEINLINE const Vector3f&
+  getDirection() const {
     return direction;
   }
 
@@ -102,14 +103,6 @@ class OA_UTILITY_EXPORT Line
   pointAt(float f);
 
   /**
-   * @brief calculates the distance between the point p and this line
-   * @param p 
-   * @return 
-  */
-  float 
-  distance(Vector3f& p);
-
-  /**
    * @brief calculates the distance between the line l and this line
    * @param l 
    * @return 
@@ -130,6 +123,8 @@ class OA_UTILITY_EXPORT Line
     * @brief the lenght of the line
    */
    float lenght;
+
+   friend class PlatformMath;
 };
 }
 

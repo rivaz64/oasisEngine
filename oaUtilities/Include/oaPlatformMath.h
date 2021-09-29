@@ -381,6 +381,14 @@ class OA_UTILITY_EXPORT PlatformMath {
   static bool
   overlap(const Capsule& _capsule1,const Capsule& _capsule2);
 
+  /**
+  * @brief calculates the distance between the point p and this line
+  * @param p 
+  * @return 
+  */
+  static float 
+  distance(const Line& _line, const Vector3f& _point);
+
   static const float PI;
   static const float HALF_PI;
   static const float TWO_PI;

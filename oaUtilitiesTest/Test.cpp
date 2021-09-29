@@ -247,7 +247,7 @@ TEST(geometry, line) {
   EXPECT_NEAR(midpoint.x, 1.5f, .000001f);
   EXPECT_NEAR(midpoint.y, 2.f, .000001f);
   EXPECT_NEAR(midpoint.z, 4.f, .000001f);
-  EXPECT_NEAR(stick.distance(C), 3.68394f, .00001f);
+  EXPECT_NEAR(Math::distance(stick,C), 3.68394f, .00001f);
   Vector3f D = { 1.f,2.f,3.f }, E = { 2.f,3.f,5.f };
   Line l = { D,E };
   EXPECT_NEAR(stick.distance(l), 0.447214f,.000001f);
