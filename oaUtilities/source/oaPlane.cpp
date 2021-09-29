@@ -18,12 +18,6 @@ Plane::Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C)
   d = -Vector3f::dot(normal,A);
 }
 
-float 
-Plane::distance(const Vector3f& p)
-{
-  return Math::abs(Vector3f::dot(normal,p)+d);
-}
-
 Matrix4f
 Plane::reflection()
 {
@@ -36,29 +30,6 @@ Plane::reflection()
     xz,yz,1.f - 2.f * normal.z * normal.z,-2.f * normal.z*d ,
     0.f,0.f,0.f,1.f
     );
-}
-
-bool
-Plane::intersect(Line& l,Vector3f& point)
-{
-  float fv = Vector3f::dot(normal,l.getDirection());
-  if (Math::abs(fv) > FLT_MIN) {
-    point = l.getStaringPoint() - l.getDirection() * ((Vector3f::dot(normal,l.getStaringPoint())+d) / fv);
-    return true;
-  }
-  return false;
-}
-
-bool 
-Plane::intersect(Plane& p1, Plane& p2, Vector3f& point)
-{
-  Vector3f n =  Vector3f::cross(p1.normal,p2.normal);
-  float det = Vector3f::dot(n,normal);
-  if (det > FLT_MIN) {
-    point = (Vector3f::cross(normal,p1.normal) * p2.d + Vector3f::cross(normal,p2.normal) * p1.d - n * d) / det;
-    return true;
-  }
-  return false;
 }
 
 bool 

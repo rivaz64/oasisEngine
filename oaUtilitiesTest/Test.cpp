@@ -250,10 +250,10 @@ TEST(geometry, line) {
   EXPECT_NEAR(Math::distance(stick,C), 3.68394f, .00001f);
   Vector3f D = { 1.f,2.f,3.f }, E = { 2.f,3.f,5.f };
   Line l = { D,E };
-  EXPECT_NEAR(stick.distance(l), 0.447214f,.000001f);
+  EXPECT_NEAR(Math::distance(stick,l), 0.447214f,.000001f);
   Vector3f F = { 2.f,2.f,3.f }, G = { 3.f,4.f,7.f };
   Line parallel = { F,G };
-  EXPECT_NEAR(stick.distance(parallel), 0.816497f,.00001f);
+  EXPECT_NEAR(Math::distance(stick,parallel), 0.816497f,.00001f);
 }
 TEST(geometry, plane) {
   EXPECT_EQ(sizeof(Plane), 16);
@@ -262,7 +262,7 @@ TEST(geometry, plane) {
   Plane paper = { A,B,C };
   EXPECT_EQ(paper.getNormal(), Vector3f(3, -19, 4).normalized());
   EXPECT_NEAR(paper.getD(), 1.57785F,.00001f);
-  EXPECT_NEAR(paper.distance(D.xyz), .865277, .000001f);
+  EXPECT_NEAR(Math::distance(paper,D.xyz), .865277, .000001f);
   Matrix4f refMat = paper.reflection();
   Vector4f refpoint = refMat * D;
   EXPECT_NEAR(refpoint.x, 4.26f, .01f);
@@ -271,13 +271,15 @@ TEST(geometry, plane) {
 
   Line arrow = Line(D.xyz,refpoint.xyz);
   Vector3f intersection;
-  EXPECT_TRUE(paper.intersect(arrow, intersection));
+  EXPECT_TRUE(Math::intersect(paper,arrow, intersection));
   EXPECT_NEAR(intersection.x, 4.13, 0.01f);
   
   Plane paper1 = { A,D.xyz,refpoint.xyz };
   Plane paper2 = { C,D.xyz,refpoint.xyz };
-  paper.intersect(paper1,paper2, intersection);
-  EXPECT_EQ(intersection, arrow.pointAt(.5));
+  EXPECT_TRUE(Math::intersect(paper,paper1,paper2,intersection));
+  EXPECT_NEAR(intersection.x, arrow.pointAt(.5).x,.0001);
+  EXPECT_NEAR(intersection.y, arrow.pointAt(.5).y,.0001);
+  EXPECT_NEAR(intersection.z, arrow.pointAt(.5).z,.0001);
 }
 
 TEST(overlaps, shpere) {

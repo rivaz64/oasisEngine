@@ -389,8 +389,44 @@ class OA_UTILITY_EXPORT PlatformMath {
   static float 
   distance(const Line& _line, const Vector3f& _point);
 
+  /**
+   * @brief calculates the distance between two lines
+   * @param _line1 
+   * @param _line2 
+   * @return 
+  */
   static float 
   distance(const Line& _line1, const Line& _line2);
+
+  /**
+   * @brief calculates the distance between a point and a plane
+   * @param _plane 
+   * @param _point 
+   * @return 
+  */
+  static float
+  distance(const Plane& _plane, const Vector3f& _point);
+  
+  /**
+   * @brief checks if a plane and a line intersect
+   * @param _plane 
+   * @param _line 
+   * @param _point the point where the intersection ocurres
+   * @return 
+  */
+  static bool
+  intersect(const Plane& _plane, const Line& _line, Vector3f& _point);
+
+  /**
+   * @brief checks if 3 planes intersect
+   * @param _plane1 
+   * @param _plane2 
+   * @param _plane3 
+   * @param _point the point where the intersection occures
+   * @return 
+  */
+  static bool
+  intersect(const Plane& _plane1, const Plane& _plane2,const Plane& _plane3, Vector3f& _point);
 
   static const float PI;
   static const float HALF_PI;

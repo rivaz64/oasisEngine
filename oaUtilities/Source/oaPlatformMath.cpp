@@ -10,6 +10,7 @@
 #include "oaBoxAABB.h"
 #include "oaCapsule.h"
 #include "oaLine.h"
+#include "oaPlane.h"
 
 namespace oaEngineSDK{
 
@@ -163,6 +164,39 @@ float PlatformMath::distance(const Line& _line1, const Line& _line2)
   }
   Vector3f a = Vector3f::cross(dif,_line1.direction);
   return (sqrt( Vector3f::dot(a,a) / v12));
+}
+
+float PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
+{
+  return abs(Vector3f::dot(_plane.normal,_point)+_plane.d);
+}
+
+bool PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _point)
+{
+  float fv = Vector3f::dot(_plane.normal,_line.direction);
+  if (Math::abs(fv) > FLT_MIN) {
+    _point = _line.startingPoint 
+           - _line.direction 
+           * ((Vector3f::dot(_plane.normal,_line.getStaringPoint())+_plane.d) / fv);
+    return true;
+  }
+  return false;
+}
+
+bool PlatformMath::intersect(const Plane& _plane1, 
+                             const Plane& _plane2, 
+                             const Plane& _plane3, 
+                             Vector3f& _point)
+{
+  Vector3f n =  Vector3f::cross(_plane1.normal,_plane2.normal);
+  float det = Vector3f::dot(n,_plane3.normal);
+  if (abs(det) > FLT_MIN) {
+    _point = (Vector3f::cross(_plane3.normal,_plane2.normal) * _plane1.d 
+            + Vector3f::cross(_plane1.normal,_plane3.normal) * _plane2.d 
+            - n * _plane3.d) / det;
+    return true;
+  }
+  return false;
 }
 
 }
