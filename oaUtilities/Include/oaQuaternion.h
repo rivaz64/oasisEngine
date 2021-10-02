@@ -122,6 +122,20 @@ class OA_UTILITY_EXPORT Quaternion
   Matrix4f 
   toMatrix() const;
 
+  /**
+   * @brief converts euler angles to quaternion
+   * @param eulerAngles in radians
+  */
+  void
+  fromEulerAngles(const Vector3f& eulerAngles);
+
+  /**
+   * @brief gives the rotation of this quaternion in euler angles
+   * @return 
+  */
+  Vector3f
+  toEulerAngles() const;
+
  public:
   /**
    * @brief real part of the quaternion

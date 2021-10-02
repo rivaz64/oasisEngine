@@ -118,4 +118,48 @@ Quaternion::toMatrix() const
           0.0f,0.0f,0.0f,1.0f};
 }
 
+void 
+Quaternion::fromEulerAngles(const Vector3f& eulerAngles)
+{
+  float c1 = Math::cos(eulerAngles.y * .5f);
+  float s1 = Math::sin(eulerAngles.y * .5f);
+  float c2 = Math::cos(eulerAngles.z * .5f);
+  float s2 = Math::sin(eulerAngles.z * .5f);
+  float c3 = Math::cos(eulerAngles.x * .5f);
+  float s3 = Math::sin(eulerAngles.x * .5f);
+  float c1c2 = c1 * c2;
+  float s1s2 = s1 * s2;
+  r =c1c2 * c3 - s1s2 * s3;
+  i =c1c2 * s3 + s1s2 * c3;
+  j =s1 * c2 * c3 + c1 * s2 * s3;
+  k =c1 * s2 * c3 - s1 * c2 * s3;
+}
+
+Vector3f Quaternion::toEulerAngles() const
+{
+  Vector3f ans;
+  float sqr = r*r;
+  float sqi = i*i;
+  float sqj = j*j;
+  float sqk = k*k;
+  float unit = i + j + k + r; 
+  float test = i*j + k*r;
+  if (test > 0.499*unit) { 
+    ans.y = 2.f * Math::atan2(r,i);
+    ans.z = Math::HALF_PI;
+    ans.x = 0.f;
+    return ans;
+  }
+  if (test < -0.499*unit) { 
+    ans.y = -2.f * atan2(r,i);
+    ans.z = -Math::HALF_PI;
+    ans.x = 0.f;
+    return ans;
+  }
+  ans.y = Math::atan2(sqi - sqj - sqk + sqr,2.f*j*r-2*i*k);
+  ans.z = Math::asin(2.f*test/unit);
+  ans.x = Math::atan2(-sqi + sqj - sqk + sqr,2*i*r-2*j*k);
+  return ans;
+}
+
 }
