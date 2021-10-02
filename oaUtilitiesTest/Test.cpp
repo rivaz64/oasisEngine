@@ -233,6 +233,13 @@ TEST(Quaternions, basic) {
   Quaternion q = { 1,2,3,4 },qua = q.conjugated();
   EXPECT_EQ(q * qua, Quaternion(30, 0, 0, 0));
   EXPECT_EQ(q.inverse(), Quaternion(1.f / 30.f, -1.f / 15.f, -1.f / 10.f, -2.f / 15.f));
+  Vector3f rotation(30.f * Math::DEG_TO_RAD,30.f * Math::DEG_TO_RAD,30.f * Math::DEG_TO_RAD);
+  Quaternion quater;
+  quater.fromEulerAngles(rotation);
+  EXPECT_NEAR(quater.r,0.8839f,.001f);
+  EXPECT_NEAR(quater.i,0.3062f,.001f);
+  EXPECT_NEAR(quater.j,0.3062f,.001f);
+  EXPECT_NEAR(quater.k,0.1768f,.001f);
 }
 TEST(geometry, line) {
   EXPECT_EQ(sizeof(Line), 28);
