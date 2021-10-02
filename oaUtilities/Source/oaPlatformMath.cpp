@@ -25,12 +25,12 @@ const float PlatformMath::DEG_TO_RAD = 0.01745329251994329576923690768f;
 float
 PlatformMath::invSqrt(float number)
 {
-  float fHalf = 0.5f*number;
-  int i = static_cast<int>(number);
-  i = 0x5f3759df - (i >> 1);
-  number = static_cast<float>(i);
-  number = number*(1.5f - fHalf*number*number);
-  return number;
+  float x2 = number * 0.5f;
+  int xi = *reinterpret_cast<int *>( &number );
+  xi = 1597294787 - (xi >> 1);
+  float y =  *reinterpret_cast<float *>( &xi );
+  y  = y * ( 1.5f - ( x2 * y * y ) ); 
+  return y;
 }
 
 bool 

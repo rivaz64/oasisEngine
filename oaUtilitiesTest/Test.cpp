@@ -1,4 +1,4 @@
-#include <gtest\gtest.h>
+#include <gtest/gtest.h>
 #include "oaMath.h"
 #include "oaVector2f.h"
 #include "oaVector3f.h"
@@ -37,7 +37,7 @@ TEST(basic, basic_types) {
 }
 TEST(math, basic) {
   EXPECT_EQ(Math::sqrt(49), 7);
-  EXPECT_EQ(Math::invSqrt(49), 1.f/7.f);
+  EXPECT_NEAR(Math::invSqrt(49), 1.f/7.f,.001f);
 }
 TEST(math, trigonometry) {
   EXPECT_NEAR(Math::sin(.5f), Math::fastSin(.5f), .001f);
@@ -56,22 +56,22 @@ TEST(vectors, vector2) {
   EXPECT_EQ(v2 * 7.f, Vector2f(21.f, 28.f));
   EXPECT_EQ(v2 / 2.f, Vector2f(1.5f, 2.f));
   EXPECT_EQ(Vector2f::dot(v2,vec2), 63.f);
-  EXPECT_EQ(v2.magnitud(), 5.f);
-  EXPECT_NEAR(v2.getDirection(), 53.1301 * Math::DEG_TO_RAD, .00001f);
+  EXPECT_NEAR(v2.magnitud(), 5.f,.001f);
+  EXPECT_NEAR(v2.getDirection(), 53.1301 * Math::DEG_TO_RAD, .001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), 126.87 * Math::DEG_TO_RAD, .00001f);
+  EXPECT_NEAR(v2.getDirection(), 126.87 * Math::DEG_TO_RAD, .001f);
   v2.y *= -1;
-  EXPECT_NEAR(v2.getDirection(), -126.87 * Math::DEG_TO_RAD, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -126.87 * Math::DEG_TO_RAD, .001f);
   v2.x *= -1;
-  EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::DEG_TO_RAD, .00001f);
+  EXPECT_NEAR(v2.getDirection(), -53.1301 * Math::DEG_TO_RAD, .001f);
   v2.y *= -1;
-  EXPECT_NEAR(v2.normalized().magnitud(), 1.f, .00001f);
-  EXPECT_NEAR(v2.normalized().getDirection(), v2.getDirection(), .0000001f);
-  EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .00001f);
-  EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .00001f);
+  EXPECT_NEAR(v2.normalized().magnitud(), 1.f, .001f);
+  EXPECT_NEAR(v2.normalized().getDirection(), v2.getDirection(), .001f);
+  EXPECT_NEAR(v2.project(vec2).x, 1.86391f, .001f);
+  EXPECT_NEAR(v2.project(vec2).y, 4.47337f, .001f);
   v2.setDirection(0.6435011087932843868f);
-  EXPECT_NEAR(v2.x, 4.f, .0000001f);
-  EXPECT_NEAR(v2.y, 3.f, .0000001f);
+  EXPECT_NEAR(v2.x, 4.f, .001f);
+  EXPECT_NEAR(v2.y, 3.f, .001f);
 }
 
 TEST(vectors, vector3) {
@@ -83,11 +83,11 @@ TEST(vectors, vector3) {
   EXPECT_EQ(vec3 /2.f, Vector3f(1.f, 1.5f, 3.f));
   EXPECT_EQ(Vector3f::dot(v3,vec3), 17.f);
   EXPECT_EQ(vec3.magnitud(), 7.f);
-  EXPECT_NEAR(v3.normalized().magnitud(), 1.f, .0001f);
+  EXPECT_NEAR(v3.normalized().magnitud(), 1.f, .001f);
   EXPECT_EQ(Vector3f::cross(v3,vec3), Vector3f(0.f, -2.f, 1.f));
-  EXPECT_NEAR(v3.project(vec3).x, 0.693878f, .00001f);
-  EXPECT_NEAR(v3.project(vec3).y, 1.04082f, .00001f);
-  EXPECT_NEAR(v3.project(vec3).z, 2.08163f, .00001f);
+  EXPECT_NEAR(v3.project(vec3).x, 0.693878f, .001f);
+  EXPECT_NEAR(v3.project(vec3).y, 1.04082f, .001f);
+  EXPECT_NEAR(v3.project(vec3).z, 2.08163f, .001f);
 }
 
 TEST(vectors, vector4) {
@@ -99,11 +99,11 @@ TEST(vectors, vector4) {
   EXPECT_EQ(vec4 / 2.f, Vector4f(1.5, 2.f, 6.f, 42.f));
   EXPECT_EQ(Vector4f::dot(v4,vec4), 383.f);
   EXPECT_EQ(vec4.magnitud(), 85.f);
-  EXPECT_NEAR(v4.normalized().magnitud(), 1.f, .0001f);
-  EXPECT_NEAR(v4.project(vec4).x, 0.159031f, .00001f);
-  EXPECT_NEAR(v4.project(vec4).y, 0.212042f, .00001f);
-  EXPECT_NEAR(v4.project(vec4).z, 0.636125f, .00001f);
-  EXPECT_NEAR(v4.project(vec4).w, 4.45287f, .00001f);
+  EXPECT_NEAR(v4.normalized().magnitud(), 1.f, .001f);
+  EXPECT_NEAR(v4.project(vec4).x, 0.159031f, .001f);
+  EXPECT_NEAR(v4.project(vec4).y, 0.212042f, .001f);
+  EXPECT_NEAR(v4.project(vec4).z, 0.636125f, .001f);
+  EXPECT_NEAR(v4.project(vec4).w, 4.45287f, .001f);
 }
 
 TEST(Matrix, Matrix3) {
@@ -157,7 +157,7 @@ TEST(Matrix, Matrix3) {
   EXPECT_EQ(Matrix3f::scaleMatrix(v2), Matrix3f({ 3.f, 0.f, 0.f,
                                                       0.f, 4.f, 0.f,
                                                       0.f, 0.f, 1.f }));
-  EXPECT_NEAR(Matrix3f::rotationMatrix(Math::HALF_PI).determinant(), 1,.0001f);
+  EXPECT_NEAR(Matrix3f::rotationMatrix(Math::HALF_PI).determinant(), 1,.001f);
 
 }
 TEST(Matrix, Matrix4) {
@@ -223,8 +223,8 @@ TEST(Matrix, Matrix4) {
                                                     0.f, 3.f, 0.f,0.f,
                                                     0.f, 0.f, 6.f,0.f,
                                                     0.f, 0.f, 0.f,1.f }));
-  EXPECT_NEAR(Matrix4f::rotationMatrixZ(Math::PI / 4.f).determinant(), 1, .0001f);
-  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::PI / 4.f).determinant(), 1, .0001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixZ(Math::PI / 4.f).determinant(), 1, .001f);
+  EXPECT_NEAR(Matrix4f::rotationMatrixX(3.f* Math::PI / 4.f).determinant(), 1, .001f);
   EXPECT_NEAR(Matrix4f::rotationMatrixY(-Math::PI / 4.f).determinant(), 1, .0001f);
 
 }
@@ -239,21 +239,21 @@ TEST(geometry, line) {
   Vector3f A = { 1.f,1.f,2.f }, B = { 2.f,3.f,6.f }, C = { 5.f,5.f,5.f };
   Line stick = { A,B };
   EXPECT_EQ(stick.getStaringPoint(), A);
-  EXPECT_NEAR(stick.getLenght(), 4.58257f,.00001f);
-  EXPECT_NEAR(stick.getDirection().x, 0.218217f, .000001f);
-  EXPECT_NEAR(stick.getDirection().y, 0.436435f, .000001f);
-  EXPECT_NEAR(stick.getDirection().z, 0.872871f, .000001f);
+  EXPECT_NEAR(stick.getLenght(), 4.58257f,.001f);
+  EXPECT_NEAR(stick.getDirection().x, 0.218217f, .001f);
+  EXPECT_NEAR(stick.getDirection().y, 0.436435f, .001f);
+  EXPECT_NEAR(stick.getDirection().z, 0.872871f, .001f);
   Vector3f midpoint = stick.pointAt(.5f);
-  EXPECT_NEAR(midpoint.x, 1.5f, .000001f);
-  EXPECT_NEAR(midpoint.y, 2.f, .000001f);
-  EXPECT_NEAR(midpoint.z, 4.f, .000001f);
-  EXPECT_NEAR(Math::distance(stick,C), 3.68394f, .00001f);
+  EXPECT_NEAR(midpoint.x, 1.5f, .001f);
+  EXPECT_NEAR(midpoint.y, 2.f, .001f);
+  EXPECT_NEAR(midpoint.z, 4.f, .001f);
+  EXPECT_NEAR(Math::distance(stick,C), 3.68394f, .001f);
   Vector3f D = { 1.f,2.f,3.f }, E = { 2.f,3.f,5.f };
   Line l = { D,E };
-  EXPECT_NEAR(Math::distance(stick,l), 0.447214f,.000001f);
+  EXPECT_NEAR(Math::distance(stick,l), 0.447214f,.001f);
   Vector3f F = { 2.f,2.f,3.f }, G = { 3.f,4.f,7.f };
   Line parallel = { F,G };
-  EXPECT_NEAR(Math::distance(stick,parallel), 0.816497f,.00001f);
+  EXPECT_NEAR(Math::distance(stick,parallel), 0.816497f,.001f);
 }
 TEST(geometry, plane) {
   EXPECT_EQ(sizeof(Plane), 16);
@@ -261,8 +261,8 @@ TEST(geometry, plane) {
   Vector4f D = { 4.f,4.f,4.f,1.f };
   Plane paper = { A,B,C };
   EXPECT_EQ(paper.getNormal(), Vector3f(3, -19, 4).normalized());
-  EXPECT_NEAR(paper.getD(), 1.57785F,.00001f);
-  EXPECT_NEAR(Math::distance(paper,D.xyz), .865277, .000001f);
+  EXPECT_NEAR(paper.getD(), 1.57785F,.001f);
+  EXPECT_NEAR(Math::distance(paper,D.xyz), .865277, .001f);
   Matrix4f refMat = paper.reflection();
   Vector4f refpoint = refMat * D;
   EXPECT_NEAR(refpoint.x, 4.26f, .01f);
@@ -277,14 +277,14 @@ TEST(geometry, plane) {
   Plane paper1 = { A,D.xyz,refpoint.xyz };
   Plane paper2 = { C,D.xyz,refpoint.xyz };
   EXPECT_TRUE(Math::intersect(paper,paper1,paper2,intersection));
-  EXPECT_NEAR(intersection.x, arrow.pointAt(.5).x,.0001);
-  EXPECT_NEAR(intersection.y, arrow.pointAt(.5).y,.0001);
-  EXPECT_NEAR(intersection.z, arrow.pointAt(.5).z,.0001);
+  EXPECT_NEAR(intersection.x, arrow.pointAt(.5).x,.001f);
+  EXPECT_NEAR(intersection.y, arrow.pointAt(.5).y,.001f);
+  EXPECT_NEAR(intersection.z, arrow.pointAt(.5).z,.001f);
   Line cut;
   EXPECT_TRUE(Math::intersect(paper1,paper2,cut));
-  EXPECT_NEAR(-cut.getDirection().x,arrow.getDirection().x,.0001);
-  EXPECT_NEAR(-cut.getDirection().y,arrow.getDirection().y,.0001);
-  EXPECT_NEAR(-cut.getDirection().z,arrow.getDirection().z,.0001);
+  EXPECT_NEAR(-cut.getDirection().x,arrow.getDirection().x,.001f);
+  EXPECT_NEAR(-cut.getDirection().y,arrow.getDirection().y,.001f);
+  EXPECT_NEAR(-cut.getDirection().z,arrow.getDirection().z,.001f);
 }
 
 TEST(overlaps, shpere) {

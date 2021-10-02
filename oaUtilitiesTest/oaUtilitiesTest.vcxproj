@@ -92,12 +92,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)googletest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -109,14 +109,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)googletest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);</AdditionalLibraryDirectories>
       <AdditionalDependencies>gtest.lib;gtest_main.lib;oaUtilities.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -126,13 +126,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gtestd.lib;gtest_maind.lib;oaUtilitiesd.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)googletest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,7 +143,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(DEVLIBS)googletest-release-1.11.0\googletest-release-1.11.0\googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DEVLIBS)googletest\include;$(SolutionDir)oaUtilities/Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +151,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gtest.lib;gtest_main.lib;oaUtilities.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(DEVLIBS)GoogleTest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DEVLIBS)googletest/$(PlatformTarget)/lib/$(Configuration);$(SolutionDir)lib/$(PlatformTarget);$(SolutionDir)bin/$(PlatformTarget)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
