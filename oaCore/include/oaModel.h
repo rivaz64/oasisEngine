@@ -23,12 +23,12 @@ class Model
   /**
    * @brief the textures of the model
   */
-  Vector<Texture> textures;
+  Vector<SPtr<Texture>> textures;
 
   /**
    * @brief the meshes of the model
   */
-  Vector<Mesh> meshes;
+  Vector<SPtr<Mesh>> meshes;
 };
 
 }

@@ -7,8 +7,28 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaVector2f.h"
+#include "oaVector3f.h"
 
 namespace oaEngineSDK{
+
+/**
+ * @brief a tructure for all the information at a certain point of a Mesh
+*/
+struct Vertex{
+  /**
+   * @brief the location in a tridimencional space of this vetrex
+  */
+  Vector3f location;
+  /**
+   * @brief the normal at a certain point
+  */
+  Vector3f normals;
+  /**
+   * @brief the part of the texture that is going to be drawn at a certain point
+  */
+  Vector2f textureCord;
+};
 
 /**
  * @brief a class for a mesh
@@ -25,12 +45,9 @@ class OA_UTILITY_EXPORT Mesh
   /**
    * @brief the location of the vertices of the mesh
   */
-  SPtr<float> vertices;
+  SPtr<Vertex> vertices;
 
-  /**
-   * @brief the 
-  */
-  //SPtr<float> textureCoords;
+
 };
 
 }
