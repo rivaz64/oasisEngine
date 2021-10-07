@@ -180,6 +180,7 @@
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
+    <ClInclude Include="include\oaModule.h" />
     <ClInclude Include="include\oaPlane.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformMath.h" />

@@ -76,7 +76,7 @@ using WString = std::wstring;
  * @tparam T
 */
 template <class T>
-using SPTr = std::shared_ptr<T>;
+using SPtr = std::shared_ptr<T>;
 
 /**
  * @brief wraper of the std::swap
