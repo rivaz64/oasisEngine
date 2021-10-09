@@ -16,7 +16,7 @@ namespace oaEngineSDK{
 /**
  * @brief class for 3D models
 */
-class Model
+class OA_UTILITY_EXPORT Model
 {
  protected:
   

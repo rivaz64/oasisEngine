@@ -1,5 +1,5 @@
 /**
-* @file oaTexture.h
+* @file oaResoursemanager.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
 * @date 10/7/2021
 */
@@ -17,7 +17,7 @@ namespace oaEngineSDK {
           is unique it would not load the same resourse 2 times
 */
 class OA_UTILITY_EXPORT oaResoureManager :
-  Module<oaResoureManager>
+  public Module<oaResoureManager>
 {
   
   void loadTexture();

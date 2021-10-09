@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class Buffer
+class OA_UTILITY_EXPORT Buffer
 {
  public:
 
@@ -35,6 +35,14 @@ class Buffer
   */
   virtual uint32 
   getSize() = 0;
+
+  /**
+   * @brief sets the data of this buffer to an updated one
+   * @param data the new data 
+   * @param size the size of the new data
+  */
+  virtual void
+  updateResourse(void* data,uint32 size) = 0;
 };
 
 }
