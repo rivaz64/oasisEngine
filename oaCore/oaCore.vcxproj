@@ -163,6 +163,7 @@
     <ClInclude Include="oaPrerequisitesCore.h" />
     <ClInclude Include="oaResoureManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaResoureManager.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
