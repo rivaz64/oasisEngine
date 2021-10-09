@@ -17,9 +17,20 @@ class Shader
 {
  public:
   
+  /**
+   * @brief compiles the shader
+   * @return if the compilation was succesfull
+  */
   virtual bool 
-  compile();
+  compile() = 0;
 
+  /**
+   * @brief loads the code for the shader, it does not compile it
+   * @param file 
+   * @return if the file was loaded or not
+  */
+  virtual bool
+  loadFromFile(String file) = 0;
 
  private:
 
