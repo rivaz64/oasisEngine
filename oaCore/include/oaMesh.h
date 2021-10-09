@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector2f.h"
 #include "oaVector3f.h"
+#include "oaBuffer.h"
 
 namespace oaEngineSDK{
 
@@ -40,14 +41,22 @@ class OA_UTILITY_EXPORT Mesh
   /**
    * @brief the indices of the vertices of each triangle
   */
-  SPtr<uint32> index;
+  Vector<uint32> index;
 
   /**
    * @brief the location of the vertices of the mesh
   */
-  SPtr<Vertex> vertices;
+  Vector<Vertex> vertices;
 
+  /**
+   * @brief the buffer for the indices
+  */
+  SPtr<Buffer> indexB;
 
+  /**
+  * @brief the buffer for the vertex
+  */
+  SPtr<Buffer> vertexB;
 };
 
 }
