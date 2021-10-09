@@ -35,7 +35,7 @@ struct Vertex{
 */
 class OA_UTILITY_EXPORT Mesh
 {
- private:
+ protected:
 
   /**
    * @brief the indices of the vertices of each triangle

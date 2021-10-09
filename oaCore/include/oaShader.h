@@ -32,7 +32,7 @@ class Shader
   virtual bool
   loadFromFile(String file) = 0;
 
- private:
+ protected:
 
   /**
    * @brief the code of the shader in its upper level language

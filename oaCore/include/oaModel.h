@@ -18,7 +18,7 @@ namespace oaEngineSDK{
 */
 class Model
 {
- private:
+ protected:
   
   /**
    * @brief the textures of the model

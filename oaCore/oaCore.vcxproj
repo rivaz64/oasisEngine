@@ -159,15 +159,14 @@
   <ItemGroup>
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
+    <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="oaPrerequisitesCore.h" />
     <ClInclude Include="oaResoureManager.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaResoureManager.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
