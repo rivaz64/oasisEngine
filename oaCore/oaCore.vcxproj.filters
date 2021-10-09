@@ -30,10 +30,10 @@
     <ClInclude Include="include\oaModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="include\oaShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaShader.h">
+    <ClInclude Include="include\oaBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClCompile Include="source\oaModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="source\oaBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

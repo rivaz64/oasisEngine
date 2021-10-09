@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaBuffer.h"
 
 namespace oaEngineSDK{
 
@@ -26,7 +27,7 @@ class Shader
 
   /**
    * @brief loads the code for the shader, it does not compile it
-   * @param file 
+   * @param file the direction of the file to load
    * @return if the file was loaded or not
   */
   virtual bool
@@ -39,6 +40,10 @@ class Shader
   */
   String code;
 
+  /**
+   * @brief the compiled shader
+  */
+  Buffer buf;
 };
 
 }
