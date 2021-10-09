@@ -18,7 +18,7 @@ class Buffer
    * @brief getter for the buffer from the GraphicalAPI
    * @return 
   */
-  virtual void*
+  virtual void*&
   get() = 0;
 
   /**
