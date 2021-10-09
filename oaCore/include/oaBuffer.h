@@ -12,16 +12,18 @@ namespace oaEngineSDK{
 
 class Buffer
 {
-private:
+ public:
   /**
-  * @brief where the data of the buffer is
+  * @brief gets where the data of the buffer is
   */
-  void* pointer;
+  virtual void* 
+  getPointer() = 0;
 
   /**
-   * @brief the size of the data in bytes
+   * @brief gets the size of the data in bytes
   */
-  uint32 size;
+  virtual uint32 
+  getSize() = 0;
 };
 
 }
