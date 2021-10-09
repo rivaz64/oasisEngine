@@ -43,7 +43,7 @@ class Shader
   /**
    * @brief the compiled shader
   */
-  Buffer buf;
+  SPtr<Buffer> buf;
 };
 
 }
