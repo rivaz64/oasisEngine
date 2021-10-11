@@ -62,7 +62,7 @@ class OA_UTILITY_EXPORT Mesh
    * @brief sends all the data from the cpu tode gpu
   */
   virtual void
-  create();
+  create() = 0;
 };
 
 }
