@@ -15,6 +15,13 @@ class OA_UTILITY_EXPORT Buffer
  public:
 
   /**
+   * @brief constructor default para el buffer
+  */
+  Buffer() = default;
+
+  ~Buffer() = default;
+
+  /**
   * @brief gets where the data of the buffer is
   * @return 
   */

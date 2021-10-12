@@ -164,19 +164,15 @@
     <ClInclude Include="include\oaModel.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaShader.h" />
-    <ClInclude Include="include\oaVertexBuffer.h" />
-    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="oaResoureManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="oaResoureManager.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaGraphicsModule.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
-    <ClCompile Include="source\oaVertexBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

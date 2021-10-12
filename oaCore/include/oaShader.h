@@ -18,6 +18,13 @@ class OA_UTILITY_EXPORT Shader
 {
  public:
   
+   /**
+    * @brief default constructor para el shader
+   */
+   Shader() = default;
+
+   ~Shader() = default;
+
   /**
    * @brief compiles the shader
    * @return if the compilation was succesfull

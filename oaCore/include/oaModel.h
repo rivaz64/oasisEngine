@@ -18,6 +18,15 @@ namespace oaEngineSDK{
 */
 class OA_UTILITY_EXPORT Model
 {
+ public:
+
+  /**
+   * @brief default constructor for the model
+  */
+  Model() = default;
+
+  ~Model() = default;
+
  protected:
   
   /**

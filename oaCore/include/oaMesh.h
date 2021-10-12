@@ -37,6 +37,14 @@ struct Vertex{
 class OA_UTILITY_EXPORT Mesh
 {
  public:
+
+  /**
+   * @brief default consturctor for the mesh
+  */
+  Mesh() = default;
+
+  ~Mesh() = default;
+
   /**
   * @brief sends all the data from the cpu tode gpu
   */
