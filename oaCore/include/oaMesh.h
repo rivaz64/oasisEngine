@@ -34,7 +34,7 @@ struct Vertex{
 /**
  * @brief a class for a mesh
 */
-class OA_UTILITY_EXPORT Mesh
+class OA_CORE_EXPORT Mesh
 {
  public:
 
