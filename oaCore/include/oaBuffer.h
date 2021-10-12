@@ -42,6 +42,18 @@ class OA_UTILITY_EXPORT Buffer
   */
   virtual void
   updateResourse(void* data,uint32 size) = 0;
+ 
+ public:
+
+  /**
+   * @brief where the data is
+  */
+  void* pointer;
+
+  /**
+   * @brief the size of the data in bytes
+  */
+  uint32 size;
 };
 
 }
