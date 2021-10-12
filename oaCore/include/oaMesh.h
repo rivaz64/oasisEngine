@@ -36,6 +36,13 @@ struct Vertex{
 */
 class OA_UTILITY_EXPORT Mesh
 {
+ public:
+  /**
+  * @brief sends all the data from the cpu tode gpu
+  */
+  virtual void
+  create() = 0;
+
  protected:
 
   /**
@@ -58,11 +65,7 @@ class OA_UTILITY_EXPORT Mesh
   */
   SPtr<Buffer> vertexB;
 
-  /**
-   * @brief sends all the data from the cpu tode gpu
-  */
-  virtual void
-  create() = 0;
+  
 };
 
 }

@@ -15,13 +15,6 @@ class OA_UTILITY_EXPORT Buffer
  public:
 
   /**
-   * @brief getter for the buffer from the GraphicalAPI
-   * @return 
-  */
-  virtual void*&
-  get() = 0;
-
-  /**
   * @brief gets where the data of the buffer is
   * @return 
   */
@@ -35,6 +28,12 @@ class OA_UTILITY_EXPORT Buffer
   */
   virtual uint32 
   getSize() = 0;
+
+  /**
+   * @brief prepares the internal things to be send to the gpu
+  */
+  virtual void
+  init() = 0;
 
   /**
    * @brief sets the data of this buffer to an updated one
