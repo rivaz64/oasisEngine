@@ -179,7 +179,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FloatingPointModel>Fast</FloatingPointModel>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <AdditionalIncludeDirectories>DXUT\Core;DXUT\Optional;C:\Users\roriv\source\repos\oasisEngine\oaCore\include;C:\Users\roriv\source\repos\oasisEngine\oaUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DXUT\Core;DXUT\Optional;D:\github\oasisEngine\oaCore\include;D:\github\oasisEngine\oaUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -373,17 +373,17 @@
   </ItemDefinitionGroup>
   <ItemGroup />
   <ItemGroup>
-    <ClCompile Include="blob.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tutorial02.cpp" />
+    <ClCompile Include="VertexBuf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutorial02.fx" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="blob.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="VertexBuf.h" />
     <ResourceCompile Include="Tutorial02.rc" />
   </ItemGroup>
   <ItemGroup>
