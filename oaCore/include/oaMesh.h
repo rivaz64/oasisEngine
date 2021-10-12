@@ -9,8 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector2f.h"
 #include "oaVector3f.h"
-#include "oaIndexBuffer.h"
-#include "oaVertexBuffer.h"
+#include "oaBuffer.h"
 
 namespace oaEngineSDK{
 
@@ -52,12 +51,12 @@ class OA_UTILITY_EXPORT Mesh
   /**
    * @brief the buffer for the indices
   */
-  SPtr<IndexBuffer> indexB;
+  SPtr<Buffer> indexB;
 
   /**
   * @brief the buffer for the vertex
   */
-  SPtr<VertexBuffer> vertexB;
+  SPtr<Buffer> vertexB;
 
   /**
    * @brief sends all the data from the cpu tode gpu
