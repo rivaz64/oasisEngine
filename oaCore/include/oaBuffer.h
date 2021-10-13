@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class OA_UTILITY_EXPORT Buffer
+class OA_CORE_EXPORT Buffer
 {
  public:
 
@@ -26,7 +26,7 @@ class OA_UTILITY_EXPORT Buffer
   * @return 
   */
   virtual void* 
-    getPointer() {};
+    getPointer() {return nullptr;};
 
 
   /**
@@ -34,7 +34,7 @@ class OA_UTILITY_EXPORT Buffer
   * @return 
   */
   virtual uint32 
-    getSize() {};
+    getSize() {return 0;};
 
   /**
    * @brief prepares the internal things to be send to the gpu
