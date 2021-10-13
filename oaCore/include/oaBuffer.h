@@ -26,7 +26,7 @@ class OA_UTILITY_EXPORT Buffer
   * @return 
   */
   virtual void* 
-  getPointer() = 0;
+    getPointer() {};
 
 
   /**
@@ -34,13 +34,13 @@ class OA_UTILITY_EXPORT Buffer
   * @return 
   */
   virtual uint32 
-  getSize() = 0;
+    getSize() {};
 
   /**
    * @brief prepares the internal things to be send to the gpu
   */
   virtual void
-  init() = 0;
+    init() {};
 
   /**
    * @brief sets the data of this buffer to an updated one
@@ -48,7 +48,7 @@ class OA_UTILITY_EXPORT Buffer
    * @param size the size of the new data
   */
   virtual void
-  updateResourse(void* data,uint32 size) = 0;
+    updateResourse(void* data,uint32 size) {};
  
  public:
 

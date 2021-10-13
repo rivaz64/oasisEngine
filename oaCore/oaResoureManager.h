@@ -20,7 +20,7 @@ class OA_UTILITY_EXPORT oaResoureManager :
   public Module<oaResoureManager>
 {
   
-  void loadTexture();
+  void loadTexture() {};
 };
 
 }

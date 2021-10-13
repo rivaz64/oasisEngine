@@ -30,7 +30,7 @@ class OA_UTILITY_EXPORT Shader
    * @return if the compilation was succesfull
   */
   virtual bool 
-  compile() = 0;
+    compile() {};
 
   /**
    * @brief loads the code for the shader, it does not compile it
@@ -38,7 +38,7 @@ class OA_UTILITY_EXPORT Shader
    * @return if the file was loaded or not
   */
   virtual bool
-  loadFromFile(String file) = 0;
+    loadFromFile(String file) {};
 
  protected:
 
