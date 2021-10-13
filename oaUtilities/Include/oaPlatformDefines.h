@@ -282,3 +282,5 @@
 # pragma warning(disable : 4503)
 
 #endif
+
+#define OA_EXTERN extern "C"
