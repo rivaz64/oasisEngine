@@ -8,8 +8,8 @@ using foo = const void* (*)();
 void oaEngineSDK::BaseApp::run()
 {
 #if OA_PLATFORM == OA_PLATFORM_WIN32
-  //HINSTANCE hGetProcIDDLL = LoadLibrary("oaDX11Graphics.dll");
-  HINSTANCE hGetProcIDDLL = LoadLibrary("oaOGL_Grafics.dll");
+  HINSTANCE hGetProcIDDLL = LoadLibrary("oaDX11Graphics.dll");
+  //HINSTANCE hGetProcIDDLL = LoadLibrary("oaOGL_Grafics.dll");
   if(!hGetProcIDDLL)
   {
     std::cout << "Could not load Dll" << std::endl;

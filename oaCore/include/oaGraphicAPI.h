@@ -11,13 +11,17 @@
 
 namespace oaEngineSDK{
 
-class DX11GraphicAPI;
-
+/**
+ * @brief everything used for graphycs
+*/
 class OA_CORE_EXPORT GraphicAPI :
   public Module<GraphicAPI>
 {
 public:
 
+  /**
+   * @brief initialize everything needed for use the graphics API
+  */
   virtual void
   initialize();
 

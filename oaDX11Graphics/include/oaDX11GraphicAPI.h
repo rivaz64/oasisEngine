@@ -15,6 +15,7 @@ class OA_DX11_EXPORT DX11GraphicAPI :
   public GraphicAPI
 {
  public:
+
   void
   initialize() override;
 

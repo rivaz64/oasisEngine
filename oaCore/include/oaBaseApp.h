@@ -11,6 +11,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief the base app for the engine
+*/
 class OA_CORE_EXPORT BaseApp :
   public Module<BaseApp>
 {
