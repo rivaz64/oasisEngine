@@ -170,9 +170,11 @@
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="oaResoureManager.h" />
+    <ClInclude Include="RenderTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaResoureManager.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaGraphicAPI.cpp" />

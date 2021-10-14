@@ -1,7 +1,6 @@
 #include "oaDX11GraphicAPI.h"
 #include <windows.h>
 #include <d3d11.h>
-//#include <d3dx11.h>
 #include <iostream>
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
@@ -30,6 +29,27 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 void oaEngineSDK::DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
+
+  UINT createDeviceFlags = 0;
+#ifdef _DEBUG
+  createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
+  D3D_DRIVER_TYPE driverTypes[] =
+  {
+    D3D_DRIVER_TYPE_HARDWARE,
+    D3D_DRIVER_TYPE_WARP,
+    D3D_DRIVER_TYPE_REFERENCE,
+  };
+  UINT numDriverTypes = ARRAYSIZE( driverTypes );
+
+  D3D_FEATURE_LEVEL featureLevels[] =
+  {
+    D3D_FEATURE_LEVEL_11_0,
+    D3D_FEATURE_LEVEL_10_1,
+    D3D_FEATURE_LEVEL_10_0,
+  };
+  UINT numFeatureLevels = ARRAYSIZE( featureLevels );
 
   HWND hWnd;
   // this struct holds information for the window class
@@ -68,7 +88,37 @@ void oaEngineSDK::DX11GraphicAPI::initialize()
 
                                   // display the window on the screen
 
+  HRESULT hr = S_OK;
+
+  DXGI_SWAP_CHAIN_DESC sd;
+  ZeroMemory( &sd, sizeof( sd ) );
+  sd.BufferCount = 1;
+  sd.BufferDesc.Width = windowWidth;
+  sd.BufferDesc.Height = windowHeight;
+  sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  sd.BufferDesc.RefreshRate.Numerator = 60;
+  sd.BufferDesc.RefreshRate.Denominator = 1;
+  sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+  sd.OutputWindow = hWnd;
+  sd.SampleDesc.Count = 1;
+  sd.SampleDesc.Quality = 0;
+  sd.Windowed = TRUE;
+
+  for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
+  {
+    driverType = driverTypes[driverTypeIndex];
+    hr = D3D11CreateDeviceAndSwapChain( NULL, driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                                       D3D11_SDK_VERSION, &sd, &swapChain, &device, &featureLevel, &context );
+    if( SUCCEEDED( hr ) )
+      break;
+  }
+  if( FAILED( hr ) ){
+    std::cout<<"failed to start up"<<std::endl;
+    return;
+  }
+
   ShowWindow(hWnd, SW_SHOWDEFAULT);
+
 
   MSG msg;
 
