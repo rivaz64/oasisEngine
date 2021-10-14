@@ -30,7 +30,24 @@ public:
 
   GraphicAPI() = default;
 
+  /**
+   * @brief the width of the window at the begining
+  */
+  uint32 windowWidth = 800;
+
+  /**
+  * @brief the height of the window at the begining
+  */
+  uint32 windowHeight = 600;
+
+  /**
+   * @brief the name of the window 
+  */
+  const String windowName = "Oasis Engine";
+
   friend class Module<GraphicAPI>;
+
+
 };
 
 

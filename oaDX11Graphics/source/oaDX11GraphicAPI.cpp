@@ -44,7 +44,7 @@ void oaEngineSDK::DX11GraphicAPI::initialize()
   wc.lpfnWndProc = WindowProc;
   wc.hInstance = GetModuleHandleA(nullptr);
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = ( HBRUSH )COLOR_BACKGROUND;
+  wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
   wc.lpszClassName = "oasisWindow";
 
   // register the window class
@@ -55,19 +55,18 @@ void oaEngineSDK::DX11GraphicAPI::initialize()
   //g_hInst = hInstance;
   hWnd = CreateWindowEx(NULL,
                         "oasisWindow",    // name of the window class
-                        "Oasis Engine",   // title of the window
+                        windowName.c_str(),   // title of the window
                         WS_OVERLAPPEDWINDOW,    // window style
                         300,    // x-position of the window
-                        300,    // y-position of the window
-                        500,    // width of the window
-                        400,    // height of the window
+                        200,    // y-position of the window
+                        windowWidth,    // width of the window
+                        windowHeight,    // height of the window
                         NULL,    // we have no parent window, NULL
                         NULL,    // we aren't using menus, NULL
                         GetModuleHandleA(nullptr),    // application handle
                         NULL);    // used with multiple windows, NULL
 
                                   // display the window on the screen
-  //ShowWindow(hWnd, nCmdShow);
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
