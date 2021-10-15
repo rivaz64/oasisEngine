@@ -6,7 +6,7 @@
 #if OA_PLATFORM == OA_PLATFORM_WIN32
 # if OA_COMPILER == OA_COMPILER_MSVC
 #   if defined( OA_STATIC_lib )
-#     define OA_CORE_EXPORT
+#     define OA_DX11_EXPORT
 #   else
 #     if defined ( OA_DX11_EXPORT )
 #       define OA_DX11_EXPORT __declspec( dllexport )

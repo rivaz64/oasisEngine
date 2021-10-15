@@ -34,7 +34,7 @@ protected:
 
   ~OGL_GraphicsAPI();
 
-  GLFWwindow* window;
+  GLFWwindow* window = nullptr;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;
