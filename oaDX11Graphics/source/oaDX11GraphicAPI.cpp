@@ -1,7 +1,10 @@
 #include "oaDX11GraphicAPI.h"
+#include "oaDX11Shader.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
+
+namespace oaEngineSDK{
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -26,7 +29,8 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   return 0;
 }
 
-bool oaEngineSDK::DX11GraphicAPI::initialize()
+bool 
+DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
 
@@ -150,19 +154,23 @@ bool oaEngineSDK::DX11GraphicAPI::initialize()
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-  return true;
+  vertexShader = new DX11Shader;
+
+  return GraphicAPI::initialize();
 }
 
-bool oaEngineSDK::DX11GraphicAPI::isRunning()
+bool 
+DX11GraphicAPI::isRunning()
 {
   return GetMessage(&msg, NULL, 0, 0);
 }
 
-void oaEngineSDK::DX11GraphicAPI::events()
+void 
+DX11GraphicAPI::events()
 {
-  // translate keystroke messages into the right format
   TranslateMessage(&msg);
 
-  // send the message to the WindowProc function
   DispatchMessage(&msg);
+}
+
 }

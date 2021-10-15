@@ -14,7 +14,7 @@ namespace oaEngineSDK{
 /**
  * @brief class for all kinds of shaders
 */
-class OA_UTILITY_EXPORT Shader
+class OA_CORE_EXPORT Shader
 {
  public:
   

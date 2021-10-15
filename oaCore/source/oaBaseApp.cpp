@@ -3,12 +3,15 @@
 #include <Windows.h>
 #include<iostream>
 
+namespace oaEngineSDK{
+
 using foo = const void* (*)();
 
-void oaEngineSDK::BaseApp::run()
+void 
+BaseApp::run()
 {
 #if OA_PLATFORM == OA_PLATFORM_WIN32
-  //HINSTANCE hGetProcIDDLL = LoadLibrary("oaDX11Graphics.dll");
+ // HINSTANCE hGetProcIDDLL = LoadLibrary("oaDX11Graphics.dll");
   HINSTANCE hGetProcIDDLL = LoadLibrary("oaOGL_Grafics.dll");
   if(!hGetProcIDDLL)
   {
@@ -33,9 +36,12 @@ void oaEngineSDK::BaseApp::run()
   GraphicAPI::shutDown();
 }
 
-void oaEngineSDK::BaseApp::mainLoop()
+void 
+BaseApp::mainLoop()
 {
   while(GraphicAPI::instancePtr()->isRunning()){
     GraphicAPI::instancePtr()->events();
   }
+}
+
 }

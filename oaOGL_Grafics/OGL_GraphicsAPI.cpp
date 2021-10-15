@@ -1,7 +1,10 @@
 #include "OGL_GraphicsAPI.h"
 #include <iostream>
 
-bool oaEngineSDK::OGL_GraphicsAPI::initialize()
+namespace oaEngineSDK{
+
+bool 
+OGL_GraphicsAPI::initialize()
 {
   std::cout<<"openGL graphic API"<<std::endl;
 
@@ -20,21 +23,26 @@ bool oaEngineSDK::OGL_GraphicsAPI::initialize()
   glfwMakeContextCurrent(window);
 
   //glViewport(0, 0, 800, 600);
-  return true;
+
+  return GraphicAPI::initialize();;
 }
 
-bool oaEngineSDK::OGL_GraphicsAPI::isRunning()
+bool 
+OGL_GraphicsAPI::isRunning()
 {
   return !glfwWindowShouldClose(window);
 }
 
-void oaEngineSDK::OGL_GraphicsAPI::events()
+void 
+OGL_GraphicsAPI::events()
 {
   glfwSwapBuffers(window);
   glfwPollEvents();
 }
 
-oaEngineSDK::OGL_GraphicsAPI::~OGL_GraphicsAPI()
+OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glfwTerminate();
+}
+
 }
