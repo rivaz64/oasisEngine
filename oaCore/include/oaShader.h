@@ -26,31 +26,13 @@ class OA_UTILITY_EXPORT Shader
    ~Shader() = default;
 
   /**
-   * @brief compiles the shader
-   * @return if the compilation was succesfull
+   * @brief compiles the sahder
+   * @param file the file where the shader is
+   * @return if it was compiled correctly
   */
   virtual bool 
-    compile() {};
+  compileFromFile(String file){return true;}
 
-  /**
-   * @brief loads the code for the shader, it does not compile it
-   * @param file the direction of the file to load
-   * @return if the file was loaded or not
-  */
-  virtual bool
-    loadFromFile(String file) {};
-
- protected:
-
-  /**
-   * @brief the code of the shader in its upper level language
-  */
-  String code;
-
-  /**
-   * @brief the compiled shader
-  */
-  SPtr<Buffer> buf;
 };
 
 }

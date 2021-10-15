@@ -59,6 +59,9 @@ public:
   */
   const String windowName = "Oasis Engine";
 
+
+  Shader* vertexShader;
+
   friend class Module<GraphicAPI>;
 
 

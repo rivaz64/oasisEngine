@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\oaBaseApp.h" />
     <ClInclude Include="include\oaBuffer.h" />
+    <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
     <ClInclude Include="include\oaGraphicsModule.h" />
     <ClInclude Include="include\oaMesh.h" />
