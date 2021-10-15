@@ -19,12 +19,26 @@ class OA_CORE_EXPORT GraphicAPI :
 {
 public:
 
+  
   /**
-   * @brief initialize everything needed for use the graphics API
+   * @brief initializes everything needed for the graphics
+   * @return if the initialization was correct
   */
-  virtual void
+  virtual bool
   initialize();
 
+  /**
+   * @brief if the grafics are still doing things
+   * @return if it should continue running
+  */
+  virtual bool
+  isRunning();
+
+  /**
+   * @brief manages the the events that the graphics api detects
+  */
+  virtual void
+  events();
 
  protected:
 

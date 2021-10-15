@@ -19,8 +19,14 @@ class OA_DX11_EXPORT DX11GraphicAPI :
 {
  public:
 
-  void
+  bool
   initialize() override;
+
+  bool
+  isRunning() override;
+
+  void
+  events() override;
 
  protected:
 
@@ -31,6 +37,8 @@ class OA_DX11_EXPORT DX11GraphicAPI :
   ID3D11Device*           device = NULL;
   ID3D11DeviceContext*    context = NULL;
   IDXGISwapChain*         swapChain = NULL;
+  ID3D11RenderTargetView* renderTargetView = NULL;
+  MSG msg;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

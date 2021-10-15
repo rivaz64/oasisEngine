@@ -26,7 +26,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   return 0;
 }
 
-void oaEngineSDK::DX11GraphicAPI::initialize()
+bool oaEngineSDK::DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
 
@@ -104,6 +104,8 @@ void oaEngineSDK::DX11GraphicAPI::initialize()
   sd.SampleDesc.Quality = 0;
   sd.Windowed = TRUE;
 
+
+
   for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
   {
     driverType = driverTypes[driverTypeIndex];
@@ -114,21 +116,53 @@ void oaEngineSDK::DX11GraphicAPI::initialize()
   }
   if( FAILED( hr ) ){
     std::cout<<"failed to start up"<<std::endl;
-    return;
+    return false;
   }
+
+  
+
+  ID3D11Texture2D* pBackBuffer = NULL;
+  hr = swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&pBackBuffer );
+  if( FAILED( hr ) ){
+    std::cout<<"failed to get backBuffer"<<std::endl;
+    return false;
+  }
+    
+
+  hr = device->CreateRenderTargetView( pBackBuffer, NULL, &renderTargetView );
+  pBackBuffer->Release();
+  if( FAILED( hr ) ){
+    std::cout<<"failed to set backBuffer"<<std::endl;
+    return false;
+  }
+
+  context->OMSetRenderTargets( 1, &renderTargetView, NULL );
+
+  // Setup the viewport
+  D3D11_VIEWPORT vp;
+  vp.Width = (FLOAT)windowWidth;
+  vp.Height = (FLOAT)windowHeight;
+  vp.MinDepth = 0.0f;
+  vp.MaxDepth = 1.0f;
+  vp.TopLeftX = 0;
+  vp.TopLeftY = 0;
+  context->RSSetViewports( 1, &vp );
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
+  return true;
+}
 
-  MSG msg;
+bool oaEngineSDK::DX11GraphicAPI::isRunning()
+{
+  return GetMessage(&msg, NULL, 0, 0);
+}
 
-  // wait for the next message in the queue, store the result in 'msg'
-  while(GetMessage(&msg, NULL, 0, 0))
-  {
-    // translate keystroke messages into the right format
-    TranslateMessage(&msg);
+void oaEngineSDK::DX11GraphicAPI::events()
+{
+  // translate keystroke messages into the right format
+  TranslateMessage(&msg);
 
-    // send the message to the WindowProc function
-    DispatchMessage(&msg);
-  }
+  // send the message to the WindowProc function
+  DispatchMessage(&msg);
 }

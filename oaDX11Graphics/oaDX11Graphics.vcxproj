@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DX11RenderTarget.h" />
     <ClInclude Include="include\oaDX11GraphicAPI.h" />
     <ClInclude Include="include\oaPrerequisitesDX11.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DX11RenderTarget.cpp" />
     <ClCompile Include="source\oaDX11GraphicAPI.cpp" />
     <ClCompile Include="source\Source.cpp" />
   </ItemGroup>

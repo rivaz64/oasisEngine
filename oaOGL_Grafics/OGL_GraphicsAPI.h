@@ -8,6 +8,8 @@
 
 #include "oaPrerequisitesOGL.h"
 #include "oaGraphicAPI.h"
+#include<glad\glad.h>
+#include <GLFW/glfw3.h>
 
 namespace oaEngineSDK{
 
@@ -15,12 +17,24 @@ class OA_OGL_EXPORT OGL_GraphicsAPI :
   public GraphicAPI
 {
 public:
-  void
+
+  bool
   initialize() override;
+
+  bool
+  isRunning() override;
+
+  void
+  events() override;
+
 
 protected:
 
   OGL_GraphicsAPI() = default;
+
+  ~OGL_GraphicsAPI();
+
+  GLFWwindow* window;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

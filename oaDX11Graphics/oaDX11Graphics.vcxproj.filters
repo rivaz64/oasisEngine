@@ -21,12 +21,18 @@
     <ClInclude Include="include\oaPrerequisitesDX11.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DX11RenderTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaDX11GraphicAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DX11RenderTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 
+
 namespace oaEngineSDK{
 
 /**
@@ -25,9 +26,17 @@ class OA_CORE_EXPORT BaseApp :
   void
   run();
 
+  /**
+   * @brief the game loop
+  */
+  virtual void
+  mainLoop();
+
  protected:
   
   BaseApp() = default;
+
+protected:
 
   friend class Module<BaseApp>;
 };
