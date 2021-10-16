@@ -9,7 +9,7 @@ OGL_PixelShader::compileFromFile(String file)
 {
   id = glCreateShader(GL_FRAGMENT_SHADER);
 
-  if(!OGL_Shader::compileFromFile(file + "/vertexShader.glsl")){
+  if(!OGL_Shader::compileFromFile(file + "/pixelShader.glsl")){
     return false;
   }
 
