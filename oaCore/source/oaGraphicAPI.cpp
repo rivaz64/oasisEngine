@@ -2,12 +2,14 @@
 #include <iostream>
 #include "oaShader.h"
 
+namespace oaEngineSDK{
+
 bool 
-oaEngineSDK::GraphicAPI::initialize()
+GraphicAPI::initialize()
 {
   //std::cout<<"no graphic API"<<std::endl;
 
-  if(!vertexShader->compileFromFile("C:/Users/roriv/Documents/GitHub/oasisEngine/bin/x64/vertexShader")){
+  if(!vertexShader->compileFromFile("shader")){
     return false;
   }
 
@@ -15,14 +17,32 @@ oaEngineSDK::GraphicAPI::initialize()
 }
 
 bool 
-oaEngineSDK::GraphicAPI::isRunning()
+GraphicAPI::isRunning()
 {
   return true;
 }
 
 void 
-oaEngineSDK::GraphicAPI::events()
+GraphicAPI::events()
 {
+
+}
+
+bool 
+GraphicAPI::compileShaders(String folder)
+{
+  if(!vertexShader->compileFromFile(folder)){
+    std::cout<<"vertex shader not compiled"<<std::endl;
+    return false;
+  }
+
+  if(!pixelShader->compileFromFile(folder)){
+    std::cout<<"pixel shader not compiled"<<std::endl;
+    return false;
+  }
+
+  return true;
+}
 
 }
 

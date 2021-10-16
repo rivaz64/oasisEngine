@@ -1,5 +1,6 @@
 #include "oaDX11GraphicAPI.h"
-#include "oaDX11Shader.h"
+#include "oaDX11VertexShader.h"
+#include "oaDX11PixelShader.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -154,7 +155,9 @@ DX11GraphicAPI::initialize()
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-  vertexShader = newSPtr<DX11Shader>();
+  vertexShader = newSPtr<DX11VertexShader>();
+
+  pixelShader = newSPtr<DX11PixelShader>();
 
   return GraphicAPI::initialize();
 }

@@ -40,6 +40,14 @@ public:
   virtual void
   events();
 
+  /**
+   * @brief compiles the shaders
+   * @param folder the folders where the shaders are
+   * @return 
+  */
+  bool
+  compileShaders(String folder);
+
  protected:
 
   GraphicAPI() = default;
@@ -59,8 +67,15 @@ public:
   */
   const String windowName = "Oasis Engine";
 
-
+  /**
+   * @brief the vertex shader
+  */
   SPtr<Shader> vertexShader;
+
+  /**
+  * @brief the pixel shader
+  */
+  SPtr<Shader> pixelShader;
 
   friend class Module<GraphicAPI>;
 

@@ -14,7 +14,7 @@
 
 namespace oaEngineSDK{
 
-class OA_DX11_EXPORT DX11GraphicAPI :
+class DX11GraphicAPI :
   public GraphicAPI
 {
  public:
