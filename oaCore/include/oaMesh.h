@@ -21,14 +21,16 @@ struct Vertex{
    * @brief the location in a tridimencional space of this vetrex
   */
   Vector3f location;
+
   /**
    * @brief the normal at a certain point
   */
-  Vector3f normals;
+  //Vector3f normals;
+
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
-  Vector2f textureCord;
+  //Vector2f textureCord;
 };
 
 /**
@@ -51,7 +53,7 @@ class OA_CORE_EXPORT Mesh
   virtual void
     create();
 
- protected:
+ public:
 
   /**
    * @brief the indices of the vertices of each triangle
@@ -62,7 +64,7 @@ class OA_CORE_EXPORT Mesh
    * @brief the location of the vertices of the mesh
   */
   Vector<Vertex> vertices;
-
+ protected:
   /**
    * @brief the buffer for the indices
   */

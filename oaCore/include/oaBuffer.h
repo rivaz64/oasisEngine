@@ -40,7 +40,7 @@ class OA_CORE_EXPORT Buffer
    * @brief prepares the internal things to be send to the gpu
   */
   virtual void
-    init() {};
+  init() {};
 
   /**
    * @brief sets the data of this buffer to an updated one
@@ -48,7 +48,7 @@ class OA_CORE_EXPORT Buffer
    * @param size the size of the new data
   */
   virtual void
-    updateResourse(void* data,uint32 size) {};
+  updateResourse(void* data,uint32 size) {};
  
  public:
 

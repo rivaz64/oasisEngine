@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="oaResoureManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,12 +45,12 @@
     <ClInclude Include="include\oaForDecCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaResoureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="oaResoureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaMesh.cpp">

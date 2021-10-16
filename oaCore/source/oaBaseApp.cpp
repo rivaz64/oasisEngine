@@ -10,9 +10,22 @@ using foo = const void* (*)();
 void 
 BaseApp::run()
 {
+  if(GraphicAPI::instancePtr()->initialize()){
+    postInit();
+    mainLoop();
+  }
+  
+  GraphicAPI::shutDown();
+}
+
+void BaseApp::postInit()
+{
+}
+
+void BaseApp::loadPlugIn(String DLL)
+{
 #if OA_PLATFORM == OA_PLATFORM_WIN32
-  //HINSTANCE hGetProcIDDLL = LoadLibrary("oaDX11Graphics.dll");
-  HINSTANCE hGetProcIDDLL = LoadLibrary("oaOGL_Grafics.dll");
+  HINSTANCE hGetProcIDDLL = LoadLibrary(DLL.c_str());
   if(!hGetProcIDDLL)
   {
     std::cout << "Could not load Dll" << std::endl;
@@ -27,16 +40,9 @@ BaseApp::run()
   }
   std::cout << "everything working" << std::endl;
 #endif
-
-
-  if(GraphicAPI::instancePtr()->initialize()){
-    mainLoop();
-  }
-  
-  GraphicAPI::shutDown();
 }
 
-void 
+void
 BaseApp::mainLoop()
 {
   while(GraphicAPI::instancePtr()->isRunning()){

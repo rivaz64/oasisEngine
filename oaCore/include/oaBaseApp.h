@@ -23,8 +23,21 @@ class OA_CORE_EXPORT BaseApp :
   /**
    * @brief runs the engine
   */
-  void
+  virtual void
   run();
+
+  /**
+   * @brief the things to do after the graphics api is started
+  */
+  virtual void
+  postInit();
+
+  /**
+   * @brief loads a plugin 
+   * @param DLL the dll of the plugin
+  */
+  virtual void
+  loadPlugIn(String DLL);
 
   /**
    * @brief the game loop
@@ -36,7 +49,7 @@ class OA_CORE_EXPORT BaseApp :
   
   BaseApp() = default;
 
-protected:
+ protected:
 
   friend class Module<BaseApp>;
 };
