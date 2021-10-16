@@ -34,6 +34,12 @@ protected:
 
   ~OGL_GraphicsAPI();
 
+ public:
+
+  unsigned int shaderProgram;
+
+ protected:
+
   GLFWwindow* window = nullptr;
 
   friend class GraphicAPI;

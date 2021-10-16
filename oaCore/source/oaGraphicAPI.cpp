@@ -9,7 +9,7 @@ GraphicAPI::initialize()
 {
   //std::cout<<"no graphic API"<<std::endl;
 
-  if(!vertexShader->compileFromFile("shader")){
+  if(!compileShaders("shader")){
     return false;
   }
 

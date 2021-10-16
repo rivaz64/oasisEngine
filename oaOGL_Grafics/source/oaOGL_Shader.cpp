@@ -1,5 +1,5 @@
 #include "oaOGL_Shader.h"
-
+#include "oaOGL_GraphicsAPI.h"
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
 #include<fstream>
@@ -11,11 +11,9 @@ namespace oaEngineSDK{
 bool 
 OGL_Shader::compileFromFile(String file)
 {
-  id = glCreateShader(GL_VERTEX_SHADER);
   std::fstream f;
-  String completeFile = file+".ogl";
   f.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-  f.open(completeFile);
+  f.open(file);
   if(!f.is_open()){
     std::cout << "failed to find shader" << std::endl;
     return false;
@@ -34,11 +32,14 @@ OGL_Shader::compileFromFile(String file)
   {
     char infoLog[512];
     glGetShaderInfoLog(id,512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    std::cout << "failed to compile shader" << std::endl;
+    std::cout << file << std::endl;
+    std::cout << infoLog << std::endl;
     return false;
   };
 
-
+  glAttachShader(
+  reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, id);
 
   return true;
 }

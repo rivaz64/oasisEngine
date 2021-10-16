@@ -1,5 +1,6 @@
 #include "oaOGL_GraphicsAPI.h"
-#include "oaOGL_Shader.h"
+#include "oaOGL_VertexShader.h"
+#include "oaOGL_PixelShader.h"
 #include <iostream>
 
 namespace oaEngineSDK{
@@ -31,9 +32,19 @@ OGL_GraphicsAPI::initialize()
 
   //glViewport(0, 0, 800, 600);
 
-  vertexShader = newSPtr<OGL_Shader>();
+  vertexShader = newSPtr<OGL_VertexShader>();
 
-  return GraphicAPI::initialize();
+  pixelShader = newSPtr<OGL_PixelShader>();
+
+  shaderProgram = glCreateProgram();
+
+  if(!GraphicAPI::initialize()){
+    return false;
+  }
+
+  glLinkProgram(shaderProgram);
+
+  return true;
 }
 
 bool 

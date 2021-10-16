@@ -145,13 +145,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\oaOGL_GraphicsAPI.h" />
+    <ClInclude Include="include\oaOGL_PixelShader.h" />
     <ClInclude Include="include\oaOGL_Shader.h" />
+    <ClInclude Include="include\oaOGL_VertexShader.h" />
     <ClInclude Include="include\oaPrerequisitesOGL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />
+    <ClCompile Include="source\oaOGL_PixelShader.cpp" />
     <ClCompile Include="source\oaOGL_Shader.cpp" />
+    <ClCompile Include="source\oaOGL_VertexShader.cpp" />
     <ClCompile Include="source\oaSource.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

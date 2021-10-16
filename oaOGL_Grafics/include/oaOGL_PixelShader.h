@@ -1,31 +1,23 @@
 /**
-* @file oaOGL_Shader.h
+* @file oaOGL_PixelShader.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
 * @date 10/13/2021
 */
 
 #pragma once
 
-#include "oaPrerequisitesOGL.h"
-#include "oaShader.h"
-
+#include"oaOGL_Shader.h"
 
 namespace oaEngineSDK{
 
-class OGL_Shader:
-  public Shader
+class OGL_PixelShader :
+  public OGL_Shader
 {
  public:
 
-  virtual bool 
+  bool 
   compileFromFile(String file);
-
- protected:
-
-  unsigned int id;
-
 };
 
 }
-
 
