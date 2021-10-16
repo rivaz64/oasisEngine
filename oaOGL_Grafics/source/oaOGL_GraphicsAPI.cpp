@@ -1,4 +1,5 @@
 #include "oaOGL_GraphicsAPI.h"
+#include "oaOGL_Shader.h"
 #include <iostream>
 
 namespace oaEngineSDK{
@@ -22,9 +23,15 @@ OGL_GraphicsAPI::initialize()
   }
   glfwMakeContextCurrent(window);
 
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+  {
+    std::cout << "Failed to initialize GLAD" << std::endl;
+    return -1;
+  }    
+
   //glViewport(0, 0, 800, 600);
 
-  //vertexShader = 
+  vertexShader = newSPtr<OGL_Shader>();
 
   return GraphicAPI::initialize();
 }

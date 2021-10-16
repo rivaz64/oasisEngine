@@ -154,7 +154,7 @@ DX11GraphicAPI::initialize()
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-  vertexShader = new DX11Shader;
+  vertexShader = newSPtr<DX11Shader>();
 
   return GraphicAPI::initialize();
 }

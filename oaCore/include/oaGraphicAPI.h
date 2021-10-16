@@ -60,7 +60,7 @@ public:
   const String windowName = "Oasis Engine";
 
 
-  Shader* vertexShader;
+  SPtr<Shader> vertexShader;
 
   friend class Module<GraphicAPI>;
 

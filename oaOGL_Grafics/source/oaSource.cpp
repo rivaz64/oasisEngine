@@ -1,5 +1,5 @@
 #include "oaPrerequisitesOGL.h"
-#include "OGL_GraphicsAPI.h"
+#include "oaOGL_GraphicsAPI.h"
 #include "oaGraphicAPI.h"
 
 namespace oaEngineSDK{

@@ -79,6 +79,15 @@ template <class T>
 using SPtr = std::shared_ptr<T>;
 
 /**
+* @brief wraper of the std::make_shared
+* @tparam T
+*/
+template <class T>
+FORCEINLINE SPtr<T> newSPtr() {
+  return std::make_shared<T>();
+}
+
+/**
  * @brief wraper of the std::swap
  * @tparam T
  * @param a

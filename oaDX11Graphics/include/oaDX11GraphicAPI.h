@@ -32,6 +32,7 @@ class OA_DX11_EXPORT DX11GraphicAPI :
 
   DX11GraphicAPI() = default;
 
+ public:
   D3D_DRIVER_TYPE         driverType = D3D_DRIVER_TYPE_NULL;
   D3D_FEATURE_LEVEL       featureLevel = D3D_FEATURE_LEVEL_11_0;
   ID3D11Device*           device = nullptr;
