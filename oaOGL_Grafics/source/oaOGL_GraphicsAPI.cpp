@@ -44,6 +44,7 @@ OGL_GraphicsAPI::initialize()
     return false;
   }
   glLinkProgram(shaderProgram);
+
   int success;
   char infoLog[512];
   glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
@@ -51,6 +52,8 @@ OGL_GraphicsAPI::initialize()
     glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
   }
+
+  glUseProgram(shaderProgram);
   return true;
 }
 
@@ -76,11 +79,6 @@ void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
 void OGL_GraphicsAPI::show()
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  // draw our first triangle
-  glUseProgram(shaderProgram);
-  uint32 n = ((OGL_Buffer*)ResoureManager::instancePtr()->meshes[0]->vertexB.get())->VAO;
-  glBindVertexArray(n);
-  //(VAO); 
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
   glfwSwapBuffers(window);
