@@ -3,6 +3,7 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <iostream>
+#include<Windows.h>
 
 namespace oaEngineSDK{
 
@@ -13,13 +14,16 @@ DX11VertexShader::compileFromFile(String file)
 
   DX11Shader::compileFromFile(file + "/vertexShader.hlsl");
 
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   device->CreateVertexShader(blob->GetBufferPointer(), 
                                blob->GetBufferSize(), 
                                nullptr, 
                                &shader);
 
   createInputLayout(blob);
+
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  context->VSSetShader( shader, NULL, 0 );
 
   return true;
 }
@@ -100,13 +104,30 @@ DX11VertexShader::createInputLayout(ID3DBlob*& blob)
 
   }
 
+  
+
+  
+  /*D3D11_INPUT_ELEMENT_DESC layout[] =
+  {
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+  };
+  UINT numElements = ARRAYSIZE( layout );
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  device->CreateInputLayout( layout, numElements, blob->GetBufferPointer(),
+                                       blob->GetBufferSize(), &inputLayout );*/
+
+  inputLayoutDesc[0].AlignedByteOffset = 0;
+  inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     device->CreateInputLayout(&inputLayoutDesc[0], 
                               inputLayoutDesc.size(), 
                               blob->GetBufferPointer(), 
-                              blob->GetBufferSize(), &inputLayout);
+                              blob->GetBufferSize(), &inputLayout);//*/
 
-  reflection->Release();
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  context->IASetInputLayout( inputLayout );
+
+  //reflection->Release();
   blob->Release();
 
 }

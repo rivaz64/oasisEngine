@@ -33,8 +33,13 @@ void TestApp::postInit()
 
 }
 
-
+void TestApp::render()
+{
+  BaseApp::render();
+}
 
 }
+
+
 
 

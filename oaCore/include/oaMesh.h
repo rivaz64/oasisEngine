@@ -70,7 +70,7 @@ class OA_CORE_EXPORT Mesh
    * @brief the location of the vertices of the mesh
   */
   Vector<Vertex> vertices;
- protected:
+ public:
   /**
    * @brief the buffer for the indices
   */

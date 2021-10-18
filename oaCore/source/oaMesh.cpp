@@ -4,7 +4,7 @@ void oaEngineSDK::Mesh::create()
 {
   vertexB = GraphicAPI::instancePtr()->createBuffer();
   vertexB->init(vertices.data(),sizeof(Vertex)*vertices.size());
-  vertices.clear();
+  //vertices.clear();
 }
 
 void oaEngineSDK::Mesh::render()

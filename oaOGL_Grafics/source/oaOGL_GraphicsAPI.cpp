@@ -1,6 +1,8 @@
 #include "oaOGL_GraphicsAPI.h"
 #include "oaOGL_VertexShader.h"
 #include "oaOGL_PixelShader.h"
+#include "oaOGL_Buffer.h"
+#include "oaResoureManager.h"
 #include <iostream>
 
 namespace oaEngineSDK{
@@ -30,7 +32,7 @@ OGL_GraphicsAPI::initialize()
     return -1;
   }    
 
-  //glViewport(0, 0, 800, 600);
+  glViewport(0, 0, 800, 600);
 
   vertexShader = newSPtr<OGL_VertexShader>();
 
@@ -41,9 +43,14 @@ OGL_GraphicsAPI::initialize()
   if(!GraphicAPI::initialize()){
     return false;
   }
-
   glLinkProgram(shaderProgram);
-
+  int success;
+  char infoLog[512];
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+  }
   return true;
 }
 
@@ -63,17 +70,30 @@ void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
 {
 
   glClearColor(color.x, color.y, color.z, color.w);
+
 }
 
 void OGL_GraphicsAPI::show()
 {
   glClear(GL_COLOR_BUFFER_BIT);
+  // draw our first triangle
+  glUseProgram(shaderProgram);
+  uint32 n = ((OGL_Buffer*)ResoureManager::instancePtr()->meshes[0]->vertexB.get())->VAO;
+  glBindVertexArray(n);
+  //(VAO); 
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
   glfwSwapBuffers(window);
+}
+
+SPtr<Buffer> OGL_GraphicsAPI::createBuffer()
+{
+  return newSPtr<OGL_Buffer>();
 }
 
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
-  glfwTerminate();
+  
 }
 
 }

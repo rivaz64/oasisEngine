@@ -20,9 +20,12 @@ class OGL_Shader:
   virtual bool 
   compileFromFile(String file);
 
- protected:
+  void* 
+  get();
 
-  unsigned int id;
+ public:
+
+  uint32 id;
 
 };
 

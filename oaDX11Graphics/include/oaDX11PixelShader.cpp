@@ -15,5 +15,9 @@ bool oaEngineSDK::DX11PixelShader::compileFromFile(String file)
                                blob->GetBufferSize(), 
                                nullptr, 
                                &shader);
+
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  context->PSSetShader( shader, NULL, 0 );
+
   return true;
 }

@@ -33,6 +33,9 @@ public:
   void
   show() override;
 
+  SPtr<Buffer>
+  createBuffer() override;
+
 protected:
 
   OGL_GraphicsAPI() = default;
@@ -46,6 +49,8 @@ protected:
  protected:
 
   GLFWwindow* window = nullptr;
+
+  
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

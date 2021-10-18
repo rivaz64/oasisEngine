@@ -9,7 +9,7 @@
 
 namespace oaEngineSDK{
 
-class oaOGL_Buffer :
+class OGL_Buffer :
   public Buffer
 {
 
@@ -17,9 +17,10 @@ class oaOGL_Buffer :
   void
     init(void* data,uint32 size) override;
 
- private:
+ public:
 
-  unsigned int id;
+   unsigned int VBO, VAO;
+  //unsigned int id;
 };
 
 }

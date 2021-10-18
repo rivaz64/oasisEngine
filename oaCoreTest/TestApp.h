@@ -14,6 +14,9 @@ public:
 
   void 
   postInit() override;
+
+  void
+  render() override;
 };
 
 }

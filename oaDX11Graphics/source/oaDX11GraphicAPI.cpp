@@ -36,6 +36,45 @@ DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
 
+
+  // this struct holds information for the window class
+  WNDCLASSEX wc;
+
+  // clear out the window class for use
+  ZeroMemory(&wc, sizeof(WNDCLASSEX));
+
+  // fill in the struct with the needed information
+  wc.cbSize = sizeof(WNDCLASSEX);
+  wc.style = CS_HREDRAW | CS_VREDRAW;
+  wc.lpfnWndProc = WindowProc;
+  wc.hInstance = GetModuleHandleA(nullptr);
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
+  wc.lpszClassName = "oasisWindow";
+
+  // register the window class
+  RegisterClassEx(&wc);
+
+  HWND hWnd;
+
+  //g_hInst = hInstance;
+  hWnd = CreateWindowEx(NULL,
+                        "oasisWindow",    // name of the window class
+                        windowName.c_str(),   // title of the window
+                        WS_OVERLAPPEDWINDOW,    // window style
+                        300,    // x-position of the window
+                        200,    // y-position of the window
+                        windowWidth,    // width of the window
+                        windowHeight,    // height of the window
+                        NULL,    // we have no parent window, NULL
+                        NULL,    // we aren't using menus, NULL
+                        GetModuleHandleA(nullptr),    // application handle
+                        NULL);    // used with multiple windows, NULL
+
+                                  // display the window on the screen
+
+  ShowWindow(hWnd, SW_SHOWDEFAULT);
+
   UINT createDeviceFlags = 0;
 #ifdef _DEBUG
   createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -56,43 +95,7 @@ DX11GraphicAPI::initialize()
     D3D_FEATURE_LEVEL_10_0,
   };
   UINT numFeatureLevels = ARRAYSIZE( featureLevels );
-
-  HWND hWnd;
-  // this struct holds information for the window class
-  WNDCLASSEX wc;
-
-  // clear out the window class for use
-  ZeroMemory(&wc, sizeof(WNDCLASSEX));
-
-  // fill in the struct with the needed information
-  wc.cbSize = sizeof(WNDCLASSEX);
-  wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = WindowProc;
-  wc.hInstance = GetModuleHandleA(nullptr);
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
-  wc.lpszClassName = "oasisWindow";
-
-  // register the window class
-  RegisterClassEx(&wc);
-
-
-
-  //g_hInst = hInstance;
-  hWnd = CreateWindowEx(NULL,
-                        "oasisWindow",    // name of the window class
-                        windowName.c_str(),   // title of the window
-                        WS_OVERLAPPEDWINDOW,    // window style
-                        300,    // x-position of the window
-                        200,    // y-position of the window
-                        windowWidth,    // width of the window
-                        windowHeight,    // height of the window
-                        NULL,    // we have no parent window, NULL
-                        NULL,    // we aren't using menus, NULL
-                        GetModuleHandleA(nullptr),    // application handle
-                        NULL);    // used with multiple windows, NULL
-
-                                  // display the window on the screen
+  
 
   HRESULT hr = S_OK;
 
@@ -154,11 +157,11 @@ DX11GraphicAPI::initialize()
   vp.TopLeftY = 0;
   context->RSSetViewports( 1, &vp );
 
-  ShowWindow(hWnd, SW_SHOWDEFAULT);
-
   vertexShader = newSPtr<DX11VertexShader>();
 
   pixelShader = newSPtr<DX11PixelShader>();
+
+  context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
   return GraphicAPI::initialize();
 }
@@ -180,14 +183,15 @@ DX11GraphicAPI::events()
 SPtr<Buffer> DX11GraphicAPI::createBuffer()
 {
   return newSPtr<DX11Buffer>();
-}
-
+}
 void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
   context->ClearRenderTargetView( renderTargetView, &color.x );
 }
+
 void DX11GraphicAPI::show()
 {
+  context->Draw( 3, 0 );
   swapChain->Present( 0, 0 );
 }
 }

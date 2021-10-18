@@ -1,6 +1,8 @@
 #include "oaDX11Buffer.h"
 #include "oaDX11GraphicAPI.h"
-
+#include "oaMesh.h"
+#include <Windows.h>
+#include<d3d11.h>
 
 void oaEngineSDK::DX11Buffer::init(void* data, uint32 size)
 {
@@ -13,12 +15,12 @@ void oaEngineSDK::DX11Buffer::init(void* data, uint32 size)
   D3D11_SUBRESOURCE_DATA InitData;
   ZeroMemory( &InitData, sizeof(InitData) );
   InitData.pSysMem = data;
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   device->CreateBuffer( &bd, &InitData, &buffer );
   
 
   // Set vertex buffer
-  UINT stride = size;
+  UINT stride = sizeof(Vertex);
   UINT offset = 0;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   context->IASetVertexBuffers( 0, 1, &buffer, &stride, &offset );
