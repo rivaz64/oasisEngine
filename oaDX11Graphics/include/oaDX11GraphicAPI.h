@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesDX11.h"
 #include "oaGraphicAPI.h"
+#include "oaVector4f.h"
 #include <windows.h>
 #include <d3d11.h>
 //#include <d3dx11.h>
@@ -28,6 +29,15 @@ class DX11GraphicAPI :
   void
   events() override;
 
+  SPtr<Buffer>
+  createBuffer() override;
+
+  void
+  setBackgroundColor(const Vector4f& color) override;
+
+  void
+  show() override;
+
  protected:
 
   DX11GraphicAPI() = default;
@@ -39,6 +49,7 @@ class DX11GraphicAPI :
   ID3D11DeviceContext*    context = nullptr;
   IDXGISwapChain*         swapChain = nullptr;
   ID3D11RenderTargetView* renderTargetView = nullptr;
+
   MSG msg = MSG();
 
   friend class GraphicAPI;

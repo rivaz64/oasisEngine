@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
+#include "oaVector4f.h"
 
 
 namespace oaEngineSDK{
@@ -45,11 +46,35 @@ class OA_CORE_EXPORT BaseApp :
   virtual void
   mainLoop();
 
+  /**
+   * @brief render everything to the screen and shows it
+  */
+  virtual void
+  render();
+
+  
+
  protected:
   
   BaseApp() = default;
 
  protected:
+
+  /**
+   * @brief the frame rate
+  */
+  float framesPerSecond = 60;
+
+  /**
+   * @brief the time a frame is going to be on screen
+  */
+  float secondPerFrame = 1.f/framesPerSecond;
+
+  /**
+   * @brief the time that has pass since the last update
+  */
+  float deltaTime = 0;
+
 
   friend class Module<BaseApp>;
 };

@@ -30,6 +30,9 @@
     <ClInclude Include="include\oaOGL_VertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="oaOGL_Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaOGL_PixelShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaOGL_Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

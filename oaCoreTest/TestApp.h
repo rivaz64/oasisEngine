@@ -10,10 +10,10 @@ class TestApp :
 public:
 
   void
-    run() override;
+  run() override;
 
   void 
-    postInit() override;
+  postInit() override;
 };
 
 }

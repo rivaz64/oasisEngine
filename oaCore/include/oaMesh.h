@@ -51,7 +51,13 @@ class OA_CORE_EXPORT Mesh
   * @brief sends all the data from the cpu tode gpu
   */
   virtual void
-    create();
+  create();
+
+  /**
+   * @brief draws the mesh to screen
+  */
+  virtual void
+  render();
 
  public:
 

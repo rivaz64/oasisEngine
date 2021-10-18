@@ -8,6 +8,8 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
+#include "oaBuffer.h"
+#include "oaVector4f.h"
 
 namespace oaEngineSDK{
 
@@ -47,6 +49,26 @@ public:
   */
   bool
   compileShaders(String folder);
+
+  /**
+   * @brief creates a buffer
+   * @return 
+  */
+  virtual SPtr<Buffer> 
+  createBuffer();
+
+  /**
+  * @brief sets the color of the background
+  * @param color 
+  */
+  virtual void
+  setBackgroundColor(const Vector4f& color);
+
+  /**
+   * @brief shows the things that where rendered
+  */
+  virtual void
+  show();
 
  protected:
 

@@ -56,8 +56,19 @@ OGL_GraphicsAPI::isRunning()
 void 
 OGL_GraphicsAPI::events()
 {
-  glfwSwapBuffers(window);
   glfwPollEvents();
+}
+
+void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
+{
+
+  glClearColor(color.x, color.y, color.z, color.w);
+}
+
+void OGL_GraphicsAPI::show()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+  glfwSwapBuffers(window);
 }
 
 OGL_GraphicsAPI::~OGL_GraphicsAPI()

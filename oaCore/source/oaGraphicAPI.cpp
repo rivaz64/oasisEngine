@@ -44,6 +44,21 @@ GraphicAPI::compileShaders(String folder)
   return true;
 }
 
+SPtr<Buffer> GraphicAPI::createBuffer()
+{
+  return newSPtr<Buffer>();
+}
+
+void GraphicAPI::setBackgroundColor(const Vector4f& color)
+{
+
+}
+
+void GraphicAPI::show()
+{
+
+}
+
 }
 
 

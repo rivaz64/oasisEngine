@@ -149,9 +149,11 @@
     <ClInclude Include="include\oaOGL_Shader.h" />
     <ClInclude Include="include\oaOGL_VertexShader.h" />
     <ClInclude Include="include\oaPrerequisitesOGL.h" />
+    <ClInclude Include="oaOGL_Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="oaOGL_Buffer.cpp" />
     <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />
     <ClCompile Include="source\oaOGL_PixelShader.cpp" />
     <ClCompile Include="source\oaOGL_Shader.cpp" />

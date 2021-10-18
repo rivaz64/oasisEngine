@@ -27,6 +27,11 @@ public:
   void
   events() override;
 
+  void
+  setBackgroundColor(const Vector4f& color) override;
+
+  void
+  show() override;
 
 protected:
 

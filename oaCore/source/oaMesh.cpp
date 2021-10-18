@@ -1,8 +1,13 @@
 #include "oaMesh.h"
-
+#include "oaGraphicAPI.h"
 void oaEngineSDK::Mesh::create()
 {
-  //indexB->updateResourse(index.data(),sizeof(uint32)*index.size());
-  vertexB->updateResourse(vertices.data(),sizeof(Vertex)*vertices.size());
+  vertexB = GraphicAPI::instancePtr()->createBuffer();
+  vertexB->init(vertices.data(),sizeof(Vertex)*vertices.size());
   vertices.clear();
+}
+
+void oaEngineSDK::Mesh::render()
+{
+
 }

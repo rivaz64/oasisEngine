@@ -48,7 +48,7 @@ class OA_CORE_EXPORT Buffer
    * @param size the size of the new data
   */
   virtual void
-  updateResourse(void* data,uint32 size) {};
+  init(void* data,uint32 size) {};
  
  public:
 

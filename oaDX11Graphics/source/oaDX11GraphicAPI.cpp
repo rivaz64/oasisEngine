@@ -1,6 +1,7 @@
 #include "oaDX11GraphicAPI.h"
 #include "oaDX11VertexShader.h"
 #include "oaDX11PixelShader.h"
+#include "oaDX11Buffer.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -176,4 +177,17 @@ DX11GraphicAPI::events()
   DispatchMessage(&msg);
 }
 
+SPtr<Buffer> DX11GraphicAPI::createBuffer()
+{
+  return newSPtr<DX11Buffer>();
+}
+
+void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
+{
+  context->ClearRenderTargetView( renderTargetView, &color.x );
+}
+void DX11GraphicAPI::show()
+{
+  swapChain->Present( 0, 0 );
+}
 }

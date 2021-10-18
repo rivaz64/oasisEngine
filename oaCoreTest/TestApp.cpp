@@ -1,19 +1,25 @@
 #include "TestApp.h"
 #include "oaResoureManager.h"
 #include <iostream>
+#include "oaVector3f.h"
+#include "oaGraphicAPI.h"
 
 namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
 void TestApp::postInit()
 {
+  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+
   std::cout<<"load triangle"<<std::endl;
+  ResoureManager::startUp();
+
   ResoureManager::instancePtr()->meshes.push_back(newSPtr<Mesh>());
 
   ResoureManager::instancePtr()->meshes[0]->vertices = 
@@ -24,7 +30,10 @@ void TestApp::postInit()
   };
 
   ResoureManager::instancePtr()->meshes[0]->create();
+
 }
+
+
 
 }
 

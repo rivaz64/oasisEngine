@@ -17,7 +17,7 @@ namespace oaEngineSDK {
  * @brief a singleton where all the resourses are going to be, every resourse
           is unique it would not load the same resourse 2 times
 */
-class OA_UTILITY_EXPORT ResoureManager :
+class OA_CORE_EXPORT ResoureManager :
   public Module<ResoureManager>
 {
  public:
@@ -25,7 +25,15 @@ class OA_UTILITY_EXPORT ResoureManager :
    * @brief all the loaded meshes
   */
   Vector<SPtr<Mesh>> meshes;
-  
+
+ protected:
+
+  ResoureManager() = default;
+
+ public:
+
+  friend class Module<ResoureManager>;
+
 };
 
 }
