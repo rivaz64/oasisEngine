@@ -2,6 +2,7 @@
 #include "oaOGL_VertexShader.h"
 #include "oaOGL_PixelShader.h"
 #include "oaOGL_Buffer.h"
+#include "oaOGL_Texture.h"
 #include "oaResoureManager.h"
 #include <iostream>
 
@@ -87,6 +88,11 @@ void OGL_GraphicsAPI::show()
 SPtr<Buffer> OGL_GraphicsAPI::createBuffer()
 {
   return newSPtr<OGL_Buffer>();
+}
+
+SPtr<Texture> OGL_GraphicsAPI::createTexture()
+{
+  return newSPtr<OGL_Texture>();
 }
 
 OGL_GraphicsAPI::~OGL_GraphicsAPI()

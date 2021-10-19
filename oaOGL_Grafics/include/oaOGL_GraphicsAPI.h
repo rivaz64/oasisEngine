@@ -36,6 +36,9 @@ public:
   SPtr<Buffer>
   createBuffer() override;
 
+  SPtr<Texture> 
+    createTexture() override;
+
 protected:
 
   OGL_GraphicsAPI() = default;

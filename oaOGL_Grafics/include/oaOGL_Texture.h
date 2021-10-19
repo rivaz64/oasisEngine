@@ -1,30 +1,23 @@
 /**
-* @file oaDX11Texture.h
+* @file oaOGL_Texture.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 10/14/2021
+* @date 10/13/2021
 */
 
 #pragma once
 #include "oaTexture.h"
-#include <d3d11.h>
-#include <d3dx11.h>
 
 namespace oaEngineSDK{
 
-class DX11Texture:
+class OGL_Texture :
   public Texture
 {
-
  public:
 
   bool
   loadFromFile(const String& file) override;
 
- private:
-
-  ID3D11ShaderResourceView* texture;
+  uint32 id;
 };
 
 }
-
-

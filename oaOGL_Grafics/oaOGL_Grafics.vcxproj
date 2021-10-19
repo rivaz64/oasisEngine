@@ -123,8 +123,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>oaCored.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>oaCored.lib;glfw3.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(DEVLIBS)freeimage</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,6 +148,7 @@
     <ClInclude Include="include\oaOGL_GraphicsAPI.h" />
     <ClInclude Include="include\oaOGL_PixelShader.h" />
     <ClInclude Include="include\oaOGL_Shader.h" />
+    <ClInclude Include="include\oaOGL_Texture.h" />
     <ClInclude Include="include\oaOGL_VertexShader.h" />
     <ClInclude Include="include\oaPrerequisitesOGL.h" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />
     <ClCompile Include="source\oaOGL_PixelShader.cpp" />
     <ClCompile Include="source\oaOGL_Shader.cpp" />
+    <ClCompile Include="source\oaOGL_Texture.cpp" />
     <ClCompile Include="source\oaOGL_VertexShader.cpp" />
     <ClCompile Include="source\oaSource.cpp" />
   </ItemGroup>
