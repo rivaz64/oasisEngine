@@ -49,6 +49,11 @@ SPtr<Buffer> GraphicAPI::createBuffer()
   return newSPtr<Buffer>();
 }
 
+SPtr<Texture> GraphicAPI::createTexture()
+{
+  return newSPtr<Texture>();
+}
+
 void GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
 

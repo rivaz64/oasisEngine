@@ -32,6 +32,9 @@ class DX11GraphicAPI :
   SPtr<Buffer>
   createBuffer() override;
 
+  SPtr<Texture> 
+  createTexture() override;
+
   void
   setBackgroundColor(const Vector4f& color) override;
 

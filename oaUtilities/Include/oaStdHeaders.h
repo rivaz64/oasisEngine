@@ -6,15 +6,16 @@
 
 #pragma once
 
-#include<vector>
-#include<list>
+#include <vector>
+#include <list>
 #include <stack>
 #include <queue>
 #include <deque>
 #include <string>
 #include <memory>
-#include<algorithm>
-#include<cmath>
+#include <algorithm>
+#include <cmath>
+#include <map>
 
 namespace oaEngineSDK {
 /**
@@ -97,5 +98,13 @@ template <class T>
 FORCEINLINE void swap(T& a, T& b) {
   std::swap(a, b);
 }
+
+/**
+ * @brief wraper for the std::map
+ * @tparam T1 
+ * @tparam T2 
+*/
+template <class T1, class T2>
+using Map = std::map<T1,T2>;
 
 }

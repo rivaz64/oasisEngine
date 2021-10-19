@@ -13,15 +13,25 @@ namespace oaEngineSDK{
 /**
  * @brief class for all kinds of textures
 */
-class OA_UTILITY_EXPORT Texture
+class OA_CORE_EXPORT Texture
 {
+ public:
 
   /**
-   * @brief the raw data of the texture
+   * @brief default constructor for the texture
   */
-  SPtr<void> pixels;
+  Texture() = default;
 
+ protected:
+  /**
+   * @brief loads the texture from a file
+   * @param file 
+   * @return 
+  */
+  virtual bool
+  loadFromFile(const String& file);
 
+  friend class ResoureManager;
 
 };
 

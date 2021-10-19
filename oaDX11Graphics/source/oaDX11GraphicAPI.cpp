@@ -2,6 +2,7 @@
 #include "oaDX11VertexShader.h"
 #include "oaDX11PixelShader.h"
 #include "oaDX11Buffer.h"
+#include "oaDX11Texture.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -183,7 +184,13 @@ DX11GraphicAPI::events()
 SPtr<Buffer> DX11GraphicAPI::createBuffer()
 {
   return newSPtr<DX11Buffer>();
-}
+}
+
+SPtr<Texture> DX11GraphicAPI::createTexture()
+{
+  return newSPtr<DX11Texture>();
+}
+
 void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
   context->ClearRenderTargetView( renderTargetView, &color.x );

@@ -9,7 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaMesh.h"
-
+#include "oaTexture.h"
 
 namespace oaEngineSDK {
 
@@ -20,15 +20,28 @@ namespace oaEngineSDK {
 class OA_CORE_EXPORT ResoureManager :
   public Module<ResoureManager>
 {
- public:
-  /**
-   * @brief all the loaded meshes
-  */
-  Vector<SPtr<Mesh>> meshes;
 
  protected:
 
   ResoureManager() = default;
+
+ public:
+
+  /**
+   * @brief loads a texture from a file
+   * @return 
+  */
+  bool
+  loadTexture(const String& file);
+
+ public:
+
+  /**
+  * @brief all the loaded meshes
+  */
+  Vector<SPtr<Mesh>> meshes;
+
+  Map<String,SPtr<Texture>> textures;
 
  public:
 

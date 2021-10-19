@@ -24,6 +24,7 @@
     <ClInclude Include="include\oaDX11GraphicAPI.h" />
     <ClInclude Include="include\oaDX11PixelShader.h" />
     <ClInclude Include="include\oaDX11Shader.h" />
+    <ClInclude Include="include\oaDX11Texture.h" />
     <ClInclude Include="include\oaDX11VertexShader.h" />
     <ClInclude Include="include\oaPrerequisitesDX11.h" />
   </ItemGroup>
@@ -33,6 +34,7 @@
     <ClCompile Include="source\oaDX11Buffer.cpp" />
     <ClCompile Include="source\oaDX11GraphicAPI.cpp" />
     <ClCompile Include="source\oaDX11Shader.cpp" />
+    <ClCompile Include="source\oaDX11Texture.cpp" />
     <ClCompile Include="source\oaDX11VertexShader.cpp" />
     <ClCompile Include="source\Source.cpp" />
   </ItemGroup>

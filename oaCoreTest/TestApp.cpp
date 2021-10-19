@@ -8,8 +8,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -30,6 +30,8 @@ void TestApp::postInit()
   };
 
   ResoureManager::instancePtr()->meshes[0]->create();
+
+  ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
 }
 

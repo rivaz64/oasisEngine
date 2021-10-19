@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaBuffer.h"
+#include "oaTexture.h"
 #include "oaVector4f.h"
 
 namespace oaEngineSDK{
@@ -56,6 +57,13 @@ public:
   */
   virtual SPtr<Buffer> 
   createBuffer();
+
+  /**
+  * @brief creates a texture
+  * @return 
+  */
+  virtual SPtr<Texture> 
+  createTexture();
 
   /**
   * @brief sets the color of the background
