@@ -20,6 +20,9 @@ bool oaEngineSDK::DX11Shader::compileFromFile(String file)
 
   if( FAILED(hr) )
   {
+
+    std::cout<<(char*)errorBlob->GetBufferPointer()<<std::endl;
+
     if( errorBlob != NULL ){
       std::cout<<"shader failed to compile"<<std::endl;
     }

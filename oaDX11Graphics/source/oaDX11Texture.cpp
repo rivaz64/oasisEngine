@@ -18,5 +18,8 @@ bool oaEngineSDK::DX11Texture::loadFromFile(const String& file)
   if(FAILED(hr))
     return false;
 
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  context->PSSetShaderResources( 0, 1, &texture );
+
   return true;
 }

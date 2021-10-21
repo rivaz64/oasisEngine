@@ -8,8 +8,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -24,9 +24,9 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes[0]->vertices = 
   {
-    Vertex{Vector3f( 0.0f, 0.5f, 0.5f )},
-    Vertex{Vector3f( 0.5f, -0.5f, 0.5f )},
-    Vertex{Vector3f( -0.5f, -0.5f, 0.5f )},
+    Vertex{Vector3f( 0.0f, 0.5f, 0.5f ),Vector2f(.5f,1)},
+    Vertex{Vector3f( 0.5f, -0.5f, 0.5f ),Vector2f(1,0)},
+    Vertex{Vector3f( -0.5f, -0.5f, 0.5f ),Vector2f(0,0)},
   };
 
   ResoureManager::instancePtr()->meshes[0]->create();

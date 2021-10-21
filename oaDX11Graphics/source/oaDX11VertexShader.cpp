@@ -12,14 +12,16 @@ DX11VertexShader::compileFromFile(String file)
 {
   version = "vs_4_0";
 
-  DX11Shader::compileFromFile(file + "/vertexShader.hlsl");
+  if(!DX11Shader::compileFromFile(file + "/vertexShader.hlsl")){
+    return false;
+  }
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   device->CreateVertexShader(blob->GetBufferPointer(), 
                                blob->GetBufferSize(), 
                                nullptr, 
                                &shader);
-
+  
   createInputLayout(blob);
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
