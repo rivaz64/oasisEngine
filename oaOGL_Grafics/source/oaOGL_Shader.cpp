@@ -44,6 +44,4 @@ OGL_Shader::compileFromFile(String file)
   return true;
 }
 
-
-
 }
