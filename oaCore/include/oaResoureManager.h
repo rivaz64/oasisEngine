@@ -10,6 +10,7 @@
 #include "oaModule.h"
 #include "oaMesh.h"
 #include "oaTexture.h"
+#include "oaModel.h"
 
 namespace oaEngineSDK {
 
@@ -39,9 +40,17 @@ class OA_CORE_EXPORT ResoureManager :
   /**
   * @brief all the loaded meshes
   */
-  Vector<SPtr<Mesh>> meshes;
+   Map<String,SPtr<Mesh>> meshes;
 
+  /**
+   * @brief all the loaded textures
+  */
   Map<String,SPtr<Texture>> textures;
+
+  /**
+  * @brief all the loaded models
+  */
+  Map<String,SPtr<Model>> models;
 
  public:
 

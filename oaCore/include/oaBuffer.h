@@ -19,7 +19,7 @@ class OA_CORE_EXPORT Buffer
   */
   Buffer() = default;
 
-  ~Buffer() = default;
+  virtual ~Buffer() = default;
 
   /**
   * @brief gets where the data of the buffer is

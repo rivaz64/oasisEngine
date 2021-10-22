@@ -14,6 +14,8 @@ class OGL_Texture :
 {
  public:
 
+  ~OGL_Texture();
+
   bool
   loadFromFile(const String& file) override;
 

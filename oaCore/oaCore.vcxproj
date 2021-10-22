@@ -171,6 +171,7 @@
     <ClInclude Include="include\oaRenderTarget.h" />
     <ClInclude Include="include\oaResoureManager.h" />
     <ClInclude Include="include\oaShader.h" />
+    <ClInclude Include="include\oaTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />

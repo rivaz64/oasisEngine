@@ -18,6 +18,9 @@ class OA_OGL_EXPORT OGL_GraphicsAPI :
 {
 public:
 
+  void
+  onShutDown() override;
+
   bool
   initialize() override;
 

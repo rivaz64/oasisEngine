@@ -17,6 +17,8 @@ class DX11PixelShader :
 {
  public:
 
+  ~DX11PixelShader();
+
   bool 
   compileFromFile(String file);
 

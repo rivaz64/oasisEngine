@@ -8,7 +8,12 @@
 
 namespace oaEngineSDK{
 
-bool 
+OGL_Shader::~OGL_Shader()
+{
+  glDeleteShader(id);
+}
+
+bool
 OGL_Shader::compileFromFile(String file)
 {
   std::fstream f;

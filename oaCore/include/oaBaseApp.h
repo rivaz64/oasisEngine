@@ -19,7 +19,16 @@ namespace oaEngineSDK{
 class OA_CORE_EXPORT BaseApp :
   public Module<BaseApp>
 {
+ protected:
+
+  BaseApp() = default;
+
+  ~BaseApp() = default;
+
  public:
+
+   void
+   onShutDown() override;
 
   /**
    * @brief runs the engine
@@ -51,12 +60,6 @@ class OA_CORE_EXPORT BaseApp :
   */
   virtual void
   render();
-
-  
-
- protected:
-  
-  BaseApp() = default;
 
  protected:
 

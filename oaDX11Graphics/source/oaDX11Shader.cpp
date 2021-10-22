@@ -3,7 +3,10 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <iostream>
-bool oaEngineSDK::DX11Shader::compileFromFile(String file)
+
+namespace oaEngineSDK{
+
+bool DX11Shader::compileFromFile(String file)
 {
   HRESULT hr = S_OK;
 
@@ -41,4 +44,7 @@ bool oaEngineSDK::DX11Shader::compileFromFile(String file)
   if( errorBlob ){
     errorBlob->Release();
   }
+}
+
+
 }

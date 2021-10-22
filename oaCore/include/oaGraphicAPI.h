@@ -20,9 +20,14 @@ namespace oaEngineSDK{
 class OA_CORE_EXPORT GraphicAPI :
   public Module<GraphicAPI>
 {
-public:
+ protected:
 
-  
+  GraphicAPI() = default;
+
+  ~GraphicAPI() = default;
+
+ public:
+
   /**
    * @brief initializes everything needed for the graphics
    * @return if the initialization was correct
@@ -79,8 +84,6 @@ public:
   show();
 
  protected:
-
-  GraphicAPI() = default;
 
   /**
    * @brief the width of the window at the begining

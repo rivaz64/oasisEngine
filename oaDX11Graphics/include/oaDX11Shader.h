@@ -17,6 +17,9 @@ class DX11Shader :
 {
  public:
 
+  virtual 
+  ~DX11Shader()=default;
+
   virtual bool 
   compileFromFile(String file);
 

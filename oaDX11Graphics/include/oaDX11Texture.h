@@ -17,6 +17,8 @@ class DX11Texture:
 
  public:
 
+  ~DX11Texture();
+
   bool
   loadFromFile(const String& file) override;
 

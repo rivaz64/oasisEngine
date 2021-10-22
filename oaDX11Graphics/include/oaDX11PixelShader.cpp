@@ -4,7 +4,14 @@
 #include <d3dcompiler.h>
 #include <iostream>
 
-bool oaEngineSDK::DX11PixelShader::compileFromFile(String file)
+namespace oaEngineSDK{
+
+DX11PixelShader::~DX11PixelShader()
+{
+  if( shader ) shader->Release();
+}
+
+bool DX11PixelShader::compileFromFile(String file)
 {
   version = "ps_4_0";
 
@@ -14,12 +21,15 @@ bool oaEngineSDK::DX11PixelShader::compileFromFile(String file)
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     device->CreatePixelShader(blob->GetBufferPointer(), 
-                               blob->GetBufferSize(), 
-                               nullptr, 
-                               &shader);
+                              blob->GetBufferSize(), 
+                              nullptr, 
+                              &shader);
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->PSSetShader( shader, NULL, 0 );
+    context->PSSetShader( shader, NULL, 0 );
 
   return true;
+}
+
+
 }

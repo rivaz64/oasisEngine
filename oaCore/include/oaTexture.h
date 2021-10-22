@@ -22,6 +22,9 @@ class OA_CORE_EXPORT Texture
   */
   Texture() = default;
 
+  virtual
+  ~Texture() = default;
+
  protected:
   /**
    * @brief loads the texture from a file

@@ -32,7 +32,17 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   return 0;
 }
 
-bool 
+void DX11GraphicAPI::onShutDown()
+{
+  if( context ) context->ClearState();
+
+  if( renderTargetView ) renderTargetView->Release();
+  if( swapChain ) swapChain->Release();
+  if( context ) context->Release();
+  if( device ) device->Release();
+}
+
+bool
 DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;

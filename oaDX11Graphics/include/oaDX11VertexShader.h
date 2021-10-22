@@ -18,6 +18,8 @@ public DX11Shader
 {
  public:
 
+  ~DX11VertexShader();
+
   bool 
   compileFromFile(String file);
 

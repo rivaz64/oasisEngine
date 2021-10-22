@@ -16,6 +16,9 @@ class DX11Buffer :
   public Buffer
 {
  public:
+
+   ~DX11Buffer();
+
   void
   init(void* data,uint32 size) override;
 

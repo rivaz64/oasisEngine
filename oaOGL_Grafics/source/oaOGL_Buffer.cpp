@@ -3,7 +3,15 @@
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
 
-void oaEngineSDK::OGL_Buffer::init(void* data, uint32 size)
+namespace oaEngineSDK{
+
+OGL_Buffer::~OGL_Buffer()
+{
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &VBO);
+}
+
+void OGL_Buffer::init(void* data, uint32 size)
 {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -28,3 +36,6 @@ void oaEngineSDK::OGL_Buffer::init(void* data, uint32 size)
   //glBindVertexArray(0); 
 
 }
+
+}
+

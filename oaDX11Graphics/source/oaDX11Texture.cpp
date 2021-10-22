@@ -1,8 +1,14 @@
 #include "oaDX11Texture.h"
 #include "oaDX11GraphicAPI.h"
 
+namespace oaEngineSDK{
 
-bool oaEngineSDK::DX11Texture::loadFromFile(const String& file)
+DX11Texture::~DX11Texture()
+{
+  if(texture) texture->Release();
+}
+
+bool DX11Texture::loadFromFile(const String& file)
 {
   HRESULT hr;
 
@@ -19,7 +25,11 @@ bool oaEngineSDK::DX11Texture::loadFromFile(const String& file)
     return false;
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->PSSetShaderResources( 0, 1, &texture );
+    context->PSSetShaderResources( 0, 1, &texture );
 
   return true;
 }
+
+
+}
+

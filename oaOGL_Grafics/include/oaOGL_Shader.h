@@ -17,6 +17,8 @@ class OGL_Shader:
 {
  public:
 
+  ~OGL_Shader();
+
   virtual bool 
   compileFromFile(String file);
 

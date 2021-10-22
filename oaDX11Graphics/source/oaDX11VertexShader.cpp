@@ -6,7 +6,11 @@
 #include<Windows.h>
 
 namespace oaEngineSDK{
-
+DX11VertexShader::~DX11VertexShader()
+{
+  if( shader ) shader->Release();
+  if( inputLayout ) inputLayout->Release();
+}
 bool
 DX11VertexShader::compileFromFile(String file)
 {

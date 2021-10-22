@@ -23,7 +23,7 @@ class OA_CORE_EXPORT Shader
    */
    Shader() = default;
 
-   ~Shader() = default;
+   virtual ~Shader() = default;
 
   /**
    * @brief compiles the sahder

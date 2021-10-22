@@ -7,8 +7,11 @@
 #include <iostream>
 
 namespace oaEngineSDK{
-
-bool 
+void OGL_GraphicsAPI::onShutDown()
+{
+  glfwTerminate();
+}
+bool
 OGL_GraphicsAPI::initialize()
 {
   std::cout<<"openGL graphic API"<<std::endl;
@@ -54,7 +57,7 @@ OGL_GraphicsAPI::initialize()
     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
   }
 
-  glUseProgram(shaderProgram);
+  glUseProgram(shaderProgram); 
   return true;
 }
 
@@ -97,7 +100,7 @@ SPtr<Texture> OGL_GraphicsAPI::createTexture()
 
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
-  
+  glDeleteProgram(shaderProgram);
 }
 
 }

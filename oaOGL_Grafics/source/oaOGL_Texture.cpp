@@ -2,13 +2,20 @@
 #include <freeimage\FreeImage.h>
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
-bool oaEngineSDK::OGL_Texture::loadFromFile(const String& file)
+
+namespace oaEngineSDK{
+
+OGL_Texture::~OGL_Texture()
+{
+  glDeleteTextures(1,&id);
+}
+bool OGL_Texture::loadFromFile(const String& file)
 {
   FIBITMAP* dib(0);
   uint32 width(0), height(0);
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
   BYTE* bits(0);
-  
+
   fif = FreeImage_GetFileType(file.c_str(), 0);
 
   if (fif == FIF_UNKNOWN)
@@ -43,5 +50,8 @@ bool oaEngineSDK::OGL_Texture::loadFromFile(const String& file)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    return true;
+  return true;
+}
+
+
 }

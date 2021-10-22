@@ -9,16 +9,20 @@ namespace oaEngineSDK{
 
 using foo = const void* (*)();
 
-void 
+void BaseApp::onShutDown()
+{
+  ResoureManager::shutDown();
+}
+
+void
 BaseApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
   if(GraphicAPI::instancePtr()->initialize()){
     postInit();
     mainLoop();
   }
-  
-  GraphicAPI::shutDown();
+
+  GraphicAPI::instancePtr()->shutDown();
 }
 
 void BaseApp::postInit()
@@ -51,10 +55,7 @@ BaseApp::mainLoop()
 {
   while(GraphicAPI::instancePtr()->isRunning()){
 
-    //deltaTime += 
-
     GraphicAPI::instancePtr()->events();
-
 
     render();
   }

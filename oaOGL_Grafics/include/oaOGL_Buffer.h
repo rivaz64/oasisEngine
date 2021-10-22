@@ -14,8 +14,10 @@ class OGL_Buffer :
 {
 
  public:
+   ~OGL_Buffer();
+
   void
-    init(void* data,uint32 size) override;
+  init(void* data,uint32 size) override;
 
  public:
 
