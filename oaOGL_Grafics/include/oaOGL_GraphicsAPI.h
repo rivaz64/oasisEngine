@@ -40,7 +40,10 @@ public:
   createBuffer() override;
 
   SPtr<Texture> 
-    createTexture() override;
+  createTexture() override;
+
+  void
+  setVertexBuffer(const SPtr<Buffer>& buffer) override;
 
 protected:
 

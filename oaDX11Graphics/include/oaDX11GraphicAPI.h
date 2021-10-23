@@ -48,6 +48,9 @@ protected:
   void
   show() override;
 
+  void
+  setVertexBuffer(const SPtr<Buffer>& buffer) override;
+
  protected:
 
   DX11GraphicAPI() = default;

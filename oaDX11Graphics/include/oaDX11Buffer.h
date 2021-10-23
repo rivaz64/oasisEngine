@@ -12,6 +12,11 @@
 #include <Windows.h>
 namespace oaEngineSDK{
 
+enum class DX11BUFFER_FLAGS{
+  VERTEX = D3D11_BIND_VERTEX_BUFFER,
+  CONSTANT = D3D11_BIND_CONSTANT_BUFFER
+};
+
 class DX11Buffer :
   public Buffer
 {
@@ -20,9 +25,9 @@ class DX11Buffer :
    ~DX11Buffer();
 
   void
-  init(void* data,uint32 size) override;
+  init(void* data,uint32 size,BUFFER_FLAGS flags) override;
 
- private:
+ public:
   ID3D11Buffer* buffer = nullptr;
 };
 

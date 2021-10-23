@@ -167,6 +167,7 @@
     <ClInclude Include="include\oaGraphicsModule.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
+    <ClInclude Include="include\oaObject.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaRenderTarget.h" />
     <ClInclude Include="include\oaResoureManager.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="source\oaGraphicsModule.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
+    <ClCompile Include="source\oaObject.cpp" />
     <ClCompile Include="source\oaRenderTarget.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
   </ItemGroup>

@@ -31,10 +31,11 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();
 
+  GraphicAPI::instancePtr()->setVertexBuffer(
+    ResoureManager::instancePtr()->meshes["triangle"]->vertexB
+  );
+
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
-
-  //ResoureManager::instancePtr()->
-
 }
 
 void TestApp::render()

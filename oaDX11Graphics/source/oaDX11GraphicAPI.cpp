@@ -3,6 +3,7 @@
 #include "oaDX11PixelShader.h"
 #include "oaDX11Buffer.h"
 #include "oaDX11Texture.h"
+#include "oaMesh.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -211,4 +212,18 @@ void DX11GraphicAPI::show()
   context->Draw( 3, 0 );
   swapChain->Present( 0, 0 );
 }
+
+void DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
+{
+  UINT stride = sizeof(Vertex);
+  UINT offset = 0;
+  //SPtr<DX11Buffer> nen = 
+  context->IASetVertexBuffers( 
+    0, 
+    1, 
+    &cast<DX11Buffer>(buffer)->buffer,
+    &stride, 
+    &offset );
+}
+
 }

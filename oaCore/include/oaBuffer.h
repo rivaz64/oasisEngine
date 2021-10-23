@@ -10,6 +10,11 @@
 
 namespace oaEngineSDK{
 
+enum class BUFFER_FLAGS{
+  VERTEX,
+  CONSTANT
+};
+
 class OA_CORE_EXPORT Buffer
 {
  public:
@@ -22,45 +27,14 @@ class OA_CORE_EXPORT Buffer
   virtual ~Buffer() = default;
 
   /**
-  * @brief gets where the data of the buffer is
-  * @return 
-  */
-  virtual void* 
-    getPointer() {return nullptr;};
-
-
-  /**
-  * @brief gets the size of the data in bytes
-  * @return 
-  */
-  virtual uint32 
-    getSize() {return 0;};
-
-  /**
-   * @brief prepares the internal things to be send to the gpu
-  */
-  virtual void
-  init() {};
-
-  /**
    * @brief sets the data of this buffer to an updated one
    * @param data the new data 
    * @param size the size of the new data
+   * @param flags the type of buffer 
   */
   virtual void
-  init(void* data,uint32 size) {};
- 
- public:
+  init(void* data,uint32 size,BUFFER_FLAGS flags) {};
 
-  /**
-   * @brief where the data is
-  */
-  void* pointer;
-
-  /**
-   * @brief the size of the data in bytes
-  */
-  uint32 size;
 };
 
 }

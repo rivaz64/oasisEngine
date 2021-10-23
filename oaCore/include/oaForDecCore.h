@@ -3,4 +3,5 @@
 
 namespace oaEngineSDK{
 class Shader;
+class Buffer;
 }

@@ -107,4 +107,9 @@ FORCEINLINE void swap(T& a, T& b) {
 template <class T1, class T2>
 using Map = std::map<T1,T2>;
 
+template<class T,class U>
+FORCEINLINE SPtr<T> cast(const SPtr<U>& pointer){
+  return std::dynamic_pointer_cast<T>(pointer);
+}
+
 }

@@ -83,6 +83,13 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   show();
 
+  /**
+   * @brief sets the vertex bubbers that are going to be drawn
+   * @param buffer 
+  */
+  virtual void
+  setVertexBuffer(const SPtr<Buffer>& buffer);
+
  protected:
 
   /**
