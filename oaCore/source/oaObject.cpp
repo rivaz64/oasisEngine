@@ -15,9 +15,8 @@ void
 Object::update()
 {
   auto transform = Matrix4f::translateMatrix(location);
+  transform.transpose();
   locationB->update(&transform,sizeof(Matrix4f));
-
-  
 }
 
 }

@@ -1,5 +1,6 @@
 #include "oaOGL_Buffer.h"
 #include "oaMesh.h"
+#include "oaOGL_GraphicsAPI.h"
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
 
@@ -38,6 +39,10 @@ void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 
 void OGL_Buffer::update(void* data, uint32 size)
 {
+  unsigned int transformLoc = glGetUniformLocation(
+    reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, 
+    "location");
+  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
 }
 
 }

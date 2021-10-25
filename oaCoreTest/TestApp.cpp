@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -67,8 +67,9 @@ void TestApp::update()
 
 void oaEngineSDK::TestApp::draw()
 {
-  GraphicAPI::instancePtr()->newImGuiFrame();
   ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
+  GraphicAPI::instancePtr()->newImGuiFrame();
+  
 
   ImGui::Begin("test");
   ImGui::DragFloat3("location",&triangle->location.x);
