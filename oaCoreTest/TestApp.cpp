@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -75,6 +75,9 @@ void oaEngineSDK::TestApp::draw()
     ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
   GraphicAPI::instancePtr()->newImGuiFrame();
+  ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
+  ImGui::Begin("test");
+  ImGui::End();
 }
 
 }

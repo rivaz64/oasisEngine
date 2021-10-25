@@ -63,6 +63,9 @@ protected:
   void
   newImGuiFrame() override;
 
+  void*
+  getImGui() override;
+
  protected:
 
   DX11GraphicAPI() = default;

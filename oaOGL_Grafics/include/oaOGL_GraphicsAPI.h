@@ -57,6 +57,9 @@ public:
   void
   newImGuiFrame() override;
 
+  void*
+  getImGui() override;
+
 protected:
 
   OGL_GraphicsAPI() = default;

@@ -112,6 +112,8 @@ class OA_CORE_EXPORT GraphicAPI :
   newImGuiFrame(){}
   void
   ImGuiRender(){}
+  virtual void*
+  getImGui(){return nullptr;}
 
  protected:
 

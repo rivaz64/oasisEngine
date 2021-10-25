@@ -220,6 +220,8 @@ void DX11GraphicAPI::clear()
 void DX11GraphicAPI::show()
 {
   context->Draw( 3, 0 );
+  ImGui::Render();
+  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   swapChain->Present( 0, 0 );
 }
 
@@ -260,10 +262,12 @@ void DX11GraphicAPI::newImGuiFrame()
   ImGui_ImplDX11_NewFrame();
   ImGui_ImplWin32_NewFrame();
   ImGui::NewFrame();
-  ImGui::Begin("test");
-  ImGui::End();
-  ImGui::Render();
-  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+  
+}
+
+void* DX11GraphicAPI::getImGui()
+{
+  return ImGui::GetCurrentContext();
 }
 
 }

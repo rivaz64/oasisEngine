@@ -91,6 +91,8 @@ void OGL_GraphicsAPI::show()
 {
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
   glfwSwapBuffers(window);
 }
 
@@ -138,10 +140,13 @@ void OGL_GraphicsAPI::newImGuiFrame()
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
-  ImGui::Begin("test");
-  ImGui::End();
   ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  
+}
+
+void* OGL_GraphicsAPI::getImGui()
+{
+  return ImGui::GetCurrentContext();;
 }
 
 }
