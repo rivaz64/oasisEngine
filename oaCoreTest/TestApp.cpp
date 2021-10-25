@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -41,9 +41,7 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();
 
-  GraphicAPI::instancePtr()->setVertexBuffer(
-    ResoureManager::instancePtr()->meshes["triangle"]->vertexB
-  );
+  
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
@@ -70,6 +68,9 @@ void TestApp::update()
 void oaEngineSDK::TestApp::draw()
 {
   GraphicAPI::instancePtr()->newImGuiFrame();
+  GraphicAPI::instancePtr()->setVertexBuffer(
+    ResoureManager::instancePtr()->meshes["triangle"]->vertexB
+  );
 }
 
 }
