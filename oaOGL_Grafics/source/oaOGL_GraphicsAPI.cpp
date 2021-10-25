@@ -103,6 +103,11 @@ void OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
   glBindVertexArray(cast<OGL_Buffer>(buffer)->VAO);
 }
 
+void OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
+{
+  glBindTexture(GL_TEXTURE_2D, cast<OGL_Texture>(texture)->id);
+}
+
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glDeleteProgram(shaderProgram);

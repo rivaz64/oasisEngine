@@ -45,6 +45,9 @@ public:
   void
   setVertexBuffer(const SPtr<Buffer>& buffer) override;
 
+  void
+  setTexture(const SPtr<Texture>& texture) override;
+
 protected:
 
   OGL_GraphicsAPI() = default;

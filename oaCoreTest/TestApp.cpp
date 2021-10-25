@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
