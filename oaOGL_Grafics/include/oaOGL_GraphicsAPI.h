@@ -48,6 +48,12 @@ public:
   void
   setTexture(const SPtr<Texture>& texture) override;
 
+  void
+  initImGui() override;
+
+  void
+  newImGuiFrame() override;
+
 protected:
 
   OGL_GraphicsAPI() = default;
