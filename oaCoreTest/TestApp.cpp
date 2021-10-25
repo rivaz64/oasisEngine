@@ -13,8 +13,9 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  
+  loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -23,7 +24,7 @@ void TestApp::postInit()
   IMGUI_CHECKVERSION();
   
 
-  GraphicAPI::instancePtr()->initImGui();
+  //GraphicAPI::instancePtr()->initImGui();
   
 
   GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
@@ -41,9 +42,7 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();
 
-  GraphicAPI::instancePtr()->setVertexBuffer(
-    ResoureManager::instancePtr()->meshes["triangle"]->vertexB
-  );
+  
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
@@ -59,6 +58,7 @@ void TestApp::postInit()
   triangle->model = ResoureManager::instancePtr()->models["triangle"];
 
 
+
 }
 
 
@@ -69,7 +69,10 @@ void TestApp::update()
 
 void oaEngineSDK::TestApp::draw()
 {
-  GraphicAPI::instancePtr()->newImGuiFrame();
+ // GraphicAPI::instancePtr()->newImGuiFrame();
+  GraphicAPI::instancePtr()->setVertexBuffer(
+    ResoureManager::instancePtr()->meshes["triangle"]->vertexB
+  );
 }
 
 }

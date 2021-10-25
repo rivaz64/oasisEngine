@@ -34,7 +34,16 @@ public:
   setBackgroundColor(const Vector4f& color) override;
 
   void
+  clear() override;
+
+  void
   show() override;
+
+  void
+  initImGui() override;
+
+  void
+  newImGuiFrame() override;
 
   SPtr<Buffer>
   createBuffer() override;
