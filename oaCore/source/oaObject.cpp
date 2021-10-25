@@ -8,6 +8,7 @@ Object::Object()
 {
   location = {0.f,0.f,0.f};
   scale = {1.f,1.f,1.f};
+  rotation =  {0.f,0.f,0.f};
   transformB = GraphicAPI::instancePtr()->createBuffer();
   transformB->init(nullptr,sizeof(Matrix4f),BUFFER_FLAGS::CONSTANT);
 }
@@ -15,7 +16,8 @@ Object::Object()
 void 
 Object::update()
 {
-  auto transform = Matrix4f::translateMatrix(location)*Matrix4f::scaleMatrix(scale);
+  
+  auto transform = Matrix4f::translateMatrix(location)*Matrix4f::rotationMatrixZ(rotation.x)*Matrix4f::scaleMatrix(scale);
   //transform.transpose();
 
   transformB->update(&transform,sizeof(Matrix4f));

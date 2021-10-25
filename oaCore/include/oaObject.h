@@ -36,6 +36,11 @@ class OA_CORE_EXPORT Object
   */
   Vector3f scale;
 
+  /**
+   * @brief how the object is rotated
+  */
+  Vector3f rotation;
+
  protected:
 
   /**

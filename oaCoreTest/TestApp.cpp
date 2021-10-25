@@ -72,8 +72,9 @@ void oaEngineSDK::TestApp::draw()
   
 
   ImGui::Begin("test");
-  ImGui::DragFloat3("location",&triangle->location.x);
-  ImGui::DragFloat3("scale",&triangle->scale.x);
+  ImGui::DragFloat3("location",&triangle->location.x,.01f);
+  ImGui::DragFloat3("scale",&triangle->scale.x,.01f);
+  ImGui::DragFloat("rotation",&triangle->rotation.x,.01f);
   ImGui::End();
 
 
