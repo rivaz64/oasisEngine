@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;OA_OGL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS);$(SolutionDir)oaOGL_Grafics\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS);$(SolutionDir)oaOGL_Grafics\Include;$(DEVLIBS)imgui/backends;$(DEVLIBS)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +153,13 @@
     <ClInclude Include="include\oaPrerequisitesOGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\externals\imgui.cpp" />
+    <ClCompile Include="..\externals\imgui_demo.cpp" />
+    <ClCompile Include="..\externals\imgui_draw.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\externals\imgui_tables.cpp" />
+    <ClCompile Include="..\externals\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="source\oaOGL_Buffer.cpp" />
     <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />

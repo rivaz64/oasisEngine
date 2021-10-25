@@ -5,6 +5,8 @@
 #include "oaOGL_Texture.h"
 #include "oaResoureManager.h"
 #include <iostream>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 namespace oaEngineSDK{
 void OGL_GraphicsAPI::onShutDown()
