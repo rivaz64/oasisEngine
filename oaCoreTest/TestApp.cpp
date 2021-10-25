@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -73,6 +73,7 @@ void oaEngineSDK::TestApp::draw()
 
   ImGui::Begin("test");
   ImGui::DragFloat3("location",&triangle->location.x);
+  ImGui::DragFloat3("scale",&triangle->scale.x);
   ImGui::End();
 
 

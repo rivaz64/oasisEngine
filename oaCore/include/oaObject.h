@@ -31,12 +31,17 @@ class OA_CORE_EXPORT Object
   */
   Vector3f location;
 
+  /**
+   * @brief the scale compared with the original imported model
+  */
+  Vector3f scale;
+
  protected:
 
   /**
    * @brief for sending the location to the shader
   */
-  SPtr<Buffer> locationB;
+  SPtr<Buffer> transformB;
 };
 
 }
