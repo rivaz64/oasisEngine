@@ -26,9 +26,13 @@ void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
   glBindBuffer(FLAGS[flags], VBO);
   glBufferData(FLAGS[flags], size, data, GL_STATIC_DRAW);
 
-  // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-  // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-  //glBindVertexArray(0); 
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(0);
+
+  glBindVertexArray(0); 
 
 }
 
