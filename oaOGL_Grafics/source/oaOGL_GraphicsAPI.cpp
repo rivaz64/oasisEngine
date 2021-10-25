@@ -82,9 +82,13 @@ void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
 
 }
 
-void OGL_GraphicsAPI::show()
+void OGL_GraphicsAPI::clear()
 {
   glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void OGL_GraphicsAPI::show()
+{
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
   glfwSwapBuffers(window);
@@ -113,6 +117,31 @@ void OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glDeleteProgram(shaderProgram);
+}
+
+void OGL_GraphicsAPI::initImGui()
+{
+  ImGui::CreateContext();
+
+  //ImGui::SetCurrentContext(io)
+  ImGui::StyleColorsDark();
+  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplOpenGL3_Init("#version 130");
+
+  ImGuiIO& io = ImGui::GetIO();
+  //io.DisplaySize.x = windowWidth;
+  //io.DisplaySize.y = windowHeight;
+}
+
+void OGL_GraphicsAPI::newImGuiFrame()
+{
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+  ImGui::Begin("test");
+  ImGui::End();
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 }

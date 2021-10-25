@@ -67,14 +67,14 @@ void TestApp::update()
 
 void oaEngineSDK::TestApp::draw()
 {
-  GraphicAPI::instancePtr()->newImGuiFrame();
+  
   GraphicAPI::instancePtr()->setVertexBuffer(
     ResoureManager::instancePtr()->meshes["triangle"]->vertexB
   );
   GraphicAPI::instancePtr()->setTexture(
     ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
-
+  GraphicAPI::instancePtr()->newImGuiFrame();
 }
 
 }

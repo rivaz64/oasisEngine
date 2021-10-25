@@ -34,6 +34,9 @@ public:
   setBackgroundColor(const Vector4f& color) override;
 
   void
+  clear() override;
+
+  void
   show() override;
 
   SPtr<Buffer>
