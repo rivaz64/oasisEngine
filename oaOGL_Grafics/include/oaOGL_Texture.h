@@ -20,6 +20,7 @@ class OGL_Texture :
   loadFromFile(const String& file) override;
 
   uint32 id;
+
 };
 
 }

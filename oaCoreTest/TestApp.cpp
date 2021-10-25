@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -48,7 +48,7 @@ void TestApp::postInit()
   ResoureManager::instancePtr()->models.insert({"triangle",newSPtr<Model>()});
 
   ResoureManager::instancePtr()->models["triangle"]->textures.
-    push_back(ResoureManager::instancePtr()->textures["triangle"]);
+    push_back(ResoureManager::instancePtr()->textures["textures/wall.jpg"]);
   ResoureManager::instancePtr()->models["triangle"]->meshes.
     push_back(ResoureManager::instancePtr()->meshes["triangle"]);
 
@@ -71,6 +71,10 @@ void oaEngineSDK::TestApp::draw()
   GraphicAPI::instancePtr()->setVertexBuffer(
     ResoureManager::instancePtr()->meshes["triangle"]->vertexB
   );
+  GraphicAPI::instancePtr()->setTexture(
+    ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+  );
+
 }
 
 }

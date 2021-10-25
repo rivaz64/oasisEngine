@@ -25,6 +25,8 @@ class DX11Texture:
  private:
 
   ID3D11ShaderResourceView* texture;
+
+  friend class DX11GraphicAPI;
 };
 
 }

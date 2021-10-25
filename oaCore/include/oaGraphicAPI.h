@@ -98,6 +98,13 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   setVertexBuffer(const SPtr<Buffer>& buffer);
 
+  /**
+   * @brief set the texture the shader is going to use
+   * @param texture 
+  */
+  virtual void
+  setTexture(const SPtr<Texture>& texture){}
+
   virtual void
   initImGui(){}
 

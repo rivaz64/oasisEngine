@@ -236,6 +236,11 @@ void DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
     &offset );
 }
 
+void DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)
+{
+  context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->texture );
+}
+
 void DX11GraphicAPI::initImGui()
 {
   ImGui::CreateContext();
