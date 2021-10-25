@@ -32,5 +32,9 @@ void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 
 }
 
+void OGL_Buffer::update(void* data, uint32 size)
+{
+}
+
 }
 

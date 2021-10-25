@@ -46,16 +46,26 @@ protected:
   setBackgroundColor(const Vector4f& color) override;
 
   void
+  clear() override;
+
+  void
   show() override;
 
   void
   setVertexBuffer(const SPtr<Buffer>& buffer) override;
+
+  void
+  initImGui() override;
+
+  void
+  newImGuiFrame() override;
 
  protected:
 
   DX11GraphicAPI() = default;
 
  public:
+   HWND hWnd;
   D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
   D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
   ID3D11Device* device = nullptr;
@@ -64,6 +74,8 @@ protected:
   ID3D11RenderTargetView* renderTargetView = nullptr;
 
   MSG msg = MSG();
+
+  Vector4f backgroundColor;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

@@ -56,10 +56,24 @@ class OA_CORE_EXPORT BaseApp :
   mainLoop();
 
   /**
-   * @brief render everything to the screen and shows it
+  * @brief update all the things
   */
   virtual void
+  update();
+
+  /**
+  * @brief render the things to the screen
+  */
+  virtual void
+  draw(){}
+
+  /**
+   * @brief shows the screen
+  */
+  void
   render();
+
+  
 
  protected:
 
@@ -77,7 +91,6 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the time that has pass since the last update
   */
   float deltaTime = 0;
-
 
   friend class Module<BaseApp>;
 };

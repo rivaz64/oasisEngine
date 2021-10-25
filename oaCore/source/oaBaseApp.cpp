@@ -57,8 +57,14 @@ BaseApp::mainLoop()
 
     GraphicAPI::instancePtr()->events();
 
+    update();
+
     render();
   }
+}
+
+void BaseApp::update()
+{
 }
 
 void BaseApp::render()
@@ -66,6 +72,8 @@ void BaseApp::render()
   /*for(SPtr<Mesh>& m : ResoureManager::instancePtr()->meshes){
     m->render();
   }*/
+  GraphicAPI::instancePtr()->clear();
+  draw();
   GraphicAPI::instancePtr()->show();
 }
 

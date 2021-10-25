@@ -13,6 +13,7 @@ Map<BUFFER_FLAGS,uint32> FLAGS = {
 
 DX11Buffer::~DX11Buffer()
 {
+  if(buffer)
   buffer->Release();
 }
 
@@ -29,6 +30,13 @@ void DX11Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
   InitData.pSysMem = data;
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     device->CreateBuffer( &bd, &InitData, &buffer );
+}
+
+void DX11Buffer::update(void* data, uint32 size)
+{
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);
+
 }
 
 }

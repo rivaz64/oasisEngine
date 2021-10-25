@@ -19,6 +19,9 @@ class OGL_Buffer :
   void
   init(void* data,uint32 size,BUFFER_FLAGS flags) override;
 
+  void
+  update(void* data,uint32 size) override;
+
  public:
 
    unsigned int VBO, VAO;

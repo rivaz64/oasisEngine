@@ -78,6 +78,14 @@ class OA_CORE_EXPORT GraphicAPI :
   setBackgroundColor(const Vector4f& color);
 
   /**
+  * @brief clears the screen
+  */
+  virtual void
+  clear();
+
+
+
+  /**
    * @brief shows the things that where rendered
   */
   virtual void
@@ -89,6 +97,14 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setVertexBuffer(const SPtr<Buffer>& buffer);
+
+  virtual void
+  initImGui(){}
+
+  virtual void
+  newImGuiFrame(){}
+  void
+  ImGuiRender(){}
 
  protected:
 
@@ -118,8 +134,6 @@ class OA_CORE_EXPORT GraphicAPI :
   SPtr<Shader> pixelShader;
 
   friend class Module<GraphicAPI>;
-
-
 };
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "oaBaseApp.h"
+#include "oaObject.h"
 
 namespace oaEngineSDK{
 
@@ -16,7 +17,14 @@ public:
   postInit() override;
 
   void
-  render() override;
+  update() override;
+
+  void
+  draw() override;
+
+ private:
+
+   SPtr<Object> triangle;
 };
 
 }

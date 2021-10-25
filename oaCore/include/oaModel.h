@@ -16,7 +16,7 @@ namespace oaEngineSDK{
 /**
  * @brief class for 3D models
 */
-class OA_UTILITY_EXPORT Model
+class OA_CORE_EXPORT Model
 {
  public:
 
@@ -27,7 +27,7 @@ class OA_UTILITY_EXPORT Model
 
   ~Model() = default;
 
- protected:
+ public:
   
   /**
    * @brief the textures of the model

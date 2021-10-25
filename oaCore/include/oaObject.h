@@ -12,16 +12,19 @@
 
 namespace oaEngineSDK{
 
-class Object
+class OA_CORE_EXPORT Object
 {
  public:
 
   Object();
 
+  void
+  update();
+
   /**
    * @brief the model that this object is using
   */
-  SPtr<Model*> model;
+  SPtr<Model> model;
 
   /**
    * @brief where the object is in a 3D space

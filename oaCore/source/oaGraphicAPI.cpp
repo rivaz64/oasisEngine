@@ -59,6 +59,10 @@ void GraphicAPI::setBackgroundColor(const Vector4f& color)
 
 }
 
+void GraphicAPI::clear()
+{
+}
+
 void GraphicAPI::show()
 {
 

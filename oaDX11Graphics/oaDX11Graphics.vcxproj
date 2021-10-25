@@ -29,6 +29,13 @@
     <ClInclude Include="include\oaPrerequisitesDX11.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\externals\imgui.cpp" />
+    <ClCompile Include="..\externals\imgui_demo.cpp" />
+    <ClCompile Include="..\externals\imgui_draw.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\externals\imgui_tables.cpp" />
+    <ClCompile Include="..\externals\imgui_widgets.cpp" />
     <ClCompile Include="DX11RenderTarget.cpp" />
     <ClCompile Include="include\oaDX11PixelShader.cpp" />
     <ClCompile Include="source\oaDX11Buffer.cpp" />
@@ -140,7 +147,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;OA_DX11_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaDX11Graphics\Include;DXUT\Core;DXUT\Optional;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaDX11Graphics\Include;DXUT\Core;DXUT\Optional;$(DEVLIBS)imgui/backends;$(DEVLIBS)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

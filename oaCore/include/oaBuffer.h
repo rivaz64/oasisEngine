@@ -27,13 +27,21 @@ class OA_CORE_EXPORT Buffer
   virtual ~Buffer() = default;
 
   /**
-   * @brief sets the data of this buffer to an updated one
+   * @brief initialize the buffer
    * @param data the new data 
    * @param size the size of the new data
    * @param flags the type of buffer 
   */
   virtual void
-  init(void* data,uint32 size,BUFFER_FLAGS flags) {};
+  init(void* data,uint32 size,BUFFER_FLAGS flags) {}
+
+  /**
+   * @brief changes the data of the buffer
+   * @param data 
+   * @param size 
+  */
+  virtual void
+  update(void* data,uint32 size){}
 
 };
 

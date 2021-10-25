@@ -3,20 +3,30 @@
 #include <iostream>
 #include "oaVector3f.h"
 #include "oaGraphicAPI.h"
+#include "oaModel.h"
+
+#include <imgui.h>
+#include <backends/imgui_impl_win32.h>
+#include <backends/imgui_impl_dx11.h>
 
 namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
 void TestApp::postInit()
 {
-  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+  IMGUI_CHECKVERSION();
+  
 
+  GraphicAPI::instancePtr()->initImGui();
+  
+
+  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
   
   ResoureManager::startUp();
 
@@ -36,11 +46,30 @@ void TestApp::postInit()
   );
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
+
+  ResoureManager::instancePtr()->models.insert({"triangle",newSPtr<Model>()});
+
+  ResoureManager::instancePtr()->models["triangle"]->textures.
+    push_back(ResoureManager::instancePtr()->textures["triangle"]);
+  ResoureManager::instancePtr()->models["triangle"]->meshes.
+    push_back(ResoureManager::instancePtr()->meshes["triangle"]);
+
+
+  triangle = newSPtr<Object>();
+  triangle->model = ResoureManager::instancePtr()->models["triangle"];
+
+
 }
 
-void TestApp::render()
+
+void TestApp::update()
 {
-  BaseApp::render();
+
+}
+
+void oaEngineSDK::TestApp::draw()
+{
+  GraphicAPI::instancePtr()->newImGuiFrame();
 }
 
 }
