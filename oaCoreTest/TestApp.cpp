@@ -62,22 +62,28 @@ void TestApp::postInit()
 
 void TestApp::update()
 {
-
+  triangle->update();
 }
 
 void oaEngineSDK::TestApp::draw()
 {
-  
+  GraphicAPI::instancePtr()->newImGuiFrame();
+  ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
+
+  ImGui::Begin("test");
+  ImGui::DragFloat3("location",&triangle->location.x);
+  ImGui::End();
+
+
   GraphicAPI::instancePtr()->setVertexBuffer(
     ResoureManager::instancePtr()->meshes["triangle"]->vertexB
   );
   GraphicAPI::instancePtr()->setTexture(
     ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
-  GraphicAPI::instancePtr()->newImGuiFrame();
-  ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
-  ImGui::Begin("test");
-  ImGui::End();
+  
+
+  
 }
 
 }

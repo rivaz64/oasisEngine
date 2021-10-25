@@ -25,18 +25,26 @@ void DX11Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
   bd.ByteWidth = size;
   bd.BindFlags = FLAGS[flags];
   bd.CPUAccessFlags = 0;
-  D3D11_SUBRESOURCE_DATA InitData;
-  ZeroMemory( &InitData, sizeof(InitData) );
-  InitData.pSysMem = data;
-  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateBuffer( &bd, &InitData, &buffer );
+  if(data){
+    D3D11_SUBRESOURCE_DATA InitData;
+    ZeroMemory( &InitData, sizeof(InitData) );
+    InitData.pSysMem = data;
+    HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+      device->CreateBuffer( &bd, &InitData, &buffer );
+  }
+  else{
+    HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+      device->CreateBuffer( &bd, nullptr, &buffer );
+  }
+  
 }
 
 void DX11Buffer::update(void* data, uint32 size)
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);
-
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    context->VSSetConstantBuffers( 0, 1, &buffer );
 }
 
 }
