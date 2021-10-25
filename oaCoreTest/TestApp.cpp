@@ -6,8 +6,6 @@
 #include "oaModel.h"
 
 #include <imgui.h>
-#include <backends/imgui_impl_win32.h>
-#include <backends/imgui_impl_dx11.h>
 
 namespace oaEngineSDK{
 
@@ -35,9 +33,9 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->vertices = 
   {
-    Vertex{Vector3f( 0.0f, 0.5f, 0.5f ),Vector2f(.5f,1)},
-    Vertex{Vector3f( 0.5f, -0.5f, 0.5f ),Vector2f(1,0)},
-    Vertex{Vector3f( -0.5f, -0.5f, 0.5f ),Vector2f(0,0)},
+    Vertex{Vector3f( 0.0f, 0.5f, 0.5f ),},//Vector2f(.5f,1)},
+    Vertex{Vector3f( 0.5f, -0.5f, 0.5f ),},//Vector2f(1,0)},
+    Vertex{Vector3f( -0.5f, -0.5f, 0.5f ),}//Vector2f(0,0)},
   };
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();

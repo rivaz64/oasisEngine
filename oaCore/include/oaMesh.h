@@ -30,7 +30,7 @@ struct Vertex{
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
-  Vector2f textureCord;
+  //Vector2f textureCord;
 };
 
 /**

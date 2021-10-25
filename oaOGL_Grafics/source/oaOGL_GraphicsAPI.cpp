@@ -89,6 +89,9 @@ void OGL_GraphicsAPI::clear()
 
 void OGL_GraphicsAPI::show()
 {
+  
+
+
 
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -132,15 +135,17 @@ SPtr<Texture> OGL_GraphicsAPI::createTexture()
 
 void OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
 {
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   // texture coord attribute
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+  //glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+  //glEnableVertexAttribArray(1);
 
   // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  //glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glUseProgram(shaderProgram); 
+  glBindVertexArray(cast<OGL_Buffer>(buffer)->VAO);
 }
 
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
