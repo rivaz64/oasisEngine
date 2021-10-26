@@ -19,6 +19,8 @@ void Camera::setCamera()
   ans.m43 = 1;
   ans.m44=0;
 
+  ans.transpose();
+
   buffer->update(&ans.m11,sizeof(Matrix4f));
 
   GraphicAPI::instancePtr()->setBuffer(buffer,1);

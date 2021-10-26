@@ -118,6 +118,13 @@ void OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
   glBindTexture(GL_TEXTURE_2D, cast<OGL_Texture>(texture)->id);
 }
 
+void OGL_GraphicsAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
+{
+  //unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+  //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
+  glUniformMatrix4fv(location, 1, GL_FALSE, reinterpret_cast<float*>(cast<OGL_Buffer>(buffer)->pointer));//*/
+}
+
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glDeleteProgram(shaderProgram);

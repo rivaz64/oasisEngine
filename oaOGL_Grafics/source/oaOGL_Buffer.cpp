@@ -39,10 +39,11 @@ void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 
 void OGL_Buffer::update(void* data, uint32 size)
 {
-  unsigned int transformLoc = glGetUniformLocation(
+  memcpy(pointer,data,size);
+  /*unsigned int transformLoc = glGetUniformLocation(
     reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, 
-    "location");
-  glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
+    "transform");
+  glUniformMatrix4fv(0, 1, GL_FALSE, reinterpret_cast<float*>(data));*/
 
 }
 

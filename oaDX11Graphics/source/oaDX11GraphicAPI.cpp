@@ -245,6 +245,7 @@ void DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)
 
 void DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 {
+
   context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
 }
 
