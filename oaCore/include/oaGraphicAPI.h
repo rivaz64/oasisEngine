@@ -105,6 +105,14 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   setTexture(const SPtr<Texture>& texture){}
 
+  /**
+   * @brief sets a constant buffer to be used un a shader
+   * @param buffer 
+   * @param location the location in th shader
+  */
+  virtual void
+  setBuffer(const SPtr<Buffer>& buffer,uint32 location){}
+
   virtual void
   initImGui(){}
 
@@ -114,8 +122,6 @@ class OA_CORE_EXPORT GraphicAPI :
   ImGuiRender(){}
   virtual void*
   getImGui(){return nullptr;}
-
- protected:
 
   /**
    * @brief the width of the window at the begining
@@ -127,6 +133,7 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   uint32 windowHeight = 600;
 
+ protected:
   /**
    * @brief the name of the window 
   */

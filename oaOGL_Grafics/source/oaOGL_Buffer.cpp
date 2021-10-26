@@ -43,6 +43,7 @@ void OGL_Buffer::update(void* data, uint32 size)
     reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, 
     "location");
   glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
+
 }
 
 }

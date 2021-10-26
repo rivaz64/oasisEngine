@@ -58,6 +58,9 @@ protected:
   setTexture(const SPtr<Texture>& texture) override;
 
   void
+  setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
+
+  void
   initImGui() override;
 
   void

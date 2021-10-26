@@ -56,7 +56,12 @@ void TestApp::postInit()
   triangle = newSPtr<Object>();
   triangle->model = ResoureManager::instancePtr()->models["triangle"];
 
+  cam = newSPtr<Camera>();
 
+  cam->angle = 0.785398163f;
+  cam->ratio =(float)GraphicAPI::instancePtr()->windowWidth /  (float)GraphicAPI::instancePtr()->windowHeight;
+  cam->nearPlane = 0.0f;
+  cam->farPlane = 100.0f;
 }
 
 
@@ -84,7 +89,10 @@ void oaEngineSDK::TestApp::draw()
   GraphicAPI::instancePtr()->setTexture(
     ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
-  
+  GraphicAPI::instancePtr()->setBuffer(triangle->transformB,0);
+
+
+  cam->setCamera();
 
   
 }

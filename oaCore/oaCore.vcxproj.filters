@@ -54,6 +54,9 @@
     <ClInclude Include="include\oaObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

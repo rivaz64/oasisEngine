@@ -43,8 +43,7 @@ void DX11Buffer::update(void* data, uint32 size)
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->VSSetConstantBuffers( 0, 1, &buffer );
+    
 }
 
 }

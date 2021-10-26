@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="include\oaBaseApp.h" />
     <ClInclude Include="include\oaBuffer.h" />
+    <ClInclude Include="include\oaCamera.h" />
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
     <ClInclude Include="include\oaGraphicsModule.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="include\oaShader.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
+    <ClCompile Include="source\oaCamera.cpp" />
     <ClCompile Include="source\oaGraphicAPI.cpp" />
     <ClCompile Include="source\oaGraphicsModule.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />

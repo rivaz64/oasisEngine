@@ -41,7 +41,7 @@ class OA_CORE_EXPORT Object
   */
   Vector3f rotation;
 
- protected:
+ public:
 
   /**
    * @brief for sending the location to the shader

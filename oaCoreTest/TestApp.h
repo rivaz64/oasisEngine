@@ -2,6 +2,7 @@
 
 #include "oaBaseApp.h"
 #include "oaObject.h"
+#include "oaCamera.h"
 
 namespace oaEngineSDK{
 
@@ -25,6 +26,10 @@ public:
  private:
 
    SPtr<Object> triangle;
+
+   SPtr<Camera> cam;
+
+   SPtr<Buffer> camBuf;
 };
 
 }
