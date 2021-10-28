@@ -9,6 +9,7 @@ namespace oaEngineSDK{
 Map<BUFFER_FLAGS,uint32> FLAGS = {
   {BUFFER_FLAGS::VERTEX,D3D11_BIND_VERTEX_BUFFER},
   {BUFFER_FLAGS::CONSTANT,D3D11_BIND_CONSTANT_BUFFER},
+  {BUFFER_FLAGS::INDEX,D3D11_BIND_INDEX_BUFFER}
   };
 
 DX11Buffer::~DX11Buffer()
@@ -31,6 +32,9 @@ void DX11Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
     InitData.pSysMem = data;
     HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
       device->CreateBuffer( &bd, &InitData, &buffer );
+    if(FAILED(hr)){
+    return;
+    }
   }
   else{
     HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
@@ -42,8 +46,7 @@ void DX11Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 void DX11Buffer::update(void* data, uint32 size)
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);
-    
+    context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);   
 }
 
 }

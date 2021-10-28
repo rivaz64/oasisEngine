@@ -13,8 +13,8 @@ namespace oaEngineSDK{
 
 void TestApp::run()
 {
-  //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   BaseApp::run();
 }
 
@@ -34,9 +34,18 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->vertices = 
   {
-    Vertex{Vector3f( 0.0f, 0.5f, 0.5f ),Vector2f(.5f,1)},
-    Vertex{Vector3f( 0.5f, -0.5f, 0.5f ),Vector2f(1,0)},
+    Vertex{Vector3f(  0.5f, 0.5f, 0.5f ), Vector2f(1,1)},
+    Vertex{Vector3f( 0.5f, -0.5f, 0.5f ), Vector2f(1,0)},
     Vertex{Vector3f( -0.5f, -0.5f, 0.5f ),Vector2f(0,0)},
+
+    //Vertex{Vector3f(  0.5f, 0.5f, 0.5f ), Vector2f(1,1)},
+    //Vertex{Vector3f( -0.5f, -0.5f, 0.5f ),Vector2f(0,0)},
+    Vertex{Vector3f( -0.5f, 0.5f, 0.5f ), Vector2f(0,1)},
+  };
+
+  ResoureManager::instancePtr()->meshes["triangle"]->index = {
+    0, 1, 2,
+    0, 2, 3
   };
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();
@@ -62,6 +71,8 @@ void TestApp::postInit()
   cam->ratio =(float)GraphicAPI::instancePtr()->windowWidth /  (float)GraphicAPI::instancePtr()->windowHeight;
   cam->nearPlane = 0.0f;
   cam->farPlane = 100.0f;
+
+ 
 }
 
 
@@ -82,10 +93,14 @@ void oaEngineSDK::TestApp::draw()
   ImGui::DragFloat("rotation",&triangle->rotation.x,.01f);
   ImGui::End();
 
-
   GraphicAPI::instancePtr()->setVertexBuffer(
     ResoureManager::instancePtr()->meshes["triangle"]->vertexB
   );
+
+  GraphicAPI::instancePtr()->setIndexBuffer(
+    ResoureManager::instancePtr()->meshes["triangle"]->indexB
+  );
+  
   GraphicAPI::instancePtr()->setTexture(
     ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );

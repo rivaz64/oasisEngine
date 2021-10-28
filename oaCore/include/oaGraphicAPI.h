@@ -83,8 +83,6 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   clear();
 
-
-
   /**
    * @brief shows the things that where rendered
   */
@@ -96,7 +94,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param buffer 
   */
   virtual void
-  setVertexBuffer(const SPtr<Buffer>& buffer);
+  setVertexBuffer(const SPtr<Buffer>& buffer){}
+
+  /**
+  * @brief sets the vertex bubbers that are going to be drawn
+  * @param buffer 
+  */
+  virtual void
+  setIndexBuffer(const SPtr<Buffer>& buffer){}
 
   /**
    * @brief set the texture the shader is going to use

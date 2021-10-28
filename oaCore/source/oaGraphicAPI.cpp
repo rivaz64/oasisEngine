@@ -67,11 +67,6 @@ void GraphicAPI::show()
 {
 
 }
-
-void GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
-{
-}
-
 }
 
 

@@ -177,9 +177,7 @@ DX11GraphicAPI::initialize()
 
   pixelShader = newSPtr<DX11PixelShader>();
 
-  context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );  
-
-
+  
   return GraphicAPI::initialize();
 }
 
@@ -219,7 +217,7 @@ void DX11GraphicAPI::clear()
 
 void DX11GraphicAPI::show()
 {
-  context->Draw( 3, 0 );
+  context->DrawIndexed(6, 0, 0);
   ImGui::Render();
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   swapChain->Present( 0, 0 );
@@ -236,6 +234,12 @@ void DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
     &cast<DX11Buffer>(buffer)->buffer,
     &stride, 
     &offset );
+}
+
+void DX11GraphicAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
+{
+  context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );  
+  context->IASetIndexBuffer(cast<DX11Buffer>(buffer)->buffer,DXGI_FORMAT_R32_UINT,0 );
 }
 
 void DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)

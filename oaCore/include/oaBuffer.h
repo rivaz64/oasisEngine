@@ -12,7 +12,8 @@ namespace oaEngineSDK{
 
 enum class BUFFER_FLAGS{
   VERTEX,
-  CONSTANT
+  CONSTANT,
+  INDEX
 };
 
 class OA_CORE_EXPORT Buffer
