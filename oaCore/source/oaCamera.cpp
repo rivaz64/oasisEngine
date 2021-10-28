@@ -19,7 +19,7 @@ void Camera::setCamera()
   ans.m43 = 1;
   ans.m44=0;
 
-  //ans.transpose();
+  ans.transpose();
 
   buffer->update(&ans.m11,sizeof(Matrix4f));
 

@@ -49,6 +49,9 @@ public:
   setVertexBuffer(const SPtr<Buffer>& buffer) override;
 
   void
+  setIndexBuffer(const SPtr<Buffer>& buffer) override;
+
+  void
   setTexture(const SPtr<Texture>& texture) override;
 
   void

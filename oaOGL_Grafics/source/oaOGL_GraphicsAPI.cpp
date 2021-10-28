@@ -89,7 +89,7 @@ void OGL_GraphicsAPI::clear()
 
 void OGL_GraphicsAPI::show()
 {
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
   ImGui::Render();
 
@@ -111,6 +111,11 @@ SPtr<Texture> OGL_GraphicsAPI::createTexture()
 void OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
 {
   glBindVertexArray(cast<OGL_Buffer>(buffer)->VAO);
+}
+
+void OGL_GraphicsAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
+{
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cast<OGL_Buffer>(buffer)->EBO);
 }
 
 void OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)

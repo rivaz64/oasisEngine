@@ -24,7 +24,7 @@ class OGL_Buffer :
 
  public:
 
-   unsigned int VBO, VAO;
+   unsigned int VBO, VAO, EBO;
 
    float pointer[16];
   //unsigned int id;

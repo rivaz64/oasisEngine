@@ -19,21 +19,30 @@ OGL_Buffer::~OGL_Buffer()
 
 void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 {
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
+  if(flags == BUFFER_FLAGS::VERTEX){
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
 
-  glBindVertexArray(VAO);
+    glBindVertexArray(VAO);
 
-  glBindBuffer(FLAGS[flags], VBO);
-  glBufferData(FLAGS[flags], size, data, GL_STATIC_DRAW);
+    glBindBuffer(FLAGS[flags], VBO);
+    glBufferData(FLAGS[flags], size, data, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-  glBindVertexArray(0); 
+    glBindVertexArray(0); 
+  }
+
+  if(flags == BUFFER_FLAGS::INDEX){
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW); 
+  }
+  
 
 }
 
