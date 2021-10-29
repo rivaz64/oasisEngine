@@ -27,6 +27,13 @@ class OA_CORE_EXPORT Model
 
   ~Model() = default;
 
+  /**
+  * @brief loads a model using assimp
+  * @param file 
+  */
+  bool
+  loadFromFile(String file);
+
  public:
   
   /**

@@ -84,10 +84,18 @@ class OA_CORE_EXPORT GraphicAPI :
   clear();
 
   /**
-   * @brief shows the things that where rendered
+   * @brief draws to the back buffer
+   * @param indexes 
   */
   virtual void
-  show();
+  draw(uint32 indexes){}
+
+  /**
+   * @brief shows the things that where rendered
+   * @param indexes number of indexes to draw
+  */
+  virtual void
+  show(){}
 
   /**
    * @brief sets the vertex bubbers that are going to be drawn

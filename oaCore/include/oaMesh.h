@@ -53,12 +53,6 @@ class OA_CORE_EXPORT Mesh
   virtual void
   create();
 
-  /**
-   * @brief draws the mesh to screen
-  */
-  virtual void
-  render();
-
  public:
 
   /**

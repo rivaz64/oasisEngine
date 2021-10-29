@@ -63,10 +63,7 @@ void GraphicAPI::clear()
 {
 }
 
-void GraphicAPI::show()
-{
 
-}
 }
 
 

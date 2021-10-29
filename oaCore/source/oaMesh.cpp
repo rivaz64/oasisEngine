@@ -1,5 +1,7 @@
 #include "oaMesh.h"
 #include "oaGraphicAPI.h"
+
+
 void oaEngineSDK::Mesh::create()
 {
   vertexB = GraphicAPI::instancePtr()->createBuffer();
@@ -10,7 +12,3 @@ void oaEngineSDK::Mesh::create()
   //index.clear();
 }
 
-void oaEngineSDK::Mesh::render()
-{
-
-}

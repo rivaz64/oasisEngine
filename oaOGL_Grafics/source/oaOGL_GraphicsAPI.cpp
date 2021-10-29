@@ -60,6 +60,9 @@ OGL_GraphicsAPI::initialize()
   }
 
   glUseProgram(shaderProgram); 
+
+  //glEnable(GL_DEPTH_TEST);  
+
   return true;
 }
 
@@ -84,12 +87,12 @@ void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
 
 void OGL_GraphicsAPI::clear()
 {
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void OGL_GraphicsAPI::show()
 {
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
   ImGui::Render();
 

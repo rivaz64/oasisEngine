@@ -25,7 +25,8 @@ public:
 
  private:
 
-   SPtr<Object> triangle;
+   //SPtr<Object> triangle;
+   SPtr<Object> character;
 
    SPtr<Camera> cam;
 

@@ -49,6 +49,9 @@ protected:
   clear() override;
 
   void
+  draw(uint32 indexes) override;
+
+  void
   show() override;
 
   void

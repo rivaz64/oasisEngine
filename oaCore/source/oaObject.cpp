@@ -17,8 +17,8 @@ void
 Object::update()
 {
   
-  auto transform = Matrix4f::translateMatrix(location)*Matrix4f::rotationMatrixZ(rotation.x)*Matrix4f::scaleMatrix(scale);
-  transform.transpose();
+  auto transform = Matrix4f::translateMatrix(location)*Matrix4f::rotationMatrixX(rotation.x)*Matrix4f::rotationMatrixY(rotation.y)*Matrix4f::rotationMatrixZ(rotation.z)*Matrix4f::scaleMatrix(scale);
+  //transform.transpose();
 
   transformB->update(&transform,sizeof(Matrix4f));
 }

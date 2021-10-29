@@ -215,9 +215,13 @@ void DX11GraphicAPI::clear()
   context->ClearRenderTargetView( renderTargetView, &backgroundColor.x );
 }
 
+void DX11GraphicAPI::draw(uint32 indexes)
+{
+  context->DrawIndexed(indexes, 0, 0);
+}
+
 void DX11GraphicAPI::show()
 {
-  context->DrawIndexed(6, 0, 0);
   ImGui::Render();
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   swapChain->Present( 0, 0 );
