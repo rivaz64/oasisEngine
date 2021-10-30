@@ -98,6 +98,15 @@ void TestApp::postInit()
 
   character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
+  character->location.y = -2.f;
+  character->location.z = 7.f;
+
+  character->scale.x = .1f;
+  character->scale.y = .1f;
+  character->scale.z = .1f;
+
+  character->rotation.y = 3.4f;
+
   cam = newSPtr<Camera>();
 
   cam->angle = 0.785398163f;

@@ -41,6 +41,7 @@ bool Model::loadFromFile(String file)
     }
 
     uint32 vertindexoffset = 0;
+    oaMesh->vertices.resize( aMesh->mNumVertices);
     for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
       Vertex actualVertex;
       actualVertex.location.x = aMesh->mVertices[numVertex].x;
@@ -51,8 +52,10 @@ bool Model::loadFromFile(String file)
         actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
         actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
       }
-      oaMesh->vertices.push_back(actualVertex);
+      oaMesh->vertices[numVertex] = actualVertex;
     }
+
+    oaMesh->index.resize(aMesh->mNumFaces * 3);
 
     for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
     {
@@ -63,9 +66,9 @@ bool Model::loadFromFile(String file)
         continue;
       }
 
-      oaMesh->index.push_back(face->mIndices[0]);
-      oaMesh->index.push_back(face->mIndices[1]);
-      oaMesh->index.push_back(face->mIndices[2]);
+      oaMesh->index[t*3] = face->mIndices[0];
+      oaMesh->index[t*3+1] = face->mIndices[1];
+      oaMesh->index[t*3+2] = face->mIndices[2];
     }
 
     oaMesh->create();
