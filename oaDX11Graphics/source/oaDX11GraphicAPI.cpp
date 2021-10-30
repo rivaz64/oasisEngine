@@ -91,6 +91,12 @@ DX11GraphicAPI::initialize()
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
+  RECT rc;
+  GetClientRect( hWnd, &rc );
+  windowWidth = rc.right - rc.left;
+  windowHeight = rc.bottom - rc.top;
+
+
   UINT createDeviceFlags = 0;
 #ifdef _DEBUG
   createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -161,7 +167,18 @@ DX11GraphicAPI::initialize()
     return false;
   }
 
-  context->OMSetRenderTargets( 1, &renderTargetView, NULL );
+  D3D11_SAMPLER_DESC sampDesc;
+  ZeroMemory( &sampDesc, sizeof(sampDesc) );
+  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+  sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+  sampDesc.MinLOD = 0;
+  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+  hr = device->CreateSamplerState( &sampDesc, &samplerLinear );
+  if( FAILED( hr ) )
+    return hr;
 
   // Setup the viewport
   D3D11_VIEWPORT vp;
@@ -177,7 +194,34 @@ DX11GraphicAPI::initialize()
 
   pixelShader = newSPtr<DX11PixelShader>();
 
-  
+  D3D11_TEXTURE2D_DESC descDepth;
+  ZeroMemory( &descDepth, sizeof(descDepth) );
+  descDepth.Width = windowWidth;
+  descDepth.Height = windowHeight;
+  descDepth.MipLevels = 1;
+  descDepth.ArraySize = 1;
+  descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+  descDepth.SampleDesc.Count = 1;
+  descDepth.SampleDesc.Quality = 0;
+  descDepth.Usage = D3D11_USAGE_DEFAULT;
+  descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+  descDepth.CPUAccessFlags = 0;
+  descDepth.MiscFlags = 0;
+  hr = device->CreateTexture2D( &descDepth, NULL, &depthStencil );
+  if( FAILED( hr ) )
+    return hr;
+
+  D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+  ZeroMemory( &descDSV, sizeof(descDSV) );
+  descDSV.Format = descDepth.Format;
+  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  descDSV.Texture2D.MipSlice = 0;
+  hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
+  if( FAILED( hr ) )
+    return hr;
+
+  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+
   return GraphicAPI::initialize();
 }
 
@@ -213,10 +257,13 @@ void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 void DX11GraphicAPI::clear()
 {
   context->ClearRenderTargetView( renderTargetView, &backgroundColor.x );
+  context->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
+  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 }
 
 void DX11GraphicAPI::draw(uint32 indexes)
 {
+  context->PSSetSamplers( 0, 1, &samplerLinear );
   context->DrawIndexed(indexes, 0, 0);
 }
 
@@ -224,6 +271,9 @@ void DX11GraphicAPI::show()
 {
   ImGui::Render();
   ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+  //context->OMSetRenderTargets( 1, &renderTargetView, NULL )
+  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+
   swapChain->Present( 0, 0 );
 }
 
@@ -260,8 +310,6 @@ void DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 void DX11GraphicAPI::initImGui()
 {
   ImGui::CreateContext();
-  
-  //ImGui::SetCurrentContext(io)
   ImGui::StyleColorsDark();
   ImGui_ImplWin32_Init(hWnd);
   ImGui_ImplDX11_Init(device, context);

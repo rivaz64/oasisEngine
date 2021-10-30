@@ -1,4 +1,5 @@
 #include "oaModel.h"
+#include "oaResoureManager.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
@@ -27,12 +28,29 @@ bool Model::loadFromFile(String file)
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
     auto oaMesh = newSPtr<Mesh>();
+
+    aiString f;
+    scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
+    String file = f.C_Str();
+    file = "textures/"+file+".png";
+    if(ResoureManager::instancePtr()->loadTexture(file)){
+      textures.push_back(ResoureManager::instancePtr()->textures[file]);
+    }
+    else{
+      break;
+    }
+
     uint32 vertindexoffset = 0;
     for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
       Vertex actualVertex;
       actualVertex.location.x = aMesh->mVertices[numVertex].x;
       actualVertex.location.y = aMesh->mVertices[numVertex].y;
       actualVertex.location.z = aMesh->mVertices[numVertex].z;
+      
+      if(aMesh->HasTextureCoords(0)){
+        actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
+        actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+      }
       oaMesh->vertices.push_back(actualVertex);
     }
 
@@ -51,7 +69,8 @@ bool Model::loadFromFile(String file)
     }
 
     oaMesh->create();
-
+    
+    
     meshes.push_back(oaMesh);
 
   }

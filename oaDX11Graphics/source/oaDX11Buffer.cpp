@@ -20,6 +20,9 @@ DX11Buffer::~DX11Buffer()
 
 void DX11Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 {
+
+
+
   D3D11_BUFFER_DESC bd;
   ZeroMemory( &bd, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;

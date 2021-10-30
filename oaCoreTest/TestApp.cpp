@@ -24,7 +24,7 @@ void TestApp::postInit()
   
   GraphicAPI::instancePtr()->initImGui();
   
-  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+  GraphicAPI::instancePtr()->setBackgroundColor({  0.0f, 0.125f, 0.3f, 1.0f });
   
   ResoureManager::startUp();
 
@@ -102,7 +102,7 @@ void TestApp::postInit()
 
   cam->angle = 0.785398163f;
   cam->ratio =(float)GraphicAPI::instancePtr()->windowWidth /  (float)GraphicAPI::instancePtr()->windowHeight;
-  cam->nearPlane = 0.0f;
+  cam->nearPlane = 0.01f;
   cam->farPlane = 100.0f;
 
  
@@ -119,7 +119,7 @@ void oaEngineSDK::TestApp::draw()
   ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
   GraphicAPI::instancePtr()->newImGuiFrame();
   
-
+  
   ImGui::Begin("test");
   ImGui::DragFloat3("location",&character->location.x,.01f);
   ImGui::DragFloat3("scale",&character->scale.x,.01f);
@@ -132,8 +132,18 @@ void oaEngineSDK::TestApp::draw()
 
   /*GraphicAPI::instancePtr()->setTexture(
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
-  );*/
+  );
+
+  GraphicAPI::instancePtr()->setVertexBuffer(
+    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->vertexB
+  );
+
+  GraphicAPI::instancePtr()->setIndexBuffer(
+    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
+  );
   
+  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());*/
+
   for(uint32 i = 0; i<character->model->meshes.size();++i){
     GraphicAPI::instancePtr()->setVertexBuffer(
       character->model->meshes[i]->vertexB
@@ -141,6 +151,9 @@ void oaEngineSDK::TestApp::draw()
 
     GraphicAPI::instancePtr()->setIndexBuffer(
       character->model->meshes[i]->indexB
+    );
+    GraphicAPI::instancePtr()->setTexture(
+      character->model->textures[i]
     );
 
     GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());

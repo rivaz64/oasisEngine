@@ -87,6 +87,9 @@ protected:
   ID3D11DeviceContext* context = nullptr;
   IDXGISwapChain* swapChain = nullptr;
   ID3D11RenderTargetView* renderTargetView = nullptr;
+  ID3D11Texture2D*        depthStencil = NULL;
+  ID3D11DepthStencilView* depthStencilView = nullptr;
+  ID3D11SamplerState*                 samplerLinear = NULL;
 
   MSG msg = MSG();
 

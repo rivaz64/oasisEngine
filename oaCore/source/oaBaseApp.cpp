@@ -69,9 +69,6 @@ void BaseApp::update()
 
 void BaseApp::render()
 {
-  /*for(SPtr<Mesh>& m : ResoureManager::instancePtr()->meshes){
-    m->render();
-  }*/
   GraphicAPI::instancePtr()->clear();
   draw();
   GraphicAPI::instancePtr()->show();
