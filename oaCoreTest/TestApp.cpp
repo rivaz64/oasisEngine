@@ -55,7 +55,8 @@ void TestApp::preInit()
 
 void TestApp::postInit()
 {
-
+  //std::cout<<"no graphic API"<<std::endl;
+  GraphicAPI::instancePtr()->compileShaders("shader");
 
   IMGUI_CHECKVERSION();
 

@@ -197,7 +197,7 @@ DX11GraphicAPI::initialize()
 
   context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 
-  return GraphicAPI::initialize();
+  return true;
 }
 
 bool 

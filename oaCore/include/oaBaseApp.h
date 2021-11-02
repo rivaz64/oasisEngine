@@ -102,11 +102,6 @@ class OA_CORE_EXPORT BaseApp :
   */
   float deltaTime = 0;
 
-  /**
-   * @brief the graphical API that has been loaded
-  */
-  
-
   friend class Module<BaseApp>;
 };
 

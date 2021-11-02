@@ -7,12 +7,6 @@ namespace oaEngineSDK{
 bool 
 GraphicAPI::initialize()
 {
-  //std::cout<<"no graphic API"<<std::endl;
-
-  if(!compileShaders("shader")){
-    return false;
-  }
-
   return true;
 }
 
