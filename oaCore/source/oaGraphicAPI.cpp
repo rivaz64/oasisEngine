@@ -7,6 +7,8 @@ namespace oaEngineSDK{
 bool 
 GraphicAPI::initialize()
 {
+  vertexShader = newSPtr<Shader>();
+  pixelShader = newSPtr<Shader>();
   return true;
 }
 

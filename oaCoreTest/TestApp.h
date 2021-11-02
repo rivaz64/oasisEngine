@@ -35,6 +35,9 @@ public:
   void
   renderImGui();
 
+  void
+  drawImGui();
+
  private:
 
    //SPtr<Object> triangle;

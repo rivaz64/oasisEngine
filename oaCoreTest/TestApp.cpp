@@ -161,16 +161,12 @@ void TestApp::update()
   character->update();
 }
 
-void oaEngineSDK::TestApp::draw()
+void TestApp::draw()
 {
   newImGuiFrame();
 
-
-  ImGui::Begin("test");
-  ImGui::DragFloat3("location", &character->location.x, .01f);
-  ImGui::DragFloat3("scale", &character->scale.x, .01f);
-  ImGui::DragFloat3("rotation", &character->rotation.x, .01f);
-  ImGui::End();
+  drawImGui();
+  
 
   GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
 
@@ -209,10 +205,13 @@ void oaEngineSDK::TestApp::draw()
 
 }
 
-void oaEngineSDK::TestApp::initImGui()
+void TestApp::initImGui()
 {
-  ImGui::CreateContext();
-  ImGui::StyleColorsDark();
+  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+  }
+  
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplWin32_Init(GraphicAPI::instancePtr()->getWindow());
     ImGui_ImplDX11_Init(
@@ -221,21 +220,38 @@ void oaEngineSDK::TestApp::initImGui()
   }
 }
 
-void oaEngineSDK::TestApp::newImGuiFrame()
+void TestApp::newImGuiFrame()
 {
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
   }
-  ImGui::NewFrame();
+  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+    ImGui::NewFrame();
+  }
+  
 }
 
-void oaEngineSDK::TestApp::renderImGui()
+void TestApp::renderImGui()
 {
-  ImGui::Render();
+  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+    ImGui::Render();
+  }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
+}
+
+void oaEngineSDK::TestApp::drawImGui()
+{
+  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
+    return;
+  }
+  ImGui::Begin("test");
+  ImGui::DragFloat3("location", &character->location.x, .01f);
+  ImGui::DragFloat3("scale", &character->scale.x, .01f);
+  ImGui::DragFloat3("rotation", &character->rotation.x, .01f);
+  ImGui::End();
 }
 
 }
