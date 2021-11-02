@@ -120,13 +120,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS)imgui;$(DEVLIBS)imgui/backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS)imgui;$(DEVLIBS)imgui/backends;$(DEVLIBS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(SolutionDir)lib/$(PlatformTarget)/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>oaCored.lib;oaUtilitiesd.lib;d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>oaCored.lib;oaUtilitiesd.lib;d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,6 +150,8 @@
     <ClCompile Include="..\externals\imgui_demo.cpp" />
     <ClCompile Include="..\externals\imgui_draw.cpp" />
     <ClCompile Include="..\externals\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\externals\imgui_impl_win32.cpp" />
     <ClCompile Include="..\externals\imgui_tables.cpp" />
     <ClCompile Include="..\externals\imgui_widgets.cpp" />

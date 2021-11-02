@@ -67,13 +67,13 @@ protected:
   setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
 
   virtual void*
-  getWindow();
+  getWindow() override;
 
   virtual void*
-  getDevice();
+  getDevice() override;
 
   virtual void*
-  getContext();
+  getContext() override;
 
  protected:
 

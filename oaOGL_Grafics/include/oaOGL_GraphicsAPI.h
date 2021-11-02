@@ -57,14 +57,8 @@ public:
   void
   setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
 
-  void
-  initImGui() override;
-
-  void
-  newImGuiFrame() override;
-
   void*
-  getImGui() override;
+  getWindow() override;
 
 protected:
 

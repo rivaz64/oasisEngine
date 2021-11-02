@@ -5,8 +5,7 @@
 #include "oaOGL_Texture.h"
 #include "oaResoureManager.h"
 #include <iostream>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+
 
 namespace oaEngineSDK{
 void OGL_GraphicsAPI::onShutDown()
@@ -92,11 +91,7 @@ void OGL_GraphicsAPI::clear()
 
 void OGL_GraphicsAPI::show()
 {
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-  ImGui::Render();
-
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
   glfwSwapBuffers(window);
 }
@@ -133,37 +128,16 @@ void OGL_GraphicsAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
   glUniformMatrix4fv(location, 1, GL_FALSE, reinterpret_cast<float*>(cast<OGL_Buffer>(buffer)->pointer));//*/
 }
 
+void* OGL_GraphicsAPI::getWindow()
+{
+  return window;
+}
+
 OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glDeleteProgram(shaderProgram);
 }
 
-void OGL_GraphicsAPI::initImGui()
-{
-  ImGui::CreateContext();
 
-  //ImGui::SetCurrentContext(io)
-  ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 130");
-
-  ImGuiIO& io = ImGui::GetIO();
-  //io.DisplaySize.x = windowWidth;
-  //io.DisplaySize.y = windowHeight;
-}
-
-void OGL_GraphicsAPI::newImGuiFrame()
-{
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
-  
-  
-}
-
-void* OGL_GraphicsAPI::getImGui()
-{
-  return ImGui::GetCurrentContext();;
-}
 
 }
