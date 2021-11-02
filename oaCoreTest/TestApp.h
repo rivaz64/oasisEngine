@@ -12,7 +12,10 @@ class TestApp :
 public:
 
   void
-  run() override;
+  postShutDown() override;
+
+  void
+  preInit();
 
   void 
   postInit() override;
@@ -22,6 +25,15 @@ public:
 
   void
   draw() override;
+
+  void
+  initImGui();
+
+  void
+  newImGuiFrame();
+
+  void
+  renderImGui();
 
  private:
 

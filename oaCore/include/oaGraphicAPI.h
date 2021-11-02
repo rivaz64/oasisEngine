@@ -11,6 +11,16 @@
 #include "oaBuffer.h"
 #include "oaTexture.h"
 #include "oaVector4f.h"
+#include <Windows.h>
+
+namespace GRAPHIC_API {
+enum E {
+  NONE=0,
+  DIRECTX11,
+  OPENGL
+};
+}
+
 
 namespace oaEngineSDK{
 
@@ -126,6 +136,15 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   setBuffer(const SPtr<Buffer>& buffer,uint32 location){}
 
+  virtual void*
+  getWindow() { return nullptr; }
+
+  virtual void*
+  getDevice() {return nullptr;}
+
+  virtual void*
+  getContext() {return nullptr;}
+
   virtual void
   initImGui(){}
 
@@ -145,6 +164,13 @@ class OA_CORE_EXPORT GraphicAPI :
   * @brief the height of the window at the begining
   */
   uint32 windowHeight = 600;
+
+  WNDPROC eventsFunction;
+
+  /**
+  * @brief the graphical API that has been loaded
+  */
+  GRAPHIC_API::E actualGraphicAPI;
 
  protected:
   /**

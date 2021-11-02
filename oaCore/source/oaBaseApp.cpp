@@ -12,11 +12,15 @@ using foo = const void* (*)();
 void BaseApp::onShutDown()
 {
   ResoureManager::shutDown();
+  postShutDown();
 }
 
 void
 BaseApp::run()
 {
+  loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
+  preInit();
   if(GraphicAPI::instancePtr()->initialize()){
     postInit();
     mainLoop();

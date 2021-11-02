@@ -153,13 +153,6 @@
     <ClInclude Include="include\oaPrerequisitesOGL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\externals\imgui.cpp" />
-    <ClCompile Include="..\externals\imgui_demo.cpp" />
-    <ClCompile Include="..\externals\imgui_draw.cpp" />
-    <ClCompile Include="..\externals\imgui_impl_glfw.cpp" />
-    <ClCompile Include="..\externals\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="..\externals\imgui_tables.cpp" />
-    <ClCompile Include="..\externals\imgui_widgets.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="source\oaOGL_Buffer.cpp" />
     <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />

@@ -7,43 +7,18 @@
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
-#include <imgui_impl_dx11.h>
-#include <imgui_impl_win32.h>
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace oaEngineSDK{
-
-LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
-{
-  PAINTSTRUCT ps;
-  HDC hdc;
-  if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
-    return 1;
-
-  switch( message )
-  {
-  case WM_PAINT:
-    hdc = BeginPaint( hWnd, &ps );
-    EndPaint( hWnd, &ps );
-    break;
-
-  case WM_DESTROY:
-    PostQuitMessage( 0 );
-    break;
-
-  default:
-    return DefWindowProc( hWnd, message, wParam, lParam );
-  }
-
-  return 0;
-}
 
 void DX11GraphicAPI::onShutDown()
 {
   if( context ) context->ClearState();
 
   if( renderTargetView ) renderTargetView->Release();
+  if( depthStencil ) depthStencil->Release();
+  if( depthStencilView ) depthStencilView->Release();
+  if( samplerLinear ) samplerLinear->Release();
   if( swapChain ) swapChain->Release();
   if( context ) context->Release();
   if( device ) device->Release();
@@ -64,7 +39,7 @@ DX11GraphicAPI::initialize()
   // fill in the struct with the needed information
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = WindowProc;
+  wc.lpfnWndProc = eventsFunction;
   wc.hInstance = GetModuleHandleA(nullptr);
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
@@ -269,8 +244,7 @@ void DX11GraphicAPI::draw(uint32 indexes)
 
 void DX11GraphicAPI::show()
 {
-  ImGui::Render();
-  ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+  
   //context->OMSetRenderTargets( 1, &renderTargetView, NULL )
   context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 
@@ -307,29 +281,19 @@ void DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
   context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
 }
 
-void DX11GraphicAPI::initImGui()
+void* DX11GraphicAPI::getWindow()
 {
-  ImGui::CreateContext();
-  ImGui::StyleColorsDark();
-  ImGui_ImplWin32_Init(hWnd);
-  ImGui_ImplDX11_Init(device, context);
-
-  ImGuiIO& io = ImGui::GetIO();
-  io.DisplaySize.x = windowWidth;
-  io.DisplaySize.y = windowHeight;
+  return hWnd;
 }
 
-void DX11GraphicAPI::newImGuiFrame()
+void* DX11GraphicAPI::getDevice()
 {
-  ImGui_ImplDX11_NewFrame();
-  ImGui_ImplWin32_NewFrame();
-  ImGui::NewFrame();
-  
+  return device;
 }
 
-void* DX11GraphicAPI::getImGui()
+void* DX11GraphicAPI::getContext()
 {
-  return ImGui::GetCurrentContext();
+  return context;
 }
 
 }

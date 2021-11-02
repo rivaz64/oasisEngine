@@ -66,14 +66,14 @@ protected:
   void
   setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
 
-  void
-  initImGui() override;
+  virtual void*
+  getWindow();
 
-  void
-  newImGuiFrame() override;
+  virtual void*
+  getDevice();
 
-  void*
-  getImGui() override;
+  virtual void*
+  getContext();
 
  protected:
 
@@ -87,9 +87,9 @@ protected:
   ID3D11DeviceContext* context = nullptr;
   IDXGISwapChain* swapChain = nullptr;
   ID3D11RenderTargetView* renderTargetView = nullptr;
-  ID3D11Texture2D*        depthStencil = NULL;
+  ID3D11Texture2D* depthStencil = nullptr;
   ID3D11DepthStencilView* depthStencilView = nullptr;
-  ID3D11SamplerState*                 samplerLinear = NULL;
+  ID3D11SamplerState* samplerLinear = nullptr;
 
   MSG msg = MSG();
 

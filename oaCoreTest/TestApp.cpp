@@ -4,58 +4,95 @@
 #include "oaVector3f.h"
 #include "oaGraphicAPI.h"
 #include "oaModel.h"
-
+#include <Windows.h>
 #include <imgui.h>
-#include <backends/imgui_impl_win32.h>
-#include <backends/imgui_impl_dx11.h>
+#include <imgui_impl_dx11.h>
+#include <imgui_impl_win32.h>
 
-namespace oaEngineSDK{
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void TestApp::run()
+
+LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-  loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
-  BaseApp::run();
+  PAINTSTRUCT ps;
+  HDC hdc;
+  if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+    return 1;
+
+  switch( message )
+  {
+  case WM_PAINT:
+    hdc = BeginPaint( hWnd, &ps );
+    EndPaint( hWnd, &ps );
+    break;
+
+  case WM_DESTROY:
+    PostQuitMessage( 0 );
+    break;
+
+  default:
+    return DefWindowProc( hWnd, message, wParam, lParam );
+  }
+
+  return 0;
+}
+
+namespace oaEngineSDK {
+
+void TestApp::postShutDown()
+{
+  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+  }
+  ImGui::DestroyContext();
+}
+
+void TestApp::preInit()
+{
+  GraphicAPI::instancePtr()->eventsFunction = WindowProc;
 }
 
 void TestApp::postInit()
 {
+
+
   IMGUI_CHECKVERSION();
-  
-  GraphicAPI::instancePtr()->initImGui();
-  
-  GraphicAPI::instancePtr()->setBackgroundColor({  0.0f, 0.125f, 0.3f, 1.0f });
-  
+
+  initImGui();
+
+  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+
   ResoureManager::startUp();
 
-  ResoureManager::instancePtr()->meshes.insert({"triangle",newSPtr<Mesh>()});
+  ResoureManager::instancePtr()->meshes.insert({ "triangle",newSPtr<Mesh>() });
 
-  ResoureManager::instancePtr()->meshes["triangle"]->vertices = 
+  ResoureManager::instancePtr()->meshes["triangle"]->vertices =
   {
-    Vertex{ Vector3f( -1.0f, 1.0f, -1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, -1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, 1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, 1.0f, 1.0f ), Vector2f( 0.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, -1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, -1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, 1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, 1.0f ), Vector2f( 0.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, 1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, -1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( -1.0f, 1.0f, -1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, 1.0f, 1.0f ), Vector2f( 0.0f, 1.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, 1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, -1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, -1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, 1.0f ), Vector2f( 0.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, -1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, -1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, -1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, 1.0f, -1.0f ), Vector2f( 0.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, -1.0f, 1.0f ), Vector2f( 0.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, -1.0f, 1.0f ), Vector2f( 1.0f, 0.0f ) },
-    Vertex{ Vector3f( 1.0f, 1.0f, 1.0f ), Vector2f( 1.0f, 1.0f ) },
-    Vertex{ Vector3f( -1.0f, 1.0f, 1.0f ), Vector2f( 0.0f, 1.0f ) },
+    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
   };
 
   ResoureManager::instancePtr()->meshes["triangle"]->index = {
@@ -80,11 +117,11 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->meshes["triangle"]->create();
 
-  
+
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
-  ResoureManager::instancePtr()->models.insert({"triangle",newSPtr<Model>()});
+  ResoureManager::instancePtr()->models.insert({ "triangle",newSPtr<Model>() });
 
   ResoureManager::instancePtr()->models["triangle"]->textures.
     push_back(ResoureManager::instancePtr()->textures["textures/wall.jpg"]);
@@ -96,7 +133,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -110,11 +147,11 @@ void TestApp::postInit()
   cam = newSPtr<Camera>();
 
   cam->angle = 0.785398163f;
-  cam->ratio =(float)GraphicAPI::instancePtr()->windowWidth /  (float)GraphicAPI::instancePtr()->windowHeight;
+  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
   cam->nearPlane = 0.01f;
   cam->farPlane = 100.0f;
 
- 
+
 }
 
 
@@ -125,17 +162,16 @@ void TestApp::update()
 
 void oaEngineSDK::TestApp::draw()
 {
-  ImGui::SetCurrentContext((ImGuiContext*)GraphicAPI::instancePtr()->getImGui());
-  GraphicAPI::instancePtr()->newImGuiFrame();
-  
-  
+  newImGuiFrame();
+
+
   ImGui::Begin("test");
-  ImGui::DragFloat3("location",&character->location.x,.01f);
-  ImGui::DragFloat3("scale",&character->scale.x,.01f);
-  ImGui::DragFloat3("rotation",&character->rotation.x,.01f);
+  ImGui::DragFloat3("location", &character->location.x, .01f);
+  ImGui::DragFloat3("scale", &character->scale.x, .01f);
+  ImGui::DragFloat3("rotation", &character->rotation.x, .01f);
   ImGui::End();
 
-  GraphicAPI::instancePtr()->setBuffer(character->transformB,0);
+  GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
 
   cam->setCamera();
 
@@ -150,10 +186,10 @@ void oaEngineSDK::TestApp::draw()
   GraphicAPI::instancePtr()->setIndexBuffer(
     ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
   );
-  
+
   GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());*/
 
-  for(uint32 i = 0; i<character->model->meshes.size();++i){
+  /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(
       character->model->meshes[i]->vertexB
     );
@@ -166,10 +202,39 @@ void oaEngineSDK::TestApp::draw()
     );
 
     GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());
+  }*/
 
-  
+  renderImGui();
+
+}
+
+void oaEngineSDK::TestApp::initImGui()
+{
+  ImGui::CreateContext();
+  ImGui::StyleColorsDark();
+  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+    ImGui_ImplWin32_Init(GraphicAPI::instancePtr()->getWindow());
+    ImGui_ImplDX11_Init(
+      (ID3D11Device*)GraphicAPI::instancePtr()->getDevice(), 
+      (ID3D11DeviceContext*)GraphicAPI::instancePtr()->getContext());
   }
-  
+}
+
+void oaEngineSDK::TestApp::newImGuiFrame()
+{
+  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+    ImGui_ImplDX11_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+  }
+  ImGui::NewFrame();
+}
+
+void oaEngineSDK::TestApp::renderImGui()
+{
+  ImGui::Render();
+  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+  }
 }
 
 }

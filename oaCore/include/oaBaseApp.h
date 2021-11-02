@@ -30,11 +30,23 @@ class OA_CORE_EXPORT BaseApp :
    void
    onShutDown() override;
 
+   /**
+    * @brief after everything is shut down
+   */
+   virtual void
+   postShutDown() {}
+
   /**
    * @brief runs the engine
   */
-  virtual void
+  void
   run();
+
+  /**
+  * @brief the things to do after the graphics api is started
+  */
+  virtual void
+  preInit() {}
 
   /**
    * @brief the things to do after the graphics api is started
@@ -73,8 +85,6 @@ class OA_CORE_EXPORT BaseApp :
   void
   render();
 
-  
-
  protected:
 
   /**
@@ -91,6 +101,11 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the time that has pass since the last update
   */
   float deltaTime = 0;
+
+  /**
+   * @brief the graphical API that has been loaded
+  */
+  
 
   friend class Module<BaseApp>;
 };
