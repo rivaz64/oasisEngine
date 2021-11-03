@@ -142,7 +142,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -194,7 +194,7 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());*/
 
-  /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
+  for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(
       character->model->meshes[i]->vertexB
     );
@@ -207,7 +207,7 @@ void TestApp::draw()
     );
 
     GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());
-  }*/
+  }
 
   renderImGui();
 
