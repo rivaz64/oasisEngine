@@ -26,7 +26,6 @@
     <ClInclude Include="include\oaDX11Shader.h" />
     <ClInclude Include="include\oaDX11Texture.h" />
     <ClInclude Include="include\oaDX11VertexShader.h" />
-    <ClInclude Include="include\oaPrerequisitesDX11.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\externals\imgui.cpp" />

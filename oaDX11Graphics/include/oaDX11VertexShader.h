@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "oaPrerequisitesDX11.h"
 #include "oaDX11Shader.h"
 
 

@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "oaPrerequisitesDX11.h"
 #include "oaBuffer.h"
 #include <d3d11.h>
 #include <Windows.h>

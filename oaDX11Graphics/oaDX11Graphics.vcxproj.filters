@@ -18,9 +18,6 @@
     <ClInclude Include="include\oaDX11GraphicAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaPrerequisitesDX11.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DX11RenderTarget.h">
       <Filter>Header Files</Filter>
     </ClInclude>

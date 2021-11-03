@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "oaPrerequisitesDX11.h"
 #include "oaGraphicAPI.h"
 #include "oaVector4f.h"
 #include <windows.h>
