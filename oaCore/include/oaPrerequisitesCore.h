@@ -9,7 +9,7 @@
 #   if defined( OA_STATIC_lib )
 #     define OA_CORE_EXPORT
 #   else
-#     if defined ( OA_CORE_EXPORT )
+#     if defined ( OA_CORE_EXPORTS )
 #       define OA_CORE_EXPORT __declspec( dllexport )
 #     else
 #       define OA_CORE_EXPORT __declspec( dllimport )
