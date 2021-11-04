@@ -44,6 +44,8 @@ bool DX11Shader::compileFromFile(String file)
   if( errorBlob ){
     errorBlob->Release();
   }
+
+  return true;
 }
 
 

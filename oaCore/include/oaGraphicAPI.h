@@ -13,16 +13,13 @@
 #include "oaVector4f.h"
 #include <Windows.h>
 
-namespace GRAPHIC_API {
-enum E {
+namespace oaEngineSDK{
+
+enum class GRAPHIC_API {
   NONE=0,
   DIRECTX11,
   OPENGL
 };
-}
-
-
-namespace oaEngineSDK{
 
 /**
  * @brief everything used for graphycs
@@ -85,7 +82,7 @@ class OA_CORE_EXPORT GraphicAPI :
   * @param color 
   */
   virtual void
-  setBackgroundColor(const Vector4f& color);
+  setBackgroundColor(const Vector4f& /*color*/) {}
 
   /**
   * @brief clears the screen
@@ -98,7 +95,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param indexes 
   */
   virtual void
-  draw(uint32 indexes){}
+  draw(uint32 /*indexes*/){}
 
   /**
    * @brief shows the things that where rendered
@@ -112,21 +109,21 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param buffer 
   */
   virtual void
-  setVertexBuffer(const SPtr<Buffer>& buffer){}
+  setVertexBuffer(const SPtr<Buffer>& /*buffer*/){}
 
   /**
   * @brief sets the vertex bubbers that are going to be drawn
   * @param buffer 
   */
   virtual void
-  setIndexBuffer(const SPtr<Buffer>& buffer){}
+  setIndexBuffer(const SPtr<Buffer>& /*buffer*/){}
 
   /**
    * @brief set the texture the shader is going to use
    * @param texture 
   */
   virtual void
-  setTexture(const SPtr<Texture>& texture){}
+  setTexture(const SPtr<Texture>& /*texture*/){}
 
   /**
    * @brief sets a constant buffer to be used un a shader
@@ -134,7 +131,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param location the location in th shader
   */
   virtual void
-  setBuffer(const SPtr<Buffer>& buffer,uint32 location){}
+  setBuffer(const SPtr<Buffer>& /*buffer*/,uint32 /*location*/){}
 
   virtual void*
   getWindow() { return nullptr; }
@@ -165,12 +162,12 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   uint32 windowHeight = 600;
 
-  WNDPROC eventsFunction;
+  WNDPROC eventsFunction = 0;
 
   /**
   * @brief the graphical API that has been loaded
   */
-  GRAPHIC_API::E actualGraphicAPI;
+  GRAPHIC_API actualGraphicAPI = GRAPHIC_API::NONE;
 
  protected:
   /**

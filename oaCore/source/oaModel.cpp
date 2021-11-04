@@ -31,7 +31,7 @@ bool Model::loadFromFile(String file)
 
     aiString f;
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
-    String file = f.C_Str();
+    file = f.C_Str();
     file = "textures/"+file+".png";
     if(ResoureManager::instancePtr()->loadTexture(file)){
       textures.push_back(ResoureManager::instancePtr()->textures[file]);
@@ -40,7 +40,6 @@ bool Model::loadFromFile(String file)
       break;
     }
 
-    uint32 vertindexoffset = 0;
     oaMesh->vertices.resize( aMesh->mNumVertices);
     for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
       Vertex actualVertex;
@@ -55,7 +54,7 @@ bool Model::loadFromFile(String file)
       oaMesh->vertices[numVertex] = actualVertex;
     }
 
-    oaMesh->index.resize(aMesh->mNumFaces * 3);
+    oaMesh->index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
 
     for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
     {
@@ -66,9 +65,9 @@ bool Model::loadFromFile(String file)
         continue;
       }
 
-      oaMesh->index[t*3] = face->mIndices[0];
-      oaMesh->index[t*3+1] = face->mIndices[1];
-      oaMesh->index[t*3+2] = face->mIndices[2];
+      oaMesh->index[static_cast<uint64>(t)*3] = face->mIndices[0];
+      oaMesh->index[static_cast<uint64>(t)*3+1] = face->mIndices[1];
+      oaMesh->index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
     }
 
     oaMesh->create();

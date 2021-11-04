@@ -142,7 +142,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;

@@ -50,11 +50,6 @@ SPtr<Texture> GraphicAPI::createTexture()
   return newSPtr<Texture>();
 }
 
-void GraphicAPI::setBackgroundColor(const Vector4f& color)
-{
-
-}
-
 void GraphicAPI::clear()
 {
 }

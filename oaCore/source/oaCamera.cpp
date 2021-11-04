@@ -21,7 +21,7 @@ void Camera::setCamera()
 
   //ans.transpose();
 
-  buffer->update(&ans.m11,sizeof(Matrix4f));
+  buffer->update(&ans.m11);
 
   GraphicAPI::instancePtr()->setBuffer(buffer,1);
 
