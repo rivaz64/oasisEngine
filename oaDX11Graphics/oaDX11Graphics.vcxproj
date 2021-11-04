@@ -28,13 +28,6 @@
     <ClInclude Include="include\oaDX11VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\externals\imgui.cpp" />
-    <ClCompile Include="..\externals\imgui_demo.cpp" />
-    <ClCompile Include="..\externals\imgui_draw.cpp" />
-    <ClCompile Include="..\externals\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\externals\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\externals\imgui_tables.cpp" />
-    <ClCompile Include="..\externals\imgui_widgets.cpp" />
     <ClCompile Include="DX11RenderTarget.cpp" />
     <ClCompile Include="include\oaDX11PixelShader.cpp" />
     <ClCompile Include="source\oaDX11Buffer.cpp" />
