@@ -8,8 +8,8 @@
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+//#include <imgui_impl_glfw.h>
+//#include <imgui_impl_opengl3.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -49,8 +49,8 @@ void TestApp::postShutDown()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
+    //ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplGlfw_Shutdown();
   }
 
   ImGui::DestroyContext();
@@ -227,8 +227,8 @@ void TestApp::initImGui()
       (ID3D11DeviceContext*)GraphicAPI::instancePtr()->getContext());
   }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
+    //ImGui_ImplOpenGL3_Init("#version 130");
   }
   
 
@@ -242,8 +242,8 @@ void TestApp::newImGuiFrame()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
+    //ImGui_ImplOpenGL3_NewFrame();
+    //ImGui_ImplGlfw_NewFrame();
   }
   
   if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
@@ -266,7 +266,7 @@ void TestApp::renderImGui()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 }
 
