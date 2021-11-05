@@ -26,7 +26,11 @@ DX11VertexShader::compileFromFile(String file)
                                nullptr, 
                                &shader);
   
-  createInputLayout(blob);
+  if (FAILED(hr)) {
+    return false;
+  }
+
+  createInputLayout();
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   context->VSSetShader( shader, NULL, 0 );
@@ -35,13 +39,13 @@ DX11VertexShader::compileFromFile(String file)
 }
 
 void 
-DX11VertexShader::createInputLayout(ID3DBlob*& blob)
+DX11VertexShader::createInputLayout()
 {
   ID3D11ShaderReflection* reflection = nullptr;
-  HRESULT hr = D3DReflect(blob->GetBufferPointer(), 
-                          blob->GetBufferSize(), 
-                          IID_ID3D11ShaderReflection, 
-                          reinterpret_cast<void**>(&reflection));
+  D3DReflect(blob->GetBufferPointer(), 
+             blob->GetBufferSize(), 
+             IID_ID3D11ShaderReflection, 
+             reinterpret_cast<void**>(&reflection));
 
   D3D11_SHADER_DESC shaderDesc;
   reflection->GetDesc(&shaderDesc);

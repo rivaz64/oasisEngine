@@ -25,7 +25,7 @@ public DX11Shader
  private:
 
   void
-  createInputLayout(ID3DBlob*& blob);
+  createInputLayout();
 
   ID3D11VertexShader* shader = nullptr;
 

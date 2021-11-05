@@ -32,7 +32,7 @@ class OA_CORE_EXPORT Texture
    * @return 
   */
   virtual bool
-  loadFromFile(const String& file);
+  loadFromFile(const String& /*file*/) { return false; }
 
   friend class ResoureManager;
 
