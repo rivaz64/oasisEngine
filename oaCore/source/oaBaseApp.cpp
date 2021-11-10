@@ -18,9 +18,9 @@ void BaseApp::onShutDown()
 void
 BaseApp::run()
 {
-  //loadPlugIn("oaDX11Graphicsd.dll");
+  loadPlugIn("oaDX11Graphicsd.dll");
   //loadPlugIn("oaDX11Graphics.dll");
-  loadPlugIn("oaOGL_Grafics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
   if (!GraphicAPI::isStarted()) {
     GraphicAPI::startUp();
   }

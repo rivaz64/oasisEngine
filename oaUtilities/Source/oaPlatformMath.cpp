@@ -21,6 +21,7 @@ const float PlatformMath::INV_PI = 0.318309886183790671537767526745f;
 const float PlatformMath::INV_TWO_PI = 0.159154943091895335768883763372f;
 const float PlatformMath::RAD_TO_DEG = 57.2957795130823208767981548141f;
 const float PlatformMath::DEG_TO_RAD = 0.01745329251994329576923690768f;
+const float PlatformMath::MAX_FLOAT = FLT_MAX;
 
 float
 PlatformMath::invSqrt(float number)

@@ -4,6 +4,7 @@
 #include "oaVector3f.h"
 #include "oaGraphicAPI.h"
 #include "oaModel.h"
+#include "oaSamplerState.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -63,7 +64,18 @@ void TestApp::preInit()
 
 void TestApp::postInit()
 {
-  //std::cout<<"no graphic API"<<std::endl;
+  SamplerDesc sampDesc;
+  ZeroMemory( &sampDesc, sizeof(sampDesc) );
+  sampDesc.filter = FILTER::MIN_MAG_MIP_LINEAR;
+  sampDesc.addressU = TEXTURE_ADDRESS_MODE::WRAP;
+  sampDesc.addressV = TEXTURE_ADDRESS_MODE::WRAP;
+  sampDesc.addressW = TEXTURE_ADDRESS_MODE::WRAP;
+  sampDesc.comparison = COMPARISON_FUNC::NEVER;
+  sampDesc.minLOD = 0.0f;
+  sampDesc.maxLOD = Math::MAX_FLOAT;
+  samsta = GraphicAPI::instancePtr()->createSamplerState(sampDesc);
+
+
   GraphicAPI::instancePtr()->compileShaders("shader");
 
   IMGUI_CHECKVERSION();
@@ -180,7 +192,9 @@ void TestApp::draw()
 
   cam->setCamera();
 
-  /*GraphicAPI::instancePtr()->setTexture(
+  GraphicAPI::instancePtr()->setSamplerState(samsta);
+
+  GraphicAPI::instancePtr()->setTexture(
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
 
@@ -192,7 +206,7 @@ void TestApp::draw()
     ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
   );
 
-  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());*/
+  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());//*/
 
   /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(

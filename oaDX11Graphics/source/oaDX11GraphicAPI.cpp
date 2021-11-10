@@ -3,6 +3,7 @@
 #include "oaDX11PixelShader.h"
 #include "oaDX11Buffer.h"
 #include "oaDX11Texture.h"
+#include "oaDX11SamplerState.h"
 #include "oaMesh.h"
 #include <windows.h>
 #include <d3d11.h>
@@ -18,7 +19,6 @@ void DX11GraphicAPI::onShutDown()
   if( renderTargetView ) renderTargetView->Release();
   if( depthStencil ) depthStencil->Release();
   if( depthStencilView ) depthStencilView->Release();
-  if( samplerLinear ) samplerLinear->Release();
   if( swapChain ) swapChain->Release();
   if( context ) context->Release();
   if( device ) device->Release();
@@ -142,18 +142,7 @@ DX11GraphicAPI::initialize()
     return false;
   }
 
-  D3D11_SAMPLER_DESC sampDesc;
-  ZeroMemory( &sampDesc, sizeof(sampDesc) );
-  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-  sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-  sampDesc.MinLOD = 0;
-  sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-  hr = device->CreateSamplerState( &sampDesc, &samplerLinear );
-  if( FAILED( hr ) )
-    return hr;
+ 
 
   // Setup the viewport
   D3D11_VIEWPORT vp;
@@ -224,6 +213,13 @@ SPtr<Texture> DX11GraphicAPI::createTexture()
   return newSPtr<DX11Texture>();
 }
 
+SPtr<SamplerState> DX11GraphicAPI::createSamplerState(SamplerDesc descriptor)
+{
+  auto sampler = newSPtr<DX11SamplerState>();
+  sampler->init(descriptor);
+  return sampler;
+}
+
 void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
   backgroundColor = color;
@@ -238,7 +234,6 @@ void DX11GraphicAPI::clear()
 
 void DX11GraphicAPI::draw(uint32 indexes)
 {
-  context->PSSetSamplers( 0, 1, &samplerLinear );
   context->DrawIndexed(indexes, 0, 0);
 }
 
@@ -279,6 +274,11 @@ void DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 {
 
   context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
+}
+
+void DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
+{
+  context->PSSetSamplers( 0, 1, &cast<DX11SamplerState>(sampler)->samplerState);
 }
 
 void* DX11GraphicAPI::getWindow()

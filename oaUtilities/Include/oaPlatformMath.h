@@ -458,6 +458,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   static const float INV_TWO_PI;
   static const float RAD_TO_DEG;
   static const float DEG_TO_RAD;
+  static const float MAX_FLOAT;
 
 };
 

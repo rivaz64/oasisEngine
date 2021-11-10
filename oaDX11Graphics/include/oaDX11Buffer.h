@@ -8,13 +8,7 @@
 
 #include "oaBuffer.h"
 #include <d3d11.h>
-#include <Windows.h>
 namespace oaEngineSDK{
-
-enum class DX11BUFFER_FLAGS{
-  VERTEX = D3D11_BIND_VERTEX_BUFFER,
-  CONSTANT = D3D11_BIND_CONSTANT_BUFFER
-};
 
 class DX11Buffer :
   public Buffer

@@ -10,7 +10,9 @@
 #include "oaModule.h"
 #include "oaBuffer.h"
 #include "oaTexture.h"
+#include "oaSamplerState.h"
 #include "oaVector4f.h"
+#include "oaSamplerState.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -81,6 +83,14 @@ class OA_CORE_EXPORT GraphicAPI :
   createTexture();
 
   /**
+   * @brief creates a sampler state
+   * @param the atributes of the sampler state
+   * @return 
+  */
+  virtual SPtr<SamplerState>
+  createSamplerState(SamplerDesc /*descriptor*/);
+
+  /**
   * @brief sets the color of the background
   * @param color 
   */
@@ -135,6 +145,13 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setBuffer(const SPtr<Buffer>& /*buffer*/,uint32 /*location*/){}
+
+  /**
+   * @brief sets a sampler tate
+   * @param  
+  */
+  virtual void
+  setSamplerState(const SPtr<SamplerState> /*sampler*/) {}
 
   virtual void*
   getWindow() { return nullptr; }

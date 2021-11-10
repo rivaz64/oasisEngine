@@ -48,6 +48,11 @@ GraphicAPI::createTexture()
   return newSPtr<Texture>();
 }
 
+SPtr<SamplerState> GraphicAPI::createSamplerState(SamplerDesc /*descriptor*/)
+{
+  return newSPtr<SamplerState>();
+}
+
 }
 
 

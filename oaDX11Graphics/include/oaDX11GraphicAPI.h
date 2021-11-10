@@ -41,6 +41,10 @@ protected:
   SPtr<Texture> 
   createTexture() override;
 
+  SPtr<SamplerState>
+  createSamplerState(SamplerDesc descriptor);
+
+
   void
   setBackgroundColor(const Vector4f& color) override;
 
@@ -65,6 +69,9 @@ protected:
   void
   setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
 
+  void
+  setSamplerState(const SPtr<SamplerState> sampler) override;
+
   virtual void*
   getWindow() override;
 
@@ -88,7 +95,7 @@ protected:
   ID3D11RenderTargetView* renderTargetView = nullptr;
   ID3D11Texture2D* depthStencil = nullptr;
   ID3D11DepthStencilView* depthStencilView = nullptr;
-  ID3D11SamplerState* samplerLinear = nullptr;
+  //ID3D11SamplerState* samplerLinear = nullptr;
 
   MSG msg = MSG();
 

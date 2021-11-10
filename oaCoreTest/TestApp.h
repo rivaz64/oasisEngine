@@ -3,6 +3,7 @@
 #include "oaBaseApp.h"
 #include "oaObject.h"
 #include "oaCamera.h"
+#include "oaSamplerState.h"
 
 namespace oaEngineSDK{
 
@@ -46,6 +47,8 @@ public:
    SPtr<Camera> cam;
 
    SPtr<Buffer> camBuf;
+
+   SPtr<SamplerState> samsta;
 };
 
 }
