@@ -1,6 +1,7 @@
 #include "oaOGL_Buffer.h"
 #include "oaMesh.h"
 #include "oaOGL_GraphicsAPI.h"
+#include "oaMatrix4f.h"
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
 
@@ -17,7 +18,8 @@ OGL_Buffer::~OGL_Buffer()
   glDeleteBuffers(1, &VBO);
 }
 
-void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
+bool 
+OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 {
   if(flags == BUFFER_FLAGS::VERTEX){
     glGenVertexArrays(1, &VAO);
@@ -43,12 +45,14 @@ void OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW); 
   }
   
+  return true;
 
 }
 
-void OGL_Buffer::update(void* data, uint32 size)
+void 
+OGL_Buffer::update(void* data)
 {
-  memcpy(pointer,data,size);
+  memcpy(pointer,data,sizeof(Matrix4f));
   /*unsigned int transformLoc = glGetUniformLocation(
     reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, 
     "transform");

@@ -18,12 +18,6 @@ GraphicAPI::isRunning()
   return true;
 }
 
-void 
-GraphicAPI::events()
-{
-
-}
-
 bool 
 GraphicAPI::compileShaders(String folder)
 {
@@ -37,23 +31,22 @@ GraphicAPI::compileShaders(String folder)
     return false;
   }
 
+  createShaderProgram();
+
   return true;
 }
 
-SPtr<Buffer> GraphicAPI::createBuffer()
+SPtr<Buffer> 
+GraphicAPI::createBuffer()
 {
   return newSPtr<Buffer>();
 }
 
-SPtr<Texture> GraphicAPI::createTexture()
+SPtr<Texture> 
+GraphicAPI::createTexture()
 {
   return newSPtr<Texture>();
 }
-
-void GraphicAPI::clear()
-{
-}
-
 
 }
 

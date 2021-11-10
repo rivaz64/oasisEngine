@@ -19,22 +19,28 @@ class OA_OGL_EXPORT OGL_GraphicsAPI :
 public:
 
   void
-  onShutDown() override;
+    onShutDown() override;
 
   bool
-  initialize() override;
+    initialize() override;
 
   bool
-  isRunning() override;
+    isRunning() override;
 
   void
-  events() override;
+    events() override;
 
   void
-  setBackgroundColor(const Vector4f& color) override;
+    setBackgroundColor(const Vector4f& color) override;
+
+  void
+  createShaderProgram() override;
 
   void
   clear() override;
+
+  void
+  draw(uint32 indexes) override;
 
   void
   show() override;

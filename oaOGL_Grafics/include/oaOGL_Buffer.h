@@ -16,11 +16,11 @@ class OGL_Buffer :
  public:
    ~OGL_Buffer();
 
-  void
+  bool
   init(void* data,uint32 size,BUFFER_FLAGS flags) override;
 
   void
-  update(void* data,uint32 size) override;
+  update(void* data) override;
 
  public:
 

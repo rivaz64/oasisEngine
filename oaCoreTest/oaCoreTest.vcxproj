@@ -171,6 +171,8 @@
     <ClCompile Include="..\externals\imgui_demo.cpp" />
     <ClCompile Include="..\externals\imgui_draw.cpp" />
     <ClCompile Include="..\externals\imgui_impl_dx11.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\externals\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\externals\imgui_impl_win32.cpp" />
     <ClCompile Include="..\externals\imgui_tables.cpp" />
     <ClCompile Include="..\externals\imgui_widgets.cpp" />

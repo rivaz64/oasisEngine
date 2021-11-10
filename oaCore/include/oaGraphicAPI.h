@@ -53,7 +53,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @brief manages the the events that the graphics api detects
   */
   virtual void
-  events();
+  events() {}
 
   /**
    * @brief compiles the shaders
@@ -62,6 +62,9 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   bool
   compileShaders(String folder);
+
+  virtual void 
+  createShaderProgram() {}
 
   /**
    * @brief creates a buffer
@@ -88,21 +91,21 @@ class OA_CORE_EXPORT GraphicAPI :
   * @brief clears the screen
   */
   virtual void
-  clear();
+  clear() {}
 
   /**
    * @brief draws to the back buffer
    * @param indexes 
   */
   virtual void
-  draw(uint32 /*indexes*/){}
+  draw(uint32 /*indexes*/) {}
 
   /**
    * @brief shows the things that where rendered
    * @param indexes number of indexes to draw
   */
   virtual void
-  show(){}
+  show() {}
 
   /**
    * @brief sets the vertex bubbers that are going to be drawn
@@ -142,15 +145,7 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void*
   getContext() {return nullptr;}
 
-  virtual void
-  initImGui(){}
-
-  virtual void
-  newImGuiFrame(){}
-  void
-  ImGuiRender(){}
-  virtual void*
-  getImGui(){return nullptr;}
+  
 
   /**
    * @brief the width of the window at the begining

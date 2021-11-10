@@ -45,20 +45,7 @@ OGL_GraphicsAPI::initialize()
 
   shaderProgram = glCreateProgram();
 
-  if(!GraphicAPI::initialize()){
-    return false;
-  }
   glLinkProgram(shaderProgram);
-
-  int success;
-  char infoLog[512];
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-  }
-
-  glUseProgram(shaderProgram); 
 
   //glEnable(GL_DEPTH_TEST);  
 
@@ -77,58 +64,90 @@ OGL_GraphicsAPI::events()
   glfwPollEvents();
 }
 
-void OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
+void 
+OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
 {
 
   glClearColor(color.x, color.y, color.z, color.w);
 
 }
 
-void OGL_GraphicsAPI::clear()
+void OGL_GraphicsAPI::createShaderProgram()
+{
+  int success;
+  char infoLog[512];
+  glAttachShader(shaderProgram, cast<OGL_Shader>(vertexShader)->id);
+  glAttachShader(shaderProgram, cast<OGL_Shader>(pixelShader)->id);
+  glLinkProgram(shaderProgram);
+  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+  if (!success) {
+    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+  }
+
+  glUseProgram(shaderProgram); 
+}
+
+void 
+OGL_GraphicsAPI::clear()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OGL_GraphicsAPI::show()
+void
+OGL_GraphicsAPI::draw(uint32 indexes)
+{
+  glDrawElements(GL_TRIANGLES, indexes, GL_UNSIGNED_INT, 0);
+}
+
+void 
+OGL_GraphicsAPI::show()
 {
   //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
   glfwSwapBuffers(window);
 }
 
-SPtr<Buffer> OGL_GraphicsAPI::createBuffer()
+SPtr<Buffer> 
+OGL_GraphicsAPI::createBuffer()
 {
   return newSPtr<OGL_Buffer>();
 }
 
-SPtr<Texture> OGL_GraphicsAPI::createTexture()
+SPtr<Texture> 
+OGL_GraphicsAPI::createTexture()
 {
   return newSPtr<OGL_Texture>();
 }
 
-void OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
+void 
+OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
 {
   glBindVertexArray(cast<OGL_Buffer>(buffer)->VAO);
 }
 
-void OGL_GraphicsAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
+void 
+OGL_GraphicsAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
 {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cast<OGL_Buffer>(buffer)->EBO);
 }
 
-void OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
+void 
+OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
 {
   glBindTexture(GL_TEXTURE_2D, cast<OGL_Texture>(texture)->id);
 }
 
-void OGL_GraphicsAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
+void 
+OGL_GraphicsAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 {
   //unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
   //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
   glUniformMatrix4fv(location, 1, GL_FALSE, reinterpret_cast<float*>(cast<OGL_Buffer>(buffer)->pointer));//*/
 }
 
-void* OGL_GraphicsAPI::getWindow()
+void* 
+OGL_GraphicsAPI::getWindow()
 {
   return window;
 }

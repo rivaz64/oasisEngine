@@ -43,8 +43,6 @@ OGL_Shader::compileFromFile(String file)
     return false;
   };
 
-  glAttachShader(
-  reinterpret_cast<OGL_GraphicsAPI*>(OGL_GraphicsAPI::instancePtr())->shaderProgram, id);
 
   return true;
 }

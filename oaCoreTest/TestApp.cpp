@@ -8,8 +8,8 @@
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
-//#include <imgui_impl_glfw.h>
-//#include <imgui_impl_opengl3.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -49,8 +49,8 @@ void TestApp::postShutDown()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    //ImGui_ImplOpenGL3_Shutdown();
-    //ImGui_ImplGlfw_Shutdown();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
   }
 
   ImGui::DestroyContext();
@@ -142,7 +142,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -194,7 +194,7 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());*/
 
-  for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
+  /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(
       character->model->meshes[i]->vertexB
     );
@@ -207,7 +207,7 @@ void TestApp::draw()
     );
 
     GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());
-  }
+  }*/
 
   renderImGui();
 
@@ -227,8 +227,8 @@ void TestApp::initImGui()
       (ID3D11DeviceContext*)GraphicAPI::instancePtr()->getContext());
   }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
-    //ImGui_ImplOpenGL3_Init("#version 130");
+    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 130");
   }
   
 
@@ -242,8 +242,8 @@ void TestApp::newImGuiFrame()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    //ImGui_ImplOpenGL3_NewFrame();
-    //ImGui_ImplGlfw_NewFrame();
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
   }
   
   if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
@@ -254,9 +254,9 @@ void TestApp::newImGuiFrame()
 
 void TestApp::renderImGui()
 {
-  /*ImGuiIO& io = ImGui::GetIO();
+  ImGuiIO& io = ImGui::GetIO();
   io.DisplaySize.x = GraphicAPI::instancePtr()->windowWidth;
-  io.DisplaySize.y = GraphicAPI::instancePtr()->windowHeight;*/
+  io.DisplaySize.y = GraphicAPI::instancePtr()->windowHeight;
   
   if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::Render();
@@ -266,7 +266,7 @@ void TestApp::renderImGui()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 }
 
