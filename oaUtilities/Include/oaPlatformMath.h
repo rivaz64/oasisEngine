@@ -9,6 +9,7 @@
 #include "oaPlatformDefines.h"
 #include "oaStdHeaders.h"
 #include "oaForDecUtilities.h"
+#include "oaPlatformTypes.h"
 
 namespace oaEngineSDK {
 /**
@@ -23,7 +24,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  sqrt(float x) 
+  sqrt(const float x) 
   {
     return std::sqrtf(x);
   }
@@ -42,7 +43,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  cos(float r) 
+  cos(const float r) 
   {
     return std::cosf(r);
   }
@@ -53,7 +54,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  sin(float r) {
+  sin(const float r) {
     return std::sinf(r);
   }
 
@@ -63,7 +64,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  tan(float r) {
+  tan(const float r) {
     return std::tanf(r);
   }
 
@@ -73,7 +74,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  acos(float x) 
+  acos(const float x) 
   {
     return std::acosf(x);
   }
@@ -84,7 +85,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  asin(float x) 
+  asin(const float x) 
   {
     return std::asinf(x);
   }
@@ -95,7 +96,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  atan(float x) 
+  atan(const float x) 
   {
     return std::atanf(x);
   }
@@ -107,7 +108,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float 
-  atan2(float x, float y) {
+  atan2(const float x,const  float y) {
     return std::atan2f(y, x);
   }
 
@@ -119,7 +120,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   template<class T>
   static FORCEINLINE T 
-  abs(T v) 
+  abs(const T v) 
   {
     return std::abs(v);
   }
@@ -133,7 +134,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   template<class T>
   static FORCEINLINE T 
-  max(T v1,T v2) 
+  max(const T v1,const T v2) 
   {
     return std::max(v1,v2);
   }
@@ -147,7 +148,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   template<class T>
   static FORCEINLINE T 
-  min(T v1, T v2) 
+  min(const T v1,const  T v2) 
   {
     return std::min(v1, v2);
   }
@@ -158,7 +159,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @param v
   */
   static FORCEINLINE float 
-  exp(float v) {
+  exp(const float v) {
     return std::expf(v);
   }
 
@@ -169,7 +170,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @param v2 
   */
   static FORCEINLINE float
-  mod(float v1, float v2)
+  mod(const float v1,const  float v2)
   {
     return std::fmod(v1, v2);
   }
@@ -182,7 +183,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  pow(float v1, float v2)
+  pow(const float v1,const  float v2)
   {
     return std::pow(v1, v2);
   }
@@ -191,7 +192,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @brief logaritmic function of the value
   */
   static FORCEINLINE float
-  log(float v)
+  log(const float v)
   {
     return std::log(v);
   }
@@ -203,7 +204,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  sign(float v) {
+  sign(const float v) {
     return float((0.f < v) - (v < 0));
   }
 
@@ -213,7 +214,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   unitRandom() {
-    return (float)std::rand() / RAND_MAX;
+    return static_cast<float>(std::rand()) / RAND_MAX;
   }
 
   /**
@@ -222,7 +223,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   symmetricRandom() {
-    return ((float)std::rand() / RAND_MAX)*2.f-1.f;
+    return (static_cast<float>(std::rand())  / RAND_MAX)*2.f-1.f;
   }
 
   /**
@@ -231,7 +232,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  fastSin(float x) 
+  fastSin(const float x) 
   {
     float x2 = x * x;
     return (1.f - .16605f * x2 + .00761f*x2*x2) * x;
@@ -243,7 +244,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  fastCos(float x)
+  fastCos(const float x)
   {
     float x2 = x * x;
     return 1.f - .4967f * x2 + .03705f * x2 * x2;
@@ -255,7 +256,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float
-  fastTan(float x)
+  fastTan(const float x)
   {
     float x2 = x * x;
     return (1.f + .31755f * x2 + .20330f * x2 * x2) * x;
@@ -267,7 +268,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float
-  fastAcos(float x)
+  fastAcos(const float x)
   {
     float x2 = x * x;
     return sqrt(1 - x) * 
@@ -280,7 +281,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float
-  fastAsin(float x)
+  fastAsin(const float x)
   {
     float x2 = x * x;
     return HALF_PI - sqrt(1 - x) *
@@ -293,12 +294,24 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return
   */
   static FORCEINLINE float
-  fastAtan(float x)
+  fastAtan(const float x)
   {
     float x2 = x * x;
     float x4 = x2 * x2;
     float x6 = x4 * x2;
     return (0.9998660f - .3302995f*x2 + .180141f*x4 - .085133f*x6 + .0208351f*x6*x2) * x;
+  }
+
+  /**
+   * @brief the module of a number in positives
+   * @param number 
+   * @param modul
+   * @return 
+  */
+  static FORCEINLINE uint32 
+  modular(int32 number, uint32 modul) 
+  {
+    return ((number % modul) + modul) % modul;
   }
 
   /**
