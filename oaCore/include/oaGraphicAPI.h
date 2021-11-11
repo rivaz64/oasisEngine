@@ -13,6 +13,7 @@
 #include "oaSamplerState.h"
 #include "oaVector4f.h"
 #include "oaSamplerState.h"
+#include "oaRenderTarget.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -91,11 +92,22 @@ class OA_CORE_EXPORT GraphicAPI :
   createSamplerState(SamplerDesc /*descriptor*/);
 
   /**
+   * @brief creates a render target
+   * @param texture the texture for the render target
+   * @return 
+  */
+  virtual SPtr<RenderTarget>
+  createRenderTarget(SPtr<Texture> /*texture*/);
+
+  /**
   * @brief sets the color of the background
   * @param color 
   */
   virtual void
   setBackgroundColor(const Vector4f& /*color*/) {}
+
+  virtual SPtr<Texture>
+  getBackBuffer();
 
   /**
   * @brief clears the screen
@@ -152,6 +164,20 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setSamplerState(const SPtr<SamplerState> /*sampler*/) {}
+
+  /**
+   * @brief clears a render target
+   * @param renderTarget 
+  */
+  virtual void
+  clearRenderTarget(SPtr<RenderTarget> renderTarget){}
+
+  /**
+   * @brief sets the render target to be used
+   * @param renderTarget 
+  */
+  virtual void
+  setRenderTarget(const SPtr<RenderTarget> /*renderTarget*/) {}
 
   virtual void*
   getWindow() { return nullptr; }

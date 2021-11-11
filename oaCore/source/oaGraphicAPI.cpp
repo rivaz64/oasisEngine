@@ -53,6 +53,16 @@ SPtr<SamplerState> GraphicAPI::createSamplerState(SamplerDesc /*descriptor*/)
   return newSPtr<SamplerState>();
 }
 
+SPtr<RenderTarget> GraphicAPI::createRenderTarget(SPtr<Texture>)
+{
+  return newSPtr<RenderTarget>();
+}
+
+SPtr<Texture> GraphicAPI::getBackBuffer()
+{
+  return newSPtr<Texture>();
+}
+
 }
 
 

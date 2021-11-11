@@ -12,6 +12,17 @@ namespace oaEngineSDK{
 
 class RenderTarget
 {
+ public:
+
+  virtual ~RenderTarget() {}
+
+  /**
+   * @brief initializes the render target
+   * @param texture where the render is going to be drawn
+   * @return 
+  */
+  virtual bool 
+  init(SPtr<Texture> texture) { return true; }
 
 };
 

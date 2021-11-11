@@ -4,6 +4,7 @@
 #include "oaObject.h"
 #include "oaCamera.h"
 #include "oaSamplerState.h"
+#include "oaRenderTarget.h"
 
 namespace oaEngineSDK{
 
@@ -49,6 +50,8 @@ public:
    SPtr<Buffer> camBuf;
 
    SPtr<SamplerState> samsta;
+
+   SPtr<RenderTarget> render;
 };
 
 }

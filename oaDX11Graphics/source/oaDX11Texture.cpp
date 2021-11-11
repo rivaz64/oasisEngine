@@ -5,6 +5,7 @@ namespace oaEngineSDK{
 
 DX11Texture::~DX11Texture()
 {
+  if(shaderResourceView) shaderResourceView->Release();
   if(texture) texture->Release();
 }
 
@@ -17,7 +18,7 @@ bool DX11Texture::loadFromFile(const String& file)
     file.c_str(),
     nullptr,
     nullptr,
-    &texture,
+    &shaderResourceView,
     nullptr
   );
 

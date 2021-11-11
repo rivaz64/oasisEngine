@@ -70,16 +70,26 @@ DX11SamplerState::~DX11SamplerState()
 bool DX11SamplerState::init(SamplerDesc descriptor)
 {
   D3D11_SAMPLER_DESC sampDesc;
+
   ZeroMemory(&sampDesc, sizeof(sampDesc));
+
   sampDesc.Filter = static_cast<D3D11_FILTER>(FILTER_FLAGS[descriptor.filter]);
+
   sampDesc.AddressU = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(TEXTURE_ADDRESS_FLAGS[descriptor.addressU]);
+
   sampDesc.AddressV = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(TEXTURE_ADDRESS_FLAGS[descriptor.addressV]);
+
   sampDesc.AddressW = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(TEXTURE_ADDRESS_FLAGS[descriptor.addressW]);
-  sampDesc.ComparisonFunc = static_cast<D3D11_COMPARISON_FUNC>(COMPARISON_FLAGS[descriptor.comparison]);;
+
+  sampDesc.ComparisonFunc = static_cast<D3D11_COMPARISON_FUNC>(COMPARISON_FLAGS[descriptor.comparison]);
+
   sampDesc.MinLOD = descriptor.minLOD;
+
   sampDesc.MaxLOD = descriptor.maxLOD;
+
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   device->CreateSamplerState( &sampDesc, &samplerState );
+
   if( FAILED( hr ) )
     return false;
 

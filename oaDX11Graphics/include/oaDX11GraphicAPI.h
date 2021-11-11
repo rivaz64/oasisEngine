@@ -17,10 +17,6 @@ namespace oaEngineSDK{
 class DX11GraphicAPI :
   public GraphicAPI
 {
- 
-protected:
-  
-
  public:
 
   void
@@ -42,11 +38,16 @@ protected:
   createTexture() override;
 
   SPtr<SamplerState>
-  createSamplerState(SamplerDesc descriptor);
+  createSamplerState(SamplerDesc descriptor) override;
 
+  SPtr<RenderTarget>
+  createRenderTarget(SPtr<Texture> texture) override;
 
   void
   setBackgroundColor(const Vector4f& color) override;
+
+  SPtr<Texture>
+  getBackBuffer() override;
 
   void
   clear() override;
@@ -72,6 +73,12 @@ protected:
   void
   setSamplerState(const SPtr<SamplerState> sampler) override;
 
+  void
+  setRenderTarget(const SPtr<RenderTarget> renderTarget);
+
+  void
+  clearRenderTarget(SPtr<RenderTarget> renderTarget);
+
   virtual void*
   getWindow() override;
 
@@ -92,10 +99,9 @@ protected:
   ID3D11Device* device = nullptr;
   ID3D11DeviceContext* context = nullptr;
   IDXGISwapChain* swapChain = nullptr;
-  ID3D11RenderTargetView* renderTargetView = nullptr;
+  //ID3D11RenderTargetView* renderTargetView = nullptr;
   ID3D11Texture2D* depthStencil = nullptr;
   ID3D11DepthStencilView* depthStencilView = nullptr;
-  //ID3D11SamplerState* samplerLinear = nullptr;
 
   MSG msg = MSG();
 

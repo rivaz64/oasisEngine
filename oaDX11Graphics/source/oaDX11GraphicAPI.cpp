@@ -4,6 +4,7 @@
 #include "oaDX11Buffer.h"
 #include "oaDX11Texture.h"
 #include "oaDX11SamplerState.h"
+#include "oaDX11RenderTarget.h"
 #include "oaMesh.h"
 #include <windows.h>
 #include <d3d11.h>
@@ -16,7 +17,6 @@ void DX11GraphicAPI::onShutDown()
 {
   if( context ) context->ClearState();
 
-  if( renderTargetView ) renderTargetView->Release();
   if( depthStencil ) depthStencil->Release();
   if( depthStencilView ) depthStencilView->Release();
   if( swapChain ) swapChain->Release();
@@ -127,20 +127,10 @@ DX11GraphicAPI::initialize()
 
   
 
-  ID3D11Texture2D* pBackBuffer = NULL;
-  hr = swapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&pBackBuffer );
-  if( FAILED( hr ) ){
-    std::cout<<"failed to get backBuffer"<<std::endl;
-    return false;
-  }
-    
-
-  hr = device->CreateRenderTargetView( pBackBuffer, NULL, &renderTargetView );
-  pBackBuffer->Release();
-  if( FAILED( hr ) ){
-    std::cout<<"failed to set backBuffer"<<std::endl;
-    return false;
-  }
+  //a
+  /*auto renderTarget = createRenderTarget(getBackBuffer());  
+  a;*/
+  
 
  
 
@@ -183,8 +173,8 @@ DX11GraphicAPI::initialize()
   hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
   if( FAILED( hr ) )
     return hr;
-
-  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+  /*b;
+  setRenderTarget(renderTarget);*/
 
   return true;
 }
@@ -203,50 +193,81 @@ DX11GraphicAPI::events()
   DispatchMessage(&msg);
 }
 
-SPtr<Buffer> DX11GraphicAPI::createBuffer()
+SPtr<Buffer> 
+DX11GraphicAPI::createBuffer()
 {
   return newSPtr<DX11Buffer>();
 }
 
-SPtr<Texture> DX11GraphicAPI::createTexture()
+SPtr<Texture> 
+DX11GraphicAPI::createTexture()
 {
   return newSPtr<DX11Texture>();
 }
 
-SPtr<SamplerState> DX11GraphicAPI::createSamplerState(SamplerDesc descriptor)
+SPtr<SamplerState> 
+DX11GraphicAPI::createSamplerState(SamplerDesc descriptor)
 {
   auto sampler = newSPtr<DX11SamplerState>();
   sampler->init(descriptor);
   return sampler;
 }
 
-void DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
+SPtr<RenderTarget> 
+DX11GraphicAPI::createRenderTarget(SPtr<Texture> texture)
+{
+  auto renderTarget = newSPtr<DX11RenderTarget>();
+  renderTarget->init(texture);
+  return renderTarget;
+}
+
+void 
+DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
   backgroundColor = color;
 }
 
-void DX11GraphicAPI::clear()
+SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 {
-  context->ClearRenderTargetView( renderTargetView, &backgroundColor.x );
-  context->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+  auto backBuffer = createTexture();
+
+  HRESULT hr = swapChain->GetBuffer( 
+    0, 
+    __uuidof( ID3D11Texture2D ), 
+    ( LPVOID* )&cast<DX11Texture>(backBuffer)->texture );
+
+  if( FAILED( hr ) ){
+    std::cout<<"failed to get backBuffer"<<std::endl;
+  }
+
+  return backBuffer;
 }
 
-void DX11GraphicAPI::draw(uint32 indexes)
+void 
+DX11GraphicAPI::clear()
+{
+  context->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
+  //context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+}
+
+void 
+DX11GraphicAPI::draw(uint32 indexes)
 {
   context->DrawIndexed(indexes, 0, 0);
 }
 
-void DX11GraphicAPI::show()
+void 
+DX11GraphicAPI::show()
 {
   
   //context->OMSetRenderTargets( 1, &renderTargetView, NULL )
-  context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
+  //context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 
   swapChain->Present( 0, 0 );
 }
 
-void DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
+void 
+DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
 {
   UINT stride = sizeof(Vertex);
   UINT offset = 0;
@@ -259,39 +280,63 @@ void DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
     &offset );
 }
 
-void DX11GraphicAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
+void 
+DX11GraphicAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
 {
   context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );  
   context->IASetIndexBuffer(cast<DX11Buffer>(buffer)->buffer,DXGI_FORMAT_R32_UINT,0 );
 }
 
-void DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)
+void 
+DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)
 {
-  context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->texture );
+  context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->shaderResourceView );
 }
 
-void DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
+void 
+DX11GraphicAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 {
 
   context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
 }
 
-void DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
+void 
+DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
 {
   context->PSSetSamplers( 0, 1, &cast<DX11SamplerState>(sampler)->samplerState);
 }
 
-void* DX11GraphicAPI::getWindow()
+void 
+DX11GraphicAPI::setRenderTarget(const SPtr<RenderTarget> renderTarget)
+{
+  context->OMSetRenderTargets( 
+    1,
+    &cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
+    depthStencilView );
+}
+
+void 
+DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
+{
+  context->ClearRenderTargetView(
+    cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
+    &backgroundColor.x );
+}
+
+void* 
+DX11GraphicAPI::getWindow()
 {
   return hWnd;
 }
 
-void* DX11GraphicAPI::getDevice()
+void* 
+DX11GraphicAPI::getDevice()
 {
   return device;
 }
 
-void* DX11GraphicAPI::getContext()
+void* 
+DX11GraphicAPI::getContext()
 {
   return context;
 }

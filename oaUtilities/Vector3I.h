@@ -9,7 +9,7 @@
 
 namespace oaEngineSDK{
 /**
-* @brief bidimencional vector of ints
+* @brief tridimencional vector of ints
 */
 class OA_UTILITY_EXPORT Vector3I
 {
