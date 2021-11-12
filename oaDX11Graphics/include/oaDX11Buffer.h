@@ -10,6 +10,8 @@
 #include <d3d11.h>
 namespace oaEngineSDK{
 
+
+
 class DX11Buffer :
   public Buffer
 {
@@ -18,7 +20,7 @@ class DX11Buffer :
    ~DX11Buffer();
 
   bool
-  init(void* data,uint32 size,BUFFER_FLAGS flags) override;
+  init(void* data,uint32 size,BIND flags) override;
 
   void
   update(void* data) override;

@@ -4,7 +4,7 @@ namespace oaEngineSDK{
 Camera::Camera()
 {
   buffer = GraphicAPI::instancePtr()->createBuffer();
-  buffer->init(nullptr,sizeof(Matrix4f),BUFFER_FLAGS::CONSTANT);
+  buffer->init(nullptr,sizeof(Matrix4f),BIND::CONSTANT);
 }
 void Camera::setCamera()
 {

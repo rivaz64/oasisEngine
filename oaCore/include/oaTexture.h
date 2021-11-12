@@ -7,8 +7,21 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaBuffer.h"
+#include "oaFlags.h"
 
 namespace oaEngineSDK{
+
+struct TextureDesc{
+  uint32 width;
+  uint32 height;
+  uint32 mipLevels;
+  uint32 arraySize;
+  FORMAT format;
+  uint32 sampleCount;
+  uint32 sampleQuality;
+  BIND bind;
+};
 
 /**
  * @brief class for all kinds of textures
@@ -25,7 +38,7 @@ class OA_CORE_EXPORT Texture
   virtual
   ~Texture() = default;
 
- protected:
+ public:
   /**
    * @brief loads the texture from a file
    * @param file 
@@ -33,6 +46,9 @@ class OA_CORE_EXPORT Texture
   */
   virtual bool
   loadFromFile(const String& /*file*/) { return false; }
+
+  virtual bool
+  init(TextureDesc description) {return true;}
 
   friend class ResoureManager;
 

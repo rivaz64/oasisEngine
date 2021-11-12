@@ -14,6 +14,7 @@
 #include "oaVector4f.h"
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
+#include "oaDepthStencil.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -89,7 +90,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<SamplerState>
-  createSamplerState(SamplerDesc /*descriptor*/);
+  createSamplerState(SamplerDesc& /*descriptor*/);
 
   /**
    * @brief creates a render target
@@ -100,6 +101,15 @@ class OA_CORE_EXPORT GraphicAPI :
   createRenderTarget(SPtr<Texture> /*texture*/);
 
   /**
+   * @brief creates a depth stencil
+   * @param description 
+   * @param texture 
+   * @return 
+  */
+  virtual SPtr<DepthStencil>
+  createDepthStencil(DepthStencilDesc& /*description*/, SPtr<Texture> /*texture*/);
+
+  /**
   * @brief sets the color of the background
   * @param color 
   */
@@ -108,12 +118,6 @@ class OA_CORE_EXPORT GraphicAPI :
 
   virtual SPtr<Texture>
   getBackBuffer();
-
-  /**
-  * @brief clears the screen
-  */
-  virtual void
-  clear() {}
 
   /**
    * @brief draws to the back buffer
@@ -173,11 +177,29 @@ class OA_CORE_EXPORT GraphicAPI :
   clearRenderTarget(SPtr<RenderTarget> renderTarget){}
 
   /**
+   * @brief clears a depth stencil to 1s
+   * @param depthStencil 
+  */
+  virtual void 
+  clearDepthStencil(SPtr<DepthStencil> depthStencil) {}
+
+  /**
    * @brief sets the render target to be used
    * @param renderTarget 
   */
   virtual void
   setRenderTarget(const SPtr<RenderTarget> /*renderTarget*/) {}
+
+  /**
+   * @brief sets a render target and a depth stencil
+   * @param renderTarget 
+   * @param depthStencil 
+  */
+  virtual void
+  setRenderTargetAndDepthStencil(
+    const SPtr<RenderTarget> /*renderTarget*/,
+    const SPtr<DepthStencil> /*depthStencil*/
+  ) {}
 
   virtual void*
   getWindow() { return nullptr; }

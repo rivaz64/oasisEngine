@@ -38,19 +38,19 @@ class DX11GraphicAPI :
   createTexture() override;
 
   SPtr<SamplerState>
-  createSamplerState(SamplerDesc descriptor) override;
+  createSamplerState(SamplerDesc& descriptor) override;
 
   SPtr<RenderTarget>
   createRenderTarget(SPtr<Texture> texture) override;
+
+  SPtr<DepthStencil>
+  createDepthStencil(DepthStencilDesc& description, SPtr<Texture> texture) override;
 
   void
   setBackgroundColor(const Vector4f& color) override;
 
   SPtr<Texture>
   getBackBuffer() override;
-
-  void
-  clear() override;
 
   void
   draw(uint32 indexes) override;
@@ -77,7 +77,16 @@ class DX11GraphicAPI :
   setRenderTarget(const SPtr<RenderTarget> renderTarget);
 
   void
+  setRenderTargetAndDepthStencil(
+    const SPtr<RenderTarget> renderTarget,
+    const SPtr<DepthStencil> depthStencil
+  ) override;
+
+  void
   clearRenderTarget(SPtr<RenderTarget> renderTarget);
+
+  void 
+  clearDepthStencil(SPtr<DepthStencil> depthStencil) override;
 
   virtual void*
   getWindow() override;
@@ -99,9 +108,8 @@ class DX11GraphicAPI :
   ID3D11Device* device = nullptr;
   ID3D11DeviceContext* context = nullptr;
   IDXGISwapChain* swapChain = nullptr;
-  //ID3D11RenderTargetView* renderTargetView = nullptr;
   ID3D11Texture2D* depthStencil = nullptr;
-  ID3D11DepthStencilView* depthStencilView = nullptr;
+  //ID3D11DepthStencilView* depthStencilView = nullptr;
 
   MSG msg = MSG();
 

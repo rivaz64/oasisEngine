@@ -6,6 +6,7 @@
 #include "oaDX11SamplerState.h"
 #include "oaDX11RenderTarget.h"
 #include "oaMesh.h"
+#include "oaDX11DepthStencil.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -18,7 +19,6 @@ void DX11GraphicAPI::onShutDown()
   if( context ) context->ClearState();
 
   if( depthStencil ) depthStencil->Release();
-  if( depthStencilView ) depthStencilView->Release();
   if( swapChain ) swapChain->Release();
   if( context ) context->Release();
   if( device ) device->Release();
@@ -148,33 +148,22 @@ DX11GraphicAPI::initialize()
 
   pixelShader = newSPtr<DX11PixelShader>();
 
-  D3D11_TEXTURE2D_DESC descDepth;
-  ZeroMemory( &descDepth, sizeof(descDepth) );
-  descDepth.Width = windowWidth;
-  descDepth.Height = windowHeight;
-  descDepth.MipLevels = 1;
-  descDepth.ArraySize = 1;
-  descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-  descDepth.SampleDesc.Count = 1;
-  descDepth.SampleDesc.Quality = 0;
-  descDepth.Usage = D3D11_USAGE_DEFAULT;
-  descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-  descDepth.CPUAccessFlags = 0;
-  descDepth.MiscFlags = 0;
-  hr = device->CreateTexture2D( &descDepth, NULL, &depthStencil );
-  if( FAILED( hr ) )
-    return hr;
+  
 
-  D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+  //hr = device->CreateTexture2D( &descDepth, NULL, &depthStencil );
+
+  /*D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   ZeroMemory( &descDSV, sizeof(descDSV) );
   descDSV.Format = descDepth.Format;
   descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
   descDSV.Texture2D.MipSlice = 0;
   hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
   if( FAILED( hr ) )
-    return hr;
-  /*b;
-  setRenderTarget(renderTarget);*/
+    return hr;*/
+
+  
+
+  //hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
 
   return true;
 }
@@ -206,7 +195,7 @@ DX11GraphicAPI::createTexture()
 }
 
 SPtr<SamplerState> 
-DX11GraphicAPI::createSamplerState(SamplerDesc descriptor)
+DX11GraphicAPI::createSamplerState(SamplerDesc& descriptor)
 {
   auto sampler = newSPtr<DX11SamplerState>();
   sampler->init(descriptor);
@@ -219,6 +208,15 @@ DX11GraphicAPI::createRenderTarget(SPtr<Texture> texture)
   auto renderTarget = newSPtr<DX11RenderTarget>();
   renderTarget->init(texture);
   return renderTarget;
+}
+
+SPtr<DepthStencil> 
+DX11GraphicAPI::createDepthStencil(DepthStencilDesc& description, SPtr<Texture> texture)
+{
+  auto renderTarget = newSPtr<DX11DepthStencil>();
+  renderTarget->init(description,texture);
+  return renderTarget;
+  return SPtr<DepthStencil>();
 }
 
 void 
@@ -241,13 +239,6 @@ SPtr<Texture> DX11GraphicAPI::getBackBuffer()
   }
 
   return backBuffer;
-}
-
-void 
-DX11GraphicAPI::clear()
-{
-  context->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-  //context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 }
 
 void 
@@ -312,7 +303,21 @@ DX11GraphicAPI::setRenderTarget(const SPtr<RenderTarget> renderTarget)
   context->OMSetRenderTargets( 
     1,
     &cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
-    depthStencilView );
+    nullptr
+  );
+}
+
+void 
+DX11GraphicAPI::setRenderTargetAndDepthStencil(
+  const SPtr<RenderTarget> renderTarget, 
+  const SPtr<DepthStencil> depthStencil
+)
+{
+  context->OMSetRenderTargets( 
+    1,
+    &cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
+    cast<DX11DepthStencil>(depthStencil)->depthStencil
+  );
 }
 
 void 
@@ -321,6 +326,16 @@ DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
   context->ClearRenderTargetView(
     cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
     &backgroundColor.x );
+}
+
+void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
+{
+  context->ClearDepthStencilView(
+    cast<DX11DepthStencil>(depthStencil)->depthStencil,
+    D3D11_CLEAR_DEPTH, 
+    1.0f, 
+    0
+  );
 }
 
 void* 

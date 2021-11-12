@@ -77,7 +77,37 @@ void TestApp::postInit()
 
   render = GraphicAPI::instancePtr()->createRenderTarget(GraphicAPI::instancePtr()->getBackBuffer());
 
-  GraphicAPI::instancePtr()->setRenderTarget(render);
+
+
+  
+
+  TextureDesc descDepth;
+  ZeroMemory( &descDepth, sizeof(descDepth) );
+  descDepth.width = GraphicAPI::instancePtr()->windowWidth;
+  descDepth.height = GraphicAPI::instancePtr()->windowHeight;
+  descDepth.mipLevels = 1;
+  descDepth.arraySize = 1;
+  descDepth.format = FORMAT::D24_UNORM_S8_UINT;
+  descDepth.sampleCount = 1;
+  descDepth.sampleQuality = 0;
+  descDepth.bind = BIND::DEPTH_STENCIL;
+
+  auto depthStencil = GraphicAPI::instancePtr()->createTexture();
+
+  if(!depthStencil->init(descDepth)){
+    return;
+  }
+  
+
+  DepthStencilDesc descDSV;
+  ZeroMemory( &descDSV, sizeof(descDSV) );
+  descDSV.format = descDepth.format;
+  descDSV.viewDimension = DS_DIMENSION::TEXTURE2D;
+  descDSV.MipSlice = 0;
+
+  depthStencilView = GraphicAPI::instancePtr()->createDepthStencil(descDSV,depthStencil);
+
+  GraphicAPI::instancePtr()->setRenderTargetAndDepthStencil(render,depthStencilView);
 
   GraphicAPI::instancePtr()->compileShaders("shader");
 
@@ -187,7 +217,7 @@ void TestApp::update()
 void TestApp::draw()
 {
   GraphicAPI::instancePtr()->clearRenderTarget(render);
-
+  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
   newImGuiFrame();
 
   drawImGui();

@@ -5,6 +5,7 @@
 #include "oaCamera.h"
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
+#include "oaDepthStencil.h"
 
 namespace oaEngineSDK{
 
@@ -52,6 +53,10 @@ public:
    SPtr<SamplerState> samsta;
 
    SPtr<RenderTarget> render;
+
+   SPtr<Texture> depthStencil;
+
+   SPtr<DepthStencil> depthStencilView;
 };
 
 }

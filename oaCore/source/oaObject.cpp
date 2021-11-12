@@ -10,7 +10,7 @@ Object::Object()
   scale = {1.f,1.f,1.f};
   rotation =  {0.f,0.f,0.f};
   transformB = GraphicAPI::instancePtr()->createBuffer();
-  transformB->init(nullptr,sizeof(Matrix4f),BUFFER_FLAGS::CONSTANT);
+  transformB->init(nullptr,sizeof(Matrix4f),BIND::CONSTANT);
 }
 
 void 

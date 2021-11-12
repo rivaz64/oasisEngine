@@ -48,17 +48,26 @@ GraphicAPI::createTexture()
   return newSPtr<Texture>();
 }
 
-SPtr<SamplerState> GraphicAPI::createSamplerState(SamplerDesc /*descriptor*/)
+SPtr<SamplerState> 
+GraphicAPI::createSamplerState(SamplerDesc&)
 {
   return newSPtr<SamplerState>();
 }
 
-SPtr<RenderTarget> GraphicAPI::createRenderTarget(SPtr<Texture>)
+SPtr<RenderTarget> 
+GraphicAPI::createRenderTarget(SPtr<Texture>)
 {
   return newSPtr<RenderTarget>();
 }
 
-SPtr<Texture> GraphicAPI::getBackBuffer()
+SPtr<DepthStencil> 
+GraphicAPI::createDepthStencil(DepthStencilDesc&, SPtr<Texture>)
+{
+  return SPtr<DepthStencil>();
+}
+
+SPtr<Texture> 
+GraphicAPI::getBackBuffer()
 {
   return newSPtr<Texture>();
 }

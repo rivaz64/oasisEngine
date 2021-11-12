@@ -77,7 +77,7 @@ void BaseApp::update()
 
 void BaseApp::render()
 {
-  GraphicAPI::instancePtr()->clear();
+  //GraphicAPI::instancePtr()->clear();
   draw();
   GraphicAPI::instancePtr()->show();
 }

@@ -39,6 +39,12 @@
     <ClInclude Include="include\oaDX11SamplerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaDX11DepthStencil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaDX11Flags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaDX11GraphicAPI.cpp">
@@ -66,6 +72,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaDX11RenderTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaDX11DepthStencil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaDX11Flags.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

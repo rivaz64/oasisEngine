@@ -11,6 +11,8 @@
 
 namespace oaEngineSDK{
 
+
+
 class DX11Texture:
   public Texture
 {
@@ -22,6 +24,9 @@ class DX11Texture:
   bool
   loadFromFile(const String& file) override;
 
+  bool
+  init(TextureDesc description);
+
  private:
 
   ID3D11ShaderResourceView* shaderResourceView;
@@ -29,6 +34,7 @@ class DX11Texture:
   ID3D11Texture2D* texture;
 
   friend class DX11GraphicAPI;
+  friend class DX11DepthStencil;
   friend class DX11RenderTarget;
 };
 

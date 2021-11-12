@@ -7,14 +7,9 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaFlags.h"
 
 namespace oaEngineSDK{
-
-enum class BUFFER_FLAGS{
-  VERTEX,
-  CONSTANT,
-  INDEX
-};
 
 class OA_CORE_EXPORT Buffer
 {
@@ -35,7 +30,7 @@ class OA_CORE_EXPORT Buffer
    * @return if the buffer initialized correctly
   */
   virtual bool
-  init(void* /*data*/, uint32 /*size*/, BUFFER_FLAGS /*flags*/) { return true; }
+  init(void* /*data*/, uint32 /*size*/, BIND /*flags*/) { return true; }
 
   /**
    * @brief changes the data of the buffer
