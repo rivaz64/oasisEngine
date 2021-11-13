@@ -54,9 +54,13 @@ public:
 
    SPtr<RenderTarget> render;
 
+   SPtr<RenderTarget> renderToTexture;
+
    SPtr<Texture> depthStencil;
 
    SPtr<DepthStencil> depthStencilView;
+
+   SPtr<Texture> renTex;
 };
 
 }

@@ -23,6 +23,13 @@ struct TextureDesc{
   BIND bind;
 };
 
+struct ShaderResourseViewDesc{
+  FORMAT format;
+  SRV_DIMENSION dimencion;
+  uint32 mostDetailedMip;
+  uint32 mipLevels;
+};
+
 /**
  * @brief class for all kinds of textures
 */
@@ -47,8 +54,22 @@ class OA_CORE_EXPORT Texture
   virtual bool
   loadFromFile(const String& /*file*/) { return false; }
 
+  /**
+   * @brief initalizes only the texture
+   * @param description 
+   * @return 
+  */
   virtual bool
-  init(TextureDesc description) {return true;}
+  init(TextureDesc /*description*/) {return true;}
+
+  /**
+   * @brief initlializes everything needed for the texture
+   * @param description the description for the texture
+   * @param descriptionSRV the description for the shader resourse
+   * @return 
+  */
+  virtual bool
+  init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/ ) {return true;}
 
   friend class ResoureManager;
 

@@ -27,6 +27,9 @@ class DX11Texture:
   bool
   init(TextureDesc description);
 
+  bool
+  init(TextureDesc description,ShaderResourseViewDesc descriptionSRV);
+
  private:
 
   ID3D11ShaderResourceView* shaderResourceView;

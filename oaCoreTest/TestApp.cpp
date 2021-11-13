@@ -97,7 +97,32 @@ void TestApp::postInit()
   if(!depthStencil->init(descDepth)){
     return;
   }
+
+
+  TextureDesc renDesc;
+  ZeroMemory( &renDesc, sizeof(renDesc) );
+  renDesc.width = GraphicAPI::instancePtr()->windowWidth;
+  renDesc.height = GraphicAPI::instancePtr()->windowHeight;
+  renDesc.mipLevels = 1;
+  renDesc.arraySize = 1;
+  renDesc.format = FORMAT::R32G32B32A32_FLOAT;
+  renDesc.sampleCount = 1;
+  renDesc.sampleQuality = 0;
+  renDesc.bind = BIND::SHADER_RESOURCE_RENDER_TARGET;
+
+  ShaderResourseViewDesc renSDesc;
+  renSDesc.dimencion = SRV_DIMENSION::TEXTURE2D;
+  renSDesc.format = FORMAT::R32G32B32A32_FLOAT;
+  renSDesc.mipLevels = 1;
+  renSDesc.mostDetailedMip = 0;
+
+  renTex = GraphicAPI::instancePtr()->createTexture();
+
+  if(!renTex->init(renDesc,renSDesc)){
+    return;
+  }
   
+  renderToTexture = GraphicAPI::instancePtr()->createRenderTarget(renTex);
 
   DepthStencilDesc descDSV;
   ZeroMemory( &descDSV, sizeof(descDSV) );
@@ -187,7 +212,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -216,12 +241,6 @@ void TestApp::update()
 
 void TestApp::draw()
 {
-  GraphicAPI::instancePtr()->clearRenderTarget(render);
-  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
-  newImGuiFrame();
-
-  drawImGui();
-  
 
   GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
 
@@ -229,8 +248,39 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->setSamplerState(samsta);
 
-  /*GraphicAPI::instancePtr()->setTexture(
+  GraphicAPI::instancePtr()->setRenderTarget(renderToTexture);
+  GraphicAPI::instancePtr()->clearRenderTarget(renderToTexture);
+  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
+
+  GraphicAPI::instancePtr()->setTexture(
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+  );
+
+  GraphicAPI::instancePtr()->setVertexBuffer(
+    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->vertexB
+  );
+
+  GraphicAPI::instancePtr()->setIndexBuffer(
+    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
+  );
+
+  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());
+
+
+
+  GraphicAPI::instancePtr()->setRenderTarget(render);
+
+  GraphicAPI::instancePtr()->clearRenderTarget(render);
+  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
+
+ 
+  
+
+  
+
+  GraphicAPI::instancePtr()->setTexture(
+    renTex
+  //ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
 
   GraphicAPI::instancePtr()->setVertexBuffer(
@@ -243,7 +293,7 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());//*/
 
-  for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
+  /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(
       character->model->meshes[i]->vertexB
     );
@@ -256,8 +306,10 @@ void TestApp::draw()
     );
 
     GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());
-  }
-
+  }*/
+   
+  newImGuiFrame();
+  drawImGui();
   renderImGui();
 
 }

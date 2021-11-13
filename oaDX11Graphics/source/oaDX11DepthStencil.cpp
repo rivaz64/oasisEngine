@@ -13,7 +13,7 @@ bool oaEngineSDK::DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Textur
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   ZeroMemory( &descDSV, sizeof(descDSV) );
   descDSV.Format = Flags::FORMATS[descritor.format];
-  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+  descDSV.ViewDimension = Flags::DS_DIMENCIONS[descritor.viewDimension];
   descDSV.Texture2D.MipSlice = 0;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->

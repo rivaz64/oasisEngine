@@ -55,6 +55,29 @@ DX11Texture::init(TextureDesc description)
   return true;
 }
 
+bool DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV)
+{
+  if(!init(description)){
+    return false;
+  }
+
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+  ZeroMemory( &srvDesc, sizeof(srvDesc) );
+  srvDesc.Format = Flags::FORMATS[descriptionSRV.format];
+  srvDesc.ViewDimension = Flags::SRV_DIMENCIONS[descriptionSRV.dimencion];
+  srvDesc.Texture2D.MostDetailedMip = descriptionSRV.mostDetailedMip;
+  srvDesc.Texture2D.MipLevels = descriptionSRV.mipLevels;
+
+  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    device->CreateShaderResourceView(texture,&srvDesc,&shaderResourceView);
+
+  if(FAILED(hr)){
+    return false;
+  }
+
+  return true;
+}
+
 
 }
 
