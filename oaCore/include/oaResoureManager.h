@@ -35,6 +35,33 @@ class OA_CORE_EXPORT ResoureManager :
   bool
   loadTexture(const String& file);
 
+  /**
+   * @brief loads the default things
+  */
+  void
+  onStartUp() override;
+
+  /**
+   * @brief generates a circle
+   * @param n the number of sides the circle has
+  */
+  void
+  generateCircle(const uint8 n);
+
+ private:
+
+  /**
+   * @brief generates a 1*1 plane
+  */
+  void 
+  generatePlane();
+
+  /**
+   * @brief generates a 1*1*1 cube
+  */
+  void
+  generateCube();
+
  public:
 
   /**

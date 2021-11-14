@@ -6,6 +6,7 @@
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
+#include "oaSceneGraph.h"
 
 namespace oaEngineSDK{
 
@@ -43,8 +44,9 @@ public:
 
  private:
 
-   //SPtr<Object> triangle;
    SPtr<Object> character;
+
+   SPtr<Object> testObject;
 
    SPtr<Camera> cam;
 
@@ -61,6 +63,8 @@ public:
    SPtr<DepthStencil> depthStencilView;
 
    SPtr<Texture> renTex;
+
+   SPtr<SceneGraph> sceneGraph; 
 };
 
 }

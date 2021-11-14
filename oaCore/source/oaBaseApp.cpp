@@ -26,6 +26,8 @@ BaseApp::run()
   }
   preInit();
   if(GraphicAPI::instancePtr()->initialize()){
+    ResoureManager::startUp();
+
     postInit();
     mainLoop();
   }

@@ -64,6 +64,10 @@ void TestApp::preInit()
 
 void TestApp::postInit()
 {
+
+  ResoureManager::instancePtr()->generateCircle(36);
+
+
   SamplerDesc sampDesc;
   ZeroMemory( &sampDesc, sizeof(sampDesc) );
   sampDesc.filter = FILTER::MIN_MAG_MIP_LINEAR;
@@ -142,59 +146,9 @@ void TestApp::postInit()
 
   GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
 
-  ResoureManager::startUp();
+  
 
-  ResoureManager::instancePtr()->meshes.insert({ "triangle",newSPtr<Mesh>() });
-
-  ResoureManager::instancePtr()->meshes["triangle"]->vertices =
-  {
-    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, -1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, -1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, 1.0f, -1.0f), Vector2f(0.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, -1.0f, 1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, -1.0f, 1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(1.0f, 1.0f, 1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-1.0f, 1.0f, 1.0f), Vector2f(0.0f, 1.0f) },
-  };
-
-  ResoureManager::instancePtr()->meshes["triangle"]->index = {
-    3,1,0,
-    2,1,3,
-
-    6,4,5,
-    7,4,6,
-
-    11,9,8,
-    10,9,11,
-
-    14,12,13,
-    15,12,14,
-
-    19,17,16,
-    18,17,19,
-
-    22,20,21,
-    23,20,22
-  };
-
-  ResoureManager::instancePtr()->meshes["triangle"]->create();
+  
 
 
 
@@ -223,6 +177,24 @@ void TestApp::postInit()
 
   character->rotation.y = 3.4f;
 
+
+
+
+  testObject = newSPtr<Object>();
+
+  testObject->model = newSPtr<Model>();
+
+  testObject->location.z = 7.f;
+
+  testObject->model->meshes.push_back(
+    ResoureManager::instancePtr()->meshes["circle"]
+  );
+  
+  testObject->model->textures.push_back(
+    ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+  );
+
+
   cam = newSPtr<Camera>();
 
   cam->angle = 0.785398163f;
@@ -230,19 +202,20 @@ void TestApp::postInit()
   cam->nearPlane = 0.01f;
   cam->farPlane = 100.0f;
 
-
+  sceneGraph = newSPtr<SceneGraph>();
 }
 
 
 void TestApp::update()
 {
   character->update();
+  testObject->update();
 }
 
 void TestApp::draw()
 {
-
-  GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
+  //GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
+  /*GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
 
   cam->setCamera();
 
@@ -266,32 +239,36 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());
 
+  */
 
-
-  GraphicAPI::instancePtr()->setRenderTarget(render);
+  //GraphicAPI::instancePtr()->setRenderTarget(render);
 
   GraphicAPI::instancePtr()->clearRenderTarget(render);
   GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
 
- 
-  
+   cam->setCamera();
 
+  GraphicAPI::instancePtr()->setSamplerState(samsta);
+  
+  sceneGraph->drawObject(testObject);
+
+  /*GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
   
 
   GraphicAPI::instancePtr()->setTexture(
-    renTex
-  //ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+    //renTex
+    ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
 
   GraphicAPI::instancePtr()->setVertexBuffer(
-    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->vertexB
+    ResoureManager::instancePtr()->meshes["cube"]->vertexB
   );
 
   GraphicAPI::instancePtr()->setIndexBuffer(
-    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
+    ResoureManager::instancePtr()->meshes["cube"]->indexB
   );
 
-  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());//*/
+  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->meshes["cube"]->index.size());//*/
 
   /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
     GraphicAPI::instancePtr()->setVertexBuffer(
@@ -377,9 +354,9 @@ void oaEngineSDK::TestApp::drawImGui()
     return;
   }
   ImGui::Begin("test");
-  ImGui::DragFloat3("location", &character->location.x, .01f);
-  ImGui::DragFloat3("scale", &character->scale.x, .01f);
-  ImGui::DragFloat3("rotation", &character->rotation.x, .01f);
+  ImGui::DragFloat3("location", &testObject->location.x, .01f);
+  ImGui::DragFloat3("scale", &testObject->scale.x, .01f);
+  ImGui::DragFloat3("rotation", &testObject->rotation.x, .01f);
   ImGui::End();
 }
 

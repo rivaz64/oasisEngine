@@ -189,12 +189,13 @@
     <ClInclude Include="Include\oaQuaternion.h" />
     <ClInclude Include="include\oaSphere.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
+    <ClInclude Include="Include\oaTree.h" />
     <ClInclude Include="Include\oaVector2f.h" />
     <ClInclude Include="Include\oaVector3f.h" />
+    <ClInclude Include="Include\oaVector3I.h" />
     <ClInclude Include="Include\oaVector4f.h" />
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
-    <ClInclude Include="Vector3I.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaBoxAABB.cpp" />
@@ -207,12 +208,13 @@
     <ClCompile Include="Source\oaPlatformMath.cpp" />
     <ClCompile Include="Source\oaQuaternion.cpp" />
     <ClCompile Include="source\oaSphere.cpp" />
+    <ClCompile Include="Source\oaTree.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />
+    <ClCompile Include="Source\oaVector3I.cpp" />
     <ClCompile Include="Source\oaVector4f.cpp" />
     <ClCompile Include="source\oaVector2I.cpp" />
     <ClCompile Include="source\oaRect.cpp" />
-    <ClCompile Include="Vector3I.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

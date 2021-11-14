@@ -10,6 +10,7 @@
 #include "oaVector3f.h"
 
 namespace oaEngineSDK {
+
 /**
  * @brief class for a mathematical shpere
 */
