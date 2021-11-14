@@ -166,7 +166,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -187,7 +187,7 @@ void TestApp::postInit()
   testObject->location.z = 7.f;
 
   testObject->model->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["circle"]
+    ResoureManager::instancePtr()->meshes["cube"]
   );
   
   testObject->model->textures.push_back(
@@ -202,7 +202,15 @@ void TestApp::postInit()
   cam->nearPlane = 0.01f;
   cam->farPlane = 100.0f;
 
-  sceneGraph = newSPtr<SceneGraph>();
+  scene = newSPtr<SceneGraph>();
+
+  scene->addToScene(testObject);
+  scene->addToScene(character);
+
+  testObject->name = "test object";
+  character->name = "character";
+
+  actualObject = testObject;
 }
 
 
@@ -250,7 +258,9 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->setSamplerState(samsta);
   
-  sceneGraph->drawObject(testObject);
+  scene->draw();
+
+  //sceneGraph->drawObject(testObject);
 
   /*GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
   
@@ -353,10 +363,18 @@ void oaEngineSDK::TestApp::drawImGui()
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
-  ImGui::Begin("test");
-  ImGui::DragFloat3("location", &testObject->location.x, .01f);
-  ImGui::DragFloat3("scale", &testObject->scale.x, .01f);
-  ImGui::DragFloat3("rotation", &testObject->rotation.x, .01f);
+  ImGui::Begin("objects");
+  for(SPtr<Object> obj:scene->objects){
+    if(ImGui::Button(obj->name.c_str())){
+      actualObject = obj;
+    }
+  }
+  ImGui::End();
+
+  ImGui::Begin("transform");
+  ImGui::DragFloat3("location", &actualObject->location.x, .01f);
+  ImGui::DragFloat3("scale", &actualObject->scale.x, .01f);
+  ImGui::DragFloat3("rotation", &actualObject->rotation.x, .01f);
   ImGui::End();
 }
 

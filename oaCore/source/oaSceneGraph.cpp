@@ -3,6 +3,18 @@
 #include "oaObject.h"
 namespace oaEngineSDK{
 
+void SceneGraph::draw()
+{
+  for(SPtr<Object> obj : objects){
+    drawObject(obj);
+  }
+}
+
+void SceneGraph::addToScene(SPtr<Object> object)
+{
+  objects.push_back(object);
+}
+
 void SceneGraph::drawObject(SPtr<Object> object)
 {
   GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);

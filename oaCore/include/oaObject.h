@@ -41,6 +41,8 @@ class OA_CORE_EXPORT Object
   */
   Vector3f rotation;
 
+  String name;
+
  public:
 
   /**

@@ -64,7 +64,9 @@ public:
 
    SPtr<Texture> renTex;
 
-   SPtr<SceneGraph> sceneGraph; 
+   SPtr<SceneGraph> scene; 
+
+   SPtr<Object> actualObject;
 };
 
 }
