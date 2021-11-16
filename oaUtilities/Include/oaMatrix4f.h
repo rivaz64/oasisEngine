@@ -266,6 +266,8 @@ class OA_UTILITY_EXPORT Matrix4f
     * @brief value at column 4 row 4
    */
    float m44;
+
+   static const Matrix4f identity;
 };
 
 }

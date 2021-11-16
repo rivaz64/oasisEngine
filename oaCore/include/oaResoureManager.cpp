@@ -57,6 +57,49 @@ void oaEngineSDK::ResoureManager::generateCircle(const uint8 n)
   meshes["circle"]->create();
 }
 
+void oaEngineSDK::ResoureManager::generatePiramid(const uint8 n)
+{
+  meshes.insert({ "piramid",newSPtr<Mesh>() });
+  auto& vertices =  meshes["piramid"]->vertices;
+  vertices.resize(n+2);
+  vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
+  vertices[1] = Vertex{ Vector3f(0.0f,0.0f, .5f), Vector2f(0.5f, 0.5f) };
+
+  float arc = Math::TWO_PI/float(n);
+
+  for(uint8 i = 0; i<n; ++i){
+    float actualArc = arc*float(i);
+    float actualCos = Math::cos(actualArc);
+    float actualSin = Math::sin(actualArc);
+    vertices[i+2] = Vertex{ Vector3f(actualCos,actualSin, -.5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
+  }
+
+  auto& indices =  meshes["piramid"]->index;
+
+  indices.resize(n*6);
+
+  for(uint8 i = 0; i<n-1; ++i){
+    indices[i*6]= i+2;
+    indices[i*6+1]= 0;
+    indices[i*6+2] = i+3;
+
+    indices[i*6+3]= i+2;
+    indices[i*6+5]= 1;
+    indices[i*6+4] = i+3;
+  }
+
+  uint8 i = n-1;
+  indices[i*6]= n+1;
+  indices[i*6+1]= 0;
+  indices[i*6+2] = 2;
+
+  indices[i*6+3]= n+1;
+  indices[i*6+5]= 1;
+  indices[i*6+4] = 2;
+
+  meshes["piramid"]->create();
+}
+
 void 
 oaEngineSDK::ResoureManager::generatePlane()
 {

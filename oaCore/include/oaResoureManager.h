@@ -48,6 +48,13 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateCircle(const uint8 n);
 
+  /**
+   * @brief generates a n poligon piramid
+   * @param n the number of sides of the base of the piramid
+  */
+  void
+  generatePiramid(const uint8 n);
+
  private:
 
   /**

@@ -17,6 +17,20 @@ namespace oaEngineSDK {
 template<class T>
 class Tree{
 
+ public:
+
+  /**
+   * @brief inserts a value into the Tree
+   * @param value 
+  */
+  void
+  insert(SPtr<T> value){
+    auto newNode = newSPtr<Tree<T>>();
+    newNode->data = value;
+    childs.push_back(newNode);
+  }
+
+ public:
   /**
    * @brief the data of the root of this tree
   */

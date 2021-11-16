@@ -7,6 +7,8 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaTree.h"
+#include "oaMatrix4f.h"
 
 namespace oaEngineSDK{
 
@@ -28,7 +30,7 @@ class OA_CORE_EXPORT SceneGraph
    * @param object 
   */
   void
-  addToScene(SPtr<Object> object);
+  addToScene(const SPtr<Object> object);
 
  private:
   /**
@@ -36,14 +38,15 @@ class OA_CORE_EXPORT SceneGraph
    * @param object 
   */
   void
-  drawObject(SPtr<Object> object);
+  drawObject(const SPtr<Tree<Object>> object,const Matrix4f& parentTransform);
 
  public:
 
   /**
    * @brief all the objects on the scene
   */
-  Vector<SPtr<Object>> objects;
+  //Vector<SPtr<Object>> objects;
+  Tree<Object> objects;
 };
 
 }

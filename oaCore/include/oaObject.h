@@ -9,6 +9,8 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModel.h"
 #include "oaVector3f.h"
+#include "oaMatrix4f.h"
+#include "oaTree.h"
 
 namespace oaEngineSDK{
 
@@ -18,8 +20,25 @@ class OA_CORE_EXPORT Object
 
   Object();
 
+  /**
+   * @brief updates the buffers, executed once eachFrame
+  */
   void
   update();
+
+  /**
+   * @brief makes the object a sub object of this one
+   * @param object 
+  */
+  void 
+  attach(SPtr<Object> object);
+
+  /**
+   * @brief gets the transform Matrix of this object
+   * @return 
+  */
+  Matrix4f
+  getTransform();
 
   /**
    * @brief the model that this object is using
@@ -41,7 +60,15 @@ class OA_CORE_EXPORT Object
   */
   Vector3f rotation;
 
+  /**
+   * @brief the name of the object in the editor
+  */
   String name;
+
+  /**
+   * @brief the objects that are child of this
+  */
+  SPtr<Tree<Object>> subObjects;
 
  public:
 

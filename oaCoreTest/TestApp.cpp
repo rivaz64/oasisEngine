@@ -67,6 +67,8 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->generateCircle(36);
 
+  ResoureManager::instancePtr()->generatePiramid(36);
+
 
   SamplerDesc sampDesc;
   ZeroMemory( &sampDesc, sizeof(sampDesc) );
@@ -187,7 +189,7 @@ void TestApp::postInit()
   testObject->location.z = 7.f;
 
   testObject->model->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["cube"]
+    ResoureManager::instancePtr()->meshes["piramid"]
   );
   
   testObject->model->textures.push_back(
@@ -204,8 +206,9 @@ void TestApp::postInit()
 
   scene = newSPtr<SceneGraph>();
 
-  scene->addToScene(testObject);
+  //scene->addToScene(testObject);
   scene->addToScene(character);
+  character->attach(testObject);
 
   testObject->name = "test object";
   character->name = "character";
@@ -364,10 +367,11 @@ void oaEngineSDK::TestApp::drawImGui()
     return;
   }
   ImGui::Begin("objects");
-  for(SPtr<Object> obj:scene->objects){
-    if(ImGui::Button(obj->name.c_str())){
-      actualObject = obj;
-    }
+  if(ImGui::Button("character")){
+    actualObject = character;
+  }
+  if(ImGui::Button("test object")){
+    actualObject = testObject;
   }
   ImGui::End();
 

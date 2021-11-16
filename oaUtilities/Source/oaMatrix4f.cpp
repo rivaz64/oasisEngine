@@ -394,4 +394,11 @@ Matrix4f::rotationMatrix(float r,const Vector3f& v)
   };
 }
 
+const Matrix4f Matrix4f::identity = {
+  1.0f,0.0f,0.0f,0.0f,
+  0.0f,1.0f,0.0f,0.0f,
+  0.0f,0.0f,1.0f,0.0f,
+  0.0f,0.0f,0.0f,1.0f,
+};
+
 }
