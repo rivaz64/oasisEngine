@@ -69,6 +69,8 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->generatePiramid(36);
 
+  ResoureManager::instancePtr()->generateCilinder(36);
+
 
   SamplerDesc sampDesc;
   ZeroMemory( &sampDesc, sizeof(sampDesc) );
@@ -168,7 +170,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -189,7 +191,7 @@ void TestApp::postInit()
   testObject->location.z = 7.f;
 
   testObject->model->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["piramid"]
+    ResoureManager::instancePtr()->meshes["cilinder"]
   );
   
   testObject->model->textures.push_back(

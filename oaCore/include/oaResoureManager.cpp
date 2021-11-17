@@ -100,6 +100,66 @@ void oaEngineSDK::ResoureManager::generatePiramid(const uint8 n)
   meshes["piramid"]->create();
 }
 
+void oaEngineSDK::ResoureManager::generateCilinder(const uint8 n)
+{
+  meshes.insert({ "cilinder",newSPtr<Mesh>() });
+  auto& vertices =  meshes["cilinder"]->vertices;
+  vertices.resize((n+1)*2);
+  vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
+  vertices[1] = Vertex{ Vector3f(0.0f,0.0f, .5f), Vector2f(0.5f, 0.5f) };
+
+  float arc = Math::TWO_PI/float(n);
+
+  for(uint8 i = 0; i<n; ++i){
+    float actualArc = arc*float(i);
+    float actualCos = Math::cos(actualArc);
+    float actualSin = Math::sin(actualArc);
+    vertices[i*2+2] = Vertex{ Vector3f(actualCos,actualSin, -.5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
+    vertices[i*2+3] = Vertex{ Vector3f(actualCos,actualSin, .5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
+  }
+
+   auto& indices =  meshes["cilinder"]->index;
+
+  indices.resize(n*12);
+
+  for(uint8 i = 0; i<n-1; ++i){
+    indices[i*12]= i*2+2;
+    indices[i*12+1]= 0;
+    indices[i*12+2] = i*2+4;
+
+    indices[i*12+3]= i*2+3;
+    indices[i*12+5]= 1;
+    indices[i*12+4] = i*2+5;
+
+    indices[i*12+6] =  i*2+2;
+    indices[i*12+7] =  i*2+4;
+    indices[i*12+8] =  i*2+3;
+
+    indices[i*12+9] =  i*2+3;
+    indices[i*12+10] =  i*2+4;
+    indices[i*12+11] =  i*2+5;
+  }
+
+  uint8 i = n-1;
+  indices[i*12]= i*2+2;
+  indices[i*12+1]= 0;
+  indices[i*12+2] = 2;
+
+  indices[i*12+3]= i*2+3;
+  indices[i*12+5]= 1;
+  indices[i*12+4] = 3;
+
+  indices[i*12+6] =  i*2+2;
+  indices[i*12+7] =  2;
+  indices[i*12+8] =  i*2+3;
+
+  indices[i*12+9] =  i*2+3;
+  indices[i*12+10] = 2;
+  indices[i*12+11] = 3;
+
+  meshes["cilinder"]->create();
+}
+
 void 
 oaEngineSDK::ResoureManager::generatePlane()
 {
