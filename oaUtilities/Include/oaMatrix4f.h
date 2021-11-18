@@ -168,25 +168,33 @@ class OA_UTILITY_EXPORT Matrix4f
    * @brief creates a rotation matrix for the given angle r in radians rotating in the Z axis
   */
   static Matrix4f
-  rotationMatrixZ(float r);
+  rotationMatrixZ(const float r);
 
   /**
    * @brief creates a rotation matrix for the given angle r in radians rotating in the X axis
   */
   static Matrix4f
-  rotationMatrixX(float r);
+  rotationMatrixX(const float r);
 
   /**
    * @brief creates a rotation matrix for the given angle r in radians rotating in the Y axis
   */
   static Matrix4f
-  rotationMatrixY(float r);
+  rotationMatrixY(const float r);
 
   /**
    * @brief creates a rotation matrix for the given angle r in radians rotating in the arbitrary axis v
   */
   static Matrix4f
   rotationMatrix(float r,const Vector3f& v);
+
+  /**
+   * @brief the rotation matrix
+   * @param v the rotation aplied in each axis
+   * @return 
+  */
+  static Matrix4f
+  rotationMatrix(const Vector3f& v);
   
    /**
     * @brief value at column 1 row 1

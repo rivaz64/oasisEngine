@@ -336,7 +336,7 @@ Matrix4f::scaleMatrix(const Vector3f& v)
 }
 
 Matrix4f
-Matrix4f::rotationMatrixZ(float r)
+Matrix4f::rotationMatrixZ(const float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
@@ -349,7 +349,7 @@ Matrix4f::rotationMatrixZ(float r)
 }
 
 Matrix4f 
-Matrix4f::rotationMatrixX(float r)
+Matrix4f::rotationMatrixX(const float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
@@ -362,7 +362,7 @@ Matrix4f::rotationMatrixX(float r)
 }
 
 Matrix4f 
-Matrix4f::rotationMatrixY(float r)
+Matrix4f::rotationMatrixY(const float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
@@ -387,10 +387,26 @@ Matrix4f::rotationMatrix(float r,const Vector3f& v)
   float sy = s * v.y;
   float sz = s * v.z;
   return  {
-    c + mc * v.x * v.x,xy - sz , xz + sy,0.f,
-    xz + sz ,c + mc * v.y * v.y,yz - sx,0.f ,
-    xz - sy,yz + sx,c + mc * v.y * v.y,0.f  ,
-    0.f,0.f,0.f,1.f                         ,
+    c + mc * v.x * v.x, xy - sz           , xz + sy           , 0.f,
+    xz + sz           , c + mc * v.y * v.y, yz - sx           , 0.f,
+    xz - sy           , yz + sx           , c + mc * v.y * v.y, 0.f,
+    0.f               , 0.f               , 0.f               , 1.f,
+  };
+}
+
+Matrix4f Matrix4f::rotationMatrix(const Vector3f& v)
+{
+  float sx = Math::sin(v.x);
+  float cx = Math::cos(v.x);
+  float sy = Math::sin(v.y);
+  float cy = Math::cos(v.y);
+  float sz = Math::sin(v.z);
+  float cz = Math::cos(v.z);
+  return {
+    cz*cy, cz*sy*sx-sz*cx, cz*sy*cx+sz*sx, 0.0f,
+    sz*cy, sz*sy*sx+cz*cx, sz*sy*cx-cz*sx, 0.0f,
+    -sy  , cy*sx         , cy*cx         , 0.0f,
+    0.0f , 0.0f          , 0.0f          , 1.0f,
   };
 }
 
