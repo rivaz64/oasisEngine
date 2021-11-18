@@ -47,6 +47,16 @@ class OA_CORE_EXPORT SceneGraph
   */
   //Vector<SPtr<Object>> objects;
   Tree<Object> objects;
+
+  /**
+   * @brief the shader to render normal stuff
+  */
+  SPtr<Shader> normalShader;
+
+  /**
+   * @brief the shader to render objects with no texture
+  */
+  SPtr<Shader> noTextureShader;
 };
 
 }

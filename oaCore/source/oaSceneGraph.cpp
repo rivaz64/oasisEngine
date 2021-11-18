@@ -32,9 +32,15 @@ void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parent
   GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
 
   for(int i = 0;i<object->model->meshes.size();++i){
-    GraphicAPI::instancePtr()->setTexture(
-      object->model->textures[i]
-    );
+
+    if(object->model->textures[i]){
+      //GraphicAPI::instancePtr()->setShader
+
+      GraphicAPI::instancePtr()->setTexture(
+        object->model->textures[i]
+      );
+    }
+    
 
     GraphicAPI::instancePtr()->setVertexBuffer(
       object->model->meshes[i]->vertexB

@@ -31,6 +31,12 @@ class DX11GraphicAPI :
   void
   events() override;
 
+  SPtr<Shader>
+  createVertexShader() override;
+
+  SPtr<Shader>
+  createPixelShader () override;
+
   SPtr<Buffer>
   createBuffer() override;
 

@@ -25,11 +25,14 @@ bool DX11PixelShader::compileFromFile(String file)
                               nullptr, 
                               &shader);
 
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->PSSetShader( shader, NULL, 0 );
-
   return true;
 }
 
+void 
+DX11PixelShader::set()
+{
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    context->PSSetShader( shader, NULL, 0 );
+}
 
 }

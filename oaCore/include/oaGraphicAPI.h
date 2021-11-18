@@ -15,6 +15,7 @@
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
+#include "oaShader.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -59,17 +60,22 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   events() {}
 
-  /**
-   * @brief compiles the shaders
-   * @param folder the folders where the shaders are
-   * @return 
-  */
-  bool
-  compileShaders(String folder);
-
   virtual void 
   createShaderProgram() {}
 
+  /**
+   * @brief creates a vertex shader
+   * @return 
+  */
+  virtual SPtr<Shader>
+  createVertexShader() {return newSPtr<Shader>();}
+
+  /**
+   * @brief creates a pixel shader
+   * @return 
+  */
+  virtual SPtr<Shader>
+  createPixelShader() {return newSPtr<Shader>();}
   /**
    * @brief creates a buffer
    * @return 
@@ -210,7 +216,7 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void*
   getContext() {return nullptr;}
 
-  
+ public:
 
   /**
    * @brief the width of the window at the begining
@@ -234,16 +240,6 @@ class OA_CORE_EXPORT GraphicAPI :
    * @brief the name of the window 
   */
   const String windowName = "Oasis Engine";
-
-  /**
-   * @brief the vertex shader
-  */
-  SPtr<Shader> vertexShader;
-
-  /**
-  * @brief the pixel shader
-  */
-  SPtr<Shader> pixelShader;
 
   friend class Module<GraphicAPI>;
 };

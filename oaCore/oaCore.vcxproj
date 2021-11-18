@@ -187,7 +187,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
-    <ClCompile Include="include\oaShader.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaCamera.cpp" />

@@ -21,9 +21,6 @@
     <ClInclude Include="include\oaModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,6 +66,9 @@
     <ClInclude Include="include\oaSceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -93,9 +93,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaRenderTarget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\oaShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\oaResoureManager.cpp">

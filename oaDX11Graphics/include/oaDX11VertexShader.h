@@ -22,6 +22,9 @@ public DX11Shader
   bool 
   compileFromFile(String file);
 
+  void
+  set() override;
+
  private:
 
   void
@@ -30,6 +33,8 @@ public DX11Shader
   ID3D11VertexShader* shader = nullptr;
 
   ID3D11InputLayout* inputLayout = NULL;
+
+  friend class DX11GraphicAPI;
 };
 
 }

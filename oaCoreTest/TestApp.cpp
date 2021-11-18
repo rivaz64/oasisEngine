@@ -5,6 +5,7 @@
 #include "oaGraphicAPI.h"
 #include "oaModel.h"
 #include "oaSamplerState.h"
+#include "oaShader.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -142,7 +143,19 @@ void TestApp::postInit()
 
   GraphicAPI::instancePtr()->setRenderTargetAndDepthStencil(render,depthStencilView);
 
-  GraphicAPI::instancePtr()->compileShaders("shader");
+  vertexShader = GraphicAPI::instancePtr()->createVertexShader();
+
+  pixelShader = GraphicAPI::instancePtr()->createPixelShader();
+
+  vertexShader->compileFromFile("shader");
+
+  pixelShader->compileFromFile("shader");
+
+  vertexShader->set();
+
+  pixelShader->set();
+
+  //GraphicAPI::instancePtr()->compileShaders("noTextureShader");
 
   IMGUI_CHECKVERSION();
 
@@ -170,7 +183,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/Shooting Gun.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;

@@ -18,10 +18,10 @@ class OA_CORE_EXPORT Shader
 {
  public:
   
-   /**
-    * @brief default constructor para el shader
-   */
-   Shader() = default;
+  /**
+   * @brief default constructor para el shader
+  */
+  Shader() = default;
 
    virtual ~Shader() = default;
 
@@ -31,7 +31,13 @@ class OA_CORE_EXPORT Shader
    * @return if it was compiled correctly
   */
   virtual bool 
-  compileFromFile(String file){return true;}
+  compileFromFile(String file) {return true;}
+
+  /**
+   * @brief 
+  */
+  virtual void
+  set() {}
 
 };
 

@@ -125,16 +125,6 @@ DX11GraphicAPI::initialize()
     return false;
   }
 
-  
-
-  //a
-  /*auto renderTarget = createRenderTarget(getBackBuffer());  
-  a;*/
-  
-
- 
-
-  // Setup the viewport
   D3D11_VIEWPORT vp;
   vp.Width = (FLOAT)windowWidth;
   vp.Height = (FLOAT)windowHeight;
@@ -143,27 +133,6 @@ DX11GraphicAPI::initialize()
   vp.TopLeftX = 0;
   vp.TopLeftY = 0;
   context->RSSetViewports( 1, &vp );
-
-  vertexShader = newSPtr<DX11VertexShader>();
-
-  pixelShader = newSPtr<DX11PixelShader>();
-
-  
-
-  //hr = device->CreateTexture2D( &descDepth, NULL, &depthStencil );
-
-  /*D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-  ZeroMemory( &descDSV, sizeof(descDSV) );
-  descDSV.Format = descDepth.Format;
-  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-  descDSV.Texture2D.MipSlice = 0;
-  hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
-  if( FAILED( hr ) )
-    return hr;*/
-
-  
-
-  //hr = device->CreateDepthStencilView( depthStencil, &descDSV, &depthStencilView );
 
   return true;
 }
@@ -180,6 +149,16 @@ DX11GraphicAPI::events()
   TranslateMessage(&msg);
 
   DispatchMessage(&msg);
+}
+
+SPtr<Shader> DX11GraphicAPI::createVertexShader()
+{
+  return newSPtr<DX11VertexShader>();
+}
+
+SPtr<Shader> DX11GraphicAPI::createPixelShader()
+{
+  return newSPtr<DX11PixelShader>();
 }
 
 SPtr<Buffer> 
@@ -355,5 +334,6 @@ DX11GraphicAPI::getContext()
 {
   return context;
 }
+
 
 }

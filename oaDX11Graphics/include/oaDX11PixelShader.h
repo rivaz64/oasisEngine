@@ -21,6 +21,9 @@ class DX11PixelShader :
   bool 
   compileFromFile(String file);
 
+  void
+  set() override;
+
  private:
   ID3D11PixelShader* shader = nullptr;
 

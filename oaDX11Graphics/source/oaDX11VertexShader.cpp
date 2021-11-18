@@ -32,10 +32,17 @@ DX11VertexShader::compileFromFile(String file)
 
   createInputLayout();
 
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->VSSetShader( shader, NULL, 0 );
-
   return true;
+}
+
+void 
+DX11VertexShader::set()
+{
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    context->VSSetShader( shader, NULL, 0 );
+
+  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    context->IASetInputLayout( inputLayout );
 }
 
 void 
@@ -133,9 +140,6 @@ DX11VertexShader::createInputLayout()
                               inputLayoutDesc.size(), 
                               blob->GetBufferPointer(), 
                               blob->GetBufferSize(), &inputLayout);//*/
-
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->IASetInputLayout( inputLayout );
 
   //reflection->Release();
   blob->Release();

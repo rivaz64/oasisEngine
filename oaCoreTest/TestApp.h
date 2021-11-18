@@ -67,6 +67,10 @@ public:
    SPtr<SceneGraph> scene; 
 
    SPtr<Object> actualObject;
+
+  SPtr<Shader> vertexShader;
+
+  SPtr<Shader> pixelShader;
 };
 
 }
