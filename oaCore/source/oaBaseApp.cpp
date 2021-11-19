@@ -63,18 +63,21 @@ void BaseApp::loadPlugIn(String DLL)
 void
 BaseApp::mainLoop()
 {
+  auto start = std::chrono::high_resolution_clock::now();
   while(GraphicAPI::instancePtr()->isRunning()){
 
-    GraphicAPI::instancePtr()->events();
+    auto end = std::chrono::high_resolution_clock::now();
+    float dt = std::chrono::duration<float>(end - start).count();
+    start = std::chrono::high_resolution_clock::now();
 
-    update();
+    GraphicAPI::instancePtr()->events(inputs);
+
+    update(dt);
 
     render();
-  }
-}
 
-void BaseApp::update()
-{
+
+  }
 }
 
 void BaseApp::render()

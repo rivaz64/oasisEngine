@@ -13,15 +13,22 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+oaEngineSDK::TestApp* app = nullptr;
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
   PAINTSTRUCT ps;
   HDC hdc;
-  if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+  if(ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
     return 1;
+  
+  
+  //std::cout<<wParam<<std::endl;
+  
+  
 
   switch( message )
   {
@@ -33,6 +40,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   case WM_DESTROY:
     PostQuitMessage( 0 );
     break;
+
 
   default:
     return DefWindowProc( hWnd, message, wParam, lParam );
@@ -61,6 +69,13 @@ void TestApp::postShutDown()
 void TestApp::preInit()
 {
   GraphicAPI::instancePtr()->eventsFunction = WindowProc;
+
+  inputs.insert({'W',false});
+  inputs.insert({'S',false});
+  inputs.insert({'A',false});
+  inputs.insert({'D',false});
+  inputs.insert({'E',false});
+  inputs.insert({'Q',false});
 }
 
 void TestApp::postInit()
@@ -219,23 +234,58 @@ void TestApp::postInit()
   cam->nearPlane = 0.01f;
   cam->farPlane = 100.0f;
 
+  cam->updateView();
+
+  cam->updateProyection();
+
   scene = newSPtr<SceneGraph>();
 
-  //scene->addToScene(testObject);
   scene->addToScene(character);
   character->attach(testObject);
 
   testObject->name = "test object";
+
   character->name = "character";
 
   actualObject = testObject;
+
 }
 
 
-void TestApp::update()
+void TestApp::update(float delta)
 {
   character->update();
   testObject->update();
+  Vector3f camdelta = {0.0f,0.0f,0.0f};
+
+  if (inputs['A'])
+  {
+    camdelta.x = -delta;
+  }
+  if (inputs['D'])
+  {
+    camdelta.x = delta;
+  }
+  if (inputs['W'])
+  {
+    camdelta.z = delta;
+  }
+  if (inputs['S'])
+  {
+    camdelta.z = -delta;
+  }
+  if (inputs['Q'])
+  {
+    camdelta.y = delta;
+  }
+  if (inputs['E'])
+  {
+    camdelta.y = -delta;
+  }
+  if(camdelta.magnitud()>0){
+    cam->moveCamera(camdelta);
+  }
+  std::cout<<delta<<std::endl;
 }
 
 void TestApp::draw()

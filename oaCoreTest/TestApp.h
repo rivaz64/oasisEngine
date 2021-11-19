@@ -25,7 +25,7 @@ public:
   postInit() override;
 
   void
-  update() override;
+  update(float delta) override;
 
   void
   draw() override;
@@ -42,7 +42,7 @@ public:
   void
   drawImGui();
 
- private:
+ public:
 
    SPtr<Object> character;
 
@@ -71,6 +71,8 @@ public:
   SPtr<Shader> vertexShader;
 
   SPtr<Shader> pixelShader;
+
+  
 };
 
 }

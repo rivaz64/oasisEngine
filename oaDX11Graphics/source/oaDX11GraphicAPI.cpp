@@ -144,11 +144,21 @@ DX11GraphicAPI::isRunning()
 }
 
 void 
-DX11GraphicAPI::events()
+DX11GraphicAPI::events(Map<char,bool>& inputs)
 {
-  TranslateMessage(&msg);
+  for(auto key : inputs){
+    if(GetKeyState(key.first) & 0x8000){
+      inputs[key.first] = true;
+    }
+    else{
+      inputs[key.first] = false;
+    }
+  }
 
-  DispatchMessage(&msg);
+
+  //TranslateMessage(&msg);
+
+  //DispatchMessage(&msg);
 }
 
 SPtr<Shader> DX11GraphicAPI::createVertexShader()

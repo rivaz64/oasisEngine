@@ -176,10 +176,12 @@
     <ClCompile Include="..\externals\imgui_impl_win32.cpp" />
     <ClCompile Include="..\externals\imgui_tables.cpp" />
     <ClCompile Include="..\externals\imgui_widgets.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

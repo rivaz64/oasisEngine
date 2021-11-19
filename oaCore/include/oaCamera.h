@@ -7,6 +7,8 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaVector3f.h"
+#include "oaMatrix3f.h"
 #include "oaMatrix4f.h"
 #include "oaBuffer.h"
 
@@ -16,7 +18,19 @@ class OA_CORE_EXPORT Camera
 {
  public:
 
-   Camera();
+  Camera();
+
+  /**
+   * @brief if the proyection atributes have changed aplies the nesesary calculations
+  */
+  void
+  updateProyection();
+
+  /**
+   * @brief if the view atributes have changed aplies the nesesary calculations
+  */
+  void
+  updateView();
 
   /**
    * @brief the transform matrix so that is seems like a camera
@@ -24,6 +38,20 @@ class OA_CORE_EXPORT Camera
   */
   void
   setCamera();
+
+  /**
+   * @brief moves the camera 
+   * @param delta
+  */
+  void
+  moveCamera(const Vector3f& delta);
+
+  /**
+   * @brief sets 
+   * @param newLocation 
+  */
+  void
+  lookAt(const Vector3f& newLocation);
 
  public:
   /**
@@ -47,9 +75,34 @@ class OA_CORE_EXPORT Camera
   float ratio;
 
   /**
+   * @brief where the camera is
+  */
+  Vector3f location;
+
+  /**
+   * @brief the direction the camera is looking
+  */
+  Vector3f lookingAt;
+
+  /**
+   * @brief where it is the up of the camera
+  */
+  Vector3f up;
+
+  /**
+   * @brief the local axis of the camera
+  */
+  Matrix3f axis;
+
+  /**
    * @brief the buffer of the viewMatrix
   */
-  SPtr<Buffer> buffer;
+  SPtr<Buffer> view;
+
+  /**
+   * @brief the buffer of the proyectionMatrix
+  */
+  SPtr<Buffer> proyection;
 };
 
 }

@@ -29,7 +29,7 @@ class DX11GraphicAPI :
   isRunning() override;
 
   void
-  events() override;
+  events(Map<char,bool>& inputs) override;
 
   SPtr<Shader>
   createVertexShader() override;

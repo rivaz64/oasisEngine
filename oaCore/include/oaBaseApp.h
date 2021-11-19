@@ -9,6 +9,9 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaVector4f.h"
+#include <ctime>
+#include <ratio>
+#include <chrono>
 
 
 namespace oaEngineSDK{
@@ -68,10 +71,11 @@ class OA_CORE_EXPORT BaseApp :
   mainLoop();
 
   /**
-  * @brief update all the things
+   * @brief executed once each loop
+   * @param delta the time passed since the last update  
   */
   virtual void
-  update();
+  update(float delta) {}
 
   /**
   * @brief render the things to the screen
@@ -101,6 +105,8 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the time that has pass since the last update
   */
   float deltaTime = 0;
+
+  Map<char,bool> inputs;
 
   friend class Module<BaseApp>;
 };

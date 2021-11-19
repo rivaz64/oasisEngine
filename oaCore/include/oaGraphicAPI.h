@@ -57,9 +57,10 @@ class OA_CORE_EXPORT GraphicAPI :
 
   /**
    * @brief manages the the events that the graphics api detects
+   * @param inputs the inputs to check if are active
   */
   virtual void
-  events() {}
+  events(Map<char,bool>& /*inputs*/) {}
 
   virtual void 
   createShaderProgram() {}

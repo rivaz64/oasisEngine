@@ -73,6 +73,15 @@ class OA_UTILITY_EXPORT Vector3f
   }
 
   /**
+   * @brief the negative of this vector
+   * @return 
+  */
+  FORCEINLINE Vector3f
+  operator-(){
+    return {-x,-y,-z};
+  }
+
+  /**
    * @brief this vector minus vector v
    * @param v
    * @return
