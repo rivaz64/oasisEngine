@@ -37,7 +37,12 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     EndPaint( hWnd, &ps );
     break;
 
+  case WM_QUIT:
+    app->isRunning = false;
+    break;
+
   case WM_DESTROY:
+    app->isRunning = false;
     PostQuitMessage( 0 );
     break;
 
@@ -68,6 +73,9 @@ void TestApp::postShutDown()
 
 void TestApp::preInit()
 {
+
+  app = this;
+
   GraphicAPI::instancePtr()->eventsFunction = WindowProc;
 
   inputs.insert({'W',false});
@@ -76,6 +84,7 @@ void TestApp::preInit()
   inputs.insert({'D',false});
   inputs.insert({'E',false});
   inputs.insert({'Q',false});
+  inputs.insert({VK_RBUTTON,false});
 }
 
 void TestApp::postInit()
@@ -282,10 +291,29 @@ void TestApp::update(float delta)
   {
     camdelta.y = -delta;
   }
+  if (inputs[VK_RBUTTON])
+  {
+    if(!mousePressed){
+      mousePressed = true;
+      mousePos = GraphicAPI::instancePtr()->getMousePos();
+    }
+    else{
+      if(mousePos != GraphicAPI::instancePtr()->getMousePos()){
+        cam->rotateWithMouse(GraphicAPI::instancePtr()->getMousePos()-mousePos);
+      }
+      mousePos = GraphicAPI::instancePtr()->getMousePos();
+    }
+  }
+  else{
+    mousePressed;
+  }
+
   if(camdelta.magnitud()>0){
     cam->moveCamera(camdelta);
   }
-  std::cout<<delta<<std::endl;
+  
+
+
 }
 
 void TestApp::draw()

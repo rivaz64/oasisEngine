@@ -1,5 +1,6 @@
 #include "oaCamera.h"
 #include "oaGraphicAPI.h"
+#include <iostream>
 namespace oaEngineSDK{
 Camera::Camera()
 {
@@ -86,6 +87,24 @@ void Camera::lookAt(const Vector3f& newLocation)
     
   *(reinterpret_cast<Vector3f*>(&axis.m21)) = 
     Vector3f::cross(*(reinterpret_cast<Vector3f*>(&axis.m31)),*(reinterpret_cast<Vector3f*>(&axis.m11))).normalized();
+
+}
+
+void Camera::rotateWithMouse(const Vector2f& delta)
+{
+  std::cout<<delta.x<<" "<<delta.y<<std::endl;
+  std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl;
+  lookingAt = *(reinterpret_cast<Vector3f*>(&axis.m31)) +
+              *(reinterpret_cast<Vector3f*>(&axis.m11)) * delta.x * .003f -
+              *(reinterpret_cast<Vector3f*>(&axis.m21)) * delta.y * .003f;
+
+  lookingAt.normalize();
+
+  lookingAt += location;
+
+  std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl<<std::endl;
+  lookAt(lookingAt);
+  updateView();
 
 }
 

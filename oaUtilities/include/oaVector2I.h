@@ -13,6 +13,9 @@ namespace oaEngineSDK{
 */
 class OA_UTILITY_EXPORT Vector2I
 {
+
+ public:
+
   /**
    * @brief default constructor fot the Vector2I
   */
@@ -35,6 +38,16 @@ class OA_UTILITY_EXPORT Vector2I
   FORCEINLINE bool const
   operator==(const Vector2I& v) const {
     return x == v.x && y == v.y;
+  }
+
+  /**
+  * @brief compares if two vectors are not equal
+  * @param v 
+  * @return 
+  */
+  FORCEINLINE bool const
+  operator!=(const Vector2I& v) const {
+    return x != v.x || y != v.y;
   }
 
   /**

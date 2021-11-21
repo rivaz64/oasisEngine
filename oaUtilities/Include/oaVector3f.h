@@ -7,6 +7,7 @@
 #pragma once
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector2f.h"
+#include "oaVector3I.h"
 #include "oaQuaternion.h"
 
 namespace oaEngineSDK {
@@ -35,6 +36,12 @@ class OA_UTILITY_EXPORT Vector3f
    * @param _z
   */
   Vector3f(const Vector2f& _xy, float _z):xy(_xy),z(_z){}
+
+  /**
+   * @brief initializes a 3d vector from one of ints
+   * @param v 
+  */
+  Vector3f(const Vector3I& v): x(v.x), y(v.y), z(v.z) {}
 
   ~Vector3f() = default;
 

@@ -8,8 +8,11 @@
 
 #include "oaGraphicAPI.h"
 #include "oaVector4f.h"
+#include "oaVector2I.h"
 #include <windows.h>
 #include <d3d11.h>
+
+
 //#include <d3dx11.h>
 
 namespace oaEngineSDK{
@@ -29,7 +32,7 @@ class DX11GraphicAPI :
   isRunning() override;
 
   void
-  events(Map<char,bool>& inputs) override;
+  events() override;
 
   SPtr<Shader>
   createVertexShader() override;

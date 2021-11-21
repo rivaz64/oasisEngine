@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
+#include "oaVector2I.h"
 
 namespace oaEngineSDK {
 /**
@@ -26,6 +27,12 @@ class OA_UTILITY_EXPORT Vector2f
    * @param _y
   */
   Vector2f(float _x, float _y) :x(_x), y(_y) {}
+
+  /**
+   * @brief initializes a 2d vector from one of ints
+   * @param v 
+  */
+  Vector2f(const Vector2I& v) :x(v.x), y(v.y) {}
 
   ~Vector2f() = default;
 

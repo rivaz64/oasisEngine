@@ -10,6 +10,7 @@
 #include "oaVector3f.h"
 #include "oaMatrix3f.h"
 #include "oaMatrix4f.h"
+#include "oaVector2f.h"
 #include "oaBuffer.h"
 
 namespace oaEngineSDK{
@@ -52,6 +53,14 @@ class OA_CORE_EXPORT Camera
   */
   void
   lookAt(const Vector3f& newLocation);
+
+  /**
+   * @brief rotates the camera 
+   * @param delta the delta of the mouse position
+  */
+  
+  void
+  rotateWithMouse(const Vector2f& delta);
 
  public:
   /**

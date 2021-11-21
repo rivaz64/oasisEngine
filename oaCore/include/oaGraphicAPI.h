@@ -15,6 +15,7 @@
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
+#include "oaVector2I.h"
 #include "oaShader.h"
 #include <Windows.h>
 
@@ -57,10 +58,9 @@ class OA_CORE_EXPORT GraphicAPI :
 
   /**
    * @brief manages the the events that the graphics api detects
-   * @param inputs the inputs to check if are active
   */
   virtual void
-  events(Map<char,bool>& /*inputs*/) {}
+  events() {}
 
   virtual void 
   createShaderProgram() {}

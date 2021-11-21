@@ -38,6 +38,16 @@ class OA_UTILITY_EXPORT Vector3I
   }
 
   /**
+  * @brief compares if two vectors are not equal
+  * @param v 
+  * @return 
+  */
+  FORCEINLINE bool const
+  operator!=(const Vector3I& v) const {
+    return x != v.x || y != v.y || z != v.z;
+  }
+
+  /**
   * @brief adds the vector v and this one
   * @param v
   * @return

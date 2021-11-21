@@ -72,7 +72,7 @@ public:
 
   SPtr<Shader> pixelShader;
 
-  
+  bool mousePressed = false;
 };
 
 }

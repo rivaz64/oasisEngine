@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaVector4f.h"
+#include "oaVector2I.h"
 #include <ctime>
 #include <ratio>
 #include <chrono>
@@ -89,6 +90,11 @@ class OA_CORE_EXPORT BaseApp :
   void
   render();
 
+  /**
+   * @brief if the app is running
+  */
+  bool isRunning = true; 
+
  protected:
 
   /**
@@ -106,7 +112,10 @@ class OA_CORE_EXPORT BaseApp :
   */
   float deltaTime = 0;
 
-  Map<char,bool> inputs;
+  /**
+   * @brief the position of the mouse
+  */
+  Vector2I mousePos;
 
   friend class Module<BaseApp>;
 };

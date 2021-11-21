@@ -7,6 +7,7 @@
 #include "oaDX11RenderTarget.h"
 #include "oaMesh.h"
 #include "oaDX11DepthStencil.h"
+#include "oaInputManager.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -140,12 +141,15 @@ DX11GraphicAPI::initialize()
 bool 
 DX11GraphicAPI::isRunning()
 {
-  return GetMessage(&msg, NULL, 0, 0);
+  return msg.message != WM_QUIT;
 }
 
 void 
-DX11GraphicAPI::events(Map<char,bool>& inputs)
+DX11GraphicAPI::events()
 {
+
+  Map<char,bool>& inputs = InputManager::instancePtr()->inputs;
+  
   for(auto key : inputs){
     if(GetKeyState(key.first) & 0x8000){
       inputs[key.first] = true;
@@ -155,10 +159,29 @@ DX11GraphicAPI::events(Map<char,bool>& inputs)
     }
   }
 
+  POINT p;
 
-  //TranslateMessage(&msg);
+  GetCursorPos(&p);
 
-  //DispatchMessage(&msg);
+  Vector2I temp(p.x,p.y);
+
+  InputManager::instancePtr()->mouseDelta = temp-InputManager::instancePtr()->mousePosition;
+
+  if (GetQueueStatus(QS_ALLINPUT))
+  while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+  {
+    TranslateMessage( &msg );
+    DispatchMessage( &msg );
+  }
+}
+
+Vector2I DX11GraphicAPI::getMousePos()
+{
+  POINT p;
+
+  GetCursorPos(&p);
+
+  return Vector2I(p.x,p.y);
 }
 
 SPtr<Shader> DX11GraphicAPI::createVertexShader()

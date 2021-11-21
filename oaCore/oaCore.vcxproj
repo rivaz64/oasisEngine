@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -174,6 +174,7 @@
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
     <ClInclude Include="include\oaGraphicsModule.h" />
+    <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
     <ClInclude Include="include\oaObject.h" />
@@ -187,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
+    <ClCompile Include="oaInputManager.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaCamera.cpp" />

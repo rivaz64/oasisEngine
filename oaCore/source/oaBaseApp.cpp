@@ -64,13 +64,13 @@ void
 BaseApp::mainLoop()
 {
   auto start = std::chrono::high_resolution_clock::now();
-  while(GraphicAPI::instancePtr()->isRunning()){
+  while(isRunning){
 
     auto end = std::chrono::high_resolution_clock::now();
     float dt = std::chrono::duration<float>(end - start).count();
     start = std::chrono::high_resolution_clock::now();
 
-    GraphicAPI::instancePtr()->events(inputs);
+    GraphicAPI::instancePtr()->events();
 
     update(dt);
 
