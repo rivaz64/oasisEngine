@@ -204,9 +204,18 @@ class OA_UTILITY_EXPORT Vector2f
    * @brief converts a vector2f to a vector2I with floor
    * @return 
   */
-  FORCEINLINE Vector2I
-  floor(){
+  FORCEINLINE Vector2I 
+  floor() const{
     return Vector2I(Math::floor(x),Math::floor(y));
+  }
+
+  /**
+   * @brief returns the fractional value of each 
+   * @return 
+  */
+  FORCEINLINE Vector2I 
+  fraction() const{
+    return Vector2I(Math::modular(x,1.0f),Math::modular(y,1.0f));
   }
 
   /**
