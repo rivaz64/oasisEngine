@@ -2,6 +2,7 @@
 #include "oaGraphicAPI.h"
 #include "oaResoureManager.h"
 #include "oaVector3f.h"
+#include "oaInputManager.h"
 #include <Windows.h>
 #include<iostream>
 
@@ -11,7 +12,9 @@ using foo = const void* (*)();
 
 void BaseApp::onShutDown()
 {
+  GraphicAPI::shutDown();
   ResoureManager::shutDown();
+  InputManager::shutDown();
   postShutDown();
 }
 
@@ -26,13 +29,13 @@ BaseApp::run()
   }
   preInit();
   if(GraphicAPI::instancePtr()->initialize()){
+
     ResoureManager::startUp();
+    InputManager::startUp();
 
     postInit();
     mainLoop();
   }
-
-  GraphicAPI::instancePtr()->shutDown();
 }
 
 void BaseApp::postInit()

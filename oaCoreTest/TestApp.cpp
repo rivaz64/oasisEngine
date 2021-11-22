@@ -78,6 +78,12 @@ void TestApp::preInit()
   app = this;
 
   GraphicAPI::instancePtr()->eventsFunction = WindowProc;
+  
+}
+
+void TestApp::postInit()
+{
+
   InputManager::instancePtr()->addInput('W');
   InputManager::instancePtr()->addInput('S');
   InputManager::instancePtr()->addInput('A');
@@ -85,10 +91,6 @@ void TestApp::preInit()
   InputManager::instancePtr()->addInput('E');
   InputManager::instancePtr()->addInput('Q');
   InputManager::instancePtr()->addInput(VK_RBUTTON);
-}
-
-void TestApp::postInit()
-{
 
   ResoureManager::instancePtr()->generateCircle(36);
 
