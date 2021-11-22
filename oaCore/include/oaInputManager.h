@@ -19,7 +19,7 @@ class OA_CORE_EXPORT InputManager :
   public Module<InputManager>
 {
 
-public:
+private:
 
   /**
     * @brief the inuts that are active
@@ -48,9 +48,18 @@ public:
     return inputs[key];
   }
 
- protected:
+  FORCEINLINE const Vector2I&
+  getMousePosition(){
+    return mousePosition;
+  }
+
+  FORCEINLINE const Vector2I&
+  getMouseDelta(){
+    return mouseDelta;
+  }
   
-  
+  friend class DX11GraphicAPI;
+
 };
 
 }

@@ -78,10 +78,10 @@
     <ClInclude Include="include\oaModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaVector3I.h">
+    <ClInclude Include="Include\oaTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaTree.h">
+    <ClInclude Include="Include\oaVector3I.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

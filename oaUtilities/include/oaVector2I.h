@@ -125,6 +125,11 @@ class OA_UTILITY_EXPORT Vector2I
   */
   int32 y;
 
+  /**
+   * @brief a vector with magnitud 0
+  */
+  static const Vector2I ZERO;
+
 };
 
 }

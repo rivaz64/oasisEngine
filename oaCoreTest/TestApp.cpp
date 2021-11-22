@@ -6,6 +6,7 @@
 #include "oaModel.h"
 #include "oaSamplerState.h"
 #include "oaShader.h"
+#include "oaInputManager.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -77,14 +78,13 @@ void TestApp::preInit()
   app = this;
 
   GraphicAPI::instancePtr()->eventsFunction = WindowProc;
-
-  inputs.insert({'W',false});
-  inputs.insert({'S',false});
-  inputs.insert({'A',false});
-  inputs.insert({'D',false});
-  inputs.insert({'E',false});
-  inputs.insert({'Q',false});
-  inputs.insert({VK_RBUTTON,false});
+  InputManager::instancePtr()->addInput('W');
+  InputManager::instancePtr()->addInput('S');
+  InputManager::instancePtr()->addInput('A');
+  InputManager::instancePtr()->addInput('D');
+  InputManager::instancePtr()->addInput('E');
+  InputManager::instancePtr()->addInput('Q');
+  InputManager::instancePtr()->addInput(VK_RBUTTON);
 }
 
 void TestApp::postInit()
@@ -267,42 +267,34 @@ void TestApp::update(float delta)
   testObject->update();
   Vector3f camdelta = {0.0f,0.0f,0.0f};
 
-  if (inputs['A'])
+  if (InputManager::instancePtr()->getInput('A'))
   {
     camdelta.x = -delta;
   }
-  if (inputs['D'])
+  if (InputManager::instancePtr()->getInput('D'))
   {
     camdelta.x = delta;
   }
-  if (inputs['W'])
+  if (InputManager::instancePtr()->getInput('W'))
   {
     camdelta.z = delta;
   }
-  if (inputs['S'])
+  if (InputManager::instancePtr()->getInput('S'))
   {
     camdelta.z = -delta;
   }
-  if (inputs['Q'])
+  if (InputManager::instancePtr()->getInput('Q'))
   {
     camdelta.y = delta;
   }
-  if (inputs['E'])
+  if (InputManager::instancePtr()->getInput('E'))
   {
     camdelta.y = -delta;
   }
-  if (inputs[VK_RBUTTON])
+  if (InputManager::instancePtr()->getInput(VK_RBUTTON) && 
+      InputManager::instancePtr()->getMouseDelta() != Vector2I::ZERO)
   {
-    if(!mousePressed){
-      mousePressed = true;
-      mousePos = GraphicAPI::instancePtr()->getMousePos();
-    }
-    else{
-      if(mousePos != GraphicAPI::instancePtr()->getMousePos()){
-        cam->rotateWithMouse(GraphicAPI::instancePtr()->getMousePos()-mousePos);
-      }
-      mousePos = GraphicAPI::instancePtr()->getMousePos();
-    }
+    cam->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
   }
   else{
     mousePressed;

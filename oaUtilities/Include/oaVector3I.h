@@ -13,6 +13,9 @@ namespace oaEngineSDK{
 */
 class OA_UTILITY_EXPORT Vector3I
 {
+
+ public:
+
   /**
   * @brief default constructor fot the Vector3I
   */
@@ -129,6 +132,11 @@ public:
   * @brief the z component of the vector
   */
   int32 z;
+
+  /**
+   * @brief a vector with magnitud 0
+  */
+  static const Vector3I ZERO;
 
 };
 

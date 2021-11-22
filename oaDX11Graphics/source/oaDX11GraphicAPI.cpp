@@ -167,21 +167,14 @@ DX11GraphicAPI::events()
 
   InputManager::instancePtr()->mouseDelta = temp-InputManager::instancePtr()->mousePosition;
 
+  InputManager::instancePtr()->mousePosition = temp;
+
   if (GetQueueStatus(QS_ALLINPUT))
   while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
   {
     TranslateMessage( &msg );
     DispatchMessage( &msg );
   }
-}
-
-Vector2I DX11GraphicAPI::getMousePos()
-{
-  POINT p;
-
-  GetCursorPos(&p);
-
-  return Vector2I(p.x,p.y);
 }
 
 SPtr<Shader> DX11GraphicAPI::createVertexShader()
