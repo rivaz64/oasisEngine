@@ -175,7 +175,7 @@ PlatformMath::distance(const Line& _line1, const Line& _line2)
 float 
 PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
 {
-  return abs(Vector3f::dot(_plane.normal,_point)+_plane.d);
+  return Vector3f::dot(_plane.normal,_point)+_plane.d;
 }
 
 bool 

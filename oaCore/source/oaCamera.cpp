@@ -52,9 +52,11 @@ void Camera::updateView()
   viewMatrix.m32 = axis.m32;
   viewMatrix.m33 = axis.m33;
   
-  viewMatrix.m14 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m11)));
-  viewMatrix.m24 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m21)));
-  viewMatrix.m34 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m31)));
+  viewMatrix.m14 = -Vector3f::dot(location,axisX);
+  viewMatrix.m24 = -Vector3f::dot(location,axisY);
+  viewMatrix.m34 = -Vector3f::dot(location,axisZ);
+
+  createFrustrum();
 
   view->update(&viewMatrix.m11);
 }
@@ -80,55 +82,70 @@ void Camera::lookAt(const Vector3f& newLocation)
 {
   lookingAt = newLocation;
 
-  *(reinterpret_cast<Vector3f*>(&axis.m31)) = 
-    (lookingAt - location).normalized();
+  axisZ = (lookingAt - location).normalized();
 
-  *(reinterpret_cast<Vector3f*>(&axis.m11)) = 
-    Vector3f::cross(*(reinterpret_cast<Vector3f*>(&axis.m31)),up).normalized();
+  axisX = Vector3f::cross(axisZ,up).normalized();
     
-  *(reinterpret_cast<Vector3f*>(&axis.m21)) = 
-    Vector3f::cross(*(reinterpret_cast<Vector3f*>(&axis.m31)),*(reinterpret_cast<Vector3f*>(&axis.m11))).normalized();
+  axisY = Vector3f::cross(axisZ,axisX).normalized();
 
 }
 
 void Camera::rotateWithMouse(const Vector2f& delta)
 {
-  std::cout<<delta.x<<" "<<delta.y<<std::endl;
-  std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl;
-  lookingAt = *(reinterpret_cast<Vector3f*>(&axis.m31)) +
-              *(reinterpret_cast<Vector3f*>(&axis.m11)) * delta.x * .003f -
-              *(reinterpret_cast<Vector3f*>(&axis.m21)) * delta.y * .003f;
+  //std::cout<<delta.x<<" "<<delta.y<<std::endl;
+  //std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl;
+  lookingAt = axisZ + axisX * delta.x * .003f - axisY * delta.y * .003f;
 
   lookingAt.normalize();
 
   lookingAt += location;
 
-  std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl<<std::endl;
+  //std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl<<std::endl;
   lookAt(lookingAt);
   updateView();
 
 }
 
-bool Camera::isInFrustrum(const Vector4f& _location)
+bool Camera::isInFrustrum(const Vector3f& _location)
 {
-  viewMatrix.m11 = axis.m11;
-  viewMatrix.m12 = axis.m12;
-  viewMatrix.m13 = axis.m13;
+  //std::cout<<Math::distance(nearP,_location)<<std::endl;
+  return 
+    Math::distance(nearP,_location)>0 &&
+    Math::distance(farP,_location)>0 &&
+    Math::distance(topP,_location)>0 &&
+    Math::distance(bottomP,_location)>0 &&
+    Math::distance(rightP,_location)>0 && 
+    Math::distance(leftP,_location)>0;
 
-  viewMatrix.m21 = axis.m21;
-  viewMatrix.m22 = axis.m22;
-  viewMatrix.m23 = axis.m23;
+}
 
-  viewMatrix.m31 = axis.m31;
-  viewMatrix.m32 = axis.m32;
-  viewMatrix.m33 = axis.m33;
-  
-  viewMatrix.m14 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m11)));
-  viewMatrix.m24 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m21)));
-  viewMatrix.m34 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m31)));
-  Vector4f temp = viewMatrix*_location;
+void Camera::createFrustrum()
+{
+  nearP = Plane(location+axisZ*nearPlane,axisZ);
+  farP = Plane(location+axisZ*farPlane,-axisZ);
+  float temp = Math::tan(angle/2.f);
+  float nh = Math::tan(angle/2.f)*nearPlane;
+  float nw = nh*ratio;
+  float fh = Math::tan(angle/2.f)*farPlane;
+  float fw = fh*ratio;
 
-  return temp.z>nearPlane && temp.z<farPlane;
+  Vector3f nnw = location+axis*Vector3f(-nw,nh,nearPlane);
+  Vector3f nne = location+axis*Vector3f(nw,nh,nearPlane);
+  Vector3f fne = location+axis*Vector3f(fw,fh,farPlane);
+
+  topP = Plane(nnw,nne,fne);
+
+  Vector3f nsw = location+axis*Vector3f(-nw,-nh,nearPlane);
+  Vector3f nse = location+axis*Vector3f(nw,-nh,nearPlane);
+  Vector3f fse = location+axis*Vector3f(fw,-fh,farPlane);
+  Vector3f fsw = location+axis*Vector3f(-fw,-fh,farPlane);
+
+  bottomP = Plane(nsw,fse,nse);
+
+  rightP = Plane(nne,fse,fne);
+
+  leftP = Plane(nnw,fsw,nsw);
+
 }
 
 }

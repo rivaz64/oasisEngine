@@ -18,6 +18,12 @@ Plane::Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C)
   d = -Vector3f::dot(normal,A);
 }
 
+Plane::Plane(const Vector3f & point, const Vector3f & _normal)
+{
+  normal = _normal;
+  d = -Vector3f::dot(normal,point);
+}
+
 Matrix4f
 Plane::reflection()
 {

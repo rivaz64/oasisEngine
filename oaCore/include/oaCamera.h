@@ -13,6 +13,7 @@
 #include "oaVector2f.h"
 #include "oaBuffer.h"
 #include "oaObject.h"
+#include "oaPlane.h"
 
 namespace oaEngineSDK{
 
@@ -68,7 +69,10 @@ class OA_CORE_EXPORT Camera
    * @return 
   */
   bool
-  isInFrustrum(const Vector4f& _location);
+  isInFrustrum(const Vector3f& _location);
+
+  void
+  createFrustrum();
 
  public:
   /**
@@ -106,10 +110,25 @@ class OA_CORE_EXPORT Camera
   */
   Vector3f up;
 
-  /**
-   * @brief the local axis of the camera
-  */
-  Matrix3f axis;
+  union{
+
+    /**
+     * @brief the local axis of the camera
+    */
+    Matrix3f axis;
+
+    struct{
+    
+      Vector3f axisX;
+
+      Vector3f axisY;
+
+      Vector3f axisZ;
+    
+    };
+
+  };
+  
 
   /**
    * @brief the view matrix of this camera
@@ -120,6 +139,18 @@ class OA_CORE_EXPORT Camera
    * @brief the buffer of the viewMatrix
   */
   SPtr<Buffer> view;
+
+  Plane nearP;
+
+  Plane farP;
+
+  Plane topP;
+
+  Plane bottomP;
+
+  Plane leftP;
+
+  Plane rightP;
 
   /**
    * @brief the buffer of the proyectionMatrix

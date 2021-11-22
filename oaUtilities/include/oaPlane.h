@@ -35,6 +35,8 @@ class OA_UTILITY_EXPORT Plane
   */
   Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C);
 
+  Plane(const Vector3f& point, const Vector3f& normal);
+
   ~Plane() = default;
 
   /**
