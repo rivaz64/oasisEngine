@@ -90,6 +90,9 @@
     <ClInclude Include="Include\oaVector2U.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\oaVector3U.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -147,6 +150,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaVector2U.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaVector3U.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

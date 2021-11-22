@@ -195,6 +195,7 @@
     <ClInclude Include="Include\oaVector2U.h" />
     <ClInclude Include="Include\oaVector3f.h" />
     <ClInclude Include="Include\oaVector3I.h" />
+    <ClInclude Include="Include\oaVector3U.h" />
     <ClInclude Include="Include\oaVector4f.h" />
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="Source\oaVector2U.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />
     <ClCompile Include="Source\oaVector3I.cpp" />
+    <ClCompile Include="Source\oaVector3U.cpp" />
     <ClCompile Include="Source\oaVector4f.cpp" />
     <ClCompile Include="source\oaVector2I.cpp" />
     <ClCompile Include="source\oaRect.cpp" />

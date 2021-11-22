@@ -11,6 +11,7 @@
 
 namespace oaEngineSDK{
 
+template<class T>
 class OA_UTILITY_EXPORT Grid2D
 {
  public:
@@ -19,13 +20,43 @@ class OA_UTILITY_EXPORT Grid2D
    * @brief initializes a grid of a certain size
    * @param size 
   */
-  Grid2D(const Vector2U& size);
+  Grid2D(const Vector2U& _size){
+    size = _size;
+    data = new T[size.x*size.y];
+  }
+
+  ~Grid2D(){
+    delete[] data;
+  }
+
+  /**
+   * @brief gets the data at the location
+   * @param location 
+   * @return 
+  */
+  FORCEINLINE T
+  getAt(const Vector2U& location){
+    OA_ASSERT(location.x<size.x && location.y<size.y);
+    return data[location.y*size.x+location.x];
+  }
+
+  /**
+   * @brief sets the data at the location
+   * @param location 
+  */
+  FORCEINLINE void
+  setAt(const Vector2U& location, T value){
+    OA_ASSERT(location.x<size.x && location.y<size.y);
+    data[location.y*size.x+location.x] = value;
+  }
 
  private:
   /**
    * @brief all the data of the grid
   */
-  int32* data;
+  T* data;
+
+  Vector2U size;
 };
 
 }
