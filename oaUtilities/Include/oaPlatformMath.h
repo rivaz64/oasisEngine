@@ -209,24 +209,6 @@ class OA_UTILITY_EXPORT PlatformMath {
   }
 
   /**
-   * @brief a random number between 0 and 1
-   * @return 
-  */
-  static FORCEINLINE float
-  unitRandom() {
-    return static_cast<float>(std::rand()) / RAND_MAX;
-  }
-
-  /**
-   * @brief a random number between 0 and 1
-   * @return
-  */
-  static FORCEINLINE float
-  symmetricRandom() {
-    return (static_cast<float>(std::rand())  / RAND_MAX)*2.f-1.f;
-  }
-
-  /**
    * @brief fast aproximation to sin
    * @param x 
    * @return 
@@ -313,6 +295,19 @@ class OA_UTILITY_EXPORT PlatformMath {
   {
     return ((number % modul) + modul) % modul;
   }
+  
+  /**
+   * @brief rounds f to the min value
+   * @param f 
+   * @return 
+  */
+  static FORCEINLINE int32
+  floor(float f){
+    return std::floor(f);
+  }
+
+  
+
 
   /**
    * @brief if a point is inside a sphere

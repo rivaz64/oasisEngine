@@ -200,9 +200,11 @@
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
     <ClInclude Include="oaGrid3D.h" />
+    <ClInclude Include="oaRandom.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaGrid3D.cpp" />
+    <ClCompile Include="oaRandom.cpp" />
     <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
     <ClCompile Include="Source\oaGrid2D.cpp" />

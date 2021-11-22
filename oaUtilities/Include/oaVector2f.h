@@ -201,6 +201,15 @@ class OA_UTILITY_EXPORT Vector2f
   }
 
   /**
+   * @brief converts a vector2f to a vector2I with floor
+   * @return 
+  */
+  FORCEINLINE Vector2I
+  floor(){
+    return Vector2I(Math::floor(x),Math::floor(y));
+  }
+
+  /**
    * @brief dot product of two vectors
    * @param v1
    * @param v2

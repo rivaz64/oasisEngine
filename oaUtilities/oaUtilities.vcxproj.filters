@@ -96,6 +96,9 @@
     <ClInclude Include="oaGrid3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="oaRandom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaGrid3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
