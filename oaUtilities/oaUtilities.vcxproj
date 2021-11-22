@@ -176,6 +176,7 @@
     <ClInclude Include="include\oaBoxAABB.h" />
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
+    <ClInclude Include="Include\oaGrid2D.h" />
     <ClInclude Include="include\oaLine.h" />
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Include\oaStdHeaders.h" />
     <ClInclude Include="Include\oaTree.h" />
     <ClInclude Include="Include\oaVector2f.h" />
+    <ClInclude Include="Include\oaVector2U.h" />
     <ClInclude Include="Include\oaVector3f.h" />
     <ClInclude Include="Include\oaVector3I.h" />
     <ClInclude Include="Include\oaVector4f.h" />
@@ -200,6 +202,7 @@
   <ItemGroup>
     <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
+    <ClCompile Include="Source\oaGrid2D.cpp" />
     <ClCompile Include="source\oaLine.cpp" />
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />
@@ -210,6 +213,7 @@
     <ClCompile Include="source\oaSphere.cpp" />
     <ClCompile Include="Source\oaTree.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
+    <ClCompile Include="Source\oaVector2U.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />
     <ClCompile Include="Source\oaVector3I.cpp" />
     <ClCompile Include="Source\oaVector4f.cpp" />

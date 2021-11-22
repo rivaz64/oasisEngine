@@ -1,7 +1,7 @@
 /**
-* @file oaVector2I.h
+* @file oaVector2U.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 9/25/2021
+* @date 11/21/2021
 */
 
 #pragma once
@@ -10,26 +10,26 @@
 
 namespace oaEngineSDK{
 /**
- * @brief bidimencional vector of ints
+ * @brief bidimencional vector of unsigned ints
 */
-class OA_UTILITY_EXPORT Vector2I
+class OA_UTILITY_EXPORT Vector2U
 {
 
  public:
 
   /**
-   * @brief default constructor fot the Vector2I
+   * @brief default constructor fot the Vector2U
   */
-  Vector2I()=default;
+  Vector2U()=default;
 
   /**
   * @brief constructor with parameters
   * @param _x
   * @param _y
   */
-  Vector2I(int32 _x, int32 _y) :x(_x), y(_y) {}
+  Vector2U(uint32 _x, uint32 _y) :x(_x), y(_y) {}
 
-  ~Vector2I() = default;
+  ~Vector2U() = default;
 
   /**
   * @brief compares if two vectors are equal
@@ -37,7 +37,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return 
   */
   FORCEINLINE bool const
-  operator==(const Vector2I& v) const {
+  operator==(const Vector2U& v) const {
     return x == v.x && y == v.y;
   }
 
@@ -47,7 +47,7 @@ class OA_UTILITY_EXPORT Vector2I
   * @return 
   */
   FORCEINLINE bool const
-  operator!=(const Vector2I& v) const {
+  operator!=(const Vector2U& v) const {
     return x != v.x || y != v.y;
   }
 
@@ -56,8 +56,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   * @return
   */
-  FORCEINLINE Vector2I const
-  operator+(const Vector2I& v) const {
+  FORCEINLINE Vector2U const
+  operator+(const Vector2U& v) const {
     return { x + v.x , y + v.y };
   }
 
@@ -65,8 +65,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @brief adds the vector v to this one
   * @param v
   */
-  FORCEINLINE Vector2I&
-  operator+=(const Vector2I& v) {
+  FORCEINLINE Vector2U&
+  operator+=(const Vector2U& v) {
     x += v.x;
     y += v.y;
     return *this;
@@ -77,8 +77,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   * @return
   */
-  FORCEINLINE Vector2I const
-  operator-(const Vector2I& v) const {
+  FORCEINLINE Vector2U const
+  operator-(const Vector2U& v) const {
     return { x - v.x , y - v.y };
   }
 
@@ -86,8 +86,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @brief substract vector v from this
   * @param v
   */
-  FORCEINLINE Vector2I&
-  operator-=(const Vector2I& v) {
+  FORCEINLINE Vector2U&
+  operator-=(const Vector2U& v) {
     x -= v.x;
     y -= v.y;
     return *this;
@@ -98,8 +98,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   * @return
   */
-  FORCEINLINE Vector2I const
-  operator*(int32 v) const {
+  FORCEINLINE Vector2U const
+  operator*(uint32 v) const {
     return { x * v , y * v };
   }
 
@@ -108,8 +108,8 @@ class OA_UTILITY_EXPORT Vector2I
   * @param v
   */
 
-  FORCEINLINE Vector2I&
-  operator*=(int32 v) {
+  FORCEINLINE Vector2U&
+  operator*=(uint32 v) {
     x *= v;
     y *= v;
     return *this;
@@ -119,20 +119,19 @@ class OA_UTILITY_EXPORT Vector2I
   /**
   * @brief the x component of the vector
   */
-  int32 x;
+  uint32 x;
 
   /**
   * @brief the y component of the vector
   */
-  int32 y;
+  uint32 y;
 
   /**
    * @brief a vector with magnitud 0
   */
-  static const Vector2I ZERO;
+  static const Vector2U ZERO;
 
 };
 
 }
-
 
