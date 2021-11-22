@@ -31,6 +31,13 @@ public:
   Vector4f(float _x, float _y, float _z, float _w) :
     x(_x), y(_y), z(_z), w(_w) {}
 
+    /**
+   * @brief constructor from a vector3 for members x, y, and z
+   * @param _xyz 
+   * @param _w
+  */
+  Vector4f(const Vector3f& _xyz, float _w):xyz(_xyz),w(_w){}
+
   ~Vector4f() = default;
   
   /**

@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaTree.h"
 #include "oaMatrix4f.h"
+#include "oaCamera.h"
 
 namespace oaEngineSDK{
 
@@ -57,6 +58,8 @@ class OA_CORE_EXPORT SceneGraph
    * @brief the shader to render objects with no texture
   */
   SPtr<Shader> noTextureShader;
+
+  SPtr<Camera> cam;
 };
 
 }

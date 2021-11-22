@@ -410,7 +410,7 @@ Matrix4f Matrix4f::rotationMatrix(const Vector3f& v)
   };
 }
 
-const Matrix4f Matrix4f::identity = {
+const Matrix4f Matrix4f::IDENTITY = {
   1.0f,0.0f,0.0f,0.0f,
   0.0f,1.0f,0.0f,0.0f,
   0.0f,0.0f,1.0f,0.0f,

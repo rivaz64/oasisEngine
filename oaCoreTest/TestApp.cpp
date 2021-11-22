@@ -252,6 +252,9 @@ void TestApp::postInit()
   scene = newSPtr<SceneGraph>();
 
   scene->addToScene(character);
+
+  scene->cam = cam;
+
   character->attach(testObject);
 
   testObject->name = "test object";
@@ -259,6 +262,8 @@ void TestApp::postInit()
   character->name = "character";
 
   actualObject = testObject;
+
+
 
 }
 
@@ -344,7 +349,7 @@ void TestApp::draw()
   GraphicAPI::instancePtr()->clearRenderTarget(render);
   GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
 
-   cam->setCamera();
+   
 
   GraphicAPI::instancePtr()->setSamplerState(samsta);
   

@@ -1,15 +1,15 @@
 #include "oaSceneGraph.h"
 #include "oaGraphicAPI.h"
 #include "oaObject.h"
+#include <iostream>
 
 namespace oaEngineSDK{
 
 void SceneGraph::draw()
 {
-
+  cam->setCamera();
   for(SPtr<Tree<Object>> obj : objects.childs){
-    
-    drawObject(obj,Matrix4f::identity);
+    drawObject(obj,Matrix4f::IDENTITY);
   }
 }
 
@@ -27,6 +27,10 @@ void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parent
   auto object = node->data;
 
   auto localTransform = parentTransform * object->getTransform();
+
+  if(cam->isInFrustrum(localTransform*Vector4f(0,0,0,1))){
+    std::cout<<"'isin"<<std::endl;
+  }
 
   object->transformB->update(&localTransform);
   GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);

@@ -10,6 +10,8 @@ Camera::Camera()
   proyection = GraphicAPI::instancePtr()->createBuffer();
   proyection->init(nullptr,sizeof(Matrix4f),BIND::CONSTANT);
 
+  viewMatrix = Matrix4f::IDENTITY;
+
   location = {0.0f,0.0f,0.0f};
 
   up = {0.0f,-1.0f,0.0f};
@@ -19,7 +21,7 @@ Camera::Camera()
 
 void Camera::updateProyection()
 {
-  Matrix4f ans = Matrix4f::identity;
+  Matrix4f ans = Matrix4f::IDENTITY;
   float co = cos(angle * .5f), si = sin(angle * .5f);
   float distance = farPlane - nearPlane;
 
@@ -37,25 +39,24 @@ void Camera::updateProyection()
 
 void Camera::updateView()
 {
-  Matrix4f ans = Matrix4f::identity;
   
-  ans.m11 = axis.m11;
-  ans.m12 = axis.m12;
-  ans.m13 = axis.m13;
+  viewMatrix.m11 = axis.m11;
+  viewMatrix.m12 = axis.m12;
+  viewMatrix.m13 = axis.m13;
 
-  ans.m21 = axis.m21;
-  ans.m22 = axis.m22;
-  ans.m23 = axis.m23;
+  viewMatrix.m21 = axis.m21;
+  viewMatrix.m22 = axis.m22;
+  viewMatrix.m23 = axis.m23;
 
-  ans.m31 = axis.m31;
-  ans.m32 = axis.m32;
-  ans.m33 = axis.m33;
+  viewMatrix.m31 = axis.m31;
+  viewMatrix.m32 = axis.m32;
+  viewMatrix.m33 = axis.m33;
   
-  ans.m14 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m11)));
-  ans.m24 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m21)));
-  ans.m34 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m31)));
+  viewMatrix.m14 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m11)));
+  viewMatrix.m24 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m21)));
+  viewMatrix.m34 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m31)));
 
-  view->update(&ans.m11);
+  view->update(&viewMatrix.m11);
 }
 
 void Camera::setCamera()
@@ -106,6 +107,28 @@ void Camera::rotateWithMouse(const Vector2f& delta)
   lookAt(lookingAt);
   updateView();
 
+}
+
+bool Camera::isInFrustrum(const Vector4f& _location)
+{
+  viewMatrix.m11 = axis.m11;
+  viewMatrix.m12 = axis.m12;
+  viewMatrix.m13 = axis.m13;
+
+  viewMatrix.m21 = axis.m21;
+  viewMatrix.m22 = axis.m22;
+  viewMatrix.m23 = axis.m23;
+
+  viewMatrix.m31 = axis.m31;
+  viewMatrix.m32 = axis.m32;
+  viewMatrix.m33 = axis.m33;
+  
+  viewMatrix.m14 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m11)));
+  viewMatrix.m24 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m21)));
+  viewMatrix.m34 = -Vector3f::dot(location,*(reinterpret_cast<Vector3f*>(&axis.m31)));
+  Vector4f temp = viewMatrix*_location;
+
+  return temp.z>nearPlane && temp.z<farPlane;
 }
 
 }

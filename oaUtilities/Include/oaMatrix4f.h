@@ -275,7 +275,7 @@ class OA_UTILITY_EXPORT Matrix4f
    */
    float m44;
 
-   static const Matrix4f identity;
+   static const Matrix4f IDENTITY;
 };
 
 }

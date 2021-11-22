@@ -12,6 +12,7 @@
 #include "oaMatrix4f.h"
 #include "oaVector2f.h"
 #include "oaBuffer.h"
+#include "oaObject.h"
 
 namespace oaEngineSDK{
 
@@ -58,9 +59,16 @@ class OA_CORE_EXPORT Camera
    * @brief rotates the camera 
    * @param delta the delta of the mouse position
   */
-  
   void
   rotateWithMouse(const Vector2f& delta);
+
+  /**
+   * @brief if the object is observerd by the camera
+   * @param _location 
+   * @return 
+  */
+  bool
+  isInFrustrum(const Vector4f& _location);
 
  public:
   /**
@@ -102,6 +110,11 @@ class OA_CORE_EXPORT Camera
    * @brief the local axis of the camera
   */
   Matrix3f axis;
+
+  /**
+   * @brief the view matrix of this camera
+  */
+  Matrix4f viewMatrix;
 
   /**
    * @brief the buffer of the viewMatrix
