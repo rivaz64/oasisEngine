@@ -306,8 +306,44 @@ class OA_UTILITY_EXPORT PlatformMath {
     return std::floor(f);
   }
 
-  
+  /**
+   * @brief interpolates a value between a and b
+   * @param a if t is o
+   * @param b if b is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  static FORCEINLINE float
+  interpolate(float a, float b, float t){
+    OA_ASSERT(t>=0 && t<=0);
+    return (b-a)*t+a;
+  }
 
+  /**
+   * @brief a cubic interpolation between a and b
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  static FORCEINLINE float
+  smoothStep(float a, float b, float t){
+    OA_ASSERT(t>=0 && t<=0);
+    return (b-a) * (3.0f - t * 2.0f) * t * t + a;
+  }
+
+  /**
+   * @brief a cubic interpolation with a  second derivative equal to zero on boundaries
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  static FORCEINLINE float
+  smootherStep(float a, float b, float t){
+    OA_ASSERT(t>=0 && t<=0);
+    return (b - a) * ((t * (t * 6.0f - 15.0f) + 10.0f) * t * t * t) + a;
+  }
 
   /**
    * @brief if a point is inside a sphere
