@@ -72,7 +72,9 @@ void Camera::setCamera()
 
 void Camera::moveCamera(const Vector3f& delta)
 {
+  axis.transpose();
   Vector3f realDelta = axis*delta;
+  axis.transpose();
   location += realDelta;
   lookingAt += realDelta;
   updateView();

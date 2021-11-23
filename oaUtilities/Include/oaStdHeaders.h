@@ -107,9 +107,22 @@ FORCEINLINE void swap(T& a, T& b) {
 template <class T1, class T2>
 using Map = std::map<T1,T2>;
 
+/**
+ * @brief cast for smart pointers
+ * @tparam T 
+ * @tparam U 
+ * @param pointer 
+ * @return 
+*/
 template<class T,class U>
 FORCEINLINE SPtr<T> cast(const SPtr<U>& pointer){
   return std::dynamic_pointer_cast<T>(pointer);
 }
+
+template<class T>
+FORCEINLINE SPtr<T> copy(const SPtr<T>& pointer){
+  return std::make_shared<T>(*pointer.get());
+}
+
 
 }

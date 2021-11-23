@@ -199,8 +199,8 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->models.insert({ "triangle",newSPtr<Model>() });
 
-  ResoureManager::instancePtr()->models["triangle"]->textures.
-    push_back(ResoureManager::instancePtr()->textures["textures/wall.jpg"]);
+  /*ResoureManager::instancePtr()->models["triangle"]->textures.
+    push_back(ResoureManager::instancePtr()->textures["textures/wall.jpg"]);*/
   ResoureManager::instancePtr()->models["triangle"]->meshes.
     push_back(ResoureManager::instancePtr()->meshes["triangle"]);
 
@@ -209,7 +209,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  //character->model->loadFromFile("models/Shooting Gun.fbx");
+  character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -233,8 +233,8 @@ void TestApp::postInit()
     ResoureManager::instancePtr()->meshes["cilinder"]
   );
   
-  testObject->model->textures.push_back(
-    ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+  testObject->model->materials.push_back(
+    ResoureManager::instancePtr()->materials["default"]
   );
 
 
@@ -251,11 +251,11 @@ void TestApp::postInit()
 
   scene = newSPtr<SceneGraph>();
 
-  scene->addToScene(character);
-
   scene->cam = cam;
 
-  character->attach(testObject);
+  scene->addToScene(character);
+
+  //character->attach(testObject);
 
   testObject->name = "test object";
 

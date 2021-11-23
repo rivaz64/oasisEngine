@@ -76,6 +76,21 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateCube();
 
+  /**
+   * @brief loads the defaault shaders
+  */
+  void
+  loadDefaultShaders();
+
+  /**
+   * @brief loads the defaults textures
+  */
+  void
+  loadDefaulTextures();
+
+  void
+  generateDefaultMaterial();
+
  public:
 
   /**
@@ -92,6 +107,23 @@ class OA_CORE_EXPORT ResoureManager :
   * @brief all the loaded models
   */
   Map<String,SPtr<Model>> models;
+
+  /**
+   * @brief all the loaded vertex shaders
+  */
+  Map<String,SPtr<Shader>> vertexShaders;
+
+  /**
+   * @brief all the loaded pixel shaders
+  */
+  Map<String,SPtr<Shader>> pixelShaders;
+
+  /**
+   * @brief all the materials
+  */
+  Map<String,SPtr<Material>> materials;
+
+
 
  public:
 

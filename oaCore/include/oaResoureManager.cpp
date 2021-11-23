@@ -2,8 +2,12 @@
 #include "oaGraphicAPI.h"
 #include <iostream>
 
-bool oaEngineSDK::ResoureManager::loadTexture(const String& file)
+namespace oaEngineSDK{
+
+bool 
+ResoureManager::loadTexture(const String& file)
 {
+  
   SPtr<Texture> texture = GraphicAPI::instancePtr()->createTexture();
 
   if(!texture->loadFromFile(file)){
@@ -17,13 +21,17 @@ bool oaEngineSDK::ResoureManager::loadTexture(const String& file)
 }
 
 void 
-oaEngineSDK::ResoureManager::onStartUp()
+ResoureManager::onStartUp()
 {
   generatePlane();
   generateCube();
+  loadDefaulTextures();
+  loadDefaultShaders();
+  generateDefaultMaterial();
 }
 
-void oaEngineSDK::ResoureManager::generateCircle(const uint8 n)
+void 
+ResoureManager::generateCircle(const uint8 n)
 {
   meshes.insert({ "circle",newSPtr<Mesh>() });
   auto& vertices =  meshes["circle"]->vertices;
@@ -57,7 +65,8 @@ void oaEngineSDK::ResoureManager::generateCircle(const uint8 n)
   meshes["circle"]->create();
 }
 
-void oaEngineSDK::ResoureManager::generatePiramid(const uint8 n)
+void 
+ResoureManager::generatePiramid(const uint8 n)
 {
   meshes.insert({ "piramid",newSPtr<Mesh>() });
   auto& vertices =  meshes["piramid"]->vertices;
@@ -100,7 +109,8 @@ void oaEngineSDK::ResoureManager::generatePiramid(const uint8 n)
   meshes["piramid"]->create();
 }
 
-void oaEngineSDK::ResoureManager::generateCilinder(const uint8 n)
+void 
+ResoureManager::generateCilinder(const uint8 n)
 {
   meshes.insert({ "cilinder",newSPtr<Mesh>() });
   auto& vertices =  meshes["cilinder"]->vertices;
@@ -161,7 +171,7 @@ void oaEngineSDK::ResoureManager::generateCilinder(const uint8 n)
 }
 
 void 
-oaEngineSDK::ResoureManager::generatePlane()
+ResoureManager::generatePlane()
 {
   meshes.insert({ "plane",newSPtr<Mesh>() });
   meshes["plane"]->vertices = {
@@ -180,7 +190,8 @@ oaEngineSDK::ResoureManager::generatePlane()
 
 }
 
-void oaEngineSDK::ResoureManager::generateCube()
+void 
+ResoureManager::generateCube()
 {
   meshes.insert({ "cube",newSPtr<Mesh>() });
   meshes["cube"]->vertices = {
@@ -233,3 +244,30 @@ void oaEngineSDK::ResoureManager::generateCube()
   meshes["cube"]->create();
 
 }
+
+void ResoureManager::loadDefaultShaders()
+{
+  vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
+  pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
+
+  vertexShaders["default"]->compileFromFile("shader");
+  pixelShaders["default"]->compileFromFile("shader");
+}
+
+void ResoureManager::loadDefaulTextures()
+{
+  textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
+  textures["default"]->loadFromFile("textures/download.jfif");
+}
+
+void
+ResoureManager::generateDefaultMaterial()
+{
+  materials.insert({"default",newSPtr<Material>()});
+  materials["default"]->vertexShader = vertexShaders["default"];
+  materials["default"]->pixelShader = pixelShaders["default"];
+  materials["default"]->textures.push_back(textures["default"]);
+}
+
+}
+

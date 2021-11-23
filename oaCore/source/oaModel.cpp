@@ -34,10 +34,12 @@ bool Model::loadFromFile(String file)
     file = f.C_Str();
     file = "textures/"+file+".png";
     if(ResoureManager::instancePtr()->loadTexture(file)){
-      textures.push_back(ResoureManager::instancePtr()->textures[file]);
+      auto mat = copy(ResoureManager::instancePtr()->materials["default"]);
+      mat->textures.push_back(ResoureManager::instancePtr()->textures[file]);
+      materials.push_back(mat);
     }
     else{
-      break;
+      materials.push_back(ResoureManager::instancePtr()->materials["default"]);
     }
 
     oaMesh->vertices.resize( aMesh->mNumVertices);

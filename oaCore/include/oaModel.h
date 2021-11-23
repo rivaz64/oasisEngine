@@ -8,7 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaMesh.h"
-#include "oaTexture.h"
+#include "oaMaterial.h"
 
 
 namespace oaEngineSDK{
@@ -37,9 +37,9 @@ class OA_CORE_EXPORT Model
  public:
   
   /**
-   * @brief the textures of the model
+   * @brief the materials of the model
   */
-  Vector<SPtr<Texture>> textures;
+  Vector<SPtr<Material>> materials;
 
   /**
    * @brief the meshes of the model
