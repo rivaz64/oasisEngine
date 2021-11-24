@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector2I.h"
+#include "oaVector2U.h"
 
 namespace oaEngineSDK {
 /**
@@ -33,6 +34,12 @@ class OA_UTILITY_EXPORT Vector2f
    * @param v 
   */
   Vector2f(const Vector2I& v) :x(v.x), y(v.y) {}
+
+  /**
+   * @brief initializes a 2d vector from one of unsigned ints
+   * @param v 
+  */
+  Vector2f(const Vector2U& v) :x(v.x), y(v.y) {}
 
   ~Vector2f() = default;
 

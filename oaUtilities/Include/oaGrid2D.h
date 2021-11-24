@@ -50,6 +50,15 @@ class OA_UTILITY_EXPORT Grid2D
     data[location.y*size.x+location.x] = value;
   }
 
+  /**
+   * @brief getter for the size of the grid
+   * @return 
+  */
+  FORCEINLINE const Vector2U&
+  getSize(){
+    return size;
+  }
+
  private:
   /**
    * @brief all the data of the grid
