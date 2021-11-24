@@ -291,9 +291,21 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE uint32 
-  modular(int32 number, uint32 modul) 
+  mod(int32 number, uint32 modul) 
   {
     return ((number % modul) + modul) % modul;
+  }
+
+  /**
+   * @brief the module of a number in positives
+   * @param number 
+   * @param modul
+   * @return 
+  */
+  static FORCEINLINE float 
+  modf(float number, float modul) 
+  {
+    return std::fmodf(std::fmodf(number,modul) + modul , modul);
   }
   
   /**
@@ -315,7 +327,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   interpolate(float a, float b, float t){
-    OA_ASSERT(t>=0 && t<=0);
+    OA_ASSERT(t>=0 && t<=1);
     return (b-a)*t+a;
   }
 
@@ -328,7 +340,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   smoothStep(float a, float b, float t){
-    OA_ASSERT(t>=0 && t<=0);
+    OA_ASSERT(t>=0 && t<=1);
     return (b-a) * (3.0f - t * 2.0f) * t * t + a;
   }
 
@@ -341,7 +353,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   smootherStep(float a, float b, float t){
-    OA_ASSERT(t>=0 && t<=0);
+    OA_ASSERT(t>=0 && t<=1);
     return (b - a) * ((t * (t * 6.0f - 15.0f) + 10.0f) * t * t * t) + a;
   }
 

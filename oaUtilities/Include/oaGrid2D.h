@@ -12,7 +12,7 @@
 namespace oaEngineSDK{
 
 template<class T>
-class OA_UTILITY_EXPORT Grid2D
+class Grid2D
 {
  public:
   
@@ -67,6 +67,8 @@ class OA_UTILITY_EXPORT Grid2D
 
   Vector2U size;
 };
+
+Grid2D<float>;
 
 }
 

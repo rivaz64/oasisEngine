@@ -4,7 +4,8 @@
 
 namespace oaEngineSDK{
 
-float PerlinNoise2D::valueAt(const Vector2f& point)
+float 
+PerlinNoise2D::valueAt(const Vector2f& point)
 {
   Vector2I pointI = point.floor();
   Vector2f pointf = point.fraction();
@@ -25,7 +26,8 @@ float PerlinNoise2D::valueAt(const Vector2f& point)
                            pointf.y);
 }
 
-void PerlinNoise2D::fillGrid(Grid2D<float>& grid, float scale)
+void 
+PerlinNoise2D::fillGrid(Grid2D<float>& grid, float scale)
 {
   const Vector2U& size = grid.getSize();
   Vector2U position;

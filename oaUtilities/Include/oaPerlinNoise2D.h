@@ -12,14 +12,15 @@
 
 namespace oaEngineSDK{
 
-class PerlinNoise2D
+class OA_UTILITY_EXPORT PerlinNoise2D
 {
+ public:
   /**
    * @brief the value of the perlin noise at a certain point
    * @param point 
    * @return 
   */
-  float 
+  static float 
   valueAt(const Vector2f& point);
 
   /**
@@ -27,7 +28,7 @@ class PerlinNoise2D
    * @param grid 
    * @param scale how separated the gradients are going to be from each other
   */
-  void
+  static void
   fillGrid(Grid2D<float>& grid,float scale);
 };
 

@@ -96,10 +96,10 @@
     <ClInclude Include="oaGrid3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaRandom.h">
+    <ClInclude Include="Include\oaPerlinNoise2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaPerlinNoise2D.h">
+    <ClInclude Include="Include\oaRandom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,10 +167,10 @@
     <ClCompile Include="oaGrid3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaRandom.cpp">
+    <ClCompile Include="Source\oaPerlinNoise2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaPerlinNoise2D.cpp">
+    <ClCompile Include="Source\oaRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -220,9 +220,9 @@ class OA_UTILITY_EXPORT Vector2f
    * @brief returns the fractional value of each 
    * @return 
   */
-  FORCEINLINE Vector2I 
+  FORCEINLINE Vector2f
   fraction() const{
-    return Vector2I(Math::modular(x,1.0f),Math::modular(y,1.0f));
+    return Vector2f(Math::modf(x,1.0f),Math::modf(y,1.0f));
   }
 
   /**

@@ -182,12 +182,14 @@
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
     <ClInclude Include="include\oaModule.h" />
+    <ClInclude Include="Include\oaPerlinNoise2D.h" />
     <ClInclude Include="include\oaPlane.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformMath.h" />
     <ClInclude Include="Include\oaPlatformTypes.h" />
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
     <ClInclude Include="Include\oaQuaternion.h" />
+    <ClInclude Include="Include\oaRandom.h" />
     <ClInclude Include="include\oaSphere.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
     <ClInclude Include="Include\oaTree.h" />
@@ -200,13 +202,9 @@
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
     <ClInclude Include="oaGrid3D.h" />
-    <ClInclude Include="oaPerlinNoise2D.h" />
-    <ClInclude Include="oaRandom.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaGrid3D.cpp" />
-    <ClCompile Include="oaPerlinNoise2D.cpp" />
-    <ClCompile Include="oaRandom.cpp" />
     <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
     <ClCompile Include="Source\oaGrid2D.cpp" />
@@ -214,9 +212,11 @@
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />
     <ClCompile Include="Source\oaMatrix4f.cpp" />
+    <ClCompile Include="Source\oaPerlinNoise2D.cpp" />
     <ClCompile Include="source\oaPlane.cpp" />
     <ClCompile Include="Source\oaPlatformMath.cpp" />
     <ClCompile Include="Source\oaQuaternion.cpp" />
+    <ClCompile Include="Source\oaRandom.cpp" />
     <ClCompile Include="source\oaSphere.cpp" />
     <ClCompile Include="Source\oaTree.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />

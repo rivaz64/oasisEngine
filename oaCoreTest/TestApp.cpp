@@ -7,6 +7,8 @@
 #include "oaSamplerState.h"
 #include "oaShader.h"
 #include "oaInputManager.h"
+#include "oaGrid2D.h"
+#include "oaPerlinNoise2D.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -189,12 +191,6 @@ void TestApp::postInit()
 
   GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
 
-  
-
-  
-
-
-
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
   ResoureManager::instancePtr()->models.insert({ "triangle",newSPtr<Model>() });
@@ -209,7 +205,7 @@ void TestApp::postInit()
 
   character->model = newSPtr<Model>();
 
-  character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->location.y = -2.f;
   character->location.z = 7.f;
@@ -224,6 +220,16 @@ void TestApp::postInit()
 
 
   testObject = newSPtr<Object>();
+
+  ResoureManager::instancePtr()->models.insert({"test",newSPtr<Model>()});
+
+  ResoureManager::instancePtr()->models["test"]->meshes.push_back(
+    ResoureManager::instancePtr()->meshes["plane"]
+  );
+
+  ResoureManager::instancePtr()->models["test"]->materials.push_back(
+    ResoureManager::instancePtr()->materials["default"]
+  );
 
   testObject->model = newSPtr<Model>();
 
@@ -253,7 +259,7 @@ void TestApp::postInit()
 
   scene->cam = cam;
 
-  scene->addToScene(character);
+  //scene->addToScene(character);
 
   //character->attach(testObject);
 
@@ -263,7 +269,20 @@ void TestApp::postInit()
 
   actualObject = testObject;
 
+  Grid2D<float> chunck({16u,16u});
 
+  PerlinNoise2D::fillGrid(chunck,8);
+
+  Vector2U position;
+  for(position.x = 0;position.x< 16; ++position.x){
+    for(position.y = 0;position.y< 16; ++position.y){
+      auto temp =  newSPtr<Object>();
+      temp->model =  ResoureManager::instancePtr()->models["test"];
+      std::cout<<chunck.getAt(position)<<std::endl;
+      temp->location = Vector3f(position.x,position.y,chunck.getAt(position)*1);
+      scene->addToScene(temp);
+    }
+  }
 
 }
 
