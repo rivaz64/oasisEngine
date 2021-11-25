@@ -25,6 +25,9 @@ ResoureManager::onStartUp()
 {
   generatePlane();
   generateCube();
+  generateCircle(36);
+  generatePiramid(36);
+  generateCilinder(36);
   loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultMaterial();
@@ -66,10 +69,10 @@ ResoureManager::generateCircle(const uint8 n)
 }
 
 void 
-ResoureManager::generatePiramid(const uint8 n)
+ResoureManager::generateCone(const uint8 n)
 {
-  meshes.insert({ "piramid",newSPtr<Mesh>() });
-  auto& vertices =  meshes["piramid"]->vertices;
+  meshes.insert({ "cone",newSPtr<Mesh>() });
+  auto& vertices =  meshes["cone"]->vertices;
   vertices.resize(n+2);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
   vertices[1] = Vertex{ Vector3f(0.0f,0.0f, .5f), Vector2f(0.5f, 0.5f) };
@@ -83,7 +86,7 @@ ResoureManager::generatePiramid(const uint8 n)
     vertices[i+2] = Vertex{ Vector3f(actualCos,actualSin, -.5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
   }
 
-  auto& indices =  meshes["piramid"]->index;
+  auto& indices =  meshes["cone"]->index;
 
   indices.resize(n*6);
 
@@ -106,7 +109,7 @@ ResoureManager::generatePiramid(const uint8 n)
   indices[i*6+5]= 1;
   indices[i*6+4] = 2;
 
-  meshes["piramid"]->create();
+  meshes["cone"]->create();
 }
 
 void 

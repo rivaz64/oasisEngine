@@ -94,12 +94,6 @@ void TestApp::postInit()
   InputManager::instancePtr()->addInput('Q');
   InputManager::instancePtr()->addInput(VK_RBUTTON);
 
-  ResoureManager::instancePtr()->generateCircle(36);
-
-  ResoureManager::instancePtr()->generatePiramid(36);
-
-  ResoureManager::instancePtr()->generateCilinder(36);
-
 
   SamplerDesc sampDesc;
   ZeroMemory( &sampDesc, sizeof(sampDesc) );
@@ -273,7 +267,7 @@ void TestApp::postInit()
 
   PerlinNoise2D::fillGrid(chunck,8);
 
-  Vector2U position;
+  /*Vector2U position;
   for(position.x = 0;position.x< 16; ++position.x){
     for(position.y = 0;position.y< 16; ++position.y){
       auto temp =  newSPtr<Object>();
@@ -282,7 +276,7 @@ void TestApp::postInit()
       temp->location = Vector3f(position.x,position.y,chunck.getAt(position)*1);
       scene->addToScene(temp);
     }
-  }
+  }*/
 
 }
 

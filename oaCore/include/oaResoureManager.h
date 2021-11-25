@@ -53,7 +53,7 @@ class OA_CORE_EXPORT ResoureManager :
    * @param n the number of sides of the base of the piramid
   */
   void
-  generatePiramid(const uint8 n);
+  generateCone(const uint8 n);
 
   /**
    * @brief generates a n poligon cilinder
