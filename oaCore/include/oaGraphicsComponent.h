@@ -4,7 +4,7 @@
 
 namespace oaEngineSDK{
 
-class oaGraphicsComponent :
+class OA_CORE_EXPORT oaGraphicsComponent :
   public Component
 {
  public:

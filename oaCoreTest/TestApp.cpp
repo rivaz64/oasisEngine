@@ -251,9 +251,9 @@ void TestApp::postInit()
 
   scene->attach(testObject);
 
-  ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
+  //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
 
-  //testObject->attachComponent(newSPtr<Gra)
+  testObject->attachComponent(newSPtr<oaGraphicsComponent>());
 
   //character->attach(testObject);
 

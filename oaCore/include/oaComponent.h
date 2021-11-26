@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class Component
+class OA_CORE_EXPORT Component
 {
  public:
   
