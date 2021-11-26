@@ -75,10 +75,10 @@
     <ClInclude Include="include\oaMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaComponent.h">
+    <ClInclude Include="include\oaComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaGraphicsComponent.h">
+    <ClInclude Include="include\oaGraphicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,10 +131,10 @@
     <ClCompile Include="source\oaMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaComponent.cpp">
+    <ClCompile Include="source\oaComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaGraphicsComponent.cpp">
+    <ClCompile Include="source\oaGraphicsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

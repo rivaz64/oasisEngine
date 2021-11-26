@@ -64,9 +64,11 @@ public:
 
    SPtr<Texture> renTex;
 
-   SPtr<SceneGraph> scene; 
+   //SPtr<SceneGraph> scene; 
 
    SPtr<Object> actualObject;
+
+   SPtr<Object> scene;
 
   SPtr<Shader> vertexShader;
 

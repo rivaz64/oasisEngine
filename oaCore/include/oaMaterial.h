@@ -11,7 +11,7 @@
 
 namespace oaEngineSDK{
 
-class Material
+class OA_CORE_EXPORT Material
 {
  public:
 

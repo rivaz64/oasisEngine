@@ -5,6 +5,12 @@
 
 namespace oaEngineSDK{
 
+enum FLAGS{
+  LOCAL=1,
+  GLOBAL=2,
+  ALL=3
+};
+
 Object::Object()
 {
   location = {0.f,0.f,0.f};
@@ -17,10 +23,8 @@ Object::Object()
 void 
 Object::attach(SPtr<Object> object)
 {
-  auto newNode = newSPtr<Tree<Object>>();
-  newNode->data = object;
-  object->subObjects = newNode;
-  subObjects->childs.push_back(newNode);
+  subObjects.push_back(object);
+  object->parent = shared_from_this();
 }
 
 void 
@@ -41,21 +45,21 @@ void
 Object::setLocation(const Vector3f& _location)
 {
   location = _location;
-  dirtyFlag = true;
+  dirtyFlag = FLAGS::ALL;
 }
 
 void 
 Object::setRotation(const Vector3f& _rotation)
 {
   rotation = _rotation;
-  dirtyFlag = true;
+  dirtyFlag |= FLAGS::ALL;
 }
 
 void 
 Object::setScale(const Vector3f& _scale)
 {
   scale = _scale;
-  dirtyFlag = true;
+  dirtyFlag |= FLAGS::ALL;
 }
 
 const Vector3f&
@@ -76,11 +80,19 @@ Object::getScale()
   return scale;
 }
 
+const Vector<SPtr<Object>>& 
+Object::getChilds()
+{
+  return subObjects;
+}
+
 Matrix4f 
 Object::getLocalTransform()
 {
-  if(dirtyFlag){
-    dirtyFlag = false;
+  if(dirtyFlag & FLAGS::LOCAL){
+
+    dirtyFlag &= FLAGS::GLOBAL;
+
     localTransform = 
       Matrix4f::translateMatrix(location)*
       Matrix4f::rotationMatrix(rotation)*
@@ -91,9 +103,21 @@ Object::getLocalTransform()
   
 }
 
-Matrix4f Object::getGlobalTransform()
+Matrix4f
+Object::getGlobalTransform()
 {
-  return Matrix4f();
+  if(dirtyFlag & FLAGS::GLOBAL){
+    
+    dirtyFlag &= FLAGS::LOCAL;
+
+    if(parent.get()){
+      globalTransform = parent->getGlobalTransform()*getLocalTransform();
+    }
+    else{
+      globalTransform = Matrix4f::IDENTITY;
+    }
+  }
+  return globalTransform;
 }
 
 }

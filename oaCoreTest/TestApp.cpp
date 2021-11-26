@@ -9,6 +9,8 @@
 #include "oaInputManager.h"
 #include "oaGrid2D.h"
 #include "oaPerlinNoise2D.h"
+#include "oaGraphicsComponent.h"
+#include "oaMaterial.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -243,11 +245,15 @@ void TestApp::postInit()
 
   cam->updateProyection();
 
-  scene = newSPtr<SceneGraph>();
+  scene = newSPtr<Object>();
 
-  scene->cam = cam;
+  //scene->cam = cam;
 
-  scene->addToScene(testObject);
+  scene->attach(testObject);
+
+  ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
+
+  //testObject->attachComponent(newSPtr<Gra)
 
   //character->attach(testObject);
 
@@ -330,42 +336,31 @@ void TestApp::draw()
 
   GraphicAPI::instancePtr()->setSamplerState(samsta);
   
-  scene->draw();
+  cam->setCamera();
+  for(auto object : ResoureManager::instancePtr()->rendereableObjects){
+    
+    auto mat = object->getGlobalTransform();
 
-  //sceneGraph->drawObject(testObject);
+    object->transformB->update(&mat);
 
-  /*GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
-  
+    for(int i = 0;i<object->model->meshes.size();++i){
 
-  GraphicAPI::instancePtr()->setTexture(
-    //renTex
-    ResoureManager::instancePtr()->textures["textures/wall.jpg"]
-  );
+      object->model->materials[i]->set();
 
-  GraphicAPI::instancePtr()->setVertexBuffer(
-    ResoureManager::instancePtr()->meshes["cube"]->vertexB
-  );
+      GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
 
-  GraphicAPI::instancePtr()->setIndexBuffer(
-    ResoureManager::instancePtr()->meshes["cube"]->indexB
-  );
+      GraphicAPI::instancePtr()->setVertexBuffer(
+        object->model->meshes[i]->vertexB
+      );
 
-  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->meshes["cube"]->index.size());//*/
+      GraphicAPI::instancePtr()->setIndexBuffer(
+        object->model->meshes[i]->indexB
+      );  
 
-  /*for (uint32 i = 0; i < character->model->meshes.size(); ++i) {
-    GraphicAPI::instancePtr()->setVertexBuffer(
-      character->model->meshes[i]->vertexB
-    );
+      GraphicAPI::instancePtr()->draw(object->model->meshes[i]->index.size());
+    }
 
-    GraphicAPI::instancePtr()->setIndexBuffer(
-      character->model->meshes[i]->indexB
-    );
-    GraphicAPI::instancePtr()->setTexture(
-      character->model->textures[i]
-    );
-
-    GraphicAPI::instancePtr()->draw(character->model->meshes[i]->index.size());
-  }*/
+  }
    
   newImGuiFrame();
   drawImGui();

@@ -85,12 +85,23 @@ class OA_CORE_EXPORT Object :
   getScale();
 
   /**
+   * @brief getter for all the subobjects of this object
+   * @return 
+  */
+  const Vector<SPtr<Object>>&
+  getChilds();
+
+  /**
    * @brief gets the transform Matrix of this object
    * @return 
   */
   Matrix4f
   getLocalTransform();
 
+  /**
+   * @brief the transform of this object in the world
+   * @return 
+  */
   Matrix4f
   getGlobalTransform();
 
@@ -107,7 +118,12 @@ class OA_CORE_EXPORT Object :
   /**
    * @brief the objects that are child of this
   */
-  SPtr<Tree<Object>> subObjects;
+  Vector<SPtr<Object>> subObjects;
+
+  /**
+   * @brief the object this one is a child of
+  */
+  SPtr<Object> parent;
 
   /**
    * @brief for sending the location to the shader
@@ -136,11 +152,19 @@ class OA_CORE_EXPORT Object :
   Matrix4f localTransform;
 
   /**
+   * @brief the transform of this object in the world
+  */
+  Matrix4f globalTransform = Matrix4f::IDENTITY;
+
+  /**
    * @brief all the components this actor has
   */
   Vector<SPtr<Component>> components;
 
-  bool dirtyFlag;
+  /**
+   * @brief the dirty flag of the local and global matrix
+  */
+  uint8 dirtyFlag = 0;
 };
 
 }

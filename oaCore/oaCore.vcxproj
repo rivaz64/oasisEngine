@@ -174,6 +174,7 @@
     <ClInclude Include="include\oaFlags.h" />
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
+    <ClInclude Include="include\oaGraphicsComponent.h" />
     <ClInclude Include="include\oaGraphicsModule.h" />
     <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaMaterial.h" />
@@ -187,11 +188,9 @@
     <ClInclude Include="include\oaSceneGraph.h" />
     <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="include\oaTexture.h" />
-    <ClInclude Include="oaGraphicsComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
-    <ClCompile Include="oaGraphicsComponent.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
@@ -199,6 +198,7 @@
     <ClCompile Include="source\oaComponent.cpp" />
     <ClCompile Include="source\oaDepthStencil.cpp" />
     <ClCompile Include="source\oaGraphicAPI.cpp" />
+    <ClCompile Include="source\oaGraphicsComponent.cpp" />
     <ClCompile Include="source\oaGraphicsModule.cpp" />
     <ClCompile Include="source\oaMaterial.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />

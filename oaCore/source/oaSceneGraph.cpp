@@ -15,10 +15,10 @@ void SceneGraph::draw()
 
 void SceneGraph::addToScene(SPtr<Object> object)
 {
-  auto newNode = newSPtr<Tree<Object>>();
+  /*auto newNode = newSPtr<Tree<Object>>();
   newNode->data = object;
   object->subObjects = newNode;
-  objects.childs.push_back(newNode);
+  objects.childs.push_back(newNode);*/
 }
 
 void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parentTransform)
