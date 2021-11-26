@@ -1,6 +1,9 @@
 #include "oaCamera.h"
 #include "oaGraphicAPI.h"
 #include <iostream>
+
+
+
 namespace oaEngineSDK{
 Camera::Camera()
 {
@@ -39,7 +42,10 @@ void Camera::updateProyection()
 
 void Camera::updateView()
 {
-  
+  if(!dirtyFlags){
+    return;
+  }
+
   viewMatrix.m11 = axis.m11;
   viewMatrix.m12 = axis.m12;
   viewMatrix.m13 = axis.m13;
@@ -59,6 +65,8 @@ void Camera::updateView()
   createFrustrum();
 
   view->update(&viewMatrix.m11);
+
+  dirtyFlags = false;
 }
 
 void Camera::setCamera()
@@ -76,8 +84,8 @@ void Camera::moveCamera(const Vector3f& delta)
   Vector3f realDelta = axis*delta;
   axis.transpose();
   location += realDelta;
-  lookingAt += realDelta;
-  updateView();
+  lookAt(lookingAt+realDelta);
+  dirtyFlags = true;
 }
 
 void Camera::lookAt(const Vector3f& newLocation)
@@ -94,18 +102,12 @@ void Camera::lookAt(const Vector3f& newLocation)
 
 void Camera::rotateWithMouse(const Vector2f& delta)
 {
-  //std::cout<<delta.x<<" "<<delta.y<<std::endl;
-  //std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl;
-  lookingAt = axisZ + axisX * delta.x * .003f - axisY * delta.y * .003f;
+  lookAt(
+    (axisZ + axisX * delta.x * .003f - axisY * delta.y * .003f).normalized()+
+    location
+  );
 
-  lookingAt.normalize();
-
-  lookingAt += location;
-
-  //std::cout<<lookingAt.x<<" "<<lookingAt.y<<" "<<lookingAt.z<<std::endl<<std::endl;
-  lookAt(lookingAt);
-  updateView();
-
+  dirtyFlags = true;
 }
 
 bool Camera::isInFrustrum(const Vector3f& _location)

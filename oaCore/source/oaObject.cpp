@@ -1,6 +1,7 @@
 #include "oaObject.h"
 #include "oaGraphicAPI.h"
 #include "oaMatrix4f.h"
+#include "oaComponent.h"
 
 namespace oaEngineSDK{
 
@@ -14,14 +15,6 @@ Object::Object()
 }
 
 void 
-Object::update()
-{
-  auto transform = Matrix4f::translateMatrix(location)*Matrix4f::rotationMatrix(rotation)*Matrix4f::scaleMatrix(scale);
-
-  transformB->update(&transform);
-}
-
-void 
 Object::attach(SPtr<Object> object)
 {
   auto newNode = newSPtr<Tree<Object>>();
@@ -30,10 +23,30 @@ Object::attach(SPtr<Object> object)
   subObjects->childs.push_back(newNode);
 }
 
-Matrix4f 
-Object::getTransform()
+void Object::attachComponent(SPtr<Component> component)
 {
-  return Matrix4f::translateMatrix(location)*Matrix4f::rotationMatrixX(rotation.x)*Matrix4f::rotationMatrixY(rotation.y)*Matrix4f::rotationMatrixZ(rotation.z)*Matrix4f::scaleMatrix(scale);
+  component->onAttach(shared_from_this());
+}
+
+void Object::update()
+{
+  for(auto component:components){
+    component->update(shared_from_this());
+  }
+}
+
+Matrix4f 
+Object::getLocalTransform()
+{
+  return 
+  Matrix4f::translateMatrix(location)*
+  Matrix4f::rotationMatrix(rotation)*
+  Matrix4f::scaleMatrix(scale);
+}
+
+Matrix4f Object::getGlobalTransform()
+{
+  return Matrix4f();
 }
 
 }

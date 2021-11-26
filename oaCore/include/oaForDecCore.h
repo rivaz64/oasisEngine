@@ -8,4 +8,5 @@ class Mesh;
 class Texture;
 class Model;
 class Object;
+class Component;
 }

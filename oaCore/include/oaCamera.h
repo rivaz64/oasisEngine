@@ -156,6 +156,12 @@ class OA_CORE_EXPORT Camera
    * @brief the buffer of the proyectionMatrix
   */
   SPtr<Buffer> proyection;
+
+  /**
+   * @brief dirty flags for the view matrix
+  */
+  uint8
+  dirtyFlags;
 };
 
 }

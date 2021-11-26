@@ -123,7 +123,7 @@ class OA_CORE_EXPORT ResoureManager :
   */
   Map<String,SPtr<Material>> materials;
 
-
+  Vector<SPtr<Object>> rendereableObjects;
 
  public:
 

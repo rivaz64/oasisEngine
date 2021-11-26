@@ -26,7 +26,8 @@ ResoureManager::onStartUp()
   generatePlane();
   generateCube();
   generateCircle(36);
-  generatePiramid(36);
+  generateCone(36);
+  generateCone(36);
   generateCilinder(36);
   loadDefaulTextures();
   loadDefaultShaders();

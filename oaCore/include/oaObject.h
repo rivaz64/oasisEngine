@@ -11,20 +11,16 @@
 #include "oaVector3f.h"
 #include "oaMatrix4f.h"
 #include "oaTree.h"
+#include <memory>
 
 namespace oaEngineSDK{
 
-class OA_CORE_EXPORT Object
+class OA_CORE_EXPORT Object :
+  public std::enable_shared_from_this<Object>
 {
  public:
 
   Object();
-
-  /**
-   * @brief updates the buffers, executed once eachFrame
-  */
-  void
-  update();
 
   /**
    * @brief makes the object a sub object of this one
@@ -34,11 +30,27 @@ class OA_CORE_EXPORT Object
   attach(SPtr<Object> object);
 
   /**
+   * @brief attaches a component
+   * @param component 
+  */
+  void
+  attachComponent(SPtr<Component> component);
+
+  /**
+   * @brief updates everything of this object
+  */
+  void 
+  update();
+
+  /**
    * @brief gets the transform Matrix of this object
    * @return 
   */
   Matrix4f
-  getTransform();
+  getLocalTransform();
+
+  Matrix4f
+  getGlobalTransform();
 
   /**
    * @brief the model that this object is using
@@ -70,12 +82,15 @@ class OA_CORE_EXPORT Object
   */
   SPtr<Tree<Object>> subObjects;
 
- public:
-
   /**
    * @brief for sending the location to the shader
   */
   SPtr<Buffer> transformB;
+
+  /**
+   * @brief all the components this actor has
+  */
+  Vector<SPtr<Component>> components;
 };
 
 }

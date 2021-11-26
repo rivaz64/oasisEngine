@@ -85,7 +85,7 @@ void TestApp::preInit()
 
 void TestApp::postInit()
 {
-
+  
   InputManager::instancePtr()->addInput('W');
   InputManager::instancePtr()->addInput('S');
   InputManager::instancePtr()->addInput('A');
@@ -253,7 +253,7 @@ void TestApp::postInit()
 
   scene->cam = cam;
 
-  //scene->addToScene(character);
+  scene->addToScene(testObject);
 
   //character->attach(testObject);
 
@@ -283,8 +283,7 @@ void TestApp::postInit()
 
 void TestApp::update(float delta)
 {
-  character->update();
-  testObject->update();
+
   Vector3f camdelta = {0.0f,0.0f,0.0f};
 
   if (InputManager::instancePtr()->getInput('A'))
@@ -323,41 +322,12 @@ void TestApp::update(float delta)
   if(camdelta.magnitud()>0){
     cam->moveCamera(camdelta);
   }
-  
 
-
+  cam->updateView();
 }
 
 void TestApp::draw()
 {
-  //GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
-  /*GraphicAPI::instancePtr()->setBuffer(character->transformB, 0);
-
-  cam->setCamera();
-
-  GraphicAPI::instancePtr()->setSamplerState(samsta);
-
-  GraphicAPI::instancePtr()->setRenderTarget(renderToTexture);
-  GraphicAPI::instancePtr()->clearRenderTarget(renderToTexture);
-  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
-
-  GraphicAPI::instancePtr()->setTexture(
-  ResoureManager::instancePtr()->textures["textures/wall.jpg"]
-  );
-
-  GraphicAPI::instancePtr()->setVertexBuffer(
-    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->vertexB
-  );
-
-  GraphicAPI::instancePtr()->setIndexBuffer(
-    ResoureManager::instancePtr()->models["triangle"]->meshes[0]->indexB
-  );
-
-  GraphicAPI::instancePtr()->draw(ResoureManager::instancePtr()->models["triangle"]->meshes[0]->index.size());
-
-  */
-
-  //GraphicAPI::instancePtr()->setRenderTarget(render);
 
   GraphicAPI::instancePtr()->clearRenderTarget(render);
   GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
@@ -464,6 +434,7 @@ void TestApp::renderImGui()
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
+
 }
 
 void oaEngineSDK::TestApp::drawImGui()
