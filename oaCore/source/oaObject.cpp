@@ -23,25 +23,72 @@ Object::attach(SPtr<Object> object)
   subObjects->childs.push_back(newNode);
 }
 
-void Object::attachComponent(SPtr<Component> component)
+void 
+Object::attachComponent(SPtr<Component> component)
 {
   component->onAttach(shared_from_this());
 }
 
-void Object::update()
+void 
+Object::update()
 {
   for(auto component:components){
     component->update(shared_from_this());
   }
 }
 
+void 
+Object::setLocation(const Vector3f& _location)
+{
+  location = _location;
+  dirtyFlag = true;
+}
+
+void 
+Object::setRotation(const Vector3f& _rotation)
+{
+  rotation = _rotation;
+  dirtyFlag = true;
+}
+
+void 
+Object::setScale(const Vector3f& _scale)
+{
+  scale = _scale;
+  dirtyFlag = true;
+}
+
+const Vector3f&
+Object::getLocation()
+{
+  return location;
+}
+
+const Vector3f& 
+Object::getRotation()
+{
+  return rotation;
+}
+
+const Vector3f& 
+Object::getScale()
+{
+  return scale;
+}
+
 Matrix4f 
 Object::getLocalTransform()
 {
-  return 
-  Matrix4f::translateMatrix(location)*
-  Matrix4f::rotationMatrix(rotation)*
-  Matrix4f::scaleMatrix(scale);
+  if(dirtyFlag){
+    dirtyFlag = false;
+    localTransform = 
+      Matrix4f::translateMatrix(location)*
+      Matrix4f::rotationMatrix(rotation)*
+      Matrix4f::scaleMatrix(scale);
+  }
+
+  return localTransform;
+  
 }
 
 Matrix4f Object::getGlobalTransform()

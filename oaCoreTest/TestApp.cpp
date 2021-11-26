@@ -201,17 +201,11 @@ void TestApp::postInit()
 
   //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
-  character->location.y = -2.f;
-  character->location.z = 7.f;
+  character->setLocation({0.0f,-2.0f,7.0f});
 
-  character->scale.x = .1f;
-  character->scale.y = .1f;
-  character->scale.z = .1f;
+  character->setScale({.1f,.1f,.1f});
 
-  character->rotation.y = 3.4f;
-
-
-
+  character->setRotation({0.0f,3.4f,0.0f});
 
   testObject = newSPtr<Object>();
 
@@ -227,7 +221,7 @@ void TestApp::postInit()
 
   testObject->model = newSPtr<Model>();
 
-  testObject->location.z = 7.f;
+  testObject->setLocation({0.0f,0.0f,7.f});
 
   testObject->model->meshes.push_back(
     ResoureManager::instancePtr()->meshes["cilinder"]
@@ -452,9 +446,18 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("transform");
-  ImGui::DragFloat3("location", &actualObject->location.x, .01f);
-  ImGui::DragFloat3("scale", &actualObject->scale.x, .01f);
-  ImGui::DragFloat3("rotation", &actualObject->rotation.x, .01f);
+  Vector3f vec = actualObject->getLocation();
+  if(ImGui::DragFloat3("location", &vec.x, .01f)){
+    actualObject->setLocation(vec);
+  }
+  vec = actualObject->getScale();
+  if(ImGui::DragFloat3("scale", &vec.x, .01f)){
+    actualObject->setScale(vec);
+  }
+  vec = actualObject->getRotation();
+  if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+    actualObject->setRotation(vec);
+  };
   ImGui::End();
 }
 

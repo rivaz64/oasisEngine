@@ -43,6 +43,48 @@ class OA_CORE_EXPORT Object :
   update();
 
   /**
+   * @brief setter for the location;
+   * @param _location 
+  */
+  void 
+  setLocation(const Vector3f& _location);
+
+  /**
+   * @brief setter for the rotation
+   * @param _rotation 
+  */
+  void
+  setRotation(const Vector3f& _rotation);
+
+  /**
+   * @brief setter for the scale
+   * @param _scale 
+  */
+  void 
+  setScale(const Vector3f& _scale);
+
+  /**
+   * @brief getter for the location
+   * @return 
+  */
+  const Vector3f&
+  getLocation();
+
+  /**
+   * @brief getter for the rotation
+   * @return 
+  */
+  const Vector3f&
+  getRotation();
+
+  /**
+   * @brief getter for the scale
+   * @return 
+  */
+  const Vector3f&
+  getScale();
+
+  /**
    * @brief gets the transform Matrix of this object
    * @return 
   */
@@ -56,21 +98,6 @@ class OA_CORE_EXPORT Object :
    * @brief the model that this object is using
   */
   SPtr<Model> model;
-
-  /**
-   * @brief where the object is in a 3D space
-  */
-  Vector3f location;
-
-  /**
-   * @brief the scale compared with the original imported model
-  */
-  Vector3f scale;
-
-  /**
-   * @brief how the object is rotated
-  */
-  Vector3f rotation;
 
   /**
    * @brief the name of the object in the editor
@@ -87,10 +114,33 @@ class OA_CORE_EXPORT Object :
   */
   SPtr<Buffer> transformB;
 
+ private:
+  /**
+   * @brief where the object is in a 3D space
+  */
+  Vector3f location;
+
+  /**
+   * @brief the scale compared with the original imported model
+  */
+  Vector3f scale;
+
+  /**
+   * @brief how the object is rotated
+  */
+  Vector3f rotation;
+
+  /**
+   * @brief the transform of this object with origin at his parent
+  */
+  Matrix4f localTransform;
+
   /**
    * @brief all the components this actor has
   */
   Vector<SPtr<Component>> components;
+
+  bool dirtyFlag;
 };
 
 }
