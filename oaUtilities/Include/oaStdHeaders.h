@@ -94,8 +94,7 @@ FORCEINLINE SPtr<T> newSPtr() {
  * @param a
  * @param b
 */
-template <class T>
-FORCEINLINE void swap(T& a, T& b) {
+FORCEINLINE void swap(float& a, float& b) {
   std::swap(a, b);
 }
 

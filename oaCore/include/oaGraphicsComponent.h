@@ -4,7 +4,7 @@
 
 namespace oaEngineSDK{
 
-class OA_CORE_EXPORT oaGraphicsComponent :
+class OA_CORE_EXPORT GraphicsComponent :
   public Component
 {
  public:
@@ -15,7 +15,10 @@ class OA_CORE_EXPORT oaGraphicsComponent :
   void
   update(SPtr<Object> actor);
 
- private:
+  COMPONENT_TYPE
+  getType() override {return COMPONENT_TYPE::GRAPHICS;}
+
+ public:
 
   /**
    * @brief a model

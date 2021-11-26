@@ -10,6 +10,11 @@
 
 namespace oaEngineSDK{
 
+enum class COMPONENT_TYPE{
+  NONE = 0,
+  GRAPHICS
+};
+
 class OA_CORE_EXPORT Component
 {
  public:
@@ -27,6 +32,12 @@ class OA_CORE_EXPORT Component
   */
   virtual void
   update(SPtr<Object> actor) {}
+
+  /**
+   * @brief get what is the type of this component
+  */
+  virtual COMPONENT_TYPE
+  getType() {return COMPONENT_TYPE::NONE;}
 };
 
 }

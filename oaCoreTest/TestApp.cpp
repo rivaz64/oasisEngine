@@ -199,7 +199,7 @@ void TestApp::postInit()
 
   character = newSPtr<Object>();
 
-  character->model = newSPtr<Model>();
+  //auto model = newSPtr<Model>();
 
   //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -221,15 +221,15 @@ void TestApp::postInit()
     ResoureManager::instancePtr()->materials["default"]
   );
 
-  testObject->model = newSPtr<Model>();
+  auto model = newSPtr<Model>();
 
   testObject->setLocation({0.0f,0.0f,7.f});
 
-  testObject->model->meshes.push_back(
+  model->meshes.push_back(
     ResoureManager::instancePtr()->meshes["cilinder"]
   );
   
-  testObject->model->materials.push_back(
+  model->materials.push_back(
     ResoureManager::instancePtr()->materials["default"]
   );
 
@@ -253,9 +253,14 @@ void TestApp::postInit()
 
   //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
 
-  testObject->attachComponent(newSPtr<oaGraphicsComponent>());
+  testObject->attachComponent(newSPtr<GraphicsComponent>());
+
+  testObject->getComponent<GraphicsComponent>()->model = model;
+
 
   //character->attach(testObject);
+
+
 
   testObject->name = "test object";
 
@@ -343,21 +348,23 @@ void TestApp::draw()
 
     object->transformB->update(&mat);
 
-    for(int i = 0;i<object->model->meshes.size();++i){
+    auto model = object->getComponent<GraphicsComponent>()->model;
 
-      object->model->materials[i]->set();
+    for(int i = 0;i<model->meshes.size();++i){
+
+      model->materials[i]->set();
 
       GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
 
       GraphicAPI::instancePtr()->setVertexBuffer(
-        object->model->meshes[i]->vertexB
+        model->meshes[i]->vertexB
       );
 
       GraphicAPI::instancePtr()->setIndexBuffer(
-        object->model->meshes[i]->indexB
+        model->meshes[i]->indexB
       );  
 
-      GraphicAPI::instancePtr()->draw(object->model->meshes[i]->index.size());
+      GraphicAPI::instancePtr()->draw(model->meshes[i]->index.size());
     }
 
   }

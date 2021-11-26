@@ -31,13 +31,14 @@ void
 Object::attachComponent(SPtr<Component> component)
 {
   component->onAttach(shared_from_this());
+  components.insert({component->getType(),component});
 }
 
 void 
 Object::update()
 {
   for(auto component:components){
-    component->update(shared_from_this());
+    //component->update(shared_from_this());
   }
 }
 

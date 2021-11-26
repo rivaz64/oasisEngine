@@ -23,7 +23,7 @@ void SceneGraph::addToScene(SPtr<Object> object)
 
 void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parentTransform)
 {
-
+/*
   auto object = node->data;
 
   auto localTransform = parentTransform * object->getLocalTransform();
@@ -53,7 +53,7 @@ void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parent
 
   for(SPtr<Tree<Object>> obj : node->childs){
     drawObject(obj,localTransform);
-  }
+  }*/
 }
 
 }

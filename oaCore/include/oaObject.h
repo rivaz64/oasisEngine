@@ -11,6 +11,7 @@
 #include "oaVector3f.h"
 #include "oaMatrix4f.h"
 #include "oaTree.h"
+#include "oaComponent.h"
 #include <memory>
 
 namespace oaEngineSDK{
@@ -106,9 +107,16 @@ class OA_CORE_EXPORT Object :
   getGlobalTransform();
 
   /**
-   * @brief the model that this object is using
+   * @brief gets a specific component
+   * @tparam T the component to get
+   * @return 
   */
-  SPtr<Model> model;
+  template<class T>
+  SPtr<T>
+  getComponent(){
+    T temp;
+    return cast<T>(components[temp.getType()]);
+  }
 
   /**
    * @brief the name of the object in the editor
@@ -130,7 +138,7 @@ class OA_CORE_EXPORT Object :
   */
   SPtr<Buffer> transformB;
 
- private:
+ public:
   /**
    * @brief where the object is in a 3D space
   */
@@ -159,7 +167,7 @@ class OA_CORE_EXPORT Object :
   /**
    * @brief all the components this actor has
   */
-  Vector<SPtr<Component>> components;
+  Map<COMPONENT_TYPE,SPtr<Component>> components;
 
   /**
    * @brief the dirty flag of the local and global matrix
