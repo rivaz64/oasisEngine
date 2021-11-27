@@ -1,16 +1,36 @@
 #include "oaModel.h"
 #include "oaResoureManager.h"
+#include "oaSkeleton.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
 #include <iostream>
+#include <stdlib.h>
 
 using Assimp::Importer;
 
 namespace oaEngineSDK{
 
-bool Model::loadFromFile(String file)
+void
+loadSkeleton(aiNode* node,SPtr<Tree<SkeletalNode>> sNode){
+  sNode->data.name = node->mName.C_Str();
+  sNode->data.transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
+  sNode->childs.resize(node->mNumChildren);
+  for(int i = 0; i<node->mNumChildren;++i){
+    sNode->childs[i] = newSPtr<Tree<SkeletalNode>>();
+    loadSkeleton(node->mChildren[i],sNode->childs[i]);
+  }
+}
+
+bool 
+Model::loadFromFile(String file)
 {
+  char drive[_MAX_DRIVE];
+  char dir[_MAX_DIR];
+  char ext[_MAX_EXT];
+  char name[_MAX_FNAME];
+  _splitpath(file.c_str(), drive,dir,name , ext);
+
   Importer importer;
   const aiScene* scene = importer.ReadFile(file, aiProcess_GenSmoothNormals |
                                            aiProcess_CalcTangentSpace |
@@ -35,7 +55,8 @@ bool Model::loadFromFile(String file)
     file = "textures/"+file+".png";
     if(ResoureManager::instancePtr()->loadTexture(file)){
       auto mat = copy(ResoureManager::instancePtr()->materials["default"]);
-      mat->textures.push_back(ResoureManager::instancePtr()->textures[file]);
+      auto texts = ResoureManager::instancePtr()->textures;
+      mat->textures[0] = ResoureManager::instancePtr()->textures[file];
       materials.push_back(mat);
     }
     else{
@@ -74,12 +95,20 @@ bool Model::loadFromFile(String file)
 
     oaMesh->create();
     
-    
     meshes.push_back(oaMesh);
 
   }
 
-  
+  if(scene->HasAnimations()){
+    
+    auto skeleton = newSPtr<Skeleton>();
+
+    skeleton->skeleton = newSPtr<Tree<SkeletalNode>>();
+
+    loadSkeleton(scene->mRootNode,skeleton->skeleton);
+
+    ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
+  }
 
   return true;
 }

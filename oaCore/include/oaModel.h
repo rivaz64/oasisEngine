@@ -34,7 +34,6 @@ class OA_CORE_EXPORT Model
   bool
   loadFromFile(String file);
 
-
  public:
   
   /**

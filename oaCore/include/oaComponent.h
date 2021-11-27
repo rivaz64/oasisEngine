@@ -15,6 +15,9 @@ enum class COMPONENT_TYPE{
   GRAPHICS
 };
 
+/**
+ * @brief a component an object can have
+*/
 class OA_CORE_EXPORT Component
 {
  public:

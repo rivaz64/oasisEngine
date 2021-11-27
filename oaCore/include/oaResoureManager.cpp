@@ -7,7 +7,10 @@ namespace oaEngineSDK{
 bool 
 ResoureManager::loadTexture(const String& file)
 {
-  
+  if(textures[file].get()){
+    return true;
+  }
+
   SPtr<Texture> texture = GraphicAPI::instancePtr()->createTexture();
 
   if(!texture->loadFromFile(file)){
@@ -15,7 +18,7 @@ ResoureManager::loadTexture(const String& file)
     return false;
   }
 
-  textures.insert({file,texture});
+  textures[file] = texture;
 
   return true;
 }

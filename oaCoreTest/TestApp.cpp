@@ -201,6 +201,10 @@ void TestApp::postInit()
 
   //auto model = newSPtr<Model>();
 
+  auto charmod = newSPtr<Model>();
+
+  charmod->loadFromFile("models/Shooting Gun.fbx");
+
   //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->setLocation({0.0f,-2.0f,7.0f});
@@ -208,6 +212,10 @@ void TestApp::postInit()
   character->setScale({.1f,.1f,.1f});
 
   character->setRotation({0.0f,3.4f,0.0f});
+
+  character->attachComponent(newSPtr<GraphicsComponent>());
+
+  character->getComponent<GraphicsComponent>()->model = charmod;
 
   testObject = newSPtr<Object>();
 
@@ -251,6 +259,8 @@ void TestApp::postInit()
 
   scene->attach(testObject);
 
+  scene->attach(character);
+
   //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
 
   testObject->attachComponent(newSPtr<GraphicsComponent>());
@@ -259,8 +269,6 @@ void TestApp::postInit()
 
 
   //character->attach(testObject);
-
-
 
   testObject->name = "test object";
 
@@ -345,6 +353,8 @@ void TestApp::draw()
   for(auto object : ResoureManager::instancePtr()->rendereableObjects){
     
     auto mat = object->getGlobalTransform();
+
+    if(!cam->isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)) continue;
 
     object->transformB->update(&mat);
 

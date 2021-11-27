@@ -132,6 +132,14 @@ class OA_CORE_EXPORT ResoureManager :
   */
   Map<String,SPtr<Material>> materials;
 
+  /**
+   * @brief all the loaded skeletons
+  */
+  Map<String,SPtr<Skeleton>> skeletons;
+
+  /**
+   * @brief all the objects that can be rendered
+  */
   Vector<SPtr<Object>> rendereableObjects;
 
  public:
