@@ -29,6 +29,7 @@ ResoureManager::onStartUp()
   generateCone(36);
   generateCone(36);
   generateCilinder(36);
+  generateTorus(36,36,.5f);
   loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultMaterial();
@@ -132,7 +133,7 @@ ResoureManager::generateCilinder(const uint8 n)
     vertices[i*2+3] = Vertex{ Vector3f(actualCos,actualSin, .5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
   }
 
-   auto& indices =  meshes["cilinder"]->index;
+  auto& indices =  meshes["cilinder"]->index;
 
   indices.resize(n*12);
 
@@ -174,7 +175,81 @@ ResoureManager::generateCilinder(const uint8 n)
   meshes["cilinder"]->create();
 }
 
-void 
+void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float ratio)
+{
+  meshes.insert({ "torus",newSPtr<Mesh>() });
+  auto& vertices =  meshes["torus"]->vertices;
+  vertices.resize(n*m);
+
+  float arc1 = Math::TWO_PI/float(n);
+  float arc2 = Math::TWO_PI/float(m);
+
+  for(uint8 i = 0; i<n; ++i){
+    float actualArc1 = arc1*float(i);
+    float actualCos1 = Math::cos(actualArc1);
+    float actualSin1 = Math::sin(actualArc1);
+    for(uint8 o = 0; o<m; ++o){
+      float actualArc2 = arc2*float(o);
+      float actualCos2 = Math::cos(actualArc2);
+      float actualSin2 = Math::sin(actualArc2);
+
+      float r = 1.0f+ratio*actualCos2;
+
+      vertices[i*m+o] = Vertex{ 
+        Vector3f(actualCos1*r,actualSin1*r, actualSin2),
+        Vector2f(0.0f,0.0f)
+      };
+    }
+  }
+
+  auto& indices =  meshes["torus"]->index;
+
+  indices.resize(n*m*6);
+
+  uint8 i,o;
+
+  for(i = 0; i<n-1; ++i){
+    for(o = 0; o<m-1; ++o){
+      indices[(i*m+o)*6] = i*m+o;
+      indices[(i*m+o)*6+1] = i*m+o+1;
+      indices[(i*m+o)*6+2] = (i+1)*m+o;
+
+      indices[(i*m+o)*6+3] = i*m+o+1;
+      indices[(i*m+o)*6+4] = (i+1)*m+o+1;
+      indices[(i*m+o)*6+5] = (i+1)*m+o;
+    }
+
+    indices[(i*m+o)*6] = i*m+o;
+    indices[(i*m+o)*6+1] = i*m;
+    indices[(i*m+o)*6+2] = (i+1)*m+o;
+
+    indices[(i*m+o)*6+3] = i*m;
+    indices[(i*m+o)*6+4] = (i+1)*m;
+    indices[(i*m+o)*6+5] = (i+1)*m+o;
+  }
+
+  for(o = 0; o<m-1; ++o){
+    indices[(i*m+o)*6] = i*m+o;
+    indices[(i*m+o)*6+1] = i*m+o+1;
+    indices[(i*m+o)*6+2] = m+o;
+
+    indices[(i*m+o)*6+3] = i*m+o+1;
+    indices[(i*m+o)*6+4] = m+o+1;
+    indices[(i*m+o)*6+5] = m+o;
+  }
+
+  indices[(i*m+o)*6] = i*m+o;
+  indices[(i*m+o)*6+1] = i*m;
+  indices[(i*m+o)*6+2] = m+o;
+
+  indices[(i*m+o)*6+3] = i*m;
+  indices[(i*m+o)*6+4] = m;
+  indices[(i*m+o)*6+5] = m+o;
+
+  meshes["torus"]->create();
+}
+
+void
 ResoureManager::generatePlane()
 {
   meshes.insert({ "plane",newSPtr<Mesh>() });

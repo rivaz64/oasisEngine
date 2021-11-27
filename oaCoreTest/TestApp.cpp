@@ -226,7 +226,7 @@ void TestApp::postInit()
   testObject->setLocation({0.0f,0.0f,7.f});
 
   model->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["cilinder"]
+    ResoureManager::instancePtr()->meshes["torus"]
   );
   
   model->materials.push_back(

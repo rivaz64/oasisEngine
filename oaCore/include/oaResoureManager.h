@@ -62,6 +62,15 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateCilinder(const uint8 n);
 
+  /**
+   * @brief generates a torus
+   * @param n the sides of the main circunference
+   * @param m the sides of the circunferences surrounding the main circunference
+   * @param ratio at one there is no hole
+  */
+  void
+  generateTorus(const uint8 n, const uint8 m, const float ratio);
+
  private:
 
   /**
