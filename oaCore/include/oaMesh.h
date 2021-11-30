@@ -12,6 +12,7 @@
 #include "oaVector4U.h"
 #include "oaVector4f.h"
 #include "oaBuffer.h"
+#include "oaGraphicAPI.h"
 
 namespace oaEngineSDK{
 
@@ -61,7 +62,7 @@ struct AnimationVertex{
 /**
  * @brief a class for a mesh
 */
-class OA_CORE_EXPORT Mesh
+class Mesh
 {
  public:
 
@@ -75,21 +76,22 @@ class OA_CORE_EXPORT Mesh
   /**
   * @brief sends all the data from the cpu tode gpu
   */
-  virtual void
-  create();
+  template<class T>
+  void
+  create(Vector<T> vertices){
+    vertexB = GraphicAPI::instancePtr()->createBuffer();
+    indexB = GraphicAPI::instancePtr()->createBuffer();
+    vertexB->init(vertices.data(),sizeof(T)*static_cast<uint64>(vertices.size()),BIND::VERTEX);
+    indexB->init(index.data(),sizeof(uint32)*static_cast<uint64>(index.size()),BIND::INDEX);
+  }
 
  public:
 
   /**
-   * @brief the indices of the vertices of each triangle
+   * @brief the number of indices this mesh has
   */
   Vector<uint32> index;
 
-  /**
-   * @brief the location of the vertices of the mesh
-  */
-  Vector<Vertex> vertices;
- public:
   /**
    * @brief the buffer for the indices
   */

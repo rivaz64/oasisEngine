@@ -171,14 +171,6 @@ void TestApp::postInit()
 
   pixelShader = GraphicAPI::instancePtr()->createPixelShader();
 
-  vertexShader->compileFromFile("shader");
-
-  pixelShader->compileFromFile("shader");
-
-  vertexShader->set();
-
-  pixelShader->set();
-
   //GraphicAPI::instancePtr()->compileShaders("noTextureShader");
 
   IMGUI_CHECKVERSION();
@@ -203,7 +195,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  //charmod->loadFromFile("models/Shooting Gun.fbx");
+  charmod->loadFromFile("models/Shooting Gun.fbx");
 
   //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -213,9 +205,9 @@ void TestApp::postInit()
 
   character->setRotation({0.0f,3.4f,0.0f});
 
-  //character->attachComponent(newSPtr<GraphicsComponent>());
+  character->attachComponent(newSPtr<GraphicsComponent>());
 
-  //character->getComponent<GraphicsComponent>()->model = charmod;
+  character->getComponent<GraphicsComponent>()->model = charmod;
 
   testObject = newSPtr<Object>();
 
@@ -259,7 +251,7 @@ void TestApp::postInit()
 
   //scene->attach(testObject);
 
-  //scene->attach(character);
+  scene->attach(character);
 
   //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
 
@@ -280,7 +272,7 @@ void TestApp::postInit()
 
   mesh->model =  ResoureManager::instancePtr()->models["test"];
 
-  Grid3D<bool> chunck({16u,16u,16u});
+  /*Grid3D<bool> chunck({16u,16u,16u});
 
   PerlinNoise2D::fillGrid(chunck,8,6,4);
 
@@ -300,7 +292,7 @@ void TestApp::postInit()
       }
       
     }
-  }
+  }*/
 
 }
 

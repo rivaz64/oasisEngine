@@ -42,7 +42,7 @@ void
 ResoureManager::generateCircle(const uint8 n)
 {
   meshes.insert({ "circle",newSPtr<Mesh>() });
-  auto& vertices =  meshes["circle"]->vertices;
+  Vector<Vertex> vertices;
   vertices.resize(n+1);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f, 0.0f), Vector2f(0.5f, 0.5f) };
 
@@ -70,14 +70,14 @@ ResoureManager::generateCircle(const uint8 n)
   indices[i*3+1]= 0;
   indices[i*3+2] = 1;
 
-  meshes["circle"]->create();
+  meshes["circle"]->create(vertices);
 }
 
 void 
 ResoureManager::generateCone(const uint8 n)
 {
   meshes.insert({ "cone",newSPtr<Mesh>() });
-  auto& vertices =  meshes["cone"]->vertices;
+  Vector<Vertex> vertices;
   vertices.resize(n+2);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
   vertices[1] = Vertex{ Vector3f(0.0f,0.0f, .5f), Vector2f(0.5f, 0.5f) };
@@ -114,14 +114,14 @@ ResoureManager::generateCone(const uint8 n)
   indices[i*6+5]= 1;
   indices[i*6+4] = 2;
 
-  meshes["cone"]->create();
+  meshes["cone"]->create(vertices);
 }
 
 void 
 ResoureManager::generateCilinder(const uint8 n)
 {
   meshes.insert({ "cilinder",newSPtr<Mesh>() });
-  auto& vertices =  meshes["cilinder"]->vertices;
+  Vector<Vertex> vertices;
   vertices.resize((n+1)*2);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
   vertices[1] = Vertex{ Vector3f(0.0f,0.0f, .5f), Vector2f(0.5f, 0.5f) };
@@ -175,13 +175,13 @@ ResoureManager::generateCilinder(const uint8 n)
   indices[i*12+10] = 2;
   indices[i*12+11] = 3;
 
-  meshes["cilinder"]->create();
+  meshes["cilinder"]->create(vertices);
 }
 
 void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float ratio)
 {
   meshes.insert({ "torus",newSPtr<Mesh>() });
-  auto& vertices =  meshes["torus"]->vertices;
+  Vector<Vertex> vertices;
   vertices.resize(n*m);
 
   float arc1 = Math::TWO_PI/float(n);
@@ -249,14 +249,14 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
   indices[(i*m+o)*6+4] = m;
   indices[(i*m+o)*6+5] = m+o;
 
-  meshes["torus"]->create();
+  meshes["torus"]->create(vertices);
 }
 
 void
 ResoureManager::generatePlane()
 {
   meshes.insert({ "plane",newSPtr<Mesh>() });
-  meshes["plane"]->vertices = {
+  Vector<Vertex> vertices = {
     Vertex{ Vector3f(-.5f, -.5f, 0.0f), Vector2f(0.0f, 0.0f) },
     Vertex{ Vector3f(.5f, -.5f, 0.0f), Vector2f(1.0f, 0.0f) },
     Vertex{ Vector3f(.5f, .5f, 0.0f), Vector2f(1.0f, 1.0f) },
@@ -268,7 +268,7 @@ ResoureManager::generatePlane()
     2,1,3,
   };
 
-  meshes["plane"]->create();
+  meshes["plane"]->create(vertices);
 
 }
 
@@ -276,7 +276,7 @@ void
 ResoureManager::generateCube()
 {
   meshes.insert({ "cube",newSPtr<Mesh>() });
-  meshes["cube"]->vertices = {
+  Vector<Vertex> vertices = {
     Vertex{ Vector3f(-.5f, .5f, -.5f), Vector2f(0.0f, 0.0f) },
     Vertex{ Vector3f(.5f, .5f, -.5f), Vector2f(1.0f, 0.0f) },
     Vertex{ Vector3f(.5f, .5f, .5f), Vector2f(1.0f, 1.0f) },
@@ -323,16 +323,18 @@ ResoureManager::generateCube()
     23,20,22
   };
 
-  meshes["cube"]->create();
+  meshes["cube"]->create(vertices);
 
 }
 
 void ResoureManager::loadDefaultShaders()
 {
   vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
+  vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
   pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
 
-  vertexShaders["default"]->compileFromFile("shader");
+  vertexShaders["default"]->compileFromFile("vertexShader");
+  vertexShaders["animation"]->compileFromFile("animVertexShader");
   pixelShaders["default"]->compileFromFile("shader");
 }
 

@@ -202,6 +202,7 @@
     <ClInclude Include="Include\oaVector4f.h" />
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
+    <ClInclude Include="Include\oaVector4U.h" />
     <ClInclude Include="oaVector4I.h" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +232,7 @@
     <ClCompile Include="Source\oaVector4f.cpp" />
     <ClCompile Include="source\oaVector2I.cpp" />
     <ClCompile Include="source\oaRect.cpp" />
+    <ClCompile Include="Source\oaVector4U.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

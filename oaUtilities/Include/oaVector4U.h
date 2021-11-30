@@ -27,7 +27,7 @@ class OA_UTILITY_EXPORT Vector4U
   * @param _x
   * @param _y
   */
-  Vector4U(int32 _x, int32 _y, int32 _z, int32 _w) :x(_x), y(_y), z(_z), w(_w) {}
+  Vector4U(uint32 _x, uint32 _y, uint32 _z, uint32 _w) :x(_x), y(_y), z(_z), w(_w) {}
 
   ~Vector4U() = default;
 
@@ -103,7 +103,7 @@ class OA_UTILITY_EXPORT Vector4U
   * @return
   */
   FORCEINLINE Vector4U const
-    operator*(int32 v) const {
+    operator*(uint32 v) const {
     return { x * v , y * v, z * v, w * v };
   }
 
@@ -113,7 +113,7 @@ class OA_UTILITY_EXPORT Vector4U
   */
 
   FORCEINLINE Vector4U&
-    operator*=(int32 v) {
+    operator*=(uint32 v) {
     x *= v;
     y *= v;
     z *= v;

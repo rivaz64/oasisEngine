@@ -63,7 +63,9 @@ Model::loadFromFile(String file)
       materials.push_back(ResoureManager::instancePtr()->materials["default"]);
     }
 
-    oaMesh->vertices.resize( aMesh->mNumVertices);
+    Vector<Vertex> vertices;
+
+    vertices.resize( aMesh->mNumVertices);
     for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
       Vertex actualVertex;
       actualVertex.location.x = aMesh->mVertices[numVertex].x;
@@ -74,7 +76,7 @@ Model::loadFromFile(String file)
         actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
         actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
       }
-      oaMesh->vertices[numVertex] = actualVertex;
+      vertices[numVertex] = actualVertex;
     }
 
     oaMesh->index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
@@ -93,22 +95,13 @@ Model::loadFromFile(String file)
       oaMesh->index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
     }
 
-    oaMesh->create();
+    oaMesh->create(vertices);
     
     meshes.push_back(oaMesh);
 
   }
 
-  if(scene->HasAnimations()){
-    
-    auto skeleton = newSPtr<Skeleton>();
-
-    skeleton->skeleton = newSPtr<Tree<SkeletalNode>>();
-
-    loadSkeleton(scene->mRootNode,skeleton->skeleton);
-
-    ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
-  }
+  
 
   return true;
 }

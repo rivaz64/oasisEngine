@@ -16,7 +16,7 @@ DX11VertexShader::compileFromFile(String file)
 {
   version = "vs_4_0";
 
-  if(!DX11Shader::compileFromFile(file + "/vertexShader.hlsl")){
+  if(!DX11Shader::compileFromFile("shader/" + file + ".hlsl")){
     return false;
   }
 
