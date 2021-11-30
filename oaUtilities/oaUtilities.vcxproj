@@ -177,6 +177,7 @@
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
     <ClInclude Include="Include\oaGrid2D.h" />
+    <ClInclude Include="Include\oaGrid3D.h" />
     <ClInclude Include="include\oaLine.h" />
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
@@ -201,13 +202,14 @@
     <ClInclude Include="Include\oaVector4f.h" />
     <ClInclude Include="include\oaVector2I.h" />
     <ClInclude Include="include\oaRect.h" />
-    <ClInclude Include="oaGrid3D.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="oaGrid3D.cpp" />
     <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
     <ClCompile Include="Source\oaGrid2D.cpp" />
+    <ClCompile Include="Source\oaGrid3D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="source\oaLine.cpp" />
     <ClCompile Include="Source\oaMath.cpp" />
     <ClCompile Include="Source\oaMatrix3f.cpp" />

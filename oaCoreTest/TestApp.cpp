@@ -203,7 +203,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  charmod->loadFromFile("models/Shooting Gun.fbx");
+  //charmod->loadFromFile("models/Shooting Gun.fbx");
 
   //character->model->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -213,16 +213,16 @@ void TestApp::postInit()
 
   character->setRotation({0.0f,3.4f,0.0f});
 
-  character->attachComponent(newSPtr<GraphicsComponent>());
+  //character->attachComponent(newSPtr<GraphicsComponent>());
 
-  character->getComponent<GraphicsComponent>()->model = charmod;
+  //character->getComponent<GraphicsComponent>()->model = charmod;
 
   testObject = newSPtr<Object>();
 
   ResoureManager::instancePtr()->models.insert({"test",newSPtr<Model>()});
 
   ResoureManager::instancePtr()->models["test"]->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["plane"]
+    ResoureManager::instancePtr()->meshes["cube"]
   );
 
   ResoureManager::instancePtr()->models["test"]->materials.push_back(
@@ -257,15 +257,15 @@ void TestApp::postInit()
 
   //scene->cam = cam;
 
-  scene->attach(testObject);
+  //scene->attach(testObject);
 
-  scene->attach(character);
+  //scene->attach(character);
 
   //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
 
-  testObject->attachComponent(newSPtr<GraphicsComponent>());
+  //testObject->attachComponent(newSPtr<GraphicsComponent>());
 
-  testObject->getComponent<GraphicsComponent>()->model = model;
+  //testObject->getComponent<GraphicsComponent>()->model = model;
 
 
   //character->attach(testObject);
@@ -276,20 +276,31 @@ void TestApp::postInit()
 
   actualObject = testObject;
 
-  Grid2D<float> chunck({16u,16u});
+  auto mesh = newSPtr<GraphicsComponent>();
 
-  PerlinNoise2D::fillGrid(chunck,8);
+  mesh->model =  ResoureManager::instancePtr()->models["test"];
 
-  /*Vector2U position;
+  Grid3D<bool> chunck({16u,16u,16u});
+
+  PerlinNoise2D::fillGrid(chunck,8,6,4);
+
+  auto& lista = ResoureManager::instancePtr()->rendereableObjects;
+
+  Vector3U position;
   for(position.x = 0;position.x< 16; ++position.x){
     for(position.y = 0;position.y< 16; ++position.y){
-      auto temp =  newSPtr<Object>();
-      temp->model =  ResoureManager::instancePtr()->models["test"];
-      std::cout<<chunck.getAt(position)<<std::endl;
-      temp->location = Vector3f(position.x,position.y,chunck.getAt(position)*1);
-      scene->addToScene(temp);
+      for(position.z = 0;position.z< 16; ++position.z){
+        if(chunck.getAt(position)){
+          auto temp =  newSPtr<Object>();
+          temp->attachComponent(mesh);
+          temp->setLocation(position);
+          scene->attach(temp); 
+        }
+        
+      }
+      
     }
-  }*/
+  }
 
 }
 
@@ -350,11 +361,14 @@ void TestApp::draw()
   GraphicAPI::instancePtr()->setSamplerState(samsta);
   
   cam->setCamera();
+
+  auto lista = ResoureManager::instancePtr()->rendereableObjects;
+
   for(auto object : ResoureManager::instancePtr()->rendereableObjects){
     
     auto mat = object->getGlobalTransform();
 
-    if(!cam->isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)) continue;
+    //if(!cam->isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)) continue;
 
     object->transformB->update(&mat);
 

@@ -38,5 +38,19 @@ PerlinNoise2D::fillGrid(Grid2D<float>& grid, float scale)
   }
 }
 
+void PerlinNoise2D::fillGrid(Grid3D<bool>& grid, float scale, float bias, float amplitud)
+{
+  const Vector3U& size = grid.getSize();
+  Vector3U position;
+  for(position.x = 0;position.x< size.x; ++position.x){
+    for(position.y = 0;position.y< size.y; ++position.y){
+      float attitude = valueAt(Vector2f(position.xy)/scale)*amplitud+bias;
+      for(position.z = 0;position.z< size.z; ++position.z){
+        grid.setAt(position,position.z<attitude);
+      }
+    }
+  }
+}
+
 }
 

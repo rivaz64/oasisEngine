@@ -6,6 +6,7 @@
 
 #pragma once
 #include "oaPrerequisitesUtilities.h"
+#include "oaVector2I.h"
 
 namespace oaEngineSDK{
 /**
@@ -118,15 +119,27 @@ class OA_UTILITY_EXPORT Vector3I
   }
 
 public:
-  /**
-  * @brief the x component of the vector
-  */
-  int32 x;
 
-  /**
-  * @brief the y component of the vector
-  */
-  int32 y;
+  union{
+
+    /**
+     * @brief the x and y components of the vector
+    */
+    Vector2I xy;
+
+    struct{
+      /**
+      * @brief the x component of the vector
+      */
+      int32 x;
+
+      /**
+      * @brief the y component of the vector
+      */
+      int32 y;
+    };
+  };
+  
 
   /**
   * @brief the z component of the vector

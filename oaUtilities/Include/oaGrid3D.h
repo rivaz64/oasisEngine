@@ -12,7 +12,7 @@
 namespace oaEngineSDK{
 
 template<class T>
-class OA_UTILITY_EXPORT Grid3D
+class Grid3D
 {
  public:
   
@@ -50,6 +50,15 @@ class OA_UTILITY_EXPORT Grid3D
     data[location.z*size.y*size.x+location.y*size.x+location.x] = value;
   }
 
+  /**
+   * @brief getter for the size of the grid
+   * @return 
+  */
+  FORCEINLINE const Vector3U&
+  getSize(){
+    return size;
+  }
+
  private:
   /**
    * @brief all the data of the grid
@@ -58,5 +67,7 @@ class OA_UTILITY_EXPORT Grid3D
 
   Vector3U size;
 };
+
+Grid3D<bool>;
 
 }

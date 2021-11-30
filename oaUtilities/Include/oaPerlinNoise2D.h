@@ -9,6 +9,7 @@
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector2f.h"
 #include "oaGrid2D.h"
+#include "oaGrid3D.h"
 
 namespace oaEngineSDK{
 
@@ -30,6 +31,16 @@ class OA_UTILITY_EXPORT PerlinNoise2D
   */
   static void
   fillGrid(Grid2D<float>& grid,float scale);
+
+  /**
+   * @brief fills a grid taking the z axis as the attitude to fill
+   * @param grid 
+   * @param scale  how separated the gradients are going to be from each other
+   * @param bias the result of the perlin plus this
+   * @param amplitud the result of the perlin times this
+  */
+  static void
+  fillGrid(Grid3D<bool>& grid,float scale,float bias, float amplitud);
 };
 
 }

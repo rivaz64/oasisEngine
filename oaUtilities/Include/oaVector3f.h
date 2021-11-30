@@ -266,6 +266,7 @@ class OA_UTILITY_EXPORT Vector3f
      * @brief the x and y components of the vector
     */
     Vector2f xy;
+
     struct {
       /**
        * @brief the x component of the vector
