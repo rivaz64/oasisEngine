@@ -1,35 +1,35 @@
 /**
-* @file oaVector3I.h
+* @file oaVector4I.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 11/10/2021
+* @date 11/29/2021
 */
 
 #pragma once
 #include "oaPrerequisitesUtilities.h"
-#include "oaVector2I.h"
+#include "oaVector3I.h"
 
 namespace oaEngineSDK{
 /**
 * @brief tridimencional vector of ints
 */
-class OA_UTILITY_EXPORT Vector3I
+class OA_UTILITY_EXPORT Vector4I
 {
 
  public:
 
   /**
-  * @brief default constructor fot the Vector3I
+  * @brief default constructor fot the Vector4I
   */
-  Vector3I()=default;
+  Vector4I()=default;
 
   /**
   * @brief constructor with parameters
   * @param _x
   * @param _y
   */
-  Vector3I(int32 _x, int32 _y, int32 _z) :x(_x), y(_y), z(_z) {}
+  Vector4I(int32 _x, int32 _y, int32 _z, int32 _w) :x(_x), y(_y), z(_z), w(_w) {}
 
-  ~Vector3I() = default;
+  ~Vector4I() = default;
 
   /**
   * @brief compares if two vectors are equal
@@ -37,8 +37,8 @@ class OA_UTILITY_EXPORT Vector3I
   * @return 
   */
   FORCEINLINE bool const
-  operator==(const Vector3I& v) const {
-    return x == v.x && y == v.y && z == v.z;
+  operator==(const Vector4I& v) const {
+    return x == v.x && y == v.y && z == v.z && w == v.w;
   }
 
   /**
@@ -47,8 +47,8 @@ class OA_UTILITY_EXPORT Vector3I
   * @return 
   */
   FORCEINLINE bool const
-  operator!=(const Vector3I& v) const {
-    return x != v.x || y != v.y || z != v.z;
+  operator!=(const Vector4I& v) const {
+    return x != v.x || y != v.y || z != v.z || w != v.w;
   }
 
   /**
@@ -56,20 +56,21 @@ class OA_UTILITY_EXPORT Vector3I
   * @param v
   * @return
   */
-  FORCEINLINE Vector3I const
-    operator+(const Vector3I& v) const {
-    return { x + v.x , y + v.y, z + v.z };
+  FORCEINLINE Vector4I const
+    operator+(const Vector4I& v) const {
+    return { x + v.x , y + v.y, z + v.z, w + v.w };
   }
 
   /**
   * @brief adds the vector v to this one
   * @param v
   */
-  FORCEINLINE Vector3I&
-    operator+=(const Vector3I& v) {
+  FORCEINLINE Vector4I&
+    operator+=(const Vector4I& v) {
     x += v.x;
     y += v.y;
     z += v.z;
+    w += v.w;
     return *this;
   }
 
@@ -78,20 +79,21 @@ class OA_UTILITY_EXPORT Vector3I
   * @param v
   * @return
   */
-  FORCEINLINE Vector3I const
-    operator-(const Vector3I& v) const {
-    return { x - v.x , y - v.y,z - v.z };
+  FORCEINLINE Vector4I const
+    operator-(const Vector4I& v) const {
+    return { x - v.x , y - v.y,z - v.z, w - v.w };
   }
 
   /**
   * @brief substract vector v from this
   * @param v
   */
-  FORCEINLINE Vector3I&
-    operator-=(const Vector3I& v) {
+  FORCEINLINE Vector4I&
+    operator-=(const Vector4I& v) {
     x -= v.x;
     y -= v.y;
     z -= v.z;
+    w -= v.w;
     return *this;
   }
 
@@ -100,9 +102,9 @@ class OA_UTILITY_EXPORT Vector3I
   * @param v
   * @return
   */
-  FORCEINLINE Vector3I const
+  FORCEINLINE Vector4I const
     operator*(int32 v) const {
-    return { x * v , y * v, z * v };
+    return { x * v , y * v, z * v, w * v };
   }
 
   /**
@@ -110,11 +112,12 @@ class OA_UTILITY_EXPORT Vector3I
   * @param v
   */
 
-  FORCEINLINE Vector3I&
+  FORCEINLINE Vector4I&
     operator*=(int32 v) {
     x *= v;
     y *= v;
     z *= v;
+    w *= v;
     return *this;
   }
 
@@ -125,7 +128,7 @@ public:
     /**
      * @brief the x and y components of the vector
     */
-    Vector2I xy;
+    Vector3I xyz;
 
     struct{
       /**
@@ -137,19 +140,24 @@ public:
       * @brief the y component of the vector
       */
       int32 y;
+
+      /**
+      * @brief the z component of the vector
+      */
+      int32 z;
     };
   };
   
 
   /**
-  * @brief the z component of the vector
+  * @brief the w component of the vector
   */
-  int32 z;
+  int32 w;
 
   /**
    * @brief a vector with magnitud 0
   */
-  static const Vector3I ZERO;
+  static const Vector4I ZERO;
 
 };
 
