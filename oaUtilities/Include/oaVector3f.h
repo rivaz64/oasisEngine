@@ -284,6 +284,8 @@ class OA_UTILITY_EXPORT Vector3f
   */
   float z;
 
+  static const Vector3f ZERO;
+
 };
 
 }

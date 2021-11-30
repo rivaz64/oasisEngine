@@ -231,6 +231,8 @@ public:
   */
   float w;
 
+  static const Vector4f ZERO;
+
  private:
   friend class Matrix4f;
 };

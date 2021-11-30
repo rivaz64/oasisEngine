@@ -8,6 +8,7 @@
 
 namespace oaEngineSDK {
 
+const Vector4f Vector4f::ZERO(0,0,0,0);
 
 }
 

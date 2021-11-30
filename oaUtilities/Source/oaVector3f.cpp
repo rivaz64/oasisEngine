@@ -10,6 +10,8 @@
 
 namespace oaEngineSDK {
 
+const Vector3f Vector3f::ZERO(0,0,0);
+
 const Vector3f Vector3f::RIGHT(1, 0, 0);
 const Vector3f Vector3f::LEFT(-1, 0, 0);
 const Vector3f Vector3f::UP(0, 1, 0);

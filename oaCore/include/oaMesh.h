@@ -9,12 +9,14 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector2f.h"
 #include "oaVector3f.h"
+#include "oaVector4U.h"
+#include "oaVector4f.h"
 #include "oaBuffer.h"
 
 namespace oaEngineSDK{
 
 /**
- * @brief a tructure for all the information at a certain point of a Mesh
+ * @brief a structure for all the information at a certain point of a Mesh
 */
 struct Vertex{
   /**
@@ -23,15 +25,38 @@ struct Vertex{
   Vector3f location;
 
   /**
-   * @brief the normal at a certain point
+   * @brief the part of the texture that is going to be drawn at a certain point
   */
-  //Vector3f normals;
+  Vector2f textureCord;
+
+};
+
+/**
+ * @brief a structure for all the information at a certain point of a Mesh whit animations
+*/
+struct AnimationVertex{
+  /**
+   * @brief the location in a tridimencional space of this vetrex
+  */
+  Vector3f location;
 
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
+
+  /**
+   * @brief the ids of the bones that are afecting this vertex
+  */
+  Vector4U ids = Vector4U::ZERO;
+
+  /**
+   * @brief how much each bone afects this vertex
+  */
+  Vector4f weights = Vector4f::ZERO;
+
 };
+
 
 /**
  * @brief a class for a mesh
