@@ -148,13 +148,29 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          
+          Map<String,uint32> boneMaping;
+
+          uint32 bonesNum=0;
 
           for(uint32 boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
 
             auto actualBone = aMesh->mBones[boneNum];
 
-            bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+            String boneName = actualBone->mName.C_Str();
+
+            uint32 boneIndex;
+
+            if(boneMaping.find(boneName) == boneMaping.end()){
+              boneIndex = bonesNum;
+              boneMaping.insert({boneName,bonesNum});
+              bones[boneIndex] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+              ++bonesNum;
+            }
+            else{
+              boneIndex = boneMaping[boneName];
+            }
+
+            actualBone = aMesh->mBones[boneIndex];
 
             for(uint32 weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
             
@@ -166,7 +182,7 @@ Model::loadFromFile(String file)
 
               for(uint8 i = 0; i < 4; ++i){
                 if(((float*)&actualVertex.weights)[i] == 0){
-                  ((uint32*)&actualVertex.ids)[i] = boneNum;
+                  ((uint32*)&actualVertex.ids)[i] = boneIndex;
                   ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
                   break;
 
