@@ -111,7 +111,7 @@ class Mesh
   */
   SPtr<VertexBuffer> vertexB;
 
-  //SPtr<Buffer
+  SPtr<Buffer> bonesB;
 
   /**
    * @brief all the bone matrizes of his mesh
