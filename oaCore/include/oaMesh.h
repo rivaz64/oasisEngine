@@ -111,7 +111,17 @@ class Mesh
   */
   SPtr<VertexBuffer> vertexB;
 
-  
+  //SPtr<Buffer
+
+  /**
+   * @brief all the bone matrizes of his mesh
+  */
+  Vector<Matrix4f> bones;
+
+  /**
+   * @brief if this mesh has bones or not
+  */
+  bool hasBones = false;
 };
 
 }

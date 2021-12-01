@@ -139,9 +139,15 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
+          oaMesh->hasBones = true;
+
+          oaMesh->bones.resize(aMesh->mNumBones);
+
           for(uint32 boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
-            
+
             auto actualBone = aMesh->mBones[boneNum];
+
+            oaMesh->bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
 
             for(uint32 weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
             
