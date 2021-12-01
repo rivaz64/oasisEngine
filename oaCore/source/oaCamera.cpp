@@ -8,10 +8,10 @@ namespace oaEngineSDK{
 Camera::Camera()
 {
   view = GraphicAPI::instancePtr()->createBuffer();
-  view->init(nullptr,sizeof(Matrix4f),BIND::CONSTANT);
+  view->init(sizeof(Matrix4f));
 
   proyection = GraphicAPI::instancePtr()->createBuffer();
-  proyection->init(nullptr,sizeof(Matrix4f),BIND::CONSTANT);
+  proyection->init(sizeof(Matrix4f));
 
   viewMatrix = Matrix4f::IDENTITY;
 

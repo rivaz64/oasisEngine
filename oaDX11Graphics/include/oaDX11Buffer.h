@@ -19,7 +19,7 @@ class DX11Buffer :
    ~DX11Buffer();
 
   bool
-  init(void* data,uint32 size,BIND flags) override;
+  init(uint32 size) override;
 
   void
   update(void* data) override;

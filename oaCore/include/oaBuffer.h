@@ -30,7 +30,7 @@ class OA_CORE_EXPORT Buffer
    * @return if the buffer initialized correctly
   */
   virtual bool
-  init(void* /*data*/, uint32 /*size*/, BIND /*flags*/) { return true; }
+  init(uint32 /*size*/) { return true; }
 
   /**
    * @brief changes the data of the buffer
