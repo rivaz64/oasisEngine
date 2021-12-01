@@ -134,10 +134,37 @@ Model::loadFromFile(String file)
           actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
         }
 
-        actualVertex.None.x =3;
-        actualVertex.None.y =5;
         vertices[numVertex] = actualVertex;
       }
+
+      if(aMesh->HasBones()){
+          
+          for(uint32 boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
+            
+            auto actualBone = aMesh->mBones[boneNum];
+
+            for(uint32 weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
+            
+              auto& actualWeight = actualBone->mWeights[weightNum];
+
+              uint32 vertexId = actualWeight.mVertexId;
+
+              auto& actualVertex = vertices[vertexId];
+
+              for(uint8 i = 0; i < 4; ++i){
+                if(((float*)&actualVertex.weights)[i] == 0){
+                  ((uint32*)&actualVertex.ids)[i] = boneNum;
+                  ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
+                  break;
+
+                }
+              }
+              
+            }
+
+          }
+
+        }
 
       oaMesh->create(vertices);
     }

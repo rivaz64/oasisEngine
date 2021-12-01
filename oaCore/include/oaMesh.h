@@ -42,12 +42,12 @@ struct AnimationVertex{
   /**
    * @brief the ids of the bones that are afecting this vertex
   */
-  //Vector4U ids = Vector4U(1,2,3,4);
+  Vector4U ids = Vector4U::ZERO;
 
   /**
    * @brief how much each bone afects this vertex
   */
-  //Vector4f weights = Vector4f(5,6,7,8);
+  Vector4f weights = Vector4f::ZERO;
 
   /**
    * @brief the location in a tridimencional space of this vetrex
@@ -59,12 +59,10 @@ struct AnimationVertex{
   */
   Vector2f textureCord;
 
-  Vector2f None;
-
   /**
    * @brief for compliting the space
   */
-  //Vector2f none;
+  Vector2f none;
 
 };
 
