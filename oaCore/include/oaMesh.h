@@ -101,6 +101,25 @@ class Mesh
 
   }
 
+  /**
+  * @brief sends all the data from the cpu tode gpu, with bones
+  */
+  template<class T>
+  void
+  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& bones){
+
+    create(vertices,index);
+
+    hasBones = true;
+
+    bonesB = GraphicAPI::instancePtr()->createBuffer();
+
+    bonesB->init(sizeof(Matrix4f)*bones.size());
+
+    bonesB->update(bones.data());
+
+  }
+
  public:
 
   /**
@@ -121,14 +140,14 @@ class Mesh
   //SPtr<Buffer
 
   /**
-   * @brief all the bone matrizes of his mesh
+   * @brief the buffer for the bones
   */
-  //Vector<Matrix4f> bones;
+  SPtr<Buffer> bonesB;
 
   /**
    * @brief if this mesh has bones or not
   */
-  //bool hasBones = false;
+  bool hasBones = false;
 };
 
 }

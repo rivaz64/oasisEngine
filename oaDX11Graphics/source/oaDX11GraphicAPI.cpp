@@ -275,13 +275,6 @@ DX11GraphicAPI::show()
 }
 
 void 
-DX11GraphicAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
-{
-  context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );  
-  context->IASetIndexBuffer(cast<DX11Buffer>(buffer)->buffer,DXGI_FORMAT_R32_UINT,0 );
-}
-
-void 
 DX11GraphicAPI::setTexture(const SPtr<Texture>& texture)
 {
   context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->shaderResourceView );

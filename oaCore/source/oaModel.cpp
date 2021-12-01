@@ -120,6 +120,10 @@ Model::loadFromFile(String file)
     }
     
     else{
+      
+      Vector<Matrix4f> bones;
+      bones.resize(aMesh->mNumBones);
+
       Vector<AnimationVertex> vertices;
 
       vertices.resize( aMesh->mNumVertices);
@@ -141,15 +145,13 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          //oaMesh->hasBones = true;
-
-          //oaMesh->bones.resize(aMesh->mNumBones);
+          
 
           for(uint32 boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
 
             auto actualBone = aMesh->mBones[boneNum];
 
-            //oaMesh->bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+            bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
 
             for(uint32 weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
             
@@ -174,7 +176,7 @@ Model::loadFromFile(String file)
 
         }
 
-      oaMesh->create(vertices,index);
+      oaMesh->create(vertices,index,bones);
     }
     
     meshes.push_back(oaMesh);

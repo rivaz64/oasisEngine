@@ -376,6 +376,8 @@ void TestApp::draw()
 
       model->meshes[i]->indexB->set();
 
+      GraphicAPI::instancePtr()->setBuffer( model->meshes[i]->bonesB,3);
+
       GraphicAPI::instancePtr()->draw(model->meshes[i]->indexNumber);
     }
 
