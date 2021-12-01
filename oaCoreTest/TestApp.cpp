@@ -374,11 +374,9 @@ void TestApp::draw()
 
       model->meshes[i]->vertexB->set();
 
-      GraphicAPI::instancePtr()->setIndexBuffer(
-        model->meshes[i]->indexB
-      );  
+      model->meshes[i]->indexB->set();
 
-      GraphicAPI::instancePtr()->draw(model->meshes[i]->index.size());
+      GraphicAPI::instancePtr()->draw(model->meshes[i]->indexNumber);
     }
 
   }

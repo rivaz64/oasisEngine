@@ -55,7 +55,7 @@ ResoureManager::generateCircle(const uint8 n)
     vertices[i+1] = Vertex{ Vector3f(actualCos,actualSin, 0.0f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
   }
 
-  auto& indices =  meshes["circle"]->index;
+  Vector<uint32> indices;
 
   indices.resize(n*3);
 
@@ -70,7 +70,7 @@ ResoureManager::generateCircle(const uint8 n)
   indices[i*3+1]= 0;
   indices[i*3+2] = 1;
 
-  meshes["circle"]->create(vertices);
+  meshes["circle"]->create(vertices,indices);
 }
 
 void 
@@ -91,7 +91,7 @@ ResoureManager::generateCone(const uint8 n)
     vertices[i+2] = Vertex{ Vector3f(actualCos,actualSin, -.5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
   }
 
-  auto& indices =  meshes["cone"]->index;
+  Vector<uint32> indices;
 
   indices.resize(n*6);
 
@@ -114,7 +114,7 @@ ResoureManager::generateCone(const uint8 n)
   indices[i*6+5]= 1;
   indices[i*6+4] = 2;
 
-  meshes["cone"]->create(vertices);
+  meshes["cone"]->create(vertices,indices);
 }
 
 void 
@@ -136,7 +136,7 @@ ResoureManager::generateCilinder(const uint8 n)
     vertices[i*2+3] = Vertex{ Vector3f(actualCos,actualSin, .5f), Vector2f((actualCos+1.f)*.5f, (actualSin+1.f)*.5f) };
   }
 
-  auto& indices =  meshes["cilinder"]->index;
+  Vector<uint32> indices;
 
   indices.resize(n*12);
 
@@ -175,7 +175,7 @@ ResoureManager::generateCilinder(const uint8 n)
   indices[i*12+10] = 2;
   indices[i*12+11] = 3;
 
-  meshes["cilinder"]->create(vertices);
+  meshes["cilinder"]->create(vertices,indices);
 }
 
 void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float ratio)
@@ -205,7 +205,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
     }
   }
 
-  auto& indices =  meshes["torus"]->index;
+  Vector<uint32> indices;
 
   indices.resize(n*m*6);
 
@@ -249,7 +249,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
   indices[(i*m+o)*6+4] = m;
   indices[(i*m+o)*6+5] = m+o;
 
-  meshes["torus"]->create(vertices);
+  meshes["torus"]->create(vertices,indices);
 }
 
 void
@@ -263,12 +263,12 @@ ResoureManager::generatePlane()
     Vertex{ Vector3f(-.5f, .5f, 0.0f), Vector2f(0.0f, 1.0f) },
   };
 
-  meshes["plane"]->index = {
+  Vector<uint32> index = {
     3,1,0,
     2,1,3,
   };
 
-  meshes["plane"]->create(vertices);
+  meshes["plane"]->create(vertices,index);
 
 }
 
@@ -303,7 +303,7 @@ ResoureManager::generateCube()
     Vertex{ Vector3f(-.5f, .5f, .5f), Vector2f(0.0f, 1.0f) },
   };
 
-  meshes["cube"]->index = {
+  Vector<uint32> index = {
     3,1,0,
     2,1,3,
 
@@ -323,7 +323,7 @@ ResoureManager::generateCube()
     23,20,22
   };
 
-  meshes["cube"]->create(vertices);
+  meshes["cube"]->create(vertices,index);
 
 }
 

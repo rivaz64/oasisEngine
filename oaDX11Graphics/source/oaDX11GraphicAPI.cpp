@@ -9,6 +9,7 @@
 #include "oaDX11DepthStencil.h"
 #include "oaInputManager.h"
 #include "oaDX11VertexBuffer.h"
+#include "oaDX11IndexBuffer.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -197,6 +198,11 @@ DX11GraphicAPI::createBuffer()
 SPtr<VertexBuffer> DX11GraphicAPI::createVertexBuffer()
 {
   return newSPtr<DX11VertexBuffer>();
+}
+
+SPtr<IndexBuffer> DX11GraphicAPI::createIndexBuffer()
+{
+  return newSPtr<DX11IndexBuffer>();
 }
 
 SPtr<Texture> 

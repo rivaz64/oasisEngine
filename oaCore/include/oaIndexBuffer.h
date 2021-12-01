@@ -1,7 +1,7 @@
 /**
-* @file oaVertexBuffer.h
+* @file oaIndexBuffer.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 11/30/2021
+* @date 12/1/2021
 */
 
 #pragma once
@@ -11,21 +11,19 @@
 namespace oaEngineSDK{
 
 /**
- * @brief a buffer for the vertices
+ * @brief a buffer for the indices
 */
-class OA_CORE_EXPORT VertexBuffer
+class OA_CORE_EXPORT IndexBuffer
 {
+  public:
 
- public:
   /**
    * @brief initialize the buffer
    * @param data the data of the vertices
-   * @param vertexSize the size of each vertex
-   * @param numberOfVertices the number of vertices
    * @return if the buffer initialized correctly
   */
   virtual bool
-  init(void* /*data*/, uint32 /*vertexSize*/, uint32 /*numberOfVertices*/) { return true; }
+  init(Vector<uint32>& /*data*/) { return true; }
 
   /**
    * @brief set this buffer to be used
@@ -35,4 +33,5 @@ class OA_CORE_EXPORT VertexBuffer
 };
 
 }
+
 

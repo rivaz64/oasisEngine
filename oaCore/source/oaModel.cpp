@@ -81,7 +81,9 @@ Model::loadFromFile(String file)
       materials.push_back(material);
     }
 
-    oaMesh->index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
+    Vector<uint32> index;
+
+    index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
 
     for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
     {
@@ -92,9 +94,9 @@ Model::loadFromFile(String file)
         continue;
       }
 
-      oaMesh->index[static_cast<uint64>(t)*3] = face->mIndices[0];
-      oaMesh->index[static_cast<uint64>(t)*3+1] = face->mIndices[1];
-      oaMesh->index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
+      index[static_cast<uint64>(t)*3] = face->mIndices[0];
+      index[static_cast<uint64>(t)*3+1] = face->mIndices[1];
+      index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
     }
 
     if(!animations){
@@ -114,7 +116,7 @@ Model::loadFromFile(String file)
         vertices[numVertex] = actualVertex;
       }
 
-      oaMesh->create(vertices);
+      oaMesh->create(vertices,index);
     }
     
     else{
@@ -139,15 +141,15 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          oaMesh->hasBones = true;
+          //oaMesh->hasBones = true;
 
-          oaMesh->bones.resize(aMesh->mNumBones);
+          //oaMesh->bones.resize(aMesh->mNumBones);
 
           for(uint32 boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
 
             auto actualBone = aMesh->mBones[boneNum];
 
-            oaMesh->bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+            //oaMesh->bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
 
             for(uint32 weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
             
@@ -172,14 +174,12 @@ Model::loadFromFile(String file)
 
         }
 
-      oaMesh->create(vertices);
+      oaMesh->create(vertices,index);
     }
     
     meshes.push_back(oaMesh);
 
   }
-
-  
 
   return true;
 }

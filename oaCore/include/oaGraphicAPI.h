@@ -18,6 +18,7 @@
 #include "oaVector2I.h"
 #include "oaShader.h"
 #include "oaVertexBuffer.h"
+#include "oaIndexBuffer.h"
 #include <Windows.h>
 
 
@@ -93,6 +94,13 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual SPtr<VertexBuffer> 
   createVertexBuffer() {return newSPtr<VertexBuffer>();}
+
+  /**
+   * @brief creates a IndexBuffer
+   * @return 
+  */
+  virtual SPtr<IndexBuffer> 
+  createIndexBuffer() {return newSPtr<IndexBuffer>();}
 
   /**
   * @brief creates a texture

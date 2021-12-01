@@ -46,6 +46,9 @@ class DX11GraphicAPI :
   SPtr<VertexBuffer> 
   createVertexBuffer() override;
 
+  SPtr<IndexBuffer> 
+  createIndexBuffer() override;
+
   SPtr<Texture> 
   createTexture() override;
 

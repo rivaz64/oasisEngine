@@ -14,6 +14,7 @@
 #include "oaBuffer.h"
 #include "oaVertexBuffer.h"
 #include "oaGraphicAPI.h"
+#include "oaIndexBuffer.h"
 #include <iostream>
 
 namespace oaEngineSDK{
@@ -86,12 +87,18 @@ class Mesh
   */
   template<class T>
   void
-  create(Vector<T> vertices){
+  create(Vector<T>& vertices,Vector<uint32>& index){
+
+    indexNumber = index.size();
+
     vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-    indexB = GraphicAPI::instancePtr()->createBuffer();
-    std::cout<<"size "<<sizeof(T)<<std::endl;
+
+    indexB = GraphicAPI::instancePtr()->createIndexBuffer();
+
     vertexB->init(vertices.data(),sizeof(T),static_cast<uint64>(vertices.size()));
-    indexB->init(index.data(),sizeof(uint32)*static_cast<uint64>(index.size()),BIND::INDEX);
+
+    indexB->init(index);
+
   }
 
  public:
@@ -99,12 +106,12 @@ class Mesh
   /**
    * @brief the number of indices this mesh has
   */
-  Vector<uint32> index;
+  uint32 indexNumber;
 
   /**
    * @brief the buffer for the indices
   */
-  SPtr<Buffer> indexB;
+  SPtr<IndexBuffer> indexB;
 
   /**
   * @brief the buffer for the vertex
@@ -116,12 +123,12 @@ class Mesh
   /**
    * @brief all the bone matrizes of his mesh
   */
-  Vector<Matrix4f> bones;
+  //Vector<Matrix4f> bones;
 
   /**
    * @brief if this mesh has bones or not
   */
-  bool hasBones = false;
+  //bool hasBones = false;
 };
 
 }
