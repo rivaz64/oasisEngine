@@ -8,6 +8,7 @@
 #include "oaMesh.h"
 #include "oaDX11DepthStencil.h"
 #include "oaInputManager.h"
+#include "oaDX11VertexBuffer.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -193,6 +194,11 @@ DX11GraphicAPI::createBuffer()
   return newSPtr<DX11Buffer>();
 }
 
+SPtr<VertexBuffer> DX11GraphicAPI::createVertexBuffer()
+{
+  return newSPtr<DX11VertexBuffer>();
+}
+
 SPtr<Texture> 
 DX11GraphicAPI::createTexture()
 {
@@ -260,20 +266,6 @@ DX11GraphicAPI::show()
   //context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
 
   swapChain->Present( 0, 0 );
-}
-
-void 
-DX11GraphicAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
-{
-  UINT stride = sizeof(Vertex);
-  UINT offset = 0;
-  //SPtr<DX11Buffer> nen = 
-  context->IASetVertexBuffers( 
-    0, 
-    1, 
-    &cast<DX11Buffer>(buffer)->buffer,
-    &stride, 
-    &offset );
 }
 
 void 

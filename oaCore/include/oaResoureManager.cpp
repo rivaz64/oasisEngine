@@ -334,8 +334,13 @@ void ResoureManager::loadDefaultShaders()
   pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
 
   vertexShaders["default"]->compileFromFile("vertexShader");
+  vertexShaders["default"]->name = "normal";
+
   vertexShaders["animation"]->compileFromFile("animVertexShader");
+  vertexShaders["animation"]->name = "animation";
+
   pixelShaders["default"]->compileFromFile("shader");
+
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -348,9 +353,15 @@ void
 ResoureManager::generateDefaultMaterial()
 {
   materials.insert({"default",newSPtr<Material>()});
+  materials.insert({"animation",newSPtr<Material>()});
+
   materials["default"]->vertexShader = vertexShaders["default"];
   materials["default"]->pixelShader = pixelShaders["default"];
   materials["default"]->textures.push_back(textures["default"]);
+
+  materials["animation"]->vertexShader = vertexShaders["animation"];
+  materials["animation"]->pixelShader = pixelShaders["default"];
+  materials["animation"]->textures.push_back(textures["default"]);
 }
 
 }

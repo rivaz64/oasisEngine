@@ -17,6 +17,7 @@
 #include "oaDepthStencil.h"
 #include "oaVector2I.h"
 #include "oaShader.h"
+#include "oaVertexBuffer.h"
 #include <Windows.h>
 
 
@@ -78,12 +79,20 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual SPtr<Shader>
   createPixelShader() {return newSPtr<Shader>();}
+
   /**
    * @brief creates a buffer
    * @return 
   */
   virtual SPtr<Buffer> 
   createBuffer();
+
+  /**
+   * @brief creates a vertexBuffer
+   * @return 
+  */
+  virtual SPtr<VertexBuffer> 
+  createVertexBuffer() {return newSPtr<VertexBuffer>();}
 
   /**
   * @brief creates a texture
@@ -140,13 +149,6 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   show() {}
-
-  /**
-   * @brief sets the vertex bubbers that are going to be drawn
-   * @param buffer 
-  */
-  virtual void
-  setVertexBuffer(const SPtr<Buffer>& /*buffer*/){}
 
   /**
   * @brief sets the vertex bubbers that are going to be drawn
@@ -210,7 +212,7 @@ class OA_CORE_EXPORT GraphicAPI :
   ) {}
 
   virtual void*
-  getWindow() { return nullptr; }
+  getWindow() { return nullptr;}
 
   virtual void*
   getDevice() {return nullptr;}

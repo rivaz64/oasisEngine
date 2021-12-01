@@ -171,8 +171,6 @@ void TestApp::postInit()
 
   pixelShader = GraphicAPI::instancePtr()->createPixelShader();
 
-  //GraphicAPI::instancePtr()->compileShaders("noTextureShader");
-
   IMGUI_CHECKVERSION();
 
   initImGui();
@@ -360,6 +358,8 @@ void TestApp::draw()
     
     auto mat = object->getGlobalTransform();
 
+    
+
     //if(!cam->isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)) continue;
 
     object->transformB->update(&mat);
@@ -372,9 +372,7 @@ void TestApp::draw()
 
       GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
 
-      GraphicAPI::instancePtr()->setVertexBuffer(
-        model->meshes[i]->vertexB
-      );
+      model->meshes[i]->vertexB->set();
 
       GraphicAPI::instancePtr()->setIndexBuffer(
         model->meshes[i]->indexB

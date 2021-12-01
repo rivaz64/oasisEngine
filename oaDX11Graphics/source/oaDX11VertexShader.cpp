@@ -56,6 +56,7 @@ DX11VertexShader::createInputLayout()
 
   D3D11_SHADER_DESC shaderDesc;
   reflection->GetDesc(&shaderDesc);
+  int32 actual = 0;
   Vector<D3D11_INPUT_ELEMENT_DESC> inputLayoutDesc;
   for (uint32 i = 0; i < shaderDesc.InputParameters; ++i){
     D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
@@ -69,12 +70,16 @@ DX11VertexShader::createInputLayout()
     elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
     elementDesc.InstanceDataStepRate = 0;
 
+    
+    elementDesc.AlignedByteOffset = actual;
     if (paramDesc.Mask == 1){
+      
+      actual +=4;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
-        elementDesc.Format = DXGI_FORMAT_R32_UINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32){
-        elementDesc.Format = DXGI_FORMAT_R32_SINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32){
         elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
@@ -82,11 +87,12 @@ DX11VertexShader::createInputLayout()
     }
 
     else if (paramDesc.Mask <= 3){
+      actual +=8;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
-        elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32){
-        elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32){
         elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
@@ -94,11 +100,12 @@ DX11VertexShader::createInputLayout()
     }
 
     else if (paramDesc.Mask <= 7){
+      actual +=12;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
-        elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32){
-        elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32){
         elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -106,11 +113,12 @@ DX11VertexShader::createInputLayout()
     }
 
     else if (paramDesc.Mask <= 15){
+      actual +=16;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
         elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32){
-        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+        elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
       }
       else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32){
         elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -121,20 +129,8 @@ DX11VertexShader::createInputLayout()
 
   }
 
-  
-
-  
-  /*D3D11_INPUT_ELEMENT_DESC layout[] =
-  {
-    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-  };
-  UINT numElements = ARRAYSIZE( layout );
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  device->CreateInputLayout( layout, numElements, blob->GetBufferPointer(),
-                                       blob->GetBufferSize(), &inputLayout );*/
-
-  inputLayoutDesc[0].AlignedByteOffset = 0;
-  inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+  //inputLayoutDesc[0].AlignedByteOffset = 0;
+  //inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     device->CreateInputLayout(&inputLayoutDesc[0], 
                               inputLayoutDesc.size(), 

@@ -12,7 +12,9 @@
 #include "oaVector4U.h"
 #include "oaVector4f.h"
 #include "oaBuffer.h"
+#include "oaVertexBuffer.h"
 #include "oaGraphicAPI.h"
+#include <iostream>
 
 namespace oaEngineSDK{
 
@@ -36,25 +38,33 @@ struct Vertex{
  * @brief a structure for all the information at a certain point of a Mesh whit animations
 */
 struct AnimationVertex{
+
+  /**
+   * @brief the ids of the bones that are afecting this vertex
+  */
+  //Vector4U ids = Vector4U(1,2,3,4);
+
+  /**
+   * @brief how much each bone afects this vertex
+  */
+  //Vector4f weights = Vector4f(5,6,7,8);
+
   /**
    * @brief the location in a tridimencional space of this vetrex
   */
-  Vector3f location;
+  Vector4f location  = Vector4f::ZERO;
 
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
 
-  /**
-   * @brief the ids of the bones that are afecting this vertex
-  */
-  Vector4U ids = Vector4U::ZERO;
+  Vector2f None;
 
   /**
-   * @brief how much each bone afects this vertex
+   * @brief for compliting the space
   */
-  Vector4f weights = Vector4f::ZERO;
+  //Vector2f none;
 
 };
 
@@ -79,9 +89,10 @@ class Mesh
   template<class T>
   void
   create(Vector<T> vertices){
-    vertexB = GraphicAPI::instancePtr()->createBuffer();
+    vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
     indexB = GraphicAPI::instancePtr()->createBuffer();
-    vertexB->init(vertices.data(),sizeof(T)*static_cast<uint64>(vertices.size()),BIND::VERTEX);
+    std::cout<<"size "<<sizeof(T)<<std::endl;
+    vertexB->init(vertices.data(),sizeof(T),static_cast<uint64>(vertices.size()));
     indexB->init(index.data(),sizeof(uint32)*static_cast<uint64>(index.size()),BIND::INDEX);
   }
 
@@ -100,7 +111,7 @@ class Mesh
   /**
   * @brief the buffer for the vertex
   */
-  SPtr<Buffer> vertexB;
+  SPtr<VertexBuffer> vertexB;
 
   
 };

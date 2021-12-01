@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -28,6 +28,7 @@
     <ClInclude Include="include\oaDX11SamplerState.h" />
     <ClInclude Include="include\oaDX11Shader.h" />
     <ClInclude Include="include\oaDX11Texture.h" />
+    <ClInclude Include="include\oaDX11VertexBuffer.h" />
     <ClInclude Include="include\oaDX11VertexShader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +41,7 @@
     <ClCompile Include="source\oaDX11SamplerState.cpp" />
     <ClCompile Include="source\oaDX11Shader.cpp" />
     <ClCompile Include="source\oaDX11Texture.cpp" />
+    <ClCompile Include="source\oaDX11VertexBuffer.cpp" />
     <ClCompile Include="source\oaDX11VertexShader.cpp" />
     <ClCompile Include="source\Source.cpp" />
   </ItemGroup>

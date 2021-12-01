@@ -8,9 +8,8 @@
 
 #include "oaBuffer.h"
 #include <d3d11.h>
+
 namespace oaEngineSDK{
-
-
 
 class DX11Buffer :
   public Buffer

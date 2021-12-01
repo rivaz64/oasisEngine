@@ -189,6 +189,7 @@
     <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
+    <ClInclude Include="include\oaVertexBuffer.h" />
     <ClInclude Include="oaSkeletalComponent.h" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +213,7 @@
     <ClCompile Include="source\oaSceneGraph.cpp" />
     <ClCompile Include="source\oaSkeleton.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
+    <ClCompile Include="source\oaVertexBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

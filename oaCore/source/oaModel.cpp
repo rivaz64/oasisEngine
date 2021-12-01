@@ -45,6 +45,25 @@ Model::loadFromFile(String file)
 
   meshes.clear();
 
+  SPtr<Material> material = ResoureManager::instancePtr()->materials["default"];
+
+  bool animations = false;
+
+  if(scene->HasAnimations()){
+    
+    auto skeleton = newSPtr<Skeleton>();
+
+    skeleton->skeleton = newSPtr<Tree<SkeletalNode>>();
+
+    loadSkeleton(scene->mRootNode,skeleton->skeleton);
+
+    ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
+
+    material = ResoureManager::instancePtr()->materials["animation"];
+
+    animations = true;
+  }
+
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
     auto oaMesh = newSPtr<Mesh>();
@@ -54,29 +73,12 @@ Model::loadFromFile(String file)
     file = f.C_Str();
     file = "textures/"+file+".png";
     if(ResoureManager::instancePtr()->loadTexture(file)){
-      auto mat = copy(ResoureManager::instancePtr()->materials["default"]);
-      auto texts = ResoureManager::instancePtr()->textures;
+      auto mat = copy(material);
       mat->textures[0] = ResoureManager::instancePtr()->textures[file];
       materials.push_back(mat);
     }
     else{
-      materials.push_back(ResoureManager::instancePtr()->materials["default"]);
-    }
-
-    Vector<Vertex> vertices;
-
-    vertices.resize( aMesh->mNumVertices);
-    for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
-      Vertex actualVertex;
-      actualVertex.location.x = aMesh->mVertices[numVertex].x;
-      actualVertex.location.y = aMesh->mVertices[numVertex].y;
-      actualVertex.location.z = aMesh->mVertices[numVertex].z;
-      
-      if(aMesh->HasTextureCoords(0)){
-        actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
-        actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
-      }
-      vertices[numVertex] = actualVertex;
+      materials.push_back(material);
     }
 
     oaMesh->index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
@@ -95,7 +97,50 @@ Model::loadFromFile(String file)
       oaMesh->index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
     }
 
-    oaMesh->create(vertices);
+    if(!animations){
+      Vector<Vertex> vertices;
+
+      vertices.resize( aMesh->mNumVertices);
+      for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
+        Vertex actualVertex;
+        actualVertex.location.x = aMesh->mVertices[numVertex].x;
+        actualVertex.location.y = aMesh->mVertices[numVertex].y;
+        actualVertex.location.z = aMesh->mVertices[numVertex].z;
+        
+        if(aMesh->HasTextureCoords(0)){
+          actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
+          actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+        }
+        vertices[numVertex] = actualVertex;
+      }
+
+      oaMesh->create(vertices);
+    }
+    
+    else{
+      Vector<AnimationVertex> vertices;
+
+      vertices.resize( aMesh->mNumVertices);
+      for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
+        AnimationVertex actualVertex;
+        actualVertex.location.x = aMesh->mVertices[numVertex].x;
+        actualVertex.location.y = aMesh->mVertices[numVertex].y;
+        actualVertex.location.z = aMesh->mVertices[numVertex].z;
+
+        actualVertex.location.w = 7;
+        
+        if(aMesh->HasTextureCoords(0)){
+          actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
+          actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+        }
+
+        actualVertex.None.x =3;
+        actualVertex.None.y =5;
+        vertices[numVertex] = actualVertex;
+      }
+
+      oaMesh->create(vertices);
+    }
     
     meshes.push_back(oaMesh);
 
