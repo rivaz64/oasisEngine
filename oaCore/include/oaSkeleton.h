@@ -37,6 +37,8 @@ class Skeleton
    * @brief all the nodes of the skeleton
   */
   SPtr<Tree<SkeletalNode>> skeleton;
+
+  Matrix4f globalInverse;
 };
 
 }

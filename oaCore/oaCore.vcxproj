@@ -191,10 +191,12 @@
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
+    <ClInclude Include="oaAnimation.h" />
     <ClInclude Include="oaSkeletalComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
+    <ClCompile Include="oaAnimation.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
     <ClCompile Include="oaSkeletalComponent.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />

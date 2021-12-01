@@ -55,6 +55,9 @@ Model::loadFromFile(String file)
 
     skeleton->skeleton = newSPtr<Tree<SkeletalNode>>();
 
+    skeleton->globalInverse = 
+      reinterpret_cast<Matrix4f*>(&scene->mRootNode->mTransformation)->inverse();
+
     loadSkeleton(scene->mRootNode,skeleton->skeleton);
 
     ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
