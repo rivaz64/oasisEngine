@@ -93,7 +93,7 @@
     <ClInclude Include="include\oaIndexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaAnimation.h">
+    <ClInclude Include="include\oaAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -164,7 +164,7 @@
     <ClCompile Include="source\oaIndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaAnimation.cpp">
+    <ClCompile Include="source\oaAnimation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

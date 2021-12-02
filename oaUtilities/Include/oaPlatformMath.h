@@ -303,6 +303,18 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float 
+  umodf(float number, float modul) 
+  {
+    return std::fmodf(std::fmodf(number,modul) + modul , modul);
+  }
+
+  /**
+   * @brief the module of a number
+   * @param number 
+   * @param modul
+   * @return 
+  */
+  static FORCEINLINE float 
   modf(float number, float modul) 
   {
     return std::fmodf(std::fmodf(number,modul) + modul , modul);

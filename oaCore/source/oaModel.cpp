@@ -1,6 +1,13 @@
+/**
+* @file oaModel.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 9/25/2021
+*/
+
 #include "oaModel.h"
 #include "oaResoureManager.h"
 #include "oaSkeleton.h"
+#include "oaAnimation.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
@@ -65,6 +72,48 @@ Model::loadFromFile(String file)
     material = ResoureManager::instancePtr()->materials["animation"];
 
     animations = true;
+
+    for(uint32 animNum = 0; animNum < scene->mNumAnimations; ++animNum){
+
+      auto actualAnim = scene->mAnimations[animNum];
+
+      auto animation = newSPtr<Animation>();
+
+      animation->duration = actualAnim->mDuration;
+
+      animation->ticksPerSecond = 1.f/actualAnim->mTicksPerSecond;
+
+      for(uint32 numChannel = 0; numChannel < actualAnim->mNumChannels; ++numChannel){
+        
+        auto actualChannel = actualAnim->mChannels[numChannel];
+
+        auto node = newSPtr<AnimNode>();
+
+        node->name = actualChannel->mNodeName.C_Str();
+
+        node->locations.resize(actualChannel->mNumPositionKeys);
+
+        for(int i = 0; i < actualChannel->mNumPositionKeys; ++i){
+          node->locations[i] = *reinterpret_cast<Vector3f*>(&actualChannel->mPositionKeys[i]);
+        }
+
+        node->scales.resize(actualChannel->mNumScalingKeys);
+
+        for(int i = 0; i < actualChannel->mNumScalingKeys; ++i){
+          node->scales[i] = *reinterpret_cast<Vector3f*>(&actualChannel->mScalingKeys[i]);
+        }
+
+        node->rotations.resize(actualChannel->mNumRotationKeys);
+
+        for(int i = 0; i < actualChannel->mNumRotationKeys; ++i){
+          node->rotations[i] = *reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i]);
+        }
+
+        animation->nodes.insert({actualChannel->mNodeName.C_Str(),node});
+      }
+
+    }
+
   }
 
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
@@ -93,7 +142,10 @@ Model::loadFromFile(String file)
       aiFace* face = &aMesh->mFaces[t];
       if (face->mNumIndices != 3)
       {
-        std::cout<< "Warning: Mesh face with not exactly 3 indices, ignoring this primitive."<<std::endl;
+        std::cout<< 
+        "Warning: Mesh face with not exactly 3 indices, ignoring this primitive."
+        <<std::endl;
+
         continue;
       }
 
@@ -108,9 +160,8 @@ Model::loadFromFile(String file)
       vertices.resize( aMesh->mNumVertices);
       for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
         Vertex actualVertex;
-        actualVertex.location.x = aMesh->mVertices[numVertex].x;
-        actualVertex.location.y = aMesh->mVertices[numVertex].y;
-        actualVertex.location.z = aMesh->mVertices[numVertex].z;
+
+        actualVertex.location = *reinterpret_cast<Vector3f*>(&aMesh->mVertices[numVertex]);
         
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;

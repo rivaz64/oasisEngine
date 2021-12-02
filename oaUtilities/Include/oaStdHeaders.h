@@ -107,6 +107,14 @@ template <class T1, class T2>
 using Map = std::map<T1,T2>;
 
 /**
+ * @brief wraper of the std::pair
+ * @tparam T1 
+ * @tparam T2 
+*/
+template <class T1, class T2>
+using Pair = std::pair<T1,T2>;
+
+/**
  * @brief cast for smart pointers
  * @tparam T 
  * @tparam U 

@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaBaseApp.h" />
     <ClInclude Include="include\oaBuffer.h" />
     <ClInclude Include="include\oaCamera.h" />
@@ -191,14 +192,13 @@
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
-    <ClInclude Include="oaAnimation.h" />
     <ClInclude Include="oaSkeletalComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
-    <ClCompile Include="oaAnimation.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
     <ClCompile Include="oaSkeletalComponent.cpp" />
+    <ClCompile Include="source\oaAnimation.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaCamera.cpp" />

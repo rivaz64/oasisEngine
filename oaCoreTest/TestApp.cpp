@@ -195,7 +195,7 @@ void TestApp::postInit()
 
   charmod->loadFromFile("models/Shooting Gun.fbx");
 
-  //character->model->loadFromFile("models/youarenotmandalorian.fbx");
+  //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
   character->setLocation({0.0f,-2.0f,7.0f});
 
@@ -372,13 +372,16 @@ void TestApp::draw()
 
       GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
 
-      model->meshes[i]->vertexB->set();
+      auto actualMesh = model->meshes[i];
 
-      model->meshes[i]->indexB->set();
+      actualMesh->vertexB->set();
 
-      GraphicAPI::instancePtr()->setBuffer( model->meshes[i]->bonesB,3);
+      actualMesh->indexB->set();
 
-      GraphicAPI::instancePtr()->draw(model->meshes[i]->indexNumber);
+      if(actualMesh->hasBones)
+      GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
+
+      GraphicAPI::instancePtr()->draw(actualMesh->indexNumber);
     }
 
   }
