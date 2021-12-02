@@ -236,6 +236,18 @@ class OA_UTILITY_EXPORT Vector2f
     return v1.x * v2.x + v1.y * v2.y;
   }
 
+  /**
+   * @brief interpolates a vector 2d
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  FORCEINLINE static Vector2f
+  inetpolate(const Vector2f& a, const Vector2f& b, float t){
+    return {Math::interpolate(a.x,b.x,t),Math::interpolate(a.y,b.y,t)};
+  }
+
  public:
   /**
    * @brief the x component of the vector

@@ -24,6 +24,8 @@ struct SkeletalNode{
    * @brief the transform of this node
   */
   Matrix4f transform;
+
+  Vector<SPtr<SkeletalNode>> childs;
 };
 
 /**
@@ -36,7 +38,7 @@ class Skeleton
   /**
    * @brief all the nodes of the skeleton
   */
-  SPtr<Tree<SkeletalNode>> skeleton;
+  SPtr<SkeletalNode> skeleton;
 
   Matrix4f globalInverse;
 };

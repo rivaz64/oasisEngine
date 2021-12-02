@@ -203,6 +203,23 @@ public:
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
   }
 
+  /**
+   * @brief interpolates a vector 2d
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  FORCEINLINE static Vector4f
+  inetpolate(const Vector4f& a, const Vector4f& b, float t){
+    return {
+    Math::interpolate(a.x,b.x,t),
+    Math::interpolate(a.y,b.y,t),
+    Math::interpolate(a.z,b.z,t),
+    Math::interpolate(a.w,b.w,t)
+    };
+  }
+
 public:
   union {
     /**

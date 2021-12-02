@@ -19,9 +19,9 @@ using Assimp::Importer;
 namespace oaEngineSDK{
 
 void
-loadSkeleton(aiNode* node,SPtr<Tree<SkeletalNode>> sNode){
-  sNode->data.name = node->mName.C_Str();
-  sNode->data.transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
+loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode){
+  sNode->name = node->mName.C_Str();
+  sNode->transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
     sNode->childs[i] = newSPtr<Tree<SkeletalNode>>();
@@ -94,22 +94,30 @@ Model::loadFromFile(String file)
         node->locations.resize(actualChannel->mNumPositionKeys);
 
         for(int i = 0; i < actualChannel->mNumPositionKeys; ++i){
-          node->locations[i] = *reinterpret_cast<Vector3f*>(&actualChannel->mPositionKeys[i]);
+          node->locations[i] = 
+          {actualChannel->mPositionKeys[i].mTime,
+          *reinterpret_cast<Vector3f*>(&actualChannel->mPositionKeys[i].mValue)};
         }
 
         node->scales.resize(actualChannel->mNumScalingKeys);
 
         for(int i = 0; i < actualChannel->mNumScalingKeys; ++i){
-          node->scales[i] = *reinterpret_cast<Vector3f*>(&actualChannel->mScalingKeys[i]);
+          node->scales[i] =
+          {actualChannel->mScalingKeys[i].mTime,
+          *reinterpret_cast<Vector3f*>(&actualChannel->mScalingKeys[i].mValue)};
         }
 
         node->rotations.resize(actualChannel->mNumRotationKeys);
 
         for(int i = 0; i < actualChannel->mNumRotationKeys; ++i){
-          node->rotations[i] = *reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i]);
+          node->rotations[i] = 
+          {actualChannel->mRotationKeys[i].mTime,
+          *reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i])};
         }
 
         animation->nodes.insert({actualChannel->mNodeName.C_Str(),node});
+
+        
       }
 
     }

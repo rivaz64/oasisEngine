@@ -251,8 +251,29 @@ class OA_UTILITY_EXPORT Vector3f
   FORCEINLINE static Vector3f
   cross(const Vector3f& v1, const Vector3f& v2)
   {
-    return Vector3f(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+    return Vector3f(
+    v1.y * v2.z - v1.z * v2.y, 
+    v1.z * v2.x - v1.x * v2.z,
+    v1.x * v2.y - v1.y * v2.x
+    );
   }
+
+  /**
+   * @brief interpolates a vector 2d
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  FORCEINLINE static Vector3f
+  inetpolate(const Vector3f& a, const Vector3f& b, float t){
+    return {
+    Math::interpolate(a.x,b.x,t),
+    Math::interpolate(a.y,b.y,t),
+    Math::interpolate(a.z,b.z,t)
+    };
+  }
+
  public:
   static const Vector3f RIGHT;
   static const Vector3f LEFT;

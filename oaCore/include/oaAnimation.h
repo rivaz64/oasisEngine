@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector3f.h"
 #include "oaQuaternion.h"
+#include "oaSkeleton.h"
 
 namespace oaEngineSDK{
 
@@ -20,19 +21,19 @@ struct AnimNode{
   String name;
 
   /**
-   * @brief the locations of this node
+   * @brief the keyframes of the locations
   */
-  Vector<Vector3f> locations;
+  Vector<Pair<uint32,Vector3f>> locations;
 
   /**
-   * @brief the scales of this node
+   * @brief the keyframes of the scales
   */
-  Vector<Vector3f> scales;
+  Vector<Pair<uint32,Vector3f>> scales;
 
   /**
-   * @brief the rotations of this node
+   * @brief the keyframes of the rotations
   */
-  Vector<Quaternion> rotations;
+  Vector<Pair<uint32,Quaternion>> rotations;
 
 };
 
@@ -55,8 +56,35 @@ class Animation
    * @param transform the transform of the parent node
   */
   void
-  readNodeHeirarchy(float animationTime,const AnimNode& node, const Matrix4f& transform);
+  readNodeHeirarchy(const float animationTime,SPtr<SkeletalNode> node, const Matrix4f& transform);
   
+  /**
+   * @brief calculates the interpolation of the location
+   * @param animationTime 
+   * @param node 
+   * @return 
+  */
+  Vector3f
+  interpolatedLocation(const float animationTime,SPtr<AnimNode> node);
+
+  /**
+   * @brief calculates the interpolation of the scale
+   * @param animationTime 
+   * @param node 
+   * @return 
+  */
+  Vector3f
+  interpolatedScale(const float animationTime,SPtr<AnimNode> node);
+
+  /**
+   * @brief calculates the interpolation of the rotation
+   * @param animationTime 
+   * @param node 
+   * @return 
+  */
+  Quaternion
+  interpolatedRotation(const float animationTime,SPtr<AnimNode> node);
+
   /**
    * @brief the ticks this animation has 
   */
@@ -71,6 +99,31 @@ class Animation
    * @brief the keyFrames of the animation
   */
   Map<String,SPtr<AnimNode>> nodes;
+
+  /**
+   * @brief the skeleton this animation uses
+  */
+  SPtr<Skeleton> skeleton;
+
+  /**
+   * @brief the time where the animation is at;
+  */
+  float animationTime = 0;
+
+  /**
+   * @brief the actual key frame of the location
+  */
+  uint32 actualLocationKey = 0;
+
+  /**
+   * @brief the actual key frame of the scale
+  */
+  uint32 actualScaleKey = 0;
+
+  /**
+   * @brief the actual key frame of the rotation
+  */
+  uint32 actualRotationKey = 0;
 
   friend class Model;
 };
