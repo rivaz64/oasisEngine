@@ -15,6 +15,7 @@
 #include "oaVertexBuffer.h"
 #include "oaGraphicAPI.h"
 #include "oaIndexBuffer.h"
+#include "oaMatrix4f.h"
 #include <iostream>
 
 namespace oaEngineSDK{
@@ -110,17 +111,17 @@ class Mesh
   */
   template<class T>
   void
-  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& bones){
+  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones){
 
     create(vertices,index);
 
     hasBones = true;
 
+    bones = _bones;
+
     bonesB = GraphicAPI::instancePtr()->createBuffer();
 
     bonesB->init(sizeof(Matrix4f)*bones.size());
-
-    bonesB->update(bones.data());
 
   }
 
@@ -152,6 +153,11 @@ class Mesh
    * @brief if this mesh has bones or not
   */
   bool hasBones = false;
+
+  /**
+   * @brief the bones of this mesh
+  */
+  Vector<Matrix4f> bones;
 };
 
 }

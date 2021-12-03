@@ -378,8 +378,12 @@ void TestApp::draw()
 
       actualMesh->indexB->set();
 
-      if(actualMesh->hasBones)
-      GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
+      if(actualMesh->hasBones){
+        actualMesh->bonesB->update(actualMesh->bones.data());
+      
+         GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
+      }
+     
 
       GraphicAPI::instancePtr()->draw(actualMesh->indexNumber);
     }
