@@ -189,15 +189,14 @@
     <ClInclude Include="include\oaSamplerState.h" />
     <ClInclude Include="include\oaSceneGraph.h" />
     <ClInclude Include="include\oaShader.h" />
+    <ClInclude Include="include\oaSkeletalComponent.h" />
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
-    <ClInclude Include="oaSkeletalComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
-    <ClCompile Include="oaSkeletalComponent.cpp" />
     <ClCompile Include="source\oaAnimation.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
@@ -215,6 +214,7 @@
     <ClCompile Include="source\oaRenderTarget.cpp" />
     <ClCompile Include="source\oaSamplerState.cpp" />
     <ClCompile Include="source\oaSceneGraph.cpp" />
+    <ClCompile Include="source\oaSkeletalComponent.cpp" />
     <ClCompile Include="source\oaSkeleton.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
     <ClCompile Include="source\oaVertexBuffer.cpp" />

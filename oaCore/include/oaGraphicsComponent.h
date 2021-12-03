@@ -21,7 +21,7 @@ class OA_CORE_EXPORT GraphicsComponent :
   onAttach(SPtr<Object> actor);
 
   COMPONENT_TYPE
-  getType() override {return COMPONENT_TYPE::GRAPHICS;}
+  getType() override; 
 
  public:
 

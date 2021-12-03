@@ -9,8 +9,9 @@
 #include "oaInputManager.h"
 #include "oaGrid2D.h"
 #include "oaPerlinNoise2D.h"
-#include "oaGraphicsComponent.h"
 #include "oaMaterial.h"
+#include "oaGraphicsComponent.h"
+#include "oaSkeletalComponent.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -206,6 +207,11 @@ void TestApp::postInit()
   character->attachComponent(newSPtr<GraphicsComponent>());
 
   character->getComponent<GraphicsComponent>()->model = charmod;
+
+  character->attachComponent(newSPtr<SkeletalComponent>());
+
+  character->getComponent<SkeletalComponent>()->skeleton = 
+  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
 
   testObject = newSPtr<Object>();
 

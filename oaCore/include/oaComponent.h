@@ -12,7 +12,8 @@ namespace oaEngineSDK{
 
 enum class COMPONENT_TYPE{
   NONE = 0,
-  GRAPHICS
+  GRAPHICS,
+  SKELETON,
 };
 
 /**

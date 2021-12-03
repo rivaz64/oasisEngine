@@ -8,18 +8,22 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaComponent.h"
-#include "oaTree.h"
-#include "oaMatrix4f.h"
+
 
 namespace oaEngineSDK{
 
 /**
  * @brief the component for the skeleton
 */
-class SkeletalComponent :
+class OA_CORE_EXPORT SkeletalComponent :
   public Component
 {
-  Tree<Matrix4f> skeleton;
+ public:
+
+  COMPONENT_TYPE
+  getType() override; 
+
+  SPtr<Skeleton> skeleton;
 };
 
 }

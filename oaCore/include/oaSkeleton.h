@@ -6,7 +6,6 @@
 
 #pragma once
 #include "oaPrerequisitesCore.h"
-#include "oaTree.h"
 #include "oaMatrix4f.h"
 
 namespace oaEngineSDK{
@@ -25,6 +24,9 @@ struct SkeletalNode{
   */
   Matrix4f transform;
 
+  /**
+   * @brief the childs of this node
+  */
   Vector<SPtr<SkeletalNode>> childs;
 };
 
