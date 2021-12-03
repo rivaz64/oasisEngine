@@ -19,17 +19,22 @@ using Assimp::Importer;
 namespace oaEngineSDK{
 
 void
-loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
+loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton,Matrix4f matrix){
 
-  skeleton->boneMaping.insert({node->mName.C_Str(),skeleton->boneMaping.size()});
+  //skeleton->boneMaping.insert({node->mName.C_Str(),skeleton->boneMaping.size()});
 
   sNode->name = node->mName.C_Str();
   
   sNode->transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
+
+  skeleton->boneMaping.insert({sNode->name,skeleton->globalInverse*matrix*sNode->transform});
+
+  //skeleton->finalMatrix.push_back(sNode->transform);
+
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
-    sNode->childs[i] = newSPtr<Tree<SkeletalNode>>();
-    loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
+    sNode->childs[i] = newSPtr<SkeletalNode>();
+    loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton,matrix*sNode->transform);
   }
 }
 
@@ -60,16 +65,18 @@ Model::loadFromFile(String file)
 
   bool animations = false;
 
+  SPtr<Skeleton> skeleton;
+
   if(scene->HasAnimations()){
     
-    auto skeleton = newSPtr<Skeleton>();
+    skeleton = newSPtr<Skeleton>();
 
-    skeleton->skeleton = newSPtr<Tree<SkeletalNode>>();
+    skeleton->skeleton = newSPtr<SkeletalNode>();
 
     skeleton->globalInverse = 
       reinterpret_cast<Matrix4f*>(&scene->mRootNode->mTransformation)->inverse();
 
-    loadSkeleton(scene->mRootNode,skeleton->skeleton);
+    loadSkeleton(scene->mRootNode,skeleton->skeleton,skeleton,Matrix4f::IDENTITY);
 
     ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
 
@@ -211,7 +218,7 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          //Map<String,uint32> boneMaping;
+          Map<String,uint32> boneMaping;
 
           uint32 bonesNum=0;
 
@@ -226,12 +233,14 @@ Model::loadFromFile(String file)
             if(boneMaping.find(boneName) == boneMaping.end()){
               boneIndex = bonesNum;
               boneMaping.insert({boneName,bonesNum});
-              bones[boneIndex] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+              bones[boneIndex] = skeleton->boneMaping[boneName] * *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
               ++bonesNum;
             }
             else{
               boneIndex = boneMaping[boneName];
             }
+
+            //boneIndex = skeleton->boneMaping[boneName];
 
             actualBone = aMesh->mBones[boneIndex];
 
@@ -243,7 +252,7 @@ Model::loadFromFile(String file)
 
               auto& actualVertex = vertices[vertexId];
 
-              for(uint8 i = 0; i < 4; ++i){
+              for(uint8 i = 0; i < 8; ++i){
                 if(((float*)&actualVertex.weights)[i] == 0){
                   ((uint32*)&actualVertex.ids)[i] = boneIndex;
                   ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;

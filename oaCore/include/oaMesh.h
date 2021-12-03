@@ -45,10 +45,14 @@ struct AnimationVertex{
   */
   Vector4U ids = Vector4U::ZERO;
 
+  Vector4U ids2 = Vector4U::ZERO;
+
   /**
    * @brief how much each bone afects this vertex
   */
   Vector4f weights = Vector4f::ZERO;
+
+  Vector4U weights2 = Vector4U::ZERO;
 
   /**
    * @brief the location in a tridimencional space of this vetrex

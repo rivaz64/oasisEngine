@@ -41,9 +41,14 @@ class Skeleton
   SPtr<SkeletalNode> skeleton;
 
   /**
+   * @brief the final matrizes 
+  */
+  //Vector<Matrix4f> finalMatrix;
+
+  /**
    * @brief the mapping for the names of the bones
   */
-  Map<String,uint32> boneMaping;
+  Map<String,Matrix4f> boneMaping;
 
   /**
    * @brief the inverse of the root
