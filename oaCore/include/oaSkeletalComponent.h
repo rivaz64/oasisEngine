@@ -23,6 +23,9 @@ class OA_CORE_EXPORT SkeletalComponent :
   COMPONENT_TYPE
   getType() override; 
 
+  void
+  update(SPtr<Object> actor) override;
+
   SPtr<Skeleton> skeleton;
 };
 

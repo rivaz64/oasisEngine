@@ -111,13 +111,15 @@ class Mesh
   */
   template<class T>
   void
-  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones){
+  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones, Vector<String>& _boneNames){
 
     create(vertices,index);
 
     hasBones = true;
 
     bones = _bones;
+    
+    boneNames = _boneNames;
 
     bonesB = GraphicAPI::instancePtr()->createBuffer();
 
@@ -158,6 +160,11 @@ class Mesh
    * @brief the bones of this mesh
   */
   Vector<Matrix4f> bones;
+
+  /**
+   * @brief the names of the bones used by this mesh
+  */
+  Vector<String> boneNames;
 };
 
 }

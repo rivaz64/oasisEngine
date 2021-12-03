@@ -37,8 +37,8 @@ Object::attachComponent(SPtr<Component> component)
 void 
 Object::update()
 {
-  for(auto component:components){
-    //component->update(shared_from_this());
+  for(auto component : components){
+    component.second->update(shared_from_this());
   }
 }
 

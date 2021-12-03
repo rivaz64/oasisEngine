@@ -195,7 +195,8 @@ Model::loadFromFile(String file)
     else{
       
       Vector<Matrix4f> bones;
-      bones.resize(aMesh->mNumBones);
+
+      Vector<String> boneNames;
 
       Vector<AnimationVertex> vertices;
 
@@ -233,7 +234,8 @@ Model::loadFromFile(String file)
             if(boneMaping.find(boneName) == boneMaping.end()){
               boneIndex = bonesNum;
               boneMaping.insert({boneName,bonesNum});
-              bones[boneIndex] = skeleton->boneMaping[boneName] * *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+              bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+              boneNames.push_back(boneName);
               ++bonesNum;
             }
             else{
@@ -267,7 +269,7 @@ Model::loadFromFile(String file)
 
         }
 
-      oaMesh->create(vertices,index,bones);
+      oaMesh->create(vertices,index,bones,boneNames);
     }
     
     meshes.push_back(oaMesh);

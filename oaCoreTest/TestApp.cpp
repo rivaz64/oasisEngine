@@ -344,6 +344,8 @@ void TestApp::update(float delta)
   }
 
   cam->updateView();
+
+  character->update();
 }
 
 void TestApp::draw()
@@ -385,9 +387,8 @@ void TestApp::draw()
       actualMesh->indexB->set();
 
       if(actualMesh->hasBones){
-        actualMesh->bonesB->update(actualMesh->bones.data());
       
-         GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
+        GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
       }
      
 
