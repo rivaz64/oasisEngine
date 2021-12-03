@@ -244,7 +244,7 @@ class OA_UTILITY_EXPORT Vector2f
    * @return 
   */
   FORCEINLINE static Vector2f
-  inetpolate(const Vector2f& a, const Vector2f& b, float t){
+  interpolate(const Vector2f& a, const Vector2f& b, float t){
     return {Math::interpolate(a.x,b.x,t),Math::interpolate(a.y,b.y,t)};
   }
 

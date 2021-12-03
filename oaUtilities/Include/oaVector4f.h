@@ -204,14 +204,14 @@ public:
   }
 
   /**
-   * @brief interpolates a vector 2d
+   * @brief interpolates a vector 4d
    * @param a if t is 0
    * @param b if t is 1
    * @param t a number between 0 and 1
    * @return 
   */
   FORCEINLINE static Vector4f
-  inetpolate(const Vector4f& a, const Vector4f& b, float t){
+  interpolate(const Vector4f& a, const Vector4f& b, float t){
     return {
     Math::interpolate(a.x,b.x,t),
     Math::interpolate(a.y,b.y,t),

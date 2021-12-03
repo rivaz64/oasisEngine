@@ -47,6 +47,12 @@ Quaternion::operator-=(const Quaternion& q)
 }
 
 Quaternion 
+Quaternion::operator-() const
+{
+  return {-r,-i,-j,-k};
+}
+
+Quaternion 
 Quaternion::operator*(const Quaternion& q) const
 {
   return { r * q.r - i * q.i - j * q.j - k * q.k,
@@ -160,6 +166,39 @@ Vector3f Quaternion::toEulerAngles() const
   ans.z = Math::asin(2.f*test/unit);
   ans.x = Math::atan2(-sqi + sqj - sqk + sqr,2*i*r-2*j*k);
   return ans;
+}
+
+
+
+Quaternion Quaternion::interpolate(Quaternion a, Quaternion b, const float t)
+{
+  float cosom = a.r*b.r+a.i*b.i+a.j*b.j+a.k*b.k;
+
+  if(cosom < 0.0f){
+    cosom = -cosom;
+    b = -b;
+  }
+
+  float sclp, sclq;
+
+  if( 1.0 - cosom > 0.0001){
+    float omega, sinom;
+    omega = Math::acos(cosom);
+    sinom = Math::sin(omega);
+    sclp  = Math::sin( (1.0 - t) * omega) / sinom;
+    sclq  = Math::sin( t * omega) / sinom;
+  }
+  else{
+    sclp = 1.0 - t;
+    sclq = t;
+  }
+
+  return {
+  sclp * a.r + sclq * b.r,
+  sclp * a.r + sclq * b.r,
+  sclp * a.r + sclq * b.r,
+  sclp * a.r + sclq * b.r,
+  };
 }
 
 }

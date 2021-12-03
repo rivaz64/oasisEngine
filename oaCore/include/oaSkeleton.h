@@ -40,6 +40,14 @@ class Skeleton
   */
   SPtr<SkeletalNode> skeleton;
 
+  /**
+   * @brief the mapping for the names of the bones
+  */
+  Map<String,uint32> boneMaping;
+
+  /**
+   * @brief the inverse of the root
+  */
   Matrix4f globalInverse;
 };
 

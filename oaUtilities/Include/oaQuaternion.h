@@ -68,6 +68,9 @@ class OA_UTILITY_EXPORT Quaternion
   void
   operator-=(const Quaternion& q);
 
+  Quaternion 
+  operator-() const;
+
   /**
    * @brief quaternion multiplication
    * @param q 
@@ -106,7 +109,8 @@ class OA_UTILITY_EXPORT Quaternion
   /**
    * @brief inverts this quaternion
   */
-  void invert();
+  void 
+  invert();
 
   /**
    * @brief gives this quaternion in its unitary form
@@ -135,6 +139,16 @@ class OA_UTILITY_EXPORT Quaternion
   */
   Vector3f
   toEulerAngles() const;
+
+  /**
+   * @brief interpolates a quaternion
+   * @param a if t is 0
+   * @param b if t is 1
+   * @param t a number between 0 and 1
+   * @return 
+  */
+  static Quaternion
+  interpolate(Quaternion a, Quaternion b, const float t);
 
  public:
   /**

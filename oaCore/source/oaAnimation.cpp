@@ -27,16 +27,29 @@ Animation::update(float deltaTime)
 }
 
 void 
-Animation::readNodeHeirarchy(const float animationTime,SPtr<SkeletalNode> skeletalNode, const Matrix4f& transform)
+Animation::readNodeHeirarchy(const float animationTime,SPtr<SkeletalNode> skeletalNode, const Matrix4f& parentTransform)
 {
   auto animNode = nodes[skeletalNode->name];
 
+  Matrix4f globalTransform;
+
   if(animNode.get()){
-    
+    globalTransform =
+    parentTransform*
+    Matrix4f::translateMatrix(interpolatedLocation(animationTime,animNode))*
+    interpolatedRotation(animationTime,animNode).toMatrix()*
+    Matrix4f::scaleMatrix(interpolatedScale(animationTime,animNode));
   }
+  else{
+    globalTransform = parentTransform;
+  }
+
+
+
 }
 
-Vector3f Animation::interpolatedLocation(const float animationTime, SPtr<AnimNode> node)
+Vector3f
+Animation::interpolatedLocation(const float animationTime, SPtr<AnimNode> node)
 {
   if(node->locations.size() == 1){
     return node->locations[0].second;
@@ -51,29 +64,53 @@ Vector3f Animation::interpolatedLocation(const float animationTime, SPtr<AnimNod
     nextKey = node->locations[actualLocationKey+1];
   }
 
-  return Vector3f::inetpolate(
+  return Vector3f::interpolate(
   actualKey.second,
   nextKey.second,
   (animationTime-actualKey.first)/(nextKey.first - actualKey.first)
   );
 }
 
-Vector3f Animation::interpolatedScale(const float animationTime, SPtr<AnimNode> node)
+Vector3f 
+Animation::interpolatedScale(const float animationTime, SPtr<AnimNode> node)
 {
   if(node->scales.size() == 1){
     return node->scales[0].second;
   }
 
-  auto& actualKey = node->scales[actualLocationKey];
-  auto& nextKey = node->scales[actualLocationKey+1];
+  auto& actualKey = node->scales[actualScaleKey];
+  auto& nextKey = node->scales[actualScaleKey+1];
 
   if(nextKey.first>animationTime){
-    ++actualLocationKey;
-    actualKey = node->scales[actualLocationKey];
-    nextKey = node->scales[actualLocationKey+1];
+    ++actualScaleKey;
+    actualKey = node->scales[actualScaleKey];
+    nextKey = node->scales[actualScaleKey+1];
   }
 
-  return Vector3f::inetpolate(
+  return Vector3f::interpolate(
+  actualKey.second,
+  nextKey.second,
+  (animationTime-actualKey.first)/(nextKey.first - actualKey.first)
+  );
+}
+
+Quaternion
+Animation::interpolatedRotation(const float animationTime, SPtr<AnimNode> node)
+{
+  if(node->rotations.size() == 1){
+    return node->rotations[0].second;
+  }
+
+  auto& actualKey = node->rotations[actualRotationKey];
+  auto& nextKey = node->rotations[actualRotationKey+1];
+
+  if(nextKey.first>animationTime){
+    ++actualRotationKey;
+    actualKey = node->rotations[actualRotationKey];
+    nextKey = node->rotations[actualRotationKey+1];
+  }
+
+  return Quaternion::interpolate(
   actualKey.second,
   nextKey.second,
   (animationTime-actualKey.first)/(nextKey.first - actualKey.first)

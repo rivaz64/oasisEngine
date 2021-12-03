@@ -53,10 +53,10 @@ class Animation
   /**
    * @brief reads each node to update it to the right time
    * @param animationTime 
-   * @param transform the transform of the parent node
+   * @param parentTransform the transform of the parent node
   */
   void
-  readNodeHeirarchy(const float animationTime,SPtr<SkeletalNode> node, const Matrix4f& transform);
+  readNodeHeirarchy(const float animationTime,SPtr<SkeletalNode> node, const Matrix4f& parentTransform);
   
   /**
    * @brief calculates the interpolation of the location

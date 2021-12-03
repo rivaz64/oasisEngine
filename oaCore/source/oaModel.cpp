@@ -19,13 +19,17 @@ using Assimp::Importer;
 namespace oaEngineSDK{
 
 void
-loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode){
+loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
+
+  skeleton->boneMaping.insert({node->mName.C_Str(),skeleton->boneMaping.size()});
+
   sNode->name = node->mName.C_Str();
+  
   sNode->transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
     sNode->childs[i] = newSPtr<Tree<SkeletalNode>>();
-    loadSkeleton(node->mChildren[i],sNode->childs[i]);
+    loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
 }
 
@@ -207,7 +211,7 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          Map<String,uint32> boneMaping;
+          //Map<String,uint32> boneMaping;
 
           uint32 bonesNum=0;
 
