@@ -109,19 +109,19 @@ Quaternion::normal() const
 Matrix4f 
 Quaternion::toMatrix() const
 {
-  float i2 = 2*i * i;
-  float j2 = 2 * j * j;
-  float k2 = 2 * k * k;
-  float ij = 2 * i * j;
-  float jk = 2 * j * k;
-  float ik = 2 * i * k;
-  float ri = 2 * r * i;
-  float rj = 2 * r * j;
-  float rk = 2 * r * k;
-  return { 1.f - j2 + k2,ij - rk,ik + rj,0.0f,
-          ij + rk,1.f - i2 + k2,jk - ri,0.0f,
-          ik - rj,jk + ri,1.f - i2 + j2,0.0f,
-          0.0f,0.0f,0.0f,1.0f};
+  float i2 = 2.f *i * i;
+  float j2 = 2.f * j * j;
+  float k2 = 2.f * k * k;
+  float ij = 2.f * i * j;
+  float jk = 2.f * j * k;
+  float ik = 2.f * i * k;
+  float ri = 2.f * r * i;
+  float rj = 2.f * r * j;
+  float rk = 2.f * r * k;
+  return {1.f - j2 + k2 ,ij - rk       ,ik + rj       ,0.0f,
+          ij + rk       ,1.f - i2 + k2 ,jk - ri       ,0.0f,
+          ik - rj       ,jk + ri       ,1.f - i2 + j2 ,0.0f,
+          0.0f          ,0.0f          ,0.0f          ,1.0f};
 }
 
 void 

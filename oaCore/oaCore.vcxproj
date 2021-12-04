@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\oaAnimation.h" />
+    <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaBaseApp.h" />
     <ClInclude Include="include\oaBuffer.h" />
     <ClInclude Include="include\oaCamera.h" />
@@ -192,12 +193,14 @@
     <ClInclude Include="include\oaSkeletalComponent.h" />
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
+    <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
     <ClCompile Include="source\oaAnimation.cpp" />
+    <ClCompile Include="source\oaAnimationComponent.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
     <ClCompile Include="source\oaBuffer.cpp" />
     <ClCompile Include="source\oaCamera.cpp" />
@@ -217,6 +220,7 @@
     <ClCompile Include="source\oaSkeletalComponent.cpp" />
     <ClCompile Include="source\oaSkeleton.cpp" />
     <ClCompile Include="source\oaTexture.cpp" />
+    <ClCompile Include="source\oaTime.cpp" />
     <ClCompile Include="source\oaVertexBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

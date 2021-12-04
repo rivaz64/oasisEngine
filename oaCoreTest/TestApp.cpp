@@ -12,6 +12,7 @@
 #include "oaMaterial.h"
 #include "oaGraphicsComponent.h"
 #include "oaSkeletalComponent.h"
+#include "oaAnimationComponent.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -194,7 +195,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  charmod->loadFromFile("models/Shooting Gun.fbx");
+  charmod->loadFromFile("models/boblampclean.md5mesh");
 
   //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -211,7 +212,12 @@ void TestApp::postInit()
   character->attachComponent(newSPtr<SkeletalComponent>());
 
   character->getComponent<SkeletalComponent>()->skeleton = 
-  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
+  ResoureManager::instancePtr()->skeletons["boblampclean"];
+
+  character->attachComponent(newSPtr<AnimationComponent>());
+
+  character->getComponent<AnimationComponent>()->animation = 
+  ResoureManager::instancePtr()->animations["boblampclean"];
 
   testObject = newSPtr<Object>();
 

@@ -8,9 +8,6 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
-#include "oaMesh.h"
-#include "oaTexture.h"
-#include "oaModel.h"
 
 namespace oaEngineSDK {
 
@@ -136,6 +133,12 @@ class OA_CORE_EXPORT ResoureManager :
    * @brief all the loaded skeletons
   */
   Map<String,SPtr<Skeleton>> skeletons;
+
+  /**
+   * @brief all the loaded animations
+  */
+  Map<String,SPtr<Animation>> animations;
+
 
   /**
    * @brief all the objects that can be rendered

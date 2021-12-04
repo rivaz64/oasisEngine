@@ -21,7 +21,7 @@ void SkeletalComponent::update(SPtr<Object> actor)
 {
   OA_ASSERT(actor->getComponent<GraphicsComponent>().get());
 
-  auto model =actor->getComponent<GraphicsComponent>()->model;
+  auto model = actor->getComponent<GraphicsComponent>()->model;
 
   Vector<Matrix4f> finalMatrix;
 

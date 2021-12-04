@@ -3,6 +3,7 @@
 #include "oaResoureManager.h"
 #include "oaVector3f.h"
 #include "oaInputManager.h"
+#include "oaTime.h"
 #include <Windows.h>
 #include<iostream>
 
@@ -15,6 +16,7 @@ void BaseApp::onShutDown()
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputManager::shutDown();
+  Time::shutDown();
   postShutDown();
 }
 
@@ -32,6 +34,7 @@ BaseApp::run()
 
     ResoureManager::startUp();
     InputManager::startUp();
+    Time::startUp();
 
     postInit();
     mainLoop();
@@ -70,12 +73,12 @@ BaseApp::mainLoop()
   while(isRunning){
 
     auto end = std::chrono::high_resolution_clock::now();
-    float dt = std::chrono::duration<float>(end - start).count();
+    Time::instancePtr()->deltaTime = std::chrono::duration<float>(end - start).count();
     start = std::chrono::high_resolution_clock::now();
 
     GraphicAPI::instancePtr()->events();
 
-    update(dt);
+    update(Time::instancePtr()->deltaTime);
 
     render();
 

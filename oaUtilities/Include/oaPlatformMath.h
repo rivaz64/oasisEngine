@@ -339,7 +339,7 @@ class OA_UTILITY_EXPORT PlatformMath {
   */
   static FORCEINLINE float
   interpolate(float a, float b, float t){
-    OA_ASSERT(t>=0 && t<=1);
+    //OA_ASSERT(t>=0 && t<=1);
     return (b-a)*t+a;
   }
 

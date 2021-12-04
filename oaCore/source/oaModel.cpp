@@ -19,22 +19,18 @@ using Assimp::Importer;
 namespace oaEngineSDK{
 
 void
-loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton,Matrix4f matrix){
-
-  //skeleton->boneMaping.insert({node->mName.C_Str(),skeleton->boneMaping.size()});
+loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
 
   sNode->name = node->mName.C_Str();
   
   sNode->transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
 
-  skeleton->boneMaping.insert({sNode->name,skeleton->globalInverse*matrix*sNode->transform});
-
-  //skeleton->finalMatrix.push_back(sNode->transform);
+  skeleton->boneMaping.insert({sNode->name,Matrix4f::IDENTITY});
 
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
     sNode->childs[i] = newSPtr<SkeletalNode>();
-    loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton,matrix*sNode->transform);
+    loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
 }
 
@@ -76,7 +72,7 @@ Model::loadFromFile(String file)
     skeleton->globalInverse = 
       reinterpret_cast<Matrix4f*>(&scene->mRootNode->mTransformation)->inverse();
 
-    loadSkeleton(scene->mRootNode,skeleton->skeleton,skeleton,Matrix4f::IDENTITY);
+    loadSkeleton(scene->mRootNode,skeleton->skeleton,skeleton);
 
     ResoureManager::instancePtr()->skeletons.insert({name,skeleton});
 
@@ -105,6 +101,7 @@ Model::loadFromFile(String file)
         node->locations.resize(actualChannel->mNumPositionKeys);
 
         for(int i = 0; i < actualChannel->mNumPositionKeys; ++i){
+          
           node->locations[i] = 
           {actualChannel->mPositionKeys[i].mTime,
           *reinterpret_cast<Vector3f*>(&actualChannel->mPositionKeys[i].mValue)};
@@ -123,13 +120,14 @@ Model::loadFromFile(String file)
         for(int i = 0; i < actualChannel->mNumRotationKeys; ++i){
           node->rotations[i] = 
           {actualChannel->mRotationKeys[i].mTime,
-          *reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i])};
+          (*reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i])).normal()};
         }
 
         animation->nodes.insert({actualChannel->mNodeName.C_Str(),node});
-
         
       }
+
+      ResoureManager::instancePtr()->animations.insert({name,animation});
 
     }
 

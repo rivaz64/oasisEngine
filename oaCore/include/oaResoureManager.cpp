@@ -1,5 +1,8 @@
 #include "oaResoureManager.h"
 #include "oaGraphicAPI.h"
+#include "oaMesh.h"
+#include "oaTexture.h"
+#include "oaModel.h"
 #include <iostream>
 
 namespace oaEngineSDK{

@@ -14,6 +14,7 @@ enum class COMPONENT_TYPE{
   NONE = 0,
   GRAPHICS,
   SKELETON,
+  ANIMATION
 };
 
 /**
