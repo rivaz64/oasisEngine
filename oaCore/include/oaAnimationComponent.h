@@ -32,7 +32,8 @@ class OA_CORE_EXPORT AnimationComponent :
     const float animationTime,
      SPtr<SkeletalNode> node, 
      const Matrix4f& parentTransform,
-     SPtr<Skeleton> skeleton);
+     SPtr<Skeleton> skeleton,
+     SPtr<Model> model);
   
   /**
    * @brief calculates the interpolation of the location

@@ -185,6 +185,7 @@ Matrix4f::operator*=(const Matrix4f& m)
   m44 = m41 * m.m14 + m42 * m.m24 + m43 * m.m34 + m44 * m.m44;
   return *this;
 }
+
 void
 Matrix4f::transpose()
 {
@@ -194,6 +195,14 @@ Matrix4f::transpose()
   swap(m23, m32);
   swap(m24, m42);
   swap(m34, m43);
+}
+
+Matrix4f
+Matrix4f::transposed() const
+{
+  Matrix4f ans = *this;
+  ans.transpose();
+  return ans;
 }
 
 float

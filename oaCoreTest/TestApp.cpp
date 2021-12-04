@@ -195,7 +195,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  charmod->loadFromFile("models/boblampclean.md5mesh");
+  charmod->loadFromFile("models/Shooting Gun.fbx");
 
   //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -212,12 +212,12 @@ void TestApp::postInit()
   character->attachComponent(newSPtr<SkeletalComponent>());
 
   character->getComponent<SkeletalComponent>()->skeleton = 
-  ResoureManager::instancePtr()->skeletons["boblampclean"];
+  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
 
   character->attachComponent(newSPtr<AnimationComponent>());
 
   character->getComponent<AnimationComponent>()->animation = 
-  ResoureManager::instancePtr()->animations["boblampclean"];
+  ResoureManager::instancePtr()->animations["Shooting Gun"];
 
   testObject = newSPtr<Object>();
 
@@ -393,7 +393,8 @@ void TestApp::draw()
       actualMesh->indexB->set();
 
       if(actualMesh->hasBones){
-      
+        actualMesh->bonesB->update(actualMesh->ofset.data());
+
         GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
       }
      

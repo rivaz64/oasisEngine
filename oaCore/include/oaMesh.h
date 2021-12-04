@@ -111,19 +111,19 @@ class Mesh
   */
   template<class T>
   void
-  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones, Vector<String>& _boneNames){
+  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones){
 
     create(vertices,index);
 
     hasBones = true;
 
     bones = _bones;
-    
-    boneNames = _boneNames;
 
     bonesB = GraphicAPI::instancePtr()->createBuffer();
 
     bonesB->init(sizeof(Matrix4f)*bones.size());
+
+    ofset.resize(bones.size());
 
   }
 
@@ -161,10 +161,12 @@ class Mesh
   */
   Vector<Matrix4f> bones;
 
+  Vector<Matrix4f> ofset;
+
   /**
    * @brief the names of the bones used by this mesh
   */
-  Vector<String> boneNames;
+  Map<String,uint32> boneMaping;
 };
 
 }

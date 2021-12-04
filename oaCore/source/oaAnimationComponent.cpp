@@ -2,6 +2,7 @@
 #include "oaAnimation.h"
 #include "oaSkeletalComponent.h"
 #include "oaObject.h"
+#include "oaGraphicsComponent.h"
 #include "oaTime.h"
 
 namespace oaEngineSDK{
@@ -18,9 +19,11 @@ AnimationComponent::update(SPtr<Object> actor)
 
   auto skeleton = actor->getComponent<SkeletalComponent>()->skeleton;
 
+  auto model = actor->getComponent<GraphicsComponent>()->model;
+
   animTimeInSecs += Time::instancePtr()->getDelta();
 
-  float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
+  //float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
 
   float temp = animationTime;
 
@@ -32,7 +35,7 @@ AnimationComponent::update(SPtr<Object> actor)
     actualRotationKey = 0;
   }
 
-  readNodeHeirarchy(animationTime,skeleton->skeleton,Matrix4f::IDENTITY,skeleton);
+  readNodeHeirarchy(animationTime,skeleton->skeleton,Matrix4f::IDENTITY,skeleton,model);
 }
 
 
@@ -41,29 +44,39 @@ AnimationComponent::readNodeHeirarchy(
   const float animationTime,
   SPtr<SkeletalNode> skeletalNode, 
   const Matrix4f& parentTransform,
-  SPtr<Skeleton> skeleton
+  SPtr<Skeleton> skeleton,
+  SPtr<Model> model
   )
 {
   auto animNode = animation->nodes[skeletalNode->name];
 
   Matrix4f globalTransform;
 
-  Matrix4f nodeTransform = skeletalNode->transform;
+  Matrix4f nodeTransform = Matrix4f::IDENTITY;
 
   if(animNode.get()){
+    auto trans = Matrix4f::translateMatrix(interpolatedLocation(animationTime,animNode));
+    auto rot = interpolatedRotation(animationTime,animNode).toMatrix();
+    auto sca = Matrix4f::scaleMatrix(interpolatedScale(animationTime,animNode));
     nodeTransform =
     Matrix4f::translateMatrix(interpolatedLocation(animationTime,animNode))*
-     interpolatedRotation(animationTime,animNode).toMatrix();
+    interpolatedRotation(animationTime,animNode).toMatrix()*
     Matrix4f::scaleMatrix(interpolatedScale(animationTime,animNode));
   }
 
   globalTransform = parentTransform*nodeTransform;
 
-  skeleton->boneMaping[skeletalNode->name] = 
-    skeleton->globalInverse*globalTransform;
+  for(auto mesh : model->meshes){
+    if(mesh->boneMaping.find(skeletalNode->name) != mesh->boneMaping.end()){
+      uint32 boneIndex = mesh->boneMaping[skeletalNode->name];
+      mesh->ofset[boneIndex] = skeleton->globalInverse*globalTransform*mesh->bones[boneIndex];
+    }
+  }
+  /*skeleton->boneMaping[skeletalNode->name] = 
+    skeleton->globalInverse*globalTransform;*/
 
   for(auto child : skeletalNode->childs){
-    readNodeHeirarchy(animationTime,child,globalTransform,skeleton);
+    readNodeHeirarchy(animationTime,child,globalTransform,skeleton,model);
   }
 
 }
@@ -117,6 +130,7 @@ AnimationComponent::interpolatedScale(const float animationTime, SPtr<AnimNode> 
 Quaternion
 AnimationComponent::interpolatedRotation(const float animationTime, SPtr<AnimNode> node)
 {
+  //return node->rotations[0].second;
   if(node->rotations.size() == 1){
     return node->rotations[0].second;
   }

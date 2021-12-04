@@ -118,9 +118,9 @@ Quaternion::toMatrix() const
   float ri = 2.f * r * i;
   float rj = 2.f * r * j;
   float rk = 2.f * r * k;
-  return {1.f - j2 + k2 ,ij - rk       ,ik + rj       ,0.0f,
-          ij + rk       ,1.f - i2 + k2 ,jk - ri       ,0.0f,
-          ik - rj       ,jk + ri       ,1.f - i2 + j2 ,0.0f,
+  return {1.f - j2 - k2 ,ij - rk       ,ik + rj       ,0.0f,
+          ij + rk       ,1.f - i2 - k2 ,jk - ri       ,0.0f,
+          ik - rj       ,jk + ri       ,1.f - i2 - j2 ,0.0f,
           0.0f          ,0.0f          ,0.0f          ,1.0f};
 }
 
@@ -195,9 +195,9 @@ Quaternion Quaternion::interpolate(Quaternion a, Quaternion b, const float t)
 
   return {
   sclp * a.r + sclq * b.r,
-  sclp * a.r + sclq * b.r,
-  sclp * a.r + sclq * b.r,
-  sclp * a.r + sclq * b.r,
+  sclp * a.i + sclq * b.i,
+  sclp * a.j + sclq * b.j,
+  sclp * a.k + sclq * b.k,
   };
 }
 

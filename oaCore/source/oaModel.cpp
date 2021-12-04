@@ -23,9 +23,9 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
 
   sNode->name = node->mName.C_Str();
   
-  sNode->transform = *reinterpret_cast<Matrix4f*>(&node->mTransformation);
+  sNode->transform = reinterpret_cast<Matrix4f*>(&node->mTransformation)->transposed();
 
-  skeleton->boneMaping.insert({sNode->name,Matrix4f::IDENTITY});
+  skeleton->boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
@@ -44,17 +44,15 @@ Model::loadFromFile(String file)
   _splitpath(file.c_str(), drive,dir,name , ext);
 
   Importer importer;
-  const aiScene* scene = importer.ReadFile(file, aiProcess_GenSmoothNormals |
-                                           aiProcess_CalcTangentSpace |
-                                           aiProcess_Triangulate |
-                                           aiProcess_JoinIdenticalVertices |
-                                           aiProcess_SortByPType);
+  const aiScene* scene = importer.ReadFile(file,
+  aiProcessPreset_TargetRealtime_MaxQuality
+    | aiProcess_ConvertToLeftHanded);
   
   if(!scene){
     std::cout<<"model not found"<<std::endl;
     return false;
   }
-
+  
   meshes.clear();
 
   SPtr<Material> material = ResoureManager::instancePtr()->materials["default"];
@@ -101,26 +99,43 @@ Model::loadFromFile(String file)
         node->locations.resize(actualChannel->mNumPositionKeys);
 
         for(int i = 0; i < actualChannel->mNumPositionKeys; ++i){
-          
+          Vector3f pos; 
+          pos.x = actualChannel->mPositionKeys[i].mValue.x;
+          pos.y = actualChannel->mPositionKeys[i].mValue.y;
+          pos.z = actualChannel->mPositionKeys[i].mValue.z;
           node->locations[i] = 
           {actualChannel->mPositionKeys[i].mTime,
-          *reinterpret_cast<Vector3f*>(&actualChannel->mPositionKeys[i].mValue)};
+          pos};
         }
 
         node->scales.resize(actualChannel->mNumScalingKeys);
 
         for(int i = 0; i < actualChannel->mNumScalingKeys; ++i){
+          Vector3f sca; 
+          sca.x = actualChannel->mScalingKeys[i].mValue.x;
+          sca.y = actualChannel->mScalingKeys[i].mValue.y;
+          sca.z = actualChannel->mScalingKeys[i].mValue.z;
           node->scales[i] =
           {actualChannel->mScalingKeys[i].mTime,
-          *reinterpret_cast<Vector3f*>(&actualChannel->mScalingKeys[i].mValue)};
+          sca};
         }
 
         node->rotations.resize(actualChannel->mNumRotationKeys);
 
         for(int i = 0; i < actualChannel->mNumRotationKeys; ++i){
+          Quaternion q;
+
+          q.i = actualChannel->mRotationKeys[i].mValue.x;
+          q.j = actualChannel->mRotationKeys[i].mValue.y;
+          q.k = actualChannel->mRotationKeys[i].mValue.z;
+          q.r = actualChannel->mRotationKeys[i].mValue.w;
+
+          auto asMat = actualChannel->mRotationKeys[i].mValue.GetMatrix();
+
+          auto oaMat = q.toMatrix();
+
           node->rotations[i] = 
-          {actualChannel->mRotationKeys[i].mTime,
-          (*reinterpret_cast<Quaternion*>(&actualChannel->mRotationKeys[i])).normal()};
+          {actualChannel->mRotationKeys[i].mTime,q};
         }
 
         animation->nodes.insert({actualChannel->mNodeName.C_Str(),node});
@@ -194,7 +209,7 @@ Model::loadFromFile(String file)
       
       Vector<Matrix4f> bones;
 
-      Vector<String> boneNames;
+      //Vector<String> boneNames;
 
       Vector<AnimationVertex> vertices;
 
@@ -217,7 +232,7 @@ Model::loadFromFile(String file)
 
       if(aMesh->HasBones()){
           
-          Map<String,uint32> boneMaping;
+          //Map<String,uint32> boneMaping;
 
           uint32 bonesNum=0;
 
@@ -229,15 +244,15 @@ Model::loadFromFile(String file)
 
             uint32 boneIndex;
 
-            if(boneMaping.find(boneName) == boneMaping.end()){
+            if(oaMesh->boneMaping.find(boneName) == oaMesh->boneMaping.end()){
               boneIndex = bonesNum;
-              boneMaping.insert({boneName,bonesNum});
+              oaMesh->boneMaping.insert({boneName,bonesNum});
               bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
-              boneNames.push_back(boneName);
+              //boneNames.push_back(boneName);
               ++bonesNum;
             }
             else{
-              boneIndex = boneMaping[boneName];
+              boneIndex = oaMesh->boneMaping[boneName];
             }
 
             //boneIndex = skeleton->boneMaping[boneName];
@@ -267,7 +282,8 @@ Model::loadFromFile(String file)
 
         }
 
-      oaMesh->create(vertices,index,bones,boneNames);
+      
+      oaMesh->create(vertices,index,bones);
     }
     
     meshes.push_back(oaMesh);

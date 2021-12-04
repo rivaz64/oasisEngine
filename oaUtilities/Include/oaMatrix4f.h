@@ -132,6 +132,12 @@ class OA_UTILITY_EXPORT Matrix4f
   transpose();
 
   /**
+   * @brief changes the rows for the columns
+  */
+  Matrix4f
+  transposed() const;
+
+  /**
    * @brief calculates the determinant of the matrix
    * @return
   */

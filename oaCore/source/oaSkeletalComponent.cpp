@@ -19,7 +19,7 @@ SkeletalComponent::getType()
 
 void SkeletalComponent::update(SPtr<Object> actor)
 {
-  OA_ASSERT(actor->getComponent<GraphicsComponent>().get());
+  /*OA_ASSERT(actor->getComponent<GraphicsComponent>().get());
 
   auto model = actor->getComponent<GraphicsComponent>()->model;
 
@@ -36,7 +36,7 @@ void SkeletalComponent::update(SPtr<Object> actor)
     }
 
     mesh->bonesB->update(finalMatrix.data());
-  }
+  }*/
 
 }
 
