@@ -36,16 +36,51 @@ struct TextureDesc{
    * @brief the number of the texutres
   */
   uint32 arraySize;
+
+  /**
+   * @brief the format
+  */
   FORMAT format;
+
+  /**
+   * @brief the number of samples
+  */
   uint32 sampleCount;
+
+  /**
+   * @brief the quality
+  */
   uint32 sampleQuality;
+
+  /**
+   * @brief the binding flag
+  */
   BIND bind;
 };
 
+/**
+ * @brief the descriptor for the shader resourse of this texture
+*/
 struct ShaderResourseViewDesc{
+
+  /**
+   * @brief the format of the descriptor
+  */
   FORMAT format;
+
+  /**
+   * @brief the dimencions of the descriptor
+  */
   SRV_DIMENSION dimencion;
+
+  /**
+   * @brief the  mips
+  */
   uint32 mostDetailedMip;
+
+  /**
+   * @brief the number of mip levels
+  */
   uint32 mipLevels;
 };
 
