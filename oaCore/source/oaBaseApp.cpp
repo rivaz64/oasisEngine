@@ -69,12 +69,10 @@ void BaseApp::loadPlugIn(String DLL)
 void
 BaseApp::mainLoop()
 {
-  auto start = std::chrono::high_resolution_clock::now();
+  
   while(isRunning){
 
-    auto end = std::chrono::high_resolution_clock::now();
-    Time::instancePtr()->deltaTime = std::chrono::duration<float>(end - start).count();
-    start = std::chrono::high_resolution_clock::now();
+    Time::instancePtr()->update();
 
     GraphicAPI::instancePtr()->events();
 

@@ -11,6 +11,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a conponent that handles the animation
+*/
 class OA_CORE_EXPORT AnimationComponent :
   public Component
 {
@@ -19,6 +22,10 @@ class OA_CORE_EXPORT AnimationComponent :
   COMPONENT_TYPE
   getType() override;
 
+  /**
+   * @brief updates the animation
+   * @param actor 
+  */
   void
   update(SPtr<Object> actor) override;
 
@@ -63,10 +70,13 @@ class OA_CORE_EXPORT AnimationComponent :
   interpolatedRotation(const float animationTime,SPtr<AnimNode> node);
 
   /**
-   * @brief the time where the animation is at;
+   * @brief the time where the animation is at in animation time
   */
   float animationTime = 0;
 
+  /**
+   * @brief the time where the animation is at in seconds
+  */
   float animTimeInSecs = 0;
 
   /**

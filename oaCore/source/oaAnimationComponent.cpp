@@ -4,6 +4,7 @@
 #include "oaObject.h"
 #include "oaGraphicsComponent.h"
 #include "oaTime.h"
+#include "oaSkeleton.h"
 
 namespace oaEngineSDK{
 

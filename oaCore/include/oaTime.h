@@ -19,10 +19,21 @@ class OA_CORE_EXPORT Time :
 {
  public:
 
+  /**
+   * @brief gets the current delta time
+   * @return 
+  */
   FORCEINLINE const float&
   getDelta(){
     return deltaTime;
   }
+
+ private:
+  /**
+   * @brief calculates the new deltaTime
+  */
+  void
+  update();
 
  private:
   

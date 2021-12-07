@@ -9,10 +9,12 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector3f.h"
 #include "oaQuaternion.h"
-#include "oaSkeleton.h"
 
 namespace oaEngineSDK{
 
+/**
+ * @brief an animation channel
+*/
 struct AnimNode{
   
   /**
@@ -37,6 +39,9 @@ struct AnimNode{
 
 };
 
+/**
+ * @brief a class to store animations
+*/
 class Animation
 {
 
@@ -56,8 +61,6 @@ class Animation
    * @brief the keyFrames of the animation
   */
   Map<String,SPtr<AnimNode>> nodes;
-
-  
 
   friend class Model;
   friend class AnimationComponent;
