@@ -1,6 +1,12 @@
 #include "oaGraphicAPI.h"
 #include <iostream>
 #include "oaShader.h"
+#include "oaTexture.h"
+#include "oaSamplerState.h"
+#include "oaRenderTarget.h"
+#include "oaShader.h"
+#include "oaVertexBuffer.h"
+#include "oaIndexBuffer.h"
 
 namespace oaEngineSDK{
 
@@ -16,10 +22,30 @@ GraphicAPI::isRunning()
   return true;
 }
 
-SPtr<Buffer> 
+SPtr<Shader> GraphicAPI::createVertexShader()
+{
+  return newSPtr<Shader>();
+}
+
+SPtr<Shader> GraphicAPI::createPixelShader()
+{
+  return newSPtr<Shader>();
+}
+
+SPtr<Buffer>
 GraphicAPI::createBuffer()
 {
   return newSPtr<Buffer>();
+}
+
+SPtr<VertexBuffer> GraphicAPI::createVertexBuffer()
+{
+  return newSPtr<VertexBuffer>();
+}
+
+SPtr<IndexBuffer> GraphicAPI::createIndexBuffer()
+{
+  return newSPtr<IndexBuffer>();
 }
 
 SPtr<Texture> 
@@ -29,7 +55,7 @@ GraphicAPI::createTexture()
 }
 
 SPtr<SamplerState> 
-GraphicAPI::createSamplerState(SamplerDesc&)
+GraphicAPI::createSamplerState(const SamplerDesc&)
 {
   return newSPtr<SamplerState>();
 }
@@ -41,7 +67,7 @@ GraphicAPI::createRenderTarget(SPtr<Texture>)
 }
 
 SPtr<DepthStencil> 
-GraphicAPI::createDepthStencil(DepthStencilDesc&, SPtr<Texture>)
+GraphicAPI::createDepthStencil(const DepthStencilDesc&, SPtr<Texture>)
 {
   return SPtr<DepthStencil>();
 }

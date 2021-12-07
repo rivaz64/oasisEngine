@@ -8,26 +8,19 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
-#include "oaBuffer.h"
-#include "oaTexture.h"
-#include "oaSamplerState.h"
 #include "oaVector4f.h"
-#include "oaSamplerState.h"
-#include "oaRenderTarget.h"
-#include "oaDepthStencil.h"
 #include "oaVector2I.h"
-#include "oaShader.h"
-#include "oaVertexBuffer.h"
-#include "oaIndexBuffer.h"
 #include <Windows.h>
 
 
 namespace oaEngineSDK{
 
-enum class GRAPHIC_API {
+namespace GRAPHIC_API {
+enum E{
   NONE=0,
   DIRECTX11,
   OPENGL
+};
 };
 
 /**
@@ -72,14 +65,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<Shader>
-  createVertexShader() {return newSPtr<Shader>();}
+  createVertexShader(); 
 
   /**
    * @brief creates a pixel shader
    * @return 
   */
   virtual SPtr<Shader>
-  createPixelShader() {return newSPtr<Shader>();}
+  createPixelShader(); 
 
   /**
    * @brief creates a buffer
@@ -93,14 +86,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<VertexBuffer> 
-  createVertexBuffer() {return newSPtr<VertexBuffer>();}
+  createVertexBuffer();
 
   /**
    * @brief creates a IndexBuffer
    * @return 
   */
   virtual SPtr<IndexBuffer> 
-  createIndexBuffer() {return newSPtr<IndexBuffer>();}
+  createIndexBuffer();
 
   /**
   * @brief creates a texture
@@ -115,7 +108,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<SamplerState>
-  createSamplerState(SamplerDesc& /*descriptor*/);
+  createSamplerState(const SamplerDesc& /*descriptor*/);
 
   /**
    * @brief creates a render target
@@ -132,7 +125,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<DepthStencil>
-  createDepthStencil(DepthStencilDesc& /*description*/, SPtr<Texture> /*texture*/);
+  createDepthStencil(const DepthStencilDesc& /*description*/, SPtr<Texture> /*texture*/);
 
   /**
   * @brief sets the color of the background
@@ -240,12 +233,15 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   uint32 windowHeight = 600;
 
+  /**
+   * @brief the function for procecing the events
+  */
   WNDPROC eventsFunction = 0;
 
   /**
   * @brief the graphical API that has been loaded
   */
-  GRAPHIC_API actualGraphicAPI = GRAPHIC_API::NONE;
+  GRAPHIC_API::E actualGraphicAPI = GRAPHIC_API::NONE;
 
  protected:
   /**

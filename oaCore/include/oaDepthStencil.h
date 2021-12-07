@@ -8,15 +8,33 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaFlags.h"
+
 namespace oaEngineSDK{
 
+/**
+ * @brief the desctriptor for the depth stencil
+*/
 struct DepthStencilDesc{
+  
+  /**
+   * @brief th number of mip Silce
+  */
   uint32 MipSlice;
+
+  /**
+   * @brief the dimecions of the view
+  */
   DS_DIMENSION viewDimension;
+
+  /**
+   * @brief the format of the depth stencil
+  */
   FORMAT format;
 };
 
-
+/**
+ * @brief a wraper for the depth stencil
+*/
 class DepthStencil
 {
  public:

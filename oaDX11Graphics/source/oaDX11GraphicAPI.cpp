@@ -212,7 +212,7 @@ DX11GraphicAPI::createTexture()
 }
 
 SPtr<SamplerState> 
-DX11GraphicAPI::createSamplerState(SamplerDesc& descriptor)
+DX11GraphicAPI::createSamplerState(const SamplerDesc& descriptor)
 {
   auto sampler = newSPtr<DX11SamplerState>();
   sampler->init(descriptor);
@@ -228,7 +228,7 @@ DX11GraphicAPI::createRenderTarget(SPtr<Texture> texture)
 }
 
 SPtr<DepthStencil> 
-DX11GraphicAPI::createDepthStencil(DepthStencilDesc& description, SPtr<Texture> texture)
+DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Texture> texture)
 {
   auto renderTarget = newSPtr<DX11DepthStencil>();
   renderTarget->init(description,texture);
