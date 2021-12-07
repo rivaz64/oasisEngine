@@ -6,6 +6,7 @@
 #include "oaTime.h"
 #include "oaSkeleton.h"
 #include "oaMesh.h"
+#include "oaModel.h"
 
 namespace oaEngineSDK{
 

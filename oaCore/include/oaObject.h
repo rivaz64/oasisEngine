@@ -7,15 +7,16 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaModel.h"
 #include "oaVector3f.h"
 #include "oaMatrix4f.h"
-#include "oaTree.h"
 #include "oaComponent.h"
 #include <memory>
 
 namespace oaEngineSDK{
 
+/**
+ * @brief something that is on a scene
+*/
 class OA_CORE_EXPORT Object :
   public std::enable_shared_from_this<Object>
 {
@@ -138,6 +139,7 @@ class OA_CORE_EXPORT Object :
   */
   SPtr<Buffer> transformB;
 
+//for change to private
  public:
   /**
    * @brief where the object is in a 3D space
