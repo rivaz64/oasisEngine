@@ -9,7 +9,6 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaVector4f.h"
-#include "oaVector2I.h"
 #include <Windows.h>
 
 

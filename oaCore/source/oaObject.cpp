@@ -2,6 +2,7 @@
 #include "oaGraphicAPI.h"
 #include "oaMatrix4f.h"
 #include "oaComponent.h"
+#include "oaBuffer.h"
 
 namespace oaEngineSDK{
 

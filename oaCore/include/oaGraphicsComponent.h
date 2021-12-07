@@ -6,7 +6,6 @@
 
 #pragma once
 #include "oaComponent.h"
-#include "oaModel.h"
 
 namespace oaEngineSDK{
 /**

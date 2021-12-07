@@ -6,15 +6,19 @@
 
 #pragma once
 #include "oaPrerequisitesCore.h"
-#include "oaTexture.h"
-#include "oaShader.h"
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a class for materials
+*/
 class OA_CORE_EXPORT Material
 {
  public:
 
+  /**
+   * @brief sets this material to be used in the shader
+  */
   void
   set();
   
@@ -29,9 +33,9 @@ class OA_CORE_EXPORT Material
   SPtr<Shader> vertexShader;
 
   /**
-   * @brief the pixel shader of this shader
+   * @brief the pixel shader of this material
   */
-  SPtr<Shader> pixelShader;
+   SPtr<Shader> pixelShader;
 };
 
 }

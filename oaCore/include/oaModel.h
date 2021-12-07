@@ -7,9 +7,6 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaMesh.h"
-#include "oaMaterial.h"
-
 
 namespace oaEngineSDK{
 

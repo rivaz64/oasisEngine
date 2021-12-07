@@ -6,6 +6,7 @@
 
 #include "oaGraphicsComponent.h"
 #include "oaResoureManager.h"
+#include "oaModel.h"
 
 namespace oaEngineSDK{
 

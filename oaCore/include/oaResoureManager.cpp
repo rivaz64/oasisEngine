@@ -3,6 +3,9 @@
 #include "oaMesh.h"
 #include "oaTexture.h"
 #include "oaModel.h"
+#include "oaShader.h"
+#include "oaMaterial.h"
+#include "oaMesh.h"
 #include <iostream>
 
 namespace oaEngineSDK{

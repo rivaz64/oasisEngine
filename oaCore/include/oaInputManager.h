@@ -19,23 +19,6 @@ class OA_CORE_EXPORT InputManager :
   public Module<InputManager>
 {
 
-private:
-
-  /**
-    * @brief the inuts that are active
-   */
-   Map<char,bool> inputs;
-
-   /**
-   * @brief the position of the mouse in the screen
-  */
-  Vector2I mousePosition;
-
-  /**
-   * @brief how much the mouse moved since the last update
-  */
-  Vector2I mouseDelta;
-
  public:
 
   FORCEINLINE void
@@ -57,6 +40,23 @@ private:
   getMouseDelta(){
     return mouseDelta;
   }
+
+private:
+
+  /**
+    * @brief the inuts that are active
+   */
+   Map<char,bool> inputs;
+
+   /**
+   * @brief the position of the mouse in the screen
+  */
+  Vector2I mousePosition;
+
+  /**
+   * @brief how much the mouse moved since the last update
+  */
+  Vector2I mouseDelta;
   
   friend class DX11GraphicAPI;
 

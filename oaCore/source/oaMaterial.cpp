@@ -1,5 +1,7 @@
 #include "oaMaterial.h"
 #include "oaGraphicAPI.h"
+#include "oaTexture.h"
+#include "oaShader.h"
 
 void oaEngineSDK::Material::set()
 {

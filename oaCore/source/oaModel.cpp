@@ -8,6 +8,8 @@
 #include "oaResoureManager.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
+#include "oaMesh.h"
+#include "oaMaterial.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
