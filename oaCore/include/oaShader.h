@@ -33,9 +33,6 @@ class OA_CORE_EXPORT Shader
   virtual bool 
   compileFromFile(String file) {return true;}
 
-  /**
-   * @brief 
-  */
   virtual void
   set() {}
 

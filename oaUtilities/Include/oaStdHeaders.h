@@ -131,5 +131,10 @@ FORCEINLINE SPtr<T> copy(const SPtr<T>& pointer){
   return std::make_shared<T>(*pointer.get());
 }
 
+/**
+ * @brief wraper for a class that can make a shared from this
+*/
+template<class T>
+using SharedEnabled = std::enable_shared_from_this<T>;
 
 }

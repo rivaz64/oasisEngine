@@ -12,10 +12,29 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief the descriptor for the texture
+*/
 struct TextureDesc{
+
+  /**
+   * @brief the width of the texture
+  */
   uint32 width;
+
+  /**
+   * @brief the height of the texture
+  */
   uint32 height;
+
+  /**
+   * @brief the number of mipmaps
+  */
   uint32 mipLevels;
+
+  /**
+   * @brief the number of the texutres
+  */
   uint32 arraySize;
   FORMAT format;
   uint32 sampleCount;

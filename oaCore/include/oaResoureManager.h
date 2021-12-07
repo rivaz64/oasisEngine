@@ -94,6 +94,9 @@ class OA_CORE_EXPORT ResoureManager :
   void
   loadDefaulTextures();
 
+  /**
+   * @brief creates the default material
+  */
   void
   generateDefaultMaterial();
 

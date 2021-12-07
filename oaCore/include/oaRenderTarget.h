@@ -10,6 +10,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a texture where the renderer is going to draw
+*/
 class RenderTarget
 {
  public:

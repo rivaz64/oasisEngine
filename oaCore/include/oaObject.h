@@ -10,7 +10,6 @@
 #include "oaVector3f.h"
 #include "oaMatrix4f.h"
 #include "oaComponent.h"
-#include <memory>
 
 namespace oaEngineSDK{
 
@@ -18,7 +17,7 @@ namespace oaEngineSDK{
  * @brief something that is on a scene
 */
 class OA_CORE_EXPORT Object :
-  public std::enable_shared_from_this<Object>
+  public SharedEnabled<Object>
 {
  public:
 
