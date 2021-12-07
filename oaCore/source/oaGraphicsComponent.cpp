@@ -15,7 +15,7 @@ GraphicsComponent::onAttach(SPtr<Object> actor)
   ResoureManager::instancePtr()->rendereableObjects.push_back(actor);
 }
 
-COMPONENT_TYPE 
+COMPONENT_TYPE::E
 GraphicsComponent::getType()
 {
   return COMPONENT_TYPE::GRAPHICS;

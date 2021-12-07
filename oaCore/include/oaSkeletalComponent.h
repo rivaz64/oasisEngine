@@ -20,7 +20,7 @@ class OA_CORE_EXPORT SkeletalComponent :
 {
  public:
 
-  COMPONENT_TYPE
+  COMPONENT_TYPE::E
   getType() override; 
 
   void

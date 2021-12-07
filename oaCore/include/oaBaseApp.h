@@ -8,10 +8,6 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
-#include "oaVector4f.h"
-#include "oaVector2I.h"
-
-
 
 namespace oaEngineSDK{
 
@@ -109,11 +105,6 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the time that has pass since the last update
   */
   float deltaTime = 0;
-
-  /**
-   * @brief the position of the mouse
-  */
-  Vector2I mousePos;
 
   friend class Module<BaseApp>;
 };

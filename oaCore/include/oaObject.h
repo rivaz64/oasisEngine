@@ -167,7 +167,7 @@ class OA_CORE_EXPORT Object :
   /**
    * @brief all the components this actor has
   */
-  Map<COMPONENT_TYPE,SPtr<Component>> components;
+  Map<COMPONENT_TYPE::E,SPtr<Component>> components;
 
   /**
    * @brief the dirty flag of the local and global matrix

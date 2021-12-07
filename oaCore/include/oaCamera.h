@@ -17,6 +17,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a virtual camera
+*/
 class OA_CORE_EXPORT Camera
 {
  public:
@@ -71,6 +74,9 @@ class OA_CORE_EXPORT Camera
   bool
   isInFrustrum(const Vector3f& _location);
 
+  /**
+   * @brief creates the frustrum
+  */
   void
   createFrustrum();
 
@@ -140,16 +146,34 @@ class OA_CORE_EXPORT Camera
   */
   SPtr<Buffer> view;
 
+  /**
+   * @brief the near plane of the frustrum
+  */
   Plane nearP;
 
+  /**
+   * @brief the far plane of the frustrum
+  */
   Plane farP;
 
+  /**
+   * @brief the top plane of the frustrum
+  */
   Plane topP;
 
+  /**
+   * @brief the bottom plane of the frustrum
+  */
   Plane bottomP;
 
+  /**
+   * @brief the near left of the frustrum
+  */
   Plane leftP;
 
+  /**
+   * @brief the right plane of the frustrum
+  */
   Plane rightP;
 
   /**

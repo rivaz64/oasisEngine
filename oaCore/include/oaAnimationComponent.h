@@ -19,7 +19,7 @@ class OA_CORE_EXPORT AnimationComponent :
 {
  public:
 
-  COMPONENT_TYPE
+  COMPONENT_TYPE::E
   getType() override;
 
   /**

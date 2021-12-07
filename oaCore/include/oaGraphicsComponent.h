@@ -20,7 +20,7 @@ class OA_CORE_EXPORT GraphicsComponent :
   void
   onAttach(SPtr<Object> actor);
 
-  COMPONENT_TYPE
+  COMPONENT_TYPE::E
   getType() override; 
 
  public:

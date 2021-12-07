@@ -10,12 +10,14 @@
 
 namespace oaEngineSDK{
 
-enum class COMPONENT_TYPE{
+namespace COMPONENT_TYPE{
+enum E{
   NONE = 0,
   GRAPHICS,
   SKELETON,
   ANIMATION
 };
+}
 
 /**
  * @brief a component an object can have
@@ -41,7 +43,7 @@ class OA_CORE_EXPORT Component
   /**
    * @brief get what is the type of this component
   */
-  virtual COMPONENT_TYPE
+  virtual COMPONENT_TYPE::E
   getType() {return COMPONENT_TYPE::NONE;}
 };
 

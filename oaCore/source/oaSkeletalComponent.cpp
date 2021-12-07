@@ -11,7 +11,7 @@
 
 namespace oaEngineSDK{
 
-COMPONENT_TYPE 
+COMPONENT_TYPE::E
 SkeletalComponent::getType()
 {
   return COMPONENT_TYPE::SKELETON;
