@@ -94,7 +94,7 @@ class Mesh
   void
   create(Vector<T>& vertices,Vector<uint32>& index){
 
-    indexNumber = index.size();
+    indexNumber = static_cast<uint64>(index.size());
 
     vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
 
@@ -132,7 +132,7 @@ class Mesh
   /**
    * @brief the number of indices this mesh has
   */
-  uint32 indexNumber;
+  uint64 indexNumber;
 
   /**
    * @brief the buffer for the indices

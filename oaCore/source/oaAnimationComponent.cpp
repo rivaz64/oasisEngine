@@ -38,13 +38,12 @@ AnimationComponent::update(SPtr<Object> actor)
     actualRotationKey = 0;
   }
 
-  readNodeHeirarchy(animationTime,skeleton->skeleton,Matrix4f::IDENTITY,skeleton,model);
+  readNodeHeirarchy(skeleton->skeleton,Matrix4f::IDENTITY,skeleton,model);
 }
 
 
 void 
 AnimationComponent::readNodeHeirarchy(
-  const float animationTime,
   SPtr<SkeletalNode> skeletalNode, 
   const Matrix4f& parentTransform,
   SPtr<Skeleton> skeleton,
@@ -58,13 +57,10 @@ AnimationComponent::readNodeHeirarchy(
   Matrix4f nodeTransform = Matrix4f::IDENTITY;
 
   if(animNode.get()){
-    auto trans = Matrix4f::translateMatrix(interpolatedLocation(animationTime,animNode));
-    auto rot = interpolatedRotation(animationTime,animNode).toMatrix();
-    auto sca = Matrix4f::scaleMatrix(interpolatedScale(animationTime,animNode));
     nodeTransform =
-    Matrix4f::translateMatrix(interpolatedLocation(animationTime,animNode))*
-    interpolatedRotation(animationTime,animNode).toMatrix()*
-    Matrix4f::scaleMatrix(interpolatedScale(animationTime,animNode));
+    Matrix4f::translateMatrix(interpolatedLocation(animNode))*
+    interpolatedRotation(animNode).toMatrix()*
+    Matrix4f::scaleMatrix(interpolatedScale(animNode));
   }
 
   globalTransform = parentTransform*nodeTransform;
@@ -79,13 +75,13 @@ AnimationComponent::readNodeHeirarchy(
     skeleton->globalInverse*globalTransform;*/
 
   for(auto child : skeletalNode->childs){
-    readNodeHeirarchy(animationTime,child,globalTransform,skeleton,model);
+    readNodeHeirarchy(child,globalTransform,skeleton,model);
   }
 
 }
 
 Vector3f
-AnimationComponent::interpolatedLocation(const float animationTime, SPtr<AnimNode> node)
+AnimationComponent::interpolatedLocation(SPtr<AnimNode> node)
 {
   if(node->locations.size() == 1){
     return node->locations[0].second;
@@ -108,7 +104,7 @@ AnimationComponent::interpolatedLocation(const float animationTime, SPtr<AnimNod
 }
 
 Vector3f 
-AnimationComponent::interpolatedScale(const float animationTime, SPtr<AnimNode> node)
+AnimationComponent::interpolatedScale(SPtr<AnimNode> node)
 {
   if(node->scales.size() == 1){
     return node->scales[0].second;
@@ -131,7 +127,7 @@ AnimationComponent::interpolatedScale(const float animationTime, SPtr<AnimNode> 
 }
 
 Quaternion
-AnimationComponent::interpolatedRotation(const float animationTime, SPtr<AnimNode> node)
+AnimationComponent::interpolatedRotation(SPtr<AnimNode> node)
 {
   //return node->rotations[0].second;
   if(node->rotations.size() == 1){

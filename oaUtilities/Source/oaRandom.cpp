@@ -5,7 +5,7 @@ namespace oaEngineSDK{
 float
 Random::noise2D(const Vector2f& point)
 {
-    return Math::mod(Math::sin(Vector2f::dot(point,Vector2f(12.9898,78.233))),1);
+    return Math::mod(Math::sin(Vector2f::dot(point,Vector2f(12.9898f,78.233f))),1);
 }
 
 Vector2f

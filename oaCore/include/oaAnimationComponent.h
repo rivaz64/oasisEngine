@@ -36,7 +36,6 @@ class OA_CORE_EXPORT AnimationComponent :
   */
   void
   readNodeHeirarchy(
-    const float animationTime,
      SPtr<SkeletalNode> node, 
      const Matrix4f& parentTransform,
      SPtr<Skeleton> skeleton,
@@ -49,7 +48,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Vector3f
-  interpolatedLocation(const float animationTime,SPtr<AnimNode> node);
+  interpolatedLocation(SPtr<AnimNode> node);
 
   /**
    * @brief calculates the interpolation of the scale
@@ -58,7 +57,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Vector3f
-  interpolatedScale(const float animationTime,SPtr<AnimNode> node);
+  interpolatedScale(SPtr<AnimNode> node);
 
   /**
    * @brief calculates the interpolation of the rotation
@@ -67,7 +66,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Quaternion
-  interpolatedRotation(const float animationTime,SPtr<AnimNode> node);
+  interpolatedRotation(SPtr<AnimNode> node);
 
   /**
    * @brief the time where the animation is at in animation time

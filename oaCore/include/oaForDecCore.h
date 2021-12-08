@@ -16,9 +16,9 @@ class Texture;
 class Model;
 class Material;
 class Skeleton;
-class SkeletalNode;
+struct SkeletalNode;
 class Animation;
-class AnimNode;
+struct AnimNode;
 class Object;
 class Component;
 
