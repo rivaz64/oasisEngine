@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <cmath>
 #include <map>
+#include <iostream>
 
 namespace oaEngineSDK {
 /**
@@ -84,7 +85,8 @@ using SPtr = std::shared_ptr<T>;
 * @tparam T
 */
 template <class T>
-FORCEINLINE SPtr<T> newSPtr() {
+FORCEINLINE SPtr<T> 
+newSPtr() {
   return std::make_shared<T>();
 }
 
@@ -94,7 +96,8 @@ FORCEINLINE SPtr<T> newSPtr() {
  * @param a
  * @param b
 */
-FORCEINLINE void swap(float& a, float& b) {
+FORCEINLINE void 
+swap(float& a, float& b) {
   std::swap(a, b);
 }
 
@@ -122,12 +125,14 @@ using Pair = std::pair<T1,T2>;
  * @return 
 */
 template<class T,class U>
-FORCEINLINE SPtr<T> cast(const SPtr<U>& pointer){
+FORCEINLINE SPtr<T> 
+cast(const SPtr<U>& pointer){
   return std::dynamic_pointer_cast<T>(pointer);
 }
 
 template<class T>
-FORCEINLINE SPtr<T> copy(const SPtr<T>& pointer){
+FORCEINLINE SPtr<T> 
+copy(const SPtr<T>& pointer){
   return std::make_shared<T>(*pointer.get());
 }
 
@@ -136,5 +141,14 @@ FORCEINLINE SPtr<T> copy(const SPtr<T>& pointer){
 */
 template<class T>
 using SharedEnabled = std::enable_shared_from_this<T>;
+
+/**
+ * @brief prints a string to the console
+ * @param s 
+*/
+FORCEINLINE void
+print(String s){
+  std::cout<<s<<std::endl;
+}
 
 }

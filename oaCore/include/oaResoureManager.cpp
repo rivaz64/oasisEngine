@@ -6,7 +6,6 @@
 #include "oaShader.h"
 #include "oaMaterial.h"
 #include "oaMesh.h"
-#include <iostream>
 
 namespace oaEngineSDK{
 
@@ -20,7 +19,7 @@ ResoureManager::loadTexture(const String& file)
   SPtr<Texture> texture = GraphicAPI::instancePtr()->createTexture();
 
   if(!texture->loadFromFile(file)){
-    std::cout<<"texture not loaded"<<std::endl;
+    print("texture not loaded");
     return false;
   }
 

@@ -112,7 +112,7 @@ void Camera::rotateWithMouse(const Vector2f& delta)
 
 bool Camera::isInFrustrum(const Vector3f& _location)
 {
-  //std::cout<<Math::distance(nearP,_location)<<std::endl;
+  //print(Math::distance(nearP,_location));
   return 
     Math::distance(nearP,_location)>0 &&
     Math::distance(farP,_location)>0 &&

@@ -5,7 +5,6 @@
 #include "oaInputManager.h"
 #include "oaTime.h"
 #include <Windows.h>
-#include<iostream>
 
 namespace oaEngineSDK{
 
@@ -52,17 +51,17 @@ void BaseApp::loadPlugIn(String DLL)
   HINSTANCE hGetProcIDDLL = LoadLibrary(DLL.c_str());
   if(!hGetProcIDDLL)
   {
-    std::cout << "Could not load Dll" << std::endl;
+    print("Could not load Dll");
     return;
   }
 
   foo function = (foo)GetProcAddress(hGetProcIDDLL, "initPlugIn");
   if(!function())
   {
-    std::cout << "Could not find function" << std::endl;
+    print("Could not find function");
     return;
   }
-  std::cout << "everything working" << std::endl;
+  print("everything working");
 #endif
 }
 

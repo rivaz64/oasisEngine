@@ -29,7 +29,7 @@ void SceneGraph::drawObject(const SPtr<Tree<Object>> node,const Matrix4f& parent
   auto localTransform = parentTransform * object->getLocalTransform();
 
   if(cam->isInFrustrum((localTransform*Vector4f(0,0,0,1)).xyz)){
-    std::cout<<"'isin"<<std::endl;
+    print("isin");
   }
 
   object->transformB->update(&localTransform);

@@ -13,7 +13,6 @@
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
-#include <iostream>
 #include <stdlib.h>
 
 using Assimp::Importer;
@@ -50,7 +49,7 @@ Model::loadFromFile(String file)
   const aiScene* scene = importer.ReadFile(file,aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
   
   if(!scene){
-    std::cout<<"model not found"<<std::endl;
+    print("model not found");
     return false;
   }
   
@@ -181,9 +180,7 @@ Model::loadFromFile(String file)
       aiFace* face = &aMesh->mFaces[t];
       if (face->mNumIndices != 3)
       {
-        std::cout<< 
-        "Warning: Mesh face with not exactly 3 indices, ignoring this primitive."
-        <<std::endl;
+        print("Warning: Mesh face with not exactly 3 indices, ignoring this primitive."); 
 
         continue;
       }
