@@ -70,7 +70,7 @@ class OA_CORE_EXPORT BaseApp :
    * @param delta the time passed since the last update  
   */
   virtual void
-  update(float delta) {}
+  update(float /*delta*/) {}
 
   /**
   * @brief render the things to the screen

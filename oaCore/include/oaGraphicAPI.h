@@ -141,7 +141,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param indexes 
   */
   virtual void
-  draw(uint32 /*indexes*/) {}
+  draw(uint64 /*indexes*/) {}
 
   /**
    * @brief shows the things that where rendered

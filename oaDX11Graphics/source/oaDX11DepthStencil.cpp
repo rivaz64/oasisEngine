@@ -3,12 +3,14 @@
 #include "oaDX11GraphicAPI.h"
 #include "oaDX11Flags.h"
 
-oaEngineSDK::DX11DepthStencil::~DX11DepthStencil()
+namespace oaEngineSDK{
+
+DX11DepthStencil::~DX11DepthStencil()
 {
   if( depthStencil ) depthStencil->Release();
 }
 
-bool oaEngineSDK::DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
+bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
 {
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   ZeroMemory( &descDSV, sizeof(descDSV) );
@@ -19,5 +21,13 @@ bool oaEngineSDK::DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Textur
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
    device->CreateDepthStencilView(cast<DX11Texture>(texture)->texture, &descDSV, &depthStencil);
 
+  if(FAILED(hr)){
+    return false;
+  }
+
   return true;
 }
+
+}
+
+

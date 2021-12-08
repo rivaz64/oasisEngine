@@ -21,7 +21,6 @@ void DX11GraphicAPI::onShutDown()
 {
   if( context ) context->ClearState();
 
-  if( depthStencil ) depthStencil->Release();
   if( swapChain ) swapChain->Release();
   if( context ) context->Release();
   if( device ) device->Release();
@@ -233,7 +232,6 @@ DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Tex
   auto renderTarget = newSPtr<DX11DepthStencil>();
   renderTarget->init(description,texture);
   return renderTarget;
-  return SPtr<DepthStencil>();
 }
 
 void 
@@ -259,9 +257,9 @@ SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 }
 
 void 
-DX11GraphicAPI::draw(uint32 indexes)
+DX11GraphicAPI::draw(uint64 indexes)
 {
-  context->DrawIndexed(indexes, 0, 0);
+  context->DrawIndexed(static_cast<UINT>(indexes), 0, 0);
 }
 
 void 

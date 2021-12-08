@@ -127,7 +127,6 @@ void Camera::createFrustrum()
 {
   nearP = Plane(location+axisZ*nearPlane,axisZ);
   farP = Plane(location+axisZ*farPlane,-axisZ);
-  float temp = Math::tan(angle/2.f);
   float nh = Math::tan(angle/2.f)*nearPlane;
   float nw = nh*ratio;
   float fh = Math::tan(angle/2.f)*farPlane;

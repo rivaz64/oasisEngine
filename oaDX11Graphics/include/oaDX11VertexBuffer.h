@@ -18,7 +18,7 @@ class DX11VertexBuffer :
  public:
 
   bool
-  init(void* data, uint32 vertexSize, uint32 numberOfVertices) override;
+  init(void* data, uint64 vertexSize, uint64 numberOfVertices) override;
 
   void
   set() override;
@@ -27,7 +27,7 @@ class DX11VertexBuffer :
 
   ID3D11Buffer* buffer = nullptr;
 
-  uint32 vertexSize;
+  uint64 vertexSize;
 
 };
 

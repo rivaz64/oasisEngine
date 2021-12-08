@@ -1,7 +1,10 @@
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11GraphicAPI.h"
 
-bool oaEngineSDK::DX11VertexBuffer::init(void* data, uint32 _vertexSize, uint32 numberOfVertices)
+bool oaEngineSDK::DX11VertexBuffer::init(
+  void* data,
+  uint64 _vertexSize,
+  uint64 numberOfVertices)
 {
   vertexSize = _vertexSize;
   D3D11_BUFFER_DESC bd;

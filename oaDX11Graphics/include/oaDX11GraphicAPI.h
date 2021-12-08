@@ -68,7 +68,7 @@ class DX11GraphicAPI :
   getBackBuffer() override;
 
   void
-  draw(uint32 indexes) override;
+  draw(uint64 indexes) override;
 
   void
   show() override;
@@ -117,8 +117,6 @@ class DX11GraphicAPI :
   ID3D11Device* device = nullptr;
   ID3D11DeviceContext* context = nullptr;
   IDXGISwapChain* swapChain = nullptr;
-  ID3D11Texture2D* depthStencil = nullptr;
-  //ID3D11DepthStencilView* depthStencilView = nullptr;
 
   MSG msg = MSG();
 

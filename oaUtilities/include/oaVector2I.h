@@ -94,6 +94,16 @@ class OA_UTILITY_EXPORT Vector2I
   }
 
   /**
+  * @brief substract vector v from this
+  * @param v
+  */
+  FORCEINLINE Vector2I
+  operator-() {
+    return { -x, -y};
+  }
+
+
+  /**
   * @brief calculates a vector with the same direction as this and a lenght multiplied by v
   * @param v
   * @return
