@@ -42,13 +42,17 @@ class OA_UTILITY_EXPORT Vector3f
    * @brief initializes a 3d vector from one of ints
    * @param v 
   */
-  Vector3f(const Vector3I& v): x(v.x), y(v.y), z(v.z) {}
+  Vector3f(const Vector3I& v): x(static_cast<float>(v.x)), 
+                               y(static_cast<float>(v.y)), 
+                               z(static_cast<float>(v.z)) {}
 
   /**
    * @brief initializes a 3d vector from one of ints
    * @param v 
   */
-  Vector3f(const Vector3U& v): x(v.x), y(v.y), z(v.z) {}
+  Vector3f(const Vector3U& v): x(static_cast<float>(v.x)), 
+                               y(static_cast<float>(v.y)), 
+                               z(static_cast<float>(v.z)) {}
 
   ~Vector3f() = default;
 

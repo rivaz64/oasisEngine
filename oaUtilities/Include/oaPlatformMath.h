@@ -325,7 +325,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @param f 
    * @return 
   */
-  static FORCEINLINE int32
+  static FORCEINLINE float
   floor(float f){
     return std::floor(f);
   }

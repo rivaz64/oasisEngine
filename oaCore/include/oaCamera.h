@@ -80,6 +80,14 @@ class OA_CORE_EXPORT Camera
   void
   createFrustrum();
 
+  
+  /**
+   * @brief sees the objects in the world 
+   * @return the objects seen by the frustrum in order from back to front
+  */
+  Vector<SPtr<Object>>
+  seeObjects(const Vector<SPtr<Object>>& objects);
+
  public:
   /**
    * @brief how far the camera can see

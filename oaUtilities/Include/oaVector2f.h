@@ -33,13 +33,13 @@ class OA_UTILITY_EXPORT Vector2f
    * @brief initializes a 2d vector from one of ints
    * @param v 
   */
-  Vector2f(const Vector2I& v) :x(v.x), y(v.y) {}
+  Vector2f(const Vector2I& v) :x(static_cast<float>(v.x)), y(static_cast<float>(v.y)) {}
 
   /**
    * @brief initializes a 2d vector from one of unsigned ints
    * @param v 
   */
-  Vector2f(const Vector2U& v) :x(v.x), y(v.y) {}
+  Vector2f(const Vector2U& v) :x(static_cast<float>(v.x)), y(static_cast<float>(v.y)) {}
 
   ~Vector2f() = default;
 
@@ -213,7 +213,10 @@ class OA_UTILITY_EXPORT Vector2f
   */
   FORCEINLINE Vector2I 
   floor() const{
-    return Vector2I(Math::floor(x),Math::floor(y));
+    return Vector2I(
+      static_cast<int32>(Math::floor(x)),
+      static_cast<int32>(Math::floor(y))
+    );
   }
 
   /**

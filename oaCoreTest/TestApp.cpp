@@ -13,6 +13,9 @@
 #include "oaGraphicsComponent.h"
 #include "oaSkeletalComponent.h"
 #include "oaAnimationComponent.h"
+#include "oaDepthStencil.h"
+#include "oaTexture.h"
+#include "oaMesh.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>

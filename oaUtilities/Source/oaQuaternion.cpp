@@ -185,11 +185,11 @@ Quaternion Quaternion::interpolate(Quaternion a, Quaternion b, const float t)
     float omega, sinom;
     omega = Math::acos(cosom);
     sinom = Math::sin(omega);
-    sclp  = Math::sin( (1.0 - t) * omega) / sinom;
+    sclp  = Math::sin( (1.0f - t) * omega) / sinom;
     sclq  = Math::sin( t * omega) / sinom;
   }
   else{
-    sclp = 1.0 - t;
+    sclp = 1.0f - t;
     sclq = t;
   }
 
