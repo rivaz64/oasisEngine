@@ -154,12 +154,18 @@ Model::loadFromFile(String file)
     auto oaMesh = newSPtr<Mesh>();
 
     aiString f;
+
+    String TextureName;
+
+    String TextureFile;
+
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
-    file = f.C_Str();
-    file = "textures/"+file+".png";
-    if(ResoureManager::instancePtr()->loadTexture(file)){
+    TextureName = f.C_Str();
+    TextureFile = "textures/"+TextureName+".png";
+    if(ResoureManager::instancePtr()->loadTexture(TextureFile)){
       auto mat = copy(material);
-      mat->textures[0] = ResoureManager::instancePtr()->textures[file];
+      mat->textures[0] = ResoureManager::instancePtr()->textures[TextureFile];
+      ResoureManager::instancePtr()->materials.insert({TextureName,mat});
       materials.push_back(mat);
     }
     else{

@@ -198,7 +198,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  charmod->loadFromFile("models/youarenotmandalorian.fbx");
+  charmod->loadFromFile("models/Shooting Gun.fbx");
 
   //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -214,13 +214,13 @@ void TestApp::postInit()
 
   character->attachComponent(newSPtr<SkeletalComponent>());
 
-  /*character->getComponent<SkeletalComponent>()->skeleton = 
+  character->getComponent<SkeletalComponent>()->skeleton = 
   ResoureManager::instancePtr()->skeletons["Shooting Gun"];
 
   character->attachComponent(newSPtr<AnimationComponent>());
 
   character->getComponent<AnimationComponent>()->animation = 
-  ResoureManager::instancePtr()->animations["Shooting Gun"];*/
+  ResoureManager::instancePtr()->animations["Shooting Gun"];
 
   testObject = newSPtr<Object>();
 
@@ -501,10 +501,20 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("textures");
   for(auto texture : ResoureManager::instancePtr()->textures){
-    ImGui::Image(texture.second->getId(),ImVec2(100,100));
+    if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
+      actualTexture = texture.second;
+    }
   }
   ImGui::End();
 
+  ImGui::Begin("materials");
+  for(auto material : ResoureManager::instancePtr()->materials){
+    if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
+      material.second->textures[0] = actualTexture;
+    }
+    
+  }
+  ImGui::End();
   
 }
 

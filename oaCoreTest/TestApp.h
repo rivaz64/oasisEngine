@@ -74,6 +74,8 @@ public:
 
   SPtr<Shader> pixelShader;
 
+  SPtr<Texture> actualTexture;
+
   bool mousePressed = false;
 };
 
