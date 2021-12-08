@@ -198,7 +198,7 @@ void TestApp::postInit()
 
   auto charmod = newSPtr<Model>();
 
-  charmod->loadFromFile("models/Shooting Gun.fbx");
+  charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
   //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
@@ -214,13 +214,13 @@ void TestApp::postInit()
 
   character->attachComponent(newSPtr<SkeletalComponent>());
 
-  character->getComponent<SkeletalComponent>()->skeleton = 
+  /*character->getComponent<SkeletalComponent>()->skeleton = 
   ResoureManager::instancePtr()->skeletons["Shooting Gun"];
 
   character->attachComponent(newSPtr<AnimationComponent>());
 
   character->getComponent<AnimationComponent>()->animation = 
-  ResoureManager::instancePtr()->animations["Shooting Gun"];
+  ResoureManager::instancePtr()->animations["Shooting Gun"];*/
 
   testObject = newSPtr<Object>();
 
@@ -369,15 +369,13 @@ void TestApp::draw()
   
   cam->setCamera();
 
-  auto lista = ResoureManager::instancePtr()->rendereableObjects;
+  //auto lista = ResoureManager::instancePtr()->rendereableObjects;
 
-  for(auto object : ResoureManager::instancePtr()->rendereableObjects){
+  auto seenObjects = cam->seeObjects(ResoureManager::instancePtr()->rendereableObjects);
+
+  for(auto object : seenObjects){
     
     auto mat = object->getGlobalTransform();
-
-    
-
-    //if(!cam->isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)) continue;
 
     object->transformB->update(&mat);
 
@@ -465,6 +463,7 @@ void TestApp::renderImGui()
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
+
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
@@ -499,6 +498,14 @@ void oaEngineSDK::TestApp::drawImGui()
     actualObject->setRotation(vec);
   };
   ImGui::End();
+
+  ImGui::Begin("textures");
+  for(auto texture : ResoureManager::instancePtr()->textures){
+    ImGui::Image(texture.second->getId(),ImVec2(100,100));
+  }
+  ImGui::End();
+
+  
 }
 
 }

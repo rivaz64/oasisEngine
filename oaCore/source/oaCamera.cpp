@@ -154,15 +154,20 @@ void Camera::createFrustrum()
 
 Vector<SPtr<Object>> Camera::seeObjects(const Vector<SPtr<Object>>& objects)
 {
-  /*Vector<Pair<SPtr<Object>,float>> 
+  Vector<SPtr<Object>> ans;
+
   for(auto object : objects){
+
     auto mat = object->getGlobalTransform();
+
     if(isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)){
-      
+
+      ans.push_back(object);
     }
 
-  }*/
-  return Vector<SPtr<Object>>();
+  }
+
+  return ans;
 }
 
 }

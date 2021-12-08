@@ -30,6 +30,10 @@ class DX11Texture:
   bool
   init(TextureDesc description,ShaderResourseViewDesc descriptionSRV);
 
+  void*
+  getId() override;
+
+
  private:
 
   ID3D11ShaderResourceView* shaderResourceView;

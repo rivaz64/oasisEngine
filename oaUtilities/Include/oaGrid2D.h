@@ -68,7 +68,7 @@ class Grid2D
   Vector2U size;
 };
 
-Grid2D<float>;
+//Grid2D<float>;
 
 }
 

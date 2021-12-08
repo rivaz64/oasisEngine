@@ -125,6 +125,13 @@ class OA_CORE_EXPORT Texture
   virtual bool
   init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/ ) {return true;}
 
+  /**
+   * @brief gets the unique id of this texture
+   * @return 
+  */
+  virtual void*
+  getId() {return 0;}
+
   friend class ResoureManager;
 
 };

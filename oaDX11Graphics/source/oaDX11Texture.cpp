@@ -78,6 +78,12 @@ bool DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descripti
   return true;
 }
 
+void* 
+DX11Texture::getId()
+{
+  return shaderResourceView;
+}
+
 
 }
 

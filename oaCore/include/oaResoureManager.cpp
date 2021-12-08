@@ -13,7 +13,7 @@ namespace oaEngineSDK{
 bool 
 ResoureManager::loadTexture(const String& file)
 {
-  if(textures[file].get()){
+  if(textures.find(file)!=textures.end()){
     return true;
   }
 
@@ -352,7 +352,7 @@ void ResoureManager::loadDefaultShaders()
 void ResoureManager::loadDefaulTextures()
 {
   textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
-  textures["default"]->loadFromFile("textures/download.jfif");
+  textures["default"]->loadFromFile("textures/defaultTexture.png");
 }
 
 void

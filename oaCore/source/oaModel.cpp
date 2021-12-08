@@ -39,6 +39,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
 bool 
 Model::loadFromFile(String file)
 {
+
   char drive[_MAX_DRIVE];
   char dir[_MAX_DIR];
   char ext[_MAX_EXT];
@@ -46,9 +47,7 @@ Model::loadFromFile(String file)
   _splitpath(file.c_str(), drive,dir,name , ext);
 
   Importer importer;
-  const aiScene* scene = importer.ReadFile(file,
-  aiProcessPreset_TargetRealtime_MaxQuality
-    | aiProcess_ConvertToLeftHanded);
+  const aiScene* scene = importer.ReadFile(file,aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
   
   if(!scene){
     std::cout<<"model not found"<<std::endl;
@@ -196,7 +195,7 @@ Model::loadFromFile(String file)
         Vertex actualVertex;
 
         actualVertex.location = *reinterpret_cast<Vector3f*>(&aMesh->mVertices[numVertex]);
-        
+
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
           actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
