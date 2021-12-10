@@ -9,7 +9,6 @@
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
 #include "oaVector4f.h"
-#include <Windows.h>
 
 
 namespace oaEngineSDK{
@@ -235,7 +234,7 @@ class OA_CORE_EXPORT GraphicAPI :
   /**
    * @brief the function for procecing the events
   */
-  WNDPROC eventsFunction = 0;
+  void* eventsFunction = nullptr;
 
   /**
   * @brief the graphical API that has been loaded

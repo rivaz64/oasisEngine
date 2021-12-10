@@ -31,40 +31,34 @@ DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
 
-
-  // this struct holds information for the window class
   WNDCLASSEX wc;
 
-  // clear out the window class for use
   ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
-  // fill in the struct with the needed information
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = eventsFunction;
+  wc.lpfnWndProc = static_cast<WNDPROC>(eventsFunction);
   wc.hInstance = GetModuleHandleA(nullptr);
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
-  wc.lpszClassName = "oasisWindow";
+  wc.lpszClassName = "oasisEngine";
 
-  // register the window class
   RegisterClassEx(&wc);
 
-  //g_hInst = hInstance;
   hWnd = CreateWindowEx(NULL,
-                        "oasisWindow",    // name of the window class
-                        windowName.c_str(),   // title of the window
-                        WS_OVERLAPPEDWINDOW,    // window style
-                        300,    // x-position of the window
-                        200,    // y-position of the window
-                        windowWidth,    // width of the window
-                        windowHeight,    // height of the window
-                        NULL,    // we have no parent window, NULL
-                        NULL,    // we aren't using menus, NULL
-                        GetModuleHandleA(nullptr),    // application handle
-                        NULL);    // used with multiple windows, NULL
+                        "oasisEngine", 
+                        windowName.c_str(),   
+                        WS_OVERLAPPEDWINDOW,    
+                        300,    
+                        200,   
+                        windowWidth,  
+                        windowHeight,    
+                        NULL,    
+                        NULL,    
+                        GetModuleHandleA(nullptr),   
+                        NULL);   
 
-                                  // display the window on the screen
+                                 
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
