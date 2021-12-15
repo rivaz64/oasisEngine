@@ -20,8 +20,6 @@
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -74,8 +72,8 @@ void TestApp::postShutDown()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
+    //ImGui_ImplOpenGL3_Shutdown();
+    //ImGui_ImplGlfw_Shutdown();
   }
 
   ImGui::DestroyContext();
@@ -192,7 +190,7 @@ void TestApp::postInit()
     push_back(ResoureManager::instancePtr()->meshes["triangle"]);
 
 
-  character = newSPtr<Object>();
+  /*character = newSPtr<Object>();
 
   //auto model = newSPtr<Model>();
 
@@ -247,16 +245,7 @@ void TestApp::postInit()
   );
 
 
-  cam = newSPtr<Camera>();
-
-  cam->angle = 0.785398163f;
-  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
-  cam->nearPlane = 1.0f;
-  cam->farPlane = 100.0f;
-
-  cam->updateView();
-
-  cam->updateProyection();
+  
 
   scene = newSPtr<Object>();
 
@@ -306,7 +295,16 @@ void TestApp::postInit()
       
     }
   }*/
+  cam = newSPtr<Camera>();
 
+  cam->angle = 0.785398163f;
+  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
+  cam->nearPlane = 1.0f;
+  cam->farPlane = 100.0f;
+
+  cam->updateView();
+
+  cam->updateProyection();
 }
 
 
@@ -354,7 +352,7 @@ void TestApp::update(float delta)
 
   cam->updateView();
 
-  character->update();
+  //character->update();
 }
 
 void TestApp::draw()
@@ -425,8 +423,8 @@ void TestApp::initImGui()
       (ID3D11DeviceContext*)GraphicAPI::instancePtr()->getContext());
   }
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
+    //ImGui_ImplOpenGL3_Init("#version 130");
   }
   
 
@@ -440,8 +438,8 @@ void TestApp::newImGuiFrame()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
+    //ImGui_ImplOpenGL3_NewFrame();
+    //ImGui_ImplGlfw_NewFrame();
   }
   
   if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
@@ -465,14 +463,14 @@ void TestApp::renderImGui()
   }
 
   if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 
 }
 
 void oaEngineSDK::TestApp::drawImGui()
 {
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
+  /*if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
   ImGui::Begin("objects");
@@ -514,7 +512,7 @@ void oaEngineSDK::TestApp::drawImGui()
     }
     
   }
-  ImGui::End();
+  ImGui::End();*/
   
 }
 
