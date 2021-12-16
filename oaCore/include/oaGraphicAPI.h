@@ -161,15 +161,23 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param texture 
   */
   virtual void
-  setTexture(const SPtr<Texture>& /*texture*/){}
+  setTexture(const SPtr<Texture> /*texture*/){}
 
   /**
-   * @brief sets a constant buffer to be used un a shader
+   * @brief sets a constant buffer to be used in a vertex shader
    * @param buffer 
    * @param location the location in th shader
   */
   virtual void
-  setBuffer(const SPtr<Buffer>& /*buffer*/,uint32 /*location*/){}
+  setVSBuffer(const SPtr<Buffer> /*buffer*/,uint32 /*location*/){}
+
+  /**
+   * @brief sets a constant buffer to be used in a pixel shader
+   * @param buffer 
+   * @param location the location in th shader
+  */
+  virtual void
+  setPSBuffer(const SPtr<Buffer> /*buffer*/,uint32 /*location*/){}
 
   /**
    * @brief sets a sampler tate

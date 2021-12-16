@@ -72,9 +72,9 @@ void Camera::updateView()
 void Camera::setCamera()
 {
 
-  GraphicAPI::instancePtr()->setBuffer(view,1);
+  GraphicAPI::instancePtr()->setVSBuffer(view,1);
   
-  GraphicAPI::instancePtr()->setBuffer(proyection,2);
+  GraphicAPI::instancePtr()->setVSBuffer(proyection,2);
 
 }
 

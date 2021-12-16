@@ -42,6 +42,9 @@ public:
   void
   drawImGui();
 
+  void
+  childsInImgui(SPtr<Object> parentObject);
+
  public:
 
    SPtr<Object> character;
@@ -49,8 +52,6 @@ public:
    SPtr<Object> testObject;
 
    SPtr<Camera> cam;
-
-   SPtr<Buffer> camBuf;
 
    SPtr<SamplerState> samsta;
 
@@ -76,7 +77,15 @@ public:
 
   SPtr<Texture> actualTexture;
 
+  SPtr<Mesh> actualMesh;
+
+  SPtr<Model> actualModel;
+
   bool mousePressed = false;
+
+  SPtr<Buffer> lights;
+
+  Vector3f color;
 };
 
 }

@@ -182,17 +182,27 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
-  ResoureManager::instancePtr()->models.insert({ "triangle",newSPtr<Model>() });
+  auto model = newSPtr<Model>();
 
-  /*ResoureManager::instancePtr()->models["triangle"]->textures.
-    push_back(ResoureManager::instancePtr()->textures["textures/wall.jpg"]);*/
-  ResoureManager::instancePtr()->models["triangle"]->meshes.
-    push_back(ResoureManager::instancePtr()->meshes["triangle"]);
+  model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
 
+  ResoureManager::instancePtr()->materials["default"]->textures.push_back(
+  ResoureManager::instancePtr()->textures["textures/wall.jpg"]
+  );
+
+  model->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
+
+  testObject = newSPtr<Object>();
+
+  testObject->attachComponent(newSPtr<GraphicsComponent>());
+
+  testObject->getComponent<GraphicsComponent>()->model = model;
+
+ 
 
   /*character = newSPtr<Object>();
 
-  //auto model = newSPtr<Model>();
+  //
 
   auto charmod = newSPtr<Model>();
 
@@ -305,6 +315,16 @@ void TestApp::postInit()
   cam->updateView();
 
   cam->updateProyection();
+
+  scene = newSPtr<Object>();
+
+  scene->name = "scene";
+
+   scene->attach(testObject);
+
+   lights = GraphicAPI::instancePtr()->createBuffer();
+
+   lights->init(sizeof(Vector4f));
 }
 
 
@@ -353,6 +373,8 @@ void TestApp::update(float delta)
   cam->updateView();
 
   //character->update();
+
+  lights->update(&color.x);
 }
 
 void TestApp::draw()
@@ -372,6 +394,8 @@ void TestApp::draw()
   auto seenObjects = cam->seeObjects(ResoureManager::instancePtr()->rendereableObjects);
 
   for(auto object : seenObjects){
+
+   
     
     auto mat = object->getGlobalTransform();
 
@@ -383,7 +407,9 @@ void TestApp::draw()
 
       model->materials[i]->set();
 
-      GraphicAPI::instancePtr()->setBuffer(object->transformB, 0);
+      GraphicAPI::instancePtr()->setVSBuffer(object->transformB, 0);
+
+      GraphicAPI::instancePtr()->setPSBuffer(lights,0);
 
       auto actualMesh = model->meshes[i];
 
@@ -394,7 +420,7 @@ void TestApp::draw()
       if(actualMesh->hasBones){
         actualMesh->bonesB->update(actualMesh->ofset.data());
 
-        GraphicAPI::instancePtr()->setBuffer( actualMesh->bonesB,3);
+        GraphicAPI::instancePtr()->setVSBuffer( actualMesh->bonesB,3);
       }
      
 
@@ -481,22 +507,25 @@ void oaEngineSDK::TestApp::drawImGui()
     actualObject = testObject;
   }
   ImGui::End();
-
+  */
   ImGui::Begin("transform");
-  Vector3f vec = actualObject->getLocation();
-  if(ImGui::DragFloat3("location", &vec.x, .01f)){
-    actualObject->setLocation(vec);
+  if(actualObject.get()){
+    Vector3f vec = actualObject->getLocation();
+    if(ImGui::DragFloat3("location", &vec.x, .01f)){
+      actualObject->setLocation(vec);
+    }
+    vec = actualObject->getScale();
+    if(ImGui::DragFloat3("scale", &vec.x, .01f)){
+      actualObject->setScale(vec);
+    }
+    vec = actualObject->getRotation();
+    if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+      actualObject->setRotation(vec);
+    };
   }
-  vec = actualObject->getScale();
-  if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-    actualObject->setScale(vec);
-  }
-  vec = actualObject->getRotation();
-  if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-    actualObject->setRotation(vec);
-  };
+  
   ImGui::End();
-
+  
   ImGui::Begin("textures");
   for(auto texture : ResoureManager::instancePtr()->textures){
     if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
@@ -510,10 +539,44 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
       material.second->textures[0] = actualTexture;
     }
-    
   }
-  ImGui::End();*/
+  ImGui::End();
+
+  ImGui::Begin("meshes");
+  for(auto mesh : ResoureManager::instancePtr()->meshes){
+    if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
+      actualMesh = mesh.second;
+    }
+  }
+  ImGui::End();
   
+  ImGui::Begin("models");
+  for(auto model : ResoureManager::instancePtr()->models){
+    if(ImGui::Button(model.first.c_str(),ImVec2(100,100))){
+      actualModel = model.second;
+    }
+  }
+  ImGui::End();
+
+  ImGui::Begin("objects");
+  /*if(ImGui::Button("new object")){
+
+  }*/
+  childsInImgui(scene);
+  ImGui::End();
+
+  ImGui::Begin("lighs");
+  ImGui::ColorPicker3("ambient",&color.x);
+  ImGui::End();
+}
+
+void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)
+{
+  for(SPtr<Object> object : parentObject->getChilds()){
+    if(ImGui::Button(object->name.c_str(),ImVec2(100,100))){
+      actualObject = object;
+    }
+  }
 }
 
 }

@@ -30,6 +30,11 @@ struct Vertex{
   Vector3f location;
 
   /**
+   * @brief the normal at this vertex
+  */
+  Vector3f Normal;
+
+  /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
@@ -46,14 +51,10 @@ struct AnimationVertex{
   */
   Vector4U ids = Vector4U::ZERO;
 
-  Vector4U ids2 = Vector4U::ZERO;
-
   /**
    * @brief how much each bone afects this vertex
   */
   Vector4f weights = Vector4f::ZERO;
-
-  Vector4U weights2 = Vector4U::ZERO;
 
   /**
    * @brief the location in a tridimencional space of this vetrex
@@ -64,11 +65,6 @@ struct AnimationVertex{
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
-
-  /**
-   * @brief for compliting the space
-  */
-  Vector2f none;
 
 };
 
