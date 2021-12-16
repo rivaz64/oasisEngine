@@ -260,7 +260,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
 void
 ResoureManager::generatePlane()
 {
-  meshes.insert({ "plane",newSPtr<Mesh>() });
+  /*meshes.insert({ "plane",newSPtr<Mesh>() });
   Vector<Vertex> vertices = {
     Vertex{ Vector3f(-.5f, -.5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(0.0f, 0.0f) },
     Vertex{ Vector3f(.5f, -.5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(1.0f, 0.0f) },
@@ -273,7 +273,7 @@ ResoureManager::generatePlane()
     2,1,3,
   };
 
-  meshes["plane"]->create(vertices,index);
+  meshes["plane"]->create(vertices,index);*/
 
 }
 
@@ -282,35 +282,30 @@ ResoureManager::generateCube()
 {
   meshes.insert({ "cube",newSPtr<Mesh>() });
   Vector<Vertex> vertices = {
-    Vertex{ Vector3f(-.5f, .5f, -.5f),Vector3f(0.0f,1.0f, 0.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, -.5f),Vector3f(0.0f,1.0f, 0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, .5f), Vector3f(0.0f,1.0f, 0.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, .5f, .5f),Vector3f(0.0f,1.0f, 0.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector3f(-.5f, -.5f, -.5f),Vector3f(0.0f,-1.0f, 0.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, -.5f),Vector3f(0.0f,-1.0f, 0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, .5f),Vector3f(0.0f,-1.0f, 0.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, -.5f, .5f),Vector3f(0.0f,-1.0f, 0.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector3f(-.5f, -.5f, .5f), Vector3f(-1.0f,0.0f, 0.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(-.5f, -.5f, -.5f),Vector3f(-1.0f,0.0f, 0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(-.5f, .5f, -.5f), Vector3f(-1.0f,0.0f, 0.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, .5f, .5f),  Vector3f(-1.0f,0.0f, 0.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector3f(.5f, -.5f, .5f), Vector3f(1.0f,0.0f, 0.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, -.5f),Vector3f(1.0f,0.0f, 0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, -.5f), Vector3f(1.0f,0.0f, 0.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(.5f, .5f, .5f), Vector3f(1.0f,0.0f, 0.0f),Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector3f(-.5f, -.5f, -.5f), Vector3f(0.0f,0.0f, -1.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, -.5f), Vector3f(0.0f,0.0f, -1.0f),Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, -.5f), Vector3f(0.0f,0.0f, -1.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, .5f, -.5f),Vector3f(0.0f,0.0f, -1.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector3f(-.5f, -.5f, .5f),Vector3f(0.0f,0.0f, -1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, .5f),Vector3f(0.0f,0.0f, -1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, .5f),Vector3f(0.0f,0.0f, -1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, .5f, .5f),Vector3f(0.0f,0.0f, -1.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, .5f,  .5f ,0.0f), Vector4f(0.0f,1.0f,  0.0f,0.0f),Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f), Vector4f(-1.0f,0.0f, 0.0f,0.0f),Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 1.0f) },
   };
 
   Vector<uint32> index = {

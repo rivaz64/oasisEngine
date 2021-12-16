@@ -324,7 +324,7 @@ void TestApp::postInit()
 
    lights = GraphicAPI::instancePtr()->createBuffer();
 
-   lights->init(sizeof(Vector4f));
+   lights->init(sizeof(Vector4f)*2);
 }
 
 
@@ -567,6 +567,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("lighs");
   ImGui::ColorPicker3("ambient",&color.x);
+  ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
   ImGui::End();
 }
 

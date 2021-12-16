@@ -166,7 +166,7 @@ Vector<SPtr<Object>> Camera::seeObjects(const Vector<SPtr<Object>>& objects)
 
   }
 
-  return ans;
+  return objects;
 }
 
 }

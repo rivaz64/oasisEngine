@@ -7,6 +7,7 @@
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
 #include "oaSceneGraph.h"
+#include "oaVector4f.h"
 
 namespace oaEngineSDK{
 
@@ -85,7 +86,10 @@ public:
 
   SPtr<Buffer> lights;
 
-  Vector3f color;
+  Vector4f color;
+
+  Vector4f dir;
+
 };
 
 }

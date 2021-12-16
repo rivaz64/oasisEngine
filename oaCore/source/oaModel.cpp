@@ -197,7 +197,10 @@ Model::loadFromFile(String file)
       for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
         Vertex actualVertex;
 
-        actualVertex.location = *reinterpret_cast<Vector3f*>(&aMesh->mVertices[numVertex]);
+        actualVertex.location.x = aMesh->mVertices[numVertex].x;
+        actualVertex.location.y = aMesh->mVertices[numVertex].y;
+        actualVertex.location.z = aMesh->mVertices[numVertex].z;
+        actualVertex.location.w = 1.0f;
 
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;

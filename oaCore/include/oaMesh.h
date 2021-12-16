@@ -27,12 +27,12 @@ struct Vertex{
   /**
    * @brief the location in a tridimencional space of this vetrex
   */
-  Vector3f location;
+  Vector4f location;
 
   /**
    * @brief the normal at this vertex
   */
-  Vector3f Normal;
+  Vector4f Normal;
 
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
