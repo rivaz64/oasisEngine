@@ -7,7 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
-#include "oaVector3U.h"
+#include "oaVector3I.h"
 
 namespace oaEngineSDK{
 
@@ -35,7 +35,7 @@ class Grid3D
    * @return 
   */
   FORCEINLINE T
-  getAt(const Vector3U& location){
+  getAt(const Vector3I& location) const {
     OA_ASSERT(location.x<size.x && location.y<size.y && location.z<size.z);
     return data[location.z*size.y*size.x+location.y*size.x+location.x];
   }
@@ -45,7 +45,7 @@ class Grid3D
    * @param location 
   */
   FORCEINLINE void
-  setAt(const Vector3U& location, T value){
+  setAt(const Vector3I location, T value){
     OA_ASSERT(location.x<size.x && location.y<size.y && location.z<size.z);
     data[location.z*size.y*size.x+location.y*size.x+location.x] = value;
   }
@@ -55,8 +55,19 @@ class Grid3D
    * @return 
   */
   FORCEINLINE const Vector3U&
-  getSize(){
+  getSize() const{
     return size;
+  }
+
+  /**
+   * @brief checks if a position is in the grid
+   * @tparam T 
+  */
+  FORCEINLINE bool
+  isIn(const Vector3I& location) const{
+    return location.x>=0 && location.x<size.x &&
+           location.y>=0 && location.y<size.y &&
+           location.z>=0 && location.z<size.z;
   }
 
  private:
@@ -68,6 +79,7 @@ class Grid3D
   Vector3U size;
 };
 
-//Grid3D<bool>;
+Grid3D<bool>;
+Grid3D<float>;
 
 }

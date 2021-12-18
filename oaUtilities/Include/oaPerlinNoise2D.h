@@ -13,6 +13,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a noise generator in 2 dimencions
+*/
 class OA_UTILITY_EXPORT PerlinNoise2D
 {
  public:

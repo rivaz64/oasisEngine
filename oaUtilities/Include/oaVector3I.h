@@ -7,6 +7,7 @@
 #pragma once
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector2I.h"
+#include "oaVector3U.h"
 
 namespace oaEngineSDK{
 /**
@@ -119,6 +120,15 @@ class OA_UTILITY_EXPORT Vector3I
   }
 
 public:
+
+  static const Vector3I RIGHT;
+  static const Vector3I LEFT;
+  static const Vector3I UP;
+  static const Vector3I DOWN;
+  static const Vector3I FRONT;
+  static const Vector3I BACK;
+
+  static const Vector<const Vector3I*> DIRECTIONS;
 
   union{
 

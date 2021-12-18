@@ -8,6 +8,7 @@
 #include "oaDepthStencil.h"
 #include "oaSceneGraph.h"
 #include "oaVector4f.h"
+#include "oaChunk.h"
 
 namespace oaEngineSDK{
 
@@ -90,6 +91,7 @@ public:
 
   Vector4f dir;
 
+  SPtr<Chunk> chnk;
 };
 
 }

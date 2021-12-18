@@ -9,6 +9,7 @@
 #include "oaInputManager.h"
 #include "oaGrid2D.h"
 #include "oaPerlinNoise2D.h"
+#include "oaPerlinNoise3D.h"
 #include "oaMaterial.h"
 #include "oaGraphicsComponent.h"
 #include "oaSkeletalComponent.h"
@@ -184,7 +185,7 @@ void TestApp::postInit()
 
   auto model = newSPtr<Model>();
 
-  model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
+  //model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
 
   ResoureManager::instancePtr()->materials["default"]->textures.push_back(
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
@@ -284,27 +285,7 @@ void TestApp::postInit()
 
   mesh->model =  ResoureManager::instancePtr()->models["test"];
 
-  /*Grid3D<bool> chunck({16u,16u,16u});
-
-  PerlinNoise2D::fillGrid(chunck,8,6,4);
-
-  auto& lista = ResoureManager::instancePtr()->rendereableObjects;
-
-  Vector3U position;
-  for(position.x = 0;position.x< 16; ++position.x){
-    for(position.y = 0;position.y< 16; ++position.y){
-      for(position.z = 0;position.z< 16; ++position.z){
-        if(chunck.getAt(position)){
-          auto temp =  newSPtr<Object>();
-          temp->attachComponent(mesh);
-          temp->setLocation(position);
-          scene->attach(temp); 
-        }
-        
-      }
-      
-    }
-  }*/
+  */
   cam = newSPtr<Camera>();
 
   cam->angle = 0.785398163f;
@@ -320,11 +301,26 @@ void TestApp::postInit()
 
   scene->name = "scene";
 
-   scene->attach(testObject);
+   
 
    lights = GraphicAPI::instancePtr()->createBuffer();
 
    lights->init(sizeof(Vector4f)*2);
+   
+   chnk = newSPtr<Chunk>();
+
+   Grid3D<float> chunck({16u,16u,16u});
+
+  PerlinNoise3D::fillGrid(chunck,8);
+
+  //PerlinNoise2D::fillGrid(chunck,8,6,4);
+
+  chnk->init(chunck);
+
+  testObject->getComponent<GraphicsComponent>()->model->meshes.push_back(chnk);
+  scene->attach(testObject); 
+
+  
 }
 
 

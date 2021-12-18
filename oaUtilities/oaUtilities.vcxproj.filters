@@ -108,6 +108,9 @@
     <ClInclude Include="Include\oaVector4U.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\oaPerlinNoise3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -183,6 +186,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaVector4U.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaPerlinNoise3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

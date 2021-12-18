@@ -32,7 +32,7 @@ struct Vertex{
   /**
    * @brief the normal at this vertex
   */
-  Vector4f Normal;
+  Vector4f normal;
 
   /**
    * @brief the part of the texture that is going to be drawn at a certain point

@@ -228,10 +228,32 @@ class OA_UTILITY_EXPORT Vector3f
   }
 
   /**
+   * @brief converts a vector2f to a vector2I with floor
+   * @return 
+  */
+  FORCEINLINE Vector3I 
+  floor() const{
+    return Vector3I(
+      static_cast<int32>(Math::floor(x)),
+      static_cast<int32>(Math::floor(y)),
+      static_cast<int32>(Math::floor(z))
+    );
+  }
+
+  /**
+   * @brief returns the fractional value of each 
+   * @return 
+  */
+  FORCEINLINE Vector3f
+  fraction() const{
+    return Vector3f(Math::modf(x,1.0f),Math::modf(y,1.0f),Math::modf(z,1.0f));
+  }
+
+  /**
    * @brief rotates the vector with the quaternion q
    * @param q
   */
-  FORCEINLINE void 
+  void 
   rotate(const Quaternion& q);
 
   /**

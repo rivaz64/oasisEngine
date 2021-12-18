@@ -184,6 +184,7 @@
     <ClInclude Include="Include\oaMatrix4f.h" />
     <ClInclude Include="include\oaModule.h" />
     <ClInclude Include="Include\oaPerlinNoise2D.h" />
+    <ClInclude Include="Include\oaPerlinNoise3D.h" />
     <ClInclude Include="include\oaPlane.h" />
     <ClInclude Include="Include\oaPlatformDefines.h" />
     <ClInclude Include="Include\oaPlatformMath.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Source\oaMatrix3f.cpp" />
     <ClCompile Include="Source\oaMatrix4f.cpp" />
     <ClCompile Include="Source\oaPerlinNoise2D.cpp" />
+    <ClCompile Include="Source\oaPerlinNoise3D.cpp" />
     <ClCompile Include="source\oaPlane.cpp" />
     <ClCompile Include="Source\oaPlatformMath.cpp" />
     <ClCompile Include="Source\oaQuaternion.cpp" />

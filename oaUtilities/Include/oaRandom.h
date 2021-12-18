@@ -6,11 +6,10 @@
 
 #pragma once
 #include "oaPrerequisitesUtilities.h"
-#include "oaVector2f.h"
 
 namespace oaEngineSDK {
 
-class Random
+class OA_UTILITY_EXPORT Random
 {
  public:
   /**
@@ -37,21 +36,66 @@ class Random
    * @return 
   */
   static float 
+  noise1D(const float point);
+
+  /**
+   * @brief the value of a 2d noise at a certain point
+   * @param point 
+   * @return 
+  */
+  static float 
   noise2D(const Vector2f& point);
+
+  /**
+   * @brief the value of a 3d noise at a certain point
+   * @param point 
+   * @return 
+  */
+  static float 
+  noise3D(const Vector3f& point);
 
   /**
    * @brief generaates a random 2d vector
    * @return 
   */
   static Vector2f
-  vector();
+  vector2();
 
   /**
    * @brief generaates a random 2d vector at a certain point
    * @return 
   */
   static Vector2f
-  vector(const Vector2f& point);
+  vector2(const Vector2f& point);
+
+  /**
+   * @brief generates a random number with a gaussian distribution 
+   * @return 
+  */
+  static float
+  gaussian();
+
+  /**
+   * @brief generates a random number with a gaussian distribution 
+   * @return 
+  */
+  static float
+  gaussian(const float point);
+
+
+  /**
+   * @brief generaates a random 3d vector
+   * @return 
+  */
+  static Vector3f
+  vector3();
+
+  /**
+   * @brief generaates a random 3d vector
+   * @return 
+  */
+  static Vector3f
+  vector3(const Vector3f& point);
 };
 
 }
