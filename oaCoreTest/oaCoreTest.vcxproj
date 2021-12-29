@@ -176,12 +176,14 @@
     <ClCompile Include="..\externals\imgui_widgets.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="oaChunk.cpp" />
+    <ClCompile Include="oaMarchingCubes.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="oaChunk.h" />
+    <ClInclude Include="oaMarchingCubes.h" />
     <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

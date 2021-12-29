@@ -32,7 +32,7 @@ class Chunk :
    * @param data 
   */
   void
-  createCubeAt(const Vector3I& position,const Grid3D<float>& data);
+  createCubeAt(const Vector3U& position,const Grid3D<float>& data);
 
   /**
    * @brief if in this position should be a cube
@@ -41,7 +41,7 @@ class Chunk :
    * @return 
   */
   bool 
-  hasCube(const Vector3I& position,const Grid3D<float>& data);
+  hasCube(const Vector3U& position,const Grid3D<float>& data);
 
   /**
    * @brief the indices for the chunk

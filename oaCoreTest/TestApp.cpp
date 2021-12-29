@@ -17,6 +17,7 @@
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
 #include "oaMesh.h"
+
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -185,6 +186,8 @@ void TestApp::postInit()
 
   auto model = newSPtr<Model>();
 
+  auto modelMC = newSPtr<Model>();
+
   //model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
 
   ResoureManager::instancePtr()->materials["default"]->textures.push_back(
@@ -193,11 +196,21 @@ void TestApp::postInit()
 
   model->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
 
+  modelMC->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
+
   testObject = newSPtr<Object>();
 
   testObject->attachComponent(newSPtr<GraphicsComponent>());
 
   testObject->getComponent<GraphicsComponent>()->model = model;
+
+
+
+  testObjectMC = newSPtr<Object>();
+
+  testObjectMC->attachComponent(newSPtr<GraphicsComponent>());
+
+  testObjectMC->getComponent<GraphicsComponent>()->model = modelMC;
 
  
 
@@ -303,24 +316,46 @@ void TestApp::postInit()
 
    
 
-   lights = GraphicAPI::instancePtr()->createBuffer();
+  lights = GraphicAPI::instancePtr()->createBuffer();
 
-   lights->init(sizeof(Vector4f)*2);
-   
-   chnk = newSPtr<Chunk>();
+  lights->init(sizeof(Vector4f)*2);
+  
+  chnk = newSPtr<Chunk>();
 
-   Grid3D<float> chunck({16u,16u,16u});
+  mc = newSPtr<MarchingCubes>();
 
-  PerlinNoise3D::fillGrid(chunck,8);
+  Grid3D<float> chunck({16u,16u,16u});
+
+  /*chunck.setAt({0,0,0},1.f);
+  chunck.setAt({1,0,0},-1.f);
+  chunck.setAt({0,1,0},1.f);
+  chunck.setAt({0,0,1},-1.f);
+  chunck.setAt({1,1,0},-1.f);
+  chunck.setAt({1,0,1},-1.f);
+  chunck.setAt({0,1,1},-1.f);
+  chunck.setAt({1,1,1},-1.f);*/
+
+
+
+  PerlinNoise3D::fillGrid(chunck,4);
 
   //PerlinNoise2D::fillGrid(chunck,8,6,4);
 
   chnk->init(chunck);
 
+  mc->init(chunck);
+
   testObject->getComponent<GraphicsComponent>()->model->meshes.push_back(chnk);
+
+  testObjectMC->getComponent<GraphicsComponent>()->model->meshes.push_back(mc);
+
+  testObject->name = "chunk";
+
+  testObjectMC->name = "marching cube";
+
   scene->attach(testObject); 
 
-  
+  scene->attach(testObjectMC); 
 }
 
 

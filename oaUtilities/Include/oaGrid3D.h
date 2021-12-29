@@ -35,7 +35,7 @@ class Grid3D
    * @return 
   */
   FORCEINLINE T
-  getAt(const Vector3I& location) const {
+  getAt(const Vector3U& location) const {
     OA_ASSERT(location.x<size.x && location.y<size.y && location.z<size.z);
     return data[location.z*size.y*size.x+location.y*size.x+location.x];
   }

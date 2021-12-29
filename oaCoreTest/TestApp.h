@@ -9,6 +9,7 @@
 #include "oaSceneGraph.h"
 #include "oaVector4f.h"
 #include "oaChunk.h"
+#include "oaMarchingCubes.h"
 
 namespace oaEngineSDK{
 
@@ -53,6 +54,8 @@ public:
 
    SPtr<Object> testObject;
 
+   SPtr<Object> testObjectMC;
+
    SPtr<Camera> cam;
 
    SPtr<SamplerState> samsta;
@@ -92,6 +95,8 @@ public:
   Vector4f dir;
 
   SPtr<Chunk> chnk;
+
+  SPtr<MarchingCubes> mc;
 };
 
 }

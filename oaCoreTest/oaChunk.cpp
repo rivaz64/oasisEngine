@@ -48,11 +48,11 @@ Vector<Vector<Vertex>> quads = {
 void 
 Chunk::init(const Grid3D<float>& data)
 {
-  Vector3I position;
-  for(position.x = 0; position.x<data.getSize().x;++position.x){
-    for(position.y = 0; position.y<data.getSize().y;++position.y){
-      for(position.z = 0; position.z<data.getSize().z;++position.z){
-        print(std::to_string(data.getAt(position)));
+  Vector3U position;
+  Vector3U size = data.getSize();
+  for(position.x = 0; position.x<size.x;++position.x){
+    for(position.y = 0; position.y<size.y;++position.y){
+      for(position.z = 0; position.z<size.z;++position.z){
         if(hasCube(position,data)){
           createCubeAt(position,data);
         }
@@ -62,12 +62,13 @@ Chunk::init(const Grid3D<float>& data)
   create(vertices,indices);
 }
 
-void Chunk::createCubeAt(const Vector3I& position,const Grid3D<float>& data)
+void 
+Chunk::createCubeAt(const Vector3U& position,const Grid3D<float>& data)
 {
   uint8 i = 0;
   for(auto direction: Vector3I::DIRECTIONS){
     uint32 actual = vertices.size();
-    auto newVec = position+*direction;
+    auto newVec = Vector3I(position.x,position.y,position.z)+*direction;
     if(!data.isIn(newVec)){
       for(auto quad: quads[i]){
         auto vertex = quad;
@@ -83,7 +84,7 @@ void Chunk::createCubeAt(const Vector3I& position,const Grid3D<float>& data)
       indices.push_back(actual+1);
       indices.push_back(actual+3);
     }
-    else if(!hasCube(newVec,data)){
+    else if(!hasCube(Vector3U(newVec.x,newVec.y,newVec.z),data)){
       for(auto quad: quads[i]){
         auto vertex = quad;
         vertex.location.x += position.x + .5f;
@@ -105,7 +106,8 @@ void Chunk::createCubeAt(const Vector3I& position,const Grid3D<float>& data)
   }
 }
 
-bool Chunk::hasCube(const Vector3I& position, const Grid3D<float>& data)
+bool 
+Chunk::hasCube(const Vector3U& position, const Grid3D<float>& data)
 {
   return data.getAt(position) >0.0f;
 }
