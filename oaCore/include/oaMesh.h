@@ -123,6 +123,24 @@ class Mesh
 
   }
 
+  /**
+   * @brief creates the normals based on the the triangles
+   * @param vertices 
+   * @param index 
+  */
+  static void
+  createNormals(Vector<Vertex>& vertices){
+    uint32 size = vertices.size();
+    for(uint32 i=0;i<size;i+=3){
+      Vector3f v1 = vertices[i+1].location.xyz-vertices[i].location.xyz;
+      Vector3f v2 = vertices[i+2].location.xyz-vertices[i].location.xyz;
+      Vector3f normal = Vector3f::cross(v1,v2);
+      vertices[i].normal = Vector4f(normal,0.0f);
+      vertices[i+1].normal = Vector4f(normal,0.0f);
+      vertices[i+2].normal = Vector4f(normal,0.0f);
+    }
+  }
+
  public:
 
   /**

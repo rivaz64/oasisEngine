@@ -295,6 +295,7 @@ void MarchingCubes::init(const Grid3D<float>& data)
       }
     }
   }
+  createNormals(vertices);
   create(vertices,indices);
 }
 
