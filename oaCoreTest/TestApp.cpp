@@ -17,7 +17,8 @@
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
 #include "oaMesh.h"
-
+#include "oaSimplexNoise.h"
+#include "oaOctavesNoise.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -184,7 +185,9 @@ void TestApp::postInit()
 
   ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
 
-  auto model = newSPtr<Model>();
+  auto model1 = newSPtr<Model>();
+
+  auto model2 = newSPtr<Model>();
 
   auto modelMC = newSPtr<Model>();
 
@@ -194,23 +197,31 @@ void TestApp::postInit()
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
   );
 
-  model->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
+  model1->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
+
+  model2->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
 
   modelMC->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
 
-  testObject = newSPtr<Object>();
+  testObject1 = newSPtr<Object>();
 
-  testObject->attachComponent(newSPtr<GraphicsComponent>());
+  testObject2 = newSPtr<Object>();
 
-  testObject->getComponent<GraphicsComponent>()->model = model;
+  testObject1->attachComponent(newSPtr<GraphicsComponent>());
+
+  testObject2->attachComponent(newSPtr<GraphicsComponent>());
+
+  testObject1->getComponent<GraphicsComponent>()->model = model1;
+
+  testObject2->getComponent<GraphicsComponent>()->model = model2;
 
 
 
   testObjectMC = newSPtr<Object>();
 
-  testObjectMC->attachComponent(newSPtr<GraphicsComponent>());
+  //testObjectMC->attachComponent(newSPtr<GraphicsComponent>());
 
-  testObjectMC->getComponent<GraphicsComponent>()->model = modelMC;
+  //testObjectMC->getComponent<GraphicsComponent>()->model = modelMC;
 
  
 
@@ -324,7 +335,18 @@ void TestApp::postInit()
 
   mc = newSPtr<MarchingCubes>();
 
-  Grid3D<float> chunck({16u,16u,16u});
+  pt1 = newSPtr<ProceduralTerrain>();
+  pt2 = newSPtr<ProceduralTerrain>();
+
+  Grid2D<float> chunck1({32u,32u});
+  Grid2D<float> chunck2({32u,32u});
+
+  noise1 = newSPtr<OctavesNoise>();
+  noise2 = newSPtr<PerlinNoise2D>();
+
+  Vector<float> amplitudes{1,.5,.25};
+
+  cast<OctavesNoise>(noise1)->init(newSPtr<PerlinNoise2D>(),amplitudes);
 
   /*chunck.setAt({0,0,0},1.f);
   chunck.setAt({1,0,0},-1.f);
@@ -337,25 +359,52 @@ void TestApp::postInit()
 
 
 
-  PerlinNoise3D::fillGrid(chunck,4);
+  //PerlinNoise3D::fillGrid(chunck,3);
 
-  //PerlinNoise2D::fillGrid(chunck,8,6,4);
+  //PerlinNoise2D::fillGrid(chunck,7);
+  //SimplexNoise::fillGrid(chunck,15);
 
-  chnk->init(chunck);
+  /*chnk->init(chunck);
 
-  mc->init(chunck);
+  mc->init(chunck);*/
 
-  testObject->getComponent<GraphicsComponent>()->model->meshes.push_back(chnk);
+  noise1->fillGrid(chunck1,15);
+  noise2->fillGrid(chunck2,15);
 
-  testObjectMC->getComponent<GraphicsComponent>()->model->meshes.push_back(mc);
+  pt1->init(chunck1);
+  pt2->init(chunck2);
 
-  testObject->name = "chunk";
+  auto testMesh = newSPtr<Mesh>();
+
+ /* auto datos = icosahedron();
+
+  datos = SubDivide(datos);
+  datos = SubDivide(datos);
+  datos = SubDivide(datos);
+
+  for(auto& v : datos.points){
+    v += v*.125*PerlinNoise3D::valueAt(v.xyz*.5+Vector3f(7,7,7));
+  }
+
+  testMesh->initFromSubMesh(datos);*/
+
+  testObject1->getComponent<GraphicsComponent>()->model->meshes.push_back(pt1);
+
+  testObject2->getComponent<GraphicsComponent>()->model->meshes.push_back(pt2);
+
+  //testObjectMC->getComponent<GraphicsComponent>()->model->meshes.push_back(mc);
+
+  testObject1->name = "octaves";
+
+  testObject2->name = "vanilla";
 
   testObjectMC->name = "marching cube";
 
-  scene->attach(testObject); 
+  scene->attach(testObject1);
+  
+  scene->attach(testObject2); 
 
-  scene->attach(testObjectMC); 
+  //scene->attach(testObjectMC); 
 }
 
 
@@ -609,6 +658,127 @@ void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)
       actualObject = object;
     }
   }
+}
+
+
+
+
+
+SubMesh
+oaEngineSDK::TestApp::tetrahedron()
+{
+  SubMesh ans;
+  float sq2 = Math::sqrt(2.0f);
+  float sq3 = Math::sqrt(3.0f);
+  ans.points = {
+    {0.0f,0.0f,1.0f,0.0f},
+    {2.0f*sq2/3.0f,0.0f,-1.0f/3.0f,0.0f},
+    {-sq2/3.0f,sq2/sq3,-1.0f/3.0f,0.0f},
+    {-sq2/3.0f,-sq2/sq3,-1.0f/3.0f,0.0f},
+  };
+
+  ans.indices = {0,1,2,0,2,3,0,3,1,1,3,2};
+
+  return ans;
+}
+
+SubMesh
+oaEngineSDK::TestApp::octahedron()
+{
+  SubMesh ans;
+  ans.points = {
+    {0.0f,0.0f, 1.0f,0.0f},
+    {0.0f,0.0f,-1.0f,0.0f},
+    {0.0f, 1.0f,0.0f,0.0f},
+    {0.0f,-1.0f,0.0f,0.0f},
+    { 1.0f,0.0f,0.0f,0.0f},
+    {-1.0f,0.0f,0.0f,0.0f},
+  };
+  ans.indices = {0,4,2,0,3,4,0,5,3,0,2,5,1,2,4,1,4,3,1,3,5,1,5,2};
+
+  return ans;
+}
+
+SubMesh
+oaEngineSDK::TestApp::icosahedron()
+{
+  float phi = (Math::sqrt(5)+1.0f)/2.0f;
+  Vector2f v{1.0f,phi};
+  v.normalize();
+
+  SubMesh ans;
+
+  ans.points = {
+    {-v.x, v.y,0.0f,0.0f},
+    { v.x, v.y,0.0f,0.0f},
+    {-v.x,-v.y,0.0f,0.0f},
+    { v.x,-v.y,0.0f,0.0f},
+
+    {0.0f,-v.x, v.y,0.0f},
+    {0.0f, v.x, v.y,0.0f},
+    {0.0f,-v.x,-v.y,0.0f},
+    {0.0f, v.x,-v.y,0.0f},
+    
+    { v.y,0.0f,-v.x,0.0f},
+    { v.y,0.0f, v.x,0.0f},
+    {-v.y,0.0f,-v.x,0.0f},
+    {-v.y,0.0f, v.x,0.0f},
+    
+  };
+
+  ans.indices = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
+                 7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
+                 9,8,1};
+
+  return ans;
+}
+
+SubMesh 
+oaEngineSDK::TestApp::SubDivide(const SubMesh& data)
+{
+  uint32 size = data.indices.size();
+  SubMesh ans;
+  for(int i = 0;i<size;i+=3){
+    Vector3f oldPoints[3]={
+      data.points[data.indices[i]].xyz,
+      data.points[data.indices[i+1]].xyz,
+      data.points[data.indices[i+2]].xyz,
+    };
+    Vector3f newPoints[3]={
+    Vector3f::interpolate(oldPoints[1],oldPoints[2],.5f).normalized(),
+    Vector3f::interpolate(oldPoints[0],oldPoints[2],.5f).normalized(),
+    Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized()
+    };
+
+    int actual = ans.points.size();
+
+    ans.points.push_back(Vector4f(oldPoints[0],0.0f));
+    ans.points.push_back(Vector4f(oldPoints[1],0.0f));
+    ans.points.push_back(Vector4f(oldPoints[2],0.0f));
+    ans.points.push_back(Vector4f(newPoints[0],0.0f));
+    ans.points.push_back(Vector4f(newPoints[1],0.0f));
+    ans.points.push_back(Vector4f(newPoints[2],0.0f));
+
+    
+
+    ans.indices.push_back(actual);
+    ans.indices.push_back(actual+5);
+    ans.indices.push_back(actual+4);
+
+    ans.indices.push_back(actual+1);
+    ans.indices.push_back(actual+3);
+    ans.indices.push_back(actual+5);
+
+    ans.indices.push_back(actual+2);
+    ans.indices.push_back(actual+4);
+    ans.indices.push_back(actual+3);
+
+    ans.indices.push_back(actual+3);
+    ans.indices.push_back(actual+4);
+    ans.indices.push_back(actual+5);
+
+  }
+  return ans;
 }
 
 }

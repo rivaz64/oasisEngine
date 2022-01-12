@@ -51,6 +51,9 @@
     <ClCompile Include="oaMarchingCubes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="oaProceduralTerrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestApp.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="oaMarchingCubes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oaProceduralTerrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

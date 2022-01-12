@@ -35,7 +35,7 @@ class Grid2D
    * @return 
   */
   FORCEINLINE T
-  getAt(const Vector2U& location){
+  getAt(const Vector2U& location) const{
     OA_ASSERT(location.x<size.x && location.y<size.y);
     return data[location.y*size.x+location.x];
   }
@@ -55,7 +55,7 @@ class Grid2D
    * @return 
   */
   FORCEINLINE const Vector2U&
-  getSize(){
+  getSize() const{
     return size;
   }
 
@@ -68,7 +68,7 @@ class Grid2D
   Vector2U size;
 };
 
-//Grid2D<float>;
+Grid2D<float>;
 
 }
 

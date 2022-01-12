@@ -127,7 +127,7 @@ using Pair = std::pair<T1,T2>;
 template<class T,class U>
 FORCEINLINE SPtr<T> 
 cast(const SPtr<U>& pointer){
-  return std::dynamic_pointer_cast<T>(pointer);
+  return std::reinterpret_pointer_cast<T>(pointer);
 }
 
 template<class T>

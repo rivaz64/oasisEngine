@@ -10,8 +10,12 @@
 #include "oaVector4f.h"
 #include "oaChunk.h"
 #include "oaMarchingCubes.h"
+#include "oaProceduralTerrain.h"
+#include "oaNoise2D.h"
 
 namespace oaEngineSDK{
+
+
 
 class TestApp :
   public BaseApp
@@ -48,11 +52,27 @@ public:
   void
   childsInImgui(SPtr<Object> parentObject);
 
+  SubMesh
+  tetrahedron();
+
+  SubMesh
+  octahedron();
+
+  SubMesh
+  icosahedron();
+
+  SubMesh
+  SubDivide(const SubMesh& data);
+
+  
+
  public:
 
    SPtr<Object> character;
 
-   SPtr<Object> testObject;
+   SPtr<Object> testObject1;
+
+   SPtr<Object> testObject2;
 
    SPtr<Object> testObjectMC;
 
@@ -97,6 +117,13 @@ public:
   SPtr<Chunk> chnk;
 
   SPtr<MarchingCubes> mc;
+
+  SPtr<ProceduralTerrain> pt1;
+  SPtr<ProceduralTerrain> pt2;
+
+  SPtr<Noise2D> noise1;
+
+  SPtr<Noise2D> noise2;
 };
 
 }

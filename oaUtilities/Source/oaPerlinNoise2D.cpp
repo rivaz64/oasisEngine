@@ -26,18 +26,8 @@ PerlinNoise2D::valueAt(const Vector2f& point)
                            pointf.y);
 }
 
-void 
-PerlinNoise2D::fillGrid(Grid2D<float>& grid, float scale)
-{
-  const Vector2U& size = grid.getSize();
-  Vector2U position;
-  for(position.x = 0;position.x< size.y; ++position.x){
-    for(position.y = 0;position.y< size.x; ++position.y){
-      grid.setAt(position,valueAt(Vector2f(position)/scale));
-    }
-  }
-}
 
+/*
 void PerlinNoise2D::fillGrid(Grid3D<bool>& grid, float scale, float bias, float amplitud)
 {
   const Vector3U& size = grid.getSize();
@@ -51,6 +41,6 @@ void PerlinNoise2D::fillGrid(Grid3D<bool>& grid, float scale, float bias, float 
     }
   }
 }
-
+*/
 }
 

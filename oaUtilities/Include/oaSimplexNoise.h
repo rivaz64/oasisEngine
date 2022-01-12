@@ -1,37 +1,36 @@
 /**
- * @file oaPerlinNoise2D.h
+ * @file oaSimplexNoise.h
  * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
- * @date 11/22/2021
+ * @date 1/10/2021
  */
 
 #pragma once
 
-#include "oaPrerequisitesUtilities.h"
 #include "oaVector2f.h"
 #include "oaGrid2D.h"
-#include "oaGrid3D.h"
 #include "oaNoise2D.h"
+
 
 namespace oaEngineSDK{
 
 /**
- * @brief a noise generator in 2 dimencions
+ * @brief perlin noise 2D generation
 */
-class OA_UTILITY_EXPORT PerlinNoise2D :
+class OA_UTILITY_EXPORT SimplexNoise :
   public Noise2D
 {
-
  public:
-
   /**
-   * @brief the value of the perlin noise at a certain point
+   * @brief he value of the simplex noise at a certain point
    * @param point 
    * @return 
   */
   float 
   valueAt(const Vector2f& point) override;
 
-
+ private:
+  static float
+  calculateGradient(const Vector2f& gradient, const Vector2f& offset);
 };
 
 }

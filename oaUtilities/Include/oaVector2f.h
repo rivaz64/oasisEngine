@@ -64,6 +64,16 @@ class OA_UTILITY_EXPORT Vector2f
   }
 
   /**
+  * @brief adds the float v and this one
+   * @param v
+   * @return
+  */
+  FORCEINLINE Vector2f const
+  operator+(float v) const {
+    return { x + v , y + v };
+  }
+
+  /**
    * @brief adds the vector v to this one
    * @param v
   */
@@ -82,6 +92,16 @@ class OA_UTILITY_EXPORT Vector2f
   FORCEINLINE Vector2f const
   operator-(const Vector2f& v) const {
     return { x - v.x , y - v.y };
+  }
+
+  /**
+  * @brief minus the float v and this one
+   * @param v
+   * @return
+  */
+  FORCEINLINE Vector2f const
+  operator-(float v) const {
+    return { x - v , y - v };
   }
 
   /**

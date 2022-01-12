@@ -12,7 +12,7 @@
 namespace oaEngineSDK{
 
 class MarchingCubes :
-    public Mesh
+  public Mesh
 {
  public:
 

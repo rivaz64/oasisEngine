@@ -19,6 +19,20 @@
 #include <iostream>
 
 namespace oaEngineSDK{
+/**
+ * @brief previus data for creating a mesh
+*/
+struct SubMesh{
+  /**
+   * @brief the location of the vertex
+  */
+  Vector<Vector4f> points;
+
+  /**
+   * @brief a temporal list of index
+  */
+  Vector<uint32> indices;
+};
 
 /**
  * @brief a structure for all the information at a certain point of a Mesh
@@ -123,13 +137,32 @@ class Mesh
 
   }
 
+  void
+  initFromSubMesh(const SubMesh& sm)
+  {
+    Vector<Vertex> vertices;
+    Vector<uint32> indices;
+    uint32 size = sm.indices.size();
+    vertices.resize(size);
+    for(int32 i=0;i<size;++i){
+      vertices[i].textureCord = Vector2f(0,0);
+      vertices[i].location = sm.points[sm.indices[i]];
+      indices.push_back(indices.size());
+    }
+  
+    Mesh::createNormals(vertices);
+  
+    create(vertices,indices);
+  }
+
   /**
    * @brief creates the normals based on the the triangles
    * @param vertices 
    * @param index 
   */
   static void
-  createNormals(Vector<Vertex>& vertices){
+  createNormals(Vector<Vertex>& vertices)
+  {
     uint32 size = vertices.size();
     for(uint32 i=0;i<size;i+=3){
       Vector3f v1 = vertices[i+1].location.xyz-vertices[i].location.xyz;
@@ -140,6 +173,8 @@ class Mesh
       vertices[i+2].normal = Vector4f(normal,0.0f);
     }
   }
+
+  
 
  public:
 
