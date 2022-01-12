@@ -342,11 +342,12 @@ void TestApp::postInit()
   Grid2D<float> chunck2({32u,32u});
 
   noise1 = newSPtr<OctavesNoise>();
-  noise2 = newSPtr<PerlinNoise2D>();
+  noise2 = newSPtr<OctavesNoise>();
 
   Vector<float> amplitudes{1,.5,.25};
 
   cast<OctavesNoise>(noise1)->init(newSPtr<PerlinNoise2D>(),amplitudes);
+  cast<OctavesNoise>(noise2)->init(newSPtr<PerlinNoise2D>(),amplitudes);
 
   /*chunck.setAt({0,0,0},1.f);
   chunck.setAt({1,0,0},-1.f);
@@ -370,6 +371,9 @@ void TestApp::postInit()
 
   noise1->fillGrid(chunck1,15);
   noise2->fillGrid(chunck2,15);
+
+  noise1->redistribute(chunck1,2,-.125);
+  noise2->redistribute(chunck2,1,-.125);
 
   pt1->init(chunck1);
   pt2->init(chunck2);

@@ -27,6 +27,15 @@ class OA_UTILITY_EXPORT Noise2D
   */
   void
   fillGrid(Grid2D<float>& grid,float scale);
+
+  /**
+   * @brief normalizes all the values and then redistrubtes them
+   * @param grid the data
+   * @param power the power to use in the redistribution
+   * @param minValue the value to set at 0 for the redistribution, every value below this one becomes 0
+  */
+  void
+  redistribute(Grid2D<float>& grid,float power, float minValue);
 };
 
 }

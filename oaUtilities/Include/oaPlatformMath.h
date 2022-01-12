@@ -351,9 +351,9 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  smoothStep(float a, float b, float t){
+  smoothStep(float t){
     OA_ASSERT(t>=0 && t<=1);
-    return (b-a) * (3.0f - t * 2.0f) * t * t + a;
+    return (3.0f - t * 2.0f) * t * t;
   }
 
   /**
@@ -364,9 +364,9 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static FORCEINLINE float
-  smootherStep(float a, float b, float t){
+  smootherStep(float t){
     OA_ASSERT(t>=0 && t<=1);
-    return (b - a) * ((t * (t * 6.0f - 15.0f) + 10.0f) * t * t * t) + a;
+    return ((t * (t * 6.0f - 15.0f) + 10.0f) * t * t * t);
   }
 
   /**

@@ -10,6 +10,9 @@ PerlinNoise2D::valueAt(const Vector2f& point)
   Vector2I pointI = point.floor();
   Vector2f pointf = point.fraction();
 
+  pointf.x = Math::smoothStep(pointf.x);
+  pointf.y = Math::smoothStep(pointf.y);
+
   Vector2f a = Random::vector2(pointI);
   Vector2f b = Random::vector2(pointI+Vector2I(1,0));
   Vector2f c = Random::vector2(pointI+Vector2I(0,1));
