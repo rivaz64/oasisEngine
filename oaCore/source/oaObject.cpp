@@ -33,6 +33,7 @@ Object::attachComponent(SPtr<Component> component)
 {
   component->onAttach(shared_from_this());
   components.insert({component->getType(),component});
+  components[component->getType()] = component;
 }
 
 void 

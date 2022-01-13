@@ -612,68 +612,85 @@ void oaEngineSDK::TestApp::drawImGui()
   }
   ImGui::End();
   */
-  ImGui::Begin("transform");
-  if(actualObject.get()){
-    Vector3f vec = actualObject->getLocation();
-    if(ImGui::DragFloat3("location", &vec.x, .01f)){
-      actualObject->setLocation(vec);
+
+  ImGui::Begin("object atributes");
+  if(actualObject){
+    if(ImGui::Button("Add Component")){
+      isAddingComponent = true;
     }
-    vec = actualObject->getScale();
-    if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-      actualObject->setScale(vec);
+
+    if (ImGui::CollapsingHeader("transform")){
+      
+      if(actualObject.get()){
+        Vector3f vec = actualObject->getLocation();
+        if(ImGui::DragFloat3("location", &vec.x, .01f)){
+          actualObject->setLocation(vec);
+        }
+        vec = actualObject->getScale();
+        if(ImGui::DragFloat3("scale", &vec.x, .01f)){
+          actualObject->setScale(vec);
+        }
+        vec = actualObject->getRotation();
+        if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+          actualObject->setRotation(vec);
+        };
+      }
     }
-    vec = actualObject->getRotation();
-    if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-      actualObject->setRotation(vec);
-    };
-  }
-  
-  ImGui::End();
-  
-  ImGui::Begin("textures");
-  for(auto texture : resourceManager.textures){
-    if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
-      actualTexture = texture.second;
+    if(actualObject->getComponent<GraphicsComponent>()){
+      ImGui::Button("select model");
     }
   }
   ImGui::End();
 
-  ImGui::Begin("materials");
-  for(auto material : resourceManager.materials){
-    if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
-      material.second->textures[0] = actualTexture;
+  ImGui::Begin("resources");
+  
+  if (ImGui::CollapsingHeader("textures")){
+    for(auto texture : resourceManager.textures){
+      if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
+        actualTexture = texture.second;
+      }
     }
   }
-  ImGui::End();
+  
+  if (ImGui::CollapsingHeader("materials")){
+    for(auto material : resourceManager.materials){
+      if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
+        material.second->textures[0] = actualTexture;
+      }
+    }
+  }
 
-  ImGui::Begin("meshes");
-  for(auto mesh : resourceManager.meshes){
-    if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
-      actualMesh = mesh.second;
+  if (ImGui::CollapsingHeader("meshes")){
+    for(auto mesh : resourceManager.meshes){
+      if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
+        actualMesh = mesh.second;
+      }
+    }
+  }
+  
+  if (ImGui::CollapsingHeader("models")){
+    if(ImGui::Button("Load From File")){
+      Path path;
+      path.searchForPath();
+      if(path.searchForPath()){
+        resourceManager.loadModel(path);
+
+      }
+    }
+
+    for(auto model : resourceManager.models){
+      if(ImGui::Button(model.second->name.c_str(),ImVec2(100,100))){
+        actualModel = model.second;
+      }
     }
   }
   ImGui::End();
   
-  ImGui::Begin("models");
-  if(ImGui::Button("Load From File")){
-    Path path;
-    path.searchForPath();
-    if(path.searchForPath()){
-      resourceManager.loadModel(path);
-
-    }
-  }
-  for(auto model : resourceManager.models){
-    if(ImGui::Button(model.first.c_str(),ImVec2(100,100))){
-      actualModel = model.second;
-    }
-  }
-  ImGui::End();
 
   ImGui::Begin("objects");
-  /*if(ImGui::Button("new object")){
-
-  }*/
+  if(ImGui::Button("new object")){
+    isCreatingObject = true;
+  }
   childsInImgui(scene);
   ImGui::End();
 
@@ -682,6 +699,27 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
   ImGui::End();*/
 
+  if(isCreatingObject){
+    ImGui::Begin("new object");
+    ImGui::InputText("name",imguiString,64);
+    if(ImGui::Button("create")){
+      auto object = newSPtr<Object>();
+      object->name = imguiString;
+      scene->attach(object);
+      isCreatingObject = false;
+    }
+    ImGui::End();
+  }
+
+  if(isAddingComponent){
+    ImGui::Begin("add component");
+    if(ImGui::Button("Graphics")){
+      actualObject->attachComponent(newSPtr<GraphicsComponent>());
+      isAddingComponent = false;
+    }
+
+    ImGui::End();
+  }
 
 }
 
@@ -693,10 +731,6 @@ void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)
     }
   }
 }
-
-
-
-
 
 SubMesh
 oaEngineSDK::TestApp::tetrahedron()

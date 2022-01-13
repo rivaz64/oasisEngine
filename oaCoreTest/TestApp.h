@@ -124,6 +124,12 @@ public:
   SPtr<Noise2D> noise1;
 
   SPtr<Noise2D> noise2;
+
+  bool isCreatingObject=false;
+
+  bool isAddingComponent=false;
+
+  char imguiString[64];
 };
 
 }
