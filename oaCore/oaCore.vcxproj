@@ -188,6 +188,7 @@
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
     <ClInclude Include="include\oaObject.h" />
+    <ClInclude Include="include\oaPath.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaRenderTarget.h" />
     <ClInclude Include="include\oaResoureManager.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
@@ -218,6 +220,7 @@
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
     <ClCompile Include="source\oaObject.cpp" />
+    <ClCompile Include="source\oaPath.cpp" />
     <ClCompile Include="source\oaRenderTarget.cpp" />
     <ClCompile Include="source\oaSamplerState.cpp" />
     <ClCompile Include="source\oaSceneGraph.cpp" />
@@ -226,6 +229,9 @@
     <ClCompile Include="source\oaTexture.cpp" />
     <ClCompile Include="source\oaTime.cpp" />
     <ClCompile Include="source\oaVertexBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="oaCore.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

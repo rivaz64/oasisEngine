@@ -30,7 +30,7 @@ class OA_CORE_EXPORT Model
   * @param file 
   */
   bool
-  loadFromFile(String file);
+  loadFromFile(const Path& file);
 
  public:
   
@@ -43,6 +43,8 @@ class OA_CORE_EXPORT Model
    * @brief the meshes of the model
   */
   Vector<SPtr<Mesh>> meshes;
+
+  String name;
 };
 
 }

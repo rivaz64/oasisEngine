@@ -86,7 +86,7 @@ struct AnimationVertex{
 /**
  * @brief a class for a mesh
 */
-class Mesh
+class OA_CORE_EXPORT Mesh
 {
  public:
 
@@ -100,7 +100,7 @@ class Mesh
   /**
   * @brief sends all the data from the cpu tode gpu
   */
-  template<class T>
+  /*template<class T>
   void
   create(Vector<T>& vertices,Vector<uint32>& index){
 
@@ -114,46 +114,22 @@ class Mesh
 
     indexB->init(index);
 
-  }
+  }*/
+
+  void
+  create(Vector<Vertex>& vertices,Vector<uint32>& index);
+
+  void
+  create(Vector<AnimationVertex>& vertices,Vector<uint32>& index);
 
   /**
   * @brief sends all the data from the cpu tode gpu, with bones
   */
-  template<class T>
   void
-  create(Vector<T>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones){
-
-    create(vertices,index);
-
-    hasBones = true;
-
-    bones = _bones;
-
-    bonesB = GraphicAPI::instancePtr()->createBuffer();
-
-    bonesB->init(sizeof(Matrix4f)*bones.size());
-
-    ofset.resize(bones.size());
-
-  }
+  create(Vector<AnimationVertex>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones);
 
   void
-  initFromSubMesh(const SubMesh& sm)
-  {
-    Vector<Vertex> vertices;
-    Vector<uint32> indices;
-    uint32 size = sm.indices.size();
-    vertices.resize(size);
-    for(int32 i=0;i<size;++i){
-      vertices[i].textureCord = Vector2f(0,0);
-      vertices[i].location = sm.points[sm.indices[i]];
-      indices.push_back(indices.size());
-    }
-  
-    Mesh::createNormals(vertices);
-  
-    create(vertices,indices);
-  }
+  initFromSubMesh(const SubMesh& sm);
 
   /**
    * @brief creates the normals based on the the triangles
@@ -161,18 +137,7 @@ class Mesh
    * @param index 
   */
   static void
-  createNormals(Vector<Vertex>& vertices)
-  {
-    uint32 size = vertices.size();
-    for(uint32 i=0;i<size;i+=3){
-      Vector3f v1 = vertices[i+1].location.xyz-vertices[i].location.xyz;
-      Vector3f v2 = vertices[i+2].location.xyz-vertices[i].location.xyz;
-      Vector3f normal = Vector3f::cross(v1,v2);
-      vertices[i].normal = Vector4f(normal,0.0f);
-      vertices[i+1].normal = Vector4f(normal,0.0f);
-      vertices[i+2].normal = Vector4f(normal,0.0f);
-    }
-  }
+  createNormals(Vector<Vertex>& vertices);
 
   
 
@@ -181,7 +146,7 @@ class Mesh
   /**
    * @brief the number of indices this mesh has
   */
-  uint64 indexNumber;
+  uint64 indexNumber = 0;
 
   /**
    * @brief the buffer for the indices

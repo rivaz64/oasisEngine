@@ -19,6 +19,7 @@
 #include "oaMesh.h"
 #include "oaSimplexNoise.h"
 #include "oaOctavesNoise.h"
+#include "oaPath.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -64,6 +65,8 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
   return 0;
 }
+
+
 
 namespace oaEngineSDK {
 
@@ -183,7 +186,7 @@ void TestApp::postInit()
 
   GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
 
-  ResoureManager::instancePtr()->loadTexture("textures/wall.jpg");
+  //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
   auto model1 = newSPtr<Model>();
 
@@ -193,9 +196,9 @@ void TestApp::postInit()
 
   //model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
 
-  ResoureManager::instancePtr()->materials["default"]->textures.push_back(
+  /*ResoureManager::instancePtr()->materials["default"]->textures.push_back(
   ResoureManager::instancePtr()->textures["textures/wall.jpg"]
-  );
+  );*/
 
   model1->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
 
@@ -207,17 +210,50 @@ void TestApp::postInit()
 
   testObject2 = newSPtr<Object>();
 
-  testObject1->attachComponent(newSPtr<GraphicsComponent>());
+  /*testObject1->attachComponent(newSPtr<GraphicsComponent>());
 
   testObject2->attachComponent(newSPtr<GraphicsComponent>());
 
   testObject1->getComponent<GraphicsComponent>()->model = model1;
 
-  testObject2->getComponent<GraphicsComponent>()->model = model2;
+  testObject2->getComponent<GraphicsComponent>()->model = model2;*/
 
 
 
   testObjectMC = newSPtr<Object>();
+
+  character = newSPtr<Object>();
+
+  auto charmod = newSPtr<Model>();
+
+  //charmod->loadFromFile(Path("models/youarenotmandalorian.fbx"));
+
+  character->setLocation({0.0f,-2.0f,7.0f});
+
+  character->setScale({.1f,.1f,.1f});
+
+  character->setRotation({0.0f,3.4f,0.0f});
+
+  character->attachComponent(newSPtr<GraphicsComponent>());
+
+  character->getComponent<GraphicsComponent>()->model = charmod;
+
+  /*character->attachComponent(newSPtr<SkeletalComponent>());
+
+  character->getComponent<SkeletalComponent>()->skeleton = 
+  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
+
+  character->attachComponent(newSPtr<AnimationComponent>());
+
+  character->getComponent<AnimationComponent>()->animation = 
+  ResoureManager::instancePtr()->animations["Shooting Gun"];*/
+
+  scene = newSPtr<Object>();
+
+  scene->attach(character);
+
+    
+
 
   //testObjectMC->attachComponent(newSPtr<GraphicsComponent>());
 
@@ -235,25 +271,7 @@ void TestApp::postInit()
 
   //charmod->loadFromFile("models/youarenotmandalorian.fbx");
 
-  character->setLocation({0.0f,-2.0f,7.0f});
-
-  character->setScale({.1f,.1f,.1f});
-
-  character->setRotation({0.0f,3.4f,0.0f});
-
-  character->attachComponent(newSPtr<GraphicsComponent>());
-
-  character->getComponent<GraphicsComponent>()->model = charmod;
-
-  character->attachComponent(newSPtr<SkeletalComponent>());
-
-  character->getComponent<SkeletalComponent>()->skeleton = 
-  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
-
-  character->attachComponent(newSPtr<AnimationComponent>());
-
-  character->getComponent<AnimationComponent>()->animation = 
-  ResoureManager::instancePtr()->animations["Shooting Gun"];
+  
 
   testObject = newSPtr<Object>();
 
@@ -282,7 +300,6 @@ void TestApp::postInit()
 
   
 
-  scene = newSPtr<Object>();
 
   //scene->cam = cam;
 
@@ -310,16 +327,7 @@ void TestApp::postInit()
   mesh->model =  ResoureManager::instancePtr()->models["test"];
 
   */
-  cam = newSPtr<Camera>();
-
-  cam->angle = 0.785398163f;
-  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
-  cam->nearPlane = 1.0f;
-  cam->farPlane = 100.0f;
-
-  cam->updateView();
-
-  cam->updateProyection();
+  /*
 
   scene = newSPtr<Object>();
 
@@ -369,7 +377,7 @@ void TestApp::postInit()
 
   mc->init(chunck);*/
 
-  noise1->fillGrid(chunck1,15);
+  /*noise1->fillGrid(chunck1,15);
   noise2->fillGrid(chunck2,15);
 
   noise1->redistribute(chunck1,2,-.125);
@@ -378,7 +386,7 @@ void TestApp::postInit()
   pt1->init(chunck1);
   pt2->init(chunck2);
 
-  auto testMesh = newSPtr<Mesh>();
+  auto testMesh = newSPtr<Mesh>();*/
 
  /* auto datos = icosahedron();
 
@@ -392,7 +400,7 @@ void TestApp::postInit()
 
   testMesh->initFromSubMesh(datos);*/
 
-  testObject1->getComponent<GraphicsComponent>()->model->meshes.push_back(pt1);
+  /*testObject1->getComponent<GraphicsComponent>()->model->meshes.push_back(pt1);
 
   testObject2->getComponent<GraphicsComponent>()->model->meshes.push_back(pt2);
 
@@ -406,9 +414,20 @@ void TestApp::postInit()
 
   scene->attach(testObject1);
   
-  scene->attach(testObject2); 
+  scene->attach(testObject2); */
 
   //scene->attach(testObjectMC); 
+
+  cam = newSPtr<Camera>();
+
+  cam->angle = 0.785398163f;
+  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
+  cam->nearPlane = 1.0f;
+  cam->farPlane = 100.0f;
+
+  cam->updateView();
+
+  cam->updateProyection();
 }
 
 
@@ -458,7 +477,7 @@ void TestApp::update(float delta)
 
   //character->update();
 
-  lights->update(&color.x);
+  //lights->update(&color.x);
 }
 
 void TestApp::draw()
@@ -493,7 +512,7 @@ void TestApp::draw()
 
       GraphicAPI::instancePtr()->setVSBuffer(object->transformB, 0);
 
-      GraphicAPI::instancePtr()->setPSBuffer(lights,0);
+      //GraphicAPI::instancePtr()->setPSBuffer(lights,0);
 
       auto actualMesh = model->meshes[i];
 
@@ -580,6 +599,7 @@ void TestApp::renderImGui()
 
 void oaEngineSDK::TestApp::drawImGui()
 {
+  auto& resourceManager = ResoureManager::instance();
   /*if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
@@ -611,7 +631,7 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
   
   ImGui::Begin("textures");
-  for(auto texture : ResoureManager::instancePtr()->textures){
+  for(auto texture : resourceManager.textures){
     if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
       actualTexture = texture.second;
     }
@@ -619,7 +639,7 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("materials");
-  for(auto material : ResoureManager::instancePtr()->materials){
+  for(auto material : resourceManager.materials){
     if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
       material.second->textures[0] = actualTexture;
     }
@@ -627,7 +647,7 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("meshes");
-  for(auto mesh : ResoureManager::instancePtr()->meshes){
+  for(auto mesh : resourceManager.meshes){
     if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
       actualMesh = mesh.second;
     }
@@ -635,7 +655,15 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
   
   ImGui::Begin("models");
-  for(auto model : ResoureManager::instancePtr()->models){
+  if(ImGui::Button("Load From File")){
+    Path path;
+    path.searchForPath();
+    if(path.searchForPath()){
+      resourceManager.loadModel(path);
+
+    }
+  }
+  for(auto model : resourceManager.models){
     if(ImGui::Button(model.first.c_str(),ImVec2(100,100))){
       actualModel = model.second;
     }
@@ -649,10 +677,12 @@ void oaEngineSDK::TestApp::drawImGui()
   childsInImgui(scene);
   ImGui::End();
 
-  ImGui::Begin("lighs");
+  /*ImGui::Begin("lighs");
   ImGui::ColorPicker3("ambient",&color.x);
   ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
-  ImGui::End();
+  ImGui::End();*/
+
+
 }
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)

@@ -27,10 +27,17 @@ class OA_CORE_EXPORT ResoureManager :
 
   /**
    * @brief loads a texture from a file
-   * @return 
+   * @return if the texture was loaded
   */
   bool
-  loadTexture(const String& file);
+  loadTexture(const Path& file);
+
+  /**
+   * @brief loads a model from a file
+   * @return if the model was loaded
+  */
+  bool
+  loadModel(const Path& file);
 
   /**
    * @brief loads the default things

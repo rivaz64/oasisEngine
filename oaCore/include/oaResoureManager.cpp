@@ -6,13 +6,15 @@
 #include "oaShader.h"
 #include "oaMaterial.h"
 #include "oaMesh.h"
+#include "oaPath.h"
 
 namespace oaEngineSDK{
 
 bool 
-ResoureManager::loadTexture(const String& file)
+ResoureManager::loadTexture(const Path& file)
 {
-  if(textures.find(file)!=textures.end()){
+  if(textures.find(file.getCompletePath())!=textures.end()){
+    print("texture already loaded");
     return true;
   }
 
@@ -23,12 +25,40 @@ ResoureManager::loadTexture(const String& file)
     return false;
   }
 
-  textures[file] = texture;
+  textures[file.getCompletePath()] = texture;
+
+  Path path(file);
+
+  texture->name = path.getName();
 
   return true;
 }
 
-void 
+bool 
+ResoureManager::loadModel(const Path& file)
+{
+  if(models.find(file.getCompletePath())!=models.end()){
+    print("texture already loaded");
+    return true;
+  }
+
+  SPtr<Model> model = newSPtr<Model>();
+
+  if(!model->loadFromFile(file)){
+    print("texture not loaded");
+    return false;
+  }
+
+  models[file.getCompletePath()] = model;
+
+   Path path(file);
+
+  model->name = path.getName();
+
+  return true;
+}
+
+void
 ResoureManager::onStartUp()
 {
   generatePlane();
@@ -356,7 +386,9 @@ void ResoureManager::loadDefaultShaders()
 void ResoureManager::loadDefaulTextures()
 {
   textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
-  textures["default"]->loadFromFile("textures/defaultTexture.png");
+  Path path;
+  path.setCompletePath("textures/defaultTexture.png");
+  textures["default"]->loadFromFile(path);
 }
 
 void

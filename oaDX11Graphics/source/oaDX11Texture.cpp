@@ -1,6 +1,8 @@
 #include "oaDX11Texture.h"
+#include "oaPath.h"
 #include "oaDX11GraphicAPI.h"
 #include "oaDX11Flags.h"
+
 
 namespace oaEngineSDK{
 
@@ -10,13 +12,17 @@ DX11Texture::~DX11Texture()
   if(texture) texture->Release();
 }
 
-bool DX11Texture::loadFromFile(const String& file)
+bool 
+DX11Texture::loadFromFile(const Path& file)
 {
   HRESULT hr;
 
+  Path p;
+  String f="";//file.getCompletePath();
+
   hr = D3DX11CreateShaderResourceViewFromFile(
     reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->device,
-    file.c_str(),
+    f.c_str(),
     nullptr,
     nullptr,
     &shaderResourceView,
@@ -55,7 +61,8 @@ DX11Texture::init(TextureDesc description)
   return true;
 }
 
-bool DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV)
+bool 
+DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV)
 {
   if(!init(description)){
     return false;

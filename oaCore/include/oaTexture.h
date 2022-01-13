@@ -106,7 +106,7 @@ class OA_CORE_EXPORT Texture
    * @return 
   */
   virtual bool
-  loadFromFile(const String& /*file*/) { return false; }
+  loadFromFile(const Path& /*file*/);
 
   /**
    * @brief initalizes only the texture
@@ -114,7 +114,7 @@ class OA_CORE_EXPORT Texture
    * @return 
   */
   virtual bool
-  init(TextureDesc /*description*/) {return true;}
+  init(TextureDesc /*description*/);
 
   /**
    * @brief initlializes everything needed for the texture
@@ -123,14 +123,16 @@ class OA_CORE_EXPORT Texture
    * @return 
   */
   virtual bool
-  init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/ ) {return true;}
+  init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/);
 
   /**
    * @brief gets the unique id of this texture
    * @return 
   */
   virtual void*
-  getId() {return 0;}
+  getId();
+
+  String name;
 
   friend class ResoureManager;
 

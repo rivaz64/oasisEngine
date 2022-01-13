@@ -10,6 +10,7 @@
 #include "oaAnimation.h"
 #include "oaMesh.h"
 #include "oaMaterial.h"
+#include "oaPath.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp/postprocess.h>
@@ -36,17 +37,14 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton){
 }
 
 bool 
-Model::loadFromFile(String file)
+Model::loadFromFile(const Path& file)
 {
 
-  char drive[_MAX_DRIVE];
-  char dir[_MAX_DIR];
-  char ext[_MAX_EXT];
-  char name[_MAX_FNAME];
-  _splitpath(file.c_str(), drive,dir,name , ext);
-
   Importer importer;
-  const aiScene* scene = importer.ReadFile(file,aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
+
+  auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph;
+
+  const aiScene* scene = importer.ReadFile(file.getCompletePath(),flags);
   
   if(!scene){
     print("model not found");
@@ -150,20 +148,20 @@ Model::loadFromFile(String file)
 
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
-    auto oaMesh = newSPtr<Mesh>();
+    SPtr<Mesh> oaMesh = newSPtr<Mesh>();
 
     aiString f;
 
     String TextureName;
 
-    String TextureFile;
+    Path TextureFile;
 
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
     TextureName = f.C_Str();
-    TextureFile = "textures/"+TextureName+".png";
+    TextureFile.setCompletePath("textures/"+TextureName+".png");
     if(ResoureManager::instancePtr()->loadTexture(TextureFile)){
       auto mat = copy(material);
-      mat->textures[0] = ResoureManager::instancePtr()->textures[TextureFile];
+      mat->textures[0] = ResoureManager::instancePtr()->textures[TextureFile.getCompletePath()];
       ResoureManager::instancePtr()->materials.insert({TextureName,mat});
       materials.push_back(mat);
     }
@@ -208,8 +206,8 @@ Model::loadFromFile(String file)
         }
         vertices[numVertex] = actualVertex;
       }
-
       oaMesh->create(vertices,index);
+      //oaMesh->create<Vertex>(vertices,index);
     }
     
     else{

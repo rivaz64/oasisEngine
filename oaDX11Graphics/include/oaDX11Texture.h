@@ -8,6 +8,7 @@
 #include "oaTexture.h"
 #include <d3d11.h>
 #include <d3dx11.h>
+#include "oaPath.h"
 
 namespace oaEngineSDK{
 
@@ -22,7 +23,7 @@ class DX11Texture:
   ~DX11Texture();
 
   bool
-  loadFromFile(const String& file) override;
+  loadFromFile(const Path& file) override;
 
   bool
   init(TextureDesc description);

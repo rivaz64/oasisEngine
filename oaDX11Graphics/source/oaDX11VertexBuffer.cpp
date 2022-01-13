@@ -17,8 +17,12 @@ bool oaEngineSDK::DX11VertexBuffer::init(
   D3D11_SUBRESOURCE_DATA InitData;
   ZeroMemory( &InitData, sizeof(InitData) );
   InitData.pSysMem = data;
-  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateBuffer( &bd, &InitData, &buffer );
+
+  auto api = DX11GraphicAPI::instancePtr();
+
+  auto api2 = reinterpret_cast<DX11GraphicAPI*>(api);
+
+  HRESULT hr = api2->device->CreateBuffer( &bd, &InitData, &buffer );
 
   if(FAILED(hr)){
     return false;

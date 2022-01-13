@@ -21,5 +21,5 @@ class Animation;
 struct AnimNode;
 class Object;
 class Component;
-
+class Path;
 }
