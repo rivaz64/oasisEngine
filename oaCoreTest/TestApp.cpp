@@ -494,7 +494,9 @@ void TestApp::draw()
 
   //auto lista = ResoureManager::instancePtr()->rendereableObjects;
 
-  auto seenObjects = cam->seeObjects(ResoureManager::instancePtr()->rendereableObjects);
+  Vector<SPtr<Object>> seenObjects;
+
+  cam->seeObjects(scene,seenObjects);
 
   for(auto object : seenObjects){
 
@@ -636,8 +638,11 @@ void oaEngineSDK::TestApp::drawImGui()
         };
       }
     }
-    if(actualObject->getComponent<GraphicsComponent>()){
-      ImGui::Button("select model");
+    auto component = actualObject->getComponent<GraphicsComponent>();
+    if(component){
+      if(ImGui::Button("select model")){
+        component->model = actualModel;
+      }
     }
   }
   ImGui::End();

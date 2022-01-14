@@ -1,5 +1,6 @@
 #include "oaCamera.h"
 #include "oaGraphicAPI.h"
+#include "oaGraphicsComponent.h"
 #include <iostream>
 
 
@@ -22,7 +23,8 @@ Camera::Camera()
   lookAt({0.0f,0.0f,1.0f});
 }
 
-void Camera::updateProyection()
+void 
+Camera::updateProyection()
 {
   Matrix4f ans = Matrix4f::IDENTITY;
   float co = cos(angle * .5f), si = sin(angle * .5f);
@@ -40,7 +42,8 @@ void Camera::updateProyection()
   proyection->update(&ans.m11);
 }
 
-void Camera::updateView()
+void 
+Camera::updateView()
 {
   if(!dirtyFlags){
     return;
@@ -69,7 +72,8 @@ void Camera::updateView()
   dirtyFlags = false;
 }
 
-void Camera::setCamera()
+void 
+Camera::setCamera()
 {
 
   GraphicAPI::instancePtr()->setVSBuffer(view,1);
@@ -78,7 +82,8 @@ void Camera::setCamera()
 
 }
 
-void Camera::moveCamera(const Vector3f& delta)
+void 
+Camera::moveCamera(const Vector3f& delta)
 {
   axis.transpose();
   Vector3f realDelta = axis*delta;
@@ -88,7 +93,8 @@ void Camera::moveCamera(const Vector3f& delta)
   dirtyFlags = true;
 }
 
-void Camera::lookAt(const Vector3f& newLocation)
+void 
+Camera::lookAt(const Vector3f& newLocation)
 {
   lookingAt = newLocation;
 
@@ -100,7 +106,8 @@ void Camera::lookAt(const Vector3f& newLocation)
 
 }
 
-void Camera::rotateWithMouse(const Vector2f& delta)
+void 
+Camera::rotateWithMouse(const Vector2f& delta)
 {
   lookAt(
     (axisZ + axisX * delta.x * .003f - axisY * delta.y * .003f).normalized()+
@@ -110,7 +117,8 @@ void Camera::rotateWithMouse(const Vector2f& delta)
   dirtyFlags = true;
 }
 
-bool Camera::isInFrustrum(const Vector3f& _location)
+bool 
+Camera::isInFrustrum(const Vector3f& _location)
 {
   //print(Math::distance(nearP,_location));
   return 
@@ -123,7 +131,8 @@ bool Camera::isInFrustrum(const Vector3f& _location)
 
 }
 
-void Camera::createFrustrum()
+void 
+Camera::createFrustrum()
 {
   nearP = Plane(location+axisZ*nearPlane,axisZ);
   farP = Plane(location+axisZ*farPlane,-axisZ);
@@ -151,22 +160,22 @@ void Camera::createFrustrum()
 
 }
 
-Vector<SPtr<Object>> Camera::seeObjects(const Vector<SPtr<Object>>& objects)
+void
+Camera::seeObjects(SPtr<Object> scene,Vector<SPtr<Object>>& seenObjects)
 {
-  Vector<SPtr<Object>> ans;
+  auto& childs = scene->getChilds();
 
-  for(auto object : objects){
+  for(auto object : childs){
 
-    auto mat = object->getGlobalTransform();
+    auto component = object->getComponent<GraphicsComponent>();
 
-    if(isInFrustrum((mat*Vector4f(0,0,0,1)).xyz)){
-
-      ans.push_back(object);
+    if(component && component->model){
+      seenObjects.push_back(object);
     }
 
-  }
+    seeObjects(object,seenObjects);
 
-  return objects;
+  }
 }
 
 }

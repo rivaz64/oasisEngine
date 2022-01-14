@@ -82,11 +82,12 @@ class OA_CORE_EXPORT Camera
 
   
   /**
-   * @brief sees the objects in the world 
-   * @return the objects seen by the frustrum in order from back to front
+   * @brief sees the objects in a scene
+   * @param the sceen to be sceen
+   * @param the objects seen by this camera
   */
-  Vector<SPtr<Object>>
-  seeObjects(const Vector<SPtr<Object>>& objects);
+  void
+  seeObjects(SPtr<Object> scene,Vector<SPtr<Object>>& seenObjects);
 
  public:
   /**

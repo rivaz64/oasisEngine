@@ -18,7 +18,7 @@ DX11Texture::loadFromFile(const Path& file)
   HRESULT hr;
 
   Path p;
-  String f="";//file.getCompletePath();
+  String f=file.getCompletePath();
 
   hr = D3DX11CreateShaderResourceViewFromFile(
     reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->device,

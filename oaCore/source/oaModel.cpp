@@ -158,7 +158,8 @@ Model::loadFromFile(const Path& file)
 
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
     TextureName = f.C_Str();
-    TextureFile.setCompletePath("textures/"+TextureName+".png");
+
+    TextureFile.setCompletePath(file.getDrive()+file.getDirection()+TextureName+".png");
     if(ResoureManager::instancePtr()->loadTexture(TextureFile)){
       auto mat = copy(material);
       mat->textures[0] = ResoureManager::instancePtr()->textures[TextureFile.getCompletePath()];

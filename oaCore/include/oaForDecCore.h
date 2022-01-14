@@ -22,4 +22,7 @@ struct AnimNode;
 class Object;
 class Component;
 class Path;
+class GraphicsComponent;
+class SkeletalComponent;
+class AnimationComponent;
 }
