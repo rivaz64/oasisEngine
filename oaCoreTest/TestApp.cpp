@@ -250,7 +250,7 @@ void TestApp::postInit()
 
   scene = newSPtr<Object>();
 
-  scene->attach(character);
+  actualObject = scene;
 
     
 
@@ -499,8 +499,6 @@ void TestApp::draw()
   cam->seeObjects(scene,seenObjects);
 
   for(auto object : seenObjects){
-
-   
     
     auto mat = object->getGlobalTransform();
 
@@ -513,8 +511,6 @@ void TestApp::draw()
       model->materials[i]->set();
 
       GraphicAPI::instancePtr()->setVSBuffer(object->transformB, 0);
-
-      //GraphicAPI::instancePtr()->setPSBuffer(lights,0);
 
       auto actualMesh = model->meshes[i];
 
@@ -696,6 +692,9 @@ void oaEngineSDK::TestApp::drawImGui()
   if(ImGui::Button("new object")){
     isCreatingObject = true;
   }
+  if(ImGui::Button("scene")){
+    actualObject = scene;
+  }
   childsInImgui(scene);
   ImGui::End();
 
@@ -710,7 +709,7 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button("create")){
       auto object = newSPtr<Object>();
       object->name = imguiString;
-      scene->attach(object);
+      actualObject->attach(object);
       isCreatingObject = false;
     }
     ImGui::End();
@@ -730,9 +729,15 @@ void oaEngineSDK::TestApp::drawImGui()
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)
 {
-  for(SPtr<Object> object : parentObject->getChilds()){
-    if(ImGui::Button(object->name.c_str(),ImVec2(100,100))){
+  auto& childs = parentObject->getChilds();
+  for(SPtr<Object> object : childs){
+    if(ImGui::Button(object->name.c_str())){
       actualObject = object;
+    }
+    if(object->getChilds().size()>0){
+      if(ImGui::CollapsingHeader("childs")){
+        childsInImgui(object);
+      }
     }
   }
 }

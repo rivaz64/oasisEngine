@@ -92,7 +92,7 @@ Object::getChilds()
 Matrix4f 
 Object::getLocalTransform()
 {
-  if(dirtyFlag & FLAGS::LOCAL){
+  if(true/*dirtyFlag & FLAGS::LOCAL*/){
 
     dirtyFlag &= FLAGS::GLOBAL;
 
@@ -109,7 +109,7 @@ Object::getLocalTransform()
 Matrix4f
 Object::getGlobalTransform()
 {
-  if(dirtyFlag & FLAGS::GLOBAL){
+  if(true /*dirtyFlag & FLAGS::GLOBAL*/){
     
     dirtyFlag &= FLAGS::LOCAL;
 
