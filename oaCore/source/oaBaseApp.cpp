@@ -1,3 +1,9 @@
+/**
+* @file oaBaseApp.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 10/13/2021
+*/
+
 #include "oaBaseApp.h"
 #include "oaGraphicAPI.h"
 #include "oaResoureManager.h"

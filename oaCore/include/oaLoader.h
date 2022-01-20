@@ -1,5 +1,5 @@
 /**
-* @file oaTexture.h
+* @file oaLoader.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
 * @date 1/14/2021
 */

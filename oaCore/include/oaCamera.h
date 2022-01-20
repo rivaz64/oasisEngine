@@ -11,8 +11,6 @@
 #include "oaMatrix3f.h"
 #include "oaMatrix4f.h"
 #include "oaVector2f.h"
-#include "oaBuffer.h"
-#include "oaObject.h"
 #include "oaPlane.h"
 
 namespace oaEngineSDK{

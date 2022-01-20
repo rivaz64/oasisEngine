@@ -7,7 +7,6 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaBuffer.h"
 
 namespace oaEngineSDK{
 

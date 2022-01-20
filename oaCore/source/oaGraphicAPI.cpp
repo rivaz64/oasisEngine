@@ -1,3 +1,9 @@
+/**
+* @file oaGraphicAPI.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 10/13/2021
+*/
+
 #include "oaGraphicAPI.h"
 #include <iostream>
 #include "oaShader.h"

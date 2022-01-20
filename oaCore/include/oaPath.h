@@ -1,3 +1,9 @@
+/**
+* @file oaPath.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 1/15/2022
+*/
+
 #pragma once
 
 #include "oaPrerequisitesCore.h"

@@ -6,7 +6,6 @@
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
-#include "oaSceneGraph.h"
 #include "oaVector4f.h"
 #include "oaChunk.h"
 #include "oaMarchingCubes.h"

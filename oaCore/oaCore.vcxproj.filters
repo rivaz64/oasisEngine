@@ -27,9 +27,6 @@
     <ClInclude Include="include\oaPrerequisitesCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaGraphicsModule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaBaseApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,9 +58,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaFlags.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\oaSceneGraph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaShader.h">
@@ -125,9 +119,6 @@
     <ClCompile Include="source\oaBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaGraphicsModule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaBaseApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaDepthStencil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaSceneGraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaInputManager.cpp">

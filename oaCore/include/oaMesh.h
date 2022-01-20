@@ -11,12 +11,7 @@
 #include "oaVector3f.h"
 #include "oaVector4U.h"
 #include "oaVector4f.h"
-#include "oaBuffer.h"
-#include "oaVertexBuffer.h"
-#include "oaGraphicAPI.h"
-#include "oaIndexBuffer.h"
 #include "oaMatrix4f.h"
-#include <iostream>
 
 namespace oaEngineSDK{
 /**

@@ -105,4 +105,13 @@ enum class FORMAT{
   R32G32B32A32_FLOAT
 };
 
+namespace COMPONENT_TYPE{
+enum E{
+  NONE = 0,
+  GRAPHICS,
+  SKELETON,
+  ANIMATION
+};
+}
+
 }

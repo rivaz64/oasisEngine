@@ -6,18 +6,9 @@
 
 #pragma once
 #include "oaPrerequisitesCore.h"
-
+#include "oaFlags.h"
 
 namespace oaEngineSDK{
-
-namespace COMPONENT_TYPE{
-enum E{
-  NONE = 0,
-  GRAPHICS,
-  SKELETON,
-  ANIMATION
-};
-}
 
 /**
  * @brief a component an object can have

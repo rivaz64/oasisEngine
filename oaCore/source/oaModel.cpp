@@ -5,12 +5,6 @@
 */
 
 #include "oaModel.h"
-#include "oaResoureManager.h"
-#include "oaSkeleton.h"
-#include "oaAnimation.h"
-#include "oaMesh.h"
-#include "oaMaterial.h"
-#include "oaPath.h"
 
 namespace oaEngineSDK{
 

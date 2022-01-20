@@ -22,6 +22,9 @@
 #include "oaPath.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
+#include "oaVertexBuffer.h"
+#include "oaIndexBuffer.h"
+#include "oaBuffer.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>

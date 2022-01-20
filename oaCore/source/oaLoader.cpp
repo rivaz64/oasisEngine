@@ -1,4 +1,14 @@
+/**
+* @file oaLoader.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 1/14/2021
+*/
+
 #include "oaLoader.h"
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp/postprocess.h>
+#include <stdlib.h>
 #include "oaPath.h"
 #include "oaMesh.h"
 #include "oaModel.h"
@@ -6,10 +16,7 @@
 #include "oaMaterial.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
-#include <assimp\Importer.hpp>
-#include <assimp\scene.h>
-#include <assimp/postprocess.h>
-#include <stdlib.h>
+
 
 using Assimp::Importer;
 

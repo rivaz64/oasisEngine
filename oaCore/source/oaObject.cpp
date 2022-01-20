@@ -1,8 +1,15 @@
+/**
+* @file oaObject.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 9/25/2021
+*/
+
 #include "oaObject.h"
 #include "oaGraphicAPI.h"
 #include "oaMatrix4f.h"
 #include "oaComponent.h"
 #include "oaBuffer.h"
+#include "oaComponent.h"
 
 namespace oaEngineSDK{
 

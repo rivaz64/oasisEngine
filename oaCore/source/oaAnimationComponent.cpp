@@ -1,3 +1,9 @@
+/**
+* @file oaAnimationComponent.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 11/26/2021
+*/
+
 #include "oaAnimationComponent.h"
 #include "oaAnimation.h"
 #include "oaSkeletalComponent.h"

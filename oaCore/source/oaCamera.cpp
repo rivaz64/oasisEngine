@@ -1,6 +1,14 @@
+/**
+* @file oaCamera.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 10/9/2021
+*/
+
 #include "oaCamera.h"
 #include "oaGraphicAPI.h"
 #include "oaGraphicsComponent.h"
+#include "oaBuffer.h"
+#include "oaObject.h"
 #include <iostream>
 
 

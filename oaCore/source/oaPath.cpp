@@ -1,6 +1,14 @@
+/**
+* @file oaPath.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 1/15/2022
+*/
+
 #include "oaPath.h"
 #include <Windows.h>
+
 namespace oaEngineSDK{
+
 bool Path::searchForPath()
 {
   OPENFILENAME ofn;

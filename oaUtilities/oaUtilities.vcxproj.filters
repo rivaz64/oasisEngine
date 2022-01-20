@@ -78,9 +78,6 @@
     <ClInclude Include="include\oaModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\oaVector3I.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -168,9 +165,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaVector3I.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\oaTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaGrid2D.cpp">

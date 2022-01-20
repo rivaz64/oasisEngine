@@ -1,4 +1,14 @@
+/**
+* @file oaMesh.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 9/25/2021
+*/
+
 #include "oaMesh.h"
+#include "oaBuffer.h"
+#include "oaVertexBuffer.h"
+#include "oaGraphicAPI.h"
+#include "oaIndexBuffer.h"
 
 namespace oaEngineSDK{
 

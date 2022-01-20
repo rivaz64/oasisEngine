@@ -1,3 +1,9 @@
+/**
+* @file oaMaterial.cpp
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 10/9/2021
+*/
+
 #include "oaMaterial.h"
 #include "oaGraphicAPI.h"
 #include "oaTexture.h"
