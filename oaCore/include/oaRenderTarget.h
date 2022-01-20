@@ -27,6 +27,12 @@ class RenderTarget
   virtual bool 
   init(SPtr<Texture> texture) { return true; }
 
+  /**
+   * @brief releases the render target
+  */
+  virtual void
+  release(){}
+
 };
 
 }

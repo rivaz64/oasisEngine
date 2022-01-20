@@ -20,6 +20,10 @@ AnimationComponent::update(SPtr<Object> actor)
 {
   OA_ASSERT(actor->getComponent<SkeletalComponent>().get());
 
+  if(!animation){
+    return;
+  }
+
   auto skeleton = actor->getComponent<SkeletalComponent>()->skeleton;
 
   auto model = actor->getComponent<GraphicsComponent>()->model;

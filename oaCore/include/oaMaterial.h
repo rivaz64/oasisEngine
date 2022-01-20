@@ -36,6 +36,8 @@ class OA_CORE_EXPORT Material
    * @brief the pixel shader of this material
   */
    SPtr<Shader> pixelShader;
+
+   String name;
 };
 
 }

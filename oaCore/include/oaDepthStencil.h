@@ -50,6 +50,11 @@ class DepthStencil
   virtual bool
   init(DepthStencilDesc /*descritor*/, SPtr<Texture> /*texture*/) {return true;}
 
+  /**
+   * @brief releases the depth stencil
+  */
+  virtual void
+  release(){}
 };
 
 }

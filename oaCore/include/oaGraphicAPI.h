@@ -218,6 +218,33 @@ class OA_CORE_EXPORT GraphicAPI :
     const SPtr<DepthStencil> /*depthStencil*/
   ) {}
 
+  /**
+   * @brief sets the render target and the depth stencil to null
+  */
+  virtual void
+  unsetRenderTargetAndDepthStencil() 
+  {}
+
+  /**
+   * @brief changes the size of the swap chain
+  */
+  virtual void
+  resizeSwapChian() {}
+
+  /**
+   * @brief initializes everything needed for the window
+   * @param window 
+  */
+  virtual void
+  initWindow(void* window) {}
+
+  /**
+   * @brief sets the window to be used
+   * @param  
+  */
+  virtual void
+  setWindow(void* /*window*/) {}
+
   virtual void*
   getWindow() { return nullptr;}
 

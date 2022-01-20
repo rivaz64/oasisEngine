@@ -95,10 +95,19 @@ class DX11GraphicAPI :
   ) override;
 
   void
-  clearRenderTarget(SPtr<RenderTarget> renderTarget);
+  unsetRenderTargetAndDepthStencil() override;
+
+  void
+  resizeSwapChian() override;
+
+  void
+  clearRenderTarget(SPtr<RenderTarget> renderTarget) override;
 
   void 
   clearDepthStencil(SPtr<DepthStencil> depthStencil) override;
+
+  void
+  setWindow(void* window) override;
 
   virtual void*
   getWindow() override;

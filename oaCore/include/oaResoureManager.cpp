@@ -8,6 +8,7 @@
 #include "oaMesh.h"
 #include "oaPath.h"
 
+
 namespace oaEngineSDK{
 
 bool 
@@ -37,8 +38,8 @@ ResoureManager::loadTexture(const Path& file)
 bool 
 ResoureManager::loadModel(const Path& file)
 {
-  if(models.find(file.getCompletePath())!=models.end()){
-    print("texture already loaded");
+  /*if(models.find(file.getCompletePath())!=models.end()){
+    print("model already loaded");
     return true;
   }
 
@@ -53,7 +54,7 @@ ResoureManager::loadModel(const Path& file)
 
    Path path(file);
 
-  model->name = path.getName();
+  model->name = path.getName();*/
 
   return true;
 }
@@ -401,9 +402,13 @@ ResoureManager::generateDefaultMaterial()
   materials["default"]->pixelShader = pixelShaders["default"];
   materials["default"]->textures.push_back(textures["default"]);
 
+  materials["default"]->name = "default";
+
   materials["animation"]->vertexShader = vertexShaders["animation"];
   materials["animation"]->pixelShader = pixelShaders["default"];
   materials["animation"]->textures.push_back(textures["default"]);
+
+  materials["animation"]->name = "animation";
 }
 
 }

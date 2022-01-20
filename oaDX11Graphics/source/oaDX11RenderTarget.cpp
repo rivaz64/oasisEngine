@@ -1,11 +1,10 @@
 #include "oaDX11RenderTarget.h"
 #include "oaDX11GraphicAPI.h"
 #include "oaDX11Texture.h"
-#include <iostream>
 
 oaEngineSDK::DX11RenderTarget::~DX11RenderTarget()
 {
-  if( renderTargetView ) renderTargetView->Release();
+  release();
 }
 
 bool oaEngineSDK::DX11RenderTarget::init(SPtr<Texture> texture)
@@ -16,9 +15,15 @@ bool oaEngineSDK::DX11RenderTarget::init(SPtr<Texture> texture)
   //if(cast<DX11Texture>(texture)->texture) cast<DX11Texture>(texture)->texture->Release();
 
   if( FAILED( hr ) ){
-    std::cout<<"failed to init render target"<<std::endl;
+    print("failed to init render target");
     return false;
   }
 
   return true;
+}
+
+void oaEngineSDK::DX11RenderTarget::release()
+{
+  if( renderTargetView ) renderTargetView->Release();
+  renderTargetView = nullptr;
 }

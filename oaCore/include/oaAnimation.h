@@ -45,6 +45,10 @@ struct AnimNode{
 class Animation
 {
 
+ public:
+  
+  String name;
+  
  private:
 
   /**
@@ -64,6 +68,7 @@ class Animation
 
   friend class Model;
   friend class AnimationComponent;
+  friend class Loader;
 };
 
 }

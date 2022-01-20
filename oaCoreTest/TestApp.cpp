@@ -20,6 +20,8 @@
 #include "oaSimplexNoise.h"
 #include "oaOctavesNoise.h"
 #include "oaPath.h"
+#include "oaSkeleton.h"
+#include "oaAnimation.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -58,7 +60,9 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     PostQuitMessage( 0 );
     break;
 
-
+  case WM_SIZE:
+    app->resizeWindow(hWnd);
+    break;
   default:
     return DefWindowProc( hWnd, message, wParam, lParam );
   }
@@ -72,12 +76,13 @@ namespace oaEngineSDK {
 
 void TestApp::postShutDown()
 {
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  auto& api = GraphicAPI::instance();
+  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
   }
 
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();
   }
@@ -90,7 +95,9 @@ void TestApp::preInit()
 
   app = this;
 
-  GraphicAPI::instancePtr()->eventsFunction = WindowProc;
+  auto& api = GraphicAPI::instance();
+
+  api.eventsFunction = WindowProc;
   
 }
 
@@ -115,36 +122,16 @@ void TestApp::postInit()
   sampDesc.comparison = COMPARISON_FUNC::NEVER;
   sampDesc.minLOD = 0.0f;
   sampDesc.maxLOD = Math::MAX_FLOAT;
-  samsta = GraphicAPI::instancePtr()->createSamplerState(sampDesc);
 
-  render = GraphicAPI::instancePtr()->createRenderTarget(GraphicAPI::instancePtr()->getBackBuffer());
-
-
-
+  auto& api = GraphicAPI::instance();
   
-
-  TextureDesc descDepth;
-  ZeroMemory( &descDepth, sizeof(descDepth) );
-  descDepth.width = GraphicAPI::instancePtr()->windowWidth;
-  descDepth.height = GraphicAPI::instancePtr()->windowHeight;
-  descDepth.mipLevels = 1;
-  descDepth.arraySize = 1;
-  descDepth.format = FORMAT::D24_UNORM_S8_UINT;
-  descDepth.sampleCount = 1;
-  descDepth.sampleQuality = 0;
-  descDepth.bind = BIND::DEPTH_STENCIL;
-
-  auto depthStencil = GraphicAPI::instancePtr()->createTexture();
-
-  if(!depthStencil->init(descDepth)){
-    return;
-  }
+  samsta = api.createSamplerState(sampDesc);
 
 
   TextureDesc renDesc;
   ZeroMemory( &renDesc, sizeof(renDesc) );
-  renDesc.width = GraphicAPI::instancePtr()->windowWidth;
-  renDesc.height = GraphicAPI::instancePtr()->windowHeight;
+  renDesc.width = api.windowWidth;
+  renDesc.height = api.windowHeight;
   renDesc.mipLevels = 1;
   renDesc.arraySize = 1;
   renDesc.format = FORMAT::R32G32B32A32_FLOAT;
@@ -158,33 +145,22 @@ void TestApp::postInit()
   renSDesc.mipLevels = 1;
   renSDesc.mostDetailedMip = 0;
 
-  renTex = GraphicAPI::instancePtr()->createTexture();
+  renTex = api.createTexture();
 
   if(!renTex->init(renDesc,renSDesc)){
     return;
   }
   
-  renderToTexture = GraphicAPI::instancePtr()->createRenderTarget(renTex);
 
-  DepthStencilDesc descDSV;
-  ZeroMemory( &descDSV, sizeof(descDSV) );
-  descDSV.format = descDepth.format;
-  descDSV.viewDimension = DS_DIMENSION::TEXTURE2D;
-  descDSV.MipSlice = 0;
+  vertexShader = api.createVertexShader();
 
-  depthStencilView = GraphicAPI::instancePtr()->createDepthStencil(descDSV,depthStencil);
-
-  GraphicAPI::instancePtr()->setRenderTargetAndDepthStencil(render,depthStencilView);
-
-  vertexShader = GraphicAPI::instancePtr()->createVertexShader();
-
-  pixelShader = GraphicAPI::instancePtr()->createPixelShader();
+  pixelShader = api.createPixelShader();
 
   IMGUI_CHECKVERSION();
 
   initImGui();
 
-  GraphicAPI::instancePtr()->setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+  api.setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
@@ -194,11 +170,6 @@ void TestApp::postInit()
 
   auto modelMC = newSPtr<Model>();
 
-  //model->meshes.push_back(ResoureManager::instancePtr()->meshes["cube"]);
-
-  /*ResoureManager::instancePtr()->materials["default"]->textures.push_back(
-  ResoureManager::instancePtr()->textures["textures/wall.jpg"]
-  );*/
 
   model1->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
 
@@ -210,14 +181,6 @@ void TestApp::postInit()
 
   testObject2 = newSPtr<Object>();
 
-  /*testObject1->attachComponent(newSPtr<GraphicsComponent>());
-
-  testObject2->attachComponent(newSPtr<GraphicsComponent>());
-
-  testObject1->getComponent<GraphicsComponent>()->model = model1;
-
-  testObject2->getComponent<GraphicsComponent>()->model = model2;*/
-
 
 
   testObjectMC = newSPtr<Object>();
@@ -225,8 +188,6 @@ void TestApp::postInit()
   character = newSPtr<Object>();
 
   auto charmod = newSPtr<Model>();
-
-  //charmod->loadFromFile(Path("models/youarenotmandalorian.fbx"));
 
   character->setLocation({0.0f,-2.0f,7.0f});
 
@@ -238,19 +199,9 @@ void TestApp::postInit()
 
   character->getComponent<GraphicsComponent>()->model = charmod;
 
-  /*character->attachComponent(newSPtr<SkeletalComponent>());
+  actualScene = newSPtr<Object>();
 
-  character->getComponent<SkeletalComponent>()->skeleton = 
-  ResoureManager::instancePtr()->skeletons["Shooting Gun"];
-
-  character->attachComponent(newSPtr<AnimationComponent>());
-
-  character->getComponent<AnimationComponent>()->animation = 
-  ResoureManager::instancePtr()->animations["Shooting Gun"];*/
-
-  scene = newSPtr<Object>();
-
-  actualObject = scene;
+  actualObject = actualScene;
 
     
 
@@ -335,7 +286,7 @@ void TestApp::postInit()
 
    
 
-  lights = GraphicAPI::instancePtr()->createBuffer();
+  lights = api.createBuffer();
 
   lights->init(sizeof(Vector4f)*2);
   
@@ -421,17 +372,19 @@ void TestApp::postInit()
   cam = newSPtr<Camera>();
 
   cam->angle = 0.785398163f;
-  cam->ratio = (float)GraphicAPI::instancePtr()->windowWidth / (float)GraphicAPI::instancePtr()->windowHeight;
+  cam->ratio = (float)api.windowWidth / (float)api.windowHeight;
   cam->nearPlane = 1.0f;
   cam->farPlane = 100.0f;
 
   cam->updateView();
 
   cam->updateProyection();
+
+  
 }
 
 
-void TestApp::update(float delta)
+void TestApp::postUpdate(float delta)
 {
 
   Vector3f camdelta = {0.0f,0.0f,0.0f};
@@ -482,13 +435,17 @@ void TestApp::update(float delta)
 
 void TestApp::draw()
 {
+  auto& api = GraphicAPI::instance();
 
-  GraphicAPI::instancePtr()->clearRenderTarget(render);
-  GraphicAPI::instancePtr()->clearDepthStencil(depthStencilView);
+  api.setRenderTargetAndDepthStencil(finalRender,finalDepthStencil);
+
+
+  api.clearRenderTarget(finalRender);
+  api.clearDepthStencil(finalDepthStencil);
 
    
 
-  GraphicAPI::instancePtr()->setSamplerState(samsta);
+  api.setSamplerState(samsta);
   
   cam->setCamera();
 
@@ -496,7 +453,7 @@ void TestApp::draw()
 
   Vector<SPtr<Object>> seenObjects;
 
-  cam->seeObjects(scene,seenObjects);
+  cam->seeObjects(actualScene,seenObjects);
 
   for(auto object : seenObjects){
     
@@ -508,9 +465,12 @@ void TestApp::draw()
 
     for(int i = 0;i<model->meshes.size();++i){
 
-      model->materials[i]->set();
+      if(model->materials.size()>i && model->materials[i]){
+        model->materials[i]->set();
+      }
 
-      GraphicAPI::instancePtr()->setVSBuffer(object->transformB, 0);
+
+      api.setVSBuffer(object->transformB, 0);
 
       auto actualMesh = model->meshes[i];
 
@@ -519,13 +479,14 @@ void TestApp::draw()
       actualMesh->indexB->set();
 
       if(actualMesh->hasBones){
+
         actualMesh->bonesB->update(actualMesh->ofset.data());
 
-        GraphicAPI::instancePtr()->setVSBuffer( actualMesh->bonesB,3);
+        api.setVSBuffer( actualMesh->bonesB,3);
       }
      
 
-      GraphicAPI::instancePtr()->draw(actualMesh->indexNumber);
+      api.draw(actualMesh->indexNumber);
     }
 
   }
@@ -538,19 +499,20 @@ void TestApp::draw()
 
 void TestApp::initImGui()
 {
-  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+  auto& api = GraphicAPI::instance();
+  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
   }
   
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
-    ImGui_ImplWin32_Init(GraphicAPI::instancePtr()->getWindow());
+  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+    ImGui_ImplWin32_Init(api.getWindow());
     ImGui_ImplDX11_Init(
-      (ID3D11Device*)GraphicAPI::instancePtr()->getDevice(), 
-      (ID3D11DeviceContext*)GraphicAPI::instancePtr()->getContext());
+      (ID3D11Device*)api.getDevice(), 
+      (ID3D11DeviceContext*)api.getContext());
   }
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
-    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)GraphicAPI::instancePtr()->getWindow(), true);
+  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
+    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)api.getWindow(), true);
     //ImGui_ImplOpenGL3_Init("#version 130");
   }
   
@@ -559,17 +521,18 @@ void TestApp::initImGui()
 
 void TestApp::newImGuiFrame()
 {
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  auto& api = GraphicAPI::instance();
+  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
   }
 
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_NewFrame();
     //ImGui_ImplGlfw_NewFrame();
   }
   
-  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::NewFrame();
   }
   
@@ -577,19 +540,20 @@ void TestApp::newImGuiFrame()
 
 void TestApp::renderImGui()
 {
+  auto& api = GraphicAPI::instance();
   ImGuiIO& io = ImGui::GetIO();
-  io.DisplaySize.x = GraphicAPI::instancePtr()->windowWidth;
-  io.DisplaySize.y = GraphicAPI::instancePtr()->windowHeight;
+  io.DisplaySize.x = api.windowWidth;
+  io.DisplaySize.y = api.windowHeight;
   
-  if (GraphicAPI::instancePtr()->actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::Render();
   }
 
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
 
-  if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 
@@ -598,7 +562,7 @@ void TestApp::renderImGui()
 void oaEngineSDK::TestApp::drawImGui()
 {
   auto& resourceManager = ResoureManager::instance();
-  /*if (GraphicAPI::instancePtr()->actualGraphicAPI == GRAPHIC_API::NONE) {
+  /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
   ImGui::Begin("objects");
@@ -634,10 +598,24 @@ void oaEngineSDK::TestApp::drawImGui()
         };
       }
     }
-    auto component = actualObject->getComponent<GraphicsComponent>();
+    SPtr<Component> component = actualObject->getComponent<GraphicsComponent>();
     if(component){
       if(ImGui::Button("select model")){
-        component->model = actualModel;
+        cast<GraphicsComponent>(component)->model = actualModel;
+      }
+    }
+
+    component = actualObject->getComponent<SkeletalComponent>();
+    if(component){
+      if(ImGui::Button("select Skeleton")){
+        cast<SkeletalComponent>(component)->skeleton = actualSkeleton;
+      }
+    }
+
+    component = actualObject->getComponent<AnimationComponent>();
+    if(component){
+      if(ImGui::Button("select Animation")){
+        cast<AnimationComponent>(component)->animation = actualAnimation;
       }
     }
   }
@@ -672,10 +650,10 @@ void oaEngineSDK::TestApp::drawImGui()
   if (ImGui::CollapsingHeader("models")){
     if(ImGui::Button("Load From File")){
       Path path;
-      path.searchForPath();
       if(path.searchForPath()){
-        resourceManager.loadModel(path);
-
+        loader = new Loader;
+        loadflags = loader->checkForLoad(path);
+        loadflags0 = 0;
       }
     }
 
@@ -685,7 +663,27 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
   }
+
+  if (ImGui::CollapsingHeader("skeletons")){
+    for(auto skeleton : resourceManager.skeletons){
+      if(ImGui::Button(skeleton.second->name.c_str(),ImVec2(100,100))){
+        actualSkeleton = skeleton.second;
+      }
+    }
+  }
+
+  if (ImGui::CollapsingHeader("animations")){
+    for(auto animation : resourceManager.animations){
+      if(ImGui::Button(animation.second->name.c_str(),ImVec2(100,100))){
+        actualAnimation = animation.second;
+      }
+    }
+  }
+
+
   ImGui::End();
+
+  
   
 
   ImGui::Begin("objects");
@@ -693,9 +691,9 @@ void oaEngineSDK::TestApp::drawImGui()
     isCreatingObject = true;
   }
   if(ImGui::Button("scene")){
-    actualObject = scene;
+    actualObject = actualScene;
   }
-  childsInImgui(scene);
+  childsInImgui(actualScene);
   ImGui::End();
 
   /*ImGui::Begin("lighs");
@@ -722,9 +720,53 @@ void oaEngineSDK::TestApp::drawImGui()
       isAddingComponent = false;
     }
 
+    if(ImGui::Button("Skeletal")){
+      actualObject->attachComponent(newSPtr<SkeletalComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("Animation")){
+      actualObject->attachComponent(newSPtr<AnimationComponent>());
+      isAddingComponent = false;
+    }
+
     ImGui::End();
   }
 
+  if(loader){
+    ImGui::Begin("load");
+    if(loadflags & LOADERFLAGS::MESH){
+      ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::MESH);
+    }
+    if(loadflags & LOADERFLAGS::TEXTURE){
+      ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::TEXTURE);
+    }
+    if(loadflags & LOADERFLAGS::SKELETON){
+      ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::SKELETON);
+    }
+    if(loadflags & LOADERFLAGS::ANIMATION){
+      ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::ANIMATION);
+    }
+    if(ImGui::Button("OK")){
+      if(loadflags0 & LOADERFLAGS::MESH){
+        ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::MESH);
+      }
+      if(loadflags0 & LOADERFLAGS::TEXTURE){
+        ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::TEXTURE);
+      }
+      if(loadflags0 & LOADERFLAGS::SKELETON){
+        ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::SKELETON);
+      }
+      if(loadflags0 & LOADERFLAGS::ANIMATION){
+        ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::ANIMATION);
+      }
+      loader->load(static_cast<LOADERFLAGS::E>(loadflags0));
+      delete loader;
+      loader = nullptr;
+    }
+    
+    ImGui::End();
+  }
 }
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)

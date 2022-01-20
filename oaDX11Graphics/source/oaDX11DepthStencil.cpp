@@ -7,7 +7,7 @@ namespace oaEngineSDK{
 
 DX11DepthStencil::~DX11DepthStencil()
 {
-  if( depthStencil ) depthStencil->Release();
+  release();
 }
 
 bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
@@ -26,6 +26,12 @@ bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
   }
 
   return true;
+}
+
+void DX11DepthStencil::release()
+{
+  if( depthStencil ) depthStencil->Release();
+  depthStencil = nullptr;
 }
 
 }

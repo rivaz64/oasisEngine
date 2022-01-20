@@ -20,6 +20,9 @@ class DX11DepthStencil :
   bool
   init(DepthStencilDesc descritor, SPtr<Texture> texture) override;
 
+  void
+  release();
+
   ID3D11DepthStencilView* depthStencil = nullptr;
 };
 

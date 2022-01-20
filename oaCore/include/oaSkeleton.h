@@ -56,6 +56,8 @@ class Skeleton
    * @brief the inverse of the root
   */
   Matrix4f globalInverse;
+
+  String name;
 };
 
 }

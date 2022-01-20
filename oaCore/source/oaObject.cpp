@@ -40,6 +40,7 @@ void
 Object::update()
 {
   for(auto component : components){
+    if(component.second.get())
     component.second->update(shared_from_this());
   }
 }

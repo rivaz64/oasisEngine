@@ -21,6 +21,9 @@ class DX11RenderTarget :
   bool 
   init(SPtr<Texture> texture) override;
 
+  void
+  release();
+
  private:
 
   ID3D11RenderTargetView* renderTargetView = nullptr;

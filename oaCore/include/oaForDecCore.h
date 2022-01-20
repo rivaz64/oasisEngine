@@ -25,4 +25,5 @@ class Path;
 class GraphicsComponent;
 class SkeletalComponent;
 class AnimationComponent;
+class Scene;
 }

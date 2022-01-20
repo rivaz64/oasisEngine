@@ -62,11 +62,7 @@ DX11GraphicAPI::initialize()
 
   ShowWindow(hWnd, SW_SHOWDEFAULT);
 
-  RECT rc;
-  GetClientRect( hWnd, &rc );
-  windowWidth = rc.right - rc.left;
-  windowHeight = rc.bottom - rc.top;
-
+  
 
   UINT createDeviceFlags = 0;
 #ifdef _DEBUG
@@ -89,6 +85,8 @@ DX11GraphicAPI::initialize()
   };
   UINT numFeatureLevels = ARRAYSIZE( featureLevels );
   
+  setWindow(hWnd);
+
 
   HRESULT hr = S_OK;
 
@@ -121,14 +119,7 @@ DX11GraphicAPI::initialize()
     return false;
   }
 
-  D3D11_VIEWPORT vp;
-  vp.Width = (FLOAT)windowWidth;
-  vp.Height = (FLOAT)windowHeight;
-  vp.MinDepth = 0.0f;
-  vp.MaxDepth = 1.0f;
-  vp.TopLeftX = 0;
-  vp.TopLeftY = 0;
-  context->RSSetViewports( 1, &vp );
+  
 
   return true;
 }
@@ -236,6 +227,7 @@ DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 
 SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 {
+  if(!swapChain) return SPtr<Texture>();
   auto backBuffer = createTexture();
 
   HRESULT hr = swapChain->GetBuffer( 
@@ -253,16 +245,12 @@ SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 void 
 DX11GraphicAPI::draw(uint64 indexes)
 {
-  context->DrawIndexed(static_cast<UINT>(indexes), 0, 0);
+  context->DrawIndexed(indexes, 0, 0);
 }
 
 void 
 DX11GraphicAPI::show()
 {
-  
-  //context->OMSetRenderTargets( 1, &renderTargetView, NULL )
-  //context->OMSetRenderTargets( 1, &renderTargetView, depthStencilView );
-
   swapChain->Present( 0, 0 );
 }
 
@@ -313,6 +301,17 @@ DX11GraphicAPI::setRenderTargetAndDepthStencil(
   );
 }
 
+void DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
+{
+  if(!context) return;
+  context->OMSetRenderTargets(0,0,0);
+}
+
+void DX11GraphicAPI::resizeSwapChian()
+{
+  
+}
+
 void 
 DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
 {
@@ -330,6 +329,31 @@ void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
     0
   );
 }
+
+void DX11GraphicAPI::setWindow(void* window)
+{
+  RECT rc;
+  GetClientRect( hWnd, &rc );
+  windowWidth = rc.right - rc.left;
+  windowHeight = rc.bottom - rc.top;
+
+  if(!context){
+    return;
+  }
+
+  D3D11_VIEWPORT vp;
+  vp.Width = windowWidth;
+  vp.Height = windowHeight;
+  vp.MinDepth = 0.0f;
+  vp.MaxDepth = 1.0f;
+  vp.TopLeftX = 0;
+  vp.TopLeftY = 0;
+  context->RSSetViewports( 1, &vp );
+
+  if(!swapChain) return;
+  HRESULT hr = swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+}
+
 
 void* 
 DX11GraphicAPI::getWindow()

@@ -12,6 +12,7 @@
 #include "oaMarchingCubes.h"
 #include "oaProceduralTerrain.h"
 #include "oaNoise2D.h"
+#include "oaLoader.h"
 
 namespace oaEngineSDK{
 
@@ -32,7 +33,7 @@ public:
   postInit() override;
 
   void
-  update(float delta) override;
+  postUpdate(float delta) override;
 
   void
   draw() override;
@@ -80,21 +81,15 @@ public:
 
    SPtr<SamplerState> samsta;
 
-   SPtr<RenderTarget> render;
 
    SPtr<RenderTarget> renderToTexture;
 
-   SPtr<Texture> depthStencil;
-
-   SPtr<DepthStencil> depthStencilView;
 
    SPtr<Texture> renTex;
 
    //SPtr<SceneGraph> scene; 
 
    SPtr<Object> actualObject;
-
-   SPtr<Object> scene;
 
   SPtr<Shader> vertexShader;
 
@@ -105,6 +100,10 @@ public:
   SPtr<Mesh> actualMesh;
 
   SPtr<Model> actualModel;
+
+  SPtr<Skeleton> actualSkeleton;
+
+  SPtr<Animation> actualAnimation;
 
   bool mousePressed = false;
 
@@ -125,11 +124,19 @@ public:
 
   SPtr<Noise2D> noise2;
 
+  Loader* loader;
+
   bool isCreatingObject=false;
 
   bool isAddingComponent=false;
 
   char imguiString[64];
+
+  LOADERFLAGS::E loadflags;
+
+  uint32 loadflags0 = 0;
+
+  uint8 loaderFlagsActive;
 };
 
 }

@@ -66,11 +66,17 @@ class OA_CORE_EXPORT BaseApp :
   mainLoop();
 
   /**
-   * @brief executed once each loop
-   * @param delta the time passed since the last update  
+   * @brief executed once each loop 
+   * @param updates the object and his childs
+  */
+  void
+  update(SPtr<Object> object);
+
+  /**
+   * @brief update for the subclasss
   */
   virtual void
-  update(float /*delta*/) {}
+  postUpdate(float /*delta*/) {}
 
   /**
   * @brief render the things to the screen
@@ -83,6 +89,19 @@ class OA_CORE_EXPORT BaseApp :
   */
   void
   render();
+
+  /**
+   * @brief initializes everything needed for the window
+   * @param window 
+  */
+  void
+  setWindow(void* window);
+
+  /**
+   * @brief this function is called when the window is resized
+  */
+  void
+  resizeWindow(void* window);
 
   /**
    * @brief if the app is running
@@ -105,6 +124,21 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the time that has pass since the last update
   */
   float deltaTime = 0;
+
+  /**
+   * @brief the actual scene selected
+  */
+  SPtr<Object> actualScene;
+
+  /**
+   * @brief the render target that is going to be shown in the screen
+  */
+  SPtr<RenderTarget> finalRender;
+
+  /**
+   * @brief the depth stencil to be used at the end
+  */
+  SPtr<DepthStencil> finalDepthStencil;
 
   friend class Module<BaseApp>;
 };

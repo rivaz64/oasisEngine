@@ -43,9 +43,12 @@ void Mesh::create(Vector<AnimationVertex>& vertices, Vector<uint32>& index, Vect
 
   bonesB = GraphicAPI::instancePtr()->createBuffer();
 
-  bonesB->init(sizeof(Matrix4f)*bones.size());
+  bonesB->init(sizeof(Matrix4f)*1024);
 
-  ofset.resize(bones.size());
+  ofset.resize(1024);
+  for(int i = 0;i<1024;++i){
+    ofset[i] = Matrix4f::IDENTITY;
+  }
 }
 
 void Mesh::initFromSubMesh(const SubMesh& sm)

@@ -4,6 +4,10 @@
 #include "oaVector3f.h"
 #include "oaInputManager.h"
 #include "oaTime.h"
+#include "oaObject.h"
+#include "oaRenderTarget.h"
+#include "oaDepthStencil.h"
+#include "oaTexture.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -28,12 +32,14 @@ BaseApp::run()
   if (!GraphicAPI::isStarted()) {
     GraphicAPI::startUp();
   }
+
   preInit();
   if(GraphicAPI::instancePtr()->initialize()){
 
     ResoureManager::startUp();
     InputManager::startUp();
     Time::startUp();
+    setWindow(GraphicAPI::instance().getWindow());
 
     postInit();
     mainLoop();
@@ -75,19 +81,91 @@ BaseApp::mainLoop()
 
     GraphicAPI::instancePtr()->events();
 
-    update(Time::instancePtr()->deltaTime);
+    update(actualScene);
+
+    postUpdate(Time::instancePtr()->deltaTime);
 
     render();
-
-
   }
 }
 
-void BaseApp::render()
+void 
+BaseApp::update(SPtr<Object> object)
+{
+  object->update();
+  auto& childs =  object->getChilds();
+  for(auto child : childs){
+    update(child);
+  }
+}
+
+void 
+BaseApp::render()
 {
   //GraphicAPI::instancePtr()->clear();
   draw();
   GraphicAPI::instancePtr()->show();
+}
+
+
+void BaseApp::setWindow(void* window)
+{
+  auto& api = GraphicAPI::instance();
+
+  api.setWindow(window);
+
+  auto backBuffer = api.getBackBuffer();
+
+  if(!backBuffer.get()){
+    return;
+  }
+
+  finalRender = api.createRenderTarget(backBuffer);
+
+  TextureDesc descDepth;
+  ZeroMemory( &descDepth, sizeof(descDepth) );
+  descDepth.width = api.windowWidth;
+  descDepth.height = api.windowHeight;
+  descDepth.mipLevels = 1;
+  descDepth.arraySize = 1;
+  descDepth.format = FORMAT::D24_UNORM_S8_UINT;
+  descDepth.sampleCount = 1;
+  descDepth.sampleQuality = 0;
+  descDepth.bind = BIND::DEPTH_STENCIL;
+
+  auto depthStencil = api.createTexture();
+
+  if(!depthStencil->init(descDepth)){
+    return;
+  }
+
+  DepthStencilDesc descDSV;
+  ZeroMemory( &descDSV, sizeof(descDSV) );
+  descDSV.format = descDepth.format;
+  descDSV.viewDimension = DS_DIMENSION::TEXTURE2D;
+  descDSV.MipSlice = 0;
+
+  finalDepthStencil = api.createDepthStencil(descDSV,depthStencil);
+}
+
+void
+BaseApp::resizeWindow(void* window)
+{
+  auto& api = GraphicAPI::instance();
+
+  if(!api.isStarted() ){
+    return;
+  }
+  api.unsetRenderTargetAndDepthStencil();
+
+  if(finalRender.get())
+  finalRender->release();
+
+  if(finalDepthStencil.get())
+  finalDepthStencil->release();
+  
+  setWindow(window);
+  
 }
 
 }
