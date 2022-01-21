@@ -184,6 +184,7 @@
     <ClInclude Include="include\oaIndexBuffer.h" />
     <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaLoader.h" />
+    <ClInclude Include="include\oaLogger.h" />
     <ClInclude Include="include\oaMaterial.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
@@ -215,6 +216,7 @@
     <ClCompile Include="source\oaGraphicsComponent.cpp" />
     <ClCompile Include="source\oaIndexBuffer.cpp" />
     <ClCompile Include="source\oaLoader.cpp" />
+    <ClCompile Include="source\oaLogger.cpp" />
     <ClCompile Include="source\oaMaterial.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />

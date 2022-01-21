@@ -14,6 +14,7 @@
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
+#include "oaLogger.h"
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -26,6 +27,7 @@ void BaseApp::onShutDown()
   ResoureManager::shutDown();
   InputManager::shutDown();
   Time::shutDown();
+  Logger::shutDown();
   postShutDown();
 }
 
@@ -44,7 +46,10 @@ BaseApp::run()
 
     ResoureManager::startUp();
     InputManager::startUp();
+    Logger::startUp();
     Time::startUp();
+    //Logger::instance().printFloats(3,3.1,2.7,1.4);
+    OA_LOG("Some variable values: x: %f, y: %f",3.f,5.f);
     setWindow(GraphicAPI::instance().getWindow());
 
     postInit();
