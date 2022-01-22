@@ -15,6 +15,9 @@
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
 #include "oaLogger.h"
+#include "oaFile.h"
+#include "oaPath.h"
+#include <exception>
 #include <Windows.h>
 
 namespace oaEngineSDK{
@@ -48,12 +51,21 @@ BaseApp::run()
     InputManager::startUp();
     Logger::startUp();
     Time::startUp();
-    //Logger::instance().printFloats(3,3.1,2.7,1.4);
-    OA_LOG("Some variable values: x: %f, y: %f",3.f,5.f);
+    
     setWindow(GraphicAPI::instance().getWindow());
 
     postInit();
-    mainLoop();
+    
+    mistake.resize(20);
+
+    try {
+      mainLoop();
+    }
+    catch (const std::out_of_range& oor) {
+      Logger::instance().flush();
+    }
+    Logger::instance().flush();
+
   }
 }
 
@@ -119,7 +131,8 @@ BaseApp::render()
 }
 
 
-void BaseApp::setWindow(void* window)
+void
+BaseApp::setWindow(void* window)
 {
   auto& api = GraphicAPI::instance();
 

@@ -28,6 +28,20 @@ class OA_CORE_EXPORT Time :
     return deltaTime;
   }
 
+  /**
+   * @brief returns a string with the actual date and time
+   * @return 
+  */
+  String
+  getActualDateAndTime();
+
+  /**
+   * @brief gets the number of seconds since the epoch
+   * @return 
+  */
+  uint32
+  getTime();
+
  private:
   /**
    * @brief calculates the new deltaTime

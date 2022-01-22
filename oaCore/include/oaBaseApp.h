@@ -140,6 +140,10 @@ class OA_CORE_EXPORT BaseApp :
   */
   SPtr<DepthStencil> finalDepthStencil;
 
+  Vector<int> mistake;
+
+  int i=0;
+
   friend class Module<BaseApp>;
 };
 

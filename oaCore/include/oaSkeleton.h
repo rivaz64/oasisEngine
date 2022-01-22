@@ -37,6 +37,8 @@ class Skeleton
 {
  public:
   
+  
+
   /**
    * @brief all the nodes of the skeleton
   */

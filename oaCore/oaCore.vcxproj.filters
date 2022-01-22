@@ -108,6 +108,9 @@
     <ClInclude Include="include\oaLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -186,6 +189,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,10 +1,10 @@
 /**
 * @file oaLogger.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 1/21/2021
+* @date 1/21/2022
 */
 
-#define OA_LOG(s,...) Logger::instance().log( s,##__VA_ARGS__,__FILE__,__LINE__,__PRETTY_FUNCTION__ );
+#define OA_LOG(s) Logger::instance().log( s,__FILE__,__LINE__,__PRETTY_FUNCTION__ );
 
 #pragma once
 
@@ -28,18 +28,19 @@ class OA_CORE_EXPORT Logger :
   void
   onShutDown() override;
 
-  template<class... Args>
-  void log(String s,Args... args){
-    m.lock();
-    printf((s+" at file: %s in line %i at function %s").c_str(),args...);
-    m.unlock();
-  }
+  void log(const String& message,const String& file,uint32 line,const String& function);
+    //printf((s+" at file: %s in line %i at function %s").c_str(),args...);
+  
+  void 
+  flush();
 
  private:
   
   String completeMessage;
 
   mutex m;
+
+  bool flushed = false;
 };
 
 }

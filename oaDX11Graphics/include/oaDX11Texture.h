@@ -12,8 +12,6 @@
 
 namespace oaEngineSDK{
 
-
-
 class DX11Texture:
   public Texture
 {
