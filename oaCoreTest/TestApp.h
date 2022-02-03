@@ -15,7 +15,7 @@
 
 namespace oaEngineSDK{
 
-class ModelComponent;
+struct ModelComponent;
 
 class TestApp :
   public BaseApp
@@ -137,6 +137,8 @@ public:
   uint8 loaderFlagsActive;
 
   ModelComponent* actualModelComponent = nullptr;
+
+  bool animInPlay=false;
 };
 
 }

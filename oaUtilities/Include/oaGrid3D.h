@@ -79,7 +79,7 @@ class Grid3D
   Vector3U size;
 };
 
-Grid3D<bool>;
-Grid3D<float>;
+//Grid3D<bool>;
+//Grid3D<float>;
 
 }

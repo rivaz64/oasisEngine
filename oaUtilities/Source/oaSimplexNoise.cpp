@@ -40,7 +40,7 @@ SimplexNoise::valueAt(const Vector2f& point)
 
   Vector2f o2 = o1-offset+G2;
 
-  Vector2f o3 = o1 - 1.0 + 2.0 * G2;
+  Vector2f o3 = o1 - 1.f + 2.f * G2;
 
   Vector2f c2 = point-o2;
 

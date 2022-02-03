@@ -30,7 +30,7 @@ AnimationComponent::update(SPtr<Actor> actor)
     return;
   }
 
-  m_animTimeInSecs += Time::instancePtr()->getDelta();
+  //m_animTimeInSecs += Time::instancePtr()->getDelta();
 
   //float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
 
@@ -73,11 +73,9 @@ AnimationComponent::readNodeHeirarchy(
     if(mesh->m_boneMaping.find(skeletalNode->name) != mesh->m_boneMaping.end()){
       uint32 boneIndex = mesh->m_boneMaping[skeletalNode->name];
       mesh->m_ofset[boneIndex] = m_skeleton->m_globalInverse*globalTransform*mesh->m_bones[boneIndex];
-      m_skeleton->m_finalMatrix[skeletalNode->name] = globalTransform*mesh->m_bones[boneIndex];
+      m_skeleton->m_finalMatrix[skeletalNode->name] = globalTransform;
     }
   }
-  /*skeleton->boneMaping[skeletalNode->name] = 
-    skeleton->globalInverse*globalTransform;*/
 
   for(auto child : skeletalNode->childs){
     readNodeHeirarchy(child,globalTransform);

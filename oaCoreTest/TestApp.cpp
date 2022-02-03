@@ -26,6 +26,7 @@
 #include "oaIndexBuffer.h"
 #include "oaBuffer.h"
 #include "oaActor.h"
+#include "oaTime.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -273,7 +274,7 @@ void TestApp::draw()
         }
        
 
-        api.draw(actualMesh->m_indexNumber);
+        api.draw(static_cast<uint32>(actualMesh->m_indexNumber));
       }
     }
 
@@ -332,8 +333,8 @@ void TestApp::renderImGui()
 {
   auto& api = GraphicAPI::instance();
   ImGuiIO& io = ImGui::GetIO();
-  io.DisplaySize.x = api.m_windowWidth;
-  io.DisplaySize.y = api.m_windowHeight;
+  io.DisplaySize.x = static_cast<float>(api.m_windowWidth);
+  io.DisplaySize.y = static_cast<float>(api.m_windowHeight);
   
   if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::Render();
@@ -388,8 +389,11 @@ void oaEngineSDK::TestApp::drawImGui()
         };
       }
     }
-    SPtr<Component> component = actualActor->getComponent<GraphicsComponent>();
-    if(component){
+
+    SPtr<Component> component;
+    component = actualActor->getComponent<GraphicsComponent>();
+    if (component && ImGui::CollapsingHeader("models")){
+      
       if(ImGui::Button("select model") && actualModel.get()){
         cast<GraphicsComponent>(component)->addModel(actualModel);
       }
@@ -403,11 +407,13 @@ void oaEngineSDK::TestApp::drawImGui()
         ImGui::DragFloat3("scale Model",&actualModelComponent->scale.x);
         ImGui::DragFloat3("rotation Model",&actualModelComponent->rotation.x);
       }
+
     }
 
-
     component = actualActor->getComponent<SkeletalComponent>();
-    if(component){
+
+    if (component && ImGui::CollapsingHeader("skeleton")){
+      
       if(ImGui::Button("select Skeleton")){
         cast<SkeletalComponent>(component)->m_skeleton = actualSkeleton;
       }
@@ -415,19 +421,29 @@ void oaEngineSDK::TestApp::drawImGui()
         if(ImGui::Button("add socket")){
           isAddingSocket = true;
         }
-        
       }
+
     }
 
     component = actualActor->getComponent<AnimationComponent>();
-    if(component){
+
+
+    if (component && ImGui::CollapsingHeader("animation")){
+      auto animComponent = cast<AnimationComponent>(component);
       if(ImGui::Button("select Animation")){
-        auto animComponent = cast<AnimationComponent>(component);
         animComponent->m_animation = actualAnimation;
         animComponent->m_model = actualModel;
         animComponent->m_skeleton = actualSkeleton;
       }
+      if(animComponent->m_animation){
+        ImGui::DragFloat("actualTime",&animComponent->m_animTimeInSecs);
+      }
+      ImGui::Checkbox("play",&animInPlay);
+      if(animInPlay){
+        animComponent->m_animTimeInSecs += Time::instance().getDelta();
+      }
     }
+
   }
   ImGui::End();
 
@@ -487,7 +503,6 @@ void oaEngineSDK::TestApp::drawImGui()
     for(auto animation : resourceManager.animations){
       if(ImGui::Button(animation.second->m_name.c_str(),ImVec2(100,100))){
         actualAnimation = animation.second;
-
       }
     }
   }
@@ -677,9 +692,11 @@ oaEngineSDK::TestApp::icosahedron()
 SubMesh 
 oaEngineSDK::TestApp::SubDivide(const SubMesh& data)
 {
-  uint32 size = data.indices.size();
+  uint32 size = static_cast<uint32>(data.indices.size());
+
   SubMesh ans;
-  for(int i = 0;i<size;i+=3){
+
+  for(uint32 i = 0; i < size; i+=3){
     Vector3f oldPoints[3]={
       data.points[data.indices[i]].xyz,
       data.points[data.indices[i+1]].xyz,
@@ -691,7 +708,7 @@ oaEngineSDK::TestApp::SubDivide(const SubMesh& data)
     Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized()
     };
 
-    int actual = ans.points.size();
+    uint32 actual = static_cast<uint32>(ans.points.size());
 
     ans.points.push_back(Vector4f(oldPoints[0],0.0f));
     ans.points.push_back(Vector4f(oldPoints[1],0.0f));

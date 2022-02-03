@@ -68,7 +68,7 @@ class DX11GraphicAPI :
   getBackBuffer() override;
 
   void
-  draw(uint64 indexes) override;
+  draw(uint32 indexes) override;
 
   void
   show() override;
@@ -107,7 +107,7 @@ class DX11GraphicAPI :
   clearDepthStencil(SPtr<DepthStencil> depthStencil) override;
 
   void
-  setWindow(void* window) override;
+  setWindow() override;
 
   virtual void*
   getWindow() override;

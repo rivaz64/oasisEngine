@@ -117,7 +117,8 @@ class OA_CORE_EXPORT Actor :
     T temp;
     return cast<T>(m_components[temp.getType()]);
   }
-
+ 
+ private:
   /**
    * @brief the name of the Actor in the editor
   */
@@ -138,8 +139,6 @@ class OA_CORE_EXPORT Actor :
   */
   SPtr<Buffer> m_transformB;
 
-//for change to private
- public:
   /**
    * @brief where the Actor is in a 3D space
   */
@@ -174,6 +173,7 @@ class OA_CORE_EXPORT Actor :
    * @brief the dirty flag of the local and global matrix
   */
   //uint8 dirtyFlag = 0;
+  friend class TestApp;
 };
 
 }

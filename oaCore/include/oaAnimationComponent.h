@@ -64,6 +64,9 @@ class OA_CORE_EXPORT AnimationComponent :
   Quaternion
   interpolatedRotation(SPtr<AnimNode> node);
 
+  
+
+ private:
   /**
    * @brief the time where the animation is at in animation time
   */
@@ -104,6 +107,7 @@ class OA_CORE_EXPORT AnimationComponent :
   */
   SPtr<Skeleton> m_skeleton;
 
+  friend class TestApp;
 };
 
 }

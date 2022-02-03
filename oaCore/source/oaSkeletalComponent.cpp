@@ -51,7 +51,7 @@ void SkeletalComponent::update(SPtr<Actor> actor)
 bool 
 SkeletalComponent::attachToBone(SPtr<Model> model, String bone)
 {
-   if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
+  if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
     return false;
   }
   

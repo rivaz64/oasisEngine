@@ -85,7 +85,7 @@ DX11GraphicAPI::initialize()
   };
   UINT numFeatureLevels = ARRAYSIZE( featureLevels );
   
-  setWindow(m_hWnd);
+  setWindow();
 
 
   HRESULT hr = S_OK;
@@ -243,7 +243,7 @@ SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 }
 
 void 
-DX11GraphicAPI::draw(uint64 indexes)
+DX11GraphicAPI::draw(uint32 indexes)
 {
   m_context->DrawIndexed(indexes, 0, 0);
 }
@@ -330,11 +330,14 @@ void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
   );
 }
 
-void DX11GraphicAPI::setWindow(void* window)
+void
+DX11GraphicAPI::setWindow()
 {
   RECT rc;
   GetClientRect( m_hWnd, &rc );
+  if(rc.right - rc.left>0)
   m_windowWidth = rc.right - rc.left;
+  if( rc.bottom - rc.top>0)
   m_windowHeight = rc.bottom - rc.top;
 
   if(!m_context){
@@ -342,8 +345,8 @@ void DX11GraphicAPI::setWindow(void* window)
   }
 
   D3D11_VIEWPORT vp;
-  vp.Width = m_windowWidth;
-  vp.Height = m_windowHeight;
+  vp.Width = static_cast<float>(m_windowWidth);
+  vp.Height = static_cast<float>(m_windowHeight);
   vp.MinDepth = 0.0f;
   vp.MaxDepth = 1.0f;
   vp.TopLeftX = 0;
@@ -351,7 +354,7 @@ void DX11GraphicAPI::setWindow(void* window)
   m_context->RSSetViewports( 1, &vp );
 
   if(!m_swapChain) return;
-  HRESULT hr = m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+  m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 }
 
 

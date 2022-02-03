@@ -135,7 +135,7 @@ BaseApp::setWindow(void* window)
 {
   auto& api = GraphicAPI::instance();
 
-  api.setWindow(window);
+  api.setWindow();
 
   auto backBuffer = api.getBackBuffer();
 

@@ -140,7 +140,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param indexes 
   */
   virtual void
-  draw(uint64 /*indexes*/) {}
+  draw(uint32 /*indexes*/) {}
 
   /**
    * @brief shows the things that where rendered
@@ -236,14 +236,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param window 
   */
   virtual void
-  initWindow(void* window) {}
+  initWindow(void* /*window*/) {}
 
   /**
    * @brief sets the window to be used
    * @param  
   */
   virtual void
-  setWindow(void* /*window*/) {}
+  setWindow() {}
 
   virtual void*
   getWindow() { return nullptr;}

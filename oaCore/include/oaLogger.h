@@ -43,12 +43,6 @@ class OA_CORE_EXPORT Logger :
 {
  public:
 
-  void
-  onStartUp() override;
-
-  void
-  onShutDown() override;
-
   /**
    * @brief 
    * @param message the message to log
