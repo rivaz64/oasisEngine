@@ -10,7 +10,7 @@ oaEngineSDK::DX11RenderTarget::~DX11RenderTarget()
 bool oaEngineSDK::DX11RenderTarget::init(SPtr<Texture> texture)
 {
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateRenderTargetView( cast<DX11Texture>(texture)->texture, NULL, &renderTargetView );
+    m_device->CreateRenderTargetView( cast<DX11Texture>(texture)->m_texture, NULL, &m_renderTargetView );
 
   //if(cast<DX11Texture>(texture)->texture) cast<DX11Texture>(texture)->texture->Release();
 
@@ -24,6 +24,6 @@ bool oaEngineSDK::DX11RenderTarget::init(SPtr<Texture> texture)
 
 void oaEngineSDK::DX11RenderTarget::release()
 {
-  if( renderTargetView ) renderTargetView->Release();
-  renderTargetView = nullptr;
+  if( m_renderTargetView ) m_renderTargetView->Release();
+  m_renderTargetView = nullptr;
 }

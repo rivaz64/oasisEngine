@@ -26,7 +26,7 @@ class DX11RenderTarget :
 
  private:
 
-  ID3D11RenderTargetView* renderTargetView = nullptr;
+  ID3D11RenderTargetView* m_renderTargetView = nullptr;
 
   friend class DX11GraphicAPI;
 };

@@ -62,13 +62,16 @@ class OA_CORE_EXPORT Loader
   void
   loadAnimations(SPtr<Model> model);
 
-  const void* sceneI;
+  const void* m_sceneI;
 
-  uint8 loadedFlags = 0;
+  uint8 m_loadedFlags = 0;
 
-  Path file;
+  Path m_file;
 
-  void* importer;
+  void* m_importer;
+
+  public:
+  float m_importScale;
 };
 
 }

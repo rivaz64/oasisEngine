@@ -25,6 +25,7 @@
 #include "oaVertexBuffer.h"
 #include "oaIndexBuffer.h"
 #include "oaBuffer.h"
+#include "oaActor.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -55,11 +56,11 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_QUIT:
-    app->isRunning = false;
+    app->m_isRunning = false;
     break;
 
   case WM_DESTROY:
-    app->isRunning = false;
+    app->m_isRunning = false;
     PostQuitMessage( 0 );
     break;
 
@@ -80,12 +81,12 @@ namespace oaEngineSDK {
 void TestApp::postShutDown()
 {
   auto& api = GraphicAPI::instance();
-  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
   }
 
-  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();
   }
@@ -130,34 +131,13 @@ void TestApp::postInit()
   
   samsta = api.createSamplerState(sampDesc);
 
-
-  TextureDesc renDesc;
-  ZeroMemory( &renDesc, sizeof(renDesc) );
-  renDesc.width = api.windowWidth;
-  renDesc.height = api.windowHeight;
-  renDesc.mipLevels = 1;
-  renDesc.arraySize = 1;
-  renDesc.format = FORMAT::R32G32B32A32_FLOAT;
-  renDesc.sampleCount = 1;
-  renDesc.sampleQuality = 0;
-  renDesc.bind = BIND::SHADER_RESOURCE_RENDER_TARGET;
-
-  ShaderResourseViewDesc renSDesc;
-  renSDesc.dimencion = SRV_DIMENSION::TEXTURE2D;
-  renSDesc.format = FORMAT::R32G32B32A32_FLOAT;
-  renSDesc.mipLevels = 1;
-  renSDesc.mostDetailedMip = 0;
-
-  renTex = api.createTexture();
-
-  if(!renTex->init(renDesc,renSDesc)){
-    return;
-  }
-  
-
   vertexShader = api.createVertexShader();
 
   pixelShader = api.createPixelShader();
+
+  lights = api.createBuffer();
+
+  lights->init(sizeof(float)*4);
 
   IMGUI_CHECKVERSION();
 
@@ -167,217 +147,16 @@ void TestApp::postInit()
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
-  auto model1 = newSPtr<Model>();
+  m_actualScene = newSPtr<Actor>();
 
-  auto model2 = newSPtr<Model>();
-
-  auto modelMC = newSPtr<Model>();
-
-
-  model1->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
-
-  model2->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
-
-  modelMC->materials.push_back(ResoureManager::instancePtr()->materials["default"]);
-
-  testObject1 = newSPtr<Object>();
-
-  testObject2 = newSPtr<Object>();
-
-
-
-  testObjectMC = newSPtr<Object>();
-
-  character = newSPtr<Object>();
-
-  auto charmod = newSPtr<Model>();
-
-  character->setLocation({0.0f,-2.0f,7.0f});
-
-  character->setScale({.1f,.1f,.1f});
-
-  character->setRotation({0.0f,3.4f,0.0f});
-
-  character->attachComponent(newSPtr<GraphicsComponent>());
-
-  character->getComponent<GraphicsComponent>()->model = charmod;
-
-  actualScene = newSPtr<Object>();
-
-  actualObject = actualScene;
-
-    
-
-
-  //testObjectMC->attachComponent(newSPtr<GraphicsComponent>());
-
-  //testObjectMC->getComponent<GraphicsComponent>()->model = modelMC;
-
- 
-
-  /*character = newSPtr<Object>();
-
-  //
-
-  auto charmod = newSPtr<Model>();
-
-  charmod->loadFromFile("models/Shooting Gun.fbx");
-
-  //charmod->loadFromFile("models/youarenotmandalorian.fbx");
-
-  
-
-  testObject = newSPtr<Object>();
-
-  ResoureManager::instancePtr()->models.insert({"test",newSPtr<Model>()});
-
-  ResoureManager::instancePtr()->models["test"]->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["cube"]
-  );
-
-  ResoureManager::instancePtr()->models["test"]->materials.push_back(
-    ResoureManager::instancePtr()->materials["default"]
-  );
-
-  auto model = newSPtr<Model>();
-
-  testObject->setLocation({0.0f,0.0f,7.f});
-
-  model->meshes.push_back(
-    ResoureManager::instancePtr()->meshes["torus"]
-  );
-  
-  model->materials.push_back(
-    ResoureManager::instancePtr()->materials["default"]
-  );
-
-
-  
-
-
-  //scene->cam = cam;
-
-  //scene->attach(testObject);
-
-  scene->attach(character);
-
-  //ResoureManager::instancePtr()->rendereableObjects.push_back(testObject);
-
-  //testObject->attachComponent(newSPtr<GraphicsComponent>());
-
-  //testObject->getComponent<GraphicsComponent>()->model = model;
-
-
-  //character->attach(testObject);
-
-  testObject->name = "test object";
-
-  character->name = "character";
-
-  actualObject = testObject;
-
-  auto mesh = newSPtr<GraphicsComponent>();
-
-  mesh->model =  ResoureManager::instancePtr()->models["test"];
-
-  */
-  /*
-
-  scene = newSPtr<Object>();
-
-  scene->name = "scene";
-
-   
-
-  lights = api.createBuffer();
-
-  lights->init(sizeof(Vector4f)*2);
-  
-  chnk = newSPtr<Chunk>();
-
-  mc = newSPtr<MarchingCubes>();
-
-  pt1 = newSPtr<ProceduralTerrain>();
-  pt2 = newSPtr<ProceduralTerrain>();
-
-  Grid2D<float> chunck1({32u,32u});
-  Grid2D<float> chunck2({32u,32u});
-
-  noise1 = newSPtr<OctavesNoise>();
-  noise2 = newSPtr<OctavesNoise>();
-
-  Vector<float> amplitudes{1,.5,.25};
-
-  cast<OctavesNoise>(noise1)->init(newSPtr<PerlinNoise2D>(),amplitudes);
-  cast<OctavesNoise>(noise2)->init(newSPtr<PerlinNoise2D>(),amplitudes);
-
-  /*chunck.setAt({0,0,0},1.f);
-  chunck.setAt({1,0,0},-1.f);
-  chunck.setAt({0,1,0},1.f);
-  chunck.setAt({0,0,1},-1.f);
-  chunck.setAt({1,1,0},-1.f);
-  chunck.setAt({1,0,1},-1.f);
-  chunck.setAt({0,1,1},-1.f);
-  chunck.setAt({1,1,1},-1.f);*/
-
-
-
-  //PerlinNoise3D::fillGrid(chunck,3);
-
-  //PerlinNoise2D::fillGrid(chunck,7);
-  //SimplexNoise::fillGrid(chunck,15);
-
-  /*chnk->init(chunck);
-
-  mc->init(chunck);*/
-
-  /*noise1->fillGrid(chunck1,15);
-  noise2->fillGrid(chunck2,15);
-
-  noise1->redistribute(chunck1,2,-.125);
-  noise2->redistribute(chunck2,1,-.125);
-
-  pt1->init(chunck1);
-  pt2->init(chunck2);
-
-  auto testMesh = newSPtr<Mesh>();*/
-
- /* auto datos = icosahedron();
-
-  datos = SubDivide(datos);
-  datos = SubDivide(datos);
-  datos = SubDivide(datos);
-
-  for(auto& v : datos.points){
-    v += v*.125*PerlinNoise3D::valueAt(v.xyz*.5+Vector3f(7,7,7));
-  }
-
-  testMesh->initFromSubMesh(datos);*/
-
-  /*testObject1->getComponent<GraphicsComponent>()->model->meshes.push_back(pt1);
-
-  testObject2->getComponent<GraphicsComponent>()->model->meshes.push_back(pt2);
-
-  //testObjectMC->getComponent<GraphicsComponent>()->model->meshes.push_back(mc);
-
-  testObject1->name = "octaves";
-
-  testObject2->name = "vanilla";
-
-  testObjectMC->name = "marching cube";
-
-  scene->attach(testObject1);
-  
-  scene->attach(testObject2); */
-
-  //scene->attach(testObjectMC); 
+  actualActor = m_actualScene;
 
   cam = newSPtr<Camera>();
 
-  cam->angle = 0.785398163f;
-  cam->ratio = (float)api.windowWidth / (float)api.windowHeight;
-  cam->nearPlane = 1.0f;
-  cam->farPlane = 100.0f;
+  cam->m_angle = 0.785398163f;
+  cam->m_ratio = (float)api.m_windowWidth / (float)api.m_windowHeight;
+  cam->m_nearPlane = 1.0f;
+  cam->m_farPlane = 100.0f;
 
   cam->updateView();
 
@@ -440,11 +219,11 @@ void TestApp::draw()
 {
   auto& api = GraphicAPI::instance();
 
-  api.setRenderTargetAndDepthStencil(finalRender,finalDepthStencil);
+  api.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
 
 
-  api.clearRenderTarget(finalRender);
-  api.clearDepthStencil(finalDepthStencil);
+  api.clearRenderTarget(m_finalRender);
+  api.clearDepthStencil(m_finalDepthStencil);
 
    
 
@@ -452,45 +231,53 @@ void TestApp::draw()
   
   cam->setCamera();
 
-  //auto lista = ResoureManager::instancePtr()->rendereableObjects;
+  //auto lista = ResoureManager::instancePtr()->rendereableActors;
 
-  Vector<SPtr<Object>> seenObjects;
+  Vector<SPtr<Actor>> seenActors;
 
-  cam->seeObjects(actualScene,seenObjects);
+  cam->seeActors(m_actualScene,seenActors);
+  lights->update(&dir.x);
+  api.setPSBuffer(lights,0);
 
-  for(auto object : seenObjects){
+  for(auto Actor : seenActors){
     
-    auto mat = object->getGlobalTransform();
+    auto mat = Actor->getGlobalTransform();
 
-    object->transformB->update(&mat);
+    //Actor->transformB->update(&mat);
 
-    auto model = object->getComponent<GraphicsComponent>()->model;
+    for(auto& modelPair : Actor->getComponent<GraphicsComponent>()->m_models){
+      auto model = modelPair.second.model;
+      for(int i = 0;i<model->m_meshes.size();++i){
+      
+        if(model->m_materials.size()>i && model->m_materials[i]){
+          model->m_materials[i]->set();
+        }
 
-    for(int i = 0;i<model->meshes.size();++i){
+        auto finalMat = mat * modelPair.second.getFinalTransform();
 
-      if(model->materials.size()>i && model->materials[i]){
-        model->materials[i]->set();
+        Actor->m_transformB->update(&finalMat);
+
+        api.setVSBuffer(Actor->m_transformB, 0);
+
+        auto actualMesh = model->m_meshes[i];
+
+        actualMesh->m_vertexB->set();
+
+        actualMesh->m_indexB->set();
+
+        if(actualMesh->m_hasBones){
+
+          actualMesh->m_bonesB->update(actualMesh->m_ofset.data());
+
+          api.setVSBuffer( actualMesh->m_bonesB,3);
+        }
+       
+
+        api.draw(actualMesh->m_indexNumber);
       }
-
-
-      api.setVSBuffer(object->transformB, 0);
-
-      auto actualMesh = model->meshes[i];
-
-      actualMesh->vertexB->set();
-
-      actualMesh->indexB->set();
-
-      if(actualMesh->hasBones){
-
-        actualMesh->bonesB->update(actualMesh->ofset.data());
-
-        api.setVSBuffer( actualMesh->bonesB,3);
-      }
-     
-
-      api.draw(actualMesh->indexNumber);
     }
+
+    
 
   }
    
@@ -503,18 +290,18 @@ void TestApp::draw()
 void TestApp::initImGui()
 {
   auto& api = GraphicAPI::instance();
-  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
   }
   
-  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplWin32_Init(api.getWindow());
     ImGui_ImplDX11_Init(
       (ID3D11Device*)api.getDevice(), 
       (ID3D11DeviceContext*)api.getContext());
   }
-  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)api.getWindow(), true);
     //ImGui_ImplOpenGL3_Init("#version 130");
   }
@@ -525,17 +312,17 @@ void TestApp::initImGui()
 void TestApp::newImGuiFrame()
 {
   auto& api = GraphicAPI::instance();
-  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
   }
 
-  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_NewFrame();
     //ImGui_ImplGlfw_NewFrame();
   }
   
-  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::NewFrame();
   }
   
@@ -545,18 +332,18 @@ void TestApp::renderImGui()
 {
   auto& api = GraphicAPI::instance();
   ImGuiIO& io = ImGui::GetIO();
-  io.DisplaySize.x = api.windowWidth;
-  io.DisplaySize.y = api.windowHeight;
+  io.DisplaySize.x = api.m_windowWidth;
+  io.DisplaySize.y = api.m_windowHeight;
   
-  if (api.actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::Render();
   }
 
-  if (api.actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
 
-  if (api.actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
     //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 
@@ -568,57 +355,77 @@ void oaEngineSDK::TestApp::drawImGui()
   /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
-  ImGui::Begin("objects");
+  ImGui::Begin("Actors");
   if(ImGui::Button("character")){
-    actualObject = character;
+    actualActor = character;
   }
-  if(ImGui::Button("test object")){
-    actualObject = testObject;
+  if(ImGui::Button("test Actor")){
+    actualActor = testActor;
   }
   ImGui::End();
   */
 
-  ImGui::Begin("object atributes");
-  if(actualObject){
+  ImGui::Begin("Actor atributes");
+  if(actualActor){
     if(ImGui::Button("Add Component")){
       isAddingComponent = true;
     }
 
     if (ImGui::CollapsingHeader("transform")){
       
-      if(actualObject.get()){
-        Vector3f vec = actualObject->getLocation();
+      if(actualActor.get()){
+        Vector3f vec = actualActor->getLocation();
         if(ImGui::DragFloat3("location", &vec.x, .01f)){
-          actualObject->setLocation(vec);
+          actualActor->setLocation(vec);
         }
-        vec = actualObject->getScale();
+        vec = actualActor->getScale();
         if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-          actualObject->setScale(vec);
+          actualActor->setScale(vec);
         }
-        vec = actualObject->getRotation();
+        vec = actualActor->getRotation();
         if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          actualObject->setRotation(vec);
+          actualActor->setRotation(vec);
         };
       }
     }
-    SPtr<Component> component = actualObject->getComponent<GraphicsComponent>();
+    SPtr<Component> component = actualActor->getComponent<GraphicsComponent>();
     if(component){
-      if(ImGui::Button("select model")){
-        cast<GraphicsComponent>(component)->model = actualModel;
+      if(ImGui::Button("select model") && actualModel.get()){
+        cast<GraphicsComponent>(component)->addModel(actualModel);
+      }
+      for(auto& model : cast<GraphicsComponent>(component)->m_models){
+        if(ImGui::Button(model.second.model->m_name.c_str())){
+          actualModelComponent = &model.second;
+        }
+      }
+      if(actualModelComponent){
+        ImGui::DragFloat3("location Model",&actualModelComponent->location.x);
+        ImGui::DragFloat3("scale Model",&actualModelComponent->scale.x);
+        ImGui::DragFloat3("rotation Model",&actualModelComponent->rotation.x);
       }
     }
 
-    component = actualObject->getComponent<SkeletalComponent>();
+
+    component = actualActor->getComponent<SkeletalComponent>();
     if(component){
       if(ImGui::Button("select Skeleton")){
-        cast<SkeletalComponent>(component)->skeleton = actualSkeleton;
+        cast<SkeletalComponent>(component)->m_skeleton = actualSkeleton;
+      }
+      if(cast<SkeletalComponent>(component)->m_skeleton){
+        if(ImGui::Button("add socket")){
+          isAddingSocket = true;
+        }
+        
       }
     }
 
-    component = actualObject->getComponent<AnimationComponent>();
+    component = actualActor->getComponent<AnimationComponent>();
     if(component){
       if(ImGui::Button("select Animation")){
-        cast<AnimationComponent>(component)->animation = actualAnimation;
+        auto animComponent = cast<AnimationComponent>(component);
+        animComponent->m_animation = actualAnimation;
+        animComponent->m_model = actualModel;
+        animComponent->m_skeleton = actualSkeleton;
       }
     }
   }
@@ -637,7 +444,7 @@ void oaEngineSDK::TestApp::drawImGui()
   if (ImGui::CollapsingHeader("materials")){
     for(auto material : resourceManager.materials){
       if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
-        material.second->textures[0] = actualTexture;
+        material.second->m_textures[0] = actualTexture;
       }
     }
   }
@@ -661,7 +468,7 @@ void oaEngineSDK::TestApp::drawImGui()
     }
 
     for(auto model : resourceManager.models){
-      if(ImGui::Button(model.second->name.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(model.second->m_name.c_str(),ImVec2(100,100))){
         actualModel = model.second;
       }
     }
@@ -669,7 +476,8 @@ void oaEngineSDK::TestApp::drawImGui()
 
   if (ImGui::CollapsingHeader("skeletons")){
     for(auto skeleton : resourceManager.skeletons){
-      if(ImGui::Button(skeleton.second->name.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(skeleton.second->m_name.c_str(),ImVec2(100,100))){
+        print("working");
         actualSkeleton = skeleton.second;
       }
     }
@@ -677,8 +485,9 @@ void oaEngineSDK::TestApp::drawImGui()
 
   if (ImGui::CollapsingHeader("animations")){
     for(auto animation : resourceManager.animations){
-      if(ImGui::Button(animation.second->name.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(animation.second->m_name.c_str(),ImVec2(100,100))){
         actualAnimation = animation.second;
+
       }
     }
   }
@@ -689,29 +498,28 @@ void oaEngineSDK::TestApp::drawImGui()
   
   
 
-  ImGui::Begin("objects");
-  if(ImGui::Button("new object")){
-    isCreatingObject = true;
+  ImGui::Begin("Actors");
+  if(ImGui::Button("new Actor")){
+    isCreatingActor = true;
   }
   if(ImGui::Button("scene")){
-    actualObject = actualScene;
+    actualActor = m_actualScene;
   }
-  childsInImgui(actualScene);
+  childsInImgui(m_actualScene);
   ImGui::End();
 
-  /*ImGui::Begin("lighs");
-  ImGui::ColorPicker3("ambient",&color.x);
+  ImGui::Begin("lighs");
   ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
-  ImGui::End();*/
+  ImGui::End();
 
-  if(isCreatingObject){
-    ImGui::Begin("new object");
+  if(isCreatingActor){
+    ImGui::Begin("new Actor");
     ImGui::InputText("name",imguiString,64);
     if(ImGui::Button("create")){
-      auto object = newSPtr<Object>();
-      object->name = imguiString;
-      actualObject->attach(object);
-      isCreatingObject = false;
+      auto actor = newSPtr<Actor>();
+      actor->m_name = imguiString;
+      actualActor->attach(actor);
+      isCreatingActor = false;
     }
     ImGui::End();
   }
@@ -719,17 +527,17 @@ void oaEngineSDK::TestApp::drawImGui()
   if(isAddingComponent){
     ImGui::Begin("add component");
     if(ImGui::Button("Graphics")){
-      actualObject->attachComponent(newSPtr<GraphicsComponent>());
+      actualActor->attachComponent(newSPtr<GraphicsComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Skeletal")){
-      actualObject->attachComponent(newSPtr<SkeletalComponent>());
+      actualActor->attachComponent(newSPtr<SkeletalComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Animation")){
-      actualObject->attachComponent(newSPtr<AnimationComponent>());
+      actualActor->attachComponent(newSPtr<AnimationComponent>());
       isAddingComponent = false;
     }
 
@@ -738,6 +546,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
   if(loader){
     ImGui::Begin("load");
+    ImGui::DragFloat("scale",&loader->m_importScale);
     if(loadflags & LOADERFLAGS::MESH){
       ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::MESH);
     }
@@ -770,18 +579,27 @@ void oaEngineSDK::TestApp::drawImGui()
     
     ImGui::End();
   }
+
+  if(isAddingSocket){
+    ImGui::InputText("bone name",imguiString,64);
+    if(ImGui::Button("ok")){
+      actualActor->getComponent<SkeletalComponent>()->attachToBone(actualModel,imguiString);
+      isAddingSocket = false;
+    }
+  }
+
 }
 
-void oaEngineSDK::TestApp::childsInImgui(SPtr<Object> parentObject)
+void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)
 {
-  auto& childs = parentObject->getChilds();
-  for(SPtr<Object> object : childs){
-    if(ImGui::Button(object->name.c_str())){
-      actualObject = object;
+  auto& childs = parentActor->getChilds();
+  for(SPtr<Actor> Actor : childs){
+    if(ImGui::Button(Actor->m_name.c_str())){
+      actualActor = Actor;
     }
-    if(object->getChilds().size()>0){
+    if(Actor->getChilds().size()>0){
       if(ImGui::CollapsingHeader("childs")){
-        childsInImgui(object);
+        childsInImgui(Actor);
       }
     }
   }

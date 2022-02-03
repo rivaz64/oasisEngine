@@ -4,16 +4,12 @@
 * @date 1/21/2022
 */
 
-#define OA_LOG(s) Logger::instance().log( s,__FILE__,__LINE__,__PRETTY_FUNCTION__ );
+#define OA_LOG(message) Logger::instance().log(message+" at file: "+__FILE__+" in line "+toString(__LINE__) + " at function "+__PRETTY_FUNCTION__);
 
 #pragma once
 
 #include "oaPrerequisitesCore.h"
 #include <oaModule.h>
-#include <stdio.h>
-#include <mutex>
-
-using std::mutex;
 
 namespace oaEngineSDK{
 
@@ -28,19 +24,17 @@ class OA_CORE_EXPORT Logger :
   void
   onShutDown() override;
 
-  void log(const String& message,const String& file,uint32 line,const String& function);
-    //printf((s+" at file: %s in line %i at function %s").c_str(),args...);
+  void 
+  log(const String& message);
+
+ private:
   
   void 
   flush();
 
- private:
-  
-  String completeMessage;
+  Vector<String> m_completeMessage;
 
-  mutex m;
-
-  bool flushed = false;
+  friend class BaseApp;
 };
 
 }

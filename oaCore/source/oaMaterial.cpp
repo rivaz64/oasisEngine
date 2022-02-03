@@ -11,9 +11,9 @@
 
 void oaEngineSDK::Material::set()
 {
-  vertexShader->set();
-  pixelShader->set();
-  for(auto texture : textures){
+  m_vertexShader->set();
+  m_pixelShader->set();
+  for(auto texture : m_textures){
     GraphicAPI::instancePtr()->setTexture(
         texture
       );

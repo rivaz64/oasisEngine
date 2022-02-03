@@ -6,7 +6,7 @@ namespace oaEngineSDK {
 
 DX11SamplerState::~DX11SamplerState()
 {
-  if (samplerState) samplerState->Release();
+  if (m_samplerState) m_samplerState->Release();
 }
 
 bool DX11SamplerState::init(SamplerDesc descriptor)
@@ -30,7 +30,7 @@ bool DX11SamplerState::init(SamplerDesc descriptor)
   sampDesc.MaxLOD = descriptor.maxLOD;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  device->CreateSamplerState( &sampDesc, &samplerState );
+  m_device->CreateSamplerState( &sampDesc, &m_samplerState );
 
   if( FAILED( hr ) )
     return false;

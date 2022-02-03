@@ -153,9 +153,9 @@ class OA_CORE_EXPORT ResoureManager :
 
 
   /**
-   * @brief all the objects that can be rendered
+   * @brief all the Actors that can be rendered
   */
-  Vector<SPtr<Object>> rendereableObjects;
+  Vector<SPtr<Actor>> rendereableActors;
 
  public:
 

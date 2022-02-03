@@ -25,7 +25,7 @@ class OA_CORE_EXPORT Time :
   */
   FORCEINLINE const float&
   getDelta(){
-    return deltaTime;
+    return m_deltaTime;
   }
 
   /**
@@ -54,7 +54,7 @@ class OA_CORE_EXPORT Time :
   /**
    * @brief the time passed since the last update
   */
-  float deltaTime = 0;
+  float m_deltaTime = 0;
 
   friend class BaseApp;
 };

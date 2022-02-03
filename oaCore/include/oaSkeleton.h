@@ -10,6 +10,8 @@
 
 namespace oaEngineSDK{
 
+struct ModelComponent;
+
 /**
  * @brief a node of a skeleton
 */
@@ -33,33 +35,31 @@ struct SkeletalNode{
 /**
  * @brief the skeleton for the animations
 */
-class Skeleton
+class OA_CORE_EXPORT Skeleton
 {
  public:
-  
-  
 
   /**
    * @brief all the nodes of the skeleton
   */
-  SPtr<SkeletalNode> skeleton;
+  SPtr<SkeletalNode> m_skeleton;
 
   /**
    * @brief the final matrizes 
   */
-  //Vector<Matrix4f> finalMatrix;
+  Map<String,Matrix4f> m_finalMatrix;
 
   /**
    * @brief the mapping for the names of the bones
   */
-  Map<String,Matrix4f> boneMaping;
+  Map<String,Matrix4f> m_boneMaping;
 
   /**
    * @brief the inverse of the root
   */
-  Matrix4f globalInverse;
+  Matrix4f m_globalInverse;
 
-  String name;
+  String m_name;
 };
 
 }

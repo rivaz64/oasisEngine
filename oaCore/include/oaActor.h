@@ -1,5 +1,5 @@
 /**
-* @file oaObject.h
+* @file oaActor.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
 * @date 9/25/2021
 */
@@ -16,19 +16,19 @@ namespace oaEngineSDK{
 /**
  * @brief something that is on a scene
 */
-class OA_CORE_EXPORT Object :
-  public SharedEnabled<Object>
+class OA_CORE_EXPORT Actor :
+  public SharedEnabled<Actor>
 {
  public:
 
-  Object();
+  Actor();
 
   /**
-   * @brief makes the object a sub object of this one
-   * @param object 
+   * @brief makes the Actor a sub Actor of this one
+   * @param Actor 
   */
   void 
-  attach(SPtr<Object> object);
+  attach(SPtr<Actor> Actor);
 
   /**
    * @brief attaches a component
@@ -38,7 +38,7 @@ class OA_CORE_EXPORT Object :
   attachComponent(SPtr<Component> component);
 
   /**
-   * @brief updates everything of this object
+   * @brief updates everything of this Actor
   */
   void 
   update();
@@ -86,21 +86,21 @@ class OA_CORE_EXPORT Object :
   getScale();
 
   /**
-   * @brief getter for all the subobjects of this object
+   * @brief getter for all the subActors of this Actor
    * @return 
   */
-  const Vector<SPtr<Object>>&
+  const Vector<SPtr<Actor>>&
   getChilds();
 
   /**
-   * @brief gets the transform Matrix of this object
+   * @brief gets the transform Matrix of this Actor
    * @return 
   */
   Matrix4f
   getLocalTransform();
 
   /**
-   * @brief the transform of this object in the world
+   * @brief the transform of this Actor in the world
    * @return 
   */
   Matrix4f
@@ -115,65 +115,65 @@ class OA_CORE_EXPORT Object :
   SPtr<T>
   getComponent(){
     T temp;
-    return cast<T>(components[temp.getType()]);
+    return cast<T>(m_components[temp.getType()]);
   }
 
   /**
-   * @brief the name of the object in the editor
+   * @brief the name of the Actor in the editor
   */
-  String name;
+  String m_name;
 
   /**
-   * @brief the objects that are child of this
+   * @brief the Actors that are child of this
   */
-  Vector<SPtr<Object>> subObjects;
+  Vector<SPtr<Actor>> m_subActors;
 
   /**
-   * @brief the object this one is a child of
+   * @brief the Actor this one is a child of
   */
-  SPtr<Object> parent;
+  SPtr<Actor> m_parent;
 
   /**
    * @brief for sending the location to the shader
   */
-  SPtr<Buffer> transformB;
+  SPtr<Buffer> m_transformB;
 
 //for change to private
  public:
   /**
-   * @brief where the object is in a 3D space
+   * @brief where the Actor is in a 3D space
   */
-  Vector3f location;
+  Vector3f m_location;
 
   /**
    * @brief the scale compared with the original imported model
   */
-  Vector3f scale;
+  Vector3f m_scale;
 
   /**
-   * @brief how the object is rotated
+   * @brief how the Actor is rotated
   */
-  Vector3f rotation;
+  Vector3f m_rotation;
 
   /**
-   * @brief the transform of this object with origin at his parent
+   * @brief the transform of this Actor with origin at his parent
   */
-  Matrix4f localTransform;
+  Matrix4f m_localTransform;
 
   /**
-   * @brief the transform of this object in the world
+   * @brief the transform of this Actor in the world
   */
-  Matrix4f globalTransform = Matrix4f::IDENTITY;
+  Matrix4f m_globalTransform = Matrix4f::IDENTITY;
 
   /**
    * @brief all the components this actor has
   */
-  Map<COMPONENT_TYPE::E,SPtr<Component>> components;
+  Map<COMPONENT_TYPE::E,SPtr<Component>> m_components;
 
   /**
    * @brief the dirty flag of the local and global matrix
   */
-  uint8 dirtyFlag = 0;
+  //uint8 dirtyFlag = 0;
 };
 
 }

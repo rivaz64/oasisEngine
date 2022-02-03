@@ -3,10 +3,10 @@
 
 bool oaEngineSDK::DX11VertexBuffer::init(
   void* data,
-  uint64 _vertexSize,
+  uint64 vertexSize,
   uint64 numberOfVertices)
 {
-  vertexSize = _vertexSize;
+  m_vertexSize = vertexSize;
   D3D11_BUFFER_DESC bd;
   ZeroMemory( &bd, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
@@ -22,7 +22,7 @@ bool oaEngineSDK::DX11VertexBuffer::init(
 
   auto api2 = reinterpret_cast<DX11GraphicAPI*>(api);
 
-  HRESULT hr = api2->device->CreateBuffer( &bd, &InitData, &buffer );
+  HRESULT hr = api2->m_device->CreateBuffer( &bd, &InitData, &m_buffer );
 
   if(FAILED(hr)){
     return false;
@@ -33,13 +33,13 @@ bool oaEngineSDK::DX11VertexBuffer::init(
 
 void oaEngineSDK::DX11VertexBuffer::set()
 {
-  UINT stride = vertexSize;
+  UINT stride = m_vertexSize;
   UINT offset = 0;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->IASetVertexBuffers( 
+  m_context->IASetVertexBuffers( 
     0, 
     1, 
-    &buffer,
+    &m_buffer,
     &stride, 
     &offset );
 }

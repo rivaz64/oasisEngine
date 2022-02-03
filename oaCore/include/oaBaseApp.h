@@ -67,10 +67,10 @@ class OA_CORE_EXPORT BaseApp :
 
   /**
    * @brief executed once each loop 
-   * @param updates the object and his childs
+   * @param updates the Actor and his childs
   */
   void
-  update(SPtr<Object> object);
+  update(SPtr<Actor> Actor);
 
   /**
    * @brief update for the subclasss
@@ -106,43 +106,39 @@ class OA_CORE_EXPORT BaseApp :
   /**
    * @brief if the app is running
   */
-  bool isRunning = true; 
+  bool m_isRunning = true; 
 
  protected:
 
   /**
    * @brief the frame rate
   */
-  float framesPerSecond = 60;
+  float m_framesPerSecond = 60;
 
   /**
    * @brief the time a frame is going to be on screen
   */
-  float secondPerFrame = 1.f/framesPerSecond;
+  float m_secondPerFrame = 1.f/m_framesPerSecond;
 
   /**
    * @brief the time that has pass since the last update
   */
-  float deltaTime = 0;
+  float m_deltaTime = 0;
 
   /**
    * @brief the actual scene selected
   */
-  SPtr<Object> actualScene;
+  SPtr<Actor> m_actualScene;
 
   /**
    * @brief the render target that is going to be shown in the screen
   */
-  SPtr<RenderTarget> finalRender;
+  SPtr<RenderTarget> m_finalRender;
 
   /**
    * @brief the depth stencil to be used at the end
   */
-  SPtr<DepthStencil> finalDepthStencil;
-
-  Vector<int> mistake;
-
-  int i=0;
+  SPtr<DepthStencil> m_finalDepthStencil;
 
   friend class Module<BaseApp>;
 };

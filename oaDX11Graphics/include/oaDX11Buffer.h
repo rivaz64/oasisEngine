@@ -25,7 +25,7 @@ class DX11Buffer :
   update(void* data) override;
 
  public:
-  ID3D11Buffer* buffer = nullptr;
+  ID3D11Buffer* m_buffer = nullptr;
 };
 
 }

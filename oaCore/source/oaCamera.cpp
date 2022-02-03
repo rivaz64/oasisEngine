@@ -8,7 +8,7 @@
 #include "oaGraphicAPI.h"
 #include "oaGraphicsComponent.h"
 #include "oaBuffer.h"
-#include "oaObject.h"
+#include "oaActor.h"
 #include <iostream>
 
 
@@ -24,9 +24,9 @@ Camera::Camera()
 
   viewMatrix = Matrix4f::IDENTITY;
 
-  location = {0.0f,0.0f,0.0f};
+  m_location = {0.0f,0.0f,0.0f};
 
-  up = {0.0f,-1.0f,0.0f};
+  m_up = {0.0f,-1.0f,0.0f};
 
   lookAt({0.0f,0.0f,1.0f});
 }
@@ -35,13 +35,13 @@ void
 Camera::updateProyection()
 {
   Matrix4f ans = Matrix4f::IDENTITY;
-  float co = cos(angle * .5f), si = sin(angle * .5f);
-  float distance = farPlane - nearPlane;
+  float co = cos(m_angle * .5f), si = sin(m_angle * .5f);
+  float distance = m_farPlane - m_nearPlane;
 
-  ans.m11 = (co / si) / ratio;
+  ans.m11 = (co / si) / m_ratio;
   ans.m22 = co/si;
-  ans.m33 = farPlane / distance;
-  ans.m34 = -ans.m33*nearPlane;
+  ans.m33 = m_farPlane / distance;
+  ans.m34 = -ans.m33*m_nearPlane;
   ans.m43 = 1;
   ans.m44=0;
 
@@ -57,21 +57,21 @@ Camera::updateView()
     return;
   }
 
-  viewMatrix.m11 = axis.m11;
-  viewMatrix.m12 = axis.m12;
-  viewMatrix.m13 = axis.m13;
+  viewMatrix.m11 = m_axis.m11;
+  viewMatrix.m12 = m_axis.m12;
+  viewMatrix.m13 = m_axis.m13;
 
-  viewMatrix.m21 = axis.m21;
-  viewMatrix.m22 = axis.m22;
-  viewMatrix.m23 = axis.m23;
+  viewMatrix.m21 = m_axis.m21;
+  viewMatrix.m22 = m_axis.m22;
+  viewMatrix.m23 = m_axis.m23;
 
-  viewMatrix.m31 = axis.m31;
-  viewMatrix.m32 = axis.m32;
-  viewMatrix.m33 = axis.m33;
+  viewMatrix.m31 = m_axis.m31;
+  viewMatrix.m32 = m_axis.m32;
+  viewMatrix.m33 = m_axis.m33;
   
-  viewMatrix.m14 = -Vector3f::dot(location,axisX);
-  viewMatrix.m24 = -Vector3f::dot(location,axisY);
-  viewMatrix.m34 = -Vector3f::dot(location,axisZ);
+  viewMatrix.m14 = -Vector3f::dot(m_location,m_axisX);
+  viewMatrix.m24 = -Vector3f::dot(m_location,m_axisY);
+  viewMatrix.m34 = -Vector3f::dot(m_location,m_axisZ);
 
   createFrustrum();
 
@@ -93,24 +93,24 @@ Camera::setCamera()
 void 
 Camera::moveCamera(const Vector3f& delta)
 {
-  axis.transpose();
-  Vector3f realDelta = axis*delta;
-  axis.transpose();
-  location += realDelta;
-  lookAt(lookingAt+realDelta);
+  m_axis.transpose();
+  Vector3f realDelta = m_axis*delta;
+  m_axis.transpose();
+  m_location += realDelta;
+  lookAt(m_lookingAt+realDelta);
   dirtyFlags = true;
 }
 
 void 
 Camera::lookAt(const Vector3f& newLocation)
 {
-  lookingAt = newLocation;
+  m_lookingAt = newLocation;
 
-  axisZ = (lookingAt - location).normalized();
+  m_axisZ = (m_lookingAt - m_location).normalized();
 
-  axisX = Vector3f::cross(axisZ,up).normalized();
+  m_axisX = Vector3f::cross(m_axisZ,m_up).normalized();
     
-  axisY = Vector3f::cross(axisZ,axisX).normalized();
+  m_axisY = Vector3f::cross(m_axisZ,m_axisX).normalized();
 
 }
 
@@ -118,8 +118,8 @@ void
 Camera::rotateWithMouse(const Vector2f& delta)
 {
   lookAt(
-    (axisZ + axisX * delta.x * .003f - axisY * delta.y * .003f).normalized()+
-    location
+    (m_axisZ + m_axisX * delta.x * .003f - m_axisY * delta.y * .003f).normalized()+
+    m_location
   );
 
   dirtyFlags = true;
@@ -142,23 +142,23 @@ Camera::isInFrustrum(const Vector3f& _location)
 void 
 Camera::createFrustrum()
 {
-  nearP = Plane(location+axisZ*nearPlane,axisZ);
-  farP = Plane(location+axisZ*farPlane,-axisZ);
-  float nh = Math::tan(angle/2.f)*nearPlane;
-  float nw = nh*ratio;
-  float fh = Math::tan(angle/2.f)*farPlane;
-  float fw = fh*ratio;
+  nearP = Plane(m_location+m_axisZ*m_nearPlane,m_axisZ);
+  farP = Plane(m_location+m_axisZ*m_farPlane,-m_axisZ);
+  float nh = Math::tan(m_angle/2.f)*m_nearPlane;
+  float nw = nh*m_ratio;
+  float fh = Math::tan(m_angle/2.f)*m_farPlane;
+  float fw = fh*m_ratio;
 
-  Vector3f nnw = location+axis*Vector3f(-nw,nh,nearPlane);
-  Vector3f nne = location+axis*Vector3f(nw,nh,nearPlane);
-  Vector3f fne = location+axis*Vector3f(fw,fh,farPlane);
+  Vector3f nnw = m_location+m_axis*Vector3f(-nw,nh,m_nearPlane);
+  Vector3f nne = m_location+m_axis*Vector3f(nw,nh,m_nearPlane);
+  Vector3f fne = m_location+m_axis*Vector3f(fw,fh,m_farPlane);
 
   topP = Plane(nnw,nne,fne);
 
-  Vector3f nsw = location+axis*Vector3f(-nw,-nh,nearPlane);
-  Vector3f nse = location+axis*Vector3f(nw,-nh,nearPlane);
-  Vector3f fse = location+axis*Vector3f(fw,-fh,farPlane);
-  Vector3f fsw = location+axis*Vector3f(-fw,-fh,farPlane);
+  Vector3f nsw = m_location+m_axis*Vector3f(-nw,-nh,m_nearPlane);
+  Vector3f nse = m_location+m_axis*Vector3f(nw,-nh,m_nearPlane);
+  Vector3f fse = m_location+m_axis*Vector3f(fw,-fh,m_farPlane);
+  Vector3f fsw = m_location+m_axis*Vector3f(-fw,-fh,m_farPlane);
 
   bottomP = Plane(nsw,fse,nse);
 
@@ -169,19 +169,19 @@ Camera::createFrustrum()
 }
 
 void
-Camera::seeObjects(SPtr<Object> scene,Vector<SPtr<Object>>& seenObjects)
+Camera::seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors)
 {
   auto& childs = scene->getChilds();
 
-  for(auto object : childs){
+  for(auto Actor : childs){
 
-    auto component = object->getComponent<GraphicsComponent>();
+    auto component = Actor->getComponent<GraphicsComponent>();
 
-    if(component && component->model){
-      seenObjects.push_back(object);
+    if(component && component->m_models.size()!=0){
+      seenActors.push_back(Actor);
     }
 
-    seeObjects(object,seenObjects);
+    seeActors(Actor,seenActors);
 
   }
 }

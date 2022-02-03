@@ -35,7 +35,7 @@ class OA_CORE_EXPORT Shader
   virtual void
   set() {}
 
-  String name;
+  String m_name;
 
 };
 

@@ -18,8 +18,8 @@ bool DX11Shader::compileFromFile(String file)
   dwShaderFlags |= D3DCOMPILE_DEBUG;
 #endif
 
-  hr = D3DX11CompileFromFile( file.c_str(), NULL, NULL, "main", version.c_str(), 
-                             dwShaderFlags, 0, NULL, &blob, &errorBlob, NULL );
+  hr = D3DX11CompileFromFile( file.c_str(), NULL, NULL, "main", m_version.c_str(), 
+                             dwShaderFlags, 0, NULL, &m_blob, &errorBlob, NULL );
 
   if( FAILED(hr) )
   {

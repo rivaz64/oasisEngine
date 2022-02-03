@@ -23,22 +23,22 @@ class OA_CORE_EXPORT InputManager :
 
   FORCEINLINE void
   addInput(char key){
-    inputs.insert({key,false});
+    m_inputs.insert({key,false});
   }
 
   FORCEINLINE bool
   getInput(char key){
-    return inputs[key];
+    return m_inputs[key];
   }
 
   FORCEINLINE const Vector2I&
   getMousePosition(){
-    return mousePosition;
+    return m_mousePosition;
   }
 
   FORCEINLINE const Vector2I&
   getMouseDelta(){
-    return mouseDelta;
+    return m_mouseDelta;
   }
 
 private:
@@ -46,17 +46,17 @@ private:
   /**
     * @brief the inuts that are active
    */
-   Map<char,bool> inputs;
+   Map<char,bool> m_inputs;
 
    /**
    * @brief the position of the mouse in the screen
   */
-  Vector2I mousePosition;
+  Vector2I m_mousePosition;
 
   /**
    * @brief how much the mouse moved since the last update
   */
-  Vector2I mouseDelta;
+  Vector2I m_mouseDelta;
   
   friend class DX11GraphicAPI;
 

@@ -259,12 +259,12 @@ class OA_CORE_EXPORT GraphicAPI :
   /**
    * @brief the width of the window at the begining
   */
-  uint32 windowWidth = 800;
+  uint32 m_windowWidth = 800;
 
   /**
   * @brief the height of the window at the begining
   */
-  uint32 windowHeight = 600;
+  uint32 m_windowHeight = 600;
 
   /**
    * @brief the function for procecing the events
@@ -274,13 +274,13 @@ class OA_CORE_EXPORT GraphicAPI :
   /**
   * @brief the graphical API that has been loaded
   */
-  GRAPHIC_API::E actualGraphicAPI = GRAPHIC_API::NONE;
+  GRAPHIC_API::E m_actualGraphicAPI = GRAPHIC_API::NONE;
 
  protected:
   /**
    * @brief the name of the window 
   */
-  const String windowName = "Oasis Engine";
+  const String m_windowName = "Oasis Engine";
 
   friend class Module<GraphicAPI>;
 };

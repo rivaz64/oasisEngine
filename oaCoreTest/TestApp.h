@@ -1,7 +1,7 @@
 #pragma once
 
 #include "oaBaseApp.h"
-#include "oaObject.h"
+#include "oaActor.h"
 #include "oaCamera.h"
 #include "oaSamplerState.h"
 #include "oaRenderTarget.h"
@@ -15,7 +15,7 @@
 
 namespace oaEngineSDK{
 
-
+class ModelComponent;
 
 class TestApp :
   public BaseApp
@@ -50,7 +50,7 @@ public:
   drawImGui();
 
   void
-  childsInImgui(SPtr<Object> parentObject);
+  childsInImgui(SPtr<Actor> parentActor);
 
   SubMesh
   tetrahedron();
@@ -68,13 +68,13 @@ public:
 
  public:
 
-   SPtr<Object> character;
+   SPtr<Actor> character;
 
-   SPtr<Object> testObject1;
+   SPtr<Actor> testActor1;
 
-   SPtr<Object> testObject2;
+   SPtr<Actor> testActor2;
 
-   SPtr<Object> testObjectMC;
+   SPtr<Actor> testActorMC;
 
    SPtr<Camera> cam;
 
@@ -83,12 +83,9 @@ public:
 
    SPtr<RenderTarget> renderToTexture;
 
-
-   SPtr<Texture> renTex;
-
    //SPtr<SceneGraph> scene; 
 
-   SPtr<Object> actualObject;
+   SPtr<Actor> actualActor;
 
   SPtr<Shader> vertexShader;
 
@@ -125,9 +122,11 @@ public:
 
   Loader* loader;
 
-  bool isCreatingObject=false;
+  bool isCreatingActor = false;
 
-  bool isAddingComponent=false;
+  bool isAddingComponent = false;
+
+  bool isAddingSocket = false;
 
   char imguiString[64];
 
@@ -136,6 +135,8 @@ public:
   uint32 loadflags0 = 0;
 
   uint8 loaderFlagsActive;
+
+  ModelComponent* actualModelComponent = nullptr;
 };
 
 }

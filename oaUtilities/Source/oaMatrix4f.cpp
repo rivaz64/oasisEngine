@@ -344,6 +344,11 @@ Matrix4f::scaleMatrix(const Vector3f& v)
   };
 }
 
+Vector3f Matrix4f::extractScale()
+{
+    return Vector3f(m11,m22,m33);
+}
+
 Matrix4f
 Matrix4f::rotationMatrixZ(const float r)
 {

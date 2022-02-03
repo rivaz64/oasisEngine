@@ -132,7 +132,7 @@ class OA_CORE_EXPORT Texture
   virtual void*
   getId();
 
-  String name;
+  String m_name;
 
   friend class ResoureManager;
 

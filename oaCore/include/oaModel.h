@@ -31,14 +31,14 @@ class OA_CORE_EXPORT Model
   /**
    * @brief the materials of the model
   */
-  Vector<SPtr<Material>> materials;
+  Vector<SPtr<Material>> m_materials;
 
   /**
    * @brief the meshes of the model
   */
-  Vector<SPtr<Mesh>> meshes;
+  Vector<SPtr<Mesh>> m_meshes;
 
-  String name;
+  String m_name;
 };
 
 }

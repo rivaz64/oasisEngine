@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by oaCore.rc
 
-// Next default values for new objects
+// Next default values for new Actors
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

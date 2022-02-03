@@ -25,19 +25,19 @@ class OA_CORE_EXPORT Material
   /**
    * @brief the textures of this material
   */
-  Vector<SPtr<Texture>> textures;
+  Vector<SPtr<Texture>> m_textures;
 
   /**
    * @brief the vertex shader of this material
   */
-  SPtr<Shader> vertexShader;
+  SPtr<Shader> m_vertexShader;
 
   /**
    * @brief the pixel shader of this material
   */
-   SPtr<Shader> pixelShader;
+   SPtr<Shader> m_pixelShader;
 
-   String name;
+   String m_name;
 };
 
 }

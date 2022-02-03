@@ -19,7 +19,9 @@ bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
   descDSV.Texture2D.MipSlice = 0;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-   device->CreateDepthStencilView(cast<DX11Texture>(texture)->texture, &descDSV, &depthStencil);
+   m_device->CreateDepthStencilView(cast<DX11Texture>(texture)->m_texture,
+                                    &descDSV, 
+                                    &m_depthStencil);
 
   if(FAILED(hr)){
     return false;
@@ -30,8 +32,8 @@ bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
 
 void DX11DepthStencil::release()
 {
-  if( depthStencil ) depthStencil->Release();
-  depthStencil = nullptr;
+  if( m_depthStencil ) m_depthStencil->Release();
+  m_depthStencil = nullptr;
 }
 
 }

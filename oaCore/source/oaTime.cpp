@@ -41,7 +41,7 @@ void Time::update()
 
   end = high_resolution_clock::now();
 
-  deltaTime = duration<float>(end - start).count();
+  m_deltaTime = duration<float>(end - start).count();
 
   start = high_resolution_clock::now();
 }

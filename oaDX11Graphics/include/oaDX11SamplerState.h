@@ -25,7 +25,7 @@ class DX11SamplerState:
 
  public:
 
-  ID3D11SamplerState* samplerState;
+  ID3D11SamplerState* m_samplerState;
 };
 
 }

@@ -16,6 +16,12 @@ OGL_PixelShader::compileFromFile(String file)
   return true;
 }
 
+void 
+OGL_PixelShader::set()
+{
+  
+}
+
 }
 
 

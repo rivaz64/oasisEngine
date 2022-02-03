@@ -1,17 +1,17 @@
 /**
-* @file oaOGL_PixelShader.h
+* @file oaOGL_VertexBuffer.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 10/13/2021
+* @date 2/1/2021
 */
 
 #pragma once
 
-#include"oaOGL_Shader.h"
+#include "oaVertexBuffer.h"
 
 namespace oaEngineSDK{
 
-class OGL_PixelShader :
-  public OGL_Shader
+class oaOGL_VertexBuffer :
+  public VertexBuffer
 {
  public:
 
@@ -23,4 +23,3 @@ class OGL_PixelShader :
 };
 
 }
-

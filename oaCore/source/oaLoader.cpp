@@ -28,9 +28,11 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 
   sNode->name = node->mName.C_Str();
   
+  print(node->mName.C_Str());
+
   sNode->transform = reinterpret_cast<Matrix4f*>(&node->mTransformation)->transposed();
 
-  skeleton->boneMaping.insert({sNode->name,sNode->transform});
+  skeleton->m_boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
   for(int i = 0; i<node->mNumChildren;++i){
@@ -41,47 +43,45 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 
 Loader::Loader()
 {
-  importer = new Importer;
+  m_importer = new Importer;
 }
 
 Loader::~Loader()
 {
-  delete importer;
+  delete m_importer;
 }
 
 LOADERFLAGS::E
 Loader::checkForLoad(const Path& _file)
 {
-  
-
-  file = _file;
+  m_file = _file;
 
   auto flags = aiProcess_Triangulate | 
                aiProcess_GenSmoothNormals | 
                aiProcess_OptimizeMeshes | 
                aiProcess_OptimizeGraph;
 
-  sceneI = static_cast<Importer*>(importer)->ReadFile(file.getCompletePath(),flags);
+  m_sceneI = static_cast<Importer*>(m_importer)->ReadFile(m_file.getCompletePath(),flags);
   
-  if(!sceneI){
+  if(!m_sceneI){
     print("file not found");
-    return static_cast<LOADERFLAGS::E>(loadedFlags);
+    return static_cast<LOADERFLAGS::E>(m_loadedFlags);
   }
-  const aiScene* scene = static_cast<const aiScene*>(sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   if(scene->HasMeshes()){
-    loadedFlags |= LOADERFLAGS::MESH;
+    m_loadedFlags |= LOADERFLAGS::MESH;
 
   }
 
   if(scene->HasMaterials()){
-    loadedFlags |= LOADERFLAGS::TEXTURE;
+    m_loadedFlags |= LOADERFLAGS::TEXTURE;
   }
 
   if(scene->HasAnimations()){
-    loadedFlags |= LOADERFLAGS::ANIMATION | LOADERFLAGS::SKELETON;
+    m_loadedFlags |= LOADERFLAGS::ANIMATION | LOADERFLAGS::SKELETON;
   }
 
-  return static_cast<LOADERFLAGS::E>(loadedFlags);
+  return static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }
 
 void
@@ -100,13 +100,13 @@ Loader::load(LOADERFLAGS::E flags)
   if(flags & LOADERFLAGS::ANIMATION){
     loadAnimations(model);
   }
-  ResoureManager::instance().models.insert({file.getCompletePath(),model});
-  model->name = file.getName();
+  ResoureManager::instance().models.insert({m_file.getCompletePath(),model});
+  model->m_name = m_file.getName();
 }
 
 void Loader::loadMeshes(SPtr<Model> model)
 {
-  const aiScene* scene = static_cast<const aiScene*>(sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
     SPtr<Mesh> oaMesh = newSPtr<Mesh>();
@@ -130,17 +130,19 @@ void Loader::loadMeshes(SPtr<Model> model)
       index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
     }
 
-    if(!(loadedFlags & LOADERFLAGS::ANIMATION)){
+    if(!(m_loadedFlags & LOADERFLAGS::ANIMATION)){
       Vector<Vertex> vertices;
 
       vertices.resize( aMesh->mNumVertices);
       for(uint32 numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
         Vertex actualVertex;
 
-        actualVertex.location.x = aMesh->mVertices[numVertex].x;
-        actualVertex.location.y = aMesh->mVertices[numVertex].y;
-        actualVertex.location.z = aMesh->mVertices[numVertex].z;
-        actualVertex.location.w = 1.0f;
+        actualVertex.location.x = aMesh->mVertices[numVertex].x*m_importScale;
+        actualVertex.location.y = aMesh->mVertices[numVertex].y*m_importScale;
+        actualVertex.location.z = aMesh->mVertices[numVertex].z*m_importScale;
+        actualVertex.normal.x = aMesh->mNormals[numVertex].x;
+        actualVertex.normal.y = aMesh->mNormals[numVertex].y;
+        actualVertex.normal.z = aMesh->mNormals[numVertex].z;
 
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
@@ -151,7 +153,6 @@ void Loader::loadMeshes(SPtr<Model> model)
       oaMesh->create(vertices,index);
       //oaMesh->create<Vertex>(vertices,index);
     }
-    
     else{
       
       Vector<Matrix4f> bones;
@@ -167,7 +168,7 @@ void Loader::loadMeshes(SPtr<Model> model)
         actualVertex.location.y = aMesh->mVertices[numVertex].y;
         actualVertex.location.z = aMesh->mVertices[numVertex].z;
 
-        actualVertex.location.w = 7;
+        
         
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
@@ -191,16 +192,16 @@ void Loader::loadMeshes(SPtr<Model> model)
 
           uint32 boneIndex;
 
-          if(oaMesh->boneMaping.find(boneName) == oaMesh->boneMaping.end()){
+          if(oaMesh->m_boneMaping.find(boneName) == oaMesh->m_boneMaping.end()){
             boneIndex = bonesNum;
-            oaMesh->boneMaping.insert({boneName,bonesNum});
+            oaMesh->m_boneMaping.insert({boneName,bonesNum});
             bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
             //boneNames.push_back(boneName);
             ++bonesNum;
           }
           else{
 
-            boneIndex = oaMesh->boneMaping[boneName];
+            boneIndex = oaMesh->m_boneMaping[boneName];
           }
 
           //boneIndex = skeleton->boneMaping[boneName];
@@ -230,13 +231,13 @@ void Loader::loadMeshes(SPtr<Model> model)
       oaMesh->create(vertices,index,bones);
     }
     
-   model->meshes.push_back(oaMesh);
+   model->m_meshes.push_back(oaMesh);
   }
 }
 
 void Loader::loadTextures(SPtr<Model> model)
 {
-  const aiScene* scene = static_cast<const aiScene*>(sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   auto& manager = ResoureManager::instance();
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
@@ -250,22 +251,22 @@ void Loader::loadTextures(SPtr<Model> model)
 
     auto material = manager.materials["default"];
 
-    if(loadedFlags & LOADERFLAGS::ANIMATION){
+    if(m_loadedFlags & LOADERFLAGS::ANIMATION){
       material = manager.materials["animation"];
     }
 
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
     TextureName = f.C_Str();
 
-    TextureFile.setCompletePath(file.getDrive()+file.getDirection()+TextureName+".png");
+    TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+".png");
     if(manager.loadTexture(TextureFile)){
       auto mat = copy(material);
-      mat->textures[0] = manager.textures[TextureFile.getCompletePath()];
+      mat->m_textures[0] = manager.textures[TextureFile.getCompletePath()];
       manager.materials.insert({TextureName,mat});
-      model->materials.push_back(mat);
+      model->m_materials.push_back(mat);
     }
     else{
-      model->materials.push_back(material);
+      model->m_materials.push_back(material);
     }
     
   }
@@ -275,27 +276,27 @@ void Loader::loadTextures(SPtr<Model> model)
 void 
 Loader::loadSkeletons(SPtr<Model> model)
 {
-  const aiScene* scene = static_cast<const aiScene*>(sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
 
   auto& manager = ResoureManager::instance();
 
   auto skeleton = newSPtr<Skeleton>();
 
-  skeleton->skeleton = newSPtr<SkeletalNode>();
+  skeleton->m_skeleton = newSPtr<SkeletalNode>();
 
-  skeleton->globalInverse = 
+  skeleton->m_globalInverse = 
     reinterpret_cast<Matrix4f*>(&scene->mRootNode->mTransformation)->inverse();
 
-  loadSkeleton(scene->mRootNode,skeleton->skeleton,skeleton);
+  loadSkeleton(scene->mRootNode,skeleton->m_skeleton,skeleton);
 
-  manager.skeletons.insert({file.getCompletePath(),skeleton});
+  manager.skeletons.insert({m_file.getCompletePath(),skeleton});
 
-  skeleton->name = file.getName();
+  skeleton->m_name = m_file.getName();
 }
 
 void Loader::loadAnimations(SPtr<Model> model)
 {
-  const aiScene* scene = static_cast<const aiScene*>(sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
 
   auto& manager = ResoureManager::instance();
 
@@ -305,9 +306,9 @@ void Loader::loadAnimations(SPtr<Model> model)
    
     auto animation = newSPtr<Animation>();
    
-    animation->duration = actualAnim->mDuration;
+    animation->m_duration = actualAnim->mDuration;
    
-    animation->ticksPerSecond = 1.f/actualAnim->mTicksPerSecond;
+    animation->m_ticksPerSecond = 1.f/actualAnim->mTicksPerSecond;
    
     for(uint32 numChannel = 0; numChannel < actualAnim->mNumChannels; ++numChannel){
       
@@ -359,12 +360,12 @@ void Loader::loadAnimations(SPtr<Model> model)
         {actualChannel->mRotationKeys[i].mTime,q};
       }
    
-      animation->nodes.insert({actualChannel->mNodeName.C_Str(),node});
+      animation->m_nodes.insert({actualChannel->mNodeName.C_Str(),node});
       
     }
    
-    ResoureManager::instancePtr()->animations.insert({file.getCompletePath(),animation});
-    animation->name = file.getName();
+    ResoureManager::instancePtr()->animations.insert({m_file.getCompletePath(),animation});
+    animation->m_name = m_file.getName();
   }
 
 }

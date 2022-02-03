@@ -10,12 +10,11 @@
 #include "oaVector3f.h"
 #include "oaInputManager.h"
 #include "oaTime.h"
-#include "oaObject.h"
+#include "oaActor.h"
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
 #include "oaLogger.h"
-#include "oaFile.h"
 #include "oaPath.h"
 #include <exception>
 #include <Windows.h>
@@ -30,13 +29,15 @@ void BaseApp::onShutDown()
   ResoureManager::shutDown();
   InputManager::shutDown();
   Time::shutDown();
-  Logger::shutDown();
+  
   postShutDown();
+  Logger::shutDown();
 }
 
 void
 BaseApp::run()
 {
+  Logger::startUp();
   loadPlugIn("oaDX11Graphicsd.dll");
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
@@ -49,20 +50,18 @@ BaseApp::run()
 
     ResoureManager::startUp();
     InputManager::startUp();
-    Logger::startUp();
     Time::startUp();
     
     setWindow(GraphicAPI::instance().getWindow());
 
     postInit();
-    
-    mistake.resize(20);
 
     try {
       mainLoop();
     }
     catch (const std::out_of_range& oor) {
       Logger::instance().flush();
+      return;
     }
     Logger::instance().flush();
 
@@ -98,25 +97,25 @@ void
 BaseApp::mainLoop()
 {
   
-  while(isRunning){
+  while(m_isRunning){
 
     Time::instancePtr()->update();
 
     GraphicAPI::instancePtr()->events();
 
-    update(actualScene);
+    update(m_actualScene);
 
-    postUpdate(Time::instancePtr()->deltaTime);
+    postUpdate(Time::instancePtr()->m_deltaTime);
 
     render();
   }
 }
 
 void 
-BaseApp::update(SPtr<Object> object)
+BaseApp::update(SPtr<Actor> Actor)
 {
-  object->update();
-  auto& childs =  object->getChilds();
+  Actor->update();
+  auto& childs =  Actor->getChilds();
   for(auto child : childs){
     update(child);
   }
@@ -144,12 +143,12 @@ BaseApp::setWindow(void* window)
     return;
   }
 
-  finalRender = api.createRenderTarget(backBuffer);
+  m_finalRender = api.createRenderTarget(backBuffer);
 
   TextureDesc descDepth;
   ZeroMemory( &descDepth, sizeof(descDepth) );
-  descDepth.width = api.windowWidth;
-  descDepth.height = api.windowHeight;
+  descDepth.width = api.m_windowWidth;
+  descDepth.height = api.m_windowHeight;
   descDepth.mipLevels = 1;
   descDepth.arraySize = 1;
   descDepth.format = FORMAT::D24_UNORM_S8_UINT;
@@ -169,7 +168,7 @@ BaseApp::setWindow(void* window)
   descDSV.viewDimension = DS_DIMENSION::TEXTURE2D;
   descDSV.MipSlice = 0;
 
-  finalDepthStencil = api.createDepthStencil(descDSV,depthStencil);
+  m_finalDepthStencil = api.createDepthStencil(descDSV,depthStencil);
 }
 
 void
@@ -182,11 +181,14 @@ BaseApp::resizeWindow(void* window)
   }
   api.unsetRenderTargetAndDepthStencil();
 
-  if(finalRender.get())
-  finalRender->release();
+  if(m_finalRender.get()){
+      m_finalRender->release();
 
-  if(finalDepthStencil.get())
-  finalDepthStencil->release();
+  }
+
+  if(m_finalDepthStencil.get()){
+    m_finalDepthStencil->release();
+  }
   
   setWindow(window);
   

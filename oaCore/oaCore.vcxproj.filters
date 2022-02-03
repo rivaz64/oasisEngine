@@ -45,9 +45,6 @@
     <ClInclude Include="include\oaTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -108,7 +105,7 @@
     <ClInclude Include="include\oaLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaFile.h">
+    <ClInclude Include="include\oaActor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -135,9 +132,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\oaResoureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaCamera.cpp">
@@ -191,7 +185,7 @@
     <ClCompile Include="source\oaLogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaFile.cpp">
+    <ClCompile Include="source\oaActor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

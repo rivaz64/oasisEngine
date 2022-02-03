@@ -8,8 +8,8 @@ namespace oaEngineSDK{
 
 DX11Texture::~DX11Texture()
 {
-  if(shaderResourceView) shaderResourceView->Release();
-  if(texture) texture->Release();
+  if(m_shaderResourceView) m_shaderResourceView->Release();
+  if(m_texture) m_texture->Release();
 }
 
 bool 
@@ -23,11 +23,11 @@ DX11Texture::loadFromFile(const Path& file)
   auto api = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr());
 
   hr = D3DX11CreateShaderResourceViewFromFile(
-    api->device,
+    api->m_device,
     f.c_str(),
     nullptr,
     nullptr,
-    &shaderResourceView,
+    &m_shaderResourceView,
     nullptr
   );
 
@@ -55,7 +55,7 @@ DX11Texture::init(TextureDesc description)
   descDepth.MiscFlags = 0;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateTexture2D( &descDepth, NULL, &texture );
+    m_device->CreateTexture2D( &descDepth, NULL, &m_texture );
 
   if(FAILED( hr ))
     return false;
@@ -78,7 +78,7 @@ DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV
   srvDesc.Texture2D.MipLevels = descriptionSRV.mipLevels;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateShaderResourceView(texture,&srvDesc,&shaderResourceView);
+    m_device->CreateShaderResourceView(m_texture,&srvDesc,&m_shaderResourceView);
 
   if(FAILED(hr)){
     return false;
@@ -90,7 +90,7 @@ DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV
 void* 
 DX11Texture::getId()
 {
-  return shaderResourceView;
+  return m_shaderResourceView;
 }
 
 

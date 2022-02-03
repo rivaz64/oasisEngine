@@ -17,6 +17,7 @@
 #include <cmath>
 #include <map>
 #include <iostream>
+#include <fstream>
 
 namespace oaEngineSDK {
 /**
@@ -72,6 +73,11 @@ using String = std::string;
  * @tparam T
 */
 using WString = std::wstring;
+
+/**
+ * @brief wraper of the std stream
+*/
+using FStream = std::fstream;
 
 /**
  * @brief wraper of the std::shared_ptr, can be changed in the future
@@ -150,5 +156,20 @@ FORCEINLINE void
 print(String s){
   std::cout<<s<<std::endl;
 }
+
+/**
+ * @brief changes something to string
+ * @tparam T the tipe of the argument
+ * @param param the thig to be converted to string
+ * @return the string
+*/
+template<class T>
+FORCEINLINE String
+toString(T param){
+  return std::to_string(param);
+}
+
+
+
 
 }

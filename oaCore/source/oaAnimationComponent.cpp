@@ -7,7 +7,7 @@
 #include "oaAnimationComponent.h"
 #include "oaAnimation.h"
 #include "oaSkeletalComponent.h"
-#include "oaObject.h"
+#include "oaActor.h"
 #include "oaGraphicsComponent.h"
 #include "oaTime.h"
 #include "oaSkeleton.h"
@@ -22,45 +22,39 @@ COMPONENT_TYPE::E oaEngineSDK::AnimationComponent::getType()
 }
 
 void 
-AnimationComponent::update(SPtr<Object> actor)
+AnimationComponent::update(SPtr<Actor> actor)
 {
   OA_ASSERT(actor->getComponent<SkeletalComponent>().get());
 
-  if(!animation){
+  if(!m_animation){
     return;
   }
 
-  auto skeleton = actor->getComponent<SkeletalComponent>()->skeleton;
-
-  auto model = actor->getComponent<GraphicsComponent>()->model;
-
-  animTimeInSecs += Time::instancePtr()->getDelta();
+  m_animTimeInSecs += Time::instancePtr()->getDelta();
 
   //float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
 
-  float temp = animationTime;
+  float temp = m_animationTime;
 
-  animationTime = Math::modf(animTimeInSecs/animation->ticksPerSecond,animation->duration);
+  m_animationTime = Math::modf(m_animTimeInSecs/m_animation->m_ticksPerSecond,m_animation->m_duration);
 
-  if(temp>animationTime){
-    actualLocationKey = 0;
-    actualScaleKey = 0;
-    actualRotationKey = 0;
+  if(temp>m_animationTime){
+    m_actualLocationKey = 0;
+    m_actualScaleKey = 0;
+    m_actualRotationKey = 0;
   }
-
-  readNodeHeirarchy(skeleton->skeleton,Matrix4f::IDENTITY,skeleton,model);
+  if(m_skeleton)
+  readNodeHeirarchy(m_skeleton->m_skeleton,Matrix4f::IDENTITY);
 }
 
 
 void 
 AnimationComponent::readNodeHeirarchy(
   SPtr<SkeletalNode> skeletalNode, 
-  const Matrix4f& parentTransform,
-  SPtr<Skeleton> skeleton,
-  SPtr<Model> model
+  const Matrix4f& parentTransform
   )
 {
-  auto animNode = animation->nodes[skeletalNode->name];
+  auto animNode = m_animation->m_nodes[skeletalNode->name];
 
   Matrix4f globalTransform;
 
@@ -75,17 +69,18 @@ AnimationComponent::readNodeHeirarchy(
 
   globalTransform = parentTransform*nodeTransform;
 
-  for(auto mesh : model->meshes){
-    if(mesh->boneMaping.find(skeletalNode->name) != mesh->boneMaping.end()){
-      uint32 boneIndex = mesh->boneMaping[skeletalNode->name];
-      mesh->ofset[boneIndex] = skeleton->globalInverse*globalTransform*mesh->bones[boneIndex];
+  for(auto mesh : m_model->m_meshes){
+    if(mesh->m_boneMaping.find(skeletalNode->name) != mesh->m_boneMaping.end()){
+      uint32 boneIndex = mesh->m_boneMaping[skeletalNode->name];
+      mesh->m_ofset[boneIndex] = m_skeleton->m_globalInverse*globalTransform*mesh->m_bones[boneIndex];
+      m_skeleton->m_finalMatrix[skeletalNode->name] = globalTransform*mesh->m_bones[boneIndex];
     }
   }
   /*skeleton->boneMaping[skeletalNode->name] = 
     skeleton->globalInverse*globalTransform;*/
 
   for(auto child : skeletalNode->childs){
-    readNodeHeirarchy(child,globalTransform,skeleton,model);
+    readNodeHeirarchy(child,globalTransform);
   }
 
 }
@@ -97,19 +92,19 @@ AnimationComponent::interpolatedLocation(SPtr<AnimNode> node)
     return node->locations[0].second;
   }
 
-  auto& actualKey = node->locations[actualLocationKey];
-  auto& nextKey = node->locations[actualLocationKey+1];
+  auto& actualKey = node->locations[m_actualLocationKey];
+  auto& nextKey = node->locations[m_actualLocationKey+1];
 
-  if(nextKey.first<animationTime){
-    ++actualLocationKey;
-    actualKey = node->locations[actualLocationKey];
-    nextKey = node->locations[actualLocationKey+1];
+  if(nextKey.first < m_animationTime){
+    ++m_actualLocationKey;
+    actualKey = node->locations[m_actualLocationKey];
+    nextKey = node->locations[m_actualLocationKey+1];
   }
 
   return Vector3f::interpolate(
   actualKey.second,
   nextKey.second,
-  Math::modf(animationTime,1.f)
+  Math::modf(m_animationTime,1.f)
   );
 }
 
@@ -120,19 +115,19 @@ AnimationComponent::interpolatedScale(SPtr<AnimNode> node)
     return node->scales[0].second;
   }
 
-  auto& actualKey = node->scales[actualScaleKey];
-  auto& nextKey = node->scales[actualScaleKey+1];
+  auto& actualKey = node->scales[m_actualScaleKey];
+  auto& nextKey = node->scales[m_actualScaleKey+1];
 
-  if(nextKey.first<animationTime){
-    ++actualScaleKey;
-    actualKey = node->scales[actualScaleKey];
-    nextKey = node->scales[actualScaleKey+1];
+  if(nextKey.first<m_animationTime){
+    ++m_actualScaleKey;
+    actualKey = node->scales[m_actualScaleKey];
+    nextKey = node->scales[m_actualScaleKey+1];
   }
 
   return Vector3f::interpolate(
   actualKey.second,
   nextKey.second,
-  Math::modf(animationTime,1.f)
+  Math::modf(m_animationTime,1.f)
   );
 }
 
@@ -144,19 +139,19 @@ AnimationComponent::interpolatedRotation(SPtr<AnimNode> node)
     return node->rotations[0].second;
   }
 
-  auto& actualKey = node->rotations[actualRotationKey];
-  auto& nextKey = node->rotations[actualRotationKey+1];
+  auto& actualKey = node->rotations[m_actualRotationKey];
+  auto& nextKey = node->rotations[m_actualRotationKey+1];
 
-  if(nextKey.first<animationTime){
-    ++actualRotationKey;
-    actualKey = node->rotations[actualRotationKey];
-    nextKey = node->rotations[actualRotationKey+1];
+  if(nextKey.first<m_animationTime){
+    ++m_actualRotationKey;
+    actualKey = node->rotations[m_actualRotationKey];
+    nextKey = node->rotations[m_actualRotationKey+1];
   }
   //return actualKey.second;
   return Quaternion::interpolate(
   actualKey.second,
   nextKey.second,
-  Math::modf(animationTime,1.f)
+  Math::modf(m_animationTime,1.f)
   );
 }
 

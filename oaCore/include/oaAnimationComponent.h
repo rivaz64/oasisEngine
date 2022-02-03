@@ -27,7 +27,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @param actor 
   */
   void
-  update(SPtr<Object> actor) override;
+  update(SPtr<Actor> actor) override;
 
   /**
    * @brief reads each node to update it to the right time
@@ -35,11 +35,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @param parentTransform the transform of the parent node
   */
   void
-  readNodeHeirarchy(
-     SPtr<SkeletalNode> node, 
-     const Matrix4f& parentTransform,
-     SPtr<Skeleton> skeleton,
-     SPtr<Model> model);
+  readNodeHeirarchy(SPtr<SkeletalNode> node, const Matrix4f& parentTransform);
   
   /**
    * @brief calculates the interpolation of the location
@@ -71,29 +67,43 @@ class OA_CORE_EXPORT AnimationComponent :
   /**
    * @brief the time where the animation is at in animation time
   */
-  float animationTime = 0;
+  float m_animationTime = 0;
 
   /**
    * @brief the time where the animation is at in seconds
   */
-  float animTimeInSecs = 0;
+  float m_animTimeInSecs = 0;
 
   /**
    * @brief the actual key frame of the location
   */
-  uint32 actualLocationKey = 0;
+  uint32 m_actualLocationKey = 0;
 
   /**
    * @brief the actual key frame of the scale
   */
-  uint32 actualScaleKey = 0;
+  uint32 m_actualScaleKey = 0;
 
   /**
    * @brief the actual key frame of the rotation
   */
-  uint32 actualRotationKey = 0;
+  uint32 m_actualRotationKey = 0;
 
-  SPtr<Animation> animation;
+  /**
+   * @brief the animation this component uses
+  */
+  SPtr<Animation> m_animation;
+
+  /**
+   * @brief the model using the animation
+  */
+  SPtr<Model> m_model;
+
+  /**
+   * @brief the skeleton using the animation
+  */
+  SPtr<Skeleton> m_skeleton;
+
 };
 
 }

@@ -14,7 +14,7 @@ bool oaEngineSDK::DX11IndexBuffer::init(Vector<uint32>& data)
   ZeroMemory( &InitData, sizeof(InitData) );
   InitData.pSysMem = data.data();
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateBuffer( &bd, &InitData, &buffer );
+    m_device->CreateBuffer( &bd, &InitData, &m_buffer );
 
   if(FAILED(hr)){
     return false;
@@ -26,8 +26,8 @@ bool oaEngineSDK::DX11IndexBuffer::init(Vector<uint32>& data)
 void oaEngineSDK::DX11IndexBuffer::set()
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); 
+  m_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); 
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  context->IASetIndexBuffer(buffer,DXGI_FORMAT_R32_UINT,0 );
+  m_context->IASetIndexBuffer(m_buffer,DXGI_FORMAT_R32_UINT,0 );
 }

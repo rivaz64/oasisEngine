@@ -6,8 +6,9 @@
 
 #include "oaSkeletalComponent.h"
 #include "oaGraphicsComponent.h"
-#include "oaObject.h"
+#include "oaActor.h"
 #include "oaSkeleton.h"
+#include "oaModel.h"
 
 namespace oaEngineSDK{
 
@@ -17,8 +18,15 @@ SkeletalComponent::getType()
   return COMPONENT_TYPE::SKELETON;
 }
 
-void SkeletalComponent::update(SPtr<Object> actor)
+void SkeletalComponent::update(SPtr<Actor> actor)
 {
+  if(m_skeleton)
+  for(auto it= m_sockets.begin();it!=m_sockets.end();++it){
+    actor->getComponent<GraphicsComponent>()->m_models[it->first->m_name].transform = 
+    m_skeleton->m_finalMatrix[it->second];
+    
+  }
+
   /*OA_ASSERT(actor->getComponent<GraphicsComponent>().get());
 
   auto model = actor->getComponent<GraphicsComponent>()->model;
@@ -38,6 +46,18 @@ void SkeletalComponent::update(SPtr<Object> actor)
     mesh->bonesB->update(finalMatrix.data());
   }*/
 
+}
+
+bool 
+SkeletalComponent::attachToBone(SPtr<Model> model, String bone)
+{
+   if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
+    return false;
+  }
+  
+  m_sockets.insert({model,bone});
+
+  return true;
 }
 
 }

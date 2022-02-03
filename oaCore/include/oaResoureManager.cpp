@@ -30,7 +30,7 @@ ResoureManager::loadTexture(const Path& file)
 
   Path path(file);
 
-  texture->name = path.getName();
+  texture->m_name = path.getName();
 
   return true;
 }
@@ -375,10 +375,10 @@ void ResoureManager::loadDefaultShaders()
   pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
 
   vertexShaders["default"]->compileFromFile("vertexShader");
-  vertexShaders["default"]->name = "normal";
+  vertexShaders["default"]->m_name = "normal";
 
   vertexShaders["animation"]->compileFromFile("animVertexShader");
-  vertexShaders["animation"]->name = "animation";
+  vertexShaders["animation"]->m_name = "animation";
 
   pixelShaders["default"]->compileFromFile("shader");
 
@@ -398,17 +398,17 @@ ResoureManager::generateDefaultMaterial()
   materials.insert({"default",newSPtr<Material>()});
   materials.insert({"animation",newSPtr<Material>()});
 
-  materials["default"]->vertexShader = vertexShaders["default"];
-  materials["default"]->pixelShader = pixelShaders["default"];
-  materials["default"]->textures.push_back(textures["default"]);
+  materials["default"]->m_vertexShader = vertexShaders["default"];
+  materials["default"]->m_pixelShader = pixelShaders["default"];
+  materials["default"]->m_textures.push_back(textures["default"]);
 
-  materials["default"]->name = "default";
+  materials["default"]->m_name = "default";
 
-  materials["animation"]->vertexShader = vertexShaders["animation"];
-  materials["animation"]->pixelShader = pixelShaders["default"];
-  materials["animation"]->textures.push_back(textures["default"]);
+  materials["animation"]->m_vertexShader = vertexShaders["animation"];
+  materials["animation"]->m_pixelShader = pixelShaders["default"];
+  materials["animation"]->m_textures.push_back(textures["default"]);
 
-  materials["animation"]->name = "animation";
+  materials["animation"]->m_name = "animation";
 }
 
 }

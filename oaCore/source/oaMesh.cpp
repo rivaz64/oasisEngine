@@ -15,31 +15,30 @@ namespace oaEngineSDK{
 void
 Mesh::create(Vector<Vertex>& vertices,Vector<uint32>& index){
 
-  
-  indexNumber = static_cast<uint64>(index.size());
+  m_indexNumber = static_cast<uint64>(index.size());
 
-  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+  m_vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
 
-  indexB = GraphicAPI::instancePtr()->createIndexBuffer();
+  m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
 
-  vertexB->init(vertices.data(),sizeof(Vertex),static_cast<uint64>(vertices.size()));
+  m_vertexB->init(vertices.data(),sizeof(Vertex),static_cast<uint64>(vertices.size()));
 
-  indexB->init(index);
+  m_indexB->init(index);
 
 }
 
 void
 Mesh::create(Vector<AnimationVertex>& vertices,Vector<uint32>& index){
 
-  indexNumber = static_cast<uint64>(index.size());
+  m_indexNumber = static_cast<uint64>(index.size());
 
-  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+  m_vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
 
-  indexB = GraphicAPI::instancePtr()->createIndexBuffer();
+  m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
 
-  vertexB->init(vertices.data(),sizeof(AnimationVertex),static_cast<uint64>(vertices.size()));
+  m_vertexB->init(vertices.data(),sizeof(AnimationVertex),static_cast<uint64>(vertices.size()));
 
-  indexB->init(index);
+  m_indexB->init(index);
 
 }
 
@@ -47,17 +46,17 @@ void Mesh::create(Vector<AnimationVertex>& vertices, Vector<uint32>& index, Vect
 {
   create(vertices,index);
 
-  hasBones = true;
+  m_hasBones = true;
 
-  bones = _bones;
+  m_bones = _bones;
 
-  bonesB = GraphicAPI::instancePtr()->createBuffer();
+  m_bonesB = GraphicAPI::instancePtr()->createBuffer();
 
-  bonesB->init(sizeof(Matrix4f)*1024);
+  m_bonesB->init(sizeof(Matrix4f)*1024);
 
-  ofset.resize(1024);
+  m_ofset.resize(1024);
   for(int i = 0;i<1024;++i){
-    ofset[i] = Matrix4f::IDENTITY;
+    m_ofset[i] = Matrix4f::IDENTITY;
   }
 }
 

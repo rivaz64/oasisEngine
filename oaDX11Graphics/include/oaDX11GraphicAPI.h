@@ -123,16 +123,16 @@ class DX11GraphicAPI :
   DX11GraphicAPI() = default;
 
  public:
-   HWND hWnd;
-  D3D_DRIVER_TYPE driverType = D3D_DRIVER_TYPE_NULL;
-  D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
-  ID3D11Device* device = nullptr;
-  ID3D11DeviceContext* context = nullptr;
-  IDXGISwapChain* swapChain = nullptr;
+   HWND m_hWnd;
+  D3D_DRIVER_TYPE m_driverType = D3D_DRIVER_TYPE_NULL;
+  D3D_FEATURE_LEVEL m_featureLevel = D3D_FEATURE_LEVEL_11_0;
+  ID3D11Device* m_device = nullptr;
+  ID3D11DeviceContext* m_context = nullptr;
+  IDXGISwapChain* m_swapChain = nullptr;
 
-  MSG msg = MSG();
+  MSG m_msg = MSG();
 
-  Vector4f backgroundColor;
+  Vector4f m_backgroundColor;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

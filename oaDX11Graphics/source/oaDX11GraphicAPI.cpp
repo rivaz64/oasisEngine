@@ -19,11 +19,11 @@ namespace oaEngineSDK{
 
 void DX11GraphicAPI::onShutDown()
 {
-  if( context ) context->ClearState();
+  if( m_context ) m_context->ClearState();
 
-  if( swapChain ) swapChain->Release();
-  if( context ) context->Release();
-  if( device ) device->Release();
+  if( m_swapChain ) m_swapChain->Release();
+  if( m_context ) m_context->Release();
+  if( m_device ) m_device->Release();
 }
 
 bool
@@ -45,14 +45,14 @@ DX11GraphicAPI::initialize()
 
   RegisterClassEx(&wc);
 
-  hWnd = CreateWindowEx(NULL,
+  m_hWnd = CreateWindowEx(NULL,
                         "oasisEngine", 
-                        windowName.c_str(),   
+                        m_windowName.c_str(),   
                         WS_OVERLAPPEDWINDOW,    
                         300,    
                         200,   
-                        windowWidth,  
-                        windowHeight,    
+                        m_windowWidth,  
+                        m_windowHeight,    
                         NULL,    
                         NULL,    
                         GetModuleHandleA(nullptr),   
@@ -60,7 +60,7 @@ DX11GraphicAPI::initialize()
 
                                  
 
-  ShowWindow(hWnd, SW_SHOWDEFAULT);
+  ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 
   
 
@@ -85,7 +85,7 @@ DX11GraphicAPI::initialize()
   };
   UINT numFeatureLevels = ARRAYSIZE( featureLevels );
   
-  setWindow(hWnd);
+  setWindow(m_hWnd);
 
 
   HRESULT hr = S_OK;
@@ -93,13 +93,13 @@ DX11GraphicAPI::initialize()
   DXGI_SWAP_CHAIN_DESC sd;
   ZeroMemory( &sd, sizeof( sd ) );
   sd.BufferCount = 1;
-  sd.BufferDesc.Width = windowWidth;
-  sd.BufferDesc.Height = windowHeight;
+  sd.BufferDesc.Width = m_windowWidth;
+  sd.BufferDesc.Height = m_windowHeight;
   sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   sd.BufferDesc.RefreshRate.Numerator = 60;
   sd.BufferDesc.RefreshRate.Denominator = 1;
   sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  sd.OutputWindow = hWnd;
+  sd.OutputWindow = m_hWnd;
   sd.SampleDesc.Count = 1;
   sd.SampleDesc.Quality = 0;
   sd.Windowed = TRUE;
@@ -108,9 +108,9 @@ DX11GraphicAPI::initialize()
 
   for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
   {
-    driverType = driverTypes[driverTypeIndex];
-    hr = D3D11CreateDeviceAndSwapChain( NULL, driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
-                                       D3D11_SDK_VERSION, &sd, &swapChain, &device, &featureLevel, &context );
+    m_driverType = driverTypes[driverTypeIndex];
+    hr = D3D11CreateDeviceAndSwapChain( NULL, m_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
+                                       D3D11_SDK_VERSION, &sd, &m_swapChain, &m_device, &m_featureLevel, &m_context );
     if( SUCCEEDED( hr ) )
       break;
   }
@@ -127,14 +127,14 @@ DX11GraphicAPI::initialize()
 bool 
 DX11GraphicAPI::isRunning()
 {
-  return msg.message != WM_QUIT;
+  return m_msg.message != WM_QUIT;
 }
 
 void 
 DX11GraphicAPI::events()
 {
 
-  Map<char,bool>& inputs = InputManager::instancePtr()->inputs;
+  Map<char,bool>& inputs = InputManager::instancePtr()->m_inputs;
   
   for(auto key : inputs){
     if(GetKeyState(key.first) & 0x8000){
@@ -151,15 +151,15 @@ DX11GraphicAPI::events()
 
   Vector2I temp(p.x,p.y);
 
-  InputManager::instancePtr()->mouseDelta = temp-InputManager::instancePtr()->mousePosition;
+  InputManager::instancePtr()->m_mouseDelta = temp-InputManager::instancePtr()->m_mousePosition;
 
-  InputManager::instancePtr()->mousePosition = temp;
+  InputManager::instancePtr()->m_mousePosition = temp;
 
   if (GetQueueStatus(QS_ALLINPUT))
-  while( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
+  while( PeekMessage( &m_msg, NULL, 0, 0, PM_REMOVE ) )
   {
-    TranslateMessage( &msg );
-    DispatchMessage( &msg );
+    TranslateMessage( &m_msg );
+    DispatchMessage( &m_msg );
   }
 }
 
@@ -222,18 +222,18 @@ DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Tex
 void 
 DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
 {
-  backgroundColor = color;
+  m_backgroundColor = color;
 }
 
 SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 {
-  if(!swapChain) return SPtr<Texture>();
+  if(!m_swapChain) return SPtr<Texture>();
   auto backBuffer = createTexture();
 
-  HRESULT hr = swapChain->GetBuffer( 
+  HRESULT hr = m_swapChain->GetBuffer( 
     0, 
     __uuidof( ID3D11Texture2D ), 
-    ( LPVOID* )&cast<DX11Texture>(backBuffer)->texture );
+    ( LPVOID* )&cast<DX11Texture>(backBuffer)->m_texture );
 
   if( FAILED( hr ) ){
     std::cout<<"failed to get backBuffer"<<std::endl;
@@ -245,45 +245,45 @@ SPtr<Texture> DX11GraphicAPI::getBackBuffer()
 void 
 DX11GraphicAPI::draw(uint64 indexes)
 {
-  context->DrawIndexed(indexes, 0, 0);
+  m_context->DrawIndexed(indexes, 0, 0);
 }
 
 void 
 DX11GraphicAPI::show()
 {
-  swapChain->Present( 0, 0 );
+  m_swapChain->Present( 0, 0 );
 }
 
 void 
 DX11GraphicAPI::setTexture(const SPtr<Texture> texture)
 {
-  context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->shaderResourceView );
+  m_context->PSSetShaderResources( 0, 1, &cast<DX11Texture>(texture)->m_shaderResourceView );
 }
 
 void 
 DX11GraphicAPI::setVSBuffer(const SPtr<Buffer> buffer, uint32 location)
 {
-  context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
+  m_context->VSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->m_buffer );
 }
 
 void 
 DX11GraphicAPI::setPSBuffer(const SPtr<Buffer> buffer, uint32 location)
 {
-  context->PSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->buffer );
+  m_context->PSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->m_buffer );
 }
 
 void 
 DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
 {
-  context->PSSetSamplers( 0, 1, &cast<DX11SamplerState>(sampler)->samplerState);
+  m_context->PSSetSamplers( 0, 1, &cast<DX11SamplerState>(sampler)->m_samplerState);
 }
 
 void 
 DX11GraphicAPI::setRenderTarget(const SPtr<RenderTarget> renderTarget)
 {
-  context->OMSetRenderTargets( 
+  m_context->OMSetRenderTargets( 
     1,
-    &cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
+    &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
     nullptr
   );
 }
@@ -294,17 +294,17 @@ DX11GraphicAPI::setRenderTargetAndDepthStencil(
   const SPtr<DepthStencil> depthStencil
 )
 {
-  context->OMSetRenderTargets( 
+  m_context->OMSetRenderTargets( 
     1,
-    &cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
-    cast<DX11DepthStencil>(depthStencil)->depthStencil
+    &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencil
   );
 }
 
 void DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
 {
-  if(!context) return;
-  context->OMSetRenderTargets(0,0,0);
+  if(!m_context) return;
+  m_context->OMSetRenderTargets(0,0,0);
 }
 
 void DX11GraphicAPI::resizeSwapChian()
@@ -315,15 +315,15 @@ void DX11GraphicAPI::resizeSwapChian()
 void 
 DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
 {
-  context->ClearRenderTargetView(
-    cast<DX11RenderTarget>(renderTarget)->renderTargetView, 
-    &backgroundColor.x );
+  m_context->ClearRenderTargetView(
+    cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
+    &m_backgroundColor.x );
 }
 
 void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
 {
-  context->ClearDepthStencilView(
-    cast<DX11DepthStencil>(depthStencil)->depthStencil,
+  m_context->ClearDepthStencilView(
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencil,
     D3D11_CLEAR_DEPTH, 
     1.0f, 
     0
@@ -333,44 +333,44 @@ void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
 void DX11GraphicAPI::setWindow(void* window)
 {
   RECT rc;
-  GetClientRect( hWnd, &rc );
-  windowWidth = rc.right - rc.left;
-  windowHeight = rc.bottom - rc.top;
+  GetClientRect( m_hWnd, &rc );
+  m_windowWidth = rc.right - rc.left;
+  m_windowHeight = rc.bottom - rc.top;
 
-  if(!context){
+  if(!m_context){
     return;
   }
 
   D3D11_VIEWPORT vp;
-  vp.Width = windowWidth;
-  vp.Height = windowHeight;
+  vp.Width = m_windowWidth;
+  vp.Height = m_windowHeight;
   vp.MinDepth = 0.0f;
   vp.MaxDepth = 1.0f;
   vp.TopLeftX = 0;
   vp.TopLeftY = 0;
-  context->RSSetViewports( 1, &vp );
+  m_context->RSSetViewports( 1, &vp );
 
-  if(!swapChain) return;
-  HRESULT hr = swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+  if(!m_swapChain) return;
+  HRESULT hr = m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 }
 
 
 void* 
 DX11GraphicAPI::getWindow()
 {
-  return hWnd;
+  return m_hWnd;
 }
 
 void* 
 DX11GraphicAPI::getDevice()
 {
-  return device;
+  return m_device;
 }
 
 void* 
 DX11GraphicAPI::getContext()
 {
-  return context;
+  return m_context;
 }
 
 

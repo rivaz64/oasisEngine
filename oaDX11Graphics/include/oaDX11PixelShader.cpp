@@ -8,22 +8,22 @@ namespace oaEngineSDK{
 
 DX11PixelShader::~DX11PixelShader()
 {
-  if( shader ) shader->Release();
+  if( m_shader ) m_shader->Release();
 }
 
 bool DX11PixelShader::compileFromFile(String file)
 {
-  version = "ps_4_0";
+  m_version = "ps_4_0";
 
   if(!DX11Shader::compileFromFile(file + "/pixelShader.hlsl")){
     return false;
   }
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreatePixelShader(blob->GetBufferPointer(), 
-                              blob->GetBufferSize(), 
-                              nullptr, 
-                              &shader);
+    m_device->CreatePixelShader(m_blob->GetBufferPointer(), 
+                                m_blob->GetBufferSize(), 
+                                nullptr, 
+                                &m_shader);
 
   return true;
 }
@@ -32,7 +32,7 @@ void
 DX11PixelShader::set()
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->PSSetShader( shader, NULL, 0 );
+    m_context->PSSetShader( m_shader, NULL, 0 );
 }
 
 }

@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\oaActor.h" />
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaBaseApp.h" />
@@ -177,7 +178,6 @@
     <ClInclude Include="include\oaCamera.h" />
     <ClInclude Include="include\oaComponent.h" />
     <ClInclude Include="include\oaDepthStencil.h" />
-    <ClInclude Include="include\oaFile.h" />
     <ClInclude Include="include\oaFlags.h" />
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
@@ -189,7 +189,6 @@
     <ClInclude Include="include\oaMaterial.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
-    <ClInclude Include="include\oaObject.h" />
     <ClInclude Include="include\oaPath.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaRenderTarget.h" />
@@ -206,6 +205,7 @@
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp" />
     <ClCompile Include="oaInputManager.cpp" />
+    <ClCompile Include="source\oaActor.cpp" />
     <ClCompile Include="source\oaAnimation.cpp" />
     <ClCompile Include="source\oaAnimationComponent.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp" />
@@ -213,7 +213,6 @@
     <ClCompile Include="source\oaCamera.cpp" />
     <ClCompile Include="source\oaComponent.cpp" />
     <ClCompile Include="source\oaDepthStencil.cpp" />
-    <ClCompile Include="source\oaFile.cpp" />
     <ClCompile Include="source\oaGraphicAPI.cpp" />
     <ClCompile Include="source\oaGraphicsComponent.cpp" />
     <ClCompile Include="source\oaIndexBuffer.cpp" />
@@ -222,7 +221,6 @@
     <ClCompile Include="source\oaMaterial.cpp" />
     <ClCompile Include="source\oaMesh.cpp" />
     <ClCompile Include="source\oaModel.cpp" />
-    <ClCompile Include="source\oaObject.cpp" />
     <ClCompile Include="source\oaPath.cpp" />
     <ClCompile Include="source\oaRenderTarget.cpp" />
     <ClCompile Include="source\oaSamplerState.cpp" />

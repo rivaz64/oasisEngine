@@ -8,23 +8,23 @@
 namespace oaEngineSDK{
 DX11VertexShader::~DX11VertexShader()
 {
-  if( shader ) shader->Release();
-  if( inputLayout ) inputLayout->Release();
+  if( m_shader ) m_shader->Release();
+  if( m_inputLayout ) m_inputLayout->Release();
 }
 bool
 DX11VertexShader::compileFromFile(String file)
 {
-  version = "vs_4_0";
+  m_version = "vs_4_0";
 
   if(!DX11Shader::compileFromFile("shader/" + file + ".hlsl")){
     return false;
   }
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  device->CreateVertexShader(blob->GetBufferPointer(), 
-                               blob->GetBufferSize(), 
+  m_device->CreateVertexShader(m_blob->GetBufferPointer(), 
+                               m_blob->GetBufferSize(), 
                                nullptr, 
-                               &shader);
+                               &m_shader);
   
   if (FAILED(hr)) {
     return false;
@@ -39,18 +39,18 @@ void
 DX11VertexShader::set()
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->VSSetShader( shader, NULL, 0 );
+    m_context->VSSetShader( m_shader, NULL, 0 );
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->IASetInputLayout( inputLayout );
+    m_context->IASetInputLayout( m_inputLayout );
 }
 
 void 
 DX11VertexShader::createInputLayout()
 {
   ID3D11ShaderReflection* reflection = nullptr;
-  D3DReflect(blob->GetBufferPointer(), 
-             blob->GetBufferSize(), 
+  D3DReflect(m_blob->GetBufferPointer(), 
+             m_blob->GetBufferSize(), 
              IID_ID3D11ShaderReflection, 
              reinterpret_cast<void**>(&reflection));
 
@@ -132,13 +132,13 @@ DX11VertexShader::createInputLayout()
   //inputLayoutDesc[0].AlignedByteOffset = 0;
   //inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateInputLayout(&inputLayoutDesc[0], 
+    m_device->CreateInputLayout(&inputLayoutDesc[0], 
                               inputLayoutDesc.size(), 
-                              blob->GetBufferPointer(), 
-                              blob->GetBufferSize(), &inputLayout);//*/
+                              m_blob->GetBufferPointer(), 
+                              m_blob->GetBufferSize(), &m_inputLayout);//*/
 
   //reflection->Release();
-  blob->Release();
+  m_blob->Release();
 
 }
 

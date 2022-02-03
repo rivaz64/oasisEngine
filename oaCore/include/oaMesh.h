@@ -141,41 +141,41 @@ class OA_CORE_EXPORT Mesh
   /**
    * @brief the number of indices this mesh has
   */
-  uint64 indexNumber = 0;
+  uint64 m_indexNumber = 0;
 
   /**
    * @brief the buffer for the indices
   */
-  SPtr<IndexBuffer> indexB;
+  SPtr<IndexBuffer> m_indexB;
 
   /**
   * @brief the buffer for the vertex
   */
-  SPtr<VertexBuffer> vertexB;
+  SPtr<VertexBuffer> m_vertexB;
 
   //SPtr<Buffer
 
   /**
    * @brief the buffer for the bones
   */
-  SPtr<Buffer> bonesB;
+  SPtr<Buffer> m_bonesB;
 
   /**
    * @brief if this mesh has bones or not
   */
-  bool hasBones = false;
+  bool m_hasBones = false;
 
   /**
    * @brief the bones of this mesh
   */
-  Vector<Matrix4f> bones;
+  Vector<Matrix4f> m_bones;
 
-  Vector<Matrix4f> ofset;
+  Vector<Matrix4f> m_ofset;
 
   /**
    * @brief the names of the bones used by this mesh
   */
-  Map<String,uint32> boneMaping;
+  Map<String,uint32> m_boneMaping;
 };
 
 }

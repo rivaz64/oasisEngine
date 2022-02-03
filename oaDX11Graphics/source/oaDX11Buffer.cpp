@@ -9,8 +9,8 @@ namespace oaEngineSDK{
 
 DX11Buffer::~DX11Buffer()
 {
-  if(buffer)
-  buffer->Release();
+  if(m_buffer)
+  m_buffer->Release();
 }
 
 bool DX11Buffer::init(uint32 size)
@@ -23,7 +23,7 @@ bool DX11Buffer::init(uint32 size)
   bd.CPUAccessFlags = 0;
   
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    device->CreateBuffer( &bd, nullptr, &buffer );
+    m_device->CreateBuffer( &bd, nullptr, &m_buffer );
 
   if(FAILED(hr)){
     return false;
@@ -35,7 +35,7 @@ bool DX11Buffer::init(uint32 size)
 void DX11Buffer::update(void* data)
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    context->UpdateSubresource( buffer, 0, NULL, data, 0, 0);   
+    m_context->UpdateSubresource( m_buffer, 0, NULL, data, 0, 0);   
 }
 
 }

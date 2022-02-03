@@ -19,7 +19,7 @@ class Skeleton;
 struct SkeletalNode;
 class Animation;
 struct AnimNode;
-class Object;
+class Actor;
 class Component;
 class Path;
 class GraphicsComponent;

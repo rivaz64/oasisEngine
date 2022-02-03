@@ -25,7 +25,7 @@ class DX11PixelShader :
   set() override;
 
  private:
-  ID3D11PixelShader* shader = nullptr;
+  ID3D11PixelShader* m_shader = nullptr;
 
 };
 

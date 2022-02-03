@@ -47,24 +47,24 @@ class Animation
 
  public:
   
-  String name;
+  String m_name;
   
  private:
 
   /**
    * @brief the ticks this animation has 
   */
-  float duration;
+  float m_duration;
 
   /**
    * @brief how many tiks have to be executed each second
   */
-  float ticksPerSecond;
+  float m_ticksPerSecond;
 
   /**
    * @brief the keyFrames of the animation
   */
-  Map<String,SPtr<AnimNode>> nodes;
+  Map<String,SPtr<AnimNode>> m_nodes;
 
   friend class Model;
   friend class AnimationComponent;

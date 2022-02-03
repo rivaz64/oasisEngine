@@ -24,9 +24,31 @@ class OA_CORE_EXPORT SkeletalComponent :
   getType() override; 
 
   void
-  update(SPtr<Object> actor) override;
+  update(SPtr<Actor> actor) override;
 
-  SPtr<Skeleton> skeleton;
+  /**
+   * @brief attach a model to a bone 
+   * @param model the model to be attached
+   * @param bone the bone the model is going to be attached
+   * @return if the model was attached
+  */
+  bool
+  attachToBone(SPtr<Model> model,String bone);
+
+  /**
+   * @brief the skeleton this component is using
+  */
+  SPtr<Skeleton> m_skeleton;
+
+  /**
+   * @brief the model this component is using
+  */
+  SPtr<Model> m_model;
+
+  /**
+   * @brief the sockets this skeleton has
+  */
+  Map<SPtr<Model>,String> m_sockets;
 };
 
 }

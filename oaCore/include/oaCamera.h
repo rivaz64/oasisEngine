@@ -65,7 +65,7 @@ class OA_CORE_EXPORT Camera
   rotateWithMouse(const Vector2f& delta);
 
   /**
-   * @brief if the object is observerd by the camera
+   * @brief if the Actor is observerd by the camera
    * @param _location 
    * @return 
   */
@@ -80,63 +80,63 @@ class OA_CORE_EXPORT Camera
 
   
   /**
-   * @brief sees the objects in a scene
+   * @brief sees the Actors in a scene
    * @param the sceen to be sceen
-   * @param the objects seen by this camera
+   * @param the Actors seen by this camera
   */
   void
-  seeObjects(SPtr<Object> scene,Vector<SPtr<Object>>& seenObjects);
+  seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
 
  public:
   /**
    * @brief how far the camera can see
   */
-  float farPlane;
+  float m_farPlane;
 
   /**
    * @brief the nearest that the camera can see
   */
-  float nearPlane;
+  float m_nearPlane;
 
   /**
    * @brief the angle of the openes of the camera
   */
-  float angle;
+  float m_angle;
 
   /**
    * @brief the ratio between the with and the height of the camera
   */
-  float ratio;
+  float m_ratio;
 
   /**
    * @brief where the camera is
   */
-  Vector3f location;
+  Vector3f m_location;
 
   /**
    * @brief the direction the camera is looking
   */
-  Vector3f lookingAt;
+  Vector3f m_lookingAt;
 
   /**
    * @brief where it is the up of the camera
   */
-  Vector3f up;
+  Vector3f m_up;
 
   union{
 
     /**
      * @brief the local axis of the camera
     */
-    Matrix3f axis;
+    Matrix3f m_axis;
 
     struct{
     
-      Vector3f axisX;
+      Vector3f m_axisX;
 
-      Vector3f axisY;
+      Vector3f m_axisY;
 
-      Vector3f axisZ;
+      Vector3f m_axisZ;
     
     };
 

@@ -11,7 +11,7 @@
 namespace oaEngineSDK{
 
 /**
- * @brief a component an object can have
+ * @brief a component an Actor can have
 */
 class OA_CORE_EXPORT Component
 {
@@ -22,14 +22,14 @@ class OA_CORE_EXPORT Component
    * @param actor 
   */
   virtual void
-  onAttach(SPtr<Object> actor) {};
+  onAttach(SPtr<Actor> actor) {};
 
   /**
    * @brief updates this component
    * @param actor the actor that has this component
   */
   virtual void
-  update(SPtr<Object> actor) {}
+  update(SPtr<Actor> actor) {}
 
   /**
    * @brief get what is the type of this component

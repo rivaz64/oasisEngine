@@ -17,16 +17,20 @@ class OGL_Buffer :
    ~OGL_Buffer();
 
   bool
-  init(void* data,uint32 size,BUFFER_FLAGS flags) override;
+  init(uint32 size) override;
 
   void
   update(void* data) override;
 
+
  public:
 
-   unsigned int VBO, VAO, EBO;
+   //unsigned int VBO, VAO, EBO;
 
-   float pointer[16];
+  uint32 m_id;
+  uint32 m_size;
+
+   //float pointer[16];
   //unsigned int id;
 };
 

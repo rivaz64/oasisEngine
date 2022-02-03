@@ -35,9 +35,9 @@ class DX11Texture:
 
  private:
 
-  ID3D11ShaderResourceView* shaderResourceView;
+  ID3D11ShaderResourceView* m_shaderResourceView;
 
-  ID3D11Texture2D* texture;
+  ID3D11Texture2D* m_texture;
 
   friend class DX11GraphicAPI;
   friend class DX11DepthStencil;

@@ -1,20 +1,19 @@
 /**
-* @file oaDX11IndexBuffer.h
+* @file oaOGL_IndexBuffer.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 10/14/2021
+* @date 2/1/2021
 */
+
 
 #pragma once
 
 #include "oaIndexBuffer.h"
-#include <d3d11.h>
 
 namespace oaEngineSDK{
 
-class DX11IndexBuffer :
+class OGL_IndexBuffer :
   public IndexBuffer
 {
- 
  public:
 
   bool
@@ -24,9 +23,7 @@ class DX11IndexBuffer :
   set() override;
 
  private:
-
-  ID3D11Buffer* m_buffer = nullptr;
-
+  uint32 id;
 };
 
 }

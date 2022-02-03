@@ -25,9 +25,9 @@ class DX11Shader :
 
 protected:
 
-  ID3DBlob* blob = nullptr;
+  ID3DBlob* m_blob = nullptr;
 
-  String version;
+  String m_version;
 };
 
 }

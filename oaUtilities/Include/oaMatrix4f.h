@@ -7,7 +7,7 @@
 #pragma once
 
 #include"oaPrerequisitesUtilities.h"
-
+#include "oaVector3f.h"
 
 namespace oaEngineSDK {
 /**
@@ -169,6 +169,12 @@ class OA_UTILITY_EXPORT Matrix4f
   */
   static Matrix4f 
   scaleMatrix(const Vector3f& v);
+
+  /**
+   * @brief gets the scale from the transform matrix
+  */
+  Vector3f
+  extractScale();
 
   /**
    * @brief creates a rotation matrix for the given angle r in radians rotating in the Z axis

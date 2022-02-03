@@ -30,9 +30,9 @@ public DX11Shader
   void
   createInputLayout();
 
-  ID3D11VertexShader* shader = nullptr;
+  ID3D11VertexShader* m_shader = nullptr;
 
-  ID3D11InputLayout* inputLayout = NULL;
+  ID3D11InputLayout* m_inputLayout = NULL;
 
   friend class DX11GraphicAPI;
 };
