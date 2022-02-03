@@ -10,33 +10,56 @@
 
 namespace oaEngineSDK{
 
-void 
-Logger::onStartUp()
+void Logger::log(const String& message,LOGGER_CHANNEL::E channel)
 {
-  //outputFile.open("logger.txt");
+  m_allLogs.push_back({message,channel});
 }
 
-void 
-Logger::onShutDown()
+void Logger::clear(LOGGER_CHANNEL::E channel)
 {
-  //outputFile << completeMessage;
-  //outputFile.close();
-  
-}
+  Vector<LogEntry> entries;
 
-void Logger::log(const String& message)
-{
-  m_completeMessage.push_back(message);
+  for(auto& message :m_allLogs){
+
+    if(message.channel & channel){
+      continue;
+    }
+
+    entries.push_back(message);
+  }
+  m_allLogs = entries;
 }
 
 void Logger::flush()
 {
   Path path;
+
   FStream f;
+
   path.setCompletePath("Logs/log "+toString(Time::instance().getTime())+".txt");
+
   f.open(path.getCompletePath());
-  for(auto& message :m_completeMessage){
-    f<<message;
+
+  for(auto& message :m_allLogs){
+    String sChannel;
+
+    switch(message.channel){
+
+    case LOGGER_CHANNEL::DEBUG:
+      sChannel = "[DEBUG]";
+      break;
+
+    case LOGGER_CHANNEL::WARNING:
+      sChannel = "[WARNING]";
+      break;
+
+    case LOGGER_CHANNEL::ERROR:
+      sChannel = "[ERROR]";
+      break;
+
+    }
+    
+    f<<sChannel<<" "<<message.channel;
   }
   f.close();
 }
