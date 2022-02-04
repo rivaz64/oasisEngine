@@ -36,7 +36,8 @@ AnimationComponent::update(SPtr<Actor> actor)
 
   float temp = m_animationTime;
 
-  m_animationTime = Math::modf(m_animTimeInSecs/m_animation->m_ticksPerSecond,m_animation->m_duration);
+  m_animationTime = Math::modf(m_animTimeInSecs/m_animation->m_ticksPerSecond,
+                               m_animation->m_duration);
 
   if(temp>m_animationTime){
     m_actualLocationKey = 0;
@@ -72,7 +73,11 @@ AnimationComponent::readNodeHeirarchy(
   for(auto mesh : m_model->m_meshes){
     if(mesh->m_boneMaping.find(skeletalNode->name) != mesh->m_boneMaping.end()){
       uint32 boneIndex = mesh->m_boneMaping[skeletalNode->name];
-      mesh->m_ofset[boneIndex] = m_skeleton->m_globalInverse*globalTransform*mesh->m_bones[boneIndex];
+
+      mesh->m_ofset[boneIndex] = m_skeleton->m_globalInverse*
+                                 globalTransform*
+                                 mesh->m_bones[boneIndex];
+
       m_skeleton->m_finalMatrix[skeletalNode->name] = globalTransform;
     }
   }
@@ -147,10 +152,10 @@ AnimationComponent::interpolatedRotation(SPtr<AnimNode> node)
   }
   //return actualKey.second;
   return Quaternion::interpolate(
-  actualKey.second,
-  nextKey.second,
-  Math::modf(m_animationTime,1.f)
-  );
+                                actualKey.second,
+                                nextKey.second,
+                                Math::modf(m_animationTime,1.f)
+                                );
 }
 
 

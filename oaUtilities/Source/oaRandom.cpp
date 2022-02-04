@@ -19,7 +19,7 @@ Random::noise2D(const Vector2f& point)
 float
 Random::noise3D(const Vector3f& point)
 {
-  return Math::mod(Math::sin(Vector3f::dot(point,Vector3f(12.9898f,78.233f,471.1698)))*43758.5453123f,1);
+  return Math::mod(Math::sin(Vector3f::dot(point,Vector3f(12.9898f,78.233f,471.1698f)))*43758.5453123f,1);
 }
 
 Vector2f

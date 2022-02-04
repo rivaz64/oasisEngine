@@ -15,7 +15,7 @@ void oaEngineSDK::Noise2D::redistribute(Grid2D<float>& grid, float power, float 
 {
   const Vector2U& size = grid.getSize();
   Vector2U position;
-  float inverseMin = 1.f/(1-minValue);
+  float inverseMin = 1.f/(1.f-minValue);
   for(position.x = 0;position.x< size.y; ++position.x){
     for(position.y = 0;position.y< size.x; ++position.y){
       float actualValue = grid.getAt(position);
@@ -26,7 +26,7 @@ void oaEngineSDK::Noise2D::redistribute(Grid2D<float>& grid, float power, float 
       else{
         actualValue*=inverseMin;
       }
-      actualValue = Math::pow(actualValue*1.2,power);
+      actualValue = Math::pow(actualValue*1.2f,power);
       grid.setAt(position,actualValue);
     }
   }

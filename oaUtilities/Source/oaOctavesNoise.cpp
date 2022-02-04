@@ -11,7 +11,6 @@ float
 oaEngineSDK::OctavesNoise::valueAt(const Vector2f& point)
 {
   float ans = 0;
-  uint32 size = amplitudes.size();
   float actual = 1;
   for(float amplitud : amplitudes){
     ans += noise->valueAt(point*actual)*amplitud;
