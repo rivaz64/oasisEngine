@@ -37,11 +37,11 @@ float PerlinNoise3D::valueAt(const Vector3f& point)
 void PerlinNoise3D::fillGrid(Grid3D<float>& grid, float scale)
 {
   const Vector3U& size = grid.getSize();
-  Vector3I position;
+  Vector3U position;
   for(position.x = 0;position.x< size.y; ++position.x){
     for(position.y = 0;position.y< size.x; ++position.y){
       for(position.z = 0;position.z< size.z; ++position.z){
-        grid.setAt(position,valueAt(Vector3f(position)/scale+Vector3f(.1,.2,.3)));
+        grid.setAt(position,valueAt(Vector3f(position)/scale+Vector3f(.1f,.2f,.3f)));
       }
     }
   }

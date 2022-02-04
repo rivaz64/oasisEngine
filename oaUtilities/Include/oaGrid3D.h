@@ -45,7 +45,7 @@ class Grid3D
    * @param location 
   */
   FORCEINLINE void
-  setAt(const Vector3I location, T value){
+  setAt(const Vector3U location, T value){
     OA_ASSERT(location.x<size.x && location.y<size.y && location.z<size.z);
     data[location.z*size.y*size.x+location.y*size.x+location.x] = value;
   }

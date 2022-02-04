@@ -35,7 +35,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
   skeleton->m_boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
-  for(int i = 0; i<node->mNumChildren;++i){
+  for(uint32 i = 0; i<node->mNumChildren;++i){
     sNode->childs[i] = newSPtr<SkeletalNode>();
     loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
@@ -298,17 +298,15 @@ void Loader::loadAnimations(SPtr<Model> model)
 {
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
 
-  auto& manager = ResoureManager::instance();
-
   for(uint32 animNum = 0; animNum < scene->mNumAnimations; ++animNum){
 
     auto actualAnim = scene->mAnimations[animNum];
    
     auto animation = newSPtr<Animation>();
    
-    animation->m_duration = actualAnim->mDuration;
+    animation->m_duration = static_cast<float>(actualAnim->mDuration);
    
-    animation->m_ticksPerSecond = 1.f/actualAnim->mTicksPerSecond;
+    animation->m_ticksPerSecond = 1.f/static_cast<float>(actualAnim->mTicksPerSecond);
    
     for(uint32 numChannel = 0; numChannel < actualAnim->mNumChannels; ++numChannel){
       
@@ -320,7 +318,7 @@ void Loader::loadAnimations(SPtr<Model> model)
    
       node->locations.resize(actualChannel->mNumPositionKeys);
    
-      for(int i = 0; i < actualChannel->mNumPositionKeys; ++i){
+      for(uint32 i = 0; i < actualChannel->mNumPositionKeys; ++i){
         Vector3f pos; 
         pos.x = actualChannel->mPositionKeys[i].mValue.x;
         pos.y = actualChannel->mPositionKeys[i].mValue.y;
@@ -332,7 +330,7 @@ void Loader::loadAnimations(SPtr<Model> model)
    
       node->scales.resize(actualChannel->mNumScalingKeys);
    
-      for(int i = 0; i < actualChannel->mNumScalingKeys; ++i){
+      for(uint32 i = 0; i < actualChannel->mNumScalingKeys; ++i){
         Vector3f sca; 
         sca.x = actualChannel->mScalingKeys[i].mValue.x;
         sca.y = actualChannel->mScalingKeys[i].mValue.y;
@@ -344,7 +342,7 @@ void Loader::loadAnimations(SPtr<Model> model)
    
       node->rotations.resize(actualChannel->mNumRotationKeys);
    
-      for(int i = 0; i < actualChannel->mNumRotationKeys; ++i){
+      for(uint32 i = 0; i < actualChannel->mNumRotationKeys; ++i){
         Quaternion q;
    
         q.i = actualChannel->mRotationKeys[i].mValue.x;

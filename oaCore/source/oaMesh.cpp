@@ -64,12 +64,12 @@ void Mesh::initFromSubMesh(const SubMesh& sm)
 {
   Vector<Vertex> vertices;
   Vector<uint32> indices;
-  uint32 size = sm.indices.size();
+  uint32 size = static_cast<uint32>(sm.indices.size());
   vertices.resize(size);
-  for(int32 i=0;i<size;++i){
+  for(uint32 i=0;i<size;++i){
     vertices[i].textureCord = Vector2f(0,0);
     vertices[i].location = sm.points[sm.indices[i]];
-    indices.push_back(indices.size());
+    indices.push_back(static_cast<uint32>(indices.size()));
   }
   
   Mesh::createNormals(vertices);
@@ -79,7 +79,7 @@ void Mesh::initFromSubMesh(const SubMesh& sm)
 
 void Mesh::createNormals(Vector<Vertex>& vertices)
 {
-  uint32 size = vertices.size();
+  uint32 size = static_cast<uint32>(vertices.size());
   for(uint32 i=0;i<size;i+=3){
     Vector3f v1 = vertices[i+1].location.xyz-vertices[i].location.xyz;
     Vector3f v2 = vertices[i+2].location.xyz-vertices[i].location.xyz;

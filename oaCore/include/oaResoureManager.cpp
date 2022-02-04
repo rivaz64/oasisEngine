@@ -35,45 +35,21 @@ ResoureManager::loadTexture(const Path& file)
   return true;
 }
 
-bool 
-ResoureManager::loadModel(const Path& file)
-{
-  /*if(models.find(file.getCompletePath())!=models.end()){
-    print("model already loaded");
-    return true;
-  }
-
-  SPtr<Model> model = newSPtr<Model>();
-
-  if(!model->loadFromFile(file)){
-    print("texture not loaded");
-    return false;
-  }
-
-  models[file.getCompletePath()] = model;
-
-   Path path(file);
-
-  model->name = path.getName();*/
-
-  return true;
-}
-
 void
 ResoureManager::onStartUp()
 {
-  generatePlane();
+  /*generatePlane();
   generateCube();
   generateCircle(36);
   generateCone(36);
   generateCone(36);
   generateCilinder(36);
-  generateTorus(36,36,.5f);
+  generateTorus(36,36,.5f);*/
   loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultMaterial();
 }
-
+/*
 void 
 ResoureManager::generateCircle(const uint8 n)
 {
@@ -106,7 +82,7 @@ ResoureManager::generateCircle(const uint8 n)
   indices[i*3+1]= 0;
   indices[i*3+2] = 1;
 
-  meshes["circle"]->create(vertices,indices);*/
+  meshes["circle"]->create(vertices,indices);
 }
 
 void 
@@ -150,7 +126,7 @@ ResoureManager::generateCone(const uint8 n)
   indices[i*6+5]= 1;
   indices[i*6+4] = 2;
 
-  meshes["cone"]->create(vertices,indices);*/
+  meshes["cone"]->create(vertices,indices);
 }
 
 void 
@@ -211,7 +187,7 @@ ResoureManager::generateCilinder(const uint8 n)
   indices[i*12+10] = 2;
   indices[i*12+11] = 3;
 
-  meshes["cilinder"]->create(vertices,indices);*/
+  meshes["cilinder"]->create(vertices,indices);
 }
 
 void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float ratio)
@@ -285,7 +261,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
   indices[(i*m+o)*6+4] = m;
   indices[(i*m+o)*6+5] = m+o;
 
-  meshes["torus"]->create(vertices,indices);*/
+  meshes["torus"]->create(vertices,indices);
 }
 
 void
@@ -304,9 +280,9 @@ ResoureManager::generatePlane()
     2,1,3,
   };
 
-  meshes["plane"]->create(vertices,index);*/
+  meshes["plane"]->create(vertices,index);
 
-}
+}*/
 
 void 
 ResoureManager::generateCube()

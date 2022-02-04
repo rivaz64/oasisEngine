@@ -143,9 +143,6 @@
     <ClCompile Include="source\oaDepthStencil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaInputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

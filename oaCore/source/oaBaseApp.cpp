@@ -52,14 +52,14 @@ BaseApp::run()
     InputManager::startUp();
     Time::startUp();
     
-    setWindow(GraphicAPI::instance().getWindow());
+    setWindow();
 
     postInit();
 
     try {
       mainLoop();
     }
-    catch (const std::out_of_range& oor) {
+    catch (...) {
       Logger::instance().flush();
       return;
     }
@@ -131,7 +131,7 @@ BaseApp::render()
 
 
 void
-BaseApp::setWindow(void* window)
+BaseApp::setWindow()
 {
   auto& api = GraphicAPI::instance();
 
@@ -172,7 +172,7 @@ BaseApp::setWindow(void* window)
 }
 
 void
-BaseApp::resizeWindow(void* window)
+BaseApp::resizeWindow()
 {
   auto& api = GraphicAPI::instance();
 
@@ -190,7 +190,7 @@ BaseApp::resizeWindow(void* window)
     m_finalDepthStencil->release();
   }
   
-  setWindow(window);
+  setWindow();
   
 }
 

@@ -30,7 +30,7 @@ uint32
 Time::getTime()
 {
   auto start = high_resolution_clock::now();
-  uint32 id = duration_cast<seconds>(start.time_since_epoch()).count();
+  uint32 id = static_cast<uint32>(duration_cast<seconds>(start.time_since_epoch()).count());
   return id;
 }
 void Time::update()

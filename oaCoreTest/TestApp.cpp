@@ -66,7 +66,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_SIZE:
-    app->resizeWindow(hWnd);
+    app->resizeWindow();
     break;
   default:
     return DefWindowProc( hWnd, message, wParam, lParam );

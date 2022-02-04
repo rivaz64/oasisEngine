@@ -95,13 +95,13 @@ class OA_CORE_EXPORT BaseApp :
    * @param window 
   */
   void
-  setWindow(void* window);
+  setWindow();
 
   /**
    * @brief this function is called when the window is resized
   */
   void
-  resizeWindow(void* window);
+  resizeWindow();
 
   /**
    * @brief if the app is running
