@@ -36,7 +36,7 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-oaEngineSDK::TestApp* app = nullptr;
+oaEngineSDK::TestApp* g_app = nullptr;
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -58,16 +58,16 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_QUIT:
-    app->m_isRunning = false;
+    g_app->m_isRunning = false;
     break;
 
   case WM_DESTROY:
-    app->m_isRunning = false;
+    g_app->m_isRunning = false;
     PostQuitMessage( 0 );
     break;
 
   case WM_SIZE:
-    app->resizeWindow();
+    g_app->resizeWindow();
     break;
   default:
     return DefWindowProc( hWnd, message, wParam, lParam );
@@ -100,8 +100,7 @@ TestApp::preShutDown()
 void
 TestApp::preInit()
 {
-
-  app = this;
+  g_app = this;
 
   auto& api = GraphicAPI::instance();
 
