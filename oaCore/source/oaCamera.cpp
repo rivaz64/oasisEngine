@@ -45,6 +45,14 @@ Camera::init(float viewAngle,
 
   m_ratio = static_cast<float>(api.m_windowWidth) / 
             static_cast<float>(api.m_windowHeight);
+
+  update();
+}
+
+void 
+Camera::update(){
+  updateProyection();
+  updateView();
 }
 
 void 

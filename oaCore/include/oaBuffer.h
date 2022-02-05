@@ -14,12 +14,12 @@ namespace oaEngineSDK{
 class OA_CORE_EXPORT Buffer
 {
  public:
-
   /**
    * @brief constructor default para el buffer
   */
   Buffer() = default;
 
+ 
   virtual ~Buffer() = default;
 
   /**
@@ -39,6 +39,7 @@ class OA_CORE_EXPORT Buffer
   virtual void
   update(void* /*data*/){}
 
+  friend class GraphicsAPI;
 };
 
 }

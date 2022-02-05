@@ -135,11 +135,6 @@ class OA_CORE_EXPORT Actor :
   SPtr<Actor> m_parent;
 
   /**
-   * @brief for sending the location to the shader
-  */
-  SPtr<Buffer> m_transformB;
-
-  /**
    * @brief where the Actor is in a 3D space
   */
   Vector3f m_location;

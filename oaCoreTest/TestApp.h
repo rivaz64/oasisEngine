@@ -68,18 +68,11 @@ public:
 
  public:
 
-   SPtr<Actor> character;
+  SPtr<Buffer> m_globalTransformBuffer;
 
-   SPtr<Actor> testActor1;
-
-   SPtr<Actor> testActor2;
-
-   SPtr<Actor> testActorMC;
-
-   SPtr<Camera> cam;
+   SPtr<Camera> m_cam;
 
    SPtr<SamplerState> samsta;
-
 
    SPtr<RenderTarget> renderToTexture;
 

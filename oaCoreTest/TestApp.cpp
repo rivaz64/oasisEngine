@@ -125,15 +125,15 @@ TestApp::postInit()
   sampDesc.minLOD = 0.0f;
   sampDesc.maxLOD = Math::MAX_FLOAT;
 
-  auto& api = GraphicAPI::instance();
+  auto& graphicAPI = GraphicAPI::instance();
   
-  samsta = api.createSamplerState(sampDesc);
+  samsta = graphicAPI.createSamplerState(sampDesc);
 
-  vertexShader = api.createVertexShader();
+  vertexShader = graphicAPI.createVertexShader();
 
-  pixelShader = api.createPixelShader();
+  pixelShader = graphicAPI.createPixelShader();
 
-  lights = api.createBuffer();
+  lights = graphicAPI.createBuffer();
 
   lights->init(sizeof(Vector4f));
 
@@ -141,7 +141,7 @@ TestApp::postInit()
 
   initImGui();
 
-  api.setBackgroundColor(Color::OCEAN);
+  graphicAPI.setBackgroundColor(Color::OCEAN);
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
@@ -149,15 +149,15 @@ TestApp::postInit()
 
   actualActor = m_actualScene;
 
-  cam = newSPtr<Camera>();
+  m_cam = newSPtr<Camera>();
 
-  cam->init();
+  m_cam->init();
 
-  cam->updateView();
+  m_cam->update();
 
-  cam->updateProyection();
+  m_globalTransformBuffer = graphicAPI.createBuffer();
 
-  
+  m_globalTransformBuffer->init(sizeof(Matrix4f));
 }
 
 
@@ -194,21 +194,17 @@ TestApp::postUpdate(float delta)
   if (InputManager::instancePtr()->getInput(VK_RBUTTON) && 
       InputManager::instancePtr()->getMouseDelta() != Vector2I::ZERO)
   {
-    cam->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
+    m_cam->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
   }
   else{
     mousePressed;
   }
 
   if(camdelta.magnitud()>0){
-    cam->moveCamera(camdelta);
+    m_cam->moveCamera(camdelta);
   }
 
-  cam->updateView();
-
-  //character->update();
-
-  //lights->update(&color.x);
+  m_cam->update();
 }
 
 void 
@@ -226,10 +222,10 @@ TestApp::draw()
 
   api.setSamplerState(samsta);
   
-  cam->setCamera();
+  m_cam->setCamera();
 
   Vector<SPtr<Actor>> seenActors;
-  cam->seeActors(m_actualScene,seenActors);
+  m_cam->seeActors(m_actualScene,seenActors);
 
   lights->update(&dir.x);
   api.setPSBuffer(lights,0);
@@ -248,9 +244,9 @@ TestApp::draw()
 
         auto finalMat = mat * modelPair.second.getFinalTransform();
 
-        Actor->m_transformB->update(&finalMat);
+        m_globalTransformBuffer->update(&finalMat);
 
-        api.setVSBuffer(Actor->m_transformB, 0);
+        api.setVSBuffer(m_globalTransformBuffer, 0);
 
         auto actualMesh = model->m_meshes[i];
 

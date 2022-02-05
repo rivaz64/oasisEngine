@@ -25,8 +25,7 @@ Actor::Actor()
   m_location = {0.f,0.f,0.f};
   m_scale = {1.f,1.f,1.f};
   m_rotation =  {0.f,0.f,0.f};
-  m_transformB = GraphicAPI::instancePtr()->createBuffer();
-  m_transformB->init(sizeof(Matrix4f));
+  
 }
 
 void 

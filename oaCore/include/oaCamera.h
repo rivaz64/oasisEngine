@@ -24,10 +24,22 @@ class OA_CORE_EXPORT Camera
 
   Camera();
 
+  /**
+   * @brief initializes the camera with standart atributes
+   * @param viewAngle 
+   * @param nearPlaneDistance 
+   * @param farPlaneDistance 
+  */
   void
   init(float viewAngle = 0.785398163f,
        float nearPlaneDistance = 1.0f,
        float farPlaneDistance = 100.0f);
+
+  /**
+   * @brief updates the campera
+  */
+  void 
+  update();
 
   /**
    * @brief if the proyection atributes have changed aplies the nesesary calculations
