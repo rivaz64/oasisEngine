@@ -44,11 +44,6 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   HDC hdc;
   if(ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
     return 1;
-  
-  
-  //std::cout<<wParam<<std::endl;
-  
-  
 
   switch( message )
   {
@@ -140,7 +135,7 @@ TestApp::postInit()
 
   lights = api.createBuffer();
 
-  lights->init(sizeof(float)*4);
+  lights->init(sizeof(Vector4f));
 
   IMGUI_CHECKVERSION();
 
