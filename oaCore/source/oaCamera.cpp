@@ -14,6 +14,7 @@
 
 
 namespace oaEngineSDK{
+
 Camera::Camera()
 {
   view = GraphicAPI::instancePtr()->createBuffer();
@@ -31,17 +32,32 @@ Camera::Camera()
   lookAt({0.0f,0.0f,1.0f});
 }
 
+void
+Camera::init(float viewAngle,
+             float nearPlaneDistance,
+             float farPlaneDistance)
+{
+  m_viewAngle = viewAngle;
+  m_nearPlaneDistance = nearPlaneDistance;
+  m_farPlaneDistance = farPlaneDistance;
+
+  auto& api = GraphicAPI::instance();
+
+  m_ratio = static_cast<float>(api.m_windowWidth) / 
+            static_cast<float>(api.m_windowHeight);
+}
+
 void 
 Camera::updateProyection()
 {
   Matrix4f ans = Matrix4f::IDENTITY;
-  float co = cos(m_angle * .5f), si = sin(m_angle * .5f);
-  float distance = m_farPlane - m_nearPlane;
+  float co = cos(m_viewAngle * .5f), si = sin(m_viewAngle * .5f);
+  float distance = m_farPlaneDistance - m_nearPlaneDistance;
 
   ans.m11 = (co / si) / m_ratio;
   ans.m22 = co/si;
-  ans.m33 = m_farPlane / distance;
-  ans.m34 = -ans.m33*m_nearPlane;
+  ans.m33 = m_farPlaneDistance / distance;
+  ans.m34 = -ans.m33*m_nearPlaneDistance;
   ans.m43 = 1.f;
   ans.m44= 0.f;
 
@@ -142,23 +158,23 @@ Camera::isInFrustrum(const Vector3f& _location)
 void 
 Camera::createFrustrum()
 {
-  nearP = Plane(m_location+m_axisZ*m_nearPlane,m_axisZ);
-  farP = Plane(m_location+m_axisZ*m_farPlane,-m_axisZ);
-  float nh = Math::tan(m_angle/2.f)*m_nearPlane;
+  nearP = Plane(m_location+m_axisZ*m_nearPlaneDistance,m_axisZ);
+  farP = Plane(m_location+m_axisZ*m_farPlaneDistance,-m_axisZ);
+  float nh = Math::tan(m_viewAngle/2.f)*m_nearPlaneDistance;
   float nw = nh*m_ratio;
-  float fh = Math::tan(m_angle/2.f)*m_farPlane;
+  float fh = Math::tan(m_viewAngle/2.f)*m_farPlaneDistance;
   float fw = fh*m_ratio;
 
-  Vector3f nnw = m_location+m_axis*Vector3f(-nw,nh,m_nearPlane);
-  Vector3f nne = m_location+m_axis*Vector3f(nw,nh,m_nearPlane);
-  Vector3f fne = m_location+m_axis*Vector3f(fw,fh,m_farPlane);
+  Vector3f nnw = m_location+m_axis*Vector3f(-nw,nh,m_nearPlaneDistance);
+  Vector3f nne = m_location+m_axis*Vector3f(nw,nh,m_nearPlaneDistance);
+  Vector3f fne = m_location+m_axis*Vector3f(fw,fh,m_farPlaneDistance);
 
   topP = Plane(nnw,nne,fne);
 
-  Vector3f nsw = m_location+m_axis*Vector3f(-nw,-nh,m_nearPlane);
-  Vector3f nse = m_location+m_axis*Vector3f(nw,-nh,m_nearPlane);
-  Vector3f fse = m_location+m_axis*Vector3f(fw,-fh,m_farPlane);
-  Vector3f fsw = m_location+m_axis*Vector3f(-fw,-fh,m_farPlane);
+  Vector3f nsw = m_location+m_axis*Vector3f(-nw,-nh,m_nearPlaneDistance);
+  Vector3f nse = m_location+m_axis*Vector3f(nw,-nh,m_nearPlaneDistance);
+  Vector3f fse = m_location+m_axis*Vector3f(fw,-fh,m_farPlaneDistance);
+  Vector3f fsw = m_location+m_axis*Vector3f(-fw,-fh,m_farPlaneDistance);
 
   bottomP = Plane(nsw,fse,nse);
 

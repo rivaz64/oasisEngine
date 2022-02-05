@@ -151,10 +151,7 @@ TestApp::postInit()
 
   cam = newSPtr<Camera>();
 
-  cam->m_angle = 0.785398163f;
-  cam->m_ratio = (float)api.m_windowWidth / (float)api.m_windowHeight;
-  cam->m_nearPlane = 1.0f;
-  cam->m_farPlane = 100.0f;
+  cam->init();
 
   cam->updateView();
 

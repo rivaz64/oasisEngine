@@ -24,6 +24,11 @@ class OA_CORE_EXPORT Camera
 
   Camera();
 
+  void
+  init(float viewAngle = 0.785398163f,
+       float nearPlaneDistance = 1.0f,
+       float farPlaneDistance = 100.0f);
+
   /**
    * @brief if the proyection atributes have changed aplies the nesesary calculations
   */
@@ -91,17 +96,17 @@ class OA_CORE_EXPORT Camera
   /**
    * @brief how far the camera can see
   */
-  float m_farPlane;
+  float m_farPlaneDistance;
 
   /**
    * @brief the nearest that the camera can see
   */
-  float m_nearPlane;
+  float m_nearPlaneDistance;
 
   /**
    * @brief the angle of the openes of the camera
   */
-  float m_angle;
+  float m_viewAngle;
 
   /**
    * @brief the ratio between the with and the height of the camera
