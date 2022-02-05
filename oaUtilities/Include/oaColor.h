@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class Color
+class OA_UTILITY_EXPORT Color
 {
  public:
   /**

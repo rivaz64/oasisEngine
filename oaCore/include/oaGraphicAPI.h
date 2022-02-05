@@ -7,8 +7,8 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaModule.h"
-#include "oaVector4f.h"
+#include <oaModule.h>
+#include <oaColor.h>
 
 
 namespace oaEngineSDK{
@@ -130,7 +130,7 @@ class OA_CORE_EXPORT GraphicAPI :
   * @param color 
   */
   virtual void
-  setBackgroundColor(const Vector4f& /*color*/) {}
+  setBackgroundColor(const Color& /*color*/) {}
 
   virtual SPtr<Texture>
   getBackBuffer();

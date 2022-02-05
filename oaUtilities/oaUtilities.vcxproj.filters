@@ -117,6 +117,9 @@
     <ClInclude Include="Include\oaOctavesNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\oaColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -201,6 +204,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaOctavesNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaColor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,37 +1,37 @@
 #include "TestApp.h"
-#include "oaResoureManager.h"
-#include <iostream>
-#include "oaVector3f.h"
-#include "oaGraphicAPI.h"
-#include "oaModel.h"
-#include "oaSamplerState.h"
-#include "oaShader.h"
-#include "oaInputManager.h"
-#include "oaGrid2D.h"
-#include "oaPerlinNoise2D.h"
-#include "oaPerlinNoise3D.h"
-#include "oaMaterial.h"
-#include "oaGraphicsComponent.h"
-#include "oaSkeletalComponent.h"
-#include "oaAnimationComponent.h"
-#include "oaDepthStencil.h"
-#include "oaTexture.h"
-#include "oaMesh.h"
-#include "oaSimplexNoise.h"
-#include "oaOctavesNoise.h"
-#include "oaPath.h"
-#include "oaSkeleton.h"
-#include "oaAnimation.h"
-#include "oaVertexBuffer.h"
-#include "oaIndexBuffer.h"
-#include "oaBuffer.h"
-#include "oaActor.h"
-#include "oaTime.h"
-#include "oaLogger.h"
+#include <oaVector3f.h>
+#include <oaGraphicAPI.h>
+#include <oaModel.h>
+#include <oaSamplerState.h>
+#include <oaShader.h>
+#include <oaInputManager.h>
+#include <oaGrid2D.h>
+#include <oaPerlinNoise2D.h>
+#include <oaPerlinNoise3D.h>
+#include <oaMaterial.h>
+#include <oaGraphicsComponent.h>
+#include <oaSkeletalComponent.h>
+#include <oaAnimationComponent.h>
+#include <oaDepthStencil.h>
+#include <oaTexture.h>
+#include <oaMesh.h>
+#include <oaSimplexNoise.h>
+#include <oaOctavesNoise.h>
+#include <oaPath.h>
+#include <oaSkeleton.h>
+#include <oaAnimation.h>
+#include <oaVertexBuffer.h>
+#include <oaIndexBuffer.h>
+#include <oaBuffer.h>
+#include <oaActor.h>
+#include <oaTime.h>
+#include <oaLogger.h>
+#include <oaResoureManager.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
+
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -141,7 +141,7 @@ TestApp::postInit()
 
   initImGui();
 
-  api.setBackgroundColor({ 0.0f, 0.125f, 0.3f, 1.0f });
+  api.setBackgroundColor(Color::OCEAN);
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 

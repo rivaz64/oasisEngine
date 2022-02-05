@@ -220,7 +220,7 @@ DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Tex
 }
 
 void 
-DX11GraphicAPI::setBackgroundColor(const Vector4f& color)
+DX11GraphicAPI::setBackgroundColor(const Color& color)
 {
   m_backgroundColor = color;
 }
@@ -317,7 +317,7 @@ DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
 {
   m_context->ClearRenderTargetView(
     cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
-    &m_backgroundColor.x );
+    &m_backgroundColor.r );
 }
 
 void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)

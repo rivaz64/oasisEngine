@@ -9,8 +9,8 @@
 #include "oaGraphicAPI.h"
 #include <windows.h>
 #include <d3d11.h>
-#include "oaVector4f.h"
-#include "oaVector2I.h"
+#include <oaColor.h>
+#include <oaVector2I.h>
 
 
 
@@ -63,7 +63,7 @@ class DX11GraphicAPI :
   createDepthStencil(const DepthStencilDesc& description, SPtr<Texture> texture) override;
 
   void
-  setBackgroundColor(const Vector4f& color) override;
+  setBackgroundColor(const Color& color) override;
 
   SPtr<Texture>
   getBackBuffer() override;
@@ -133,7 +133,7 @@ class DX11GraphicAPI :
 
   MSG m_msg = MSG();
 
-  Vector4f m_backgroundColor;
+  Color m_backgroundColor;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;
