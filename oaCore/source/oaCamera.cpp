@@ -71,7 +71,7 @@ Camera::updateProyection()
 
   //ans.transpose();
 
-  proyection->update(&ans.m11);
+  proyection->write(&ans.m11);
 }
 
 void 
@@ -99,7 +99,7 @@ Camera::updateView()
 
   createFrustrum();
 
-  view->update(&viewMatrix.m11);
+  view->write(&viewMatrix.m11);
 
   dirtyFlags = false;
 }

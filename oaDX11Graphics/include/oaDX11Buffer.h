@@ -22,7 +22,7 @@ class DX11Buffer :
   init(uint32 size) override;
 
   void
-  update(void* data) override;
+  write(void* data) override;
 
  public:
   ID3D11Buffer* m_buffer = nullptr;

@@ -227,44 +227,47 @@ TestApp::draw()
   Vector<SPtr<Actor>> seenActors;
   m_cam->seeActors(m_actualScene,seenActors);
 
-  lights->update(&dir.x);
+  lights->write(&dir.x);
   api.setPSBuffer(lights,0);
+
+  Matrix4f finalTransform;
+
+  Matrix4f globalActorTransform;
 
   for(auto Actor : seenActors){
     
-    auto mat = Actor->getGlobalTransform();
+    globalActorTransform = Actor->getGlobalTransform();
 
     for(auto& modelPair : Actor->getComponent<GraphicsComponent>()->m_models){
-      auto model = modelPair.second.model;
+
+      auto& model = modelPair.second.model;
+
       for(uint32 i = 0;i<model->m_meshes.size();++i){
       
         if(model->m_materials.size()>i && model->m_materials[i]){
           model->m_materials[i]->set();
         }
 
-        auto finalMat = mat * modelPair.second.getFinalTransform();
+        finalTransform = globalActorTransform * modelPair.second.getFinalTransform();
 
-        m_globalTransformBuffer->update(&finalMat);
+        m_globalTransformBuffer->write(&finalTransform);
 
         api.setVSBuffer(m_globalTransformBuffer, 0);
 
-        auto actualMesh = model->m_meshes[i];
+        auto& actualMesh = model->m_meshes[i];
 
         actualMesh->set();
 
         if(actualMesh->m_hasBones){
 
-          actualMesh->m_bonesB->update(actualMesh->m_ofset.data());
+          actualMesh->m_bonesB->write(actualMesh->m_ofset.data());
 
-          api.setVSBuffer( actualMesh->m_bonesB,3);
+          api.setVSBuffer(actualMesh->m_bonesB,3);
         }
        
         api.draw(static_cast<uint32>(actualMesh->m_indexNumber));
       }
     }
-
-    
-
   }
    
   newImGuiFrame();
