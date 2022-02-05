@@ -18,27 +18,27 @@ struct SamplerDesc {
   /**
    * @brief how it is going to filter
   */
-  FILTER filter;
+  FILTER::E filter;
 
   /**
    * @brief who it handles the execes in u
   */
-  TEXTURE_ADDRESS_MODE addressU;
+  TEXTURE_ADDRESS_MODE::E addressU;
 
   /**
    * @brief who it handles the execes in v
   */
-  TEXTURE_ADDRESS_MODE addressV;
+  TEXTURE_ADDRESS_MODE::E addressV;
 
   /**
    * @brief who it handles the execes in w
   */
-  TEXTURE_ADDRESS_MODE addressW;
+  TEXTURE_ADDRESS_MODE::E addressW;
 
   /**
    * @brief the funcion for comparicion
   */
-  COMPARISON_FUNC comparison;
+  COMPARISON_FUNC::E comparison;
 
   /**
    * @brief the minimum number of LODs

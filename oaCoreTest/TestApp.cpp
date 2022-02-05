@@ -27,6 +27,7 @@
 #include "oaBuffer.h"
 #include "oaActor.h"
 #include "oaTime.h"
+#include "oaLogger.h"
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -79,7 +80,8 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 namespace oaEngineSDK {
 
-void TestApp::postShutDown()
+void 
+TestApp::preShutDown()
 {
   auto& api = GraphicAPI::instance();
   if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
@@ -95,7 +97,8 @@ void TestApp::postShutDown()
   ImGui::DestroyContext();
 }
 
-void TestApp::preInit()
+void
+TestApp::preInit()
 {
 
   app = this;
@@ -106,7 +109,8 @@ void TestApp::preInit()
   
 }
 
-void TestApp::postInit()
+void 
+TestApp::postInit()
 {
   
   InputManager::instancePtr()->addInput('W');
@@ -117,14 +121,13 @@ void TestApp::postInit()
   InputManager::instancePtr()->addInput('Q');
   InputManager::instancePtr()->addInput(VK_RBUTTON);
 
-
   SamplerDesc sampDesc;
   ZeroMemory( &sampDesc, sizeof(sampDesc) );
-  sampDesc.filter = FILTER::MIN_MAG_MIP_LINEAR;
-  sampDesc.addressU = TEXTURE_ADDRESS_MODE::WRAP;
-  sampDesc.addressV = TEXTURE_ADDRESS_MODE::WRAP;
-  sampDesc.addressW = TEXTURE_ADDRESS_MODE::WRAP;
-  sampDesc.comparison = COMPARISON_FUNC::NEVER;
+  sampDesc.filter = FILTER::kMinMagMipLinear;
+  sampDesc.addressU = TEXTURE_ADDRESS_MODE::kWrap;
+  sampDesc.addressV = TEXTURE_ADDRESS_MODE::kWrap;
+  sampDesc.addressW = TEXTURE_ADDRESS_MODE::kWrap;
+  sampDesc.comparison = COMPARISON_FUNC::kNever;
   sampDesc.minLOD = 0.0f;
   sampDesc.maxLOD = Math::MAX_FLOAT;
 
@@ -167,7 +170,8 @@ void TestApp::postInit()
 }
 
 
-void TestApp::postUpdate(float delta)
+void 
+TestApp::postUpdate(float delta)
 {
 
   Vector3f camdelta = {0.0f,0.0f,0.0f};
@@ -216,7 +220,8 @@ void TestApp::postUpdate(float delta)
   //lights->update(&color.x);
 }
 
-void TestApp::draw()
+void 
+TestApp::draw()
 {
   auto& api = GraphicAPI::instance();
 
@@ -232,11 +237,9 @@ void TestApp::draw()
   
   cam->setCamera();
 
-  //auto lista = ResoureManager::instancePtr()->rendereableActors;
-
   Vector<SPtr<Actor>> seenActors;
-
   cam->seeActors(m_actualScene,seenActors);
+
   lights->update(&dir.x);
   api.setPSBuffer(lights,0);
 
@@ -244,11 +247,9 @@ void TestApp::draw()
     
     auto mat = Actor->getGlobalTransform();
 
-    //Actor->transformB->update(&mat);
-
     for(auto& modelPair : Actor->getComponent<GraphicsComponent>()->m_models){
       auto model = modelPair.second.model;
-      for(int i = 0;i<model->m_meshes.size();++i){
+      for(uint32 i = 0;i<model->m_meshes.size();++i){
       
         if(model->m_materials.size()>i && model->m_materials[i]){
           model->m_materials[i]->set();
@@ -262,9 +263,7 @@ void TestApp::draw()
 
         auto actualMesh = model->m_meshes[i];
 
-        actualMesh->m_vertexB->set();
-
-        actualMesh->m_indexB->set();
+        actualMesh->set();
 
         if(actualMesh->m_hasBones){
 
@@ -273,7 +272,6 @@ void TestApp::draw()
           api.setVSBuffer( actualMesh->m_bonesB,3);
         }
        
-
         api.draw(static_cast<uint32>(actualMesh->m_indexNumber));
       }
     }
@@ -288,7 +286,8 @@ void TestApp::draw()
 
 }
 
-void TestApp::initImGui()
+void 
+TestApp::initImGui()
 {
   auto& api = GraphicAPI::instance();
   if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
@@ -310,7 +309,8 @@ void TestApp::initImGui()
 
 }
 
-void TestApp::newImGuiFrame()
+void 
+TestApp::newImGuiFrame()
 {
   auto& api = GraphicAPI::instance();
   if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {

@@ -18,7 +18,7 @@ namespace oaEngineSDK{
 
 COMPONENT_TYPE::E oaEngineSDK::AnimationComponent::getType()
 {
-  return COMPONENT_TYPE::ANIMATION;
+  return COMPONENT_TYPE::kAnimation;
 }
 
 void 

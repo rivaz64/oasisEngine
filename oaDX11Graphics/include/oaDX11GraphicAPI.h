@@ -7,10 +7,11 @@
 #pragma once
 
 #include "oaGraphicAPI.h"
-#include "oaVector4f.h"
-#include "oaVector2I.h"
 #include <windows.h>
 #include <d3d11.h>
+#include "oaVector4f.h"
+#include "oaVector2I.h"
+
 
 
 //#include <d3dx11.h>

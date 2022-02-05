@@ -20,10 +20,11 @@ GraphicsComponent::onAttach(SPtr<Actor> actor)
 COMPONENT_TYPE::E
 GraphicsComponent::getType()
 {
-  return COMPONENT_TYPE::GRAPHICS;
+  return COMPONENT_TYPE::kGrpahics;
 }
 
-void GraphicsComponent::update(SPtr<Actor> actor)
+void 
+GraphicsComponent::update(SPtr<Actor> actor)
 { 
   
   /*for(SPtr<GraphicsComponent> component : childs){
@@ -32,7 +33,8 @@ void GraphicsComponent::update(SPtr<Actor> actor)
   
 }
 
-void GraphicsComponent::addModel(SPtr<Model> model)
+void
+GraphicsComponent::addModel(SPtr<Model> model)
 {
   m_models.insert({model->m_name,ModelComponent(model)});
 }

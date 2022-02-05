@@ -35,7 +35,7 @@ class OA_CORE_EXPORT Component
    * @brief get what is the type of this component
   */
   virtual COMPONENT_TYPE::E
-  getType() {return COMPONENT_TYPE::NONE;}
+  getType() {return COMPONENT_TYPE::kNone;}
 };
 
 }

@@ -20,6 +20,13 @@
 #include <fstream>
 
 namespace oaEngineSDK {
+
+using std::make_shared;
+using std::reinterpret_pointer_cast;
+using std::make_shared;
+using std::cout;
+using std::to_string;
+
 /**
  * @brief wraper of the std::vector, can be changed in the future
  * @tparam T
@@ -93,7 +100,7 @@ using SPtr = std::shared_ptr<T>;
 template <class T>
 FORCEINLINE SPtr<T> 
 newSPtr() {
-  return std::make_shared<T>();
+  return make_shared<T>();
 }
 
 /**
@@ -133,13 +140,13 @@ using Pair = std::pair<T1,T2>;
 template<class T,class U>
 FORCEINLINE SPtr<T> 
 cast(const SPtr<U>& pointer){
-  return std::reinterpret_pointer_cast<T>(pointer);
+  return reinterpret_pointer_cast<T>(pointer);
 }
 
 template<class T>
 FORCEINLINE SPtr<T> 
 copy(const SPtr<T>& pointer){
-  return std::make_shared<T>(*pointer.get());
+  return make_shared<T>(*pointer.get());
 }
 
 /**
@@ -166,7 +173,7 @@ print(String s){
 template<class T>
 FORCEINLINE String
 toString(T param){
-  return std::to_string(param);
+  return to_string(param);
 }
 
 

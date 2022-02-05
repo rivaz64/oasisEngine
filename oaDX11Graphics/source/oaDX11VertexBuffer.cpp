@@ -1,10 +1,12 @@
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11GraphicAPI.h"
 
-bool oaEngineSDK::DX11VertexBuffer::init(
+namespace oaEngineSDK{
+
+bool DX11VertexBuffer::init(
   void* data,
-  uint64 vertexSize,
-  uint64 numberOfVertices)
+  uint32 vertexSize,
+  uint32 numberOfVertices)
 {
   m_vertexSize = vertexSize;
   D3D11_BUFFER_DESC bd;
@@ -31,7 +33,7 @@ bool oaEngineSDK::DX11VertexBuffer::init(
   return true;
 }
 
-void oaEngineSDK::DX11VertexBuffer::set()
+void DX11VertexBuffer::set()
 {
   UINT stride = m_vertexSize;
   UINT offset = 0;
@@ -42,4 +44,6 @@ void oaEngineSDK::DX11VertexBuffer::set()
     &m_buffer,
     &stride, 
     &offset );
+}
+
 }

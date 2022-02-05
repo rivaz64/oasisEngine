@@ -13,11 +13,12 @@
 
 namespace oaEngineSDK{
 
+/*
 enum FLAGS{
   LOCAL=1,
   GLOBAL=2,
   ALL=3
-};
+};*/
 
 Actor::Actor()
 {

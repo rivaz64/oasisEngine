@@ -26,7 +26,7 @@ class OA_CORE_EXPORT Model
   ~Model() = default;
 
 
- public:
+ private:
   
   /**
    * @brief the materials of the model
@@ -39,6 +39,12 @@ class OA_CORE_EXPORT Model
   Vector<SPtr<Mesh>> m_meshes;
 
   String m_name;
+
+  friend class Loader;
+  friend class TestApp;
+  friend class AnimationComponent;
+  friend class GraphicsComponent;
+  friend class SkeletalComponent;
 };
 
 }

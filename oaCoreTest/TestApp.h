@@ -23,9 +23,6 @@ class TestApp :
 public:
 
   void
-  postShutDown() override;
-
-  void
   preInit();
 
   void 
@@ -33,6 +30,9 @@ public:
 
   void
   postUpdate(float delta) override;
+
+  void
+  preShutDown() override;
 
   void
   draw() override;

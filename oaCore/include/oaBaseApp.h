@@ -25,14 +25,14 @@ class OA_CORE_EXPORT BaseApp :
 
  public:
 
-   void
-   onShutDown() override;
+  void
+  onShutDown() override;
 
-   /**
-    * @brief after everything is shut down
-   */
-   virtual void
-   postShutDown() {}
+  /**
+   * @brief shuts down things in the child class
+  */
+  virtual void
+  preShutDown() {}
 
   /**
    * @brief runs the engine
@@ -50,7 +50,7 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the things to do after the graphics api is started
   */
   virtual void
-  postInit();
+  postInit() {}
 
   /**
    * @brief loads a plugin 

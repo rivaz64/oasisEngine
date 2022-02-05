@@ -40,7 +40,7 @@ struct TextureDesc{
   /**
    * @brief the format
   */
-  FORMAT format;
+  FORMAT::E format;
 
   /**
    * @brief the number of samples
@@ -55,7 +55,7 @@ struct TextureDesc{
   /**
    * @brief the binding flag
   */
-  BIND bind;
+  BIND::E bind;
 };
 
 /**
@@ -66,12 +66,12 @@ struct ShaderResourseViewDesc{
   /**
    * @brief the format of the descriptor
   */
-  FORMAT format;
+  FORMAT::E format;
 
   /**
    * @brief the dimencions of the descriptor
   */
-  SRV_DIMENSION dimencion;
+  SRV_DIMENSION::E dimencion;
 
   /**
    * @brief the  mips

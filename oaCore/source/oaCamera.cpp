@@ -42,8 +42,8 @@ Camera::updateProyection()
   ans.m22 = co/si;
   ans.m33 = m_farPlane / distance;
   ans.m34 = -ans.m33*m_nearPlane;
-  ans.m43 = 1;
-  ans.m44=0;
+  ans.m43 = 1.f;
+  ans.m44= 0.f;
 
   //ans.transpose();
 

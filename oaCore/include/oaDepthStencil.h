@@ -24,12 +24,12 @@ struct DepthStencilDesc{
   /**
    * @brief the dimecions of the view
   */
-  DS_DIMENSION viewDimension;
+  DS_DIMENSION::E viewDimension;
 
   /**
    * @brief the format of the depth stencil
   */
-  FORMAT format;
+  FORMAT::E format;
 };
 
 /**

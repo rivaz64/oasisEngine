@@ -302,7 +302,6 @@ void MarchingCubes::init(const Grid3D<float>& data)
 uint8 
 MarchingCubes::getTriangulation(const Vector3U location, const Grid3D<float>& data)
 {
-  Vector3U delta;
   uint8 ans = 0;
   if(data.getAt(location)>0) ans += 1;
 
@@ -329,7 +328,7 @@ MarchingCubes::addTriangulation(int8* triangulation, const Vector3U location)
     Vertex actual = vertexTable[*triangulation];
     actual.location += Vector4f(location,0.0f)+Vector4f(.5f,.5f,.5f,0.0f);
     vertices.push_back(actual);
-    indices.push_back(indices.size());
+    indices.push_back(static_cast<uint32>(indices.size()));
     triangulation++;
   }
 }

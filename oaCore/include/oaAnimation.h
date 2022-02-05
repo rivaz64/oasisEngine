@@ -25,17 +25,17 @@ struct AnimNode{
   /**
    * @brief the keyframes of the locations
   */
-  Vector<Pair<uint32,Vector3f>> locations;
+  Vector<Pair<float,Vector3f>> locations;
 
   /**
    * @brief the keyframes of the scales
   */
-  Vector<Pair<uint32,Vector3f>> scales;
+  Vector<Pair<float,Vector3f>> scales;
 
   /**
    * @brief the keyframes of the rotations
   */
-  Vector<Pair<uint32,Quaternion>> rotations;
+  Vector<Pair<float,Quaternion>> rotations;
 
 };
 

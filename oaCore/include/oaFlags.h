@@ -4,45 +4,51 @@
 
 namespace oaEngineSDK{
 
-enum class BIND{
-  VERTEX=0,
-  CONSTANT,
-  INDEX,
-  DEPTH_STENCIL,
-  SHADER_RESOURCE,
-  RENDER_TARGET,
-  SHADER_RESOURCE_RENDER_TARGET
+namespace BIND{
+enum E{
+  kConstant=0,
+  kVertex,
+  kIndex,
+  kDepthStencil,
+  kShaderResourse,
+  kRenderTarget,
+  kShaderResourseRenderTarget
 };
-
-enum class DS_DIMENSION
-{
-  UNKNOWN	= 0,
-  TEXTURE1D,
-  TEXTURE1DARRAY,
-  TEXTURE2D,
-  TEXTURE2DARRAY,
-  TEXTURE2DMS,
-  TEXTURE2DMSARRAY
+}
+ 
+namespace DS_DIMENSION{
+enum E{
+  kUnknown = 0,
+  kTexture1D,
+  kTexture1DArray,
+  kTexture2D,
+  kTexture2DArray,
+  kTexture2DMS,
+  kTexture2DMSArray
 };
+}
 
-enum class SRV_DIMENSION
-{
-  UNKNOWN = 0,
-  BUFFER,
-  TEXTURE1D,
-  TEXTURE1DARRAY,
-  TEXTURE2D,
-  TEXTURE2DARRAY,
-  TEXTURE2DMS,
-  TEXTURE2DMSARRAY,
-  TEXTURE3D,
-  TEXTURECUBE,
-  TEXTURECUBEARRAY,
-  BUFFEREX  
+namespace SRV_DIMENSION{
+enum E{
+  kUnknown = 0,
+  kBuffer,
+  kTexture1D,
+  kTexture1DArray,
+  kTexture2D,
+  kTexture2DArray,
+  kTexture2DMS,
+  kTexture2DMSArray,
+  kTexture3D,
+  kTextureCube,
+  kTextureCubeArray,
+  kBufferEx
 };
+}
 
-enum class FILTER{
-  MIN_MAG_MIP_POINT = 0,
+namespace FILTER{
+enum E{
+  kMinMagMipLinear=0,
+  /*MIN_MAG_MIP_POINT = 0,
   MIN_MAG_POINT_MIP_LINEAR,
   MIN_POINT_MAG_LINEAR_MIP_POINT,
   MIN_POINT_MAG_MIP_LINEAR,
@@ -77,40 +83,46 @@ enum class FILTER{
   MAXIMUM_MIN_LINEAR_MAG_POINT_MIP_LINEAR,
   MAXIMUM_MIN_MAG_LINEAR_MIP_POINT,
   MAXIMUM_MIN_MAG_MIP_LINEAR,
-  MAXIMUM_ANISOTROPIC
+  MAXIMUM_ANISOTROPIC*/
 };
+}
 
-enum class TEXTURE_ADDRESS_MODE {
-  WRAP=0,
-  MIRROR,
-  CLAMP,
-  BORDER,
-  MIRROR_ONCE
+namespace TEXTURE_ADDRESS_MODE{
+enum E{
+  kWrap=0,
+  kMirror,
+  kClamp,
+  kBorder,
+  kMirrorOnce
 };
+}
 
-enum class COMPARISON_FUNC {
-  NEVER=0,
-  LESS,
-  EQUAL,
-  LESS_EQUAL,
-  GREATER,
-  NOT_EQUAL,
-  GREATER_EQUAL,
-  ALWAYS
-
+namespace COMPARISON_FUNC{
+enum E{
+  kNever=0,
+  kLess,
+  kEqual,
+  kLessEqual,
+  kGreater,
+  kNotEqual,
+  kGreaterEqual,
+  kAlways
 };
+}
 
-enum class FORMAT{
-  D24_UNORM_S8_UINT = 0,
-  R32G32B32A32_FLOAT
+namespace FORMAT{
+enum E{
+  kD24UNormS8UInt = 0,
+  kR32G32B32A32Float
 };
+}
 
 namespace COMPONENT_TYPE{
 enum E{
-  NONE = 0,
-  GRAPHICS,
-  SKELETON,
-  ANIMATION
+  kNone = 0,
+  kGrpahics,
+  kSkeleton,
+  kAnimation
 };
 }
 

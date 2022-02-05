@@ -10,20 +10,28 @@
 #include <chrono>
 #include <ratio>
 
+namespace oaEngineSDK{
 
 using std::chrono::high_resolution_clock;
 using std::chrono::duration;
 using std::chrono::system_clock;
 using std::chrono::duration_cast;
 using std::chrono::seconds;
-namespace oaEngineSDK{
+using std::strftime;
+using std::time_t;
+using std::localtime;
+
 String 
 Time::getActualDateAndTime()
 {
   static auto now = system_clock::now();
-  std::time_t time = system_clock::to_time_t(now);
+
+  time_t time = system_clock::to_time_t(now);
+
   char mbstr[124];
-  std::strftime(mbstr, 100, "%d/%m/%Y %T", std::localtime(&time));
+
+  strftime(mbstr, 100, "%d/%m/%Y %T", localtime(&time));
+
   return mbstr;
 }
 uint32 

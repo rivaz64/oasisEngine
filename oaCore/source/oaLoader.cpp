@@ -35,7 +35,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
   skeleton->m_boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
-  for(uint32 i = 0; i<node->mNumChildren;++i){
+  for(uint32 i = 0; i < node->mNumChildren; ++i){
     sNode->childs[i] = newSPtr<SkeletalNode>();
     loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
@@ -113,7 +113,7 @@ void Loader::loadMeshes(SPtr<Model> model)
 
     Vector<uint32> index;
 
-    index.resize(static_cast<uint64>(aMesh->mNumFaces)* 3 );
+    index.resize(static_cast<uint64>(aMesh->mNumFaces) * 3 );
 
     for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
     {
@@ -125,9 +125,9 @@ void Loader::loadMeshes(SPtr<Model> model)
         continue;
       }
 
-      index[static_cast<uint64>(t)*3] = face->mIndices[0];
-      index[static_cast<uint64>(t)*3+1] = face->mIndices[1];
-      index[static_cast<uint64>(t)*3+2] = face->mIndices[2];
+      index[static_cast<uint32>(t)*3] = face->mIndices[0];
+      index[static_cast<uint32>(t)*3+1] = face->mIndices[1];
+      index[static_cast<uint32>(t)*3+2] = face->mIndices[2];
     }
 
     if(!(m_loadedFlags & LOADERFLAGS::ANIMATION)){
@@ -324,7 +324,7 @@ void Loader::loadAnimations(SPtr<Model> model)
         pos.y = actualChannel->mPositionKeys[i].mValue.y;
         pos.z = actualChannel->mPositionKeys[i].mValue.z;
         node->locations[i] = 
-        {actualChannel->mPositionKeys[i].mTime,
+        {static_cast<float>(actualChannel->mPositionKeys[i].mTime),
         pos};
       }
    
@@ -336,7 +336,7 @@ void Loader::loadAnimations(SPtr<Model> model)
         sca.y = actualChannel->mScalingKeys[i].mValue.y;
         sca.z = actualChannel->mScalingKeys[i].mValue.z;
         node->scales[i] =
-        {actualChannel->mScalingKeys[i].mTime,
+        {static_cast<float>(actualChannel->mScalingKeys[i].mTime),
         sca};
       }
    
@@ -355,7 +355,7 @@ void Loader::loadAnimations(SPtr<Model> model)
         auto oaMat = q.toMatrix();
    
         node->rotations[i] = 
-        {actualChannel->mRotationKeys[i].mTime,q};
+        {static_cast<float>(actualChannel->mRotationKeys[i].mTime),q};
       }
    
       animation->m_nodes.insert({actualChannel->mNodeName.C_Str(),node});

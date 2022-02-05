@@ -133,7 +133,7 @@ DX11VertexShader::createInputLayout()
   //inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateInputLayout(&inputLayoutDesc[0], 
-                              inputLayoutDesc.size(), 
+                              static_cast<uint32>(inputLayoutDesc.size()), 
                               m_blob->GetBufferPointer(), 
                               m_blob->GetBufferSize(), &m_inputLayout);//*/
 

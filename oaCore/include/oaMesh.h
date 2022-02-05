@@ -123,6 +123,12 @@ class OA_CORE_EXPORT Mesh
   void
   create(Vector<AnimationVertex>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones);
 
+  /**
+   * @brief sets the buffers to the GPU
+  */
+  void
+  set();
+
   void
   initFromSubMesh(const SubMesh& sm);
 
@@ -136,7 +142,7 @@ class OA_CORE_EXPORT Mesh
 
   
 
- public:
+ private:
 
   /**
    * @brief the number of indices this mesh has
@@ -176,6 +182,10 @@ class OA_CORE_EXPORT Mesh
    * @brief the names of the bones used by this mesh
   */
   Map<String,uint32> m_boneMaping;
+
+  friend class TestApp;
+  friend class Loader;
+  friend class AnimationComponent;
 };
 
 }

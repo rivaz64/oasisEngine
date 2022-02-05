@@ -25,12 +25,11 @@ using foo = const void* (*)();
 
 void BaseApp::onShutDown()
 {
+  preShutDown();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputManager::shutDown();
   Time::shutDown();
-  
-  postShutDown();
   Logger::shutDown();
 }
 
@@ -38,9 +37,15 @@ void
 BaseApp::run()
 {
   Logger::startUp();
+
+  #ifdef _DEBUG
   loadPlugIn("oaDX11Graphicsd.dll");
+  #else
+  loadPlugIn("oaDX11Graphics.dll");
+  #endif
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
+
   if (!GraphicAPI::isStarted()) {
     GraphicAPI::startUp();
   }
@@ -66,11 +71,6 @@ BaseApp::run()
     Logger::instance().flush();
 
   }
-}
-
-void BaseApp::postInit()
-{
-  ResoureManager::startUp();
 }
 
 void BaseApp::loadPlugIn(String DLL)
@@ -151,10 +151,10 @@ BaseApp::setWindow()
   descDepth.height = api.m_windowHeight;
   descDepth.mipLevels = 1;
   descDepth.arraySize = 1;
-  descDepth.format = FORMAT::D24_UNORM_S8_UINT;
+  descDepth.format = FORMAT::kD24UNormS8UInt;
   descDepth.sampleCount = 1;
   descDepth.sampleQuality = 0;
-  descDepth.bind = BIND::DEPTH_STENCIL;
+  descDepth.bind = BIND::kDepthStencil;
 
   auto depthStencil = api.createTexture();
 
@@ -165,7 +165,7 @@ BaseApp::setWindow()
   DepthStencilDesc descDSV;
   ZeroMemory( &descDSV, sizeof(descDSV) );
   descDSV.format = descDepth.format;
-  descDSV.viewDimension = DS_DIMENSION::TEXTURE2D;
+  descDSV.viewDimension = DS_DIMENSION::kTexture2D;
   descDSV.MipSlice = 0;
 
   m_finalDepthStencil = api.createDepthStencil(descDSV,depthStencil);
@@ -182,8 +182,7 @@ BaseApp::resizeWindow()
   api.unsetRenderTargetAndDepthStencil();
 
   if(m_finalRender.get()){
-      m_finalRender->release();
-
+    m_finalRender->release();
   }
 
   if(m_finalDepthStencil.get()){
