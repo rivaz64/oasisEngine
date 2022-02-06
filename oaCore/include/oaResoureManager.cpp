@@ -376,13 +376,13 @@ ResoureManager::generateDefaultMaterial()
 
   materials["default"]->m_vertexShader = vertexShaders["default"];
   materials["default"]->m_pixelShader = pixelShaders["default"];
-  materials["default"]->m_textures.push_back(textures["default"]);
+  materials["default"]->m_diffuse = textures["default"];
 
   materials["default"]->m_name = "default";
 
   materials["animation"]->m_vertexShader = vertexShaders["animation"];
   materials["animation"]->m_pixelShader = pixelShaders["default"];
-  materials["animation"]->m_textures.push_back(textures["default"]);
+  materials["animation"]->m_diffuse = textures["default"];
 
   materials["animation"]->m_name = "animation";
 }

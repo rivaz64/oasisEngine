@@ -147,7 +147,7 @@ class OA_CORE_EXPORT Mesh
   /**
    * @brief the number of indices this mesh has
   */
-  uint64 m_indexNumber = 0;
+  uint32 m_indexNumber = 0;
 
   /**
    * @brief the buffer for the indices

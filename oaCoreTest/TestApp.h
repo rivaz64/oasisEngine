@@ -70,13 +70,15 @@ public:
 
   SPtr<Buffer> m_globalTransformBuffer;
 
-   SPtr<Camera> m_cam;
+  SPtr<Buffer> m_viewBuffer;
 
-   SPtr<SamplerState> samsta;
+  SPtr<Buffer> m_projectionBuffer;
 
-   SPtr<RenderTarget> renderToTexture;
+  SPtr<Buffer> m_viewLocationBuffer;
 
-   //SPtr<SceneGraph> scene; 
+   SPtr<Camera> m_camera;
+
+   SPtr<SamplerState> m_samplerState; 
 
    SPtr<Actor> actualActor;
 

@@ -127,7 +127,7 @@ TestApp::postInit()
 
   auto& graphicAPI = GraphicAPI::instance();
   
-  samsta = graphicAPI.createSamplerState(sampDesc);
+  m_samplerState = graphicAPI.createSamplerState(sampDesc);
 
   vertexShader = graphicAPI.createVertexShader();
 
@@ -136,6 +136,10 @@ TestApp::postInit()
   lights = graphicAPI.createBuffer();
 
   lights->init(sizeof(Vector4f));
+
+  m_viewLocationBuffer = graphicAPI.createBuffer();
+
+  m_viewLocationBuffer->init(sizeof(Vector4f));
 
   IMGUI_CHECKVERSION();
 
@@ -149,15 +153,20 @@ TestApp::postInit()
 
   actualActor = m_actualScene;
 
-  m_cam = newSPtr<Camera>();
+  m_camera = newSPtr<Camera>();
 
-  m_cam->init();
+  m_camera->init();
 
-  m_cam->update();
+  m_camera->update();
 
   m_globalTransformBuffer = graphicAPI.createBuffer();
-
   m_globalTransformBuffer->init(sizeof(Matrix4f));
+
+  m_viewBuffer = graphicAPI.createBuffer();
+  m_viewBuffer->init(sizeof(Matrix4f));
+
+  m_projectionBuffer = graphicAPI.createBuffer();
+  m_projectionBuffer->init(sizeof(Matrix4f));
 }
 
 
@@ -194,41 +203,49 @@ TestApp::postUpdate(float delta)
   if (InputManager::instancePtr()->getInput(VK_RBUTTON) && 
       InputManager::instancePtr()->getMouseDelta() != Vector2I::ZERO)
   {
-    m_cam->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
+    m_camera->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
   }
   else{
     mousePressed;
   }
 
   if(camdelta.magnitud()>0){
-    m_cam->moveCamera(camdelta);
+    m_camera->moveCamera(camdelta);
   }
 
-  m_cam->update();
+  m_camera->update();
 }
 
 void 
 TestApp::draw()
 {
-  auto& api = GraphicAPI::instance();
+  auto& graphicsAPI = GraphicAPI::instance();
 
-  api.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
+  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
 
 
-  api.clearRenderTarget(m_finalRender);
-  api.clearDepthStencil(m_finalDepthStencil);
+  graphicsAPI.clearRenderTarget(m_finalRender);
+  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
 
-   
-
-  api.setSamplerState(samsta);
   
-  m_cam->setCamera();
+  m_viewBuffer->write(&m_camera->getViewMatrix().m11);
+  graphicsAPI.setVSBuffer(m_viewBuffer,1);
+
+  m_projectionBuffer->write(&m_camera->getProjectionMatrix().m11);
+  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
+   
+  graphicsAPI.setSamplerState(m_samplerState);
+  
+  //m_camera->setCamera();
 
   Vector<SPtr<Actor>> seenActors;
-  m_cam->seeActors(m_actualScene,seenActors);
+  m_camera->seeActors(m_actualScene,seenActors);
 
   lights->write(&dir.x);
-  api.setPSBuffer(lights,0);
+  graphicsAPI.setPSBuffer(lights,0);
+
+  m_viewLocationBuffer->write(&m_camera->getLocation().x);
+  graphicsAPI.setPSBuffer(m_viewLocationBuffer,1);
 
   Matrix4f finalTransform;
 
@@ -252,7 +269,7 @@ TestApp::draw()
 
         m_globalTransformBuffer->write(&finalTransform);
 
-        api.setVSBuffer(m_globalTransformBuffer, 0);
+        graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
 
         auto& actualMesh = model->m_meshes[i];
 
@@ -262,10 +279,10 @@ TestApp::draw()
 
           actualMesh->m_bonesB->write(actualMesh->m_ofset.data());
 
-          api.setVSBuffer(actualMesh->m_bonesB,3);
+          graphicsAPI.setVSBuffer(actualMesh->m_bonesB,3);
         }
        
-        api.draw(static_cast<uint32>(actualMesh->m_indexNumber));
+        graphicsAPI.draw(actualMesh->m_indexNumber);
       }
     }
   }
@@ -450,7 +467,7 @@ void oaEngineSDK::TestApp::drawImGui()
   if (ImGui::CollapsingHeader("materials")){
     for(auto material : resourceManager.materials){
       if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
-        material.second->m_textures[0] = actualTexture;
+        material.second->m_diffuse = actualTexture;
       }
     }
   }
@@ -552,30 +569,30 @@ void oaEngineSDK::TestApp::drawImGui()
   if(loader){
     ImGui::Begin("load");
     ImGui::DragFloat("scale",&loader->m_importScale);
-    if(loadflags & LOADERFLAGS::MESH){
-      ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::MESH);
+    if(loadflags & LOADERFLAGS::kMesh){
+      ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::kMesh);
     }
-    if(loadflags & LOADERFLAGS::TEXTURE){
-      ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::TEXTURE);
+    if(loadflags & LOADERFLAGS::kTexture){
+      ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::kTexture);
     }
-    if(loadflags & LOADERFLAGS::SKELETON){
-      ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::SKELETON);
+    if(loadflags & LOADERFLAGS::kSkeleton){
+      ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::kSkeleton);
     }
-    if(loadflags & LOADERFLAGS::ANIMATION){
-      ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::ANIMATION);
+    if(loadflags & LOADERFLAGS::kAnimation){
+      ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::kAnimation);
     }
     if(ImGui::Button("OK")){
-      if(loadflags0 & LOADERFLAGS::MESH){
-        ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::MESH);
+      if(loadflags0 & LOADERFLAGS::kMesh){
+        ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::kMesh);
       }
-      if(loadflags0 & LOADERFLAGS::TEXTURE){
-        ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::TEXTURE);
+      if(loadflags0 & LOADERFLAGS::kTexture){
+        ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::kTexture);
       }
-      if(loadflags0 & LOADERFLAGS::SKELETON){
-        ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::SKELETON);
+      if(loadflags0 & LOADERFLAGS::kSkeleton){
+        ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::kSkeleton);
       }
-      if(loadflags0 & LOADERFLAGS::ANIMATION){
-        ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::ANIMATION);
+      if(loadflags0 & LOADERFLAGS::kAnimation){
+        ImGui::CheckboxFlags("animation",&loadflags0,LOADERFLAGS::kAnimation);
       }
       loader->load(static_cast<LOADERFLAGS::E>(loadflags0));
       delete loader;

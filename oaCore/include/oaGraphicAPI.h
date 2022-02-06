@@ -159,9 +159,10 @@ class OA_CORE_EXPORT GraphicAPI :
   /**
    * @brief set the texture the shader is going to use
    * @param texture 
+   * @param location 
   */
   virtual void
-  setTexture(const SPtr<Texture> /*texture*/){}
+  setTexture(const SPtr<Texture> /*texture*/,uint8 /*location*/){}
 
   /**
    * @brief sets a constant buffer to be used in a vertex shader

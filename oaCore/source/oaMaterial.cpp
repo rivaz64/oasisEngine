@@ -13,9 +13,8 @@ void oaEngineSDK::Material::set()
 {
   m_vertexShader->set();
   m_pixelShader->set();
-  for(auto texture : m_textures){
-    GraphicAPI::instancePtr()->setTexture(
-        texture
-      );
-  }
+  auto& graphicsAPI = GraphicAPI::instance(); 
+  graphicsAPI.setTexture(m_diffuse,0);
+  if(m_specular)
+  graphicsAPI.setTexture(m_specular,1);
 }

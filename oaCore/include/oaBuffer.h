@@ -37,7 +37,7 @@ class OA_CORE_EXPORT Buffer
    * @param data 
   */
   virtual void
-  write(void* /*data*/){}
+  write(const void* /*data*/){}
 
   friend class GraphicsAPI;
 };

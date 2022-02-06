@@ -11,11 +11,11 @@
 
 namespace LOADERFLAGS{
   enum E{
-    NONE = 0,
-    MESH = 1,
-    TEXTURE = 2,
-    SKELETON = 4,
-    ANIMATION = 8
+    kNone = 0,
+    kMesh = 1,
+    kTexture = 2,
+    kSkeleton = 4,
+    kAnimation = 8
   };
 }
 

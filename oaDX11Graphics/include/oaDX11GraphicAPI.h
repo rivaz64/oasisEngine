@@ -75,7 +75,7 @@ class DX11GraphicAPI :
   show() override;
 
   void
-  setTexture(const SPtr<Texture> texture) override;
+  setTexture(const SPtr<Texture> texture,uint8 location) override;
 
   void
   setVSBuffer(const SPtr<Buffer> buffer,uint32 location) override;

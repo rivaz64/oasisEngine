@@ -7,7 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaVector3f.h"
+#include "oaVector4f.h"
 #include "oaMatrix3f.h"
 #include "oaMatrix4f.h"
 #include "oaVector2f.h"
@@ -54,13 +54,6 @@ class OA_CORE_EXPORT Camera
   updateView();
 
   /**
-   * @brief the transform matrix so that is seems like a camera
-   * @return 
-  */
-  void
-  setCamera();
-
-  /**
    * @brief moves the camera 
    * @param delta
   */
@@ -103,6 +96,33 @@ class OA_CORE_EXPORT Camera
   */
   void
   seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
+
+  /**
+   * @brief getter for the view matrix
+   * @return the viewMatrix
+  */
+  FORCEINLINE const Matrix4f&
+  getViewMatrix(){
+    return m_viewMatrix;
+  }
+
+  /**
+   * @brief getter for the view getProyectionMatrix
+   * @return the viewMatrix
+  */
+  FORCEINLINE const Matrix4f&
+  getProjectionMatrix(){
+    return m_projectionMatrix;
+  }
+
+  /**
+   * @brief getter for the view matrix
+   * @return the viewMatrix
+  */
+  FORCEINLINE const Vector3f&
+  getLocation(){
+    return m_location;
+  }
 
  public:
   /**
@@ -163,12 +183,12 @@ class OA_CORE_EXPORT Camera
   /**
    * @brief the view matrix of this camera
   */
-  Matrix4f viewMatrix;
+  Matrix4f m_viewMatrix;
 
   /**
-   * @brief the buffer of the viewMatrix
+   * @brief the projection matrix of this camera
   */
-  SPtr<Buffer> view;
+  Matrix4f m_projectionMatrix;
 
   /**
    * @brief the near plane of the frustrum
@@ -199,11 +219,6 @@ class OA_CORE_EXPORT Camera
    * @brief the right plane of the frustrum
   */
   Plane rightP;
-
-  /**
-   * @brief the buffer of the proyectionMatrix
-  */
-  SPtr<Buffer> proyection;
 
   /**
    * @brief dirty flags for the view matrix

@@ -17,13 +17,8 @@ namespace oaEngineSDK{
 
 Camera::Camera()
 {
-  view = GraphicAPI::instancePtr()->createBuffer();
-  view->init(sizeof(Matrix4f));
 
-  proyection = GraphicAPI::instancePtr()->createBuffer();
-  proyection->init(sizeof(Matrix4f));
-
-  viewMatrix = Matrix4f::IDENTITY;
+  m_viewMatrix = Matrix4f::IDENTITY;
 
   m_location = {0.0f,0.0f,0.0f};
 
@@ -58,20 +53,18 @@ Camera::update(){
 void 
 Camera::updateProyection()
 {
-  Matrix4f ans = Matrix4f::IDENTITY;
+  m_projectionMatrix = Matrix4f::IDENTITY;
   float co = cos(m_viewAngle * .5f), si = sin(m_viewAngle * .5f);
   float distance = m_farPlaneDistance - m_nearPlaneDistance;
 
-  ans.m11 = (co / si) / m_ratio;
-  ans.m22 = co/si;
-  ans.m33 = m_farPlaneDistance / distance;
-  ans.m34 = -ans.m33*m_nearPlaneDistance;
-  ans.m43 = 1.f;
-  ans.m44= 0.f;
+  m_projectionMatrix.m11 = (co / si) / m_ratio;
+  m_projectionMatrix.m22 = co/si;
+  m_projectionMatrix.m33 = m_farPlaneDistance / distance;
+  m_projectionMatrix.m34 = -m_projectionMatrix.m33*m_nearPlaneDistance;
+  m_projectionMatrix.m43 = 1.f;
+  m_projectionMatrix.m44= 0.f;
 
   //ans.transpose();
-
-  proyection->write(&ans.m11);
 }
 
 void 
@@ -81,37 +74,27 @@ Camera::updateView()
     return;
   }
 
-  viewMatrix.m11 = m_axis.m11;
-  viewMatrix.m12 = m_axis.m12;
-  viewMatrix.m13 = m_axis.m13;
+  m_viewMatrix.m11 = m_axis.m11;
+  m_viewMatrix.m12 = m_axis.m12;
+  m_viewMatrix.m13 = m_axis.m13;
 
-  viewMatrix.m21 = m_axis.m21;
-  viewMatrix.m22 = m_axis.m22;
-  viewMatrix.m23 = m_axis.m23;
+  m_viewMatrix.m21 = m_axis.m21;
+  m_viewMatrix.m22 = m_axis.m22;
+  m_viewMatrix.m23 = m_axis.m23;
 
-  viewMatrix.m31 = m_axis.m31;
-  viewMatrix.m32 = m_axis.m32;
-  viewMatrix.m33 = m_axis.m33;
+  m_viewMatrix.m31 = m_axis.m31;
+  m_viewMatrix.m32 = m_axis.m32;
+  m_viewMatrix.m33 = m_axis.m33;
   
-  viewMatrix.m14 = -Vector3f::dot(m_location,m_axisX);
-  viewMatrix.m24 = -Vector3f::dot(m_location,m_axisY);
-  viewMatrix.m34 = -Vector3f::dot(m_location,m_axisZ);
+  m_viewMatrix.m14 = -Vector3f::dot(m_location,m_axisX);
+  m_viewMatrix.m24 = -Vector3f::dot(m_location,m_axisY);
+  m_viewMatrix.m34 = -Vector3f::dot(m_location,m_axisZ);
 
   createFrustrum();
 
-  view->write(&viewMatrix.m11);
+  //view->write(&viewMatrix.m11);
 
   dirtyFlags = false;
-}
-
-void 
-Camera::setCamera()
-{
-
-  GraphicAPI::instancePtr()->setVSBuffer(view,1);
-  
-  GraphicAPI::instancePtr()->setVSBuffer(proyection,2);
-
 }
 
 void 

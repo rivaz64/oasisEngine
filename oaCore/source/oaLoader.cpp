@@ -69,16 +69,16 @@ Loader::checkForLoad(const Path& _file)
   }
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   if(scene->HasMeshes()){
-    m_loadedFlags |= LOADERFLAGS::MESH;
+    m_loadedFlags |= LOADERFLAGS::kMesh;
 
   }
 
   if(scene->HasMaterials()){
-    m_loadedFlags |= LOADERFLAGS::TEXTURE;
+    m_loadedFlags |= LOADERFLAGS::kTexture;
   }
 
   if(scene->HasAnimations()){
-    m_loadedFlags |= LOADERFLAGS::ANIMATION | LOADERFLAGS::SKELETON;
+    m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }
 
   return static_cast<LOADERFLAGS::E>(m_loadedFlags);
@@ -88,16 +88,16 @@ void
 Loader::load(LOADERFLAGS::E flags)
 {
   auto model = newSPtr<Model>();
-  if(flags & LOADERFLAGS::MESH){
+  if(flags & LOADERFLAGS::kMesh){
     loadMeshes(model);
   }
-  if(flags & LOADERFLAGS::TEXTURE){
+  if(flags & LOADERFLAGS::kTexture){
     loadTextures(model);
   }
-  if(flags & LOADERFLAGS::SKELETON){
+  if(flags & LOADERFLAGS::kSkeleton){
     loadSkeletons(model);
   }
-  if(flags & LOADERFLAGS::ANIMATION){
+  if(flags & LOADERFLAGS::kAnimation){
     loadAnimations(model);
   }
   ResoureManager::instance().models.insert({m_file.getCompletePath(),model});
@@ -130,7 +130,7 @@ void Loader::loadMeshes(SPtr<Model> model)
       index[static_cast<uint32>(t)*3+2] = face->mIndices[2];
     }
 
-    if(!(m_loadedFlags & LOADERFLAGS::ANIMATION)){
+    if(!(m_loadedFlags & LOADERFLAGS::kAnimation)){
       Vector<Vertex> vertices;
 
       vertices.resize( aMesh->mNumVertices);
@@ -251,19 +251,26 @@ void Loader::loadTextures(SPtr<Model> model)
 
     auto material = manager.materials["default"];
 
-    if(m_loadedFlags & LOADERFLAGS::ANIMATION){
+    if(m_loadedFlags & LOADERFLAGS::kAnimation){
       material = manager.materials["animation"];
     }
 
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
+    //TextureName = f.data-4;
     TextureName = f.C_Str();
-
+    print(TextureName);
     TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+".png");
     if(manager.loadTexture(TextureFile)){
       auto mat = copy(material);
-      mat->m_textures[0] = manager.textures[TextureFile.getCompletePath()];
+      mat->m_diffuse = manager.textures[TextureFile.getCompletePath()];
       manager.materials.insert({TextureName,mat});
       model->m_materials.push_back(mat);
+
+      TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"S.png");
+
+      if(manager.loadTexture(TextureFile)){
+        mat->m_specular = manager.textures[TextureFile.getCompletePath()];
+      }
     }
     else{
       model->m_materials.push_back(material);

@@ -23,9 +23,14 @@ class OA_CORE_EXPORT Material
   set();
   
   /**
-   * @brief the textures of this material
+   * @brief the diffuse texture of this material
   */
-  Vector<SPtr<Texture>> m_textures;
+  SPtr<Texture> m_diffuse;
+
+  /**
+   * @brief the diffuse texture of this material
+  */
+  SPtr<Texture> m_specular;
 
   /**
    * @brief the vertex shader of this material
