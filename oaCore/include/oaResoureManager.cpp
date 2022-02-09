@@ -7,6 +7,7 @@
 #include "oaMaterial.h"
 #include "oaMesh.h"
 #include "oaPath.h"
+#include "oaShaderProgram.h"
 
 
 namespace oaEngineSDK{
@@ -14,19 +15,19 @@ namespace oaEngineSDK{
 bool 
 ResoureManager::loadTexture(const Path& file)
 {
-  if(textures.find(file.getCompletePath())!=textures.end()){
+  if(m_textures.find(file.getCompletePath())!=m_textures.end()){
     print("texture already loaded");
     return true;
   }
 
-  SPtr<Texture> texture = GraphicAPI::instancePtr()->createTexture();
+  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
   if(!texture->loadFromFile(file)){
     print("texture not loaded");
     return false;
   }
 
-  textures[file.getCompletePath()] = texture;
+  m_textures[file.getCompletePath()] = texture;
 
   Path path(file);
 
@@ -287,7 +288,7 @@ ResoureManager::generatePlane()
 void 
 ResoureManager::generateCube()
 {
-  meshes.insert({ "cube",newSPtr<Mesh>() });
+  /*meshes.insert({ "cube",newSPtr<Mesh>() });
   Vector<Vertex> vertices = {
     Vertex{ Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f) },
     Vertex{ Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
@@ -340,51 +341,51 @@ ResoureManager::generateCube()
     23,20,22
   };
 
-  meshes["cube"]->create(vertices,index);
+  meshes["cube"]->create(vertices,index);*/
 
 }
 
 void ResoureManager::loadDefaultShaders()
 {
-  vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
-  vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
-  pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
+  m_vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
+  m_vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
+  m_pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
 
-  vertexShaders["default"]->compileFromFile("vertexShader");
-  vertexShaders["default"]->m_name = "normal";
+  m_vertexShaders["default"]->compileFromFile("vertexShader");
+  m_vertexShaders["default"]->m_name = "normal";
 
-  vertexShaders["animation"]->compileFromFile("animVertexShader");
-  vertexShaders["animation"]->m_name = "animation";
+  m_vertexShaders["animation"]->compileFromFile("animVertexShader");
+  m_vertexShaders["animation"]->m_name = "animation";
 
-  pixelShaders["default"]->compileFromFile("shader");
-
+  m_pixelShaders["default"]->compileFromFile("shader");
+  
 }
 
 void ResoureManager::loadDefaulTextures()
 {
-  textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
+  m_textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
   Path path;
   path.setCompletePath("textures/defaultTexture.png");
-  textures["default"]->loadFromFile(path);
+  m_textures["default"]->loadFromFile(path);
 }
 
 void
 ResoureManager::generateDefaultMaterial()
 {
-  materials.insert({"default",newSPtr<Material>()});
-  materials.insert({"animation",newSPtr<Material>()});
+  m_materials.insert({"default",newSPtr<Material>()});
+  m_materials.insert({"animation",newSPtr<Material>()});
 
-  materials["default"]->m_vertexShader = vertexShaders["default"];
-  materials["default"]->m_pixelShader = pixelShaders["default"];
-  materials["default"]->m_diffuse = textures["default"];
+  m_materials["default"]->m_program->attach(m_vertexShaders["default"]);
+  m_materials["default"]->m_program->attach(m_pixelShaders["default"]);
+  m_materials["default"]->m_diffuse = m_textures["default"];
+  
+  m_materials["default"]->m_name = "default";
+  
+  m_materials["animation"]->m_program->attach(m_vertexShaders["animation"]);
+  m_materials["animation"]->m_program->attach(m_pixelShaders["default"]);
+  m_materials["animation"]->m_diffuse = m_textures["default"];
 
-  materials["default"]->m_name = "default";
-
-  materials["animation"]->m_vertexShader = vertexShaders["animation"];
-  materials["animation"]->m_pixelShader = pixelShaders["default"];
-  materials["animation"]->m_diffuse = textures["default"];
-
-  materials["animation"]->m_name = "animation";
+  m_materials["animation"]->m_name = "animation";
 }
 
 }

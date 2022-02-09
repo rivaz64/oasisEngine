@@ -44,6 +44,16 @@ struct Vertex{
   Vector4f normal;
 
   /**
+   * @brief the tangent at this vertex
+  */
+  Vector4f tangent;
+
+  /**
+   * @brief the bitangent at this vertex
+  */
+  Vector4f bitangent;
+
+  /**
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;

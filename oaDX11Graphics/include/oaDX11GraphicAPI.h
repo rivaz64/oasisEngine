@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "oaGraphicAPI.h"
+#include <oaGraphicAPI.h>
 #include <windows.h>
 #include <d3d11.h>
 #include <oaColor.h>
@@ -34,6 +34,9 @@ class DX11GraphicAPI :
 
   void
   events() override;
+
+  SPtr<ShaderProgram>
+  createShaderProgram() override;
 
   SPtr<Shader>
   createVertexShader() override;
@@ -97,9 +100,6 @@ class DX11GraphicAPI :
 
   void
   unsetRenderTargetAndDepthStencil() override;
-
-  void
-  resizeSwapChian() override;
 
   void
   clearRenderTarget(SPtr<RenderTarget> renderTarget) override;

@@ -10,6 +10,7 @@
 #include "oaInputManager.h"
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11IndexBuffer.h"
+#include "oaDX11ShaderProgram.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
@@ -17,7 +18,8 @@
 
 namespace oaEngineSDK{
 
-void DX11GraphicAPI::onShutDown()
+void 
+DX11GraphicAPI::onShutDown()
 {
   if( m_context ) m_context->ClearState();
 
@@ -119,8 +121,6 @@ DX11GraphicAPI::initialize()
     return false;
   }
 
-  
-
   return true;
 }
 
@@ -163,12 +163,20 @@ DX11GraphicAPI::events()
   }
 }
 
-SPtr<Shader> DX11GraphicAPI::createVertexShader()
+SPtr<ShaderProgram> 
+DX11GraphicAPI::createShaderProgram()
+{
+  return newSPtr<DX11ShaderProgram>();
+}
+
+SPtr<Shader> 
+DX11GraphicAPI::createVertexShader()
 {
   return newSPtr<DX11VertexShader>();
 }
 
-SPtr<Shader> DX11GraphicAPI::createPixelShader()
+SPtr<Shader> 
+DX11GraphicAPI::createPixelShader()
 {
   return newSPtr<DX11PixelShader>();
 }
@@ -179,12 +187,14 @@ DX11GraphicAPI::createBuffer()
   return newSPtr<DX11Buffer>();
 }
 
-SPtr<VertexBuffer> DX11GraphicAPI::createVertexBuffer()
+SPtr<VertexBuffer> 
+DX11GraphicAPI::createVertexBuffer()
 {
   return newSPtr<DX11VertexBuffer>();
 }
 
-SPtr<IndexBuffer> DX11GraphicAPI::createIndexBuffer()
+SPtr<IndexBuffer> 
+DX11GraphicAPI::createIndexBuffer()
 {
   return newSPtr<DX11IndexBuffer>();
 }
@@ -225,7 +235,8 @@ DX11GraphicAPI::setBackgroundColor(const Color& color)
   m_backgroundColor = color;
 }
 
-SPtr<Texture> DX11GraphicAPI::getBackBuffer()
+SPtr<Texture> 
+DX11GraphicAPI::getBackBuffer()
 {
   if(!m_swapChain) return SPtr<Texture>();
   auto backBuffer = createTexture();
@@ -301,15 +312,11 @@ DX11GraphicAPI::setRenderTargetAndDepthStencil(
   );
 }
 
-void DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
+void 
+DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
 {
   if(!m_context) return;
   m_context->OMSetRenderTargets(0,0,0);
-}
-
-void DX11GraphicAPI::resizeSwapChian()
-{
-  
 }
 
 void 
@@ -320,7 +327,8 @@ DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
     &m_backgroundColor.r );
 }
 
-void DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
+void 
+DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
 {
   m_context->ClearDepthStencilView(
     cast<DX11DepthStencil>(depthStencil)->m_depthStencil,

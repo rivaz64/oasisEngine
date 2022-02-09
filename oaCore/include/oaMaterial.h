@@ -16,6 +16,8 @@ class OA_CORE_EXPORT Material
 {
  public:
 
+  Material();
+
   /**
    * @brief sets this material to be used in the shader
   */
@@ -33,14 +35,14 @@ class OA_CORE_EXPORT Material
   SPtr<Texture> m_specular;
 
   /**
-   * @brief the vertex shader of this material
+   * @brief the diffuse texture of this material
   */
-  SPtr<Shader> m_vertexShader;
+  SPtr<Texture> m_normalMap;
 
   /**
-   * @brief the pixel shader of this material
+   * @brief the shaders program this material is going to be using
   */
-   SPtr<Shader> m_pixelShader;
+  SPtr<ShaderProgram> m_program;
 
    String m_name;
 };

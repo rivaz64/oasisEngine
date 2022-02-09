@@ -108,6 +108,9 @@
     <ClInclude Include="include\oaActor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -183,6 +186,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaActor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "oaIndexBuffer.h"
+#include <oaIndexBuffer.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK{

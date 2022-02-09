@@ -5,7 +5,7 @@
 */
 
 #pragma once
-#include "oaDepthStencil.h"
+#include <oaDepthStencil.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK{

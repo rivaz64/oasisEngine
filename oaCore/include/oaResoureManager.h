@@ -35,13 +35,6 @@ class OA_CORE_EXPORT ResoureManager :
   loadTexture(const Path& file);
 
   /**
-   * @brief loads a model from a file
-   * @return if the model was loaded
-  */
-  bool
-  loadModel(const Path& file);
-
-  /**
    * @brief loads the default things
   */
   void
@@ -109,58 +102,53 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateDefaultMaterial();
 
- public:
+ private:
 
   /**
   * @brief all the loaded meshes
   */
-   Map<String,SPtr<Mesh>> meshes;
+   Map<String,SPtr<Mesh>> m_meshes;
 
   /**
    * @brief all the loaded textures
   */
-  Map<String,SPtr<Texture>> textures;
+  Map<String,SPtr<Texture>> m_textures;
 
   /**
   * @brief all the loaded models
   */
-  Map<String,SPtr<Model>> models;
+  Map<String,SPtr<Model>> m_models;
 
   /**
    * @brief all the loaded vertex shaders
   */
-  Map<String,SPtr<Shader>> vertexShaders;
+  Map<String,SPtr<Shader>> m_vertexShaders;
 
   /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,SPtr<Shader>> pixelShaders;
+  Map<String,SPtr<Shader>> m_pixelShaders;
 
   /**
    * @brief all the materials
   */
-  Map<String,SPtr<Material>> materials;
+  Map<String,SPtr<Material>> m_materials;
 
   /**
    * @brief all the loaded skeletons
   */
-  Map<String,SPtr<Skeleton>> skeletons;
+  Map<String,SPtr<Skeleton>> m_skeletons;
 
   /**
    * @brief all the loaded animations
   */
-  Map<String,SPtr<Animation>> animations;
+  Map<String,SPtr<Animation>> m_animations;
 
 
-  /**
-   * @brief all the Actors that can be rendered
-  */
-  Vector<SPtr<Actor>> rendereableActors;
-
- public:
 
   friend class Module<ResoureManager>;
-
+  friend class TestApp;
+  friend class Loader;
 };
 
 }

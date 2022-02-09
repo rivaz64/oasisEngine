@@ -129,10 +129,6 @@ TestApp::postInit()
   
   m_samplerState = graphicAPI.createSamplerState(sampDesc);
 
-  vertexShader = graphicAPI.createVertexShader();
-
-  pixelShader = graphicAPI.createPixelShader();
-
   lights = graphicAPI.createBuffer();
 
   lights->init(sizeof(Vector4f));
@@ -151,7 +147,7 @@ TestApp::postInit()
 
   m_actualScene = newSPtr<Actor>();
 
-  actualActor = m_actualScene;
+  m_selectedActor = m_actualScene;
 
   m_camera = newSPtr<Camera>();
 
@@ -204,9 +200,6 @@ TestApp::postUpdate(float delta)
       InputManager::instancePtr()->getMouseDelta() != Vector2I::ZERO)
   {
     m_camera->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
-  }
-  else{
-    mousePressed;
   }
 
   if(camdelta.magnitud()>0){
@@ -374,55 +367,55 @@ void oaEngineSDK::TestApp::drawImGui()
   */
 
   ImGui::Begin("Actor atributes");
-  if(actualActor){
+  if(m_selectedActor){
     if(ImGui::Button("Add Component")){
       isAddingComponent = true;
     }
 
     if (ImGui::CollapsingHeader("transform")){
       
-      if(actualActor.get()){
-        Vector3f vec = actualActor->getLocation();
+      if(m_selectedActor.get()){
+        Vector3f vec = m_selectedActor->getLocation();
         if(ImGui::DragFloat3("location", &vec.x, .01f)){
-          actualActor->setLocation(vec);
+          m_selectedActor->setLocation(vec);
         }
-        vec = actualActor->getScale();
+        vec = m_selectedActor->getScale();
         if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-          actualActor->setScale(vec);
+          m_selectedActor->setScale(vec);
         }
-        vec = actualActor->getRotation();
+        vec = m_selectedActor->getRotation();
         if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          actualActor->setRotation(vec);
+          m_selectedActor->setRotation(vec);
         };
       }
     }
 
     SPtr<Component> component;
-    component = actualActor->getComponent<GraphicsComponent>();
+    component = m_selectedActor->getComponent<GraphicsComponent>();
     if (component && ImGui::CollapsingHeader("models")){
       
-      if(ImGui::Button("select model") && actualModel.get()){
-        cast<GraphicsComponent>(component)->addModel(actualModel);
+      if(ImGui::Button("select model") && m_selectedModel.get()){
+        cast<GraphicsComponent>(component)->addModel(m_selectedModel);
       }
       for(auto& model : cast<GraphicsComponent>(component)->m_models){
         if(ImGui::Button(model.second.model->m_name.c_str())){
-          actualModelComponent = &model.second;
+          m_selectedModelComponent = &model.second;
         }
       }
-      if(actualModelComponent){
-        ImGui::DragFloat3("location Model",&actualModelComponent->location.x);
-        ImGui::DragFloat3("scale Model",&actualModelComponent->scale.x);
-        ImGui::DragFloat3("rotation Model",&actualModelComponent->rotation.x);
+      if(m_selectedModelComponent){
+        ImGui::DragFloat3("location Model",&m_selectedModelComponent->location.x);
+        ImGui::DragFloat3("scale Model",&m_selectedModelComponent->scale.x);
+        ImGui::DragFloat3("rotation Model",&m_selectedModelComponent->rotation.x);
       }
 
     }
 
-    component = actualActor->getComponent<SkeletalComponent>();
+    component = m_selectedActor->getComponent<SkeletalComponent>();
 
     if (component && ImGui::CollapsingHeader("skeleton")){
       
       if(ImGui::Button("select Skeleton")){
-        cast<SkeletalComponent>(component)->m_skeleton = actualSkeleton;
+        cast<SkeletalComponent>(component)->m_skeleton = m_selectedSkeleton;
       }
       if(cast<SkeletalComponent>(component)->m_skeleton){
         if(ImGui::Button("add socket")){
@@ -432,18 +425,18 @@ void oaEngineSDK::TestApp::drawImGui()
 
     }
 
-    component = actualActor->getComponent<AnimationComponent>();
+    component = m_selectedActor->getComponent<AnimationComponent>();
 
 
     if (component && ImGui::CollapsingHeader("animation")){
       auto animComponent = cast<AnimationComponent>(component);
       if(ImGui::Button("select Animation")){
-        animComponent->m_animation = actualAnimation;
-        animComponent->m_model = actualModel;
-        animComponent->m_skeleton = actualSkeleton;
+        animComponent->m_animation = m_selectedAnimation;
+        animComponent->m_model = m_selectedModel;
+        animComponent->m_skeleton = m_selectedSkeleton;
       }
       if(animComponent->m_animation){
-        ImGui::DragFloat("actualTime",&animComponent->m_animTimeInSecs);
+        ImGui::DragFloat("m_selectedTime",&animComponent->m_animTimeInSecs);
       }
       ImGui::Checkbox("play",&animInPlay);
       if(animInPlay){
@@ -457,25 +450,25 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::Begin("resources");
   
   if (ImGui::CollapsingHeader("textures")){
-    for(auto texture : resourceManager.textures){
+    for(auto texture : resourceManager.m_textures){
       if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
-        actualTexture = texture.second;
+        m_selectedTexture = texture.second;
       }
     }
   }
   
   if (ImGui::CollapsingHeader("materials")){
-    for(auto material : resourceManager.materials){
+    for(auto material : resourceManager.m_materials){
       if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
-        material.second->m_diffuse = actualTexture;
+        material.second->m_diffuse = m_selectedTexture;
       }
     }
   }
 
   if (ImGui::CollapsingHeader("meshes")){
-    for(auto mesh : resourceManager.meshes){
+    for(auto mesh : resourceManager.m_meshes){
       if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
-        actualMesh = mesh.second;
+        m_selectedMesh = mesh.second;
       }
     }
   }
@@ -490,26 +483,26 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
 
-    for(auto model : resourceManager.models){
+    for(auto model : resourceManager.m_models){
       if(ImGui::Button(model.second->m_name.c_str(),ImVec2(100,100))){
-        actualModel = model.second;
+        m_selectedModel = model.second;
       }
     }
   }
 
   if (ImGui::CollapsingHeader("skeletons")){
-    for(auto skeleton : resourceManager.skeletons){
+    for(auto skeleton : resourceManager.m_skeletons){
       if(ImGui::Button(skeleton.second->m_name.c_str(),ImVec2(100,100))){
         print("working");
-        actualSkeleton = skeleton.second;
+        m_selectedSkeleton = skeleton.second;
       }
     }
   }
 
   if (ImGui::CollapsingHeader("animations")){
-    for(auto animation : resourceManager.animations){
+    for(auto animation : resourceManager.m_animations){
       if(ImGui::Button(animation.second->m_name.c_str(),ImVec2(100,100))){
-        actualAnimation = animation.second;
+        m_selectedAnimation = animation.second;
       }
     }
   }
@@ -525,7 +518,7 @@ void oaEngineSDK::TestApp::drawImGui()
     isCreatingActor = true;
   }
   if(ImGui::Button("scene")){
-    actualActor = m_actualScene;
+    m_selectedActor = m_actualScene;
   }
   childsInImgui(m_actualScene);
   ImGui::End();
@@ -540,7 +533,7 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button("create")){
       auto actor = newSPtr<Actor>();
       actor->m_name = imguiString;
-      actualActor->attach(actor);
+      m_selectedActor->attach(actor);
       isCreatingActor = false;
     }
     ImGui::End();
@@ -549,17 +542,17 @@ void oaEngineSDK::TestApp::drawImGui()
   if(isAddingComponent){
     ImGui::Begin("add component");
     if(ImGui::Button("Graphics")){
-      actualActor->attachComponent(newSPtr<GraphicsComponent>());
+      m_selectedActor->attachComponent(newSPtr<GraphicsComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Skeletal")){
-      actualActor->attachComponent(newSPtr<SkeletalComponent>());
+      m_selectedActor->attachComponent(newSPtr<SkeletalComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Animation")){
-      actualActor->attachComponent(newSPtr<AnimationComponent>());
+      m_selectedActor->attachComponent(newSPtr<AnimationComponent>());
       isAddingComponent = false;
     }
 
@@ -605,7 +598,7 @@ void oaEngineSDK::TestApp::drawImGui()
   if(isAddingSocket){
     ImGui::InputText("bone name",imguiString,64);
     if(ImGui::Button("ok")){
-      actualActor->getComponent<SkeletalComponent>()->attachToBone(actualModel,imguiString);
+      m_selectedActor->getComponent<SkeletalComponent>()->attachToBone(m_selectedModel,imguiString);
       isAddingSocket = false;
     }
   }
@@ -617,7 +610,7 @@ void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)
   auto& childs = parentActor->getChilds();
   for(SPtr<Actor> Actor : childs){
     if(ImGui::Button(Actor->m_name.c_str())){
-      actualActor = Actor;
+      m_selectedActor = Actor;
     }
     if(Actor->getChilds().size()>0){
       if(ImGui::CollapsingHeader("childs")){

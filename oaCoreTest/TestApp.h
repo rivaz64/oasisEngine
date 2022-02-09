@@ -80,40 +80,23 @@ public:
 
    SPtr<SamplerState> m_samplerState; 
 
-   SPtr<Actor> actualActor;
+   SPtr<Actor> m_selectedActor;
 
-  SPtr<Shader> vertexShader;
+  SPtr<Texture> m_selectedTexture;
 
-  SPtr<Shader> pixelShader;
+  SPtr<Mesh> m_selectedMesh;
 
-  SPtr<Texture> actualTexture;
+  SPtr<Model> m_selectedModel;
 
-  SPtr<Mesh> actualMesh;
+  SPtr<Skeleton> m_selectedSkeleton;
 
-  SPtr<Model> actualModel;
+  SPtr<Animation> m_selectedAnimation;
 
-  SPtr<Skeleton> actualSkeleton;
-
-  SPtr<Animation> actualAnimation;
-
-  bool mousePressed = false;
+  SPtr<ShaderProgram> m_program; 
 
   SPtr<Buffer> lights;
 
-  Vector4f color;
-
   Vector4f dir;
-
-  SPtr<Chunk> chnk;
-
-  SPtr<MarchingCubes> mc;
-
-  SPtr<ProceduralTerrain> pt1;
-  SPtr<ProceduralTerrain> pt2;
-
-  SPtr<Noise2D> noise1;
-
-  SPtr<Noise2D> noise2;
 
   Loader* loader;
 
@@ -131,7 +114,7 @@ public:
 
   uint8 loaderFlagsActive;
 
-  ModelComponent* actualModelComponent = nullptr;
+  ModelComponent* m_selectedModelComponent = nullptr;
 
   bool animInPlay=false;
 };

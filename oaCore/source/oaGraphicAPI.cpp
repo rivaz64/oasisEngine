@@ -13,6 +13,7 @@
 #include "oaShader.h"
 #include "oaVertexBuffer.h"
 #include "oaIndexBuffer.h"
+#include "oaShaderProgram.h"
 
 namespace oaEngineSDK{
 
@@ -26,6 +27,11 @@ bool
 GraphicAPI::isRunning()
 {
   return true;
+}
+
+SPtr<ShaderProgram> GraphicAPI::createShaderProgram()
+{
+    return newSPtr<ShaderProgram>();
 }
 
 SPtr<Shader> GraphicAPI::createVertexShader()

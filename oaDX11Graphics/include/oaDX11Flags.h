@@ -1,6 +1,6 @@
 #pragma once
 
-#include "oaFlags.h"
+#include <oaFlags.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK {

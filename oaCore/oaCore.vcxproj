@@ -195,6 +195,7 @@
     <ClInclude Include="include\oaResoureManager.h" />
     <ClInclude Include="include\oaSamplerState.h" />
     <ClInclude Include="include\oaShader.h" />
+    <ClInclude Include="include\oaShaderProgram.h" />
     <ClInclude Include="include\oaSkeletalComponent.h" />
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaTexture.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="source\oaSamplerState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaShaderProgram.cpp" />
     <ClCompile Include="source\oaSkeletalComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

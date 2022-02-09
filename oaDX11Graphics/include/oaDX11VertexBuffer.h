@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "oaVertexBuffer.h"
+#include <oaVertexBuffer.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK{

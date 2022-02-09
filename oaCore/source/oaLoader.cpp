@@ -59,7 +59,8 @@ Loader::checkForLoad(const Path& _file)
   auto flags = aiProcess_Triangulate | 
                aiProcess_GenSmoothNormals | 
                aiProcess_OptimizeMeshes | 
-               aiProcess_OptimizeGraph;
+               aiProcess_OptimizeGraph |
+               aiProcess_CalcTangentSpace;
 
   m_sceneI = static_cast<Importer*>(m_importer)->ReadFile(m_file.getCompletePath(),flags);
   
@@ -95,16 +96,17 @@ Loader::load(LOADERFLAGS::E flags)
     loadTextures(model);
   }
   if(flags & LOADERFLAGS::kSkeleton){
-    loadSkeletons(model);
+    loadSkeletons();
   }
   if(flags & LOADERFLAGS::kAnimation){
-    loadAnimations(model);
+    loadAnimations();
   }
-  ResoureManager::instance().models.insert({m_file.getCompletePath(),model});
+  ResoureManager::instance().m_models.insert({m_file.getCompletePath(),model});
   model->m_name = m_file.getName();
 }
 
-void Loader::loadMeshes(SPtr<Model> model)
+void 
+Loader::loadMeshes(SPtr<Model> model)
 {
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
@@ -140,9 +142,18 @@ void Loader::loadMeshes(SPtr<Model> model)
         actualVertex.location.x = aMesh->mVertices[numVertex].x*m_importScale;
         actualVertex.location.y = aMesh->mVertices[numVertex].y*m_importScale;
         actualVertex.location.z = aMesh->mVertices[numVertex].z*m_importScale;
+
         actualVertex.normal.x = aMesh->mNormals[numVertex].x;
         actualVertex.normal.y = aMesh->mNormals[numVertex].y;
         actualVertex.normal.z = aMesh->mNormals[numVertex].z;
+        
+        actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
+        actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
+        actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
+        
+        actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
+        actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
+        actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
 
         if(aMesh->HasTextureCoords(0)){
           actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
@@ -235,7 +246,8 @@ void Loader::loadMeshes(SPtr<Model> model)
   }
 }
 
-void Loader::loadTextures(SPtr<Model> model)
+void 
+Loader::loadTextures(SPtr<Model> model)
 {
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
   auto& manager = ResoureManager::instance();
@@ -249,10 +261,10 @@ void Loader::loadTextures(SPtr<Model> model)
 
     Path TextureFile;
 
-    auto material = manager.materials["default"];
+    auto material = manager.m_materials["default"];
 
     if(m_loadedFlags & LOADERFLAGS::kAnimation){
-      material = manager.materials["animation"];
+      material = manager.m_materials["animation"];
     }
 
     scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
@@ -262,14 +274,22 @@ void Loader::loadTextures(SPtr<Model> model)
     TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+".png");
     if(manager.loadTexture(TextureFile)){
       auto mat = copy(material);
-      mat->m_diffuse = manager.textures[TextureFile.getCompletePath()];
-      manager.materials.insert({TextureName,mat});
+      mat->m_diffuse = manager.m_textures[TextureFile.getCompletePath()];
+      manager.m_materials.insert({TextureName,mat});
       model->m_materials.push_back(mat);
 
-      TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"S.png");
+      Path texfile;
 
-      if(manager.loadTexture(TextureFile)){
-        mat->m_specular = manager.textures[TextureFile.getCompletePath()];
+      texfile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"S.png");
+
+      if(manager.loadTexture(texfile)){
+        mat->m_specular = manager.m_textures[texfile.getCompletePath()];
+      }
+
+      texfile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"N.png");
+
+      if(manager.loadTexture(texfile)){
+        mat->m_normalMap = manager.m_textures[texfile.getCompletePath()];
       }
     }
     else{
@@ -281,7 +301,7 @@ void Loader::loadTextures(SPtr<Model> model)
 }
 
 void 
-Loader::loadSkeletons(SPtr<Model> model)
+Loader::loadSkeletons()
 {
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
 
@@ -296,12 +316,13 @@ Loader::loadSkeletons(SPtr<Model> model)
 
   loadSkeleton(scene->mRootNode,skeleton->m_skeleton,skeleton);
 
-  manager.skeletons.insert({m_file.getCompletePath(),skeleton});
+  manager.m_skeletons.insert({m_file.getCompletePath(),skeleton});
 
   skeleton->m_name = m_file.getName();
 }
 
-void Loader::loadAnimations(SPtr<Model> model)
+void 
+Loader::loadAnimations()
 {
   const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
 
@@ -369,7 +390,7 @@ void Loader::loadAnimations(SPtr<Model> model)
       
     }
    
-    ResoureManager::instancePtr()->animations.insert({m_file.getCompletePath(),animation});
+    ResoureManager::instancePtr()->m_animations.insert({m_file.getCompletePath(),animation});
     animation->m_name = m_file.getName();
   }
 

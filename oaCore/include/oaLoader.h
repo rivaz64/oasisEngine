@@ -50,17 +50,31 @@ class OA_CORE_EXPORT Loader
 
  private:
   
+  /**
+   * @brief loads the meshes of the models and adds them to the model
+   * @param model 
+  */
   void
   loadMeshes(SPtr<Model> model);
 
+  /**
+   * @brief loads textures and adds it to the model 
+   * @param model 
+  */
   void
   loadTextures(SPtr<Model> model);
 
+  /**
+   * @brief loads the skeleton
+  */
   void
-  loadSkeletons(SPtr<Model> model);
+  loadSkeletons();
 
+  /**
+   * @brief loads the animations
+  */
   void
-  loadAnimations(SPtr<Model> model);
+  loadAnimations();
 
   const void* m_sceneI;
 

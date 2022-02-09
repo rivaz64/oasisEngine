@@ -55,8 +55,12 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   events() {}
 
-  virtual void 
-  createShaderProgram() {}
+  /**
+   * @brief creates a shader program
+   * @return 
+  */
+  virtual SPtr<ShaderProgram> 
+  createShaderProgram();
 
   /**
    * @brief creates a vertex shader
@@ -223,14 +227,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @brief sets the render target and the depth stencil to null
   */
   virtual void
-  unsetRenderTargetAndDepthStencil() 
-  {}
-
-  /**
-   * @brief changes the size of the swap chain
-  */
-  virtual void
-  resizeSwapChian() {}
+  unsetRenderTargetAndDepthStencil() {}
 
   /**
    * @brief initializes everything needed for the window
