@@ -5,9 +5,7 @@
 */
 
 #pragma once
-
-#include "oaPrerequisitesOGL.h"
-#include "oaShader.h"
+#include <oaShader.h>
 
 
 namespace oaEngineSDK{

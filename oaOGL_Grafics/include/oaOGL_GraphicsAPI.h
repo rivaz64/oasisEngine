@@ -6,14 +6,13 @@
 
 #pragma once
 
-#include "oaPrerequisitesOGL.h"
-#include "oaGraphicAPI.h"
+#include <oaGraphicAPI.h>
 #include<glad\glad.h>
 #include <GLFW/glfw3.h>
 
 namespace oaEngineSDK{
 
-class OA_OGL_EXPORT OGL_GraphicsAPI :
+class OGL_GraphicsAPI :
   public GraphicAPI
 {
 public:

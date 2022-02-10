@@ -1,20 +1,21 @@
 /**
-* @file oaDX11ShaderProgram.h
+* @file oaOGL_ShaderProgram.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 10/13/2021
+* @date 2/9/2022
 */
 
 #pragma once
 
 #include <oaShaderProgram.h>
-#include <d3d11.h>
 
 namespace oaEngineSDK{
 
-class DX11ShaderProgram :
+class OGL_ShaderProgram :
   public ShaderProgram
 {
  public:
+
+  OGL_ShaderProgram();
 
   void 
   attach(SPtr<Shader> shader) override;
@@ -22,13 +23,9 @@ class DX11ShaderProgram :
   void
   set() override;
 
- protected:
-  /**
-   * @brief the shaders used by this program
-  */
-  Vector<SPtr<Shader>> m_shaders;
+  uint32 id;
 };
 
-}
 
+}
 

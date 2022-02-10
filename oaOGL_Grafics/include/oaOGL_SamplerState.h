@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "oaSamplerState.h"
+#include <oaSamplerState.h>
 
 namespace oaEngineSDK{
 

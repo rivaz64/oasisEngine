@@ -18,20 +18,14 @@ class OA_CORE_EXPORT ShaderProgram
    * @brief attach a shader to this program
    * @param shader the shader to be attached
   */
-  void 
-  attach(SPtr<Shader> shader);
+  virtual void 
+  attach(SPtr<Shader> shader){}
 
   /**
    * @brief sets this program to be used
   */
   virtual void
   set(){}
-
- protected:
-  /**
-   * @brief the shaders used by this program
-  */
-  Vector<SPtr<Shader>> m_shaders;
 };
 
 }

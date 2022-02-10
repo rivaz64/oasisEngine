@@ -5,7 +5,7 @@
 */
 
 #pragma once
-#include "oaTexture.h"
+#include <oaTexture.h>
 
 namespace oaEngineSDK{
 

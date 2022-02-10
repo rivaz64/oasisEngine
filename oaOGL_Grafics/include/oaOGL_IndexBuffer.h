@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "oaIndexBuffer.h"
+#include <oaIndexBuffer.h>
 
 namespace oaEngineSDK{
 

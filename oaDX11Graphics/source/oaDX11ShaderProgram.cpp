@@ -3,6 +3,12 @@
 
 namespace oaEngineSDK{
 
+void 
+DX11ShaderProgram::attach(SPtr<Shader> shader)
+{
+  m_shaders.push_back(shader);
+}
+
 void
 DX11ShaderProgram::set()
 {
