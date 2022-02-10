@@ -177,6 +177,7 @@
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaColor.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
+    <ClInclude Include="Include\oaFrustrum.h" />
     <ClInclude Include="Include\oaGrid2D.h" />
     <ClInclude Include="Include\oaGrid3D.h" />
     <ClInclude Include="include\oaLine.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="source\oaBoxAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
     <ClCompile Include="Source\oaColor.cpp" />
+    <ClCompile Include="Source\oaFrustrum.cpp" />
     <ClCompile Include="Source\oaGrid2D.cpp" />
     <ClCompile Include="Source\oaGrid3D.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

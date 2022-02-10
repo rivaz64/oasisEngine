@@ -18,17 +18,18 @@ OGL_Buffer::~OGL_Buffer()
   //glDeleteBuffers(1, &VBO);
 }
 
-bool OGL_Buffer::init(uint32 size)
+bool 
+OGL_Buffer::init(uint32 size)
 {
   glGenBuffers(1, &m_id);
   m_size = size;
   return true;
 }
-
+/*
 bool 
 OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 {
-  /*if(flags == BUFFER_FLAGS::VERTEX){
+  if(flags == BUFFER_FLAGS::VERTEX){
     glGenVertexArrays(1, &VA);
     glGenBuffers(1, &VBO);
 
@@ -52,12 +53,12 @@ OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW); 
   }
   
-  return true;*/
+  return true;
 
-}
+}*/
 
 void 
-OGL_Buffer::update(void* data)
+OGL_Buffer::write(void* data)
 {
   glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 	glBufferData(GL_UNIFORM_BUFFER, m_size, data,GL_STATIC_DRAW);

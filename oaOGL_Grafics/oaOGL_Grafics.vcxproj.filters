@@ -57,6 +57,9 @@
     <ClCompile Include="source\oaOGL_Buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\oaOGL_ShaderProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\oaOGL_Buffer.h">
@@ -92,7 +95,7 @@
     <ClInclude Include="include\oaOGL_VertexShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaPrerequisitesOGL.h">
+    <ClInclude Include="include\oaOGL_ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

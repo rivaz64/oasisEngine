@@ -4,7 +4,9 @@
 #include "oaOGL_Buffer.h"
 #include "oaOGL_Texture.h"
 #include "oaResoureManager.h"
-#include <iostream>
+#include "oaColor.h"
+#include "oaShaderProgram.h"
+#include "oaOGL_ShaderProgram.h"
 
 
 namespace oaEngineSDK{
@@ -15,17 +17,17 @@ void OGL_GraphicsAPI::onShutDown()
 bool
 OGL_GraphicsAPI::initialize()
 {
-  std::cout<<"openGL graphic API"<<std::endl;
+  print("openGL graphic API");
 
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  window = glfwCreateWindow(windowWidth, windowHeight, windowName.c_str(), NULL, NULL);
+  window = glfwCreateWindow(m_windowWidth, m_windowHeight, m_windowName.c_str(), NULL, NULL);
   if (window == NULL)
   {
-    std::cout << "Failed to create GLFW window" << std::endl;
+    print("Failed to create GLFW window");
     glfwTerminate();
     return false;
   }
@@ -39,15 +41,14 @@ OGL_GraphicsAPI::initialize()
 
   glViewport(0, 0, 800, 600);
 
+  /*
   vertexShader = newSPtr<OGL_VertexShader>();
 
   pixelShader = newSPtr<OGL_PixelShader>();
 
   shaderProgram = glCreateProgram();
 
-  glLinkProgram(shaderProgram);
-
-  //glEnable(GL_DEPTH_TEST);  
+  glLinkProgram(shaderProgram);*/
 
   return true;
 }
@@ -65,15 +66,16 @@ OGL_GraphicsAPI::events()
 }
 
 void 
-OGL_GraphicsAPI::setBackgroundColor(const Vector4f& color)
+OGL_GraphicsAPI::setBackgroundColor(const Color& color)
 {
-
-  glClearColor(color.x, color.y, color.z, color.w);
-
+  glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void OGL_GraphicsAPI::createShaderProgram()
+SPtr<ShaderProgram> 
+OGL_GraphicsAPI::createShaderProgram()
 {
+  return newSPtr<OGL_ShaderProgram>();
+/*
   int success;
   char infoLog[512];
   glAttachShader(shaderProgram, cast<OGL_Shader>(vertexShader)->id);
@@ -85,15 +87,15 @@ void OGL_GraphicsAPI::createShaderProgram()
     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
   }
 
-  glUseProgram(shaderProgram); 
+  glUseProgram(shaderProgram); */
 }
-
+/*
 void 
 OGL_GraphicsAPI::clear()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
+*/
 void
 OGL_GraphicsAPI::draw(uint32 indexes)
 {
@@ -119,31 +121,31 @@ OGL_GraphicsAPI::createTexture()
 {
   return newSPtr<OGL_Texture>();
 }
-
+/*
 void 
 OGL_GraphicsAPI::setVertexBuffer(const SPtr<Buffer>& buffer)
 {
-  glBindVertexArray(cast<OGL_Buffer>(buffer)->VAO);
-}
+  glBindVertexArray(cast<OGL_Buffer>(buffer)->m_id);
+}*/
 
 void 
 OGL_GraphicsAPI::setIndexBuffer(const SPtr<Buffer>& buffer)
 {
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cast<OGL_Buffer>(buffer)->EBO);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cast<OGL_Buffer>(buffer)->m_id);
 }
-
+/*
 void 
 OGL_GraphicsAPI::setTexture(const SPtr<Texture>& texture)
 {
   glBindTexture(GL_TEXTURE_2D, cast<OGL_Texture>(texture)->id);
-}
-
+}*/
+/*
 void 
 OGL_GraphicsAPI::setBuffer(const SPtr<Buffer>& buffer, uint32 location)
 {
   //unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
   //glUniformMatrix4fv(transformLoc, 1, GL_FALSE, reinterpret_cast<float*>(data));
-  glUniformMatrix4fv(location, 1, GL_FALSE, reinterpret_cast<float*>(cast<OGL_Buffer>(buffer)->pointer));//*/
+  glUniformMatrix4fv(location, 1, GL_FALSE, reinterpret_cast<float*>(cast<OGL_Buffer>(buffer)->m_id));//
 }
 
 void* 
@@ -156,7 +158,5 @@ OGL_GraphicsAPI::~OGL_GraphicsAPI()
 {
   glDeleteProgram(shaderProgram);
 }
-
-
-
+*/
 }

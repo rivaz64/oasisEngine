@@ -18,25 +18,22 @@ class OGL_GraphicsAPI :
 public:
 
   void
-    onShutDown() override;
+  onShutDown() override;
 
   bool
-    initialize() override;
+  initialize() override;
 
   bool
-    isRunning() override;
+  isRunning() override;
 
   void
-    events() override;
+  events() override;
 
   void
-    setBackgroundColor(const Vector4f& color) override;
+  setBackgroundColor(const Color& color) override;
 
-  void
+  SPtr<ShaderProgram>
   createShaderProgram() override;
-
-  void
-  clear() override;
 
   void
   draw(uint32 indexes) override;
@@ -51,16 +48,7 @@ public:
   createTexture() override;
 
   void
-  setVertexBuffer(const SPtr<Buffer>& buffer) override;
-
-  void
   setIndexBuffer(const SPtr<Buffer>& buffer) override;
-
-  void
-  setTexture(const SPtr<Texture>& texture) override;
-
-  void
-  setBuffer(const SPtr<Buffer>& buffer,uint32 location) override;
 
   void*
   getWindow() override;
@@ -78,8 +66,6 @@ protected:
  protected:
 
   GLFWwindow* window = nullptr;
-
-  
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

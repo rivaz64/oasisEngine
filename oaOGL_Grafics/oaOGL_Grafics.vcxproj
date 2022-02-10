@@ -153,6 +153,7 @@
     <ClCompile Include="source\oaOGL_RenderTarget.cpp" />
     <ClCompile Include="source\oaOGL_SamplerState.cpp" />
     <ClCompile Include="source\oaOGL_Shader.cpp" />
+    <ClCompile Include="source\oaOGL_ShaderProgram.cpp" />
     <ClCompile Include="source\oaOGL_Texture.cpp" />
     <ClCompile Include="source\oaOGL_VertexBuffer.cpp" />
     <ClCompile Include="source\oaOGL_VertexShader.cpp" />
@@ -168,10 +169,10 @@
     <ClInclude Include="include\oaOGL_RenderTarget.h" />
     <ClInclude Include="include\oaOGL_SamplerState.h" />
     <ClInclude Include="include\oaOGL_Shader.h" />
+    <ClInclude Include="include\oaOGL_ShaderProgram.h" />
     <ClInclude Include="include\oaOGL_Texture.h" />
     <ClInclude Include="include\oaOGL_VertexBuffer.h" />
     <ClInclude Include="include\oaOGL_VertexShader.h" />
-    <ClInclude Include="include\oaPrerequisitesOGL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -90,7 +90,7 @@ Camera::updateView()
   m_viewMatrix.m24 = -Vector3f::dot(m_location,m_axisY);
   m_viewMatrix.m34 = -Vector3f::dot(m_location,m_axisZ);
 
-  createFrustrum();
+  //createFrustrum();
 
   //view->write(&viewMatrix.m11);
 
@@ -131,7 +131,7 @@ Camera::rotateWithMouse(const Vector2f& delta)
 
   dirtyFlags = true;
 }
-
+/*
 bool 
 Camera::isInFrustrum(const Vector3f& _location)
 {
@@ -144,36 +144,7 @@ Camera::isInFrustrum(const Vector3f& _location)
     Math::distance(rightP,_location)>0 && 
     Math::distance(leftP,_location)>0;
 
-}
-
-void 
-Camera::createFrustrum()
-{
-  nearP = Plane(m_location+m_axisZ*m_nearPlaneDistance,m_axisZ);
-  farP = Plane(m_location+m_axisZ*m_farPlaneDistance,-m_axisZ);
-  float nh = Math::tan(m_viewAngle/2.f)*m_nearPlaneDistance;
-  float nw = nh*m_ratio;
-  float fh = Math::tan(m_viewAngle/2.f)*m_farPlaneDistance;
-  float fw = fh*m_ratio;
-
-  Vector3f nnw = m_location+m_axis*Vector3f(-nw,nh,m_nearPlaneDistance);
-  Vector3f nne = m_location+m_axis*Vector3f(nw,nh,m_nearPlaneDistance);
-  Vector3f fne = m_location+m_axis*Vector3f(fw,fh,m_farPlaneDistance);
-
-  topP = Plane(nnw,nne,fne);
-
-  Vector3f nsw = m_location+m_axis*Vector3f(-nw,-nh,m_nearPlaneDistance);
-  Vector3f nse = m_location+m_axis*Vector3f(nw,-nh,m_nearPlaneDistance);
-  Vector3f fse = m_location+m_axis*Vector3f(fw,-fh,m_farPlaneDistance);
-  Vector3f fsw = m_location+m_axis*Vector3f(-fw,-fh,m_farPlaneDistance);
-
-  bottomP = Plane(nsw,fse,nse);
-
-  rightP = Plane(nne,fse,fne);
-
-  leftP = Plane(nnw,fsw,nsw);
-
-}
+}*/
 
 void
 Camera::seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors)

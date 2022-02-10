@@ -73,21 +73,6 @@ class OA_CORE_EXPORT Camera
   */
   void
   rotateWithMouse(const Vector2f& delta);
-
-  /**
-   * @brief if the Actor is observerd by the camera
-   * @param _location 
-   * @return 
-  */
-  bool
-  isInFrustrum(const Vector3f& _location);
-
-  /**
-   * @brief creates the frustrum
-  */
-  void
-  createFrustrum();
-
   
   /**
    * @brief sees the Actors in a scene
@@ -189,36 +174,6 @@ class OA_CORE_EXPORT Camera
    * @brief the projection matrix of this camera
   */
   Matrix4f m_projectionMatrix;
-
-  /**
-   * @brief the near plane of the frustrum
-  */
-  Plane nearP;
-
-  /**
-   * @brief the far plane of the frustrum
-  */
-  Plane farP;
-
-  /**
-   * @brief the top plane of the frustrum
-  */
-  Plane topP;
-
-  /**
-   * @brief the bottom plane of the frustrum
-  */
-  Plane bottomP;
-
-  /**
-   * @brief the near left of the frustrum
-  */
-  Plane leftP;
-
-  /**
-   * @brief the right plane of the frustrum
-  */
-  Plane rightP;
 
   /**
    * @brief dirty flags for the view matrix
