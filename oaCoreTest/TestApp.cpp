@@ -64,7 +64,14 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   case WM_SIZE:
     g_app->resizeWindow();
     break;
+  
+
+  case WM_KEYDOWN:
+    g_app->processInputs(wParam);
+    break;
+    
   default:
+    
     return DefWindowProc( hWnd, message, wParam, lParam );
   }
 
@@ -106,13 +113,6 @@ TestApp::preInit()
 void 
 TestApp::postInit()
 {
-  
-  InputManager::instancePtr()->addInput('W');
-  InputManager::instancePtr()->addInput('S');
-  InputManager::instancePtr()->addInput('A');
-  InputManager::instancePtr()->addInput('D');
-  InputManager::instancePtr()->addInput('E');
-  InputManager::instancePtr()->addInput('Q');
   InputManager::instancePtr()->addInput(VK_RBUTTON);
 
   SamplerDesc sampDesc;
@@ -149,12 +149,6 @@ TestApp::postInit()
 
   m_selectedActor = m_actualScene;
 
-  m_camera = newSPtr<Camera>();
-
-  m_camera->init();
-
-  m_camera->update();
-
   m_globalTransformBuffer = graphicAPI.createBuffer();
   m_globalTransformBuffer->init(sizeof(Matrix4f));
 
@@ -168,42 +162,11 @@ TestApp::postInit()
 
 void 
 TestApp::postUpdate(float delta)
-{
-
-  Vector3f camdelta = {0.0f,0.0f,0.0f};
-
-  if (InputManager::instancePtr()->getInput('A'))
+{ 
+  auto& inputManager = InputManager::instance();
+  if (inputManager.getInput(VK_RBUTTON))
   {
-    camdelta.x = -delta;
-  }
-  if (InputManager::instancePtr()->getInput('D'))
-  {
-    camdelta.x = delta;
-  }
-  if (InputManager::instancePtr()->getInput('W'))
-  {
-    camdelta.z = delta;
-  }
-  if (InputManager::instancePtr()->getInput('S'))
-  {
-    camdelta.z = -delta;
-  }
-  if (InputManager::instancePtr()->getInput('Q'))
-  {
-    camdelta.y = delta;
-  }
-  if (InputManager::instancePtr()->getInput('E'))
-  {
-    camdelta.y = -delta;
-  }
-  if (InputManager::instancePtr()->getInput(VK_RBUTTON) && 
-      InputManager::instancePtr()->getMouseDelta() != Vector2I::ZERO)
-  {
-    m_camera->rotateWithMouse(InputManager::instancePtr()->getMouseDelta());
-  }
-
-  if(camdelta.magnitud()>0){
-    m_camera->moveCamera(camdelta);
+    m_camera->rotateWithMouse(inputManager.getMouseDelta());
   }
 
   m_camera->update();

@@ -16,6 +16,7 @@
 #include "oaTexture.h"
 #include "oaLogger.h"
 #include "oaPath.h"
+#include "oaCamera.h"
 #include <exception>
 #include <Windows.h>
 
@@ -58,6 +59,10 @@ BaseApp::run()
     Time::startUp();
     
     setWindow();
+
+    m_camera = newSPtr<Camera>();
+    m_camera->init();
+    m_camera->update();
 
     postInit();
 
@@ -191,6 +196,41 @@ BaseApp::resizeWindow()
   
   setWindow();
   
+}
+
+void 
+BaseApp::processInputs(char input)
+{
+  switch (input)
+  {
+  case 'A':
+    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
+    break;
+
+  case 'D':
+    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+    break;
+
+  case 'W':
+    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+    break;
+
+  case 'S':
+    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+    break;
+
+  case 'Q':
+    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+    break;
+
+  case 'E':
+    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+    break;
+
+  default:
+    print(toString(input));
+    break;
+  }
 }
 
 }

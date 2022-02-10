@@ -76,11 +76,11 @@ public:
 
   SPtr<Buffer> m_viewLocationBuffer;
 
-   SPtr<Camera> m_camera;
+   
 
-   SPtr<SamplerState> m_samplerState; 
+  SPtr<SamplerState> m_samplerState; 
 
-   SPtr<Actor> m_selectedActor;
+  SPtr<Actor> m_selectedActor;
 
   SPtr<Texture> m_selectedTexture;
 

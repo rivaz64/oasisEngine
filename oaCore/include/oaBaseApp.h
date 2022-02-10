@@ -104,6 +104,15 @@ class OA_CORE_EXPORT BaseApp :
   resizeWindow();
 
   /**
+   * @brief triggers the effect of certain input
+   * @param input 
+  */
+  void
+  processInputs(char input);
+
+
+
+  /**
    * @brief if the app is running
   */
   bool m_isRunning = true; 
@@ -139,6 +148,11 @@ class OA_CORE_EXPORT BaseApp :
    * @brief the depth stencil to be used at the end
   */
   SPtr<DepthStencil> m_finalDepthStencil;
+
+  /**
+   * @brief the camera for the editor
+  */
+  SPtr<Camera> m_camera;
 
   friend class Module<BaseApp>;
 };

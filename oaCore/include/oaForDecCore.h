@@ -27,4 +27,5 @@ class SkeletalComponent;
 class AnimationComponent;
 class Scene;
 class ShaderProgram;
+class Camera;
 }
