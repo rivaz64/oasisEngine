@@ -20,14 +20,6 @@ enum FLAGS{
   ALL=3
 };*/
 
-Actor::Actor()
-{
-  m_location = {0.f,0.f,0.f};
-  m_scale = {1.f,1.f,1.f};
-  m_rotation =  {0.f,0.f,0.f};
-  
-}
-
 void 
 Actor::attach(SPtr<Actor> Actor)
 {
@@ -52,66 +44,10 @@ Actor::update()
   }
 }
 
-void 
-Actor::setLocation(const Vector3f& _location)
-{
-  m_location = _location;
-  //dirtyFlag = FLAGS::ALL;
-}
-
-void 
-Actor::setRotation(const Vector3f& _rotation)
-{
-  m_rotation = _rotation;
-  //dirtyFlag |= FLAGS::ALL;
-}
-
-void 
-Actor::setScale(const Vector3f& _scale)
-{
-  m_scale = _scale;
-  //dirtyFlag |= FLAGS::ALL;
-}
-
-const Vector3f&
-Actor::getLocation()
-{
-  return m_location;
-}
-
-const Vector3f& 
-Actor::getRotation()
-{
-  return m_rotation;
-}
-
-const Vector3f& 
-Actor::getScale()
-{
-  return m_scale;
-}
-
 const Vector<SPtr<Actor>>& 
 Actor::getChilds()
 {
   return m_subActors;
-}
-
-Matrix4f 
-Actor::getLocalTransform()
-{
-  if(true/*dirtyFlag & FLAGS::LOCAL*/){
-
-    //dirtyFlag &= FLAGS::GLOBAL;
-
-    m_localTransform = 
-      Matrix4f::translateMatrix(m_location)*
-      Matrix4f::rotationMatrix(m_rotation)*
-      Matrix4f::scaleMatrix(m_scale);
-  }
-
-  return m_localTransform;
-  
 }
 
 Matrix4f
@@ -119,10 +55,8 @@ Actor::getGlobalTransform()
 {
   if(true /*dirtyFlag & FLAGS::GLOBAL*/){
     
-    //dirtyFlag &= FLAGS::LOCAL;
-
     if(m_parent.get()){
-      m_globalTransform = m_parent->getGlobalTransform()*getLocalTransform();
+      m_globalTransform = m_parent->getGlobalTransform()*m_localTransform.getMatrix();
     }
     else{
       m_globalTransform = Matrix4f::IDENTITY;

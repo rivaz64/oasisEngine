@@ -28,10 +28,6 @@ class OA_CORE_EXPORT Loader
 {
  public:
 
-  Loader();
-
-  ~Loader();
-
   /**
    * @brief checks what a file has
    * @param file th file to check
@@ -49,43 +45,10 @@ class OA_CORE_EXPORT Loader
   load(LOADERFLAGS::E flags);
 
  private:
-  
-  /**
-   * @brief loads the meshes of the models and adds them to the model
-   * @param model 
-  */
-  void
-  loadMeshes(SPtr<Model> model);
-
-  /**
-   * @brief loads textures and adds it to the model 
-   * @param model 
-  */
-  void
-  loadTextures(SPtr<Model> model);
-
-  /**
-   * @brief loads the skeleton
-  */
-  void
-  loadSkeletons();
-
-  /**
-   * @brief loads the animations
-  */
-  void
-  loadAnimations();
-
-  const void* m_sceneI;
 
   uint8 m_loadedFlags = 0;
 
   Path m_file;
-
-  void* m_importer;
-
-  public:
-  float m_importScale;
 };
 
 }

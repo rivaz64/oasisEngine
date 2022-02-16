@@ -20,7 +20,7 @@ class OGL_Buffer :
   init(uint32 size) override;
 
   void
-  write(void* data) override;
+  write(const void* data) override;
 
 
  public:

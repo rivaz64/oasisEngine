@@ -58,7 +58,7 @@ OGL_Buffer::init(void* data, uint32 size,BUFFER_FLAGS flags)
 }*/
 
 void 
-OGL_Buffer::write(void* data)
+OGL_Buffer::write(const void* data)
 {
   glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 	glBufferData(GL_UNIFORM_BUFFER, m_size, data,GL_STATIC_DRAW);

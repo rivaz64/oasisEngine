@@ -13,6 +13,7 @@
 #include "oaSkeleton.h"
 #include "oaMesh.h"
 #include "oaModel.h"
+#include "oaSkeletalMesh.h"
 
 namespace oaEngineSDK{
 
@@ -70,7 +71,8 @@ AnimationComponent::readNodeHeirarchy(
 
   globalTransform = parentTransform*nodeTransform;
 
-  for(auto mesh : m_model->m_meshes){
+  for(auto oaMesh : m_model->m_meshes){
+    auto mesh = cast<SkeletalMesh>(oaMesh);
     if(mesh->m_boneMaping.find(skeletalNode->name) != mesh->m_boneMaping.end()){
       uint32 boneIndex = mesh->m_boneMaping[skeletalNode->name];
 

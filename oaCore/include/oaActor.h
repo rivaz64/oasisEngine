@@ -7,8 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaVector3f.h"
-#include "oaMatrix4f.h"
+#include <oaTransform.h>
 #include "oaComponent.h"
 
 namespace oaEngineSDK{
@@ -21,7 +20,7 @@ class OA_CORE_EXPORT Actor :
 {
  public:
 
-  Actor();
+  Actor() : m_localTransform(){}
 
   /**
    * @brief makes the Actor a sub Actor of this one
@@ -43,47 +42,10 @@ class OA_CORE_EXPORT Actor :
   void 
   update();
 
-  /**
-   * @brief setter for the location;
-   * @param _location 
-  */
-  void 
-  setLocation(const Vector3f& _location);
-
-  /**
-   * @brief setter for the rotation
-   * @param _rotation 
-  */
-  void
-  setRotation(const Vector3f& _rotation);
-
-  /**
-   * @brief setter for the scale
-   * @param _scale 
-  */
-  void 
-  setScale(const Vector3f& _scale);
-
-  /**
-   * @brief getter for the location
-   * @return 
-  */
-  const Vector3f&
-  getLocation();
-
-  /**
-   * @brief getter for the rotation
-   * @return 
-  */
-  const Vector3f&
-  getRotation();
-
-  /**
-   * @brief getter for the scale
-   * @return 
-  */
-  const Vector3f&
-  getScale();
+  FORCEINLINE Transform&
+  GetActorTransform(){
+    return m_localTransform;
+  }
 
   /**
    * @brief getter for all the subActors of this Actor
@@ -91,13 +53,6 @@ class OA_CORE_EXPORT Actor :
   */
   const Vector<SPtr<Actor>>&
   getChilds();
-
-  /**
-   * @brief gets the transform Matrix of this Actor
-   * @return 
-  */
-  Matrix4f
-  getLocalTransform();
 
   /**
    * @brief the transform of this Actor in the world
@@ -135,24 +90,9 @@ class OA_CORE_EXPORT Actor :
   SPtr<Actor> m_parent;
 
   /**
-   * @brief where the Actor is in a 3D space
+   * @brief the local transform of this actor
   */
-  Vector3f m_location;
-
-  /**
-   * @brief the scale compared with the original imported model
-  */
-  Vector3f m_scale;
-
-  /**
-   * @brief how the Actor is rotated
-  */
-  Vector3f m_rotation;
-
-  /**
-   * @brief the transform of this Actor with origin at his parent
-  */
-  Matrix4f m_localTransform;
+  Transform m_localTransform;
 
   /**
    * @brief the transform of this Actor in the world

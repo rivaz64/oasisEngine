@@ -174,8 +174,10 @@
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaBaseApp.h" />
+    <ClInclude Include="include\oaBoundComponent.h" />
     <ClInclude Include="include\oaBuffer.h" />
     <ClInclude Include="include\oaCamera.h" />
+    <ClInclude Include="include\oaCameraComponent.h" />
     <ClInclude Include="include\oaComponent.h" />
     <ClInclude Include="include\oaDepthStencil.h" />
     <ClInclude Include="include\oaFlags.h" />
@@ -194,19 +196,24 @@
     <ClInclude Include="include\oaRenderTarget.h" />
     <ClInclude Include="include\oaResoureManager.h" />
     <ClInclude Include="include\oaSamplerState.h" />
+    <ClInclude Include="include\oaScene.h" />
     <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="include\oaShaderProgram.h" />
     <ClInclude Include="include\oaSkeletalComponent.h" />
+    <ClInclude Include="include\oaSkeletalMesh.h" />
     <ClInclude Include="include\oaSkeleton.h" />
+    <ClInclude Include="include\oaStaticMesh.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
+    <ClInclude Include="oaImage.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="oaImage.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -219,12 +226,14 @@
     <ClCompile Include="source\oaBaseApp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaBoundComponent.cpp" />
     <ClCompile Include="source\oaBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="source\oaCamera.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaCameraComponent.cpp" />
     <ClCompile Include="source\oaComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -264,13 +273,16 @@
     <ClCompile Include="source\oaSamplerState.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaScene.cpp" />
     <ClCompile Include="source\oaShaderProgram.cpp" />
     <ClCompile Include="source\oaSkeletalComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaSkeletalMesh.cpp" />
     <ClCompile Include="source\oaSkeleton.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaStaticMesh.cpp" />
     <ClCompile Include="source\oaTexture.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

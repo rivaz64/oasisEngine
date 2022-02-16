@@ -68,17 +68,32 @@ struct AnimationVertex{
   /**
    * @brief the ids of the bones that are afecting this vertex
   */
-  Vector4U ids = Vector4U::ZERO;
+  Vector4U ids;
 
   /**
    * @brief how much each bone afects this vertex
   */
-  Vector4f weights = Vector4f::ZERO;
+  Vector4f weights;
 
   /**
    * @brief the location in a tridimencional space of this vetrex
   */
-  Vector4f location  = Vector4f::ZERO;
+  Vector4f location;
+
+  /**
+   * @brief the normal at this vertex
+  */
+  Vector4f normal;
+
+  /**
+   * @brief the tangent at this vertex
+  */
+  Vector4f tangent;
+
+  /**
+   * @brief the bitangent at this vertex
+  */
+  Vector4f bitangent;
 
   /**
    * @brief the part of the texture that is going to be drawn at a certain point
@@ -103,40 +118,15 @@ class OA_CORE_EXPORT Mesh
   ~Mesh() = default;
 
   /**
-  * @brief sends all the data from the cpu tode gpu
+   * @brief creates and fils the buffers
   */
-  /*template<class T>
-  void
-  create(Vector<T>& vertices,Vector<uint32>& index){
-
-    indexNumber = static_cast<uint64>(index.size());
-
-    vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-
-    indexB = GraphicAPI::instancePtr()->createIndexBuffer();
-
-    vertexB->init(vertices.data(),sizeof(T),static_cast<uint64>(vertices.size()));
-
-    indexB->init(index);
-
-  }*/
-
-  void
-  create(Vector<Vertex>& vertices,Vector<uint32>& index);
-
-  void
-  create(Vector<AnimationVertex>& vertices,Vector<uint32>& index);
-
-  /**
-  * @brief sends all the data from the cpu tode gpu, with bones
-  */
-  void
-  create(Vector<AnimationVertex>& vertices,Vector<uint32>& index, Vector<Matrix4f>& _bones);
+  virtual void
+  create();
 
   /**
    * @brief sets the buffers to the GPU
   */
-  void
+  virtual void
   set();
 
   void
@@ -150,14 +140,36 @@ class OA_CORE_EXPORT Mesh
   static void
   createNormals(Vector<Vertex>& vertices);
 
-  
+  /**
+   * @brief sets how much indexes this mesh has
+   * @param n the new number of indexes
+  */
+  FORCEINLINE void
+  setIndexNum(SIZE_T n){
+    m_index.resize(n);
+  }
+
+  FORCEINLINE SIZE_T
+  getIndexNum(){
+    return m_index.size();
+  }
+
+  /**
+   * @brief sets an index
+   * @param place where the index is in the list
+   * @param index the value of the index
+  */
+  FORCEINLINE void
+  setIndexAt(SIZE_T place,SIZE_T index){
+    m_index[place] = index;
+  }
 
  private:
 
   /**
    * @brief the number of indices this mesh has
   */
-  uint32 m_indexNumber = 0;
+  Vector<SIZE_T> m_index;
 
   /**
    * @brief the buffer for the indices
@@ -168,34 +180,6 @@ class OA_CORE_EXPORT Mesh
   * @brief the buffer for the vertex
   */
   SPtr<VertexBuffer> m_vertexB;
-
-  //SPtr<Buffer
-
-  /**
-   * @brief the buffer for the bones
-  */
-  SPtr<Buffer> m_bonesB;
-
-  /**
-   * @brief if this mesh has bones or not
-  */
-  bool m_hasBones = false;
-
-  /**
-   * @brief the bones of this mesh
-  */
-  Vector<Matrix4f> m_bones;
-
-  Vector<Matrix4f> m_ofset;
-
-  /**
-   * @brief the names of the bones used by this mesh
-  */
-  Map<String,uint32> m_boneMaping;
-
-  friend class TestApp;
-  friend class Loader;
-  friend class AnimationComponent;
 };
 
 }

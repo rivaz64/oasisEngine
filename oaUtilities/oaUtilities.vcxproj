@@ -199,6 +199,7 @@
     <ClInclude Include="Include\oaSimplexNoise.h" />
     <ClInclude Include="include\oaSphere.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
+    <ClInclude Include="Include\oaTransform.h" />
     <ClInclude Include="Include\oaVector2f.h" />
     <ClInclude Include="Include\oaVector2U.h" />
     <ClInclude Include="Include\oaVector3f.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="Source\oaRandom.cpp" />
     <ClCompile Include="Source\oaSimplexNoise.cpp" />
     <ClCompile Include="source\oaSphere.cpp" />
+    <ClCompile Include="Source\oaTransform.cpp" />
     <ClCompile Include="Source\oaVector2f.cpp" />
     <ClCompile Include="Source\oaVector2U.cpp" />
     <ClCompile Include="Source\oaVector3f.cpp" />

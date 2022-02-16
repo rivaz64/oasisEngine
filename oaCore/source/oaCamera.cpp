@@ -1,5 +1,5 @@
 /**
-* @file oaCamera.h
+* @file oaCamera.cpp
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
 * @date 10/9/2021
 */

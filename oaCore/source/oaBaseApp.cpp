@@ -7,7 +7,7 @@
 #include "oaBaseApp.h"
 #include "oaGraphicAPI.h"
 #include "oaResoureManager.h"
-#include "oaVector3f.h"
+#include <oaVector3f.h>
 #include "oaInputManager.h"
 #include "oaTime.h"
 #include "oaActor.h"
@@ -17,6 +17,7 @@
 #include "oaLogger.h"
 #include "oaPath.h"
 #include "oaCamera.h"
+#include "oaScene.h"
 #include <exception>
 #include <Windows.h>
 
@@ -108,7 +109,7 @@ BaseApp::mainLoop()
 
     GraphicAPI::instancePtr()->events();
 
-    update(m_actualScene);
+    update(m_actualScene->m_root);
 
     postUpdate(Time::instancePtr()->m_deltaTime);
 

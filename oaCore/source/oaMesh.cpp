@@ -13,52 +13,16 @@
 namespace oaEngineSDK{
 
 void
-Mesh::create(Vector<Vertex>& vertices,Vector<uint32>& index){
-
-  m_indexNumber = static_cast<uint32>(index.size());
+Mesh::create(){
 
   m_vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
 
   m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
 
-  m_vertexB->init(vertices.data(),sizeof(Vertex),static_cast<uint32>(vertices.size()));
-
-  m_indexB->init(index);
+  m_indexB->init(m_index);
 
 }
 
-void
-Mesh::create(Vector<AnimationVertex>& vertices,Vector<uint32>& index){
-
-  m_indexNumber = static_cast<uint32>(index.size());
-
-  m_vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-
-  m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
-
-  m_vertexB->init(vertices.data(),sizeof(AnimationVertex),static_cast<uint32>(vertices.size()));
-
-  m_indexB->init(index);
-
-}
-
-void Mesh::create(Vector<AnimationVertex>& vertices, Vector<uint32>& index, Vector<Matrix4f>& _bones)
-{
-  create(vertices,index);
-
-  m_hasBones = true;
-
-  m_bones = _bones;
-
-  m_bonesB = GraphicAPI::instancePtr()->createBuffer();
-
-  m_bonesB->init(sizeof(Matrix4f)*1024);
-
-  m_ofset.resize(1024);
-  for(int i = 0;i<1024;++i){
-    m_ofset[i] = Matrix4f::IDENTITY;
-  }
-}
 
 void
 Mesh::set()
@@ -81,7 +45,7 @@ void Mesh::initFromSubMesh(const SubMesh& sm)
   
   Mesh::createNormals(vertices);
   
-  create(vertices,indices);
+  //create(vertices,indices);
 }
 
 void Mesh::createNormals(Vector<Vertex>& vertices)

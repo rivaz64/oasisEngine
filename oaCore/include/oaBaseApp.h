@@ -110,8 +110,6 @@ class OA_CORE_EXPORT BaseApp :
   void
   processInputs(char input);
 
-
-
   /**
    * @brief if the app is running
   */
@@ -137,7 +135,7 @@ class OA_CORE_EXPORT BaseApp :
   /**
    * @brief the actual scene selected
   */
-  SPtr<Actor> m_actualScene;
+  SPtr<Scene> m_actualScene;
 
   /**
    * @brief the render target that is going to be shown in the screen

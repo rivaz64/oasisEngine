@@ -76,8 +76,6 @@ public:
 
   SPtr<Buffer> m_viewLocationBuffer;
 
-   
-
   SPtr<SamplerState> m_samplerState; 
 
   SPtr<Actor> m_selectedActor;

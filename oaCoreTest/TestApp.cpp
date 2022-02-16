@@ -27,10 +27,13 @@
 #include <oaTime.h>
 #include <oaLogger.h>
 #include <oaResoureManager.h>
+#include <oaScene.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
+
+
 
 
 
@@ -145,9 +148,11 @@ TestApp::postInit()
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
-  m_actualScene = newSPtr<Actor>();
+  m_actualScene = newSPtr<Scene>();
 
-  m_selectedActor = m_actualScene;
+  m_actualScene->m_root = newSPtr<Actor>();
+
+  m_selectedActor = m_actualScene->m_root;
 
   m_globalTransformBuffer = graphicAPI.createBuffer();
   m_globalTransformBuffer->init(sizeof(Matrix4f));
@@ -195,13 +200,13 @@ TestApp::draw()
   //m_camera->setCamera();
 
   Vector<SPtr<Actor>> seenActors;
-  m_camera->seeActors(m_actualScene,seenActors);
+  m_camera->seeActors(m_actualScene->m_root,seenActors);
 
   lights->write(&dir.x);
-  graphicsAPI.setPSBuffer(lights,0);
+  graphicsAPI.setVSBuffer(lights,3);
 
   m_viewLocationBuffer->write(&m_camera->getLocation().x);
-  graphicsAPI.setPSBuffer(m_viewLocationBuffer,1);
+  graphicsAPI.setVSBuffer(m_viewLocationBuffer,4);
 
   Matrix4f finalTransform;
 
@@ -230,15 +235,8 @@ TestApp::draw()
         auto& actualMesh = model->m_meshes[i];
 
         actualMesh->set();
-
-        if(actualMesh->m_hasBones){
-
-          actualMesh->m_bonesB->write(actualMesh->m_ofset.data());
-
-          graphicsAPI.setVSBuffer(actualMesh->m_bonesB,3);
-        }
        
-        graphicsAPI.draw(actualMesh->m_indexNumber);
+        graphicsAPI.draw(actualMesh->getIndexNum());
       }
     }
   }
@@ -338,17 +336,18 @@ void oaEngineSDK::TestApp::drawImGui()
     if (ImGui::CollapsingHeader("transform")){
       
       if(m_selectedActor.get()){
-        Vector3f vec = m_selectedActor->getLocation();
+        auto& transform = m_selectedActor->GetActorTransform();
+        Vector3f vec = transform.getLocation();
         if(ImGui::DragFloat3("location", &vec.x, .01f)){
-          m_selectedActor->setLocation(vec);
+          transform.setLocation(vec);
         }
-        vec = m_selectedActor->getScale();
+        vec = transform.getScale();
         if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-          m_selectedActor->setScale(vec);
+          transform.setScale(vec);
         }
-        vec = m_selectedActor->getRotation();
+        vec = transform.getRotation();
         if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          m_selectedActor->setRotation(vec);
+          transform.setRotation(vec);
         };
       }
     }
@@ -470,20 +469,16 @@ void oaEngineSDK::TestApp::drawImGui()
     }
   }
 
-
   ImGui::End();
-
-  
-  
 
   ImGui::Begin("Actors");
   if(ImGui::Button("new Actor")){
     isCreatingActor = true;
   }
   if(ImGui::Button("scene")){
-    m_selectedActor = m_actualScene;
+    m_selectedActor = m_actualScene->m_root;
   }
-  childsInImgui(m_actualScene);
+  childsInImgui(m_actualScene->m_root);
   ImGui::End();
 
   ImGui::Begin("lighs");

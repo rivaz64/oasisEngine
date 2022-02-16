@@ -14,6 +14,15 @@ namespace oaEngineSDK{
 class OGL_RenderTarget :
   public RenderTarget
 {
+  bool 
+  init(SPtr<Texture> texture) override;
+
+  void
+  release();
+
+ private:
+  
+  uint32 m_id;
 };
 
 }

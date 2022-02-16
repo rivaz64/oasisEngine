@@ -25,6 +25,15 @@ class OA_CORE_EXPORT Model
 
   ~Model() = default;
 
+  /**
+   * @brief adds a mesh to this model
+   * @param mesh the new mesh
+  */
+  FORCEINLINE void
+  addMesh(SPtr<Mesh> mesh){
+    m_meshes.push_back(mesh);
+  }
+
 
  private:
   
