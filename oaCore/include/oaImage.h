@@ -22,12 +22,12 @@ class Image
   /**
    * @brief the with of the image
   */
-  SIZE_T height;
+  SIZE_T m_height;
 
   /**
    * @brief the pixels of the image
   */
-  uint8* data;  
+  uint8* m_pixels;  
 };
 
 }

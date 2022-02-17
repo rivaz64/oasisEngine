@@ -4,3 +4,4 @@
 #include "oaStdHeaders.h"
 #include "oaMath.h"
 #include "oaForDecUtilities.h"
+#include "oaStringUtilities.h"

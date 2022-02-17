@@ -15,6 +15,7 @@ namespace oaEngineSDK{
 bool 
 ResoureManager::loadTexture(const Path& file)
 {
+/*
   if(m_textures.find(file.getCompletePath())!=m_textures.end()){
     print("texture already loaded");
     return true;
@@ -32,8 +33,9 @@ ResoureManager::loadTexture(const Path& file)
   Path path(file);
 
   texture->m_name = path.getName();
-
+  */
   return true;
+  
 }
 
 void

@@ -126,7 +126,7 @@
     <ClInclude Include="include\oaCameraComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaImage.h">
+    <ClInclude Include="include\oaImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -222,9 +222,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaCameraComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="oaImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

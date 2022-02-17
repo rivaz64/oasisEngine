@@ -184,6 +184,7 @@
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />
     <ClInclude Include="include\oaGraphicsComponent.h" />
+    <ClInclude Include="include\oaImage.h" />
     <ClInclude Include="include\oaIndexBuffer.h" />
     <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaLoader.h" />
@@ -206,14 +207,12 @@
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
-    <ClInclude Include="oaImage.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="oaImage.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

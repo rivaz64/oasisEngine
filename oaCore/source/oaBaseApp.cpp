@@ -229,7 +229,7 @@ BaseApp::processInputs(char input)
     break;
 
   default:
-    print(toString(input));
+    //print(StringUtilities::toString(input));
     break;
   }
 }

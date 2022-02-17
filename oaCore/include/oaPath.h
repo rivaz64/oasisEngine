@@ -20,34 +20,37 @@ class OA_CORE_EXPORT Path
   bool
   searchForPath();
 
-  FORCEINLINE String
+  FORCEINLINE WString
   getCompletePath() const
   {
     return completePath;
   }
 
   void
+  setCompletePath(WString path);
+
+  void
   setCompletePath(String path);
 
-  FORCEINLINE String
+  FORCEINLINE WString
   getDrive() const
   {
     return drive;
   }
 
-  FORCEINLINE String
+  FORCEINLINE WString
   getDirection() const
   {
     return direction;
   }
 
-  FORCEINLINE String
+  FORCEINLINE WString
   getName() const
   {
     return name;
   }
 
-  FORCEINLINE String
+  FORCEINLINE WString
   getExtencion() const
   {
     return extencion;
@@ -55,12 +58,12 @@ class OA_CORE_EXPORT Path
 
  private:
 
-  String completePath;
+  WString completePath;
 
-  char drive[_MAX_DRIVE];
-  char direction[_MAX_DIR];
-  char name[_MAX_FNAME];
-  char extencion[_MAX_EXT];
+  UNICHAR drive[_MAX_DRIVE];
+  UNICHAR direction[_MAX_DIR];
+  UNICHAR name[_MAX_FNAME];
+  UNICHAR extencion[_MAX_EXT];
   
 };
 

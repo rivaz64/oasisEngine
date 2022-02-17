@@ -519,7 +519,6 @@ void oaEngineSDK::TestApp::drawImGui()
 
   if(loader){
     ImGui::Begin("load");
-    ImGui::DragFloat("scale",&loader->m_importScale);
     if(loadflags & LOADERFLAGS::kMesh){
       ImGui::CheckboxFlags("mesh",&loadflags0,LOADERFLAGS::kMesh);
     }

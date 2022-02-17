@@ -34,10 +34,10 @@ class StaticMesh :
   */
   FORCEINLINE Vertex&
   getVertexAt(SIZE_T n){
-    m_vertices.resize(n);
+    return m_vertices[n];
   }
 
- private:
+ protected:
   
   /**
    * @brief the vertices of this mesh

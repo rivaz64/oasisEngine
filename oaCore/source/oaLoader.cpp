@@ -20,6 +20,7 @@
 #include "oaStaticMesh.h"
 #include "oaSkeletalMesh.h"
 #include "oaLogger.h"
+#include "oaImage.h"
 
 
 using Assimp::Importer;
@@ -46,10 +47,8 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 }
 
 LOADERFLAGS::E
-Loader::checkForLoad(const Path& _file)
+Loader::checkForLoad(const Path& file)
 {
-  m_file = _file;
-
   auto flags = aiProcess_Triangulate | 
                aiProcess_GenSmoothNormals | 
                aiProcess_OptimizeMeshes | 
@@ -57,10 +56,13 @@ Loader::checkForLoad(const Path& _file)
                aiProcess_CalcTangentSpace;
   Importer importer;
 
-  const aiScene* importedScene = importer.ReadFile(m_file.getCompletePath(),flags);
+  String completePath = StringUtilities::toString(file.getCompletePath());
+
+  const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
   
   if(!importedScene){
-    OA_DEBUG_LOG(String("file not found"));
+    //OA_DEBUG_LOG("file "+completePath+"not found");
+    //__PRETTY_FUNCTION__;
     return static_cast<LOADERFLAGS::E>(m_loadedFlags);
   }
  
@@ -215,11 +217,11 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
   for(uint32 numMesh = 0; numMesh < loadedScene->mNumMeshes; ++numMesh){
 
-    auto aMesh = loadedScene->mMeshes[numMesh];
+    auto& aMesh = loadedScene->mMeshes[numMesh];
 
     SPtr<Mesh> mesh;
 
-    if(!(m_loadedFlags & LOADERFLAGS::kAnimation)){
+    if(aMesh->HasBones()){
 
       readStaticMesh(cast<StaticMesh>(mesh),aMesh);
     }
@@ -234,13 +236,11 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
     model->addMesh(mesh);
   }
 }
-
+/*
 bool
 loadImage(Path path){
   FIBITMAP* dib(0);
-  uint32 width(0), height(0);
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-  BYTE* bits(0);
 
   auto file = path.getCompletePath().c_str();
   fif = FreeImage_GetFileType(file,0);
@@ -251,32 +251,33 @@ loadImage(Path path){
   }
 
   if (fif == FIF_UNKNOWN){
-    OA_WARNING_LOG(String("unknown format of image"+path.getCompletePath()));
+    OA_WARNING_LOG("unknown format of image"+path.getCompletePath());
     return false;
   }
     
   if (FreeImage_FIFSupportsReading(fif)) {
     dib = FreeImage_Load(fif, file);
     if (!dib){
-      OA_WARNING_LOG(String("file "));
+      OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
       return false;
     }
     dib = FreeImage_ConvertTo32Bits(dib);
   }
 
-  
+  auto image = newSPtr<Image>();
 
-  bits = FreeImage_GetBits(dib);
-  width = FreeImage_GetWidth(dib);
-  height = FreeImage_GetHeight(dib);
+  image->m_pixels = FreeImage_GetBits(dib);
+  image->m_width = FreeImage_GetWidth(dib);
+  image->m_height = FreeImage_GetHeight(dib);
 
-  if (bits == 0 || width == 0 || height == 0){
+  if (image->m_pixels == 0 || image->m_width == 0 || image->m_height == 0){
+    OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
     return false;
   }
 
   return true;
-}
-
+}*/
+/*
 void 
 loadTextures(SPtr<Model> model)
 {
@@ -330,12 +331,11 @@ loadTextures(SPtr<Model> model)
   }
   
 }
-
+*/
+/*
 void 
-loadSkeletons()
+loadSkeletons(const aiScene* loadedScene)
 {
-  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
-
   auto& manager = ResoureManager::instance();
 
   auto skeleton = newSPtr<Skeleton>();
@@ -343,15 +343,15 @@ loadSkeletons()
   skeleton->m_skeleton = newSPtr<SkeletalNode>();
 
   skeleton->m_globalInverse = 
-    reinterpret_cast<Matrix4f*>(&scene->mRootNode->mTransformation)->inverse();
+    reinterpret_cast<Matrix4f*>(&loadedScene->mRootNode->mTransformation)->inverse();
 
-  loadSkeleton(scene->mRootNode,skeleton->m_skeleton,skeleton);
+  loadSkeleton(loadedScene->mRootNode,skeleton->m_skeleton,skeleton);
 
   manager.m_skeletons.insert({m_file.getCompletePath(),skeleton});
 
   skeleton->m_name = m_file.getName();
-}
-
+}*/
+/*
 void 
 loadAnimations()
 {
@@ -427,12 +427,13 @@ loadAnimations()
 
 }
 
-}
+}*/
 
 
 void
 Loader::load(LOADERFLAGS::E flags)
 {
+/*
   auto model = newSPtr<Model>();
   if(flags & LOADERFLAGS::kMesh){
     loadMeshes(model);
@@ -448,5 +449,7 @@ Loader::load(LOADERFLAGS::E flags)
   }
   ResoureManager::instance().m_models.insert({m_file.getCompletePath(),model});
   model->m_name = m_file.getName();
+  */
 }
 
+}

@@ -164,7 +164,7 @@ class OA_CORE_EXPORT Mesh
     m_index[place] = index;
   }
 
- private:
+ protected:
 
   /**
    * @brief the number of indices this mesh has

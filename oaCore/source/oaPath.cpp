@@ -12,13 +12,12 @@ namespace oaEngineSDK{
 bool Path::searchForPath()
 {
   OPENFILENAME ofn;
-  char fileName[MAX_PATH] = "";
+  UNICHAR fileName[MAX_PATH] = L"";
   ZeroMemory(&ofn, sizeof(ofn));
 
   ofn.lStructSize = sizeof(OPENFILENAME);
   ofn.hwndOwner = nullptr;
   ofn.lpstrFilter =  "All Files (*.*)\0*.*\0";
-  ofn.lpstrFile = fileName;
   ofn.nMaxFile = MAX_PATH;
   ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
   ofn.lpstrDefExt = "";
@@ -31,21 +30,15 @@ bool Path::searchForPath()
     return false;
   }
 
-  _splitpath_s(fileName, 
-               drive, 
-               _MAX_DRIVE,
-               direction, 
-               _MAX_DIR,
-               name , 
-               _MAX_FNAME, 
-               extencion, 
-               _MAX_EXT);
+  setCompletePath(fileName);
 
   return true;
 }
-void Path::setCompletePath(String path)
+
+void 
+Path::setCompletePath(WString path)
 {
-  _splitpath_s(path.c_str(), 
+  _wsplitpath_s(path.c_str(), 
                drive, 
                _MAX_DRIVE,
                direction, 
@@ -55,6 +48,22 @@ void Path::setCompletePath(String path)
                extencion, 
                _MAX_EXT);
   completePath = path;
+}
+
+void 
+Path::setCompletePath(String path)
+{
+  completePath = StringUtilities::toWString(path);
+  _wsplitpath_s(completePath.c_str(), 
+               drive, 
+               _MAX_DRIVE,
+               direction, 
+               _MAX_DIR,
+               name , 
+               _MAX_FNAME, 
+               extencion, 
+               _MAX_EXT);
+  
 }
 
 }

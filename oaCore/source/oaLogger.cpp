@@ -36,7 +36,7 @@ void Logger::flush()
 
   FStream f;
 
-  path.setCompletePath("Logs/log "+toString(Time::instance().getTime())+".txt");
+  path.setCompletePath("Logs/log "+StringUtilities::intToString(Time::instance().getTime())+".txt");
 
   f.open(path.getCompletePath());
 

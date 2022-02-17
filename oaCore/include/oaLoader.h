@@ -47,8 +47,6 @@ class OA_CORE_EXPORT Loader
  private:
 
   uint8 m_loadedFlags = 0;
-
-  Path m_file;
 };
 
 }

@@ -11,7 +11,7 @@
 
 namespace oaEngineSDK{
 
-class Frustum
+class OA_UTILITY_EXPORT Frustum
 {
  public:
   /**
