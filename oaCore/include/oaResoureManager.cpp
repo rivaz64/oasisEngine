@@ -368,7 +368,7 @@ void ResoureManager::loadDefaulTextures()
   m_textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
   Path path;
   path.setCompletePath("textures/defaultTexture.png");
-  m_textures["default"]->loadFromFile(path);
+  //m_textures["default"]->loadFromFile(path);
 }
 
 void

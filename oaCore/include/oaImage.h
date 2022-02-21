@@ -17,12 +17,17 @@ class Image
   /**
    * @brief the with of the image
   */
-  SIZE_T m_width;
+  uint32 m_width;
 
   /**
    * @brief the with of the image
   */
-  SIZE_T m_height;
+  uint32 m_height;
+
+  /**
+   * @brief the pitch of this image
+  */
+  uint32 m_pitch;
 
   /**
    * @brief the pixels of the image

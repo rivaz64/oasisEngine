@@ -8,12 +8,6 @@
 
 namespace oaEngineSDK{
 
-bool 
-Texture::loadFromFile(const Path& /*file*/)
-{
-    return false;
-}
-
 bool Texture::init(TextureDesc /*description*/)
 {
   return true;

@@ -100,13 +100,6 @@ class OA_CORE_EXPORT Texture
   ~Texture() = default;
 
  public:
-  /**
-   * @brief loads the texture from a file
-   * @param file 
-   * @return 
-  */
-  virtual bool
-  loadFromFile(const Path& /*file*/);
 
   /**
    * @brief initalizes only the texture
@@ -125,6 +118,12 @@ class OA_CORE_EXPORT Texture
   virtual bool
   init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/);
 
+  virtual void
+  init(uint32 width,uint32 height){}
+
+  virtual void
+  initFromImage(SPtr<Image> /*image*/){}
+
   /**
    * @brief gets the unique id of this texture
    * @return 
@@ -133,6 +132,8 @@ class OA_CORE_EXPORT Texture
   getId();
 
   String m_name;
+
+  SPtr<Image> m_image;
 
   friend class ResoureManager;
 

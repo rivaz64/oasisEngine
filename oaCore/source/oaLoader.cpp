@@ -21,6 +21,8 @@
 #include "oaSkeletalMesh.h"
 #include "oaLogger.h"
 #include "oaImage.h"
+#include "oaTexture.h"
+#include "oaGraphicAPI.h"
 
 
 using Assimp::Importer;
@@ -46,61 +48,29 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
   }
 }
 
-LOADERFLAGS::E
-Loader::checkForLoad(const Path& file)
-{
-  auto flags = aiProcess_Triangulate | 
-               aiProcess_GenSmoothNormals | 
-               aiProcess_OptimizeMeshes | 
-               aiProcess_OptimizeGraph |
-               aiProcess_CalcTangentSpace;
-  Importer importer;
 
-  String completePath = StringUtilities::toString(file.getCompletePath());
-
-  const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
-  
-  if(!importedScene){
-    //OA_DEBUG_LOG("file "+completePath+"not found");
-    //__PRETTY_FUNCTION__;
-    return static_cast<LOADERFLAGS::E>(m_loadedFlags);
-  }
- 
-  if(importedScene->HasMeshes()){
-    m_loadedFlags |= LOADERFLAGS::kMesh;
-
-  }
-
-  if(importedScene->HasMaterials()){
-    m_loadedFlags |= LOADERFLAGS::kTexture;
-  }
-
-  if(importedScene->HasAnimations()){
-    m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
-  }
-
-  return static_cast<LOADERFLAGS::E>(m_loadedFlags);
-}
 
 void
 readIndexes(SPtr<Mesh> mesh, aiMesh* aMesh){
   
-  SIZE_T numIndices = aMesh->mNumFaces * 3;
+  uint32 numIndices = aMesh->mNumFaces * 3;
   mesh->setIndexNum(numIndices);
 
-  for (SIZE_T t = 0; t < numIndices; ++t)
+  for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
   {
     aiFace* face = &aMesh->mFaces[t];
-    mesh->setIndexAt(numIndices,face->mIndices[0]);
-    mesh->setIndexAt(numIndices+1,face->mIndices[1]);
-    mesh->setIndexAt(numIndices+2,face->mIndices[2]);
+    uint32 numIndice = t*3;
+
+    mesh->setIndexAt(numIndice,face->mIndices[0]);
+    mesh->setIndexAt(numIndice+1,face->mIndices[1]);
+    mesh->setIndexAt(numIndice+2,face->mIndices[2]);
   }
 }
 
 void
 readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
   
-  mesh->setVertexNum(aMesh->mNumVertices);
+  mesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
 
   for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
 
@@ -214,21 +184,23 @@ readSkeletalMesh(SPtr<SkeletalMesh> mesh, aiMesh* aMesh){
 void 
 loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 {
-
   for(uint32 numMesh = 0; numMesh < loadedScene->mNumMeshes; ++numMesh){
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    SPtr<Mesh> mesh;
+    auto mesh = newSPtr<StaticMesh>();
 
-    if(aMesh->HasBones()){
+    readStaticMesh(cast<StaticMesh>(mesh),aMesh);
 
-      readStaticMesh(cast<StaticMesh>(mesh),aMesh);
+    model->addMaterial(ResoureManager::instance().m_materials["default"]);
+
+    /*if(aMesh->HasBones()){
+
     }
     else{
       readSkeletalMesh(cast<SkeletalMesh>(mesh),aMesh);
       
-    }
+    }*/
 
     readIndexes(mesh,aMesh);
     
@@ -236,13 +208,15 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
     model->addMesh(mesh);
   }
 }
-/*
+
 bool
 loadImage(Path path){
   FIBITMAP* dib(0);
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 
-  auto file = path.getCompletePath().c_str();
+  String s = StringUtilities::toString(path.getCompletePath());
+
+  auto file = s.c_str();
   fif = FreeImage_GetFileType(file,0);
 
   if (fif == FIF_UNKNOWN){
@@ -251,14 +225,14 @@ loadImage(Path path){
   }
 
   if (fif == FIF_UNKNOWN){
-    OA_WARNING_LOG("unknown format of image"+path.getCompletePath());
+    //OA_WARNING_LOG("unknown format of image"+file);
     return false;
   }
     
   if (FreeImage_FIFSupportsReading(fif)) {
     dib = FreeImage_Load(fif, file);
     if (!dib){
-      OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
+      //OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
       return false;
     }
     dib = FreeImage_ConvertTo32Bits(dib);
@@ -269,14 +243,73 @@ loadImage(Path path){
   image->m_pixels = FreeImage_GetBits(dib);
   image->m_width = FreeImage_GetWidth(dib);
   image->m_height = FreeImage_GetHeight(dib);
+  image->m_pitch = FreeImage_GetPitch(dib);
+
 
   if (image->m_pixels == 0 || image->m_width == 0 || image->m_height == 0){
-    OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
+    //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
     return false;
   }
 
+  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+
+  texture->init(image->m_width,image->m_height);
+
+  texture->initFromImage(image);
+
+  ResoureManager::instance().m_textures.insert({ StringUtilities::toString(path.getName()),texture});
+
+  texture->m_name =  StringUtilities::toString(path.getName());
+
   return true;
-}*/
+}
+
+void 
+loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
+
+  auto& manager = ResoureManager::instance();
+
+  for(uint32 numMaterial = 0; numMaterial < loadedScene->mNumMaterials; ++numMaterial){
+    auto material = loadedScene->mMaterials[numMaterial];
+
+    aiString notMyString;
+
+    material->Get(AI_MATKEY_NAME,notMyString);
+
+    WString MaterialName = StringUtilities::toWString(notMyString.C_Str());
+
+    auto mat = copy(model->getMaterial(numMaterial));
+
+    Path texturePath;
+
+    WString textureName = MaterialName;
+
+    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+
+    if(loadImage(texturePath)){
+      mat->m_diffuse = manager.m_textures[ StringUtilities::toString(textureName)];
+    }
+
+    textureName = MaterialName+L"N";
+
+    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+
+    if(loadImage(texturePath)){
+      mat->m_normalMap = manager.m_textures[ StringUtilities::toString(textureName)];
+    }
+
+    textureName = MaterialName+L"S";
+
+    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+
+    if(loadImage(texturePath)){
+      mat->m_specular = manager.m_textures[ StringUtilities::toString(textureName)];
+    }
+
+    model->setMaterial(mat,numMaterial);
+  }
+}
+
 /*
 void 
 loadTextures(SPtr<Model> model)
@@ -450,6 +483,50 @@ Loader::load(LOADERFLAGS::E flags)
   ResoureManager::instance().m_models.insert({m_file.getCompletePath(),model});
   model->m_name = m_file.getName();
   */
+}
+
+LOADERFLAGS::E
+Loader::checkForLoad(const Path& file)
+{
+  auto flags = aiProcess_Triangulate | 
+               aiProcess_GenSmoothNormals | 
+               aiProcess_OptimizeMeshes | 
+               aiProcess_OptimizeGraph |
+               aiProcess_CalcTangentSpace;
+  Importer importer;
+
+  String completePath = StringUtilities::toString(file.getCompletePath());
+
+  const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
+  
+  auto model = newSPtr<Model>();
+
+  if(!importedScene){
+    //OA_DEBUG_LOG("file "+completePath+"not found");
+    //__PRETTY_FUNCTION__;
+    return static_cast<LOADERFLAGS::E>(m_loadedFlags);
+  }
+ 
+  if(importedScene->HasMeshes()){
+    m_loadedFlags |= LOADERFLAGS::kMesh;
+    loadMeshes(model,importedScene);
+  }
+
+  if(importedScene->HasMaterials()){
+    m_loadedFlags |= LOADERFLAGS::kTexture;
+    loadTextures(model,importedScene,file);
+  }
+
+  if(importedScene->HasAnimations()){
+    m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
+  }
+
+   
+  
+  ResoureManager::instance().m_models.insert({StringUtilities::toString(file.getCompletePath()),model});
+  model->m_name =StringUtilities::toString(file.getName());
+
+  return static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }
 
 }

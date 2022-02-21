@@ -11,22 +11,25 @@ namespace oaEngineSDK{
 
 bool Path::searchForPath()
 {
-  OPENFILENAME ofn;
+  OPENFILENAMEW ofn;
   UNICHAR fileName[MAX_PATH] = L"";
   ZeroMemory(&ofn, sizeof(ofn));
 
   ofn.lStructSize = sizeof(OPENFILENAME);
   ofn.hwndOwner = nullptr;
-  ofn.lpstrFilter =  "All Files (*.*)\0*.*\0";
+  ofn.lpstrFilter = L"All Files (*.*)\0*.*\0";
+  ofn.lpstrFile = fileName;
   ofn.nMaxFile = MAX_PATH;
   ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-  ofn.lpstrDefExt = "";
+  ofn.lpstrDefExt = L"";
 
-  if (GetOpenFileName(&ofn))
+  if (!GetOpenFileNameW(&ofn)){
+    return false;
+  }
 
   completePath = fileName;
 
-  if(completePath.size()==0){
+  if (completePath.size()==0){
     return false;
   }
 

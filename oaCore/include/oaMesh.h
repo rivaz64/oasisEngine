@@ -164,12 +164,17 @@ class OA_CORE_EXPORT Mesh
     m_index[place] = index;
   }
 
+  FORCEINLINE const Vector<uint32>&
+  getIndex(){
+    return m_index;
+  }
+
  protected:
 
   /**
    * @brief the number of indices this mesh has
   */
-  Vector<SIZE_T> m_index;
+  Vector<uint32> m_index;
 
   /**
    * @brief the buffer for the indices

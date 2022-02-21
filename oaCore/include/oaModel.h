@@ -23,6 +23,12 @@ class OA_CORE_EXPORT Model
   */
   Model() = default;
 
+  /**
+   * @brief if the number of meshes is known
+   * @param numOfMeshes 
+  */
+  Model(SIZE_T numOfMeshes);
+
   ~Model() = default;
 
   /**
@@ -34,6 +40,35 @@ class OA_CORE_EXPORT Model
     m_meshes.push_back(mesh);
   }
 
+  FORCEINLINE void
+  addMaterial(SPtr<Material> material){
+    m_materials.push_back(material);
+  }
+
+  FORCEINLINE SIZE_T
+  getNumOfMeshes(){
+    return m_meshes.size();
+  }
+
+  FORCEINLINE void
+  setNumOfMeshes(SIZE_T n){
+    return m_meshes.resize(n);
+  }
+
+  FORCEINLINE const SPtr<Mesh>&
+  getMesh(SIZE_T n){
+    return m_meshes[n];
+  }
+
+  FORCEINLINE const SPtr<Material>&
+  getMaterial(SIZE_T n){
+    return m_materials[n];
+  }
+
+  FORCEINLINE const SPtr<Material>&
+  setMaterial(SPtr<Material> material,SIZE_T n){
+    return m_materials[n] = material;
+  }
 
  private:
   

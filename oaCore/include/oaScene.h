@@ -10,9 +10,10 @@
 
 namespace oaEngineSDK{
 
-class Scene
+class OA_CORE_EXPORT Scene
 {
   SPtr<Actor> m_root;
+
   friend class TestApp;
   friend class BaseApp;
 };

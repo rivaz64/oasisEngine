@@ -8,6 +8,10 @@
 
 namespace oaEngineSDK{
 
+Model::Model(SIZE_T numOfMeshes)
+{
+  m_meshes.resize(numOfMeshes);
+}
 
 }
 

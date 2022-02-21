@@ -102,7 +102,7 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateDefaultMaterial();
 
- private:
+ public:
 
   /**
   * @brief all the loaded meshes

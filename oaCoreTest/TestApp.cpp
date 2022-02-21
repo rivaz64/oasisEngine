@@ -32,7 +32,7 @@
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
-
+#include <oaSerializer.h>
 
 
 
@@ -440,8 +440,10 @@ void oaEngineSDK::TestApp::drawImGui()
       Path path;
       if(path.searchForPath()){
         loader = new Loader;
-        loadflags = loader->checkForLoad(path);
-        loadflags0 = 0;
+        loader->checkForLoad(path);
+        //loadflags = loader->checkForLoad(path);
+        delete loader;
+        loader = 0;
       }
     }
 
@@ -559,6 +561,21 @@ void oaEngineSDK::TestApp::drawImGui()
       isAddingSocket = false;
     }
   }
+
+  ImGui::Begin("file");
+  if(ImGui::Button("save all")){
+    Serializer serializer;
+    Path path;
+    if(path.searchForPath()){
+      serializer.init(path);
+      for(auto& model: ResoureManager::instance().m_models){
+        serializer.encodeModel(model.second);
+      }
+      
+    }
+  }
+   ImGui::End();
+
 
 }
 

@@ -27,15 +27,20 @@ using std::shared_ptr;
 using std::map;
 using std::pair;
 using std::enable_shared_from_this;
+using std::istream_iterator;
+using std::istringstream;
 using std::string;
 using std::wstring;
 using std::fstream;
 using std::make_shared;
 using std::reinterpret_pointer_cast;
 using std::make_shared;
+using std::endl;
+using std::copy;
 using std::cout;
 using std::to_string;
-using std::endl;
+
+
 
 /**
  * @brief wraper of the std::vector, can be changed in the future
@@ -79,10 +84,10 @@ using SPtr = shared_ptr<T>;
 * @brief wraper of the std::make_shared
 * @tparam T
 */
-template <class T>
+template <class T, class... _Types>
 FORCEINLINE SPtr<T> 
-newSPtr() {
-  return make_shared<T>();
+newSPtr(_Types&&... _Args) {
+  return make_shared<T>(std::forward<_Types>(_Args)...);
 }
 
 /**

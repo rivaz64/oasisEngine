@@ -27,6 +27,11 @@ class StaticMesh :
     m_vertices.resize(n);
   }
 
+  FORCEINLINE SIZE_T
+  getVertexNum(){
+    return m_vertices.size();
+  }
+
   /**
    * @brief gets a certain vertex
    * @param n the number of the vertex
@@ -35,6 +40,11 @@ class StaticMesh :
   FORCEINLINE Vertex&
   getVertexAt(SIZE_T n){
     return m_vertices[n];
+  }
+
+  FORCEINLINE const Vector<Vertex>&
+  getVertex(){
+    return m_vertices;
   }
 
  protected:

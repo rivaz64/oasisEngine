@@ -23,7 +23,7 @@ class OA_CORE_EXPORT IndexBuffer
    * @return if the buffer initialized correctly
   */
   virtual bool
-  init(Vector<SIZE_T>& /*data*/) { return true; }
+  init(Vector<uint32>& /*data*/) { return true; }
 
   /**
    * @brief set this buffer to be used

@@ -22,9 +22,6 @@ class DX11Texture:
   ~DX11Texture();
 
   bool
-  loadFromFile(const Path& file) override;
-
-  bool
   init(TextureDesc description);
 
   bool
@@ -33,6 +30,8 @@ class DX11Texture:
   void*
   getId() override;
 
+  void
+  initFromImage(SPtr<Image> image);
 
  private:
 
