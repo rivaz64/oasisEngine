@@ -15,7 +15,7 @@ bool DX11PixelShader::compileFromFile(String file)
 {
   m_version = "ps_4_0";
 
-  if(!DX11Shader::compileFromFile(file + "/pixelShader.hlsl")){
+  if(!DX11Shader::compileFromFile("shader/" + file + ".hlsl")){
     return false;
   }
 

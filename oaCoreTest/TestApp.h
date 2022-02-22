@@ -82,6 +82,8 @@ public:
 
   SPtr<Texture> m_selectedTexture;
 
+  SPtr<Material> m_selectedMaterial;
+
   SPtr<Mesh> m_selectedMesh;
 
   SPtr<Model> m_selectedModel;

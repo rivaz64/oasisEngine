@@ -89,6 +89,7 @@ class OA_CORE_EXPORT Model
   friend class AnimationComponent;
   friend class GraphicsComponent;
   friend class SkeletalComponent;
+  friend class ResoureManager;
 };
 
 }

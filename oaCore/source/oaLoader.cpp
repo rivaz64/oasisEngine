@@ -10,6 +10,8 @@
 #include <assimp/postprocess.h>
 #include <stdlib.h>
 #include <freeimage\FreeImage.h>
+//#define STB_IMAGE_IMPLEMENTATION
+//#include <stb_image\stb_image.h>
 #include "oaPath.h"
 #include "oaMesh.h"
 #include "oaModel.h"
@@ -94,7 +96,7 @@ readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
 
     if(aMesh->HasTextureCoords(0)){
       actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
-      actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+      actualVertex.textureCord.y = aMesh->mTextureCoords[0][numVertex].y;
     }
   }
 }
@@ -210,11 +212,10 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 }
 
 bool
-loadImage(Path path){
+loadImage(const Path& path){
+  String s = StringUtilities::toString(path.getCompletePath());
   FIBITMAP* dib(0);
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-
-  String s = StringUtilities::toString(path.getCompletePath());
 
   auto file = s.c_str();
   fif = FreeImage_GetFileType(file,0);
@@ -238,13 +239,23 @@ loadImage(Path path){
     dib = FreeImage_ConvertTo32Bits(dib);
   }
 
-  auto image = newSPtr<Image>();
-
+  
+   auto image = newSPtr<Image>();
   image->m_pixels = FreeImage_GetBits(dib);
   image->m_width = FreeImage_GetWidth(dib);
   image->m_height = FreeImage_GetHeight(dib);
   image->m_pitch = FreeImage_GetPitch(dib);
 
+ 
+
+  /*int32 desiredChanels = 4;
+  int32 channels = 0;
+
+  image->m_pixels = stbi_load(s.c_str(),
+                           &image->m_width,
+                           &image->m_height,
+                           &channels,
+                           desiredChanels);*/
 
   if (image->m_pixels == 0 || image->m_width == 0 || image->m_height == 0){
     //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
@@ -262,6 +273,11 @@ loadImage(Path path){
   texture->m_name =  StringUtilities::toString(path.getName());
 
   return true;
+}
+
+bool
+Loader::loadTexture(const Path& path){
+  return loadImage(path);
 }
 
 void 

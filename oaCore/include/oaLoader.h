@@ -44,6 +44,14 @@ class OA_CORE_EXPORT Loader
   void
   load(LOADERFLAGS::E flags);
 
+  /**
+   * @brief reads an image from a file
+   * @param file the file with the image to load
+   * @return if it loaded
+  */
+  bool
+  loadTexture(const Path& path);
+
  private:
 
   uint8 m_loadedFlags = 0;

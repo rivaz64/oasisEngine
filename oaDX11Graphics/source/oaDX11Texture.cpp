@@ -79,7 +79,7 @@ DX11Texture::initFromImage(SPtr<Image> image)
   descDepth.Height = image->m_height;
   descDepth.MipLevels = 1;
   descDepth.ArraySize = 1;
-  descDepth.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  descDepth.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
   descDepth.SampleDesc.Count = 1;
   descDepth.SampleDesc.Quality = 0;
   descDepth.Usage = D3D11_USAGE_DEFAULT;
@@ -91,7 +91,6 @@ DX11Texture::initFromImage(SPtr<Image> image)
     
   image_subresource_data.pSysMem = image->m_pixels;
   image_subresource_data.SysMemPitch = image->m_pitch;
-  //image_subresource_data.SysMemSlicePitch = image->m_pitch*image->m_height;
    
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
@@ -107,13 +106,13 @@ DX11Texture::initFromImage(SPtr<Image> image)
   
 
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-  srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+  srvDesc.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
   srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   srvDesc.Texture2D.MipLevels = 1;
   srvDesc.Texture2D.MostDetailedMip = 0;
 
-   hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_device->CreateShaderResourceView(m_texture,&srvDesc,&m_shaderResourceView);
+  hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+   m_device->CreateShaderResourceView(m_texture,&srvDesc,&m_shaderResourceView);
 
 }
 /*

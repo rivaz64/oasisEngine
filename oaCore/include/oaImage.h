@@ -17,12 +17,12 @@ class Image
   /**
    * @brief the with of the image
   */
-  uint32 m_width;
+  int32 m_width;
 
   /**
    * @brief the with of the image
   */
-  uint32 m_height;
+  int32 m_height;
 
   /**
    * @brief the pitch of this image

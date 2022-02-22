@@ -53,6 +53,8 @@ class StaticMesh :
    * @brief the vertices of this mesh
   */
   Vector<Vertex> m_vertices;
+
+  friend class ResoureManager;
 };
 
 }

@@ -8,6 +8,7 @@
 #include "oaMesh.h"
 #include "oaPath.h"
 #include "oaShaderProgram.h"
+#include "oaStaticMesh.h"
 
 
 namespace oaEngineSDK{
@@ -41,13 +42,14 @@ ResoureManager::loadTexture(const Path& file)
 void
 ResoureManager::onStartUp()
 {
-  /*generatePlane();
+  /*
   generateCube();
   generateCircle(36);
   generateCone(36);
   generateCone(36);
   generateCilinder(36);
   generateTorus(36,36,.5f);*/
+  generateQuad();
   loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultMaterial();
@@ -265,27 +267,38 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
   indices[(i*m+o)*6+5] = m+o;
 
   meshes["torus"]->create(vertices,indices);
-}
+}*/
 
 void
-ResoureManager::generatePlane()
+ResoureManager::generateQuad()
 {
-  /*meshes.insert({ "plane",newSPtr<Mesh>() });
-  Vector<Vertex> vertices = {
-    Vertex{ Vector3f(-.5f, -.5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, -.5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector3f(.5f, .5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector3f(-.5f, .5f, 0.0f),Vector3f(0.0f,0.0f, 1.0f), Vector2f(0.0f, 1.0f) },
+  auto quad = newSPtr<StaticMesh>();
+
+  quad->m_vertices = {
+    Vertex{ Vector4f(-.5f,-.5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(0.0f, 0.0f) },
+    Vertex{ Vector4f( .5f,-.5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(1.0f, 0.0f) },
+    Vertex{ Vector4f( .5f, .5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(1.0f, 1.0f) },
+    Vertex{ Vector4f(-.5f, .5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(0.0f, 1.0f) },
   };
 
-  Vector<uint32> index = {
+  quad->m_index = {
     3,1,0,
     2,1,3,
   };
 
-  meshes["plane"]->create(vertices,index);
+  quad->create();
 
-}*/
+  m_meshes.insert({ "quad",quad });
+
+  auto modelQuad = newSPtr<Model>();
+
+  modelQuad->addMesh(quad);
+
+  modelQuad->m_name = "quad";
+
+  m_models.insert({ "quad",modelQuad });
+
+}
 
 void 
 ResoureManager::generateCube()
@@ -352,6 +365,8 @@ void ResoureManager::loadDefaultShaders()
   m_vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
   m_vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
   m_pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
+  m_pixelShaders.insert({"paralax",GraphicAPI::instancePtr()->createPixelShader()});
+
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
   m_vertexShaders["default"]->m_name = "normal";
@@ -359,7 +374,10 @@ void ResoureManager::loadDefaultShaders()
   m_vertexShaders["animation"]->compileFromFile("animVertexShader");
   m_vertexShaders["animation"]->m_name = "animation";
 
-  m_pixelShaders["default"]->compileFromFile("shader");
+  m_pixelShaders["default"]->compileFromFile("pixelShader");
+  m_pixelShaders["paralax"]->compileFromFile("paralax");
+
+  
   
 }
 
@@ -375,6 +393,7 @@ void
 ResoureManager::generateDefaultMaterial()
 {
   m_materials.insert({"default",newSPtr<Material>()});
+  m_materials.insert({"paralax",newSPtr<Material>()});
   m_materials.insert({"animation",newSPtr<Material>()});
 
   m_materials["default"]->m_program->attach(m_vertexShaders["default"]);
@@ -388,6 +407,12 @@ ResoureManager::generateDefaultMaterial()
   m_materials["animation"]->m_diffuse = m_textures["default"];
 
   m_materials["animation"]->m_name = "animation";
+
+  m_materials["paralax"]->m_program->attach(m_vertexShaders["default"]);
+  m_materials["paralax"]->m_program->attach(m_pixelShaders["paralax"]);
+  m_materials["paralax"]->m_diffuse = m_textures["default"];
+
+  m_materials["paralax"]->m_name = "paralax";
 }
 
 }

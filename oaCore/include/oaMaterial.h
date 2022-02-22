@@ -40,11 +40,16 @@ class OA_CORE_EXPORT Material
   SPtr<Texture> m_normalMap;
 
   /**
+   * @brief the depth map of this material
+  */
+  SPtr<Texture> m_depthMap;
+
+  /**
    * @brief the shaders program this material is going to be using
   */
   SPtr<ShaderProgram> m_program;
 
-   String m_name;
+  String m_name;
 };
 
 }

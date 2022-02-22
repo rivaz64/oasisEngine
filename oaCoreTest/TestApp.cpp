@@ -204,6 +204,7 @@ TestApp::draw()
 
   lights->write(&dir.x);
   graphicsAPI.setVSBuffer(lights,3);
+  graphicsAPI.setPSBuffer(lights,0);
 
   m_viewLocationBuffer->write(&m_camera->getLocation().x);
   graphicsAPI.setVSBuffer(m_viewLocationBuffer,4);
@@ -412,6 +413,16 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::Begin("resources");
   
   if (ImGui::CollapsingHeader("textures")){
+    if(ImGui::Button("load Texture")){
+      Path path;
+      if(path.searchForPath()){
+        loader = new Loader;
+        loader->loadTexture(path);
+        //loadflags = loader->checkForLoad(path);
+        delete loader;
+        loader = 0;
+      }
+    }
     for(auto texture : resourceManager.m_textures){
       if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
         m_selectedTexture = texture.second;
@@ -422,7 +433,7 @@ void oaEngineSDK::TestApp::drawImGui()
   if (ImGui::CollapsingHeader("materials")){
     for(auto material : resourceManager.m_materials){
       if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
-        material.second->m_diffuse = m_selectedTexture;
+        m_selectedMaterial = material.second;
       }
     }
   }
@@ -483,8 +494,9 @@ void oaEngineSDK::TestApp::drawImGui()
   childsInImgui(m_actualScene->m_root);
   ImGui::End();
 
-  ImGui::Begin("lighs");
+  ImGui::Begin("lights");
   ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
+  ImGui::DragFloat("paralax",&dir.w,1.0f);
   ImGui::End();
 
   if(isCreatingActor){
@@ -574,9 +586,37 @@ void oaEngineSDK::TestApp::drawImGui()
       
     }
   }
-   ImGui::End();
+  ImGui::End();
 
+  ImGui::Begin("material editor");
+  if(m_selectedMaterial){
+    if(ImGui::Button("select difusse")){
+      m_selectedMaterial->m_diffuse = m_selectedTexture;
+    }
 
+    if(ImGui::Button("select normal map")){
+      m_selectedMaterial->m_normalMap = m_selectedTexture;
+    }
+
+    if(ImGui::Button("select specular")){
+      m_selectedMaterial->m_specular = m_selectedTexture;
+    }
+
+    if(ImGui::Button("select depth map")){
+      m_selectedMaterial->m_depthMap = m_selectedTexture;
+    }
+  }
+  ImGui::End();
+
+  ImGui::Begin("Model Editor");
+  if(m_selectedModel){
+    if(ImGui::Button("select material")){
+      m_selectedModel->addMaterial(m_selectedMaterial);
+    }
+  }
+  ImGui::End();
+
+  
 }
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)

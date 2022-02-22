@@ -18,7 +18,8 @@ Material::Material()
   m_program = graphicsAPI.createShaderProgram();
 }
 
-void Material::set()
+void 
+Material::set()
 {
   m_program->set();
 
@@ -32,6 +33,10 @@ void Material::set()
 
   if(m_normalMap){
     graphicsAPI.setTexture(m_normalMap,2);
+  }
+
+  if(m_depthMap){
+    graphicsAPI.setTexture(m_depthMap,3);
   }
 }
 
