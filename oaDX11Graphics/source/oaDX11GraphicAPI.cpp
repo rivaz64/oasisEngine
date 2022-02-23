@@ -11,12 +11,17 @@
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11IndexBuffer.h"
 #include "oaDX11ShaderProgram.h"
+#include "oaBaseApp.h"
 #include <windows.h>
 #include <d3d11.h>
 #include <iostream>
 
 
 namespace oaEngineSDK{
+
+struct ExtraBytes{
+  BaseApp* app;
+};
 
 void 
 DX11GraphicAPI::onShutDown()
@@ -29,7 +34,7 @@ DX11GraphicAPI::onShutDown()
 }
 
 bool
-DX11GraphicAPI::initialize()
+DX11GraphicAPI::initialize(BaseApp* baseApp)
 {
   std::cout<<"directX graphic API"<<std::endl;
 
@@ -44,6 +49,7 @@ DX11GraphicAPI::initialize()
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
   wc.lpszClassName = "oasisEngine";
+  wc.cbWndExtra = sizeof(BaseApp*);
 
   RegisterClassEx(&wc);
 
@@ -55,12 +61,12 @@ DX11GraphicAPI::initialize()
                         200,   
                         m_windowWidth,  
                         m_windowHeight,    
-                        NULL,    
-                        NULL,    
+                        nullptr,    
+                        nullptr,    
                         GetModuleHandleA(nullptr),   
-                        NULL);   
+                        baseApp); 
 
-                                 
+  SetWindowLongPtr(m_hWnd,0,reinterpret_cast<LONG_PTR>(baseApp));
 
   ShowWindow(m_hWnd, SW_SHOWDEFAULT);
 

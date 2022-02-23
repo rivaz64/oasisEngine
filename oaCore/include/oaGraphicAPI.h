@@ -13,6 +13,8 @@
 
 namespace oaEngineSDK{
 
+class BaseApp;
+
 namespace GRAPHIC_API {
 enum E{
   NONE=0,
@@ -40,7 +42,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return if the initialization was correct
   */
   virtual bool
-  initialize();
+  initialize(BaseApp* baseApp);
 
   /**
    * @brief if the grafics are still doing things

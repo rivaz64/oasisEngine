@@ -23,7 +23,7 @@
 
 namespace oaEngineSDK{
 
-using foo = const void* (*)();
+using function = const void* (*)();
 
 void BaseApp::onShutDown()
 {
@@ -53,7 +53,7 @@ BaseApp::run()
   }
 
   preInit();
-  if(GraphicAPI::instancePtr()->initialize()){
+  if(GraphicAPI::instancePtr()->initialize(this)){
 
     ResoureManager::startUp();
     InputManager::startUp();
@@ -89,8 +89,8 @@ void BaseApp::loadPlugIn(String DLL)
     return;
   }
 
-  foo function = (foo)GetProcAddress(hGetProcIDDLL, "initPlugIn");
-  if(!function())
+  function foundFunction = reinterpret_cast<function>(GetProcAddress(hGetProcIDDLL, "initPlugIn"));
+  if(!foundFunction())
   {
     print("Could not find function");
     return;

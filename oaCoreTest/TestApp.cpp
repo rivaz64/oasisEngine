@@ -39,12 +39,17 @@
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-oaEngineSDK::TestApp* g_app = nullptr;
+namespace oaEngineSDK {
+
+TestApp* g_app = nullptr;
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
   PAINTSTRUCT ps;
   HDC hdc;
+
+  BaseApp* app = reinterpret_cast<BaseApp*>(GetWindowLongPtr(hWnd, 0));
+
   if(ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
     return 1;
 
@@ -56,23 +61,27 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_QUIT:
-    g_app->m_isRunning = false;
+    app->m_isRunning = false;
     break;
 
   case WM_DESTROY:
-    g_app->m_isRunning = false;
+    app->m_isRunning = false;
     PostQuitMessage( 0 );
     break;
 
   case WM_SIZE:
-    g_app->resizeWindow();
+    app->resizeWindow();
     break;
   
 
   case WM_KEYDOWN:
-    g_app->processInputs(wParam);
+    app->processInputs(wParam);
     break;
     
+  //case WM_NCCREATE:
+    
+    //break;
+
   default:
     
     return DefWindowProc( hWnd, message, wParam, lParam );
@@ -80,10 +89,6 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
   return 0;
 }
-
-
-
-namespace oaEngineSDK {
 
 void 
 TestApp::preShutDown()
@@ -105,12 +110,9 @@ TestApp::preShutDown()
 void
 TestApp::preInit()
 {
-  g_app = this;
-
   auto& api = GraphicAPI::instance();
 
   api.eventsFunction = WindowProc;
-  
 }
 
 void 

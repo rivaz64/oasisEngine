@@ -15,6 +15,7 @@
 
 
 //#include <d3dx11.h>
+class BaseApp;
 
 namespace oaEngineSDK{
 
@@ -27,7 +28,7 @@ class DX11GraphicAPI :
   onShutDown() override;
 
   bool
-  initialize() override;
+  initialize(BaseApp* baseApp) override;
 
   bool
   isRunning() override;

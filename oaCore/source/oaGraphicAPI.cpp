@@ -18,7 +18,7 @@
 namespace oaEngineSDK{
 
 bool 
-GraphicAPI::initialize()
+GraphicAPI::initialize(BaseApp* baseApp)
 {
   return true;
 }
