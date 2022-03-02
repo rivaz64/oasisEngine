@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaResourse.h"
 #include "oaSphere.h"
 
 namespace oaEngineSDK{
@@ -14,7 +15,8 @@ namespace oaEngineSDK{
 /**
  * @brief class for 3D models
 */
-class OA_CORE_EXPORT Model
+class OA_CORE_EXPORT Model :
+  public Resourse
 {
   
  public:
@@ -76,9 +78,6 @@ class OA_CORE_EXPORT Model
     return m_materials[n] = material;
   }
 
-
-
-  String m_name;
  private:
   
   /**
@@ -91,10 +90,7 @@ class OA_CORE_EXPORT Model
   */
   Vector<SPtr<Mesh>> m_meshes;
 
-  
-
   friend class Loader;
-  friend class TestApp;
   friend class AnimationComponent;
   friend class GraphicsComponent;
   friend class SkeletalComponent;

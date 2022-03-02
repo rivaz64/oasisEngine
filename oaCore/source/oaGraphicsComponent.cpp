@@ -33,10 +33,5 @@ GraphicsComponent::update(SPtr<Actor> actor)
   
 }
 
-void
-GraphicsComponent::addModel(SPtr<Model> model)
-{
-  m_models.insert({model->m_name,ModelComponent(model)});
-}
 
 }

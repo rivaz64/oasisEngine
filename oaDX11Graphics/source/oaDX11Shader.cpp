@@ -31,7 +31,7 @@ bool DX11Shader::compileFromFile(String file)
       errorBlob->Release();
     }
     else{
-      std::cout<<"shader not found"<<std::endl;
+      print("shader not found "+file);
     }
 
     return false;

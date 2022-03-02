@@ -80,8 +80,8 @@ class OA_CORE_EXPORT Camera
    * @param the sceen to be sceen
    * @param the Actors seen by this camera
   */
-  void
-  seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
+  //void
+  //seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
 
   /**
    * @brief sets the global location of the camera

@@ -146,23 +146,23 @@ Camera::isInFrustrum(const Vector3f& _location)
 
 }*/
 
-void
-Camera::seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors)
-{
-  auto& childs = scene->getChilds();
-
-  for(auto Actor : childs){
-
-    auto component = Actor->getComponent<GraphicsComponent>();
-
-    if(component && component->m_models.size()!=0){
-      seenActors.push_back(Actor);
-    }
-
-    seeActors(Actor,seenActors);
-
-  }
-}
+//void
+//Camera::seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors)
+//{
+//  auto& childs = scene->getChilds();
+//
+//  for(auto Actor : childs){
+//
+//    auto component = Actor->getComponent<GraphicsComponent>();
+//    seenActors.push_back(Actor);
+//    //if(component && component->m_models.size()!=0){
+//    //  seenActors.push_back(Actor);
+//    //}
+//
+//    seeActors(Actor,seenActors);
+//
+//  }
+//}
 
 void 
 Camera::setLocation(const Vector3f& newLocation)

@@ -23,4 +23,5 @@ class Plane;
 class Sphere;
 class BoxAABB;
 class Capsule;
+class Frustum;
 }

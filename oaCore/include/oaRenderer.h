@@ -7,8 +7,25 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include <oaMatrix4f.h>
 
 namespace oaEngineSDK{
+
+struct RenderData{
+
+  RenderData();
+
+  RenderData(SPtr<Mesh> mesh,SPtr<Material> material, const Matrix4f& transform) :
+    m_mesh(mesh),
+    m_material(material),
+    m_transform(transform) {}
+
+  SPtr<Mesh> m_mesh;
+
+  SPtr<Material> m_material;
+
+  Matrix4f m_transform;
+};
 
 class OA_CORE_EXPORT Renderer
 {
@@ -19,6 +36,9 @@ class OA_CORE_EXPORT Renderer
 
   void
   render(SPtr<Scene> scene,SPtr<Camera> camera);
+
+  void
+  meshesInFrustum(SPtr<Actor> actor,const Frustum& frustum,Vector<RenderData>& meshes);
 
  protected:
   

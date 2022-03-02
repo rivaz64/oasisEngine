@@ -20,12 +20,12 @@ SkeletalComponent::getType()
 
 void SkeletalComponent::update(SPtr<Actor> actor)
 {
-  if(m_skeleton)
-  for(auto it= m_sockets.begin(); it!=m_sockets.end(); ++it){
-    actor->getComponent<GraphicsComponent>()->m_models[it->first->m_name].transform = 
-    m_skeleton->m_finalMatrix[it->second];
-    
-  }
+  //if(m_skeleton)
+  //for(auto it= m_sockets.begin(); it!=m_sockets.end(); ++it){
+  //  actor->getComponent<GraphicsComponent>()->m_models[it->first->m_name].transform = 
+  //  m_skeleton->m_finalMatrix[it->second];
+  //  
+  //}
 
   /*OA_ASSERT(actor->getComponent<GraphicsComponent>().get());
 

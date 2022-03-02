@@ -14,9 +14,14 @@ namespace oaEngineSDK{
 class OA_UTILITY_EXPORT Frustum
 {
  public:
-  /**
-   * @brief 
-  */
+  
+  Frustum(const Vector3f& location,
+          const Matrix3f& axis,
+          const float nearPlaneDistance,
+          const float farPlaneDistance,
+          const float viewAngle,
+          const float ratio);
+
   void
   calculatePlanes(const Vector3f& location,
                   const Matrix3f& axis,

@@ -70,7 +70,20 @@ class OA_CORE_EXPORT Actor :
   SPtr<T>
   getComponent(){
     T temp;
-    return cast<T>(m_components[temp.getType()]);
+    if(m_components.find(temp.getType()) == m_components.end()){
+      return SPtr<T>();
+    }
+    return cast<T>(m_components[temp.getType()][0]);
+  }
+
+  template<class T>
+  Vector<Component>
+  getComponents(){
+    T temp;
+    if(m_components.find(temp.getType()) == m_components.end()){
+      return SPtr<T>();
+    }
+    return m_components[temp.getType()];
   }
  
  private:
@@ -102,7 +115,7 @@ class OA_CORE_EXPORT Actor :
   /**
    * @brief all the components this actor has
   */
-  Map<COMPONENT_TYPE::E,SPtr<Component>> m_components;
+  Map<COMPONENT_TYPE::E,Vector<SPtr<Component>>> m_components;
 
   /**
    * @brief the dirty flag of the local and global matrix

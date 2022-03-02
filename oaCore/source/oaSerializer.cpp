@@ -152,6 +152,8 @@ Serializer::decodeMaterial()
 void
 Serializer::encodeModel(SPtr<Model> model)
 {
+  encodeString(model->getName());
+
   SIZE_T meshNum = model->getNumOfMeshes();
 
   file.write(reinterpret_cast<char*>(&meshNum),sizeof(SIZE_T));
@@ -177,6 +179,8 @@ Serializer::encodeModel(SPtr<Model> model)
     auto vertexData = staticMesh->getVertex().data();
 
     file.write(reinterpret_cast<const char*>(vertexData),sizeof(Vertex)*vertexNum);
+
+    encodeString(model->getMaterial(meshN)->getName());
   }
 }
 
@@ -184,6 +188,8 @@ SPtr<Model>
 Serializer::decodeModel()
 {
   auto model = newSPtr<Model>();
+
+  model->setName(decodeString());
 
   SIZE_T meshNum;
 
@@ -193,8 +199,10 @@ Serializer::decodeModel()
 
   SIZE_T indexNum;
 
+  String materialName;
+
   for(SIZE_T meshN = 0; meshN < meshNum; meshN++){
-    auto mesh = newSPtr<Mesh>();
+    auto mesh = newSPtr<StaticMesh>();
 
     file.read(reinterpret_cast<char*>(&indexNum),sizeof(SIZE_T));
 
@@ -204,13 +212,15 @@ Serializer::decodeModel()
 
     file.read(reinterpret_cast<char*>(indexData),sizeof(uint32)*indexNum);
 
-    auto staticMesh = cast<StaticMesh>(mesh);
+    //auto staticMesh = cast<StaticMesh>(mesh);
 
-    SIZE_T vertexNum = staticMesh->getVertexNum();
+    SIZE_T vertexNum = mesh->getVertexNum();
 
     file.read(reinterpret_cast<char*>(&vertexNum),sizeof(SIZE_T));
 
-    SIZE_T vertexData = reinterpret_cast<SIZE_T>(staticMesh->getVertex().data());
+    mesh->setVertexNum(vertexNum);
+
+    SIZE_T vertexData = reinterpret_cast<SIZE_T>(mesh->getVertex().data());
 
     file.read(reinterpret_cast<char*>(vertexData),sizeof(Vertex)*vertexNum);
 
@@ -218,9 +228,9 @@ Serializer::decodeModel()
 
     model->addMesh(mesh);
 
-    model->m_name = "loaded";
+    materialName = decodeString();
 
-    //model->addMaterial(ResoureManager::instance().m_materials["default"]);
+    model->addMaterial(ResoureManager::instance().m_materials[materialName]);
   }
   
   return model;

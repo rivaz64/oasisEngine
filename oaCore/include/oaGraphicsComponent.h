@@ -6,6 +6,7 @@
 
 #pragma once
 #include "oaPrerequisitesCore.h"
+#include "oaTransform.h"
 #include "oaComponent.h"
 #include "oaMatrix4f.h"
 
@@ -65,22 +66,39 @@ class OA_CORE_EXPORT GraphicsComponent :
   update(SPtr<Actor> actor) override;
 
   /**
-   * @brief adds a model to the list of models
-   * @param model the model to add
-   * @param name the name to identify this model
+   * @brief set the model of this component
+   * @param model 
   */
-  void
-  addModel(SPtr<Model> model);
-
- public:
+  FORCEINLINE void
+  setModel(SPtr<Model> model){
+    m_model = model;
+  }
 
   /**
-   * @brief the models and their local transforms
+   * @brief gets the model of this component
+   * @return 
   */
-  Map<String,ModelComponent> m_models;
+  FORCEINLINE const SPtr<Model>&
+  getModel(){
+    return m_model;
+  }
 
+  FORCEINLINE Transform&
+  getTransform(){
+    return m_transform;
+  }
 
-  
+ private:
+
+  /**
+   * @brief the model of the component
+  */
+  SPtr<Model> m_model;
+
+  /**
+   * @brief the transform of the model
+  */
+  Transform m_transform;
 };
 
 }

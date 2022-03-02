@@ -64,7 +64,7 @@ class OA_UTILITY_EXPORT Transform
    * @brief gets the location of this transform
    * @return 
   */
-  FORCEINLINE const Vector3f&
+  FORCEINLINE Vector3f&
   getLocation(){
     return m_location;
   }
@@ -73,7 +73,7 @@ class OA_UTILITY_EXPORT Transform
    * @brief gets the scale of this transform
    * @return 
   */
-  FORCEINLINE const Vector3f&
+  FORCEINLINE Vector3f&
   getScale(){
     dirty = true;
     return m_scale;
@@ -83,7 +83,7 @@ class OA_UTILITY_EXPORT Transform
    * @brief gets the rotation of this transform
    * @return 
   */
-  FORCEINLINE const Vector3f&
+  FORCEINLINE Vector3f&
   getRotation(){
     dirty = true;
     return m_rotation;

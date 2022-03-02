@@ -4,13 +4,22 @@
 
 namespace oaEngineSDK{
 
+Frustum::Frustum(const Vector3f& location, 
+                 const Matrix3f& axis, 
+                 const float nearPlaneDistance, 
+                 const float farPlaneDistance, 
+                 const float viewAngle, 
+                 const float ratio)
+{
+  calculatePlanes(location,axis,nearPlaneDistance,farPlaneDistance,viewAngle,ratio);
+}
 void 
 Frustum::calculatePlanes(const Vector3f& location, 
-                   const Matrix3f& axis, 
-                   const float nearPlaneDistance, 
-                   const float farPlaneDistance, 
-                   const float viewAngle, 
-                   const float ratio)
+                         const Matrix3f& axis, 
+                         const float nearPlaneDistance, 
+                         const float farPlaneDistance, 
+                         const float viewAngle, 
+                         const float ratio)
 {
 
   auto points = calculatePoints(location,axis,nearPlaneDistance,farPlaneDistance,viewAngle,ratio);
@@ -45,7 +54,7 @@ Frustum::calculatePoints(const Vector3f& location,
   Vector3f farNorthWest = location+axis*Vector3f(-farWidth,farHeight,farPlaneDistance);
   Vector3f farNorthEast = location+axis*Vector3f(farWidth,farHeight,farPlaneDistance);
   Vector3f farSouthWest = location+axis*Vector3f(-farWidth,-farHeight,farPlaneDistance);
-  Vector3f farSouthEast = location+axis*Vector3f(farWidth,-farHeight,nearPlaneDistance);
+  Vector3f farSouthEast = location+axis*Vector3f(farWidth,-farHeight,farPlaneDistance);
 
   return {nearNorthWest, 
           nearNorthEast, 

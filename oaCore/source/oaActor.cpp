@@ -31,16 +31,22 @@ void
 Actor::attachComponent(SPtr<Component> component)
 {
   component->onAttach(shared_from_this());
-  m_components.insert({component->getType(),component});
-  m_components[component->getType()] = component;
+  auto type = component->getType();
+  if(m_components.find(type) == m_components.end()){
+    m_components.insert({component->getType(),{}});
+  }
+  m_components[type].push_back(component);
+  
 }
 
 void 
 Actor::update()
 {
-  for(auto component : m_components){
-    if(component.second.get())
-    component.second->update(shared_from_this());
+  for(auto& componentList : m_components){
+    for(auto& component : componentList.second){
+      component->update(shared_from_this());
+    }
+    
   }
 }
 

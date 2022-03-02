@@ -546,7 +546,7 @@ Loader::checkForLoad(const Path& file)
    
   
   ResoureManager::instance().m_models.insert({StringUtilities::toString(file.getCompletePath()),model});
-  model->m_name =StringUtilities::toString(file.getName());
+  model->setName(StringUtilities::toString(file.getName()));
 
   return static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }

@@ -332,19 +332,17 @@ void oaEngineSDK::TestApp::drawImGui()
     SPtr<Component> component;
     component = m_selectedActor->getComponent<GraphicsComponent>();
     if (component && ImGui::CollapsingHeader("models")){
-      
+      auto graphicsComponent = cast<GraphicsComponent>(component);
       if(ImGui::Button("select model") && m_selectedModel.get()){
-        cast<GraphicsComponent>(component)->addModel(m_selectedModel);
+        graphicsComponent->setModel(m_selectedModel);
       }
-      for(auto& model : cast<GraphicsComponent>(component)->m_models){
-        if(ImGui::Button(model.second.model->m_name.c_str())){
-          m_selectedModelComponent = &model.second;
-        }
-      }
-      if(m_selectedModelComponent){
-        ImGui::DragFloat3("location Model",&m_selectedModelComponent->location.x);
-        ImGui::DragFloat3("scale Model",&m_selectedModelComponent->scale.x);
-        ImGui::DragFloat3("rotation Model",&m_selectedModelComponent->rotation.x);
+      auto& model = graphicsComponent->getModel();
+      if(model){
+        ImGui::Text(model->getName().c_str());
+        auto& transform = graphicsComponent->getTransform();
+        ImGui::DragFloat3("location Model",&transform.getLocation().x);
+        ImGui::DragFloat3("scale Model",&transform.getScale().x);
+        ImGui::DragFloat3("rotation Model",&transform.getRotation().x);
       }
 
     }
@@ -449,7 +447,7 @@ void oaEngineSDK::TestApp::drawImGui()
     }
 
     for(auto model : resourceManager.m_models){
-      if(ImGui::Button(model.second->m_name.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(model.second->getName().c_str(),ImVec2(100,100))){
         m_selectedModel = model.second;
       }
     }
@@ -580,17 +578,20 @@ void oaEngineSDK::TestApp::drawImGui()
       serializer.init(path);
 
       serializer.encodeNumber(resourceManager.m_textures.size());
-
       for(auto& image: resourceManager.m_textures){
         serializer.encodeImage(image.second->getimage());
       }
 
       serializer.encodeNumber(resourceManager.m_materials.size());
-
       for(auto& material: resourceManager.m_materials){
         serializer.encodeMaterial(material.second);
       }
       
+      serializer.encodeNumber(resourceManager.m_models.size());
+      for(auto& model: resourceManager.m_models){
+        serializer.encodeModel(model.second);
+      }
+
     }
   }
 
@@ -612,6 +613,12 @@ void oaEngineSDK::TestApp::drawImGui()
       for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
         auto material = serializer.decodeMaterial();
         ResoureManager::instance().m_materials.insert({ material->getName(),material});
+      }
+
+      number = serializer.decodeNumber();
+      for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+        auto model = serializer.decodeModel();
+        ResoureManager::instance().m_models.insert({ model->getName(),model});
       }
     }
   }

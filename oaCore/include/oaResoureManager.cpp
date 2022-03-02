@@ -294,7 +294,7 @@ ResoureManager::generateQuad()
 
   modelQuad->addMesh(quad);
 
-  modelQuad->m_name = "quad";
+  modelQuad->setName("quad");
 
   m_models.insert({ "quad",modelQuad });
 
@@ -411,8 +411,8 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms["transparent"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["transparent"]->attach(m_pixelShaders["transparent"]);
 
-  m_shaderPrograms["debug"]->attach(m_vertexShaders["vertexDebug"]);
-  m_shaderPrograms["debug"]->attach(m_pixelShaders["pixelDebug"]);
+  m_shaderPrograms["debug"]->attach(m_vertexShaders["debug"]);
+  m_shaderPrograms["debug"]->attach(m_pixelShaders["debug"]);
 
   /*m_materials.insert({"default",newSPtr<Material>()});
   m_materials.insert({"paralax",newSPtr<Material>()});
