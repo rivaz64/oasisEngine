@@ -12,6 +12,7 @@
 #include "oaMatrix4f.h"
 #include "oaVector2f.h"
 #include "oaPlane.h"
+#include "oaFrustum.h"
 
 namespace oaEngineSDK{
 
@@ -83,6 +84,12 @@ class OA_CORE_EXPORT Camera
   seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
 
   /**
+   * @brief sets the global location of the camera
+  */
+  void
+  setLocation(const Vector3f& newLocation);
+
+  /**
    * @brief getter for the view matrix
    * @return the viewMatrix
   */
@@ -108,6 +115,32 @@ class OA_CORE_EXPORT Camera
   getLocation(){
     return m_location;
   }
+
+  FORCEINLINE const Matrix3f&
+  getAxisMatrix(){
+    return m_axis;
+  }
+
+  FORCEINLINE float
+  getNearPlaneDistance(){
+    return m_nearPlaneDistance;
+  }
+
+  FORCEINLINE float
+  getFarPlaneDistance(){
+    return m_farPlaneDistance;
+  }
+
+  FORCEINLINE float
+  getViewAngle(){
+    return m_viewAngle;
+  }
+
+  FORCEINLINE float
+  getRatio(){
+    return m_ratio;
+  }
+
 
  public:
   /**
@@ -178,8 +211,7 @@ class OA_CORE_EXPORT Camera
   /**
    * @brief dirty flags for the view matrix
   */
-  uint8
-  dirtyFlags;
+  uint8 dirtyFlags;
 };
 
 }

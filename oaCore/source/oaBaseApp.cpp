@@ -23,9 +23,18 @@
 
 namespace oaEngineSDK{
 
+
+
 using function = const void* (*)();
 
-void BaseApp::onShutDown()
+BaseApp::BaseApp()
+  : m_windowName("Oasis Engine"), m_windowSize(800,600)
+{
+
+}
+
+void 
+BaseApp::onShutDown()
 {
   preShutDown();
   GraphicAPI::shutDown();
@@ -52,8 +61,11 @@ BaseApp::run()
     GraphicAPI::startUp();
   }
 
-  preInit();
-  if(GraphicAPI::instancePtr()->initialize(this)){
+  onInit();
+
+   GraphicAPI::instance().createWindow(this,m_windowSize,m_windowName);
+
+  if(GraphicAPI::instance().initialize()){
 
     ResoureManager::startUp();
     InputManager::startUp();
@@ -109,9 +121,9 @@ BaseApp::mainLoop()
 
     GraphicAPI::instancePtr()->events();
 
-    update(m_actualScene->m_root);
+    update(m_actualScene->getRoot());
 
-    postUpdate(Time::instancePtr()->m_deltaTime);
+    onUpdate(Time::instancePtr()->m_deltaTime);
 
     render();
   }
@@ -202,36 +214,8 @@ BaseApp::resizeWindow()
 void 
 BaseApp::processInputs(char input)
 {
-  switch (input)
-  {
-  case 'A':
-    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
-    break;
-
-  case 'D':
-    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
-    break;
-
-  case 'W':
-    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
-    break;
-
-  case 'S':
-    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
-    break;
-
-  case 'Q':
-    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
-    break;
-
-  case 'E':
-    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
-    break;
-
-  default:
-    //print(StringUtilities::toString(input));
-    break;
-  }
+  onKeyBoardInput(input);
+  
 }
 
 }

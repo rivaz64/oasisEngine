@@ -13,7 +13,7 @@ bool DX11SamplerState::init(SamplerDesc descriptor)
 {
   D3D11_SAMPLER_DESC sampDesc;
 
-  ZeroMemory(&sampDesc, sizeof(sampDesc));
+  memset(&sampDesc, 0, sizeof(sampDesc));
 
   sampDesc.Filter = Flags::FILTER_FLAGS[descriptor.filter];
 

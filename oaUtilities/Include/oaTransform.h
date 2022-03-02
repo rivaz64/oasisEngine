@@ -34,6 +34,15 @@ class OA_UTILITY_EXPORT Transform
   }
 
   /**
+   * @brief sets the location of this transfomr
+   * @param location 
+  */
+  FORCEINLINE void
+  move(const Vector3f& delta){
+    m_location += delta;
+  }
+
+  /**
    * @brief sets the scale of this transfomr
    * @param scale 
   */

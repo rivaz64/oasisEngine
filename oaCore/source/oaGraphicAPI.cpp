@@ -14,11 +14,13 @@
 #include "oaVertexBuffer.h"
 #include "oaIndexBuffer.h"
 #include "oaShaderProgram.h"
+#include "oaRasterizer.h"
+#include "oaBlender.h"
 
 namespace oaEngineSDK{
 
 bool 
-GraphicAPI::initialize(BaseApp* baseApp)
+GraphicAPI::initialize()
 {
   return true;
 }
@@ -82,6 +84,18 @@ SPtr<DepthStencil>
 GraphicAPI::createDepthStencil(const DepthStencilDesc&, SPtr<Texture>)
 {
   return SPtr<DepthStencil>();
+}
+
+SPtr<Rasterizer> 
+GraphicAPI::createRasterizer()
+{
+  return newSPtr<Rasterizer>();
+}
+
+SPtr<Blender> 
+GraphicAPI::createBlender()
+{
+  return newSPtr<Blender>();
 }
 
 SPtr<Texture> 

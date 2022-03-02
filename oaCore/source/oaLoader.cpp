@@ -194,7 +194,7 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
     readStaticMesh(cast<StaticMesh>(mesh),aMesh);
 
-    model->addMaterial(ResoureManager::instance().m_materials["default"]);
+    //model->addMaterial(ResoureManager::instance().m_materials["default"]);
 
     /*if(aMesh->HasBones()){
 
@@ -262,15 +262,13 @@ loadImage(const Path& path){
     return false;
   }
 
-  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+  image->setName(StringUtilities::toString(path.getName()));
 
-  texture->init(image->m_width,image->m_height);
+  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
   texture->initFromImage(image);
 
-  ResoureManager::instance().m_textures.insert({ StringUtilities::toString(path.getName()),texture});
-
-  texture->m_name =  StringUtilities::toString(path.getName());
+  ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
 
   return true;
 }
@@ -294,7 +292,9 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     WString MaterialName = StringUtilities::toWString(notMyString.C_Str());
 
-    auto mat = copy(model->getMaterial(numMaterial));
+    print(StringUtilities::toString(MaterialName));
+
+    auto mat = newSPtr<Material>();
 
     Path texturePath;
 
@@ -303,7 +303,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->m_diffuse = manager.m_textures[ StringUtilities::toString(textureName)];
+      mat->setTexture(TEXTURE_TYPE::kDiffuse, manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
     textureName = MaterialName+L"N";
@@ -311,7 +311,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->m_normalMap = manager.m_textures[ StringUtilities::toString(textureName)];
+      mat->setTexture(TEXTURE_TYPE::kNormalMap, manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
     textureName = MaterialName+L"S";
@@ -319,10 +319,16 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->m_specular = manager.m_textures[ StringUtilities::toString(textureName)];
+      mat->setTexture(TEXTURE_TYPE::kSpecular,manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
-    model->setMaterial(mat,numMaterial);
+    mat->setShader(SHADER_TYPE::kNormal);
+
+    model->addMaterial(mat);
+
+    mat->setName(StringUtilities::toString(MaterialName));
+
+    manager.m_materials.insert({mat->getName(),mat});
   }
 }
 

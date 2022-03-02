@@ -18,12 +18,20 @@ class OA_UTILITY_EXPORT Frustum
    * @brief 
   */
   void
-  calculate(const Vector3f& location,
-            const Matrix3f& axis,
-            const float nearPlaneDistance,
-            const float farPlaneDistance,
-            const float viewAngle,
-            const float ratio);
+  calculatePlanes(const Vector3f& location,
+                  const Matrix3f& axis,
+                  const float nearPlaneDistance,
+                  const float farPlaneDistance,
+                  const float viewAngle,
+                  const float ratio);
+
+  static Vector<Vector3f>
+  calculatePoints(const Vector3f& location,
+                  const Matrix3f& axis,
+                  const float nearPlaneDistance,
+                  const float farPlaneDistance,
+                  const float viewAngle,
+                  const float ratio);
 
  private:
   /**

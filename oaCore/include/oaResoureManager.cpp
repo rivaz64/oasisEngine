@@ -49,10 +49,10 @@ ResoureManager::onStartUp()
   generateCone(36);
   generateCilinder(36);
   generateTorus(36,36,.5f);*/
-  generateQuad();
-  loadDefaulTextures();
+  //generateQuad();
+  //loadDefaulTextures();
   loadDefaultShaders();
-  generateDefaultMaterial();
+  generateDefaultShaderPrograms();
 }
 /*
 void 
@@ -364,20 +364,20 @@ void ResoureManager::loadDefaultShaders()
 {
   m_vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
   m_vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
+  m_vertexShaders.insert({"debug",GraphicAPI::instancePtr()->createVertexShader()});
   m_pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
   m_pixelShaders.insert({"paralax",GraphicAPI::instancePtr()->createPixelShader()});
-
+  m_pixelShaders.insert({"transparent",GraphicAPI::instancePtr()->createPixelShader()});
+  m_pixelShaders.insert({"debug",GraphicAPI::instancePtr()->createPixelShader()});
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
-  m_vertexShaders["default"]->m_name = "normal";
-
   m_vertexShaders["animation"]->compileFromFile("animVertexShader");
-  m_vertexShaders["animation"]->m_name = "animation";
+  m_vertexShaders["debug"]->compileFromFile("vertexDebug");
 
   m_pixelShaders["default"]->compileFromFile("pixelShader");
   m_pixelShaders["paralax"]->compileFromFile("paralax");
-
-  
+  m_pixelShaders["transparent"]->compileFromFile("transparent");
+  m_pixelShaders["debug"]->compileFromFile("pixelDebug");
   
 }
 
@@ -390,29 +390,48 @@ void ResoureManager::loadDefaulTextures()
 }
 
 void
-ResoureManager::generateDefaultMaterial()
+ResoureManager::generateDefaultShaderPrograms()
 {
-  m_materials.insert({"default",newSPtr<Material>()});
+  auto& graphicApi = GraphicAPI::instance();
+  m_shaderPrograms.insert({"default",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"paralax",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"animation",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"transparent",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"debug",graphicApi.createShaderProgram()});
+
+  m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
+  m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
+
+  m_shaderPrograms["animation"]->attach(m_vertexShaders["animation"]);
+  m_shaderPrograms["animation"]->attach(m_pixelShaders["default"]);
+
+  m_shaderPrograms["paralax"]->attach(m_vertexShaders["default"]);
+  m_shaderPrograms["paralax"]->attach(m_pixelShaders["paralax"]);
+
+  m_shaderPrograms["transparent"]->attach(m_vertexShaders["default"]);
+  m_shaderPrograms["transparent"]->attach(m_pixelShaders["transparent"]);
+
+  m_shaderPrograms["debug"]->attach(m_vertexShaders["vertexDebug"]);
+  m_shaderPrograms["debug"]->attach(m_pixelShaders["pixelDebug"]);
+
+  /*m_materials.insert({"default",newSPtr<Material>()});
   m_materials.insert({"paralax",newSPtr<Material>()});
   m_materials.insert({"animation",newSPtr<Material>()});
-
-  m_materials["default"]->m_program->attach(m_vertexShaders["default"]);
-  m_materials["default"]->m_program->attach(m_pixelShaders["default"]);
-  m_materials["default"]->m_diffuse = m_textures["default"];
+  //m_materials["default"]->m_diffuse = m_textures["default"];
   
   m_materials["default"]->m_name = "default";
   
   m_materials["animation"]->m_program->attach(m_vertexShaders["animation"]);
   m_materials["animation"]->m_program->attach(m_pixelShaders["default"]);
-  m_materials["animation"]->m_diffuse = m_textures["default"];
+  //m_materials["animation"]->m_diffuse = m_textures["default"];
 
   m_materials["animation"]->m_name = "animation";
 
   m_materials["paralax"]->m_program->attach(m_vertexShaders["default"]);
   m_materials["paralax"]->m_program->attach(m_pixelShaders["paralax"]);
-  m_materials["paralax"]->m_diffuse = m_textures["default"];
+  //m_materials["paralax"]->m_diffuse = m_textures["default"];
 
-  m_materials["paralax"]->m_name = "paralax";
+  m_materials["paralax"]->m_name = "paralax";*/
 }
 
 }

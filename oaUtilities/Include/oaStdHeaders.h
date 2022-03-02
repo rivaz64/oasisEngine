@@ -46,14 +46,14 @@ using std::to_string;
  * @brief wraper of the std::vector, can be changed in the future
  * @tparam T
 */
-template <class T>
+template <typename T>
 using Vector = vector<T>;
 
 /**
  * @brief wraper of the std::list, can be changed in the future
  * @tparam T
 */
-template <class T>
+template <typename T>
 using List = list<T>;
 
 /**
@@ -77,14 +77,14 @@ using FStream = fstream;
  * @brief wraper of the std::shared_ptr, can be changed in the future
  * @tparam T
 */
-template <class T>
+template <typename T>
 using SPtr = shared_ptr<T>;
 
 /**
 * @brief wraper of the std::make_shared
 * @tparam T
 */
-template <class T, class... _Types>
+template <typename T, typename... _Types>
 FORCEINLINE SPtr<T> 
 newSPtr(_Types&&... _Args) {
   return make_shared<T>(std::forward<_Types>(_Args)...);
@@ -106,7 +106,7 @@ swap(float& a, float& b) {
  * @tparam T1 
  * @tparam T2 
 */
-template <class T1, class T2>
+template <typename T1, typename T2>
 using Map = map<T1,T2>;
 
 /**
@@ -114,7 +114,7 @@ using Map = map<T1,T2>;
  * @tparam T1 
  * @tparam T2 
 */
-template <class T1, class T2>
+template <typename T1, typename T2>
 using Pair = pair<T1,T2>;
 
 /**
@@ -124,13 +124,13 @@ using Pair = pair<T1,T2>;
  * @param pointer 
  * @return 
 */
-template<class T,class U>
+template<typename T,typename U>
 FORCEINLINE SPtr<T> 
 cast(const SPtr<U>& pointer){
   return reinterpret_pointer_cast<T>(pointer);
 }
 
-template<class T>
+template<typename T>
 FORCEINLINE SPtr<T> 
 copy(const SPtr<T>& pointer){
   return make_shared<T>(*pointer.get());
@@ -139,7 +139,7 @@ copy(const SPtr<T>& pointer){
 /**
  * @brief wraper for a class that can make a shared from this
 */
-template<class T>
+template<typename T>
 using SharedEnabled = enable_shared_from_this<T>;
 
 /**

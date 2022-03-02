@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaBuffer.h"
 #include "oaFlags.h"
+#include "oaImage.h"
 
 namespace oaEngineSDK{
 
@@ -131,8 +132,22 @@ class OA_CORE_EXPORT Texture
   virtual void*
   getId();
 
-  String m_name;
+  FORCEINLINE SPtr<Image>
+  getimage(){
+    return m_image;
+  }
 
+  FORCEINLINE void
+  setimage(SPtr<Image> image){
+    m_image = image;
+  }
+
+  FORCEINLINE const String&
+  getName(){
+    return m_image->getName();
+  }
+
+ protected:
   SPtr<Image> m_image;
 
   friend class ResoureManager;

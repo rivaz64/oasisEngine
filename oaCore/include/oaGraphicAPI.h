@@ -42,7 +42,10 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return if the initialization was correct
   */
   virtual bool
-  initialize(BaseApp* baseApp);
+  initialize();
+
+  virtual void 
+  createWindow(void* /*app*/, const Vector2U& /*size*/, const String& /*name*/){}
 
   /**
    * @brief if the grafics are still doing things
@@ -132,6 +135,20 @@ class OA_CORE_EXPORT GraphicAPI :
   createDepthStencil(const DepthStencilDesc& /*description*/, SPtr<Texture> /*texture*/);
 
   /**
+   * @brief creates a new rasterizer
+   * @return 
+  */
+  virtual SPtr<Rasterizer>
+  createRasterizer();
+
+   /**
+   * @brief creates a new blender
+   * @return 
+  */
+  virtual SPtr<Blender>
+  createBlender();
+
+  /**
   * @brief sets the color of the background
   * @param color 
   */
@@ -192,6 +209,20 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setSamplerState(const SPtr<SamplerState> /*sampler*/) {}
+
+  /**
+   * @brief sets a rasterizer to be used
+   * @param  
+  */
+  virtual void
+  setRasterizer(const SPtr<Rasterizer> /*rasterizer*/) {}
+
+  /**
+   * @brief sets a blender to be used
+   * @param  
+  */
+  virtual void
+  setBlender(const SPtr<Blender> /*blender*/) {}
 
   /**
    * @brief clears a render target
@@ -277,10 +308,6 @@ class OA_CORE_EXPORT GraphicAPI :
   GRAPHIC_API::E m_actualGraphicAPI = GRAPHIC_API::NONE;
 
  protected:
-  /**
-   * @brief the name of the window 
-  */
-  const String m_windowName = "Oasis Engine";
 
   friend class Module<GraphicAPI>;
 };

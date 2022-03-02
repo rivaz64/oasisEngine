@@ -1,7 +1,7 @@
 /**
 * @file oaSerializer.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 9/25/2021
+* @date 2/25/2022
 */
 
 #pragma once
@@ -19,6 +19,30 @@ class OA_CORE_EXPORT Serializer
 
   void 
   init(const Path& path);
+
+  void
+  encodeNumber(SIZE_T n);
+
+  SIZE_T
+  decodeNumber();
+
+  void
+  encodeString(const String& string);
+
+  String
+  decodeString();
+
+  void
+  encodeImage(SPtr<Image> image);
+
+  SPtr<Image>
+  decodeImage();
+
+  void
+  encodeMaterial(SPtr<Material> material);
+
+  SPtr<Material>
+  decodeMaterial();
 
   void
   encodeModel(SPtr<Model> model);

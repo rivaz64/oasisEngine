@@ -1,27 +1,23 @@
 #include "oaDX11GraphicAPI.h"
+#include <d3d11.h>
+#include <oaVector2U.h>
+#include <oaInputManager.h>
 #include "oaDX11VertexShader.h"
 #include "oaDX11PixelShader.h"
 #include "oaDX11Buffer.h"
 #include "oaDX11Texture.h"
 #include "oaDX11SamplerState.h"
 #include "oaDX11RenderTarget.h"
-#include "oaMesh.h"
 #include "oaDX11DepthStencil.h"
-#include "oaInputManager.h"
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11IndexBuffer.h"
 #include "oaDX11ShaderProgram.h"
-#include "oaBaseApp.h"
-#include <windows.h>
-#include <d3d11.h>
-#include <iostream>
+#include "oaDX11Rasterizer.h"
+#include "oaDX11Blender.h"
+
 
 
 namespace oaEngineSDK{
-
-struct ExtraBytes{
-  BaseApp* app;
-};
 
 void 
 DX11GraphicAPI::onShutDown()
@@ -34,43 +30,9 @@ DX11GraphicAPI::onShutDown()
 }
 
 bool
-DX11GraphicAPI::initialize(BaseApp* baseApp)
+DX11GraphicAPI::initialize()
 {
   std::cout<<"directX graphic API"<<std::endl;
-
-  WNDCLASSEX wc;
-
-  ZeroMemory(&wc, sizeof(WNDCLASSEX));
-
-  wc.cbSize = sizeof(WNDCLASSEX);
-  wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = static_cast<WNDPROC>(eventsFunction);
-  wc.hInstance = GetModuleHandleA(nullptr);
-  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-  wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
-  wc.lpszClassName = "oasisEngine";
-  wc.cbWndExtra = sizeof(BaseApp*);
-
-  RegisterClassEx(&wc);
-
-  m_hWnd = CreateWindowEx(NULL,
-                        "oasisEngine", 
-                        m_windowName.c_str(),   
-                        WS_OVERLAPPEDWINDOW,    
-                        300,    
-                        200,   
-                        m_windowWidth,  
-                        m_windowHeight,    
-                        nullptr,    
-                        nullptr,    
-                        GetModuleHandleA(nullptr),   
-                        baseApp); 
-
-  SetWindowLongPtr(m_hWnd,0,reinterpret_cast<LONG_PTR>(baseApp));
-
-  ShowWindow(m_hWnd, SW_SHOWDEFAULT);
-
-  
 
   UINT createDeviceFlags = 0;
 #ifdef _DEBUG
@@ -99,7 +61,7 @@ DX11GraphicAPI::initialize(BaseApp* baseApp)
   HRESULT hr = S_OK;
 
   DXGI_SWAP_CHAIN_DESC sd;
-  ZeroMemory( &sd, sizeof( sd ) );
+  memset( &sd, 0, sizeof( sd ) );
   sd.BufferCount = 1;
   sd.BufferDesc.Width = m_windowWidth;
   sd.BufferDesc.Height = m_windowHeight;
@@ -128,6 +90,42 @@ DX11GraphicAPI::initialize(BaseApp* baseApp)
   }
 
   return true;
+}
+
+void 
+DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name)
+{
+  WNDCLASSEX wc;
+
+  memset(&wc,0, sizeof(WNDCLASSEX));
+
+  wc.cbSize = sizeof(WNDCLASSEX);
+  wc.style = CS_HREDRAW | CS_VREDRAW;
+  wc.lpfnWndProc = static_cast<WNDPROC>(eventsFunction);
+  wc.hInstance = GetModuleHandleA(nullptr);
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
+  wc.lpszClassName = "oasisEngine";
+  wc.cbWndExtra = sizeof(void*);
+
+  RegisterClassEx(&wc);
+
+  m_hWnd = CreateWindowEx(NULL,
+                        "oasisEngine", 
+                        name.c_str(),   
+                        WS_OVERLAPPEDWINDOW,    
+                        300,    
+                        200,   
+                        size.x,  
+                        size.y,    
+                        nullptr,    
+                        nullptr,    
+                        GetModuleHandleA(nullptr),   
+                        nullptr); 
+
+  SetWindowLongPtr(m_hWnd,0,reinterpret_cast<LONG_PTR>(app));
+
+  ShowWindow(m_hWnd, SW_SHOWDEFAULT); 
 }
 
 bool 
@@ -235,6 +233,16 @@ DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Tex
   return renderTarget;
 }
 
+SPtr<Rasterizer> DX11GraphicAPI::createRasterizer()
+{
+  return newSPtr<DX11Rasterizer>();
+}
+
+SPtr<Blender> DX11GraphicAPI::createBlender()
+{
+  return newSPtr<DX11Blender>();
+}
+
 void 
 DX11GraphicAPI::setBackgroundColor(const Color& color)
 {
@@ -293,6 +301,18 @@ void
 DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
 {
   m_context->PSSetSamplers( 0, 1, &cast<DX11SamplerState>(sampler)->m_samplerState);
+}
+
+void 
+DX11GraphicAPI::setRasterizer(const SPtr<Rasterizer> rasterizer)
+{
+  m_context->RSSetState(cast<DX11Rasterizer>(rasterizer)->m_id);
+}
+
+void 
+DX11GraphicAPI::setBlender(const SPtr<Blender> blender)
+{
+  //m_context->OMSetBlendState(cast<DX11Blender>(blender)->m_id);
 }
 
 void 

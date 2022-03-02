@@ -13,7 +13,7 @@ DX11DepthStencil::~DX11DepthStencil()
 bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
 {
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-  ZeroMemory( &descDSV, sizeof(descDSV) );
+  memset( &descDSV,0, sizeof(descDSV) );
   descDSV.Format = Flags::FORMATS[descritor.format];
   descDSV.ViewDimension = Flags::DS_DIMENCIONS[descritor.viewDimension];
   descDSV.Texture2D.MipSlice = 0;

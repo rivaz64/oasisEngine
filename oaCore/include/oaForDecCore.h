@@ -25,9 +25,15 @@ class Path;
 class GraphicsComponent;
 class SkeletalComponent;
 class AnimationComponent;
+class CameraComponent;
 class Scene;
 class ShaderProgram;
 class Camera;
 class Scene;
 class Image;
+class Resourse;
+class Rasterizer;
+class Renderer;
+class Blender;
+class DebugMesh;
 }

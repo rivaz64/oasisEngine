@@ -7,8 +7,14 @@ using oaEngineSDK::TestApp;
 
 int main(){
   //srand(time(NULL));
-  BaseApp::startUp<TestApp>();
-  BaseApp::instancePtr()->run();
-  BaseApp::shutDown();
+  BaseApp* app = new TestApp;
+  //app.startUp<TestApp>();
+  app->run();
+  //app.shutDown();
+
+  delete app;
+
+  app = 0;
+
   return 0;
 }

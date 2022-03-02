@@ -23,13 +23,13 @@ class TestApp :
 public:
 
   void
-  preInit();
+  onInit() override;
 
   void 
   postInit() override;
 
   void
-  postUpdate(float delta) override;
+  onUpdate(float delta) override;
 
   void
   preShutDown() override;
@@ -64,17 +64,10 @@ public:
   SubMesh
   SubDivide(const SubMesh& data);
 
-  
+  void
+  onKeyBoardInput(char input);
 
  public:
-
-  SPtr<Buffer> m_globalTransformBuffer;
-
-  SPtr<Buffer> m_viewBuffer;
-
-  SPtr<Buffer> m_projectionBuffer;
-
-  SPtr<Buffer> m_viewLocationBuffer;
 
   SPtr<SamplerState> m_samplerState; 
 
@@ -94,7 +87,11 @@ public:
 
   SPtr<ShaderProgram> m_program; 
 
+  SPtr<Renderer> m_renderer;
+
   SPtr<Buffer> lights;
+
+  SPtr<Actor> m_controlledActor;
 
   Vector4f dir;
 

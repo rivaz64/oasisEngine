@@ -16,6 +16,7 @@ namespace oaEngineSDK{
 */
 class OA_CORE_EXPORT Model
 {
+  
  public:
 
   /**
@@ -50,6 +51,11 @@ class OA_CORE_EXPORT Model
     return m_meshes.size();
   }
 
+  FORCEINLINE SIZE_T
+  getNumOfMaterials(){
+    return m_meshes.size();
+  }
+
   FORCEINLINE void
   setNumOfMeshes(SIZE_T n){
     return m_meshes.resize(n);
@@ -70,6 +76,9 @@ class OA_CORE_EXPORT Model
     return m_materials[n] = material;
   }
 
+
+
+  String m_name;
  private:
   
   /**
@@ -82,7 +91,7 @@ class OA_CORE_EXPORT Model
   */
   Vector<SPtr<Mesh>> m_meshes;
 
-  String m_name;
+  
 
   friend class Loader;
   friend class TestApp;

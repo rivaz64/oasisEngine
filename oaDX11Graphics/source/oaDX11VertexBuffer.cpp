@@ -6,18 +6,18 @@ namespace oaEngineSDK{
 bool DX11VertexBuffer::init(
   void* data,
   uint32 vertexSize,
-  uint32 numberOfVertices)
+  SIZE_T numberOfVertices)
 {
   m_vertexSize = vertexSize;
   D3D11_BUFFER_DESC bd;
-  ZeroMemory( &bd, sizeof(bd) );
+  memset( &bd, 0, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = vertexSize*numberOfVertices;
   bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
   bd.CPUAccessFlags = 0;
   
   D3D11_SUBRESOURCE_DATA InitData;
-  ZeroMemory( &InitData, sizeof(InitData) );
+  memset( &InitData, 0, sizeof(InitData) );
   InitData.pSysMem = data;
 
   auto api = DX11GraphicAPI::instancePtr();

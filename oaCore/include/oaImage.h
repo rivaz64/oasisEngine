@@ -7,10 +7,12 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaResourse.h"
 
 namespace oaEngineSDK{
 
-class Image
+class Image :
+  public Resourse
 {
  public:
   

@@ -12,10 +12,20 @@ namespace oaEngineSDK{
 
 class OA_CORE_EXPORT Scene
 {
+ public:
+
+  void
+  init();
+
+  FORCEINLINE SPtr<Actor> 
+  getRoot(){
+    return m_root;
+  }
+
+ private:
+
   SPtr<Actor> m_root;
 
-  friend class TestApp;
-  friend class BaseApp;
 };
 
 }

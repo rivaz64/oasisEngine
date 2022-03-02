@@ -7,26 +7,25 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaModule.h"
+#include <oaVector2U.h>
 
 namespace oaEngineSDK{
 
 /**
  * @brief the base app for the engine
 */
-class OA_CORE_EXPORT BaseApp :
-  public Module<BaseApp>
+class OA_CORE_EXPORT BaseApp
 {
- protected:
+ public:
 
-  BaseApp() = default;
+  BaseApp();
 
   ~BaseApp() = default;
 
  public:
 
   void
-  onShutDown() override;
+  onShutDown();
 
   /**
    * @brief shuts down things in the child class
@@ -44,7 +43,7 @@ class OA_CORE_EXPORT BaseApp :
   * @brief the things to do after the graphics api is started
   */
   virtual void
-  preInit() {}
+  onInit() {}
 
   /**
    * @brief the things to do after the graphics api is started
@@ -76,7 +75,7 @@ class OA_CORE_EXPORT BaseApp :
    * @brief update for the subclasss
   */
   virtual void
-  postUpdate(float /*delta*/) {}
+  onUpdate(float /*delta*/) {}
 
   /**
   * @brief render the things to the screen
@@ -109,6 +108,13 @@ class OA_CORE_EXPORT BaseApp :
   */
   void
   processInputs(char input);
+
+  /**
+   * @brief for the subclass to test the imputs
+   * @param input 
+  */
+  virtual void
+  onKeyBoardInput(char input){}
 
   /**
    * @brief if the app is running
@@ -152,7 +158,16 @@ class OA_CORE_EXPORT BaseApp :
   */
   SPtr<Camera> m_camera;
 
-  friend class Module<BaseApp>;
+  /**
+   * @brief the name of the window of the app
+  */
+  String m_windowName;
+
+  /**
+   * @brief the size of the window of the app
+  */
+  Vector2U m_windowSize;
+
 };
 
 }

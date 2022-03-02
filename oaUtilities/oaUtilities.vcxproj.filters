@@ -120,13 +120,13 @@
     <ClInclude Include="Include\oaColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaFrustrum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\oaTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\oaStringUtilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\oaFrustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -218,13 +218,13 @@
     <ClCompile Include="Source\oaColor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\oaFrustrum.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\oaTransform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaStringUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaFrustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

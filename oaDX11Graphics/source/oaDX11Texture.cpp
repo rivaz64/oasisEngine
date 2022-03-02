@@ -18,7 +18,7 @@ bool
 DX11Texture::init(TextureDesc description)
 {
   D3D11_TEXTURE2D_DESC descDepth;
-  ZeroMemory( &descDepth, sizeof(descDepth) );
+  memset( &descDepth, 0, sizeof(descDepth) );
   descDepth.Width = description.width;
   descDepth.Height = description.height;
   descDepth.MipLevels = description.mipLevels;
@@ -48,7 +48,7 @@ DX11Texture::init(TextureDesc description, ShaderResourseViewDesc descriptionSRV
   }
 
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-  ZeroMemory( &srvDesc, sizeof(srvDesc) );
+  memset( &srvDesc, 0, sizeof(srvDesc) );
   srvDesc.Format = Flags::FORMATS[descriptionSRV.format];
   srvDesc.ViewDimension = Flags::SRV_DIMENCIONS[descriptionSRV.dimencion];
   srvDesc.Texture2D.MostDetailedMip = descriptionSRV.mostDetailedMip;
@@ -79,7 +79,7 @@ DX11Texture::initFromImage(SPtr<Image> image)
   descDepth.Height = image->m_height;
   descDepth.MipLevels = 1;
   descDepth.ArraySize = 1;
-  descDepth.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
+  descDepth.Format =DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; //DXGI_FORMAT_B8G8R8X8_UNORM;
   descDepth.SampleDesc.Count = 1;
   descDepth.SampleDesc.Quality = 0;
   descDepth.Usage = D3D11_USAGE_DEFAULT;
@@ -106,7 +106,7 @@ DX11Texture::initFromImage(SPtr<Image> image)
   
 
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-  srvDesc.Format = DXGI_FORMAT_B8G8R8X8_UNORM;
+  srvDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
   srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   srvDesc.Texture2D.MipLevels = 1;
   srvDesc.Texture2D.MostDetailedMip = 0;

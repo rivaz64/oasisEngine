@@ -12,11 +12,6 @@
 #include <oaColor.h>
 #include <oaVector2I.h>
 
-
-
-//#include <d3dx11.h>
-class BaseApp;
-
 namespace oaEngineSDK{
 
 class DX11GraphicAPI :
@@ -28,7 +23,10 @@ class DX11GraphicAPI :
   onShutDown() override;
 
   bool
-  initialize(BaseApp* baseApp) override;
+  initialize() override;
+
+  void 
+  createWindow(void* app, const Vector2U& size, const String& name) override;
 
   bool
   isRunning() override;
@@ -66,6 +64,13 @@ class DX11GraphicAPI :
   SPtr<DepthStencil>
   createDepthStencil(const DepthStencilDesc& description, SPtr<Texture> texture) override;
 
+  
+  SPtr<Rasterizer>
+  createRasterizer() override;
+
+  SPtr<Blender>
+  createBlender() override;
+  
   void
   setBackgroundColor(const Color& color) override;
 
@@ -91,7 +96,13 @@ class DX11GraphicAPI :
   setSamplerState(const SPtr<SamplerState> sampler) override;
 
   void
-  setRenderTarget(const SPtr<RenderTarget> renderTarget);
+  setRasterizer(const SPtr<Rasterizer> rasterizer) override;
+
+  void
+  setBlender(const SPtr<Blender> blender) override;
+
+  void
+  setRenderTarget(const SPtr<RenderTarget> renderTarget) override;
 
   void
   setRenderTargetAndDepthStencil(
@@ -125,7 +136,7 @@ class DX11GraphicAPI :
   DX11GraphicAPI() = default;
 
  public:
-   HWND m_hWnd;
+  HWND m_hWnd;
   D3D_DRIVER_TYPE m_driverType = D3D_DRIVER_TYPE_NULL;
   D3D_FEATURE_LEVEL m_featureLevel = D3D_FEATURE_LEVEL_11_0;
   ID3D11Device* m_device = nullptr;

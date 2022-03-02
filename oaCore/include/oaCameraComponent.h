@@ -1,7 +1,7 @@
 /**
 * @file oaCameraComponent.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 2/11/2021
+* @date 11/2/2021
 */
 
 #pragma once
@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class oaCameraComponent :
+class OA_CORE_EXPORT CameraComponent :
   public Component
 {
  public:
@@ -19,7 +19,7 @@ class oaCameraComponent :
    * @brief getter for the camera
    * @return 
   */
-  FORCEINLINE SPtr<Camera> 
+  FORCEINLINE SPtr<Camera>&
   getCamera(){
     return m_camera;
   }
@@ -32,6 +32,15 @@ class oaCameraComponent :
   setCamera(SPtr<Camera> camera){
     m_camera = camera;
   }
+
+  void
+  update(SPtr<Actor> actor) override;
+
+  /**
+   * @brief if true draws the 
+  */
+  bool 
+  m_debug = false;
 
  private:
 

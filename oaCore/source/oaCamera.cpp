@@ -164,5 +164,15 @@ Camera::seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors)
   }
 }
 
+void 
+Camera::setLocation(const Vector3f& newLocation)
+{
+  auto pastLocation = m_location;
+  m_location = newLocation;
+  lookAt(m_lookingAt+newLocation-pastLocation);
+  dirtyFlags = true;
+}
+
+
 }
 

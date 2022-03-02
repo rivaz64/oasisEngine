@@ -8,7 +8,11 @@
 
 namespace oaEngineSDK {
 class Vector2f;
+class Vector2I;
+class Vector2U;
 class Vector3f;
+class Vector3I;
+class Vector3U;
 class Vector4f;
 class Matrix3f;
 class Matrix4f;

@@ -100,7 +100,7 @@ class OA_CORE_EXPORT ResoureManager :
    * @brief creates the default material
   */
   void
-  generateDefaultMaterial();
+  generateDefaultShaderPrograms();
 
  public:
 
@@ -128,6 +128,11 @@ class OA_CORE_EXPORT ResoureManager :
    * @brief all the loaded pixel shaders
   */
   Map<String,SPtr<Shader>> m_pixelShaders;
+
+  /**
+   * @brief all the loaded pixel shaders
+  */
+  Map<String,SPtr<ShaderProgram>> m_shaderPrograms;
 
   /**
    * @brief all the materials

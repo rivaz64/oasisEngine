@@ -26,8 +26,12 @@
 #include <oaActor.h>
 #include <oaTime.h>
 #include <oaLogger.h>
+#include <oaShaderProgram.h>
 #include <oaResoureManager.h>
 #include <oaScene.h>
+#include <oaRasterizer.h>
+#include <oaRenderer.h>
+#include <oaCameraComponent.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -40,8 +44,6 @@
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace oaEngineSDK {
-
-TestApp* g_app = nullptr;
 
 LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -108,7 +110,7 @@ TestApp::preShutDown()
 }
 
 void
-TestApp::preInit()
+TestApp::onInit()
 {
   auto& api = GraphicAPI::instance();
 
@@ -138,9 +140,7 @@ TestApp::postInit()
 
   lights->init(sizeof(Vector4f));
 
-  m_viewLocationBuffer = graphicAPI.createBuffer();
-
-  m_viewLocationBuffer->init(sizeof(Vector4f));
+  
 
   IMGUI_CHECKVERSION();
 
@@ -152,37 +152,45 @@ TestApp::postInit()
 
   m_actualScene = newSPtr<Scene>();
 
-  m_actualScene->m_root = newSPtr<Actor>();
+  m_actualScene->init();
 
-  m_selectedActor = m_actualScene->m_root;
+  m_selectedActor = m_actualScene->getRoot();
 
-  m_globalTransformBuffer = graphicAPI.createBuffer();
-  m_globalTransformBuffer->init(sizeof(Matrix4f));
+  m_renderer = newSPtr<Renderer>();
 
-  m_viewBuffer = graphicAPI.createBuffer();
-  m_viewBuffer->init(sizeof(Matrix4f));
-
-  m_projectionBuffer = graphicAPI.createBuffer();
-  m_projectionBuffer->init(sizeof(Matrix4f));
+  m_renderer->init();
 }
 
 
 void 
-TestApp::postUpdate(float delta)
+TestApp::onUpdate(float delta)
 { 
   auto& inputManager = InputManager::instance();
-  if (inputManager.getInput(VK_RBUTTON))
-  {
-    m_camera->rotateWithMouse(inputManager.getMouseDelta());
-  }
 
-  m_camera->update();
+  if(m_controlledActor){
+    if (inputManager.getInput(VK_RBUTTON))
+    {
+      m_controlledActor->getComponent<CameraComponent>()->
+        getCamera()->rotateWithMouse(inputManager.getMouseDelta());
+    }
+  }
+  else{
+    if (inputManager.getInput(VK_RBUTTON))
+    {
+      m_camera->rotateWithMouse(inputManager.getMouseDelta());
+    }
+
+    m_camera->update();
+  }
+  
 }
 
 void 
 TestApp::draw()
 {
   auto& graphicsAPI = GraphicAPI::instance();
+
+  auto& resourseManager = ResoureManager::instance();
 
   graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
 
@@ -191,57 +199,23 @@ TestApp::draw()
   graphicsAPI.clearDepthStencil(m_finalDepthStencil);
 
   
-  m_viewBuffer->write(&m_camera->getViewMatrix().m11);
-  graphicsAPI.setVSBuffer(m_viewBuffer,1);
-
-  m_projectionBuffer->write(&m_camera->getProjectionMatrix().m11);
-  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
+  
    
   graphicsAPI.setSamplerState(m_samplerState);
   
   //m_camera->setCamera();
 
-  Vector<SPtr<Actor>> seenActors;
-  m_camera->seeActors(m_actualScene->m_root,seenActors);
-
-  lights->write(&dir.x);
+   lights->write(&dir.x);
   graphicsAPI.setVSBuffer(lights,3);
   graphicsAPI.setPSBuffer(lights,0);
 
-  m_viewLocationBuffer->write(&m_camera->getLocation().x);
-  graphicsAPI.setVSBuffer(m_viewLocationBuffer,4);
+  
 
-  Matrix4f finalTransform;
-
-  Matrix4f globalActorTransform;
-
-  for(auto Actor : seenActors){
-    
-    globalActorTransform = Actor->getGlobalTransform();
-
-    for(auto& modelPair : Actor->getComponent<GraphicsComponent>()->m_models){
-
-      auto& model = modelPair.second.model;
-
-      for(uint32 i = 0;i<model->m_meshes.size();++i){
-      
-        if(model->m_materials.size()>i && model->m_materials[i]){
-          model->m_materials[i]->set();
-        }
-
-        finalTransform = globalActorTransform * modelPair.second.getFinalTransform();
-
-        m_globalTransformBuffer->write(&finalTransform);
-
-        graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-
-        auto& actualMesh = model->m_meshes[i];
-
-        actualMesh->set();
-       
-        graphicsAPI.draw(actualMesh->getIndexNum());
-      }
-    }
+  if(m_controlledActor){
+    m_renderer->render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera());
+  }
+  else{
+    m_renderer->render(m_actualScene,m_camera);
   }
    
   newImGuiFrame();
@@ -392,7 +366,6 @@ void oaEngineSDK::TestApp::drawImGui()
 
     component = m_selectedActor->getComponent<AnimationComponent>();
 
-
     if (component && ImGui::CollapsingHeader("animation")){
       auto animComponent = cast<AnimationComponent>(component);
       if(ImGui::Button("select Animation")){
@@ -409,6 +382,21 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
 
+    component = m_selectedActor->getComponent<CameraComponent>();
+
+    if (component && ImGui::CollapsingHeader("camera")){
+      auto cameraComponent = cast<CameraComponent>(component);
+      if(ImGui::Button("view from this")){
+        if(m_controlledActor == m_selectedActor){
+          m_controlledActor = SPtr<Actor>();
+        }
+        else{
+          m_controlledActor = m_selectedActor;
+        }
+        
+      }
+      ImGui::Checkbox("debug",&cameraComponent->m_debug);
+    }
   }
   ImGui::End();
 
@@ -491,9 +479,9 @@ void oaEngineSDK::TestApp::drawImGui()
     isCreatingActor = true;
   }
   if(ImGui::Button("scene")){
-    m_selectedActor = m_actualScene->m_root;
+    m_selectedActor = m_actualScene->getRoot();
   }
-  childsInImgui(m_actualScene->m_root);
+  childsInImgui(m_actualScene->getRoot());
   ImGui::End();
 
   ImGui::Begin("lights");
@@ -527,6 +515,13 @@ void oaEngineSDK::TestApp::drawImGui()
 
     if(ImGui::Button("Animation")){
       m_selectedActor->attachComponent(newSPtr<AnimationComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("Camera")){
+      m_selectedActor->attachComponent(newSPtr<CameraComponent>());
+      m_selectedActor->getComponent<CameraComponent>()->setCamera(newSPtr<Camera>());
+      m_selectedActor->getComponent<CameraComponent>()->getCamera()->init();
       isAddingComponent = false;
     }
 
@@ -581,31 +576,89 @@ void oaEngineSDK::TestApp::drawImGui()
     Serializer serializer;
     Path path;
     if(path.searchForPath()){
+
       serializer.init(path);
-      for(auto& model: ResoureManager::instance().m_models){
-        serializer.encodeModel(model.second);
+
+      serializer.encodeNumber(resourceManager.m_textures.size());
+
+      for(auto& image: resourceManager.m_textures){
+        serializer.encodeImage(image.second->getimage());
+      }
+
+      serializer.encodeNumber(resourceManager.m_materials.size());
+
+      for(auto& material: resourceManager.m_materials){
+        serializer.encodeMaterial(material.second);
       }
       
+    }
+  }
+
+  if(ImGui::Button("load")){
+    Serializer serializer;
+    Path path;
+    if(path.searchForPath()){
+      serializer.init(path);
+
+      SIZE_T number = serializer.decodeNumber();
+      for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+        auto image = serializer.decodeImage();
+        SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+        texture->initFromImage(image);
+        ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
+      }
+
+      number = serializer.decodeNumber();
+      for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+        auto material = serializer.decodeMaterial();
+        ResoureManager::instance().m_materials.insert({ material->getName(),material});
+      }
     }
   }
   ImGui::End();
 
   ImGui::Begin("material editor");
   if(m_selectedMaterial){
+    SPtr<Texture> texture;
+
+    static const char* shaders[]{"normal","animation","paralax","transparent"};
+
+    int32 shader = m_selectedMaterial->getShader();
+
+    ImGui::Combo("shader",&shader,shaders,4);
+
+    m_selectedMaterial->setShader(static_cast<SHADER_TYPE::E>(shader));
+
     if(ImGui::Button("select difusse")){
-      m_selectedMaterial->m_diffuse = m_selectedTexture;
+      m_selectedMaterial->setTexture(TEXTURE_TYPE::kDiffuse,m_selectedTexture);
+    }
+    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDiffuse);
+    if(texture){
+      ImGui::Image(texture->getId(),ImVec2(100,100));
     }
 
     if(ImGui::Button("select normal map")){
-      m_selectedMaterial->m_normalMap = m_selectedTexture;
+      m_selectedMaterial->setTexture(TEXTURE_TYPE::kNormalMap,m_selectedTexture);
+    }
+    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kNormalMap);
+    if(texture){
+      ImGui::Image(texture->getId(),ImVec2(100,100));
     }
 
     if(ImGui::Button("select specular")){
-      m_selectedMaterial->m_specular = m_selectedTexture;
+      m_selectedMaterial->setTexture(TEXTURE_TYPE::kSpecular,m_selectedTexture);
+    }
+    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kSpecular);
+    if(texture){
+      ImGui::Image(texture->getId(),ImVec2(100,100));
     }
 
     if(ImGui::Button("select depth map")){
-      m_selectedMaterial->m_depthMap = m_selectedTexture;
+      m_selectedMaterial->setTexture(TEXTURE_TYPE::kDepthMap,m_selectedTexture);
+    }
+    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDepthMap);
+    if(texture){
+      ImGui::Image(texture->getId(),ImVec2(100,100));
     }
   }
   ImGui::End();
@@ -753,6 +806,74 @@ oaEngineSDK::TestApp::SubDivide(const SubMesh& data)
 
   }
   return ans;
+}
+
+void 
+TestApp::onKeyBoardInput(char input)
+{
+  if(!m_controlledActor){
+    switch (input)
+    {
+    case 'A':
+      m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
+      break;
+
+    case 'D':
+      m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+      break;
+
+    case 'W':
+      m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+      break;
+
+    case 'S':
+      m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+      break;
+
+    case 'Q':
+      m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+      break;
+
+    case 'E':
+      m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+      break;
+
+    default:
+      break;
+    }
+  }
+  else{
+    switch (input)
+    {
+    case 'A':
+      m_controlledActor->GetActorTransform().move(Vector3f(-m_secondPerFrame,0,0));
+      break;
+
+    case 'D':
+      m_controlledActor->GetActorTransform().move(Vector3f(m_secondPerFrame,0,0));
+      break;
+
+    case 'W':
+      m_controlledActor->GetActorTransform().move(Vector3f(0,0,m_secondPerFrame));
+      break;
+
+    case 'S':
+      m_controlledActor->GetActorTransform().move(Vector3f(0,0,-m_secondPerFrame));
+      break;
+
+    case 'Q':
+      m_controlledActor->GetActorTransform().move(Vector3f(0,m_secondPerFrame,0));
+      break;
+
+    case 'E':
+      m_controlledActor->GetActorTransform().move(Vector3f(0,-m_secondPerFrame,0));
+      break;
+
+    default:
+      break;
+    }
+  }
+  
 }
 
 }

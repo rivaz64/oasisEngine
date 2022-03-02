@@ -8,14 +8,14 @@ bool
 DX11IndexBuffer::init(Vector<uint32>& data)
 {
   D3D11_BUFFER_DESC bd;
-  ZeroMemory( &bd, sizeof(bd) );
+  memset( &bd, 0, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = sizeof(uint32)*data.size();
   bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
   bd.CPUAccessFlags = 0;
   
   D3D11_SUBRESOURCE_DATA InitData;
-  ZeroMemory( &InitData, sizeof(InitData) );
+  memset( &InitData, 0, sizeof(InitData) );
   InitData.pSysMem = data.data();
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateBuffer( &bd, &InitData, &m_buffer );

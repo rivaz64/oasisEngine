@@ -16,7 +16,7 @@ DX11Buffer::~DX11Buffer()
 bool DX11Buffer::init(uint32 size)
 {
   D3D11_BUFFER_DESC bd;
-  ZeroMemory( &bd, sizeof(bd) );
+  memset( &bd,0, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
   bd.ByteWidth = size;
   bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

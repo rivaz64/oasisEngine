@@ -164,9 +164,14 @@ class OA_CORE_EXPORT Mesh
     m_index[place] = index;
   }
 
-  FORCEINLINE const Vector<uint32>&
+  FORCEINLINE Vector<uint32>&
   getIndex(){
     return m_index;
+  }
+
+  FORCEINLINE void
+  setIndex(const Vector<uint32>& index){
+    m_index = index;
   }
 
  protected:
