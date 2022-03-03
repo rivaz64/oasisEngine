@@ -40,7 +40,7 @@ class OA_CORE_EXPORT Model :
   */
   FORCEINLINE void
   addMesh(SPtr<Mesh> mesh){
-    m_meshes.insert(m_meshes.end(),mesh);
+    m_meshes.push_back(mesh);
   }
 
   FORCEINLINE void
