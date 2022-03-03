@@ -66,5 +66,18 @@ Frustum::calculatePoints(const Vector3f& location,
           farSouthEast};
 }
 
+bool 
+Frustum::isInside(const Vector3f& point) const
+{
+  return true;
+  return 
+    Math::distance(m_nearPlane,point)>0 &&
+    Math::distance(m_farPlane,point)>0 &&
+    Math::distance(m_topPlane,point)>0 &&
+    Math::distance(m_bottomPlane,point)>0 &&
+    Math::distance(m_rightPlane,point)>0 && 
+    Math::distance(m_leftPlane,point)>0;
+}
+
 }
 

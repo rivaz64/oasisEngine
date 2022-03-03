@@ -35,7 +35,7 @@ class OA_CORE_EXPORT Renderer
   init();
 
   void
-  render(SPtr<Scene> scene,SPtr<Camera> camera);
+  render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum);
 
   void
   meshesInFrustum(SPtr<Actor> actor,const Frustum& frustum,Vector<RenderData>& meshes);

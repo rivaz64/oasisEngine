@@ -3,6 +3,11 @@
 
 namespace oaEngineSDK{
 
+DX11VertexBuffer::~DX11VertexBuffer()
+{
+  release();
+}
+
 bool DX11VertexBuffer::init(
   void* data,
   uint32 vertexSize,
@@ -44,6 +49,15 @@ void DX11VertexBuffer::set()
     &m_buffer,
     &stride, 
     &offset );
+}
+
+void
+DX11VertexBuffer::release()
+{
+  if(m_buffer){
+    m_buffer->Release();
+  }
+  m_buffer = 0;
 }
 
 }

@@ -53,6 +53,7 @@ ResoureManager::onStartUp()
   //loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultShaderPrograms();
+  generateDefaultMaterials();
 }
 /*
 void 
@@ -362,13 +363,15 @@ ResoureManager::generateCube()
 
 void ResoureManager::loadDefaultShaders()
 {
-  m_vertexShaders.insert({"default",GraphicAPI::instancePtr()->createVertexShader()});
-  m_vertexShaders.insert({"animation",GraphicAPI::instancePtr()->createVertexShader()});
-  m_vertexShaders.insert({"debug",GraphicAPI::instancePtr()->createVertexShader()});
-  m_pixelShaders.insert({"default",GraphicAPI::instancePtr()->createPixelShader()});
-  m_pixelShaders.insert({"paralax",GraphicAPI::instancePtr()->createPixelShader()});
-  m_pixelShaders.insert({"transparent",GraphicAPI::instancePtr()->createPixelShader()});
-  m_pixelShaders.insert({"debug",GraphicAPI::instancePtr()->createPixelShader()});
+  auto& graphicsApi = GraphicAPI::instance();
+
+  m_vertexShaders.insert({"default",graphicsApi.createVertexShader()});
+  m_vertexShaders.insert({"animation",graphicsApi.createVertexShader()});
+  m_vertexShaders.insert({"debug",graphicsApi.createVertexShader()});
+  m_pixelShaders.insert({"default",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"paralax",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"transparent",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"debug",graphicsApi.createPixelShader()});
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
   m_vertexShaders["animation"]->compileFromFile("animVertexShader");
@@ -432,6 +435,18 @@ ResoureManager::generateDefaultShaderPrograms()
   //m_materials["paralax"]->m_diffuse = m_textures["default"];
 
   m_materials["paralax"]->m_name = "paralax";*/
+}
+
+void 
+ResoureManager::generateDefaultMaterials()
+{
+  auto material = newSPtr<Material>();
+
+  material->setName("debug");
+
+  material->setShader(SHADER_TYPE::kDebug);
+
+  m_materials.insert({material->getName(),material});
 }
 
 }

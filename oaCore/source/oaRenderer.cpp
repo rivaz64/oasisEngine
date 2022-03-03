@@ -44,29 +44,29 @@ void Renderer::init()
 }
 
 void
-Renderer::render(SPtr<Scene> scene,SPtr<Camera> camera)
+Renderer::render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum)
 {
   auto& resourseManager = ResoureManager::instance();
   
   auto& graphicsAPI = GraphicAPI::instance();
   
-  m_viewBuffer->write(&camera->getViewMatrix().m11);
+  m_viewBuffer->write(&camForView->getViewMatrix().m11);
   graphicsAPI.setVSBuffer(m_viewBuffer,1);
   
-  m_projectionBuffer->write(&camera->getProjectionMatrix().m11);
+  m_projectionBuffer->write(&camForView->getProjectionMatrix().m11);
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
   
-  m_viewLocationBuffer->write(&camera->getLocation().x);
+  m_viewLocationBuffer->write(&camForView->getLocation().x);
   graphicsAPI.setVSBuffer(m_viewLocationBuffer,4);
   
   Vector<RenderData> toRender;
 
-  Frustum frustrum(camera->getLocation(),
-                   camera->getAxisMatrix(),
-                   camera->getNearPlaneDistance(),
-                   camera->getFarPlaneDistance(),
-                   camera->getViewAngle(),
-                   camera->getRatio());
+  Frustum frustrum(camForFrustrum->getLocation(),
+                   camForFrustrum->getAxisMatrix(),
+                   camForFrustrum->getNearPlaneDistance(),
+                   camForFrustrum->getFarPlaneDistance(),
+                   camForFrustrum->getViewAngle(),
+                   camForFrustrum->getRatio());
 
 
 
@@ -96,6 +96,12 @@ Renderer::render(SPtr<Scene> scene,SPtr<Camera> camera)
       graphicsAPI.setRasterizer(m_normalRasterizer);
       break;
     
+    case SHADER_TYPE::kDebug:
+      resourseManager.m_shaderPrograms["debug"]->set();
+      graphicsAPI.setRasterizer(m_debugRasterizer);
+      break;
+    
+
     default:
       break;
     }
@@ -241,29 +247,75 @@ Renderer::meshesInFrustum(SPtr<Actor> actor, const Frustum& frustum,Vector<Rende
   
   Matrix4f finalTransform;
 
-  for(auto actor : childs){
-  
-    auto component = actor->getComponent<GraphicsComponent>();
-    if(!component){
-      continue;
-    }
+  Vector4f location;
 
-    auto model = component->getModel();
-    if(!model){
-      continue;
-    }
+  for(auto actor : childs){
 
     actorTransform = actor->getGlobalTransform();
+  
+    auto component = actor->getComponent<GraphicsComponent>();
+    if(component){
+      auto model = component->getModel();
+      if(model){
+        finalTransform = actorTransform*component->getTransform().getMatrix();
 
-    finalTransform = actorTransform*component->getTransform().getMatrix();
+        location = finalTransform*Vector4f(0,0,0,1);
 
-    SIZE_T meshes = model->getNumOfMeshes();
-    for(SIZE_T i = 0; i<meshes;++i){
-      toRender.push_back(RenderData(model->getMesh(i),model->getMaterial(i),finalTransform));
+        if(frustum.isInside(location.xyz)){
+          SIZE_T meshes = model->getNumOfMeshes();
+          for(SIZE_T i = 0; i<meshes;++i){
+            toRender.push_back(RenderData(model->getMesh(i),model->getMaterial(i),finalTransform));
+          }
+        }
+      }
     }
-  
+
+    auto camComponent = actor->getComponent<CameraComponent>();
+    if(camComponent && camComponent->m_debug){
+      auto& cam = camComponent->getCamera();
+      auto points = Frustum::calculatePoints(cam->getLocation(),
+                                             cam->getAxisMatrix(),
+                                             cam->getNearPlaneDistance(),
+                                             cam->getFarPlaneDistance(),
+                                             cam->getViewAngle(),
+                                             cam->getRatio());
+      
+      Vector<Vector4f> vertices;
+      
+      for(auto& point : points){
+        vertices.push_back(Vector4f(point,1.0f));
+      }
+      
+      auto mesh = newSPtr<DebugMesh>();
+      mesh->setVertex(vertices);
+      
+      mesh->setIndex({
+        0,1,2,
+        1,2,3,
+        
+        4,5,6,
+        5,6,7,
+        
+        0,1,4,
+        1,4,5,
+        
+        2,3,6,
+        3,6,7,
+        
+        0,2,4,
+        2,4,6,
+        
+        1,3,5,
+        3,5,7,
+      
+      });
+      
+      mesh->create();
+
+      toRender.push_back(RenderData(mesh,ResoureManager::instance().m_materials["debug"],Matrix4f::IDENTITY));
+    }
+    
     meshesInFrustum(actor,frustum,toRender);
-  
   }
 }
 

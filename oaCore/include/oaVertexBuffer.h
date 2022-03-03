@@ -15,8 +15,11 @@ namespace oaEngineSDK{
 */
 class OA_CORE_EXPORT VertexBuffer
 {
-
  public:
+  
+  virtual
+  ~VertexBuffer(){}
+
   /**
    * @brief initialize the buffer
    * @param data the data of the vertices
@@ -32,6 +35,12 @@ class OA_CORE_EXPORT VertexBuffer
   */
   virtual void
   set() {}
+
+  /**
+   * @brief release the data
+  */
+  virtual void
+  release(){}
 };
 
 }

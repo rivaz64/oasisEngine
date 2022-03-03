@@ -14,14 +14,18 @@ namespace oaEngineSDK{
 class DX11VertexBuffer :
   public VertexBuffer
 {
-
  public:
+
+  ~DX11VertexBuffer();
 
   bool
   init(void* data, uint32 vertexSize, SIZE_T numberOfVertices) override;
 
   void
   set() override;
+
+  void
+  release() override;
 
  private:
 

@@ -3,8 +3,12 @@
 
 namespace oaEngineSDK{
 
+DX11IndexBuffer::~DX11IndexBuffer()
+{
+  release();
+}
 
-bool 
+bool
 DX11IndexBuffer::init(Vector<uint32>& data)
 {
   D3D11_BUFFER_DESC bd;
@@ -35,6 +39,15 @@ DX11IndexBuffer::set()
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   m_context->IASetIndexBuffer(m_buffer,DXGI_FORMAT_R32_UINT,0 );
+}
+
+void
+DX11IndexBuffer::release()
+{
+  if(m_buffer){
+    m_buffer->Release();
+  }
+  m_buffer = 0;
 }
 
 

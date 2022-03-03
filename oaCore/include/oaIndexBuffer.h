@@ -17,6 +17,9 @@ class OA_CORE_EXPORT IndexBuffer
 {
   public:
 
+  virtual
+  ~IndexBuffer(){}
+
   /**
    * @brief initialize the buffer
    * @param data the data of the vertices
@@ -30,6 +33,12 @@ class OA_CORE_EXPORT IndexBuffer
   */
   virtual void
   set() {}
+
+  /**
+   * @brief release the data
+  */
+  virtual void
+  release(){}
 };
 
 }

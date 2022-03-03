@@ -24,7 +24,8 @@ enum E : int32{
   kNormal = 0,
   kAnimation,
   kParalax,
-  kTransparent
+  kTransparent,
+  kDebug
 };
 }
 

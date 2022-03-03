@@ -212,12 +212,15 @@ TestApp::draw()
   
 
   if(m_controlledActor){
-    m_renderer->render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera());
+    m_renderer->render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
+  }
+  else if(m_debugCamera){
+    m_renderer->render(m_actualScene,m_camera,m_debugCamera);
   }
   else{
-    m_renderer->render(m_actualScene,m_camera);
+    m_renderer->render(m_actualScene,m_camera,m_camera);
   }
-   
+  
   newImGuiFrame();
   drawImGui();
   renderImGui();
@@ -394,6 +397,9 @@ void oaEngineSDK::TestApp::drawImGui()
         
       }
       ImGui::Checkbox("debug",&cameraComponent->m_debug);
+      if(cameraComponent->m_debug){
+        m_debugCamera = cameraComponent->getCamera();
+      }
     }
   }
   ImGui::End();

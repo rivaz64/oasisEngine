@@ -97,10 +97,16 @@ class OA_CORE_EXPORT ResoureManager :
   loadDefaulTextures();
 
   /**
-   * @brief creates the default material
+   * @brief creates the default shader programs
   */
   void
   generateDefaultShaderPrograms();
+
+  /**
+   * @brief creates the default materials
+  */
+  void
+  generateDefaultMaterials();
 
  public:
 

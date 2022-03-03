@@ -17,11 +17,16 @@ class DX11IndexBuffer :
  
  public:
 
+  ~DX11IndexBuffer();
+
   bool
   init(Vector<uint32>& data) override;
 
   void
   set() override;
+
+  void
+  release() override;
 
  private:
 

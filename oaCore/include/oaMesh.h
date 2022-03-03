@@ -129,6 +129,12 @@ class OA_CORE_EXPORT Mesh
   virtual void
   set();
 
+  /**
+   * @brief releases the 
+  */
+  virtual void
+  release(){}
+
   void
   initFromSubMesh(const SubMesh& sm);
 

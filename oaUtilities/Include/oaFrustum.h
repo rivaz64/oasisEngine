@@ -11,6 +11,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief class for a frustum of 6 planes
+*/
 class OA_UTILITY_EXPORT Frustum
 {
  public:
@@ -22,6 +25,15 @@ class OA_UTILITY_EXPORT Frustum
           const float viewAngle,
           const float ratio);
 
+  /**
+   * @brief calculates the 6 planes of this frustrum
+   * @param location 
+   * @param axis 
+   * @param nearPlaneDistance 
+   * @param farPlaneDistance 
+   * @param viewAngle 
+   * @param ratio 
+  */
   void
   calculatePlanes(const Vector3f& location,
                   const Matrix3f& axis,
@@ -30,6 +42,16 @@ class OA_UTILITY_EXPORT Frustum
                   const float viewAngle,
                   const float ratio);
 
+  /**
+   * @brief calculates the 8 points of the frustrum
+   * @param location 
+   * @param axis 
+   * @param nearPlaneDistance 
+   * @param farPlaneDistance 
+   * @param viewAngle 
+   * @param ratio 
+   * @return 
+  */
   static Vector<Vector3f>
   calculatePoints(const Vector3f& location,
                   const Matrix3f& axis,
@@ -37,6 +59,14 @@ class OA_UTILITY_EXPORT Frustum
                   const float farPlaneDistance,
                   const float viewAngle,
                   const float ratio);
+
+  /**
+   * @brief calculates if a point is inside of the frustrum
+   * @param point 
+   * @return 
+  */
+  bool 
+  isInside(const Vector3f& point) const;
 
  private:
   /**

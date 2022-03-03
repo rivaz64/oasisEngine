@@ -93,6 +93,8 @@ public:
 
   SPtr<Actor> m_controlledActor;
 
+  SPtr<Camera> m_debugCamera;
+
   Vector4f dir;
 
   Loader* loader;
