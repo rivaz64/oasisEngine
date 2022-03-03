@@ -17,12 +17,4 @@ const Vector3I Vector3I::DOWN(0, -1, 0);
 const Vector3I Vector3I::FRONT(0, 0, 1);
 const Vector3I Vector3I::BACK(0, 0, -1);
 
-const Vector<const Vector3I*> Vector3I::DIRECTIONS = {
-  &Vector3I::RIGHT,
-  &Vector3I::LEFT,
-  &Vector3I::UP,
-  &Vector3I::DOWN,
-  &Vector3I::FRONT,
-  &Vector3I::BACK,
-};
 }

@@ -128,8 +128,6 @@ public:
   static const Vector3I FRONT;
   static const Vector3I BACK;
 
-  static const Vector<const Vector3I*> DIRECTIONS;
-
   union{
 
     /**
