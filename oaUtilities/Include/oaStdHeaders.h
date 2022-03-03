@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <vector>
+#include <boost/numeric/ublas/vector.hpp>
 #include <list>
 #include <stack>
 #include <queue>
@@ -21,7 +21,7 @@
 
 namespace oaEngineSDK {
 
-using std::vector;
+using boost::numeric::ublas::vector;
 using std::list;
 using std::shared_ptr;
 using std::map;
