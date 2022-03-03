@@ -24,11 +24,11 @@ Frustum::calculatePlanes(const Vector3f& location,
 
   auto points = calculatePoints(location,axis,nearPlaneDistance,farPlaneDistance,viewAngle,ratio);
 
-  m_nearPlane = Plane(points[0],points[1],points[2]);
+  m_nearPlane = Plane(points[1],points[0],points[2]);
   m_farPlane = Plane(points[4],points[5],points[6]);
   m_topPlane = Plane(points[0],points[1],points[4]);
-  m_bottomPlane = Plane(points[2],points[3],points[6]);
-  m_leftPlane = Plane(points[0],points[2],points[4]);
+  m_bottomPlane = Plane(points[3],points[2],points[6]);
+  m_leftPlane = Plane(points[2],points[0],points[4]);
   m_rightPlane = Plane(points[1],points[3],points[5]);
 }
 
@@ -69,7 +69,6 @@ Frustum::calculatePoints(const Vector3f& location,
 bool 
 Frustum::isInside(const Vector3f& point) const
 {
-  return true;
   return 
     Math::distance(m_nearPlane,point)>0 &&
     Math::distance(m_farPlane,point)>0 &&
