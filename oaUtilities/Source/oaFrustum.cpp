@@ -1,8 +1,24 @@
 #include "oaFrustum.h"
 #include "oaVector3f.h"
+#include "oaVector4f.h"
 #include "oaMatrix3f.h"
+#include "oaMatrix4f.h"
+#include "oaSphere.h"
+#include "oaAABB.h"
 
 namespace oaEngineSDK{
+
+bool
+comparePlaneToAABB(const Plane& plane, const Vector<Vector3f>& box){
+  bool isIn = false;
+  for(auto& point : box){
+    if(Math::distance(plane, point) > 0){
+      isIn = true;
+      break;
+    }
+  }
+  return isIn;
+}
 
 Frustum::Frustum(const Vector3f& location, 
                  const Matrix3f& axis, 
@@ -70,12 +86,41 @@ bool
 Frustum::isInside(const Vector3f& point) const
 {
   return 
-    Math::distance(m_nearPlane,point)>0 &&
-    Math::distance(m_farPlane,point)>0 &&
-    Math::distance(m_topPlane,point)>0 &&
-    Math::distance(m_bottomPlane,point)>0 &&
-    Math::distance(m_rightPlane,point)>0 && 
-    Math::distance(m_leftPlane,point)>0;
+    Math::distance(m_nearPlane, point) > 0 &&
+    Math::distance(m_farPlane, point) > 0 &&
+    Math::distance(m_topPlane, point) > 0 &&
+    Math::distance(m_bottomPlane, point) > 0 &&
+    Math::distance(m_rightPlane, point) > 0 && 
+    Math::distance(m_leftPlane, point) > 0;
+}
+
+bool 
+Frustum::isInside(const Sphere& sphere) const
+{
+  return 
+    Math::distance(m_nearPlane, sphere.getCenter()) > -sphere.getRadius() &&
+    Math::distance(m_farPlane, sphere.getCenter()) > -sphere.getRadius() &&
+    Math::distance(m_topPlane, sphere.getCenter()) > -sphere.getRadius() &&
+    Math::distance(m_bottomPlane, sphere.getCenter()) > -sphere.getRadius() &&
+    Math::distance(m_rightPlane, sphere.getCenter()) > -sphere.getRadius() &&
+    Math::distance(m_leftPlane, sphere.getCenter()) > -sphere.getRadius();
+}
+
+bool 
+Frustum::isInside(const AABB& box, const Matrix4f& transform) const
+{
+  auto points = box.getPoints();
+  for(auto& point : points){
+    point = (transform*Vector4f(point,1.0f)).xyz;
+  }
+  return
+   comparePlaneToAABB(m_nearPlane,points) &&
+   comparePlaneToAABB(m_farPlane,points) &&
+   comparePlaneToAABB(m_topPlane,points) &&
+   comparePlaneToAABB(m_bottomPlane,points) &&
+   comparePlaneToAABB(m_rightPlane,points) &&
+   comparePlaneToAABB(m_leftPlane,points);
+
 }
 
 }

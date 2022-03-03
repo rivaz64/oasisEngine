@@ -63,9 +63,6 @@
     <ClInclude Include="include\oaSphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaBoxAABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaVector2I.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -129,6 +126,9 @@
     <ClInclude Include="Include\oaFrustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\oaAABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -162,9 +162,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaBoxAABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaVector2I.cpp">
@@ -225,6 +222,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaFrustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaAABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

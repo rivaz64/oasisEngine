@@ -101,7 +101,6 @@ Renderer::render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFr
       graphicsAPI.setRasterizer(m_debugRasterizer);
       break;
     
-
     default:
       break;
     }
@@ -249,6 +248,12 @@ Renderer::meshesInFrustum(SPtr<Actor> actor, const Frustum& frustum,Vector<Rende
 
   Vector4f location;
 
+  Vector3f finalLocation;
+
+  Vector3f finalScale;
+
+  Sphere boundingSphere;
+
   for(auto actor : childs){
 
     actorTransform = actor->getGlobalTransform();
@@ -259,14 +264,26 @@ Renderer::meshesInFrustum(SPtr<Actor> actor, const Frustum& frustum,Vector<Rende
       if(model){
         finalTransform = actorTransform*component->getTransform().getMatrix();
 
-        location = finalTransform*Vector4f(0,0,0,1);
+        //location = finalTransform*Vector4f(0,0,0,1);
 
-        if(frustum.isInside(location.xyz)){
-          SIZE_T meshes = model->getNumOfMeshes();
-          for(SIZE_T i = 0; i<meshes;++i){
-            toRender.push_back(RenderData(model->getMesh(i),model->getMaterial(i),finalTransform));
+        SIZE_T meshes = model->getNumOfMeshes();
+        for(SIZE_T i = 0; i<meshes;++i){
+          auto& mesh = model->getMesh(i);
+
+          finalScale = (finalTransform * Vector4f(1,1,1,1)).xyz-(finalTransform * Vector4f(0,0,0,1)).xyz; 
+
+          boundingSphere.setRadius(mesh->getBoundingSphere().getRadius()*Math::max(Math::max(finalScale.x,finalScale.y),finalScale.z));
+
+          finalLocation = (finalTransform*Vector4f(mesh->getBoundingSphere().getCenter(),1.0)).xyz;
+
+          boundingSphere.setCenter(finalLocation);
+
+          if(frustum.isInside(boundingSphere) || frustum.isInside(mesh->getBoundingBox(),finalTransform)){
+            toRender.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
           }
         }
+
+        
       }
     }
 
@@ -307,7 +324,6 @@ Renderer::meshesInFrustum(SPtr<Actor> actor, const Frustum& frustum,Vector<Rende
         
         1,3,5,
         3,5,7,
-      
       });
       
       mesh->create();

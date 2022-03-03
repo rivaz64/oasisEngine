@@ -27,11 +27,8 @@ class OA_CORE_EXPORT BaseApp
   void
   onShutDown();
 
-  /**
-   * @brief shuts down things in the child class
-  */
   virtual void
-  preShutDown() {}
+  onDestroy(){}
 
   /**
    * @brief runs the engine

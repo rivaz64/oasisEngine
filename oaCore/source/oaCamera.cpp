@@ -124,6 +124,9 @@ Camera::lookAt(const Vector3f& newLocation)
 void 
 Camera::rotateWithMouse(const Vector2f& delta)
 {
+  if(delta.magnitud()<=0){
+    return;
+  }
   lookAt(
     (m_axisZ + m_axisX * delta.x * .003f - m_axisY * delta.y * .003f).normalized()+
     m_location

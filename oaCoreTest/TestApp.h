@@ -32,7 +32,7 @@ public:
   onUpdate(float delta) override;
 
   void
-  preShutDown() override;
+  onDestroy() override;
 
   void
   draw() override;

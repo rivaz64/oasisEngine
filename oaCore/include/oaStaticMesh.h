@@ -18,6 +18,9 @@ class StaticMesh :
   void 
   create() override;
 
+  void
+  calculateBounding() override;
+
   /**
    * @brief sets the number of vertices this mesh is going to have
    * @param n the number of vertices

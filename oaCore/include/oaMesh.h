@@ -7,11 +7,13 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaVector2f.h"
-#include "oaVector3f.h"
-#include "oaVector4U.h"
-#include "oaVector4f.h"
-#include "oaMatrix4f.h"
+#include <oaVector2f.h>
+#include <oaVector3f.h>
+#include <oaVector4U.h>
+#include <oaVector4f.h>
+#include <oaMatrix4f.h>
+#include <oaSphere.h>
+#include <oaAABB.h>
 
 namespace oaEngineSDK{
 /**
@@ -130,10 +132,10 @@ class OA_CORE_EXPORT Mesh
   set();
 
   /**
-   * @brief releases the 
+   * @brief calculates the boundings for this mesh
   */
   virtual void
-  release(){}
+  calculateBounding(){}
 
   void
   initFromSubMesh(const SubMesh& sm);
@@ -180,6 +182,16 @@ class OA_CORE_EXPORT Mesh
     m_index = index;
   }
 
+  FORCEINLINE const Sphere&
+  getBoundingSphere(){
+    return m_boundingSphere;
+  }
+
+  FORCEINLINE const AABB&
+  getBoundingBox(){
+    return m_boundingBox;
+  }
+
  protected:
 
   /**
@@ -196,6 +208,16 @@ class OA_CORE_EXPORT Mesh
   * @brief the buffer for the vertex
   */
   SPtr<VertexBuffer> m_vertexB;
+
+  /**
+   * @brief the bounding sphere of this mesh
+  */
+  Sphere m_boundingSphere;
+
+  /**
+   * @brief the bounding box of this mesh
+  */
+  AABB m_boundingBox;
 };
 
 }

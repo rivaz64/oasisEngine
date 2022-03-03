@@ -173,7 +173,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\oaBoxAABB.h" />
+    <ClInclude Include="Include\oaAABB.h" />
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaColor.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
@@ -214,7 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oaVector4I.cpp" />
-    <ClCompile Include="source\oaBoxAABB.cpp" />
+    <ClCompile Include="Source\oaAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />
     <ClCompile Include="Source\oaColor.cpp" />
     <ClCompile Include="Source\oaFrustum.cpp" />

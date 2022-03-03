@@ -21,7 +21,7 @@ class Mesh;
 class Line;
 class Plane;
 class Sphere;
-class BoxAABB;
+class AABB;
 class Capsule;
 class Frustum;
 }

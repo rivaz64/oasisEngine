@@ -394,7 +394,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static bool
-  overlap(const Vector3f& _point,const BoxAABB& _box);
+  overlap(const Vector3f& _point,const AABB& _box);
 
   /**
    * @brief checks if a shpere overlaps a box
@@ -403,7 +403,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static bool
-  overlap(const Sphere& _sphere,const BoxAABB& _box);
+  overlap(const Sphere& _sphere,const AABB& _box);
 
   /**
    * @brief checks if two boxes overlap
@@ -412,7 +412,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static bool
-  overlap(const BoxAABB& _box1,const BoxAABB& _box2);
+  overlap(const AABB& _box1,const AABB& _box2);
 
   /**
    * @brief checks if a point is inside a capsule
@@ -439,7 +439,7 @@ class OA_UTILITY_EXPORT PlatformMath {
    * @return 
   */
   static bool
-  overlap(const BoxAABB& _box, const Capsule& _capsule);
+  overlap(const AABB& _box, const Capsule& _capsule);
   /**
    * @brief checks if two capsules are overlapping
    * @param _capsule1 

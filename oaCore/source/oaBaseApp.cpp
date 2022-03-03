@@ -36,7 +36,7 @@ BaseApp::BaseApp()
 void 
 BaseApp::onShutDown()
 {
-  preShutDown();
+  onDestroy();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputManager::shutDown();

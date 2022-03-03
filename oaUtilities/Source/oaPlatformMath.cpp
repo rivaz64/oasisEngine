@@ -7,7 +7,7 @@
 #include "oaPlatformMath.h"
 #include "oaVector3f.h"
 #include "oaSphere.h"
-#include "oaBoxAABB.h"
+#include "oaAABB.h"
 #include "oaCapsule.h"
 #include "oaLine.h"
 #include "oaPlane.h"
@@ -48,7 +48,7 @@ PlatformMath::overlap(const Sphere& _sphere1, const Sphere& _sphere2)
 }
 
 bool 
-PlatformMath::overlap(const Vector3f& _point, const BoxAABB& _box)
+PlatformMath::overlap(const Vector3f& _point, const AABB& _box)
 {
   return _point.x> _box.minPoint.x && _point.x < _box.maxPoint.x &&
     _point.y> _box.minPoint.y && _point.y < _box.maxPoint.y &&
@@ -56,7 +56,7 @@ PlatformMath::overlap(const Vector3f& _point, const BoxAABB& _box)
 }
 
 bool 
-PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
+PlatformMath::overlap(const Sphere& _sphere, const AABB& _box)
 {
   Vector3f point = 
   { max(_box.minPoint.x, min(_sphere.center.x, _box.maxPoint.x)),
@@ -67,7 +67,7 @@ PlatformMath::overlap(const Sphere& _sphere, const BoxAABB& _box)
 }
 
 bool 
-PlatformMath::overlap(const BoxAABB& _box1, const BoxAABB& _box2)
+PlatformMath::overlap(const AABB& _box1, const AABB& _box2)
 {
   return 
     _box1.maxPoint.x > _box2.minPoint.x && 
@@ -104,7 +104,7 @@ PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
 }
 
 bool 
-PlatformMath::overlap(const BoxAABB& _box, const Capsule& _capsule)
+PlatformMath::overlap(const AABB& _box, const Capsule& _capsule)
 {
   Vector2f point = 
   { Math::max(_box.minPoint.x, Math::min(_capsule.base.x, _box.maxPoint.x)),

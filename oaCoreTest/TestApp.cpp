@@ -93,7 +93,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 void 
-TestApp::preShutDown()
+TestApp::onDestroy()
 {
   auto& api = GraphicAPI::instance();
   if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
@@ -205,7 +205,7 @@ TestApp::draw()
   
   //m_camera->setCamera();
 
-   lights->write(&dir.x);
+  lights->write(&dir.x);
   graphicsAPI.setVSBuffer(lights,3);
   graphicsAPI.setPSBuffer(lights,0);
 
@@ -394,8 +394,8 @@ void oaEngineSDK::TestApp::drawImGui()
         else{
           m_controlledActor = m_selectedActor;
         }
-        
       }
+
       ImGui::Checkbox("debug",&cameraComponent->m_debug);
       if(cameraComponent->m_debug){
         m_debugCamera = cameraComponent->getCamera();

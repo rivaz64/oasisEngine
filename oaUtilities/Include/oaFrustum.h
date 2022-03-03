@@ -68,6 +68,22 @@ class OA_UTILITY_EXPORT Frustum
   bool 
   isInside(const Vector3f& point) const;
 
+  /**
+   * @brief calculates if a part of a  sphere is inside of the frustrum
+   * @param sphere 
+   * @return 
+  */
+  bool 
+  isInside(const Sphere& sphere) const;
+
+  /**
+   * @brief calculates if a part of a aabb is inside of the frustrum
+   * @param sphere 
+   * @return 
+  */
+  bool 
+  isInside(const AABB& box, const Matrix4f& transform) const;
+
  private:
   /**
    * @brief the near plane of the frustrum
