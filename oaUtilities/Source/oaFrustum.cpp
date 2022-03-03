@@ -62,24 +62,28 @@ Frustum::calculatePoints(const Vector3f& location,
   float farHeight = Math::tan(viewAngle/2.f)*farPlaneDistance;
   float farWidth = farHeight*ratio;
 
-  Vector3f nearNorthWest = location+axis*Vector3f(-nearWidth,nearHeight,nearPlaneDistance);
-  Vector3f nearNorthEast = location+axis*Vector3f(nearWidth,nearHeight,nearPlaneDistance);
-  Vector3f nearSouthWest = location+axis*Vector3f(-nearWidth,-nearHeight,nearPlaneDistance);
-  Vector3f nearSouthEast = location+axis*Vector3f(nearWidth,-nearHeight,nearPlaneDistance);
+  Vector<Vector3f> points;
 
-  Vector3f farNorthWest = location+axis*Vector3f(-farWidth,farHeight,farPlaneDistance);
-  Vector3f farNorthEast = location+axis*Vector3f(farWidth,farHeight,farPlaneDistance);
-  Vector3f farSouthWest = location+axis*Vector3f(-farWidth,-farHeight,farPlaneDistance);
-  Vector3f farSouthEast = location+axis*Vector3f(farWidth,-farHeight,farPlaneDistance);
+  points.resize(8);
 
-  return {nearNorthWest, 
-          nearNorthEast, 
-          nearSouthWest, 
-          nearSouthEast, 
-          farNorthWest, 
-          farNorthEast, 
-          farSouthWest, 
-          farSouthEast};
+  //nearNorthWest
+  points[0] = location+axis*Vector3f(-nearWidth,nearHeight,nearPlaneDistance);
+  //nearNorthEast
+  points[1] = location+axis*Vector3f(nearWidth,nearHeight,nearPlaneDistance);
+  //nearSouthWest
+  points[2] = location+axis*Vector3f(-nearWidth,-nearHeight,nearPlaneDistance);
+  //nearSouthEast
+  points[3] = location+axis*Vector3f(nearWidth,-nearHeight,nearPlaneDistance);
+  //farNorthWest
+  points[4] = location+axis*Vector3f(-farWidth,farHeight,farPlaneDistance);
+  //farNorthEast
+  points[5] = location+axis*Vector3f(farWidth,farHeight,farPlaneDistance);
+  //farSouthWest
+  points[6] = location+axis*Vector3f(-farWidth,-farHeight,farPlaneDistance);
+  //farSouthEast
+  points[7] = location+axis*Vector3f(farWidth,-farHeight,farPlaneDistance);
+  
+  return points;
 }
 
 bool 
