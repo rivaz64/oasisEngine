@@ -7,7 +7,7 @@
 #pragma once
 
 #include <boost/container/vector.hpp>
-#include <list>
+#include <boost/container/list.hpp>
 #include <stack>
 #include <queue>
 #include <deque>
@@ -22,7 +22,7 @@
 namespace oaEngineSDK {
 
 using boost::container::vector;
-using std::list;
+using boost::container::list;
 using std::shared_ptr;
 using std::map;
 using std::pair;

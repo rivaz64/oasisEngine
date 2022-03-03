@@ -177,7 +177,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaDX11Graphics\Include;DXUT\Core;DXUT\Optional;$(DEVLIBS)imgui/backends;$(DEVLIBS)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaDX11Graphics\Include;DXUT\Core;DXUT\Optional;$(DEVLIBS)imgui/backends;$(DEVLIBS)imgui;$(DEVLIBS)boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
