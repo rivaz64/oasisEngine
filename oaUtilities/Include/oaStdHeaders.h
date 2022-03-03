@@ -6,16 +6,16 @@
 
 #pragma once
 
+#include <string>
 #include <boost/container/vector.hpp>
 #include <boost/container/list.hpp>
-#include <stack>
-#include <queue>
-#include <deque>
-#include <string>
-#include <memory>
+#include <boost/container/map.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/enable_shared_from_this.hpp>
+#include <boost/pointer_cast.hpp>
 #include <algorithm>
 #include <cmath>
-#include <map>
 #include <iostream>
 #include <fstream>
 
@@ -23,18 +23,17 @@ namespace oaEngineSDK {
 
 using boost::container::vector;
 using boost::container::list;
-using std::shared_ptr;
-using std::map;
+using boost::container::map;
 using std::pair;
-using std::enable_shared_from_this;
+using boost::shared_ptr;
+using boost::enable_shared_from_this;
 using std::istream_iterator;
 using std::istringstream;
 using std::string;
 using std::wstring;
 using std::fstream;
-using std::make_shared;
-using std::reinterpret_pointer_cast;
-using std::make_shared;
+using boost::make_shared;
+using boost::reinterpret_pointer_cast;
 using std::endl;
 using std::copy;
 using std::cout;
@@ -84,10 +83,10 @@ using SPtr = shared_ptr<T>;
 * @brief wraper of the std::make_shared
 * @tparam T
 */
-template <typename T, typename... _Types>
+template <typename T/*, typename... _Types*/>
 FORCEINLINE SPtr<T> 
-newSPtr(_Types&&... _Args) {
-  return make_shared<T>(std::forward<_Types>(_Args)...);
+newSPtr(/*_Types&&... _Args*/) {
+  return make_shared<T>(/*std::forward<_Types>(_Args)...*/);
 }
 
 /**

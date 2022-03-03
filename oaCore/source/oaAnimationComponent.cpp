@@ -94,6 +94,7 @@ Vector3f
 AnimationComponent::interpolatedLocation(SPtr<AnimNode> node)
 {
   if(node->locations.size() == 1){
+    //node->locations[0];
     return node->locations[0].second;
   }
 
