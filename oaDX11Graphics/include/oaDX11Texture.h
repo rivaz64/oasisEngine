@@ -33,6 +33,9 @@ class DX11Texture:
   void
   initForDepthStencil(const Vector2U& size) override;
 
+  void
+  initForRenderTarget(const Vector2U& size) override;
+
  private:
 
   ID3D11ShaderResourceView* m_shaderResourceView;

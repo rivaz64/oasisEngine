@@ -50,6 +50,11 @@ Deferred::onStartUp()
   m_finalDepthStencil = graphicsAPI.createDepthStencil();
 
   m_finalRender = graphicsAPI.createRenderTarget(graphicsAPI.getBackBuffer());
+
+  m_color = graphicsAPI.createTexture();
+  m_normal = graphicsAPI.createTexture();
+  m_position = graphicsAPI.createTexture();
+  m_specular = graphicsAPI.createTexture();
 }
 
 void 

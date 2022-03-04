@@ -99,5 +99,31 @@ DX11Texture::initForDepthStencil(const Vector2U& size)
     m_device->CreateTexture2D( &desc, nullptr, &m_texture );
 }
 
+void 
+DX11Texture::initForRenderTarget(const Vector2U& size)
+{
+  auto& graphicApi = GraphicAPI::instance();
+  D3D11_TEXTURE2D_DESC desc;
+  memset( &desc,0, sizeof(desc) );
+  desc.Width = size.x;
+  desc.Height =  size.y;
+  desc.MipLevels = 1;
+  desc.ArraySize = 1;
+  desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+  desc.SampleDesc.Count = 1;
+  desc.SampleDesc.Quality = 0;
+  desc.Usage = D3D11_USAGE_DEFAULT;
+  desc.BindFlags = D3D11_BIND_SHADER_RESOURCE|D3D11_BIND_RENDER_TARGET;
+  desc.CPUAccessFlags = 0;
+  desc.MiscFlags = 0;
+
+  m_image = newSPtr<Image>();
+
+  m_image->m_format = FORMAT::kR32G32B32A32Float;
+   
+  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    m_device->CreateTexture2D( &desc, nullptr, &m_texture );
+}
+
 }
 

@@ -105,8 +105,17 @@ class DX11GraphicAPI :
   setRenderTarget(const SPtr<RenderTarget> renderTarget) override;
 
   void
+  setRenderTargets(const Vector<SPtr<RenderTarget>>& renderTargets) override;
+
+  void
   setRenderTargetAndDepthStencil(
     const SPtr<RenderTarget> renderTarget,
+    const SPtr<DepthStencil> depthStencil
+  ) override;
+
+  void
+  setRenderTargetsAndDepthStencil(
+    const Vector<SPtr<RenderTarget>>& renderTargets,
     const SPtr<DepthStencil> depthStencil
   ) override;
 

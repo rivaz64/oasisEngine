@@ -23,6 +23,18 @@ class Deferred :
 
   void
   setSize(const Vector2U& size) override;
+
+ private:
+  
+  SPtr<Texture> m_color;
+
+  SPtr<Texture> m_normal;
+
+  SPtr<Texture> m_position;
+
+  SPtr<Texture> m_specular;
+
+  
 };
 
 }

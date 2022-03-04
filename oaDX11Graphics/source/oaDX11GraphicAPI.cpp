@@ -324,6 +324,23 @@ DX11GraphicAPI::setRenderTarget(const SPtr<RenderTarget> renderTarget)
   );
 }
 
+void
+DX11GraphicAPI::setRenderTargets(const Vector<SPtr<RenderTarget>>& renderTargets)
+{
+  SIZE_T numOfRenders = renderTargets.size();
+  ID3D11RenderTargetView** renders = new ID3D11RenderTargetView*[numOfRenders];
+
+  for(SIZE_T renderNum = 0; renderNum<numOfRenders; ++renderNum){
+    renders[renderNum] = cast<DX11RenderTarget>(renderTargets[renderNum])->m_renderTargetView;
+  }
+
+  m_context->OMSetRenderTargets( 
+    numOfRenders,
+    renders, 
+    nullptr
+  );
+}
+
 void 
 DX11GraphicAPI::setRenderTargetAndDepthStencil(
   const SPtr<RenderTarget> renderTarget, 
@@ -333,6 +350,25 @@ DX11GraphicAPI::setRenderTargetAndDepthStencil(
   m_context->OMSetRenderTargets( 
     1,
     &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencil
+  );
+}
+
+void
+DX11GraphicAPI::setRenderTargetsAndDepthStencil(
+  const Vector<SPtr<RenderTarget>>& renderTargets, 
+  const SPtr<DepthStencil> depthStencil)
+{
+  SIZE_T numOfRenders = renderTargets.size();
+  ID3D11RenderTargetView** renders = new ID3D11RenderTargetView*[numOfRenders];
+
+  for(SIZE_T renderNum = 0; renderNum<numOfRenders; ++renderNum){
+    renders[renderNum] = cast<DX11RenderTarget>(renderTargets[renderNum])->m_renderTargetView;
+  }
+
+  m_context->OMSetRenderTargets( 
+    numOfRenders,
+    renders, 
     cast<DX11DepthStencil>(depthStencil)->m_depthStencil
   );
 }

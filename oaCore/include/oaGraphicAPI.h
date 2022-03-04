@@ -244,6 +244,13 @@ class OA_CORE_EXPORT GraphicAPI :
   setRenderTarget(const SPtr<RenderTarget> /*renderTarget*/) {}
 
   /**
+   * @brief sets the renders target to be used
+   * @param renderTarget 
+  */
+  virtual void
+  setRenderTargets(const Vector<SPtr<RenderTarget>>& /*renderTargets*/) {}
+
+  /**
    * @brief sets a render target and a depth stencil
    * @param renderTarget 
    * @param depthStencil 
@@ -251,6 +258,17 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   setRenderTargetAndDepthStencil(
     const SPtr<RenderTarget> /*renderTarget*/,
+    const SPtr<DepthStencil> /*depthStencil*/
+  ) {}
+
+   /**
+   * @brief sets the render targets and a depth stencil
+   * @param renderTarget 
+   * @param depthStencil 
+  */
+  virtual void
+  setRenderTargetsAndDepthStencil(
+    const Vector<SPtr<RenderTarget>>& /*renderTarget*/,
     const SPtr<DepthStencil> /*depthStencil*/
   ) {}
 

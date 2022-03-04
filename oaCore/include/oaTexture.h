@@ -112,6 +112,9 @@ class OA_CORE_EXPORT Texture
   initForDepthStencil(const Vector2U& size) {}
 
   virtual void
+  initForRenderTarget(const Vector2U& size) {}
+
+  virtual void
   release(){}
 
   /**
