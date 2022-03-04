@@ -18,6 +18,7 @@
 #include "oaPath.h"
 #include "oaCamera.h"
 #include "oaScene.h"
+#include "oaRenderer.h"
 #include <exception>
 #include <Windows.h>
 
@@ -65,20 +66,26 @@ BaseApp::run()
 
   onInit();
 
-   GraphicAPI::instance().createWindow(this,m_windowSize,m_windowName);
+  auto& graphicsApi = GraphicAPI::instance();
 
-  if(GraphicAPI::instance().initialize()){
+  m_window = graphicsApi.createWindow(this,m_windowSize,m_windowName);
+
+  m_windowSize = graphicsApi.getWindowSize(m_window);
+
+  if(graphicsApi.initialize(m_window)){
 
     loadPlugIn("oaRendererd.dll");
+
+    Renderer::instance().setSize(m_windowSize);
 
     ResoureManager::startUp();
     InputManager::startUp();
     Time::startUp();
     
-    setWindow();
+    graphicsApi.setViewport(m_windowSize);
 
     m_camera = newSPtr<Camera>();
-    m_camera->init();
+    m_camera->init(static_cast<float>(m_windowSize.x)/static_cast<float>(m_windowSize.y));
     m_camera->update();
 
     postInit();
@@ -151,67 +158,18 @@ BaseApp::render()
   GraphicAPI::instancePtr()->show();
 }
 
-
-void
-BaseApp::setWindow()
-{
-  auto& api = GraphicAPI::instance();
-
-  api.setWindow();
-
-  auto backBuffer = api.getBackBuffer();
-
-  if(!backBuffer.get()){
-    return;
-  }
-
-  m_finalRender = api.createRenderTarget(backBuffer);
-
-  TextureDesc descDepth;
-  ZeroMemory( &descDepth, sizeof(descDepth) );
-  descDepth.width = api.m_windowWidth;
-  descDepth.height = api.m_windowHeight;
-  descDepth.mipLevels = 1;
-  descDepth.arraySize = 1;
-  descDepth.format = FORMAT::kD24UNormS8UInt;
-  descDepth.sampleCount = 1;
-  descDepth.sampleQuality = 0;
-  descDepth.bind = BIND::kDepthStencil;
-
-  auto depthStencil = api.createTexture();
-
-  if(!depthStencil->init(descDepth)){
-    return;
-  }
-
-  DepthStencilDesc descDSV;
-  ZeroMemory( &descDSV, sizeof(descDSV) );
-  descDSV.format = descDepth.format;
-  descDSV.viewDimension = DS_DIMENSION::kTexture2D;
-  descDSV.MipSlice = 0;
-
-  m_finalDepthStencil = api.createDepthStencil(descDSV,depthStencil);
-}
-
 void
 BaseApp::resizeWindow()
 {
-  auto& api = GraphicAPI::instance();
+  auto& graphicsApi = GraphicAPI::instance();
 
-  if(!api.isStarted() ){
+  m_windowSize = graphicsApi.getWindowSize(m_window);
+  if(!graphicsApi.getContext()){
     return;
   }
-  api.unsetRenderTargetAndDepthStencil();
-
-  if(m_finalRender.get()){
-    m_finalRender->release();
-  }
-
-  if(m_finalDepthStencil.get()){
-    m_finalDepthStencil->release();
-  }
-  
-  setWindow();
+  graphicsApi.setViewport(m_windowSize);
+  graphicsApi.resizeSwapChain(m_windowSize);
+  Renderer::instance().setSize(m_windowSize);
   
 }
 

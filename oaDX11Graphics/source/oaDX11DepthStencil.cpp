@@ -10,12 +10,13 @@ DX11DepthStencil::~DX11DepthStencil()
   release();
 }
 
-bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
+bool 
+DX11DepthStencil::init(SPtr<Texture> texture)
 {
   D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
   memset( &descDSV,0, sizeof(descDSV) );
-  descDSV.Format = Flags::FORMATS[descritor.format];
-  descDSV.ViewDimension = Flags::DS_DIMENCIONS[descritor.viewDimension];
+  descDSV.Format = Flags::FORMATS[texture->getFormat()];
+  descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
   descDSV.Texture2D.MipSlice = 0;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
@@ -30,7 +31,8 @@ bool DX11DepthStencil::init(DepthStencilDesc descritor, SPtr<Texture> texture)
   return true;
 }
 
-void DX11DepthStencil::release()
+void
+DX11DepthStencil::release()
 {
   if( m_depthStencil ) m_depthStencil->Release();
   m_depthStencil = nullptr;

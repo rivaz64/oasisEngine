@@ -141,16 +141,6 @@ class OA_CORE_EXPORT BaseApp
   SPtr<Scene> m_actualScene;
 
   /**
-   * @brief the render target that is going to be shown in the screen
-  */
-  SPtr<RenderTarget> m_finalRender;
-
-  /**
-   * @brief the depth stencil to be used at the end
-  */
-  SPtr<DepthStencil> m_finalDepthStencil;
-
-  /**
    * @brief the camera for the editor
   */
   SPtr<Camera> m_camera;
@@ -164,6 +154,10 @@ class OA_CORE_EXPORT BaseApp
    * @brief the size of the window of the app
   */
   Vector2U m_windowSize;
+
+  void* m_window;
+
+
 
 };
 

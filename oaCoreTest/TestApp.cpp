@@ -189,15 +189,6 @@ TestApp::draw()
   auto& graphicsAPI = GraphicAPI::instance();
 
   auto& resourseManager = ResoureManager::instance();
-
-  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
-
-
-  graphicsAPI.clearRenderTarget(m_finalRender);
-  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
-
-  
-  
    
   graphicsAPI.setSamplerState(m_samplerState);
   
@@ -235,7 +226,7 @@ TestApp::initImGui()
   }
   
   if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
-    ImGui_ImplWin32_Init(api.getWindow());
+    ImGui_ImplWin32_Init(m_window);
     ImGui_ImplDX11_Init(
       (ID3D11Device*)api.getDevice(), 
       (ID3D11DeviceContext*)api.getContext());
@@ -271,9 +262,9 @@ TestApp::newImGuiFrame()
 void TestApp::renderImGui()
 {
   auto& api = GraphicAPI::instance();
-  ImGuiIO& io = ImGui::GetIO();
-  io.DisplaySize.x = static_cast<float>(api.m_windowWidth);
-  io.DisplaySize.y = static_cast<float>(api.m_windowHeight);
+  //ImGuiIO& io = ImGui::GetIO();
+  //io.DisplaySize.x = static_cast<float>(api.m_windowWidth);
+  //io.DisplaySize.y = static_cast<float>(api.m_windowHeight);
   
   if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
     ImGui::Render();
@@ -523,7 +514,11 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button("Camera")){
       m_selectedActor->attachComponent(newSPtr<CameraComponent>());
       m_selectedActor->getComponent<CameraComponent>()->setCamera(newSPtr<Camera>());
-      m_selectedActor->getComponent<CameraComponent>()->getCamera()->init();
+
+      m_selectedActor->getComponent<CameraComponent>()->getCamera()->init(
+        static_cast<float>(m_windowSize.y)/static_cast<float>(m_windowSize.x)
+      );
+
       isAddingComponent = false;
     }
 

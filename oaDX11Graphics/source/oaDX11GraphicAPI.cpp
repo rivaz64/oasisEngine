@@ -30,7 +30,7 @@ DX11GraphicAPI::onShutDown()
 }
 
 bool
-DX11GraphicAPI::initialize()
+DX11GraphicAPI::initialize(void* window)
 {
   std::cout<<"directX graphic API"<<std::endl;
 
@@ -54,27 +54,24 @@ DX11GraphicAPI::initialize()
     D3D_FEATURE_LEVEL_10_0,
   };
   UINT numFeatureLevels = ARRAYSIZE( featureLevels );
-  
-  setWindow();
-
 
   HRESULT hr = S_OK;
+
+  auto size = getWindowSize(window);
 
   DXGI_SWAP_CHAIN_DESC sd;
   memset( &sd, 0, sizeof( sd ) );
   sd.BufferCount = 1;
-  sd.BufferDesc.Width = m_windowWidth;
-  sd.BufferDesc.Height = m_windowHeight;
+  sd.BufferDesc.Width = size.x;
+  sd.BufferDesc.Height = size.y;
   sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
   sd.BufferDesc.RefreshRate.Numerator = 60;
   sd.BufferDesc.RefreshRate.Denominator = 1;
   sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-  sd.OutputWindow = m_hWnd;
+  sd.OutputWindow = reinterpret_cast<HWND>(window);
   sd.SampleDesc.Count = 1;
   sd.SampleDesc.Quality = 0;
   sd.Windowed = TRUE;
-
-
 
   for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
   {
@@ -92,7 +89,7 @@ DX11GraphicAPI::initialize()
   return true;
 }
 
-void 
+void*
 DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name)
 {
   WNDCLASSEX wc;
@@ -109,8 +106,10 @@ DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name
   wc.cbWndExtra = sizeof(void*);
 
   RegisterClassEx(&wc);
+  
+  HWND hWnd;
 
-  m_hWnd = CreateWindowEx(NULL,
+  hWnd = CreateWindowEx(NULL,
                         "oasisEngine", 
                         name.c_str(),   
                         WS_OVERLAPPEDWINDOW,    
@@ -123,9 +122,11 @@ DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name
                         GetModuleHandleA(nullptr),   
                         nullptr); 
 
-  SetWindowLongPtr(m_hWnd,0,reinterpret_cast<LONG_PTR>(app));
+  SetWindowLongPtr(hWnd,0,reinterpret_cast<LONG_PTR>(app));
 
-  ShowWindow(m_hWnd, SW_SHOWDEFAULT); 
+  ShowWindow(hWnd, SW_SHOWDEFAULT); 
+
+  return hWnd;
 }
 
 bool 
@@ -226,11 +227,9 @@ DX11GraphicAPI::createRenderTarget(SPtr<Texture> texture)
 }
 
 SPtr<DepthStencil> 
-DX11GraphicAPI::createDepthStencil(const DepthStencilDesc& description, SPtr<Texture> texture)
+DX11GraphicAPI::createDepthStencil()
 {
-  auto renderTarget = newSPtr<DX11DepthStencil>();
-  renderTarget->init(description,texture);
-  return renderTarget;
+  return newSPtr<DX11DepthStencil>();
 }
 
 SPtr<Rasterizer> DX11GraphicAPI::createRasterizer()
@@ -364,38 +363,31 @@ DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
   );
 }
 
-void
-DX11GraphicAPI::setWindow()
+Vector2U 
+DX11GraphicAPI::getWindowSize(void* window)
 {
   RECT rc;
-  GetClientRect( m_hWnd, &rc );
-  if(rc.right - rc.left>0)
-  m_windowWidth = rc.right - rc.left;
-  if( rc.bottom - rc.top>0)
-  m_windowHeight = rc.bottom - rc.top;
+  GetClientRect( reinterpret_cast<HWND>(window), &rc );
+  return Vector2U( rc.right - rc.left, rc.bottom - rc.top);
+}
 
-  if(!m_context){
-    return;
-  }
-
+void
+DX11GraphicAPI::setViewport(const Vector2U& size)
+{
   D3D11_VIEWPORT vp;
-  vp.Width = static_cast<float>(m_windowWidth);
-  vp.Height = static_cast<float>(m_windowHeight);
+  vp.Width = static_cast<float>(size.x);
+  vp.Height = static_cast<float>(size.y);
   vp.MinDepth = 0.0f;
   vp.MaxDepth = 1.0f;
   vp.TopLeftX = 0;
   vp.TopLeftY = 0;
   m_context->RSSetViewports( 1, &vp );
-
-  if(!m_swapChain) return;
-  m_swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 }
 
-
-void* 
-DX11GraphicAPI::getWindow()
+void 
+DX11GraphicAPI::resizeSwapChain(const Vector2U& size)
 {
-  return m_hWnd;
+  m_swapChain->ResizeBuffers(0, size.x, size.y, DXGI_FORMAT_UNKNOWN, 0);
 }
 
 void* 

@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaResourse.h"
+#include "oaFlags.h"
 
 namespace oaEngineSDK{
 
@@ -35,6 +36,11 @@ class Image :
    * @brief the pixels of the image
   */
   uint8* m_pixels;  
+
+  /**
+   * @brief the format of the data
+  */
+  FORMAT::E m_format;
 };
 
 }

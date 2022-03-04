@@ -32,9 +32,10 @@ class OA_CORE_EXPORT Camera
    * @param farPlaneDistance 
   */
   void
-  init(float viewAngle = 0.785398163f,
-       float nearPlaneDistance = 1.0f,
-       float farPlaneDistance = 100.0f);
+  init(const float ratio,
+       const float viewAngle = 0.785398163f,
+       const float nearPlaneDistance = 1.0f,
+       const float farPlaneDistance = 100.0f);
 
   /**
    * @brief updates the campera

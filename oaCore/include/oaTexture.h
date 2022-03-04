@@ -102,28 +102,17 @@ class OA_CORE_EXPORT Texture
 
  public:
 
-  /**
-   * @brief initalizes only the texture
-   * @param description 
-   * @return 
-  */
-  virtual bool
-  init(TextureDesc /*description*/);
-
-  /**
-   * @brief initlializes everything needed for the texture
-   * @param description the description for the texture
-   * @param descriptionSRV the description for the shader resourse
-   * @return 
-  */
-  virtual bool
-  init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/);
-
   virtual void
   init(uint32 width,uint32 height){}
 
   virtual void
   initFromImage(SPtr<Image> /*image*/){}
+
+  virtual void
+  initForDepthStencil(const Vector2U& size) {}
+
+  virtual void
+  release(){}
 
   /**
    * @brief gets the unique id of this texture
@@ -147,7 +136,15 @@ class OA_CORE_EXPORT Texture
     return m_image->getName();
   }
 
+  FORCEINLINE const FORMAT::E&
+  getFormat(){
+    return m_image->m_format;
+  }
+
  protected:
+  /**
+   * @brief the image this texture is using
+  */
   SPtr<Image> m_image;
 
   friend class ResoureManager;

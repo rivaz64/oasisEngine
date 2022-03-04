@@ -264,6 +264,8 @@ loadImage(const Path& path){
 
   image->setName(StringUtilities::toString(path.getName()));
 
+  image->m_format = FORMAT::kB8G8R8A8UnormSRGB;
+
   SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
   texture->initFromImage(image);

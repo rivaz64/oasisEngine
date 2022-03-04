@@ -21,17 +21,17 @@ class DX11Texture:
 
   ~DX11Texture();
 
-  bool
-  init(TextureDesc description);
-
-  bool
-  init(TextureDesc description,ShaderResourseViewDesc descriptionSRV);
+  void
+  release() override;
 
   void*
   getId() override;
 
   void
-  initFromImage(SPtr<Image> image);
+  initFromImage(SPtr<Image> image) override;
+
+  void
+  initForDepthStencil(const Vector2U& size) override;
 
  private:
 

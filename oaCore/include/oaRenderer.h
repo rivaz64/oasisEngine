@@ -20,6 +20,9 @@ class OA_CORE_EXPORT Renderer :
   virtual void
   render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum);
 
+  virtual void
+  setSize(const Vector2U& size) {}
+
 
  protected:
   
@@ -31,11 +34,19 @@ class OA_CORE_EXPORT Renderer :
 
   SPtr<Buffer> m_viewLocationBuffer;
 
+  SPtr<Texture> m_depthTexture;
+
+  SPtr<Texture> m_renderTexture;
+
   SPtr<Rasterizer> m_normalRasterizer;
 
   SPtr<Rasterizer> m_hairRasterizer;
 
   SPtr<Rasterizer> m_debugRasterizer;
+  
+  SPtr<RenderTarget> m_finalRender;
+
+  SPtr<DepthStencil> m_finalDepthStencil;
 
 };
 

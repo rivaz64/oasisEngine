@@ -23,9 +23,9 @@ class DX11GraphicAPI :
   onShutDown() override;
 
   bool
-  initialize() override;
+  initialize(void* window) override;
 
-  void 
+  void*
   createWindow(void* app, const Vector2U& size, const String& name) override;
 
   bool
@@ -62,7 +62,7 @@ class DX11GraphicAPI :
   createRenderTarget(SPtr<Texture> texture) override;
 
   SPtr<DepthStencil>
-  createDepthStencil(const DepthStencilDesc& description, SPtr<Texture> texture) override;
+  createDepthStencil() override;
 
   
   SPtr<Rasterizer>
@@ -119,11 +119,14 @@ class DX11GraphicAPI :
   void 
   clearDepthStencil(SPtr<DepthStencil> depthStencil) override;
 
-  void
-  setWindow() override;
+  Vector2U
+  getWindowSize(void* window);
 
-  virtual void*
-  getWindow() override;
+  void
+  setViewport(const Vector2U& size) override;
+
+  void
+  resizeSwapChain(const Vector2U& size) override;
 
   virtual void*
   getDevice() override;
@@ -136,7 +139,6 @@ class DX11GraphicAPI :
   DX11GraphicAPI() = default;
 
  public:
-  HWND m_hWnd;
   D3D_DRIVER_TYPE m_driverType = D3D_DRIVER_TYPE_NULL;
   D3D_FEATURE_LEVEL m_featureLevel = D3D_FEATURE_LEVEL_11_0;
   ID3D11Device* m_device = nullptr;

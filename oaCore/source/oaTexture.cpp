@@ -8,17 +8,6 @@
 
 namespace oaEngineSDK{
 
-bool Texture::init(TextureDesc /*description*/)
-{
-  return true;
-}
-
-bool 
-Texture::init(TextureDesc /*description*/,ShaderResourseViewDesc /*descriptionSRV*/)
-{
-  return true;
-}
-
 void* 
 Texture::getId()
 {

@@ -20,6 +20,9 @@ class Deferred :
 
   void
   render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum) override;
+
+  void
+  setSize(const Vector2U& size) override;
 };
 
 }

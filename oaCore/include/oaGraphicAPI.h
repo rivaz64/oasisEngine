@@ -40,10 +40,10 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return if the initialization was correct
   */
   virtual bool
-  initialize();
+  initialize(void* /*window*/);
 
-  virtual void 
-  createWindow(void* /*app*/, const Vector2U& /*size*/, const String& /*name*/){}
+  virtual void* 
+  createWindow(void* /*app*/, const Vector2U& /*size*/, const String& /*name*/);
 
   /**
    * @brief if the grafics are still doing things
@@ -130,7 +130,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<DepthStencil>
-  createDepthStencil(const DepthStencilDesc& /*description*/, SPtr<Texture> /*texture*/);
+  createDepthStencil();
 
   /**
    * @brief creates a new rasterizer
@@ -267,15 +267,14 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void
   initWindow(void* /*window*/) {}
 
-  /**
-   * @brief sets the window to be used
-   * @param  
-  */
-  virtual void
-  setWindow() {}
+  virtual Vector2U
+  getWindowSize(void* /*window*/);
 
-  virtual void*
-  getWindow() { return nullptr;}
+  virtual void
+  setViewport(const Vector2U& /*size*/){}
+
+  virtual void
+  resizeSwapChain(const Vector2U& /*size*/){}
 
   virtual void*
   getDevice() {return nullptr;}
@@ -284,16 +283,6 @@ class OA_CORE_EXPORT GraphicAPI :
   getContext() {return nullptr;}
 
  public:
-
-  /**
-   * @brief the width of the window at the begining
-  */
-  uint32 m_windowWidth = 800;
-
-  /**
-  * @brief the height of the window at the begining
-  */
-  uint32 m_windowHeight = 600;
 
   /**
    * @brief the function for procecing the events

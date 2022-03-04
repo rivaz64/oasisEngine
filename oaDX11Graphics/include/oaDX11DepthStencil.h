@@ -18,7 +18,7 @@ class DX11DepthStencil :
   ~DX11DepthStencil();
 
   bool
-  init(DepthStencilDesc descritor, SPtr<Texture> texture) override;
+  init(SPtr<Texture> texture) override;
 
   void
   release();

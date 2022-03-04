@@ -6,6 +6,7 @@
 
 #include "oaGraphicAPI.h"
 #include <iostream>
+#include <oaVector2U.h>
 #include "oaShader.h"
 #include "oaTexture.h"
 #include "oaSamplerState.h"
@@ -20,9 +21,15 @@
 namespace oaEngineSDK{
 
 bool 
-GraphicAPI::initialize()
+GraphicAPI::initialize(void*)
 {
   return true;
+}
+
+void*
+GraphicAPI::createWindow(void*, const Vector2U&, const String&)
+{
+  return nullptr;
 }
 
 bool 
@@ -81,7 +88,7 @@ GraphicAPI::createRenderTarget(SPtr<Texture>)
 }
 
 SPtr<DepthStencil> 
-GraphicAPI::createDepthStencil(const DepthStencilDesc&, SPtr<Texture>)
+GraphicAPI::createDepthStencil()
 {
   return SPtr<DepthStencil>();
 }
@@ -102,6 +109,12 @@ SPtr<Texture>
 GraphicAPI::getBackBuffer()
 {
   return newSPtr<Texture>();
+}
+
+Vector2U
+GraphicAPI::getWindowSize(void* /*window*/)
+{
+  return Vector2U(0,0);
 }
 
 }

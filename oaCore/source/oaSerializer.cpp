@@ -45,15 +45,12 @@ String
 Serializer::decodeString()
 {
   String string;
-
   uint32 nameSize;
 
   file.read(reinterpret_cast<char*>(&nameSize),sizeof(int32));
-
   string.resize(nameSize);
 
    SIZE_T nameData = reinterpret_cast<SIZE_T>(string.data());
-
   file.read(reinterpret_cast<char*>(nameData),sizeof(char)*nameSize);
 
   return string;
@@ -67,6 +64,7 @@ Serializer::encodeImage(SPtr<Image> image)
   file.write(reinterpret_cast<char*>(&image->m_width),sizeof(int32));
   file.write(reinterpret_cast<char*>(&image->m_height),sizeof(int32));
   file.write(reinterpret_cast<char*>(&image->m_pitch),sizeof(int32));
+  file.write(reinterpret_cast<char*>(&image->m_format),sizeof(int32));
   file.write(reinterpret_cast<char*>(image->m_pixels),sizeof(int32)*image->m_width*image->m_height);
 }
 
@@ -80,6 +78,7 @@ Serializer::decodeImage()
   file.read(reinterpret_cast<char*>(&image->m_width),sizeof(int32));
   file.read(reinterpret_cast<char*>(&image->m_height),sizeof(int32));
   file.read(reinterpret_cast<char*>(&image->m_pitch),sizeof(int32));
+  file.read(reinterpret_cast<char*>(&image->m_format),sizeof(int32));
 
   uint32 imageSize = image->m_height*image->m_pitch;
 

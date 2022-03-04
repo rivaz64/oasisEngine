@@ -1,20 +1,22 @@
 #include "oaDeferred.h"
 #include <oaFrustum.h>
-#include "oaScene.h"
-#include "oaMatrix4f.h"
-#include "oaActor.h"
-#include "oaGraphicsComponent.h"
-#include "oaModel.h"
-#include "oaMesh.h"
-#include "oaMaterial.h"
-#include "oaResoureManager.h"
-#include "oaShaderProgram.h"
-#include "oaBuffer.h"
-#include "oaGraphicAPI.h"
-#include "oaCamera.h"
-#include "oaRasterizer.h"
-#include "oaCameraComponent.h"
-#include "oaDebugMesh.h"
+#include <oaScene.h>
+#include <oaMatrix4f.h>
+#include <oaActor.h>
+#include <oaGraphicsComponent.h>
+#include <oaModel.h>
+#include <oaMesh.h>
+#include <oaMaterial.h>
+#include <oaResoureManager.h>
+#include <oaShaderProgram.h>
+#include <oaBuffer.h>
+#include <oaGraphicAPI.h>
+#include <oaCamera.h>
+#include <oaRasterizer.h>
+#include <oaCameraComponent.h>
+#include <oaDebugMesh.h>
+#include <oaTexture.h>
+#include <oaDepthStencil.h>
 
 namespace oaEngineSDK{
 
@@ -42,6 +44,12 @@ Deferred::onStartUp()
 
   m_projectionBuffer = graphicsAPI.createBuffer();
   m_projectionBuffer->init(sizeof(Matrix4f));
+
+  m_depthTexture = graphicsAPI.createTexture();
+
+  m_finalDepthStencil = graphicsAPI.createDepthStencil();
+
+  m_finalRender = graphicsAPI.createRenderTarget(graphicsAPI.getBackBuffer());
 }
 
 void 
@@ -50,6 +58,11 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   auto& resourseManager = ResoureManager::instance();
   
   auto& graphicsAPI = GraphicAPI::instance();
+
+  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
+
+  graphicsAPI.clearRenderTarget(m_finalRender);
+  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
   
   m_viewBuffer->write(&camForView->getViewMatrix().m11);
   graphicsAPI.setVSBuffer(m_viewBuffer,1);
@@ -111,6 +124,21 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
     renderData.m_mesh->set();
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
   }
+}
+
+void 
+Deferred::setSize(const Vector2U& size)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+  graphicsApi.unsetRenderTargetAndDepthStencil();
+
+  m_depthTexture->release();
+  m_finalDepthStencil->release();
+
+  m_depthTexture->initForDepthStencil(size);
+  m_finalDepthStencil->init(m_depthTexture);
+
+   m_finalRender = graphicsApi.createRenderTarget(graphicsApi.getBackBuffer());
 }
 
 }

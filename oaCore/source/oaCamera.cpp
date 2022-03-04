@@ -28,19 +28,15 @@ Camera::Camera()
 }
 
 void
-Camera::init(float viewAngle,
-             float nearPlaneDistance,
-             float farPlaneDistance)
+Camera::init(const float ratio,
+             const float viewAngle,
+             const float nearPlaneDistance,
+             const float farPlaneDistance)
 {
   m_viewAngle = viewAngle;
   m_nearPlaneDistance = nearPlaneDistance;
   m_farPlaneDistance = farPlaneDistance;
-
-  auto& api = GraphicAPI::instance();
-
-  m_ratio = static_cast<float>(api.m_windowWidth) / 
-            static_cast<float>(api.m_windowHeight);
-
+  m_ratio = ratio;
   update();
 }
 
