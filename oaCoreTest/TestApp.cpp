@@ -156,9 +156,7 @@ TestApp::postInit()
 
   m_selectedActor = m_actualScene->getRoot();
 
-  m_renderer = newSPtr<Renderer>();
-
-  m_renderer->init();
+  
 }
 
 
@@ -209,16 +207,16 @@ TestApp::draw()
   graphicsAPI.setVSBuffer(lights,3);
   graphicsAPI.setPSBuffer(lights,0);
 
-  
+  auto& renderer = Renderer::instance();
 
   if(m_controlledActor){
-    m_renderer->render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
+    renderer.render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
   }
   else if(m_debugCamera){
-    m_renderer->render(m_actualScene,m_camera,m_debugCamera);
+    renderer.render(m_actualScene,m_camera,m_debugCamera);
   }
   else{
-    m_renderer->render(m_actualScene,m_camera,m_camera);
+    renderer.render(m_actualScene,m_camera,m_camera);
   }
   
   newImGuiFrame();

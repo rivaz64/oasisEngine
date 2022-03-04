@@ -25,7 +25,7 @@ namespace oaEngineSDK{
 
 
 
-using function = const void* (*)();
+using Function = const void* (*)();
 
 BaseApp::BaseApp()
   : m_windowName("Oasis Engine"), m_windowSize(800,600)
@@ -57,6 +57,8 @@ BaseApp::run()
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
 
+  
+
   if (!GraphicAPI::isStarted()) {
     GraphicAPI::startUp();
   }
@@ -66,6 +68,8 @@ BaseApp::run()
    GraphicAPI::instance().createWindow(this,m_windowSize,m_windowName);
 
   if(GraphicAPI::instance().initialize()){
+
+    loadPlugIn("oaRendererd.dll");
 
     ResoureManager::startUp();
     InputManager::startUp();
@@ -101,7 +105,7 @@ void BaseApp::loadPlugIn(String DLL)
     return;
   }
 
-  function foundFunction = reinterpret_cast<function>(GetProcAddress(hGetProcIDDLL, "initPlugIn"));
+  Function foundFunction = reinterpret_cast<Function>(GetProcAddress(hGetProcIDDLL, "initPlugIn"));
   if(!foundFunction())
   {
     print("Could not find function");

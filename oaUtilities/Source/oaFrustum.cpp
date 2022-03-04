@@ -99,15 +99,19 @@ Frustum::isInside(const Vector3f& point) const
 }
 
 bool 
-Frustum::isInside(const Sphere& sphere) const
-{
+Frustum::isInside(const Sphere& sphere, const Matrix4f& transform) const
+{ 
+  auto center = (transform * Vector4f(sphere.getCenter(),1.0)).xyz;
+  auto scale = (transform * Vector4f(1,1,1,1)).xyz-(transform * Vector4f(0,0,0,1)).xyz; 
+  auto radius = sphere.getRadius()*Math::max(Math::max(scale.x,scale.y),scale.z);
+  
   return 
-    Math::distance(m_nearPlane, sphere.getCenter()) > -sphere.getRadius() &&
-    Math::distance(m_farPlane, sphere.getCenter()) > -sphere.getRadius() &&
-    Math::distance(m_topPlane, sphere.getCenter()) > -sphere.getRadius() &&
-    Math::distance(m_bottomPlane, sphere.getCenter()) > -sphere.getRadius() &&
-    Math::distance(m_rightPlane, sphere.getCenter()) > -sphere.getRadius() &&
-    Math::distance(m_leftPlane, sphere.getCenter()) > -sphere.getRadius();
+    Math::distance(m_nearPlane, center) > -sphere.getRadius() &&
+    Math::distance(m_farPlane, center) > -sphere.getRadius() &&
+    Math::distance(m_topPlane, center) > -sphere.getRadius() &&
+    Math::distance(m_bottomPlane, center) > -sphere.getRadius() &&
+    Math::distance(m_rightPlane, center) > -sphere.getRadius() &&
+    Math::distance(m_leftPlane, center) > -sphere.getRadius();
 }
 
 bool 

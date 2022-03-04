@@ -13,8 +13,6 @@
 
 namespace oaEngineSDK{
 
-class BaseApp;
-
 namespace GRAPHIC_API {
 enum E{
   NONE=0,

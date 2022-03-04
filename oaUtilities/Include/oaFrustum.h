@@ -74,7 +74,7 @@ class OA_UTILITY_EXPORT Frustum
    * @return 
   */
   bool 
-  isInside(const Sphere& sphere) const;
+  isInside(const Sphere& sphere, const Matrix4f& transform) const;
 
   /**
    * @brief calculates if a part of a aabb is inside of the frustrum

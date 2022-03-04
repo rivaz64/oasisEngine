@@ -188,7 +188,9 @@
     <ClInclude Include="include\oaGraphicsComponent.h" />
     <ClInclude Include="include\oaImage.h" />
     <ClInclude Include="include\oaIndexBuffer.h" />
+    <ClInclude Include="include\oaInput.h" />
     <ClInclude Include="include\oaInputManager.h" />
+    <ClInclude Include="include\oaInputMap.h" />
     <ClInclude Include="include\oaLoader.h" />
     <ClInclude Include="include\oaLogger.h" />
     <ClInclude Include="include\oaMaterial.h" />
@@ -257,6 +259,8 @@
     <ClCompile Include="source\oaIndexBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaInput.cpp" />
+    <ClCompile Include="source\oaInputMap.cpp" />
     <ClCompile Include="source\oaLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

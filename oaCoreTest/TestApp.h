@@ -87,8 +87,6 @@ public:
 
   SPtr<ShaderProgram> m_program; 
 
-  SPtr<Renderer> m_renderer;
-
   SPtr<Buffer> lights;
 
   SPtr<Actor> m_controlledActor;
