@@ -121,7 +121,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<RenderTarget>
-  createRenderTarget(SPtr<Texture> /*texture*/);
+  createRenderTarget();
 
   /**
    * @brief creates a depth stencil

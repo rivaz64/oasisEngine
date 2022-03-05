@@ -25,7 +25,7 @@ DX11Rasterizer::init(CULLING::E culling, FILL_MODE::E fillMode)
   descriptor.DepthBias = 0;
   descriptor.DepthBiasClamp = 0;
   descriptor.SlopeScaledDepthBias = 0;
-  descriptor.DepthClipEnable = true;
+  descriptor.DepthClipEnable = false;
   descriptor.ScissorEnable = false;
   descriptor.MultisampleEnable = false;
   descriptor.AntialiasedLineEnable = false;

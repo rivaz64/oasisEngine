@@ -60,4 +60,12 @@ void Mesh::createNormals(Vector<Vertex>& vertices)
   }
 }
 
+void
+Mesh::create(void* data, SIZE_T vertexSize, SIZE_T dataSize)
+{
+  create();
+
+  m_vertexB->init(data,vertexSize,dataSize);
+}
+
 }

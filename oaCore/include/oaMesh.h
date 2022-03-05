@@ -34,6 +34,24 @@ struct SubMesh{
 /**
  * @brief a structure for all the information at a certain point of a Mesh
 */
+struct SimpleVertex{
+
+  SimpleVertex(const Vector4f& _location, const Vector2f& _textureCord) :
+    location(_location), textureCord(_textureCord){}
+  /**
+   * @brief the location in a tridimencional space of this vetrex
+  */
+  Vector4f location;
+
+  /**
+   * @brief the part of the texture that is going to be drawn at a certain point
+  */
+  Vector2f textureCord;
+};
+
+/**
+ * @brief a structure for all the information at a certain point of a Mesh
+*/
 struct Vertex{
   /**
    * @brief the location in a tridimencional space of this vetrex
@@ -124,6 +142,9 @@ class OA_CORE_EXPORT Mesh
   */
   virtual void
   create();
+
+  void
+  create(void* data, SIZE_T vertexSize, SIZE_T dataSize);
 
   /**
    * @brief sets the buffers to the GPU

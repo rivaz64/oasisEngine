@@ -59,7 +59,7 @@ class DX11GraphicAPI :
   createSamplerState(const SamplerDesc& descriptor) override;
 
   SPtr<RenderTarget>
-  createRenderTarget(SPtr<Texture> texture) override;
+  createRenderTarget() override;
 
   SPtr<DepthStencil>
   createDepthStencil() override;

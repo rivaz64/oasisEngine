@@ -17,6 +17,7 @@
 #include <oaDebugMesh.h>
 #include <oaTexture.h>
 #include <oaDepthStencil.h>
+#include <oaRenderTarget.h>
 
 namespace oaEngineSDK{
 
@@ -28,7 +29,7 @@ Deferred::onStartUp()
   m_globalTransformBuffer->init(sizeof(Matrix4f));
 
   m_normalRasterizer = graphicsAPI.createRasterizer();
-  m_normalRasterizer->init(CULLING::kFront,FILL_MODE::kSolid);
+  m_normalRasterizer->init(CULLING::kNone,FILL_MODE::kSolid);
 
   m_hairRasterizer = graphicsAPI.createRasterizer();
   m_hairRasterizer->init(CULLING::kNone,FILL_MODE::kSolid);
@@ -46,15 +47,34 @@ Deferred::onStartUp()
   m_projectionBuffer->init(sizeof(Matrix4f));
 
   m_depthTexture = graphicsAPI.createTexture();
-
   m_finalDepthStencil = graphicsAPI.createDepthStencil();
 
-  m_finalRender = graphicsAPI.createRenderTarget(graphicsAPI.getBackBuffer());
+  m_finalRender = graphicsAPI.createRenderTarget();
+  m_finalRender->init(graphicsAPI.getBackBuffer());
 
-  m_color = graphicsAPI.createTexture();
-  m_normal = graphicsAPI.createTexture();
-  m_position = graphicsAPI.createTexture();
-  m_specular = graphicsAPI.createTexture();
+  m_colorTexture = graphicsAPI.createTexture();
+  m_normalTexture = graphicsAPI.createTexture();
+  m_positionTexture = graphicsAPI.createTexture();
+  m_specularTexture = graphicsAPI.createTexture();
+
+  m_colorRender = graphicsAPI.createRenderTarget();
+  m_normalRender = graphicsAPI.createRenderTarget();
+  m_positionRender = graphicsAPI.createRenderTarget();
+  m_specularRender = graphicsAPI.createRenderTarget();
+
+  m_gBuffer = {m_colorRender,m_normalRender,m_positionRender,m_specularRender};
+  Vector<SimpleVertex> points{
+    SimpleVertex(Vector4f(-0.5f, -0.5f, 0.0f,0),Vector2f(0,0)),
+    SimpleVertex(Vector4f(0.5f, -0.5f, 0.0f,0),Vector2f(0,0)),
+    SimpleVertex(Vector4f(0.0f,  0.5f, 0.0f,0),Vector2f(0,0))
+    //SimpleVertex(Vector4f(1,1,.5f,0),Vector2f(1,1)),
+  };
+  
+  screen = newSPtr<Mesh>();
+
+  screen->setIndex({0,1,2});
+
+  screen->create(points.data(),sizeof(SimpleVertex),points.size());
 }
 
 void 
@@ -64,20 +84,17 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   
   auto& graphicsAPI = GraphicAPI::instance();
 
-  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
-
+  graphicsAPI.clearRenderTarget(m_colorRender);
+  graphicsAPI.clearRenderTarget(m_normalRender);
+  graphicsAPI.clearRenderTarget(m_positionRender);
+  graphicsAPI.clearRenderTarget(m_specularRender);
   graphicsAPI.clearRenderTarget(m_finalRender);
   graphicsAPI.clearDepthStencil(m_finalDepthStencil);
-  
-  m_viewBuffer->write(&camForView->getViewMatrix().m11);
-  graphicsAPI.setVSBuffer(m_viewBuffer,1);
-  
-  m_projectionBuffer->write(&camForView->getProjectionMatrix().m11);
-  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
-  
-  m_viewLocationBuffer->write(&camForView->getLocation().x);
-  graphicsAPI.setVSBuffer(m_viewLocationBuffer,4);
-  
+
+  resourseManager.m_shaderPrograms["GBuffer"]->set();
+
+  graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
+
   Vector<RenderData> toRender;
 
   Frustum frustrum(camForFrustrum->getLocation(),
@@ -86,10 +103,48 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
                    camForFrustrum->getFarPlaneDistance(),
                    camForFrustrum->getViewAngle(),
                    camForFrustrum->getRatio());
-
+  
 
   scene->meshesToRender(scene->getRoot(),frustrum,toRender);
 
+  m_viewBuffer->write(&camForView->getViewMatrix().m11);
+  graphicsAPI.setVSBuffer(m_viewBuffer,1);
+  
+  m_projectionBuffer->write(&camForView->getProjectionMatrix().m11);
+  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
+
+
+
+  for(auto& renderData : toRender){
+    m_globalTransformBuffer->write(&renderData.m_transform);
+    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+
+    renderData.m_mesh->set();
+    renderData.m_material->set();
+
+    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+  }
+
+  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
+
+  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
+
+  graphicsAPI.setRasterizer(m_normalRasterizer);
+
+  resourseManager.m_shaderPrograms["lights"]->set();
+
+  graphicsAPI.setTexture(m_colorTexture,0);
+  graphicsAPI.setTexture(m_normalTexture,1);
+  graphicsAPI.setTexture(m_positionTexture,2);
+  graphicsAPI.setTexture(m_specularTexture,3);
+
+  screen->set();
+
+  graphicsAPI.draw(3);
+
+  //graphicsAPI.unsetRenderTargetAndDepthStencil();
+  
+  /*
   for(auto& renderData : toRender){
     renderData.m_material->set();
     switch (renderData.m_material->getShader())
@@ -128,7 +183,7 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
 
     renderData.m_mesh->set();
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }
+  }*/
 }
 
 void 
@@ -139,11 +194,26 @@ Deferred::setSize(const Vector2U& size)
 
   m_depthTexture->release();
   m_finalDepthStencil->release();
+  m_finalRender->release();
+  m_colorTexture->release();
+  m_normalTexture->release();
+  m_positionTexture->release();
+  m_specularTexture->release();
 
   m_depthTexture->initForDepthStencil(size);
   m_finalDepthStencil->init(m_depthTexture);
 
-   m_finalRender = graphicsApi.createRenderTarget(graphicsApi.getBackBuffer());
+  m_finalRender->init(graphicsApi.getBackBuffer());
+
+  m_colorTexture->initForRenderTarget(size);
+  m_normalTexture->initForRenderTarget(size);
+  m_positionTexture->initForRenderTarget(size);
+  m_specularTexture->initForRenderTarget(size);
+
+  m_colorRender->init(m_colorTexture);
+  m_normalRender->init(m_normalTexture);
+  m_positionRender->init(m_positionTexture);
+  m_specularRender->init(m_specularTexture);
 }
 
 }

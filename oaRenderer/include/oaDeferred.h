@@ -26,15 +26,25 @@ class Deferred :
 
  private:
   
-  SPtr<Texture> m_color;
+  SPtr<Texture> m_colorTexture;
 
-  SPtr<Texture> m_normal;
+  SPtr<Texture> m_normalTexture;
 
-  SPtr<Texture> m_position;
+  SPtr<Texture> m_positionTexture;
 
-  SPtr<Texture> m_specular;
+  SPtr<Texture> m_specularTexture;
 
-  
+  SPtr<RenderTarget> m_colorRender;
+
+  SPtr<RenderTarget> m_normalRender;
+
+  SPtr<RenderTarget> m_positionRender;
+
+  SPtr<RenderTarget> m_specularRender;
+
+  Vector<SPtr<RenderTarget>> m_gBuffer;
+
+  SPtr<Mesh> screen;
 };
 
 }

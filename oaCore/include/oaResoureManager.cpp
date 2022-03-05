@@ -368,22 +368,26 @@ void ResoureManager::loadDefaultShaders()
   m_vertexShaders.insert({"default",graphicsApi.createVertexShader()});
   m_vertexShaders.insert({"animation",graphicsApi.createVertexShader()});
   m_vertexShaders.insert({"debug",graphicsApi.createVertexShader()});
+  m_vertexShaders.insert({"screen",graphicsApi.createVertexShader()});
 
   m_pixelShaders.insert({"default",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"paralax",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"transparent",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"debug",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"GBuffer",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
   m_vertexShaders["animation"]->compileFromFile("animVertexShader");
   m_vertexShaders["debug"]->compileFromFile("vertexDebug");
+  m_vertexShaders["screen"]->compileFromFile("screen");
 
   m_pixelShaders["default"]->compileFromFile("pixelShader");
   m_pixelShaders["paralax"]->compileFromFile("paralax");
   m_pixelShaders["transparent"]->compileFromFile("transparent");
   m_pixelShaders["debug"]->compileFromFile("pixelDebug");
   m_pixelShaders["GBuffer"]->compileFromFile("GBuffer");
+  m_pixelShaders["lights"]->compileFromFile("lights");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -404,6 +408,7 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms.insert({"transparent",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"debug",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"GBuffer",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"lights",graphicApi.createShaderProgram()});
 
   m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
@@ -422,6 +427,9 @@ ResoureManager::generateDefaultShaderPrograms()
 
   m_shaderPrograms["GBuffer"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["GBuffer"]->attach(m_pixelShaders["GBuffer"]);
+
+  m_shaderPrograms["lights"]->attach(m_vertexShaders["screen"]);
+  m_shaderPrograms["lights"]->attach(m_pixelShaders["lights"]);
 }
 
 void 

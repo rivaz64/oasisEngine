@@ -543,9 +543,7 @@ Loader::checkForLoad(const Path& file)
 
   if(importedScene->HasAnimations()){
     m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
-  }
-
-   
+  }   
   
   ResoureManager::instance().m_models.insert({StringUtilities::toString(file.getCompletePath()),model});
   model->setName(StringUtilities::toString(file.getName()));

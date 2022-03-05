@@ -82,7 +82,7 @@ GraphicAPI::createSamplerState(const SamplerDesc&)
 }
 
 SPtr<RenderTarget> 
-GraphicAPI::createRenderTarget(SPtr<Texture>)
+GraphicAPI::createRenderTarget()
 {
   return newSPtr<RenderTarget>();
 }
