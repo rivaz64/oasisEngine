@@ -121,7 +121,6 @@ class OA_CORE_EXPORT Actor :
    * @brief the dirty flag of the local and global matrix
   */
   //uint8 dirtyFlag = 0;
-  friend class TestApp;
 };
 
 }

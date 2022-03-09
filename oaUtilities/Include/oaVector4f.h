@@ -203,6 +203,12 @@ public:
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
   }
 
+  FORCEINLINE float
+  dot(const Vector4f& v) const
+  {
+    return x * v.x + y * v.y + z * v.z + w * v.w;
+  }
+
   /**
    * @brief interpolates a vector 4d
    * @param a if t is 0

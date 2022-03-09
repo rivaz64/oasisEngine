@@ -24,4 +24,5 @@ class Sphere;
 class AABB;
 class Capsule;
 class Frustum;
+class Transform;
 }

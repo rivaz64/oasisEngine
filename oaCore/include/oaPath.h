@@ -53,17 +53,17 @@ class OA_CORE_EXPORT Path
   FORCEINLINE WString
   getExtencion() const
   {
-    return extencion;
+    return m_extencion;
   }
 
  private:
 
-  WString completePath;
+  WString m_completePath;
 
-  UNICHAR drive[_MAX_DRIVE];
-  UNICHAR direction[_MAX_DIR];
-  UNICHAR name[_MAX_FNAME];
-  UNICHAR extencion[_MAX_EXT];
+  WString m_drive;
+  WString m_direction;
+  WString m_name;
+  WString m_extencion;
   
 };
 

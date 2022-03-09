@@ -33,7 +33,7 @@ class OA_CORE_EXPORT Camera
   */
   void
   init(const float ratio,
-       const float viewAngle = 0.785398163f,
+       const float viewAngle = Math::PI/4.f,
        const float nearPlaneDistance = 1.0f,
        const float farPlaneDistance = 100.0f);
 

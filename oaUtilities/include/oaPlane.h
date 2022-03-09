@@ -26,7 +26,8 @@ class OA_UTILITY_EXPORT Plane
    * @param _normal 
    * @param _d 
   */
-  Plane(const Vector3f& _normal, float _d) :normal(_normal.normalized()), d(_d) {}
+  Plane(const Vector3f& normal, float d) :
+    m_normal(normal.normalized()), m_d(d) {}
 
   /**
    * @brief a plane that passes throwth A, B, and C
@@ -36,7 +37,7 @@ class OA_UTILITY_EXPORT Plane
   */
   Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C);
 
-  Plane(const Vector3f& point, const Vector3f& normal);
+  Plane(const Vector3f& point, const Vector3f& m_normal);
 
   ~Plane() = default;
 
@@ -45,8 +46,8 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   FORCEINLINE const Vector3f&
-  getNormal() {
-    return normal;
+  getNormal() const {
+    return m_normal;
   }
   
   /**
@@ -54,8 +55,8 @@ class OA_UTILITY_EXPORT Plane
    * @return 
   */
   FORCEINLINE float 
-  getD() {
-    return d;
+  getD() const {
+    return m_d;
   }
 
   /**
@@ -65,15 +66,16 @@ class OA_UTILITY_EXPORT Plane
   Matrix4f
   reflection();
  
+ private:
   /**
     * @brief the normal of the plane
    */
-  Vector3f normal;
+  Vector3f m_normal;
 
   /**
    * @brief the result of the dot product betweeen the normal and any vector in the plane
   */
-  float d;
+  float m_d;
 
   friend class PlatformMath;
 };

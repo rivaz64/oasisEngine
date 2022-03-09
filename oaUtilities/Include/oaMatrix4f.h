@@ -7,7 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
-#include "oaVector3f.h"
+#include "oaVector4f.h"
 
 namespace oaEngineSDK {
 /**
@@ -23,19 +23,19 @@ class OA_UTILITY_EXPORT Matrix4f
 
   /**
    * @brief parametrized constructor for the Matrix4f
-   * @param _a
-   * @param _b
-   * @param _c
-   * @param _d
+   * @param r1 
+   * @param r2 
+   * @param r3 
+   * @param r4
   */
-  Matrix4f(float _m11, float _m12, float _m13, float _m14,
-           float _m21, float _m22, float _m23, float _m24,
-           float _m31, float _m32, float _m33, float _m34,
-           float _m41, float _m42, float _m43, float _m44 ) :
-    m11(_m11), m12(_m12), m13(_m13), m14(_m14),
-    m21(_m21), m22(_m22), m23(_m23), m24(_m24),
-    m31(_m31), m32(_m32), m33(_m33), m34(_m34),
-    m41(_m41), m42(_m42), m43(_m43), m44(_m44) {}
+  Matrix4f(Vector4f r1, Vector4f r2, Vector4f r3, Vector4f r4) :
+    row1(r1), row2(r2), row3(r3), row4(r4) {}
+
+  /**
+   * @brief constructor from a matrix3
+   * @param m 
+  */
+  Matrix4f(const Matrix3f& m);
 
   ~Matrix4f() = default;
 
@@ -46,16 +46,6 @@ class OA_UTILITY_EXPORT Matrix4f
   */
   bool const
   operator==(const Matrix4f& m) const;
-
-  /**
-   * @brief constructor for an identity matrix
-   * @param f the idnetity matrix is going to be multiplied by f
-  */
-  Matrix4f(float f):
-    m11(f), m12(0), m13(0), m14(0),
-    m21(0), m22(f), m23(0), m24(0),
-    m31(0), m32(0), m33(f), m34(0),
-    m41(0), m42(0), m43(0), m44(f) {}
 
   /**
   * @brief adds the matrix m and this one
@@ -126,6 +116,13 @@ class OA_UTILITY_EXPORT Matrix4f
   operator*=(const Matrix4f& m);
 
   /**
+   * @brief returns the xyz elementts of the firts 3 rows
+   * @return 
+  */
+  Matrix3f
+  toMatrix3f() const;
+
+  /**
    * @brief changes the rows for the columns
   */
   void
@@ -171,12 +168,6 @@ class OA_UTILITY_EXPORT Matrix4f
   scaleMatrix(const Vector3f& v);
 
   /**
-   * @brief gets the scale from the transform matrix
-  */
-  Vector3f
-  extractScale();
-
-  /**
    * @brief creates a rotation matrix for the given angle r in radians rotating in the Z axis
   */
   static Matrix4f
@@ -208,84 +199,15 @@ class OA_UTILITY_EXPORT Matrix4f
   static Matrix4f
   rotationMatrix(const Vector3f& v);
   
-   /**
-    * @brief value at column 1 row 1
-   */
-   float m11;
+ public:
 
-   /**
-    * @brief value at column 2 row 1
-   */
-   float m12;
+  Vector4f row1;
 
-   /**
-    * @brief value at column 3 row 1
-   */
-   float m13;
+  Vector4f row2;
 
-   /**
-    * @brief value at column 4 row 1
-   */
-   float m14;
-   /**
-    * @brief value at column 1 row 2
-   */
-   float m21;
+  Vector4f row3;
 
-   /**
-    * @brief value at column 2 row 2
-   */
-   float m22;
-
-   /**
-    * @brief value at column 3 row 2
-   */
-   float m23;
-
-   /**
-    * @brief value at column 4 row 2
-   */
-   float m24;
-
-   /**
-    * @brief value at column 1 row 3
-   */
-   float m31;
-
-   /**
-    * @brief value at column 2 row 3
-   */
-   float m32;
-
-   /**
-    * @brief value at column 3 row 3
-   */
-   float m33;
-
-   /**
-    * @brief value at column 4 row 3
-   */
-   float m34;
-
-   /**
-    * @brief value at column 1 row 4
-   */
-   float m41;
-
-   /**
-    * @brief value at column 2 row 4
-   */
-   float m42;
-
-   /**
-    * @brief value at column 3 row 4
-   */
-   float m43;
-
-   /**
-    * @brief value at column 4 row 4
-   */
-   float m44;
+  Vector4f row4;
 
    static const Matrix4f IDENTITY;
 };

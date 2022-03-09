@@ -27,9 +27,9 @@ bool Path::searchForPath()
     return false;
   }
 
-  completePath = fileName;
+  m_completePath = fileName;
 
-  if (completePath.size()==0){
+  if (m_completePath.size()==0){
     return false;
   }
 
@@ -42,15 +42,15 @@ void
 Path::setCompletePath(WString path)
 {
   _wsplitpath_s(path.c_str(), 
-               drive, 
+               m_drive, 
                _MAX_DRIVE,
-               direction, 
+               m_direction, 
                _MAX_DIR,
-               name , 
+               m_name , 
                _MAX_FNAME, 
-               extencion, 
+               m_extencion, 
                _MAX_EXT);
-  completePath = path;
+  m_completePath = path;
 }
 
 void 
@@ -58,13 +58,13 @@ Path::setCompletePath(String path)
 {
   completePath = StringUtilities::toWString(path);
   _wsplitpath_s(completePath.c_str(), 
-               drive, 
+               m_drive, 
                _MAX_DRIVE,
-               direction, 
+               m_direction, 
                _MAX_DIR,
-               name , 
+               m_name , 
                _MAX_FNAME, 
-               extencion, 
+               m_extencion, 
                _MAX_EXT);
   
 }

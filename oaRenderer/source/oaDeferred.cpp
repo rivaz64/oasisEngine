@@ -74,7 +74,7 @@ Deferred::onStartUp()
 
   screen->setIndex({0,1,2});
 
-  screen->create(points.data(),sizeof(SimpleVertex),points.size());
+  screen->create(points.data(),sizeof(SimpleVertex),points.size()*sizeof(SimpleVertex));
 }
 
 void 
@@ -91,7 +91,7 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   graphicsAPI.clearRenderTarget(m_finalRender);
   graphicsAPI.clearDepthStencil(m_finalDepthStencil);
 
-  resourseManager.m_shaderPrograms["GBuffer"]->set();
+  /*resourseManager.m_shaderPrograms["GBuffer"]->set();
 
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
 
@@ -123,20 +123,16 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
     renderData.m_material->set();
 
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }
+  }*/
 
-  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
-
-  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
-
-  graphicsAPI.setRasterizer(m_normalRasterizer);
+  graphicsAPI.setRenderTarget(m_finalRender);
 
   resourseManager.m_shaderPrograms["lights"]->set();
 
-  graphicsAPI.setTexture(m_colorTexture,0);
-  graphicsAPI.setTexture(m_normalTexture,1);
-  graphicsAPI.setTexture(m_positionTexture,2);
-  graphicsAPI.setTexture(m_specularTexture,3);
+  //graphicsAPI.setTexture(m_colorTexture,0);
+  //graphicsAPI.setTexture(m_normalTexture,1);
+  //graphicsAPI.setTexture(m_positionTexture,2);
+  //graphicsAPI.setTexture(m_specularTexture,3);
 
   screen->set();
 

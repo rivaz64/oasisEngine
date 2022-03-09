@@ -20,7 +20,7 @@ enum E{
 }
 
 namespace SHADER_TYPE{
-enum E : int32{
+enum E {
   kNormal = 0,
   kAnimation,
   kParalax,

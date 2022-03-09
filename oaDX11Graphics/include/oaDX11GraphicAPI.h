@@ -7,7 +7,6 @@
 #pragma once
 
 #include <oaGraphicAPI.h>
-#include <windows.h>
 #include <d3d11.h>
 #include <oaColor.h>
 #include <oaVector2I.h>

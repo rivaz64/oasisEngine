@@ -14,27 +14,27 @@ namespace oaEngineSDK {
 
 Plane::Plane(const Vector3f& A, const Vector3f& B, const Vector3f& C)
 {
-  normal = Vector3f::cross(B - A,C - A).normalized();
-  d = -Vector3f::dot(normal,A);
+  m_normal = Vector3f::cross(B - A,C - A).normalized();
+  m_d = -Vector3f::dot(m_normal,A);
 }
 
 Plane::Plane(const Vector3f & point, const Vector3f & _normal)
 {
-  normal = _normal;
-  d = -Vector3f::dot(normal,point);
+  m_normal = _normal;
+  m_d = -Vector3f::dot(m_normal,point);
 }
 
 Matrix4f
 Plane::reflection()
 {
-  float xy = -2.f*normal.x * normal.y;
-  float xz = -2.f * normal.x * normal.z;
-  float yz = -2.f * normal.y * normal.z;
+  float xy = -2.f * m_normal.x * m_normal.y;
+  float xz = -2.f * m_normal.x * m_normal.z;
+  float yz = -2.f * m_normal.y * m_normal.z;
   return Matrix4f(
-    1.f-2.f*normal.x*normal.x,xy,xz,-2.f*normal.x*d,
-    xy,1.f - 2.f * normal.y * normal.y, yz,-2.f * normal.y*d,
-    xz,yz,1.f - 2.f * normal.z * normal.z,-2.f * normal.z*d ,
-    0.f,0.f,0.f,1.f
+    Vector4f(1.f-2.f*m_normal.x*m_normal.x,xy,xz,-2.f*m_normal.x*m_d),
+    Vector4f(xy,1.f - 2.f * m_normal.y * m_normal.y, yz,-2.f * m_normal.y*m_d),
+    Vector4f(xz,yz,1.f - 2.f * m_normal.z * m_normal.z,-2.f * m_normal.z*m_d),
+    Vector4f(0.f,0.f,0.f,1.f)
     );
 }
 

@@ -118,10 +118,10 @@ Quaternion::toMatrix() const
   float ri = 2.f * r * i;
   float rj = 2.f * r * j;
   float rk = 2.f * r * k;
-  return {1.f - j2 - k2 ,ij - rk       ,ik + rj       ,0.0f,
-          ij + rk       ,1.f - i2 - k2 ,jk - ri       ,0.0f,
-          ik - rj       ,jk + ri       ,1.f - i2 - j2 ,0.0f,
-          0.0f          ,0.0f          ,0.0f          ,1.0f};
+  return Matrix4f(Vector4f(1.f - j2 - k2 ,ij - rk       ,ik + rj       ,0.0f),
+                  Vector4f(ij + rk       ,1.f - i2 - k2 ,jk - ri       ,0.0f),
+                  Vector4f(ik - rj       ,jk + ri       ,1.f - i2 - j2 ,0.0f),
+                  Vector4f(0.0f          ,0.0f          ,0.0f          ,1.0f));
 }
 
 void 

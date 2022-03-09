@@ -24,7 +24,8 @@ class OA_UTILITY_EXPORT Capsule
   * @param _center 
   * @param _radius 
   */
-  Capsule(const Vector3f& _base, float _radius,float _height) :base(_base), radius(_radius),height(_height) {}
+  Capsule(const Vector3f& base, float radius,float height) : 
+    m_base(base), m_radius(radius),m_height(height) {}
 
   ~Capsule() = default;
 
@@ -34,7 +35,7 @@ class OA_UTILITY_EXPORT Capsule
   */
   FORCEINLINE const Vector3f& 
   getBase() const {
-    return base;
+    return m_base;
   }
 
   /**
@@ -43,7 +44,7 @@ class OA_UTILITY_EXPORT Capsule
   */
   FORCEINLINE float const 
   getRadius() const {
-    return radius;
+    return m_radius;
   }
 
   /**
@@ -52,7 +53,7 @@ class OA_UTILITY_EXPORT Capsule
   */
   FORCEINLINE float const 
   getHeight() const {
-    return height;
+    return m_height;
   }
 
   /**
@@ -60,8 +61,8 @@ class OA_UTILITY_EXPORT Capsule
   * @param _center 
   */
   FORCEINLINE void 
-  setBase(const Vector3f& _base) {
-    base = _base;
+  setBase(const Vector3f& base) {
+    m_base = base;
   }
 
   /**
@@ -69,8 +70,8 @@ class OA_UTILITY_EXPORT Capsule
   * @param _radius 
   */
   FORCEINLINE void 
-  setRadius(float _radius) {
-    radius = _radius;
+  setRadius(float radius) {
+    m_radius = radius;
   }
 
   /**
@@ -78,25 +79,25 @@ class OA_UTILITY_EXPORT Capsule
   * @param _radius 
   */
   FORCEINLINE void 
-  setHeight(float _height) {
-    height = _height;
+  setHeight(float height) {
+    m_height = height;
   }
  private:
 
   /**
   * @brief the lowest point of the capsule
   */
-  Vector3f base;
+  Vector3f m_base;
 
   /**
   * @brief the radius of the capsule
   */
-  float radius;
+  float m_radius;
 
   /**
   * @brief the height of the capsule
   */
-  float height;
+  float m_height;
 
   friend class PlatformMath;
 };

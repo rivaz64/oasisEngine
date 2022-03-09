@@ -268,6 +268,12 @@ class OA_UTILITY_EXPORT Vector3f
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
   }
 
+  FORCEINLINE float
+  dot(const Vector3f& v) const
+  {
+    return x * v.x + y * v.y + z * v.z;
+  }
+
   /**
   * @brief cross product of two vectors
   * @param v1

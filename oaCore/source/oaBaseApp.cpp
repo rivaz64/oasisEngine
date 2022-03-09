@@ -141,11 +141,11 @@ BaseApp::mainLoop()
 }
 
 void 
-BaseApp::update(SPtr<Actor> Actor)
+BaseApp::update(SPtr<Actor> actor)
 {
-  Actor->update();
-  auto& childs =  Actor->getChilds();
-  for(auto child : childs){
+  actor->update();
+  auto& childs =  actor->getChilds();
+  for(auto& child : childs){
     update(child);
   }
 }

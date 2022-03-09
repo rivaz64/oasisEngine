@@ -106,8 +106,6 @@ class OA_CORE_EXPORT AnimationComponent :
    * @brief the skeleton using the animation
   */
   SPtr<Skeleton> m_skeleton;
-
-  friend class TestApp;
 };
 
 }

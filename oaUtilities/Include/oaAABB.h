@@ -38,7 +38,7 @@ class OA_UTILITY_EXPORT AABB
   */
   FORCEINLINE const Vector3f& 
   getMinPoint() const {
-    return minPoint;
+    return m_minPoint;
   }
 
   /**
@@ -47,33 +47,33 @@ class OA_UTILITY_EXPORT AABB
   */
   FORCEINLINE const Vector3f& 
   getMaxPoint() const {
-    return maxPoint;
+    return m_maxPoint;
   }
 
   FORCEINLINE void
-  setMinPoint(const Vector3f& _minPoint) {
-    minPoint = _minPoint;
+  setMinPoint(const Vector3f& minPoint) {
+    m_minPoint = minPoint;
   }
 
   FORCEINLINE void
-  setMaxPoint(const Vector3f& _maxPoint) {
-    maxPoint = _maxPoint;
+  setMaxPoint(const Vector3f& maxPoint) {
+    m_maxPoint = maxPoint;
   }
 
   Vector<Vector3f>
   getPoints() const;
 
-private:
+ private:
 
   /**
    * @brief the minimum values of the box in each axis
   */
-  Vector3f minPoint;
+  Vector3f m_minPoint;
 
   /**
    * @brief the maximum values of the box in each axis
   */
-  Vector3f maxPoint;
+  Vector3f m_maxPoint;
 
   friend class PlatformMath;
 };

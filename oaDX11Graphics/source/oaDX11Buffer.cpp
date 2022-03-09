@@ -13,7 +13,8 @@ DX11Buffer::~DX11Buffer()
   m_buffer->Release();
 }
 
-bool DX11Buffer::init(uint32 size)
+bool 
+DX11Buffer::init(uint32 size)
 {
   D3D11_BUFFER_DESC bd;
   memset( &bd,0, sizeof(bd) );
@@ -32,7 +33,8 @@ bool DX11Buffer::init(uint32 size)
   return true;
 }
 
-void DX11Buffer::write(const void* data)
+void 
+DX11Buffer::write(const void* data)
 {
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_context->UpdateSubresource( m_buffer, 0, NULL, data, 0, 0);   

@@ -27,7 +27,7 @@ class OA_UTILITY_EXPORT Sphere
    * @param _center 
    * @param _radius 
   */
-  Sphere(const Vector3f& _center, float _radius) :center(_center), radius(_radius) {}
+  Sphere(const Vector3f& center, float radius) : m_center(center), m_radius(radius) {}
 
   ~Sphere() = default;
 
@@ -37,7 +37,7 @@ class OA_UTILITY_EXPORT Sphere
   */
   FORCEINLINE const Vector3f& 
   getCenter() const {
-    return center;
+    return m_center;
   }
 
   /**
@@ -46,7 +46,7 @@ class OA_UTILITY_EXPORT Sphere
   */
   FORCEINLINE float const 
   getRadius() const {
-    return radius;
+    return m_radius;
   }
 
   /**
@@ -54,8 +54,8 @@ class OA_UTILITY_EXPORT Sphere
    * @param _center 
   */
   FORCEINLINE void 
-  setCenter(const Vector3f& _center) {
-    center = _center;
+  setCenter(const Vector3f& center) {
+    m_center = center;
   }
 
   /**
@@ -63,21 +63,19 @@ class OA_UTILITY_EXPORT Sphere
    * @param _radius 
   */
   FORCEINLINE void 
-  setRadius(float _radius) {
-    radius = _radius;
+  setRadius(float radius) {
+    m_radius = radius;
   }
 
  private:
   /**
    * @brief the point where the center of the sphere is
   */
-  Vector3f center;
+  Vector3f m_center;
   /**
    * @brief the radius of the sphere
   */
-  float radius;
-
-  friend class PlatformMath;
+  float m_radius;
 };
 
 }

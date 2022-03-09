@@ -37,110 +37,110 @@ PlatformMath::invSqrt(float number)
 bool 
 PlatformMath::overlap(const Vector3f& _point, const Sphere& _sphere)
 {
-  return (_sphere.center - _point).magnitud() < _sphere.radius;
+  return (_sphere.getCenter() - _point).magnitud() < _sphere.getRadius();
 }
 
 bool 
 PlatformMath::overlap(const Sphere& _sphere1, const Sphere& _sphere2)
 {
-  return (_sphere1.center - _sphere2.center).magnitud()
-    < _sphere1.radius+_sphere2.radius;
+  return (_sphere1.getCenter() - _sphere2.getCenter()).magnitud()
+    < _sphere1.getRadius()+_sphere2.getRadius();
 }
 
 bool 
 PlatformMath::overlap(const Vector3f& _point, const AABB& _box)
 {
-  return _point.x> _box.minPoint.x && _point.x < _box.maxPoint.x &&
-    _point.y> _box.minPoint.y && _point.y < _box.maxPoint.y &&
-    _point.z> _box.minPoint.z && _point.z < _box.maxPoint.z;
+  return _point.x> _box.getMinPoint().x && _point.x < _box.getMaxPoint().x &&
+    _point.y> _box.getMinPoint().y && _point.y < _box.getMaxPoint().y &&
+    _point.z> _box.getMinPoint().z && _point.z < _box.getMaxPoint().z;
 }
 
 bool 
 PlatformMath::overlap(const Sphere& _sphere, const AABB& _box)
 {
   Vector3f point = 
-  { max(_box.minPoint.x, min(_sphere.center.x, _box.maxPoint.x)),
-    max(_box.minPoint.y, min(_sphere.center.y, _box.maxPoint.y)),
-    max(_box.minPoint.z, min(_sphere.center.z, _box.maxPoint.z)) };
+  { max(_box.getMinPoint().x, min(_sphere.getCenter().x, _box.getMaxPoint().x)),
+    max(_box.getMinPoint().y, min(_sphere.getCenter().y, _box.getMaxPoint().y)),
+    max(_box.getMinPoint().z, min(_sphere.getCenter().z, _box.getMaxPoint().z)) };
 
-  return (point- _sphere.center).magnitud() < _sphere.radius;
+  return (point- _sphere.getCenter()).magnitud() < _sphere.getRadius();
 }
 
 bool 
 PlatformMath::overlap(const AABB& _box1, const AABB& _box2)
 {
   return 
-    _box1.maxPoint.x > _box2.minPoint.x && 
-    _box1.minPoint.x < _box2.maxPoint.x &&
-    _box1.maxPoint.y > _box2.minPoint.y && 
-    _box1.minPoint.y < _box2.maxPoint.y &&
-    _box1.maxPoint.z > _box2.minPoint.z && 
-    _box1.minPoint.z < _box2.maxPoint.z;
+    _box1.getMaxPoint().x > _box2.getMinPoint().x && 
+    _box1.getMinPoint().x < _box2.getMaxPoint().x &&
+    _box1.getMaxPoint().y > _box2.getMinPoint().y && 
+    _box1.getMinPoint().y < _box2.getMaxPoint().y &&
+    _box1.getMaxPoint().z > _box2.getMinPoint().z && 
+    _box1.getMinPoint().z < _box2.getMaxPoint().z;
 }
 
 bool 
 PlatformMath::overlap(const Vector3f& _point, const Capsule& _capsule)
 {
-  float height1 = _capsule.base.z+_capsule.radius;
-  float height2 = _capsule.base.z+_capsule.height-_capsule.radius;
-  return ((_point.xy - _capsule.base.xy).magnitud() < _capsule.radius 
+  float height1 = _capsule.getBase().z+_capsule.getRadius();
+  float height2 = _capsule.getBase().z+_capsule.getHeight()-_capsule.getRadius();
+  return ((_point.xy - _capsule.getBase().xy).magnitud() < _capsule.getRadius() 
           && _point.z > height1
           && _point.z < height2) 
-  ||(Vector3f(_capsule.base.xy,height1) - _point).magnitud() < _capsule.radius 
-  ||(Vector3f(_capsule.base.xy,height2) - _point).magnitud() < _capsule.radius;
+  ||(Vector3f(_capsule.getBase().xy,height1) - _point).magnitud() < _capsule.getRadius() 
+  ||(Vector3f(_capsule.getBase().xy,height2) - _point).magnitud() < _capsule.getRadius();
 }
 
 bool 
 PlatformMath::overlap(const Sphere& _sphere, const Capsule& _capsule)
 {
-  float height1 = _capsule.base.z+_capsule.radius;
-  float height2 = _capsule.base.z+_capsule.height-_capsule.radius;
-  float radius = _capsule.radius + _sphere.radius;
-  return ((_sphere.center.xy - _capsule.base.xy).magnitud() < radius
-          && _sphere.center.z > height1
-          && _sphere.center.z < height2) 
-  ||(Vector3f(_capsule.base.xy,height1) - _sphere.center).magnitud() < radius
-  ||(Vector3f(_capsule.base.xy,height2) - _sphere.center).magnitud() < radius;
+  float height1 = _capsule.getBase().z+_capsule.getRadius();
+  float height2 = _capsule.getBase().z+_capsule.getHeight()-_capsule.getRadius();
+  float radius = _capsule.getRadius() + _sphere.getRadius();
+  return ((_sphere.getCenter().xy - _capsule.getBase().xy).magnitud() < radius
+          && _sphere.getCenter().z > height1
+          && _sphere.getCenter().z < height2) 
+  ||(Vector3f(_capsule.getBase().xy,height1) - _sphere.getCenter()).magnitud() < radius
+  ||(Vector3f(_capsule.getBase().xy,height2) - _sphere.getCenter()).magnitud() < radius;
 }
 
 bool 
 PlatformMath::overlap(const AABB& _box, const Capsule& _capsule)
 {
   Vector2f point = 
-  { Math::max(_box.minPoint.x, Math::min(_capsule.base.x, _box.maxPoint.x)),
-    Math::max(_box.minPoint.y, Math::min(_capsule.base.y, _box.maxPoint.y))};
+  { Math::max(_box.getMinPoint().x, Math::min(_capsule.getBase().x, _box.getMaxPoint().x)),
+    Math::max(_box.getMinPoint().y, Math::min(_capsule.getBase().y, _box.getMaxPoint().y))};
 
-  if ((point- _capsule.base.xy).magnitud() < _capsule.radius){
+  if ((point- _capsule.getBase().xy).magnitud() < _capsule.getRadius()){
     return true;
   }
-  Sphere s1(Vector3f(_capsule.base.xy,
-            _capsule.base.z+_capsule.radius),_capsule.radius);
-  Sphere s2(Vector3f(_capsule.base.xy,
-            _capsule.base.z+_capsule.height-_capsule.radius),_capsule.radius);
+  Sphere s1(Vector3f(_capsule.getBase().xy,
+            _capsule.getBase().z+_capsule.getRadius()),_capsule.getRadius());
+  Sphere s2(Vector3f(_capsule.getBase().xy,
+            _capsule.getBase().z+_capsule.getHeight()-_capsule.getRadius()),_capsule.getRadius());
   return overlap(s1,_box) || overlap(s2,_box);
 }
 
 bool 
 PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
 {
-  float height11 = _capsule1.base.z+_capsule1.radius;
-  float height21 = _capsule1.base.z+_capsule1.height-_capsule1.radius;
-  float height12 = _capsule2.base.z+_capsule2.radius;
-  float height22 = _capsule2.base.z+_capsule2.height-_capsule1.radius;
-  if((_capsule1.base.xy-_capsule2.base.xy).magnitud()
-     < _capsule1.radius+_capsule2.radius
+  float height11 = _capsule1.getBase().z+_capsule1.getRadius();
+  float height21 = _capsule1.getBase().z+_capsule1.getHeight()-_capsule1.getRadius();
+  float height12 = _capsule2.getBase().z+_capsule2.getRadius();
+  float height22 = _capsule2.getBase().z+_capsule2.getHeight()-_capsule1.getRadius();
+  if((_capsule1.getBase().xy-_capsule2.getBase().xy).magnitud()
+     < _capsule1.getRadius()+_capsule2.getRadius()
      && height11<height22 && height21 > height12)
   {
     return true;
   }
-  Sphere s11(Vector3f(_capsule1.base.xy,
-            _capsule1.base.z+_capsule1.radius),_capsule1.radius);
-  Sphere s21(Vector3f(_capsule1.base.xy,
-            _capsule1.base.z+_capsule1.height-_capsule1.radius),_capsule1.radius);
-  Sphere s12(Vector3f(_capsule2.base.xy,
-             _capsule2.base.z+_capsule2.radius),_capsule2.radius);
-  Sphere s22(Vector3f(_capsule2.base.xy,
-             _capsule2.base.z+_capsule2.height-_capsule2.radius),_capsule2.radius);
+  Sphere s11(Vector3f(_capsule1.getBase().xy,
+            _capsule1.getBase().z+_capsule1.getRadius()),_capsule1.getRadius());
+  Sphere s21(Vector3f(_capsule1.getBase().xy,
+            _capsule1.getBase().z+_capsule1.getHeight()-_capsule1.getRadius()),_capsule1.getRadius());
+  Sphere s12(Vector3f(_capsule2.getBase().xy,
+             _capsule2.getBase().z+_capsule2.getRadius()),_capsule2.getRadius());
+  Sphere s22(Vector3f(_capsule2.getBase().xy,
+             _capsule2.getBase().z+_capsule2.getHeight()-_capsule2.getRadius()),_capsule2.getRadius());
 
   return overlap(s11,s22) || overlap(s12,s21);
 }
@@ -175,17 +175,17 @@ PlatformMath::distance(const Line& _line1, const Line& _line2)
 float 
 PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
 {
-  return Vector3f::dot(_plane.normal,_point)+_plane.d;
+  return Vector3f::dot(_plane.getNormal(),_point)+_plane.getD();
 }
 
 bool 
 PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _point)
 {
-  float fv = Vector3f::dot(_plane.normal,_line.direction);
+  float fv = Vector3f::dot(_plane.getNormal(),_line.direction);
   if (Math::abs(fv) > FLT_MIN) {
     _point = _line.startingPoint 
            - _line.direction 
-           * ((Vector3f::dot(_plane.normal,_line.getStaringPoint())+_plane.d) / fv);
+           * ((Vector3f::dot(_plane.getNormal(),_line.getStaringPoint())+_plane.getD()) / fv);
     return true;
   }
   return false;
@@ -197,12 +197,12 @@ PlatformMath::intersect(const Plane& _plane1,
                              const Plane& _plane3, 
                              Vector3f& _point)
 {
-  Vector3f n =  Vector3f::cross(_plane1.normal,_plane2.normal);
-  float det = Vector3f::dot(n,_plane3.normal);
+  Vector3f n =  Vector3f::cross(_plane1.getNormal(),_plane2.getNormal());
+  float det = Vector3f::dot(n,_plane3.getNormal());
   if (abs(det) > FLT_MIN) {
-    _point = (Vector3f::cross(_plane3.normal,_plane2.normal) * _plane1.d 
-            + Vector3f::cross(_plane1.normal,_plane3.normal) * _plane2.d 
-            - n * _plane3.d) / det;
+    _point = (Vector3f::cross(_plane3.getNormal(),_plane2.getNormal()) * _plane1.getD() 
+            + Vector3f::cross(_plane1.getNormal(),_plane3.getNormal()) * _plane2.getD() 
+            - n * _plane3.getD()) / det;
     return true;
   }
   return false;
@@ -211,11 +211,11 @@ PlatformMath::intersect(const Plane& _plane1,
 bool 
 PlatformMath::intersect(const Plane& _plane1, const Plane& _plane2, Line& _line)
 {
-  Vector3f dir = Vector3f::cross(_plane1.normal,_plane2.normal);
+  Vector3f dir = Vector3f::cross(_plane1.getNormal(),_plane2.getNormal());
   _line.setDirection(dir);
   float det = Vector3f::dot(dir,dir);
   if (det > FLT_MIN) {
-    _line.setStaringPoint((Vector3f::cross(dir,_plane1.normal) * _plane2.d + Vector3f::cross(dir,_plane2.normal) * _plane1.d) / det);
+    _line.setStaringPoint((Vector3f::cross(dir,_plane1.getNormal()) * _plane2.getD() + Vector3f::cross(dir,_plane2.getNormal()) * _plane1.getD()) / det);
     return true;
   }
   return false;

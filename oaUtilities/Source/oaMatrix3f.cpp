@@ -15,185 +15,147 @@ bool const
 Matrix3f::operator==(const Matrix3f& m) const
 {
   return
-    m11 == m.m11 &&
-    m12 == m.m12 &&
-    m13 == m.m13 &&
-    m21 == m.m21 &&
-    m22 == m.m22 &&
-    m23 == m.m23 &&
-    m31 == m.m31 &&
-    m32 == m.m32 &&
-    m33 == m.m33;
+    row1 == m.row1 &&
+    row2 == m.row2 &&
+    row3 == m.row3;
 }
 
 Matrix3f
 Matrix3f::operator+(const Matrix3f& m) const
 {
-  return {
-    m11 + m.m11,m12 + m.m12,m13 + m.m13,
-    m21 + m.m21,m22 + m.m22,m23 + m.m23,
-    m31 + m.m31,m32 + m.m32,m33 + m.m33
-  };
+  return Matrix3f(row1+m.row1, row2+m.row2, row3+m.row3);
 }
 
 Matrix3f&
 Matrix3f::operator+=(const Matrix3f& m)
 {
-  m11 += m.m11;
-  m12 += m.m12;
-  m13 += m.m13;
-  m21 += m.m21;
-  m22 += m.m22;
-  m23 += m.m23;
-  m31 += m.m31;
-  m32 += m.m32;
-  m33 += m.m33;
+  row1 += m.row1;
+  row2 += m.row2;
+  row3 += m.row3;
   return *this;
 }
 
 Matrix3f
 Matrix3f::operator-(const Matrix3f& m) const
 {
-  return {
-    m11 - m.m11,m12 - m.m12,m13 - m.m13,
-    m21 - m.m21,m22 - m.m22,m23 - m.m23,
-    m31 - m.m31,m32 - m.m32,m33 - m.m33
-  };
+  return Matrix3f(row1-m.row1, row2-m.row2, row3-m.row3);
 }
 
 Matrix3f&
 Matrix3f::operator-=(const Matrix3f& m)
 {
-  m11 -= m.m11;
-  m12 -= m.m12;
-  m13 -= m.m13;
-  m21 -= m.m21;
-  m22 -= m.m22;
-  m23 -= m.m23;
-  m31 -= m.m31;
-  m32 -= m.m32;
-  m33 -= m.m33;
+  row1 -= m.row1;
+  row2 -= m.row2;
+  row3 -= m.row3;
   return *this;
 }
 
 Matrix3f
 Matrix3f::operator*(float m) const
 {
-  return {
-    m11* m,m12* m,m13* m,
-    m21* m,m22* m,m23* m,
-    m31* m,m32* m,m33* m
-  };
+  return Matrix3f(row1*m, row2*m, row3*m);
 }
 
 Matrix3f&
 Matrix3f::operator*=(float m)
 {
-  m11 *= m;
-  m12 *= m;
-  m13 *= m;
-  m21 *= m;
-  m22 *= m;
-  m23 *= m;
-  m31 *= m;
-  m32 *= m;
-  m33 *= m;
+  row1 *= m;
+  row2 *= m;
+  row3 *= m;
   return *this;
 }
 
 Vector3f
 Matrix3f::operator*(const Vector3f& v) const
 {
-  return { 
-  m11 * v.x + m12 * v.y + m13 * v.z,
-  m21 * v.x + m22 * v.y + m23 * v.z, 
-  m31 * v.x + m32 * v.y + m33 * v.z, };
+  return Vector3f(row1.dot(v),row2.dot(v),row3.dot(v));
 }
 
 Matrix3f
 Matrix3f::operator*(const Matrix3f& m) const
 {
-  return {
-    m11* m.m11 + m12 * m.m21 + m13 * m.m31,
-    m11* m.m12 + m12 * m.m22 + m13 * m.m32,
-    m11* m.m13 + m12 * m.m23 + m13 * m.m33,
-    m21* m.m11 + m22 * m.m21 + m23 * m.m31,
-    m21* m.m12 + m22 * m.m22 + m23 * m.m32,
-    m21* m.m13 + m22 * m.m23 + m23 * m.m33,
-    m31* m.m11 + m32 * m.m21 + m33 * m.m31,
-    m31* m.m12 + m32 * m.m22 + m33 * m.m32,
-    m31* m.m13 + m32 * m.m23 + m33 * m.m33,
-  };
+  return Matrix3f(
+    Vector3f(row1.x* m.row1.x + row1.y * m.row2.x + row1.z * m.row3.x,
+             row1.x* m.row1.y + row1.y * m.row2.y + row1.z * m.row3.y,
+             row1.x* m.row1.z + row1.y * m.row2.z + row1.z * m.row3.z),
+    Vector3f(row2.x* m.row1.x + row2.y * m.row2.x + row2.z * m.row3.x,
+             row2.x* m.row1.y + row2.y * m.row2.y + row2.z * m.row3.y,
+             row2.x* m.row1.z + row2.y * m.row2.z + row2.z * m.row3.z),
+    Vector3f(row3.x* m.row1.x + row3.y * m.row2.x + row3.z * m.row3.x,
+             row3.x* m.row1.y + row3.y * m.row2.y + row3.z * m.row3.y,
+             row3.x* m.row1.z + row3.y * m.row2.z + row3.z * m.row3.z)
+  );
 }
 
 Matrix3f&
 Matrix3f::operator*=(const Matrix3f& m)
 {
-  m11 = m11* m.m11 + m12 * m.m21 + m13 * m.m31;
-  m12 = m11* m.m12 + m12 * m.m22 + m13 * m.m32;
-  m13 = m11* m.m13 + m12 * m.m23 + m13 * m.m33;
-  m21 = m21* m.m11 + m22 * m.m21 + m23 * m.m31;
-  m22 = m21* m.m12 + m22 * m.m22 + m23 * m.m32;
-  m23 = m21* m.m13 + m22 * m.m23 + m23 * m.m33;
-  m31 = m31* m.m11 + m32 * m.m21 + m33 * m.m31;
-  m32 = m31* m.m12 + m32 * m.m22 + m33 * m.m32;
-  m33 = m31* m.m13 + m32 * m.m23 + m33 * m.m33;
+  row1.x = row1.x* m.row1.x + row1.y * m.row2.x + row1.z * m.row3.x;
+  row1.y = row1.x* m.row1.y + row1.y * m.row2.y + row1.z * m.row3.y;
+  row1.z = row1.x* m.row1.z + row1.y * m.row2.z + row1.z * m.row3.z;
+  row2.x = row2.x* m.row1.x + row2.y * m.row2.x + row2.z * m.row3.x;
+  row2.y = row2.x* m.row1.y + row2.y * m.row2.y + row2.z * m.row3.y;
+  row2.z = row2.x* m.row1.z + row2.y * m.row2.z + row2.z * m.row3.z;
+  row3.x = row3.x* m.row1.x + row3.y * m.row2.x + row3.z * m.row3.x;
+  row3.y = row3.x* m.row1.y + row3.y * m.row2.y + row3.z * m.row3.y;
+  row3.z = row3.x* m.row1.z + row3.y * m.row2.z + row3.z * m.row3.z;
   return *this;
 }
 void
 Matrix3f::transpose()
 {
-  swap(m12, m21);
-  swap(m13, m31);
-  swap(m23, m32);
+  swap(row1.y, row2.x);
+  swap(row1.z, row3.x);
+  swap(row2.z, row3.y);
 }
 float
 Matrix3f::determinant() const
 {
-  return m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32
-    - m13 * m22 * m31 - m12 * m21 * m33 - m11 * m23 * m32;
+  return row1.x * row2.y * row3.z + row1.y * row2.z * row3.x + row1.z * row2.x * row3.y
+    - row1.z * row2.y * row3.x - row1.y * row2.x * row3.z - row1.x * row2.z * row3.y;
 }
 
 Matrix3f
 Matrix3f::inverse() const
 {
   float invDet = 1.f / determinant();
-  return {
-    +(m22 * m33 - m32 * m23) * invDet,-(m12 * m33 - m32 * m13) * invDet,+(m12 * m23 - m22 * m13) * invDet,
-    -(m21 * m33 - m31 * m23) * invDet,+(m11 * m33 - m31 * m13) * invDet,-(m11 * m23 - m21 * m13) * invDet,
-    +(m21 * m32 - m31 * m22) * invDet,-(m11 * m32 - m31 * m12) * invDet,+(m11 * m22 - m21 * m12) * invDet,
-  };
+  return Matrix3f(                                                                                    
+    Vector3f(+(row2.y * row3.z - row3.y * row2.z),-(row1.y * row3.z - row3.y * row1.z),+(row1.y * row2.z - row2.y * row1.z)),
+    Vector3f(-(row2.x * row3.z - row3.x * row2.z),+(row1.x * row3.z - row3.x * row1.z),-(row1.x * row2.z - row2.x * row1.z)),
+    Vector3f(+(row2.x * row3.y - row3.x * row2.y),-(row1.x * row3.y - row3.x * row1.y),+(row1.x * row2.y - row2.x * row1.y))
+  );
 }
 
 void 
 Matrix3f::invert()
 {
   float invDet = 1.f / determinant();
-  m11 = +(m22 * m33 - m32 * m23) * invDet;
-  m12 = -(m12 * m33 - m32 * m13) * invDet;
-  m13 = +(m12 * m23 - m22 * m13) * invDet;
-  m21 = -(m21 * m33 - m31 * m23) * invDet;
-  m22 = +(m11 * m33 - m31 * m13) * invDet;
-  m23 = -(m11 * m23 - m21 * m13) * invDet;
-  m31 = +(m21 * m32 - m31 * m22) * invDet;
-  m32 = -(m11 * m32 - m31 * m12) * invDet;
-  m33 = +(m11 * m22 - m21 * m12) * invDet;
+  row1.x = +(row2.y * row3.z - row3.y * row2.z);
+  row1.y = -(row1.y * row3.z - row3.y * row1.z);
+  row1.z = +(row1.y * row2.z - row2.y * row1.z);
+  row2.x = -(row2.x * row3.z - row3.x * row2.z);
+  row2.y = +(row1.x * row3.z - row3.x * row1.z);
+  row2.z = -(row1.x * row2.z - row2.x * row1.z);
+  row3.x = +(row2.x * row3.y - row3.x * row2.y);
+  row3.y = -(row1.x * row3.y - row3.x * row1.y);
+  row3.z = +(row1.x * row2.y - row2.x * row1.y);
+  *this *= invDet;
 }
 
 Matrix3f
 Matrix3f::translateMatrix(const Vector2f& v)
 {
-  return { 1.f,0.f,v.x ,
-           0.f,1.f,v.y ,
-           0.f,0.f,1.f };
+  return Matrix3f( Vector3f(1.f,0.f,v.x) ,
+                   Vector3f(0.f,1.f,v.y) ,
+                   Vector3f(0.f,0.f,1.f) );
 }
 
 Matrix3f
 Matrix3f::scaleMatrix(const Vector2f& v)
 {
-  return { v.x,0.f,0.f ,
-           0.f,v.y,0.f ,
-           0.f,0.f,1.f };
+  return Matrix3f( Vector3f(v.x,0.f,0.f) ,
+                   Vector3f(0.f,v.y,0.f) ,
+                   Vector3f(0.f,0.f,1.f) );
 }
 
 Matrix3f
@@ -201,9 +163,9 @@ Matrix3f::rotationMatrix(float r)
 {
   float c = Math::cos(r);
   float s = Math::sin(r);
-  return{ c,-s,0.f ,
-          s, -c, 0.f ,
-          0.f,0.f,1.f };
+  return  Matrix3f(  Vector3f(c,-s,0.f   ),
+                     Vector3f(s, -c, 0.f ), 
+                     Vector3f(0.f,0.f,1.f));
 }
 
 }
