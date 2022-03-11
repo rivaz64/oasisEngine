@@ -141,7 +141,7 @@ class OA_CORE_EXPORT Texture
 
   FORCEINLINE const FORMAT::E&
   getFormat(){
-    return m_image->m_format;
+    return m_image->getFormat();
   }
 
  protected:

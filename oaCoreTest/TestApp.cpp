@@ -150,7 +150,7 @@ TestApp::postInit()
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
-  m_actualScene = newSPtr<Scene>();
+  m_actualScene = makeSPtr<Scene>();
 
   m_actualScene->init();
 
@@ -358,18 +358,18 @@ void oaEngineSDK::TestApp::drawImGui()
 
     if (component && ImGui::CollapsingHeader("animation")){
       auto animComponent = cast<AnimationComponent>(component);
-      if(ImGui::Button("select Animation")){
-        animComponent->m_animation = m_selectedAnimation;
-        animComponent->m_model = m_selectedModel;
-        animComponent->m_skeleton = m_selectedSkeleton;
-      }
-      if(animComponent->m_animation){
-        ImGui::DragFloat("m_selectedTime",&animComponent->m_animTimeInSecs);
-      }
-      ImGui::Checkbox("play",&animInPlay);
-      if(animInPlay){
-        animComponent->m_animTimeInSecs += Time::instance().getDelta();
-      }
+      //if(ImGui::Button("select Animation")){
+      //  animComponent->m_animation = m_selectedAnimation;
+      //  animComponent->m_model = m_selectedModel;
+      //  animComponent->m_skeleton = m_selectedSkeleton;
+      //}
+      //if(animComponent->m_animation){
+      //  ImGui::DragFloat("m_selectedTime",&animComponent->m_animTimeInSecs);
+      //}
+      //ImGui::Checkbox("play",&animInPlay);
+      //if(animInPlay){
+      //  animComponent->m_animTimeInSecs += Time::instance().getDelta();
+      //}
     }
 
     component = m_selectedActor->getComponent<CameraComponent>();
@@ -486,8 +486,8 @@ void oaEngineSDK::TestApp::drawImGui()
     ImGui::Begin("new Actor");
     ImGui::InputText("name",imguiString,64);
     if(ImGui::Button("create")){
-      auto actor = newSPtr<Actor>();
-      actor->m_name = imguiString;
+      auto actor = makeSPtr<Actor>();
+      actor->setName(imguiString);
       m_selectedActor->attach(actor);
       isCreatingActor = false;
     }
@@ -497,23 +497,23 @@ void oaEngineSDK::TestApp::drawImGui()
   if(isAddingComponent){
     ImGui::Begin("add component");
     if(ImGui::Button("Graphics")){
-      m_selectedActor->attachComponent(newSPtr<GraphicsComponent>());
+      m_selectedActor->attachComponent(makeSPtr<GraphicsComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Skeletal")){
-      m_selectedActor->attachComponent(newSPtr<SkeletalComponent>());
+      m_selectedActor->attachComponent(makeSPtr<SkeletalComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Animation")){
-      m_selectedActor->attachComponent(newSPtr<AnimationComponent>());
+      m_selectedActor->attachComponent(makeSPtr<AnimationComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Camera")){
-      m_selectedActor->attachComponent(newSPtr<CameraComponent>());
-      m_selectedActor->getComponent<CameraComponent>()->setCamera(newSPtr<Camera>());
+      m_selectedActor->attachComponent(makeSPtr<CameraComponent>());
+      m_selectedActor->getComponent<CameraComponent>()->setCamera(makeSPtr<Camera>());
 
       m_selectedActor->getComponent<CameraComponent>()->getCamera()->init(
         static_cast<float>(m_windowSize.y)/static_cast<float>(m_windowSize.x)
@@ -581,15 +581,15 @@ void oaEngineSDK::TestApp::drawImGui()
         serializer.encodeImage(image.second->getimage());
       }
 
-      serializer.encodeNumber(resourceManager.m_materials.size());
-      for(auto& material: resourceManager.m_materials){
-        serializer.encodeMaterial(material.second);
-      }
-      
-      serializer.encodeNumber(resourceManager.m_models.size());
-      for(auto& model: resourceManager.m_models){
-        serializer.encodeModel(model.second);
-      }
+      //serializer.encodeNumber(resourceManager.m_materials.size());
+      //for(auto& material: resourceManager.m_materials){
+      //  serializer.encodeMaterial(material.second);
+      //}
+      //
+      //serializer.encodeNumber(resourceManager.m_models.size());
+      //for(auto& model: resourceManager.m_models){
+      //  serializer.encodeModel(model.second);
+      //}
 
     }
   }
@@ -608,17 +608,17 @@ void oaEngineSDK::TestApp::drawImGui()
         ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
       }
 
-      number = serializer.decodeNumber();
-      for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-        auto material = serializer.decodeMaterial();
-        ResoureManager::instance().m_materials.insert({ material->getName(),material});
-      }
-
-      number = serializer.decodeNumber();
-      for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-        auto model = serializer.decodeModel();
-        ResoureManager::instance().m_models.insert({ model->getName(),model});
-      }
+      //number = serializer.decodeNumber();
+      //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+      //  auto material = serializer.decodeMaterial();
+      //  ResoureManager::instance().m_materials.insert({ material->getName(),material});
+      //}
+      //
+      //number = serializer.decodeNumber();
+      //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+      //  auto model = serializer.decodeModel();
+      //  ResoureManager::instance().m_models.insert({ model->getName(),model});
+      //}
     }
   }
   ImGui::End();
@@ -683,13 +683,13 @@ void oaEngineSDK::TestApp::drawImGui()
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)
 {
   auto& childs = parentActor->getChilds();
-  for(SPtr<Actor> Actor : childs){
-    if(ImGui::Button(Actor->m_name.c_str())){
-      m_selectedActor = Actor;
+  for(SPtr<Actor> actor : childs){
+    if(ImGui::Button(actor->getName().c_str())){
+      m_selectedActor = actor;
     }
-    if(Actor->getChilds().size()>0){
+    if(actor->getChilds().size()>0){
       if(ImGui::CollapsingHeader("childs")){
-        childsInImgui(Actor);
+        childsInImgui(actor);
       }
     }
   }

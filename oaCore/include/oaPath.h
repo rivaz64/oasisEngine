@@ -23,7 +23,7 @@ class OA_CORE_EXPORT Path
   FORCEINLINE WString
   getCompletePath() const
   {
-    return completePath;
+    return m_completePath;
   }
 
   void
@@ -35,19 +35,19 @@ class OA_CORE_EXPORT Path
   FORCEINLINE WString
   getDrive() const
   {
-    return drive;
+    return m_drive;
   }
 
   FORCEINLINE WString
   getDirection() const
   {
-    return direction;
+    return m_direction;
   }
 
   FORCEINLINE WString
   getName() const
   {
-    return name;
+    return m_name;
   }
 
   FORCEINLINE WString

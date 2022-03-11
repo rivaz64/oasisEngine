@@ -70,7 +70,7 @@ Deferred::onStartUp()
     //SimpleVertex(Vector4f(1,1,.5f,0),Vector2f(1,1)),
   };
   
-  screen = newSPtr<Mesh>();
+  screen = makeSPtr<Mesh>();
 
   screen->setIndex({0,1,2});
 

@@ -53,12 +53,12 @@ Camera::updateProyection()
   float co = cos(m_viewAngle * .5f), si = sin(m_viewAngle * .5f);
   float distance = m_farPlaneDistance - m_nearPlaneDistance;
 
-  m_projectionMatrix.m11 = (co / si) / m_ratio;
-  m_projectionMatrix.m22 = co/si;
-  m_projectionMatrix.m33 = m_farPlaneDistance / distance;
-  m_projectionMatrix.m34 = -m_projectionMatrix.m33*m_nearPlaneDistance;
-  m_projectionMatrix.m43 = 1.f;
-  m_projectionMatrix.m44= 0.f;
+  m_projectionMatrix.row1.x = (co / si) / m_ratio;
+  m_projectionMatrix.row2.y = co/si;
+  m_projectionMatrix.row3.z = m_farPlaneDistance / distance;
+  m_projectionMatrix.row3.w = -m_projectionMatrix.row3.z*m_nearPlaneDistance;
+  m_projectionMatrix.row4.z = 1.f;
+  m_projectionMatrix.row4.w= 0.f;
 
   //ans.transpose();
 }
@@ -70,21 +70,11 @@ Camera::updateView()
     return;
   }
 
-  m_viewMatrix.m11 = m_axis.m11;
-  m_viewMatrix.m12 = m_axis.m12;
-  m_viewMatrix.m13 = m_axis.m13;
-
-  m_viewMatrix.m21 = m_axis.m21;
-  m_viewMatrix.m22 = m_axis.m22;
-  m_viewMatrix.m23 = m_axis.m23;
-
-  m_viewMatrix.m31 = m_axis.m31;
-  m_viewMatrix.m32 = m_axis.m32;
-  m_viewMatrix.m33 = m_axis.m33;
+  m_viewMatrix = Matrix4f(m_axis);
   
-  m_viewMatrix.m14 = -Vector3f::dot(m_location,m_axisX);
-  m_viewMatrix.m24 = -Vector3f::dot(m_location,m_axisY);
-  m_viewMatrix.m34 = -Vector3f::dot(m_location,m_axisZ);
+  m_viewMatrix.row1.w = -Vector3f::dot(m_location,m_axisX);
+  m_viewMatrix.row2.w = -Vector3f::dot(m_location,m_axisY);
+  m_viewMatrix.row3.w = -Vector3f::dot(m_location,m_axisZ);
 
   //createFrustrum();
 

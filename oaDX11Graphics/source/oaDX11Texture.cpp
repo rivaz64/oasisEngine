@@ -32,11 +32,11 @@ DX11Texture::initFromImage(SPtr<Image> image)
 {
   D3D11_TEXTURE2D_DESC desc;
   memset( &desc,0, sizeof(desc) );
-  desc.Width = image->m_width;
-  desc.Height = image->m_height;
+  desc.Width = image->getSize().x;
+  desc.Height = image->getSize().y;
   desc.MipLevels = 1;
   desc.ArraySize = 1;
-  desc.Format = Flags::FORMATS[image->m_format];// DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; 
+  desc.Format = Flags::FORMATS[image->getFormat()];// DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; 
   desc.SampleDesc.Count = 1;
   desc.SampleDesc.Quality = 0;
   desc.Usage = D3D11_USAGE_DEFAULT;
@@ -46,8 +46,8 @@ DX11Texture::initFromImage(SPtr<Image> image)
 
   D3D11_SUBRESOURCE_DATA image_subresource_data = {};
     
-  image_subresource_data.pSysMem = image->m_pixels;
-  image_subresource_data.SysMemPitch = image->m_pitch;
+  image_subresource_data.pSysMem = image->getPixels().data();
+  image_subresource_data.SysMemPitch = image->getPitch();
    
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
@@ -63,7 +63,7 @@ DX11Texture::initFromImage(SPtr<Image> image)
   
 
   D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-  srvDesc.Format = Flags::FORMATS[image->m_format];
+  srvDesc.Format = Flags::FORMATS[image->getFormat()];
   srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
   srvDesc.Texture2D.MipLevels = 1;
   srvDesc.Texture2D.MostDetailedMip = 0;
@@ -91,9 +91,9 @@ DX11Texture::initForDepthStencil(const Vector2U& size)
   desc.CPUAccessFlags = 0;
   desc.MiscFlags = 0;
 
-  m_image = newSPtr<Image>();
+  m_image = makeSPtr<Image>();
 
-  m_image->m_format = FORMAT::kD24UNormS8UInt;
+  m_image->setFormat(FORMAT::kD24UNormS8UInt);
    
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateTexture2D( &desc, nullptr, &m_texture );
@@ -117,9 +117,9 @@ DX11Texture::initForRenderTarget(const Vector2U& size)
   desc.CPUAccessFlags = 0;
   desc.MiscFlags = 0;
 
-  m_image = newSPtr<Image>();
+  m_image = makeSPtr<Image>();
 
-  m_image->m_format = FORMAT::kR32G32B32A32Float;
+  m_image->setFormat(FORMAT::kR32G32B32A32Float);
    
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateTexture2D( &desc, nullptr, &m_texture );

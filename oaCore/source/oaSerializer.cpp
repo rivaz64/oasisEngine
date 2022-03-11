@@ -61,30 +61,27 @@ Serializer::encodeImage(SPtr<Image> image)
 {
   encodeString(image->getName());
 
-  file.write(reinterpret_cast<char*>(&image->m_width),sizeof(int32));
-  file.write(reinterpret_cast<char*>(&image->m_height),sizeof(int32));
-  file.write(reinterpret_cast<char*>(&image->m_pitch),sizeof(int32));
-  file.write(reinterpret_cast<char*>(&image->m_format),sizeof(int32));
-  file.write(reinterpret_cast<char*>(image->m_pixels),sizeof(int32)*image->m_width*image->m_height);
+  file.write(reinterpret_cast<const char*>(&image->getSize()),
+             sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
+
+  file.write(reinterpret_cast<const char*>(image->getPixels().data()),
+             image->getNumberOfBytes());
 }
 
 SPtr<Image> 
 Serializer::decodeImage()
 {
-  auto image = newSPtr<Image>();
+  auto image = makeSPtr<Image>();
 
   image->setName(decodeString());
 
-  file.read(reinterpret_cast<char*>(&image->m_width),sizeof(int32));
-  file.read(reinterpret_cast<char*>(&image->m_height),sizeof(int32));
-  file.read(reinterpret_cast<char*>(&image->m_pitch),sizeof(int32));
-  file.read(reinterpret_cast<char*>(&image->m_format),sizeof(int32));
+  file.read(reinterpret_cast<char*>(unconstPointer(&image->getSize())),
+            sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
 
-  uint32 imageSize = image->m_height*image->m_pitch;
+  image->init();
 
-  image->m_pixels = new uint8[imageSize];
-
-  file.read(reinterpret_cast<char*>(image->m_pixels),imageSize);
+  file.read(reinterpret_cast<char*>(unconstPointer(image->getPixels().data())),
+             image->getNumberOfBytes());
 
   return image;
 }
@@ -118,7 +115,7 @@ Serializer::decodeMaterial()
 {
   auto& resourseManager = ResoureManager::instance();
 
-  auto material = newSPtr<Material>();
+  auto material = makeSPtr<Material>();
 
   material->setName(decodeString());
 
@@ -186,7 +183,7 @@ Serializer::encodeModel(SPtr<Model> model)
 SPtr<Model> 
 Serializer::decodeModel()
 {
-  auto model = newSPtr<Model>();
+  auto model = makeSPtr<Model>();
 
   model->setName(decodeString());
 
@@ -201,7 +198,7 @@ Serializer::decodeModel()
   String materialName;
 
   for(SIZE_T meshN = 0; meshN < meshNum; meshN++){
-    auto mesh = newSPtr<StaticMesh>();
+    auto mesh = makeSPtr<StaticMesh>();
 
     file.read(reinterpret_cast<char*>(&indexNum),sizeof(SIZE_T));
 

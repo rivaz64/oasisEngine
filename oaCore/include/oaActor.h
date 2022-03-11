@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include <oaTransform.h>
 #include "oaComponent.h"
+#include "oaResourse.h"
 
 namespace oaEngineSDK{
 
@@ -16,7 +17,7 @@ namespace oaEngineSDK{
  * @brief something that is on a scene
 */
 class OA_CORE_EXPORT Actor :
-  public SharedEnabled<Actor>
+  public SharedEnabled<Actor>, public Resourse
 {
  public:
 
@@ -87,10 +88,6 @@ class OA_CORE_EXPORT Actor :
   }
  
  private:
-  /**
-   * @brief the name of the Actor in the editor
-  */
-  String m_name;
 
   /**
    * @brief the Actors that are child of this

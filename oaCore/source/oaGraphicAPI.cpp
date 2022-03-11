@@ -40,51 +40,51 @@ GraphicAPI::isRunning()
 
 SPtr<ShaderProgram> GraphicAPI::createShaderProgram()
 {
-    return newSPtr<ShaderProgram>();
+    return makeSPtr<ShaderProgram>();
 }
 
 SPtr<Shader> GraphicAPI::createVertexShader()
 {
-  return newSPtr<Shader>();
+  return makeSPtr<Shader>();
 }
 
 SPtr<Shader> GraphicAPI::createPixelShader()
 {
-  return newSPtr<Shader>();
+  return makeSPtr<Shader>();
 }
 
 SPtr<Buffer>
 GraphicAPI::createBuffer()
 {
-  return newSPtr<Buffer>();
+  return makeSPtr<Buffer>();
 }
 
 SPtr<VertexBuffer> GraphicAPI::createVertexBuffer()
 {
-  return newSPtr<VertexBuffer>();
+  return makeSPtr<VertexBuffer>();
 }
 
 SPtr<IndexBuffer> GraphicAPI::createIndexBuffer()
 {
-  return newSPtr<IndexBuffer>();
+  return makeSPtr<IndexBuffer>();
 }
 
 SPtr<Texture> 
 GraphicAPI::createTexture()
 {
-  return newSPtr<Texture>();
+  return makeSPtr<Texture>();
 }
 
 SPtr<SamplerState> 
 GraphicAPI::createSamplerState(const SamplerDesc&)
 {
-  return newSPtr<SamplerState>();
+  return makeSPtr<SamplerState>();
 }
 
 SPtr<RenderTarget> 
 GraphicAPI::createRenderTarget()
 {
-  return newSPtr<RenderTarget>();
+  return makeSPtr<RenderTarget>();
 }
 
 SPtr<DepthStencil> 
@@ -96,19 +96,19 @@ GraphicAPI::createDepthStencil()
 SPtr<Rasterizer> 
 GraphicAPI::createRasterizer()
 {
-  return newSPtr<Rasterizer>();
+  return makeSPtr<Rasterizer>();
 }
 
 SPtr<Blender> 
 GraphicAPI::createBlender()
 {
-  return newSPtr<Blender>();
+  return makeSPtr<Blender>();
 }
 
 SPtr<Texture> 
 GraphicAPI::getBackBuffer()
 {
-  return newSPtr<Texture>();
+  return makeSPtr<Texture>();
 }
 
 Vector2U

@@ -105,7 +105,7 @@ Renderer::render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFr
   //      vertices.push_back(Vector4f(point,1.0f));
   //    }
   //
-  //    auto mesh = newSPtr<DebugMesh>();
+  //    auto mesh = makeSPtr<DebugMesh>();
   //    mesh->setVertex(vertices);
   //
   //    mesh->setIndex({

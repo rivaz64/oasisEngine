@@ -184,6 +184,7 @@
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
+    <ClInclude Include="Include\oaMemory.h" />
     <ClInclude Include="include\oaModule.h" />
     <ClInclude Include="Include\oaNoise2D.h" />
     <ClInclude Include="Include\oaOctavesNoise.h" />

@@ -59,7 +59,7 @@ ResoureManager::onStartUp()
 void 
 ResoureManager::generateCircle(const uint8 n)
 {
-  /*meshes.insert({ "circle",newSPtr<Mesh>() });
+  /*meshes.insert({ "circle",makeSPtr<Mesh>() });
   Vector<Vertex> vertices;
   vertices.resize(n+1);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f, 0.0f),Vector3f(0.0f,1.0f, 0.0f), Vector2f(0.5f, 0.5f) };
@@ -94,7 +94,7 @@ ResoureManager::generateCircle(const uint8 n)
 void 
 ResoureManager::generateCone(const uint8 n)
 {
-  /*meshes.insert({ "cone",newSPtr<Mesh>() });
+  /*meshes.insert({ "cone",makeSPtr<Mesh>() });
   Vector<Vertex> vertices;
   vertices.resize(n+2);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
@@ -138,7 +138,7 @@ ResoureManager::generateCone(const uint8 n)
 void 
 ResoureManager::generateCilinder(const uint8 n)
 {
-  /*meshes.insert({ "cilinder",newSPtr<Mesh>() });
+  /*meshes.insert({ "cilinder",makeSPtr<Mesh>() });
   Vector<Vertex> vertices;
   vertices.resize((n+1)*2);
   vertices[0] = Vertex{ Vector3f(0.0f,0.0f,-.5f), Vector2f(0.5f, 0.5f) };
@@ -198,7 +198,7 @@ ResoureManager::generateCilinder(const uint8 n)
 
 void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float ratio)
 {
-  /*meshes.insert({ "torus",newSPtr<Mesh>() });
+  /*meshes.insert({ "torus",makeSPtr<Mesh>() });
   Vector<Vertex> vertices;
   vertices.resize(n*m);
 
@@ -273,7 +273,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
 void
 ResoureManager::generateQuad()
 {
-  auto quad = newSPtr<StaticMesh>();
+  auto quad = makeSPtr<StaticMesh>();
 
   quad->m_vertices = {
     Vertex{ Vector4f(-.5f,-.5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(0.0f, 0.0f) },
@@ -291,7 +291,7 @@ ResoureManager::generateQuad()
 
   m_meshes.insert({ "quad",quad });
 
-  auto modelQuad = newSPtr<Model>();
+  auto modelQuad = makeSPtr<Model>();
 
   modelQuad->addMesh(quad);
 
@@ -304,7 +304,7 @@ ResoureManager::generateQuad()
 void 
 ResoureManager::generateCube()
 {
-  /*meshes.insert({ "cube",newSPtr<Mesh>() });
+  /*meshes.insert({ "cube",makeSPtr<Mesh>() });
   Vector<Vertex> vertices = {
     Vertex{ Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f) },
     Vertex{ Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
@@ -435,7 +435,7 @@ ResoureManager::generateDefaultShaderPrograms()
 void 
 ResoureManager::generateDefaultMaterials()
 {
-  auto material = newSPtr<Material>();
+  auto material = makeSPtr<Material>();
 
   material->setName("debug");
 

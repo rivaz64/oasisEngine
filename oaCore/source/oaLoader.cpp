@@ -45,7 +45,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 
   sNode->childs.resize(node->mNumChildren);
   for(uint32 i = 0; i < node->mNumChildren; ++i){
-    sNode->childs[i] = newSPtr<SkeletalNode>();
+    sNode->childs[i] = makeSPtr<SkeletalNode>();
     loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
 }
@@ -190,7 +190,7 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    auto mesh = newSPtr<StaticMesh>();
+    auto mesh = makeSPtr<StaticMesh>();
 
     readStaticMesh(cast<StaticMesh>(mesh),aMesh);
 
@@ -239,14 +239,13 @@ loadImage(const Path& path){
     dib = FreeImage_ConvertTo32Bits(dib);
   }
 
-  
-   auto image = newSPtr<Image>();
-  image->m_pixels = FreeImage_GetBits(dib);
-  image->m_width = FreeImage_GetWidth(dib);
-  image->m_height = FreeImage_GetHeight(dib);
-  image->m_pitch = FreeImage_GetPitch(dib);
 
- 
+  
+   auto image = makeSPtr<Image>(Vector2I(FreeImage_GetWidth(dib),FreeImage_GetHeight(dib)),
+                                FreeImage_GetBPP(dib),
+                                FORMAT::kB8G8R8A8UnormSRGB);
+
+  image->fillFromPointer(FreeImage_GetBits(dib));
 
   /*int32 desiredChanels = 4;
   int32 channels = 0;
@@ -257,14 +256,12 @@ loadImage(const Path& path){
                            &channels,
                            desiredChanels);*/
 
-  if (image->m_pixels == 0 || image->m_width == 0 || image->m_height == 0){
+  if (image->getSize().x == 0 || image->getSize().y == 0){
     //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
     return false;
   }
 
   image->setName(StringUtilities::toString(path.getName()));
-
-  image->m_format = FORMAT::kB8G8R8A8UnormSRGB;
 
   SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
@@ -296,7 +293,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     print(StringUtilities::toString(MaterialName));
 
-    auto mat = newSPtr<Material>();
+    auto mat = makeSPtr<Material>();
 
     Path texturePath;
 
@@ -342,7 +339,7 @@ loadTextures(SPtr<Model> model)
   auto& manager = ResoureManager::instance();
   for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
     auto aMesh = scene->mMeshes[numMesh];
-    SPtr<Mesh> oaMesh = newSPtr<Mesh>();
+    SPtr<Mesh> oaMesh = makeSPtr<Mesh>();
 
     aiString f;
 
@@ -395,9 +392,9 @@ loadSkeletons(const aiScene* loadedScene)
 {
   auto& manager = ResoureManager::instance();
 
-  auto skeleton = newSPtr<Skeleton>();
+  auto skeleton = makeSPtr<Skeleton>();
 
-  skeleton->m_skeleton = newSPtr<SkeletalNode>();
+  skeleton->m_skeleton = makeSPtr<SkeletalNode>();
 
   skeleton->m_globalInverse = 
     reinterpret_cast<Matrix4f*>(&loadedScene->mRootNode->mTransformation)->inverse();
@@ -418,7 +415,7 @@ loadAnimations()
 
     auto actualAnim = scene->mAnimations[animNum];
    
-    auto animation = newSPtr<Animation>();
+    auto animation = makeSPtr<Animation>();
    
     animation->m_duration = static_cast<float>(actualAnim->mDuration);
    
@@ -428,7 +425,7 @@ loadAnimations()
       
       auto actualChannel = actualAnim->mChannels[numChannel];
    
-      auto node = newSPtr<AnimNode>();
+      auto node = makeSPtr<AnimNode>();
    
       node->name = actualChannel->mNodeName.C_Str();
    
@@ -491,7 +488,7 @@ void
 Loader::load(LOADERFLAGS::E flags)
 {
 /*
-  auto model = newSPtr<Model>();
+  auto model = makeSPtr<Model>();
   if(flags & LOADERFLAGS::kMesh){
     loadMeshes(model);
   }
@@ -523,7 +520,7 @@ Loader::checkForLoad(const Path& file)
 
   const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
   
-  auto model = newSPtr<Model>();
+  auto model = makeSPtr<Model>();
 
   if(!importedScene){
     //OA_DEBUG_LOG("file "+completePath+"not found");

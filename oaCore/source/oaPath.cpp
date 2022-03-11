@@ -41,32 +41,31 @@ bool Path::searchForPath()
 void 
 Path::setCompletePath(WString path)
 {
+  UNICHAR drive[_MAX_DRIVE];
+  UNICHAR direction[_MAX_DIR];
+  UNICHAR name[_MAX_FNAME];
+  UNICHAR extencion[_MAX_EXT];
+
   _wsplitpath_s(path.c_str(), 
-               m_drive, 
+               drive, 
                _MAX_DRIVE,
-               m_direction, 
+               direction, 
                _MAX_DIR,
-               m_name , 
+               name, 
                _MAX_FNAME, 
-               m_extencion, 
+               extencion, 
                _MAX_EXT);
   m_completePath = path;
+  m_drive = drive;
+  m_direction = direction;
+  m_name = name;
+  m_extencion = extencion;
 }
 
 void 
 Path::setCompletePath(String path)
 {
-  completePath = StringUtilities::toWString(path);
-  _wsplitpath_s(completePath.c_str(), 
-               m_drive, 
-               _MAX_DRIVE,
-               m_direction, 
-               _MAX_DIR,
-               m_name , 
-               _MAX_FNAME, 
-               m_extencion, 
-               _MAX_EXT);
-  
+  setCompletePath(StringUtilities::toWString(path));
 }
 
 }

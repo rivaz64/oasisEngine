@@ -84,7 +84,7 @@ BaseApp::run()
     
     graphicsApi.setViewport(m_windowSize);
 
-    m_camera = newSPtr<Camera>();
+    m_camera = makeSPtr<Camera>();
     m_camera->init(static_cast<float>(m_windowSize.x)/static_cast<float>(m_windowSize.y));
     m_camera->update();
 

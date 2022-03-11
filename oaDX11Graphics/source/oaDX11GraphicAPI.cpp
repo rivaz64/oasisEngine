@@ -171,49 +171,49 @@ DX11GraphicAPI::events()
 SPtr<ShaderProgram> 
 DX11GraphicAPI::createShaderProgram()
 {
-  return newSPtr<DX11ShaderProgram>();
+  return makeSPtr<DX11ShaderProgram>();
 }
 
 SPtr<Shader> 
 DX11GraphicAPI::createVertexShader()
 {
-  return newSPtr<DX11VertexShader>();
+  return makeSPtr<DX11VertexShader>();
 }
 
 SPtr<Shader> 
 DX11GraphicAPI::createPixelShader()
 {
-  return newSPtr<DX11PixelShader>();
+  return makeSPtr<DX11PixelShader>();
 }
 
 SPtr<Buffer> 
 DX11GraphicAPI::createBuffer()
 {
-  return newSPtr<DX11Buffer>();
+  return makeSPtr<DX11Buffer>();
 }
 
 SPtr<VertexBuffer> 
 DX11GraphicAPI::createVertexBuffer()
 {
-  return newSPtr<DX11VertexBuffer>();
+  return makeSPtr<DX11VertexBuffer>();
 }
 
 SPtr<IndexBuffer> 
 DX11GraphicAPI::createIndexBuffer()
 {
-  return newSPtr<DX11IndexBuffer>();
+  return makeSPtr<DX11IndexBuffer>();
 }
 
 SPtr<Texture> 
 DX11GraphicAPI::createTexture()
 {
-  return newSPtr<DX11Texture>();
+  return makeSPtr<DX11Texture>();
 }
 
 SPtr<SamplerState> 
 DX11GraphicAPI::createSamplerState(const SamplerDesc& descriptor)
 {
-  auto sampler = newSPtr<DX11SamplerState>();
+  auto sampler = makeSPtr<DX11SamplerState>();
   sampler->init(descriptor);
   return sampler;
 }
@@ -221,23 +221,23 @@ DX11GraphicAPI::createSamplerState(const SamplerDesc& descriptor)
 SPtr<RenderTarget> 
 DX11GraphicAPI::createRenderTarget()
 {
-  return newSPtr<DX11RenderTarget>();
+  return makeSPtr<DX11RenderTarget>();
 }
 
 SPtr<DepthStencil> 
 DX11GraphicAPI::createDepthStencil()
 {
-  return newSPtr<DX11DepthStencil>();
+  return makeSPtr<DX11DepthStencil>();
 }
 
 SPtr<Rasterizer> DX11GraphicAPI::createRasterizer()
 {
-  return newSPtr<DX11Rasterizer>();
+  return makeSPtr<DX11Rasterizer>();
 }
 
 SPtr<Blender> DX11GraphicAPI::createBlender()
 {
-  return newSPtr<DX11Blender>();
+  return makeSPtr<DX11Blender>();
 }
 
 void 

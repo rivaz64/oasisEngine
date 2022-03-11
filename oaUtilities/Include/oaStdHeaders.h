@@ -21,6 +21,7 @@ namespace oaEngineSDK {
 using std::vector;
 using std::list;
 using std::shared_ptr;
+using std::weak_ptr;
 using std::map;
 using std::pair;
 using std::enable_shared_from_this;
@@ -31,7 +32,6 @@ using std::wstring;
 using std::fstream;
 using std::make_shared;
 using std::reinterpret_pointer_cast;
-using std::make_shared;
 using std::endl;
 using std::copy;
 using std::cout;
@@ -78,14 +78,11 @@ template <typename T>
 using SPtr = shared_ptr<T>;
 
 /**
-* @brief wraper of the std::make_shared
-* @tparam T
+ * @brief wraper of the std::shared_ptr, can be changed in the future
+ * @tparam T
 */
-template <typename T, typename... _Types>
-FORCEINLINE SPtr<T> 
-newSPtr(_Types&&... _Args) {
-  return make_shared<T>(std::forward<_Types>(_Args)...);
-}
+template <typename T>
+using WPtr = weak_ptr<T>;
 
 /**
  * @brief wraper of the std::swap

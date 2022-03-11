@@ -13,7 +13,7 @@ namespace oaEngineSDK{
 
 void
 Scene::init(){
-  m_root = newSPtr<Actor>();
+  m_root = makeSPtr<Actor>();
 }
 
 void 
@@ -64,7 +64,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
         vertices.push_back(Vector4f(point,1.0f));
       }
       
-      auto mesh = newSPtr<DebugMesh>();
+      auto mesh = makeSPtr<DebugMesh>();
       mesh->setVertex(vertices);
       
       mesh->setIndex({
