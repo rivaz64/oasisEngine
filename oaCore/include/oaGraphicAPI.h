@@ -9,17 +9,10 @@
 #include "oaPrerequisitesCore.h"
 #include <oaModule.h>
 #include <oaColor.h>
+#include "oaFlags.h"
 
 
 namespace oaEngineSDK{
-
-namespace GRAPHIC_API {
-enum E{
-  NONE=0,
-  DIRECTX11,
-  OPENGL
-};
-};
 
 /**
  * @brief everything used for graphycs
@@ -43,7 +36,7 @@ class OA_CORE_EXPORT GraphicAPI :
   initialize(void* /*window*/);
 
   virtual void* 
-  createWindow(void* /*app*/, const Vector2U& /*size*/, const String& /*name*/);
+  createWindow(void* ,void* /*app*/, const Vector2U& /*size*/, const String& /*name*/);
 
   /**
    * @brief if the grafics are still doing things
@@ -279,6 +272,13 @@ class OA_CORE_EXPORT GraphicAPI :
   unsetRenderTargetAndDepthStencil() {}
 
   /**
+   * @brief sets the primitive topology to be used
+   * @param  
+  */
+  virtual void
+  setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E /*topology*/){}
+
+  /**
    * @brief initializes everything needed for the window
    * @param window 
   */
@@ -300,17 +300,25 @@ class OA_CORE_EXPORT GraphicAPI :
   virtual void*
   getContext() {return nullptr;}
 
+  virtual void
+  initTest(){}
+
+  virtual void
+  renderTest(){}
+
  public:
 
   /**
    * @brief the function for procecing the events
   */
-  void* eventsFunction = nullptr;
+  //void* eventsFunction = nullptr;
 
   /**
   * @brief the graphical API that has been loaded
   */
-  GRAPHIC_API::E m_actualGraphicAPI = GRAPHIC_API::NONE;
+  String m_actualGraphicAPI;
+
+
 
  protected:
 

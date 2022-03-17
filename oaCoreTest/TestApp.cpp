@@ -96,12 +96,12 @@ void
 TestApp::onDestroy()
 {
   auto& api = GraphicAPI::instance();
-  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == "DIRECTX11") {
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
   }
 
-  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == "OPENGL") {
     //ImGui_ImplOpenGL3_Shutdown();
     //ImGui_ImplGlfw_Shutdown();
   }
@@ -112,9 +112,9 @@ TestApp::onDestroy()
 void
 TestApp::onInit()
 {
-  auto& api = GraphicAPI::instance();
+  auto& graphicsApi = GraphicAPI::instance();
 
-  api.eventsFunction = WindowProc;
+  m_window = graphicsApi.createWindow(WindowProc,this,m_windowSize,m_windowName);
 }
 
 void 
@@ -156,7 +156,9 @@ TestApp::postInit()
 
   m_selectedActor = m_actualScene->getRoot();
 
-  
+  graphicAPI.initTest();
+
+  graphicAPI.setPrimitiveTopology(oaEngineSDK::PRIMITIVE_TOPOLOGY::kTrianlgeList);
 }
 
 
@@ -191,14 +193,16 @@ TestApp::draw()
   auto& resourseManager = ResoureManager::instance();
    
   graphicsAPI.setSamplerState(m_samplerState);
-  
-  //m_camera->setCamera();
-
-  lights->write(&dir.x);
-  graphicsAPI.setVSBuffer(lights,3);
-  graphicsAPI.setPSBuffer(lights,0);
+  //
+  ////m_camera->setCamera();
+  //
+  //lights->write(&dir.x);
+  //graphicsAPI.setVSBuffer(lights,3);
+  //graphicsAPI.setPSBuffer(lights,0);
 
   auto& renderer = Renderer::instance();
+
+  //graphicsAPI.renderTest();
 
   if(m_controlledActor){
     renderer.render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
@@ -220,18 +224,18 @@ void
 TestApp::initImGui()
 {
   auto& api = GraphicAPI::instance();
-  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (!api.m_actualGraphicAPI.empty()) {
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
   }
   
-  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI == "DIRECTX11") {
     ImGui_ImplWin32_Init(m_window);
     ImGui_ImplDX11_Init(
       (ID3D11Device*)api.getDevice(), 
       (ID3D11DeviceContext*)api.getContext());
   }
-  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == "OPENGL") {
     //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)api.getWindow(), true);
     //ImGui_ImplOpenGL3_Init("#version 130");
   }
@@ -243,17 +247,17 @@ void
 TestApp::newImGuiFrame()
 {
   auto& api = GraphicAPI::instance();
-  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI =="DIRECTX11") {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
   }
 
-  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == "OPENGL") {
     //ImGui_ImplOpenGL3_NewFrame();
     //ImGui_ImplGlfw_NewFrame();
   }
   
-  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (!api.m_actualGraphicAPI.empty()) {
     ImGui::NewFrame();
   }
   
@@ -266,15 +270,15 @@ void TestApp::renderImGui()
   //io.DisplaySize.x = static_cast<float>(api.m_windowWidth);
   //io.DisplaySize.y = static_cast<float>(api.m_windowHeight);
   
-  if (api.m_actualGraphicAPI != GRAPHIC_API::NONE) {
+  if (!api.m_actualGraphicAPI.empty()) {
     ImGui::Render();
   }
 
-  if (api.m_actualGraphicAPI == GRAPHIC_API::DIRECTX11) {
+  if (api.m_actualGraphicAPI =="DIRECTX11") {
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
   }
 
-  if (api.m_actualGraphicAPI == GRAPHIC_API::OPENGL) {
+  if (api.m_actualGraphicAPI == "OPENGL") {
     //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   }
 
@@ -581,15 +585,15 @@ void oaEngineSDK::TestApp::drawImGui()
         serializer.encodeImage(image.second->getimage());
       }
 
-      //serializer.encodeNumber(resourceManager.m_materials.size());
-      //for(auto& material: resourceManager.m_materials){
-      //  serializer.encodeMaterial(material.second);
-      //}
-      //
-      //serializer.encodeNumber(resourceManager.m_models.size());
-      //for(auto& model: resourceManager.m_models){
-      //  serializer.encodeModel(model.second);
-      //}
+      serializer.encodeNumber(resourceManager.m_materials.size());
+      for(auto& material: resourceManager.m_materials){
+        serializer.encodeMaterial(material.second);
+      }
+      
+      serializer.encodeNumber(resourceManager.m_models.size());
+      for(auto& model: resourceManager.m_models){
+        serializer.encodeModel(model.second);
+      }
 
     }
   }
@@ -608,66 +612,66 @@ void oaEngineSDK::TestApp::drawImGui()
         ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
       }
 
-      //number = serializer.decodeNumber();
-      //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-      //  auto material = serializer.decodeMaterial();
-      //  ResoureManager::instance().m_materials.insert({ material->getName(),material});
-      //}
-      //
-      //number = serializer.decodeNumber();
-      //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-      //  auto model = serializer.decodeModel();
-      //  ResoureManager::instance().m_models.insert({ model->getName(),model});
-      //}
+      number = serializer.decodeNumber();
+      for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+        auto material = serializer.decodeMaterial();
+        ResoureManager::instance().m_materials.insert({ material->getName(),material});
+      }
+      
+      number = serializer.decodeNumber();
+      for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+        auto model = serializer.decodeModel();
+        ResoureManager::instance().m_models.insert({ model->getName(),model});
+      }
     }
   }
   ImGui::End();
 
-  ImGui::Begin("material editor");
-  if(m_selectedMaterial){
-    SPtr<Texture> texture;
-
-    static const char* shaders[]{"normal","animation","paralax","transparent"};
-
-    int32 shader = m_selectedMaterial->getShader();
-
-    ImGui::Combo("shader",&shader,shaders,4);
-
-    m_selectedMaterial->setShader(static_cast<SHADER_TYPE::E>(shader));
-
-    if(ImGui::Button("select difusse")){
-      m_selectedMaterial->setTexture(TEXTURE_TYPE::kDiffuse,m_selectedTexture);
-    }
-    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDiffuse);
-    if(texture){
-      ImGui::Image(texture->getId(),ImVec2(100,100));
-    }
-
-    if(ImGui::Button("select normal map")){
-      m_selectedMaterial->setTexture(TEXTURE_TYPE::kNormalMap,m_selectedTexture);
-    }
-    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kNormalMap);
-    if(texture){
-      ImGui::Image(texture->getId(),ImVec2(100,100));
-    }
-
-    if(ImGui::Button("select specular")){
-      m_selectedMaterial->setTexture(TEXTURE_TYPE::kSpecular,m_selectedTexture);
-    }
-    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kSpecular);
-    if(texture){
-      ImGui::Image(texture->getId(),ImVec2(100,100));
-    }
-
-    if(ImGui::Button("select depth map")){
-      m_selectedMaterial->setTexture(TEXTURE_TYPE::kDepthMap,m_selectedTexture);
-    }
-    texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDepthMap);
-    if(texture){
-      ImGui::Image(texture->getId(),ImVec2(100,100));
-    }
-  }
-  ImGui::End();
+  //ImGui::Begin("material editor");
+  //if(m_selectedMaterial){
+  //  SPtr<Texture> texture;
+  //
+  //  static const char* shaders[]{"normal","animation","paralax","transparent"};
+  //
+  //  int32 shader = m_selectedMaterial->getShader();
+  //
+  //  ImGui::Combo("shader",&shader,shaders,4);
+  //
+  //  m_selectedMaterial->setShader(static_cast<SHADER_TYPE::E>(shader));
+  //
+  //  if(ImGui::Button("select difusse")){
+  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kDiffuse,m_selectedTexture);
+  //  }
+  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDiffuse);
+  //  if(texture){
+  //    ImGui::Image(texture->getId(),ImVec2(100,100));
+  //  }
+  //
+  //  if(ImGui::Button("select normal map")){
+  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kNormalMap,m_selectedTexture);
+  //  }
+  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kNormalMap);
+  //  if(texture){
+  //    ImGui::Image(texture->getId(),ImVec2(100,100));
+  //  }
+  //
+  //  if(ImGui::Button("select specular")){
+  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kSpecular,m_selectedTexture);
+  //  }
+  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kSpecular);
+  //  if(texture){
+  //    ImGui::Image(texture->getId(),ImVec2(100,100));
+  //  }
+  //
+  //  if(ImGui::Button("select depth map")){
+  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kDepthMap,m_selectedTexture);
+  //  }
+  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDepthMap);
+  //  if(texture){
+  //    ImGui::Image(texture->getId(),ImVec2(100,100));
+  //  }
+  //}
+  //ImGui::End();
 
   ImGui::Begin("Model Editor");
   if(m_selectedModel){
@@ -676,8 +680,6 @@ void oaEngineSDK::TestApp::drawImGui()
     }
   }
   ImGui::End();
-
-  
 }
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)

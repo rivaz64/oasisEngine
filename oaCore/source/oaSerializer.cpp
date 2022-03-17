@@ -8,6 +8,7 @@
 #include "oaImage.h"
 #include "oaTexture.h"
 #include "oaResoureManager.h"
+#include "oaShaderProgram.h"
 
 namespace oaEngineSDK{
 
@@ -93,9 +94,9 @@ Serializer::encodeMaterial(SPtr<Material> material)
 
   auto shader = material->getShader();
 
-  file.write(reinterpret_cast<char*>(&shader),sizeof(SHADER_TYPE::E));
+  encodeString(material->getShader()->getName());
 
-  auto types = material->getTextureTypes();
+  auto types = material->getTextureChannels();
 
   SIZE_T numOfTypes = types.size();
 
@@ -104,10 +105,9 @@ Serializer::encodeMaterial(SPtr<Material> material)
   SIZE_T nameSize;
 
   for(auto& type : types){
-    file.write(reinterpret_cast<char*>(&type),sizeof(TEXTURE_TYPE::E));
+    encodeString(type);
     encodeString(material->getTexture(type)->getName());
   }
-
 }
 
 SPtr<Material> 
@@ -119,23 +119,18 @@ Serializer::decodeMaterial()
 
   material->setName(decodeString());
 
-  SHADER_TYPE::E shader;
-
-  file.read(reinterpret_cast<char*>(&shader),sizeof(SHADER_TYPE::E));
-
-  material->setShader(shader);
+  material->setShader(resourseManager.m_shaderPrograms[decodeString()]);
 
   SIZE_T numOfTypes;
 
   file.read(reinterpret_cast<char*>(&numOfTypes),sizeof(SIZE_T));
 
-  TEXTURE_TYPE::E type;
-
-  String name;
+  String channel, name;
 
   for(SIZE_T typeNum = 0; typeNum<numOfTypes; ++typeNum){
-    file.read(reinterpret_cast<char*>(&type),sizeof(TEXTURE_TYPE::E));
-    material->setTexture(type, resourseManager.m_textures[decodeString()]);
+    channel = decodeString();
+    name =  decodeString();
+    material->setTexture(channel, resourseManager.m_textures[name]);
   }
 
   resourseManager.m_materials.insert({material->getName(),material});

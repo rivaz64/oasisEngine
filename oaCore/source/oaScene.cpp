@@ -39,7 +39,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
         for(SIZE_T i = 0; i<meshes;++i){
           auto& mesh = model->getMesh(i);
 
-          if(frustum.isInside(mesh->getBoundingSphere(),finalTransform) || frustum.isInside(mesh->getBoundingBox(),finalTransform)){
+          if(true){//frustum.isInside(mesh->getBoundingSphere(),finalTransform) || frustum.isInside(mesh->getBoundingBox(),finalTransform)){
             toRender.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
           }
         }

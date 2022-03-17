@@ -2,29 +2,32 @@
 #include "oaDX11GraphicAPI.h"
 #include <d3dx11.h>
 #include <d3dcompiler.h>
-#include <iostream>
 
 namespace oaEngineSDK{
 
 DX11PixelShader::~DX11PixelShader()
 {
-  if( m_shader ) m_shader->Release();
+  if(m_shader) m_shader->Release();
 }
 
-bool DX11PixelShader::compileFromFile(String file)
+bool 
+DX11PixelShader::compileFromFile(String file)
 {
   m_version = "ps_4_0";
 
-  if(!DX11Shader::compileFromFile("shader/" + file + ".hlsl")){
+  ID3DBlob* blob;
+
+  if(!readFromFile("shader/" + file + ".hlsl",&blob)){
     return false;
   }
 
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_device->CreatePixelShader(m_blob->GetBufferPointer(), 
-                                m_blob->GetBufferSize(), 
+  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+    m_device->CreatePixelShader(blob->GetBufferPointer(), 
+                                blob->GetBufferSize(), 
                                 nullptr, 
                                 &m_shader);
 
+  blob->Release();
   return true;
 }
 

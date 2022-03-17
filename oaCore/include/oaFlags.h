@@ -127,4 +127,15 @@ enum E{
 };
 }
 
+namespace PRIMITIVE_TOPOLOGY{
+enum E{
+  kPointList=0,
+  kLineList,
+  kLineStrip,
+  kTrianlgeList,
+  kTrianlgeStrip
+};
 }
+
+}
+

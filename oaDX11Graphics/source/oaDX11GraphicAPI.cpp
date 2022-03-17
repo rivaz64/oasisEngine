@@ -1,5 +1,9 @@
 #include "oaDX11GraphicAPI.h"
 #include <d3d11.h>
+#include <windows.h>
+#include <d3dx11.h>
+#include <d3dcompiler.h>
+#include <xnamath.h>
 #include <oaVector2U.h>
 #include <oaInputManager.h>
 #include "oaDX11VertexShader.h"
@@ -14,7 +18,9 @@
 #include "oaDX11ShaderProgram.h"
 #include "oaDX11Rasterizer.h"
 #include "oaDX11Blender.h"
-
+#include "oaResoureManager.h"
+#include "oaRenderer.h"
+#include "oaDX11Flags.h"
 
 
 namespace oaEngineSDK{
@@ -72,6 +78,7 @@ DX11GraphicAPI::initialize(void* window)
   sd.SampleDesc.Count = 1;
   sd.SampleDesc.Quality = 0;
   sd.Windowed = TRUE;
+  sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
   for( UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++ )
   {
@@ -90,7 +97,7 @@ DX11GraphicAPI::initialize(void* window)
 }
 
 void*
-DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name)
+DX11GraphicAPI::createWindow(void* function,void* app, const Vector2U& size, const String& name)
 {
   WNDCLASSEX wc;
 
@@ -98,7 +105,7 @@ DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name
 
   wc.cbSize = sizeof(WNDCLASSEX);
   wc.style = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = static_cast<WNDPROC>(eventsFunction);
+  wc.lpfnWndProc = static_cast<WNDPROC>(function);
   wc.hInstance = GetModuleHandleA(nullptr);
   wc.hCursor = LoadCursor(NULL, IDC_ARROW);
   wc.hbrBackground = ( HBRUSH )COLOR_ACTIVECAPTION;
@@ -108,7 +115,7 @@ DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name
   RegisterClassEx(&wc);
   
   HWND hWnd;
-
+  
   hWnd = CreateWindowEx(NULL,
                         "oasisEngine", 
                         name.c_str(),   
@@ -121,9 +128,9 @@ DX11GraphicAPI::createWindow(void* app, const Vector2U& size, const String& name
                         nullptr,    
                         GetModuleHandleA(nullptr),   
                         nullptr); 
-
+  
   SetWindowLongPtr(hWnd,0,reinterpret_cast<LONG_PTR>(app));
-
+  
   ShowWindow(hWnd, SW_SHOWDEFAULT); 
 
   return hWnd;
@@ -268,6 +275,7 @@ void
 DX11GraphicAPI::draw(uint32 indexes)
 {
   m_context->DrawIndexed(indexes, 0, 0);
+  //m_context->Draw(indexes,0);
 }
 
 void 
@@ -380,6 +388,12 @@ DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
 }
 
 void 
+DX11GraphicAPI::setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology)
+{
+  m_context->IASetPrimitiveTopology(Flags::PRIMITIVE_TOPOLOGYS[topology]);
+}
+
+void 
 DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
 {
   m_context->ClearRenderTargetView(
@@ -435,6 +449,45 @@ void*
 DX11GraphicAPI::getContext()
 {
   return m_context;
+}
+
+
+
+void DX11GraphicAPI::initTest()
+{
+  
+
+//  D3D11_BUFFER_DESC bd;
+//ZeroMemory( &bd, sizeof(bd) );
+//  bd.Usage = D3D11_USAGE_DEFAULT;
+//  bd.ByteWidth = sizeof( SimpleVertex ) * 3;
+//  bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+//bd.CPUAccessFlags = 0;
+//  D3D11_SUBRESOURCE_DATA InitData;
+//ZeroMemory( &InitData, sizeof(InitData) );
+//  InitData.pSysMem = vertices;
+//
+//  HRESULT hr = m_device->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
+//  UINT stride = sizeof( SimpleVertex );
+//  UINT offset = 0;
+//  m_context->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
+//  m_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+//  // Set vertex buffer
+}
+
+void DX11GraphicAPI::renderTest()
+{
+  
+
+  auto& man = ResoureManager::instance();
+  auto ren = Renderer::instancePtr();
+  auto ps = cast<DX11PixelShader>(man.m_pixelShaders["lights"])->m_shader;
+  man.m_vertexShaders["screen"]->set();
+	m_context->PSSetShader(ps, NULL, 0 );
+  setRenderTarget(ren->m_finalRender);
+  m_context->Draw(3,0 );
+
+  
 }
 
 

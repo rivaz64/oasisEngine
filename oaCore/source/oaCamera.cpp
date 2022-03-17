@@ -58,7 +58,7 @@ Camera::updateProyection()
   m_projectionMatrix.row3.z = m_farPlaneDistance / distance;
   m_projectionMatrix.row3.w = -m_projectionMatrix.row3.z*m_nearPlaneDistance;
   m_projectionMatrix.row4.z = 1.f;
-  m_projectionMatrix.row4.w= 0.f;
+  m_projectionMatrix.row4.w = 0.f;
 
   //ans.transpose();
 }
@@ -75,7 +75,7 @@ Camera::updateView()
   m_viewMatrix.row1.w = -Vector3f::dot(m_location,m_axisX);
   m_viewMatrix.row2.w = -Vector3f::dot(m_location,m_axisY);
   m_viewMatrix.row3.w = -Vector3f::dot(m_location,m_axisZ);
-
+  m_viewMatrix.row4.w = 1;
   //createFrustrum();
 
   //view->write(&viewMatrix.m11);

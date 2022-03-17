@@ -24,7 +24,7 @@ class OA_CORE_EXPORT Renderer :
   setSize(const Vector2U& size) {}
 
 
- protected:
+ public:
   
   SPtr<Buffer> m_globalTransformBuffer;
 

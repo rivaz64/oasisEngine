@@ -302,7 +302,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->setTexture(TEXTURE_TYPE::kDiffuse, manager.m_textures[ StringUtilities::toString(textureName)]);
+      mat->setTexture("diffuse", manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
     textureName = MaterialName+L"N";
@@ -310,7 +310,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->setTexture(TEXTURE_TYPE::kNormalMap, manager.m_textures[ StringUtilities::toString(textureName)]);
+      mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
     textureName = MaterialName+L"S";
@@ -318,10 +318,10 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     if(loadImage(texturePath)){
-      mat->setTexture(TEXTURE_TYPE::kSpecular,manager.m_textures[ StringUtilities::toString(textureName)]);
+      mat->setTexture("specular",manager.m_textures[ StringUtilities::toString(textureName)]);
     }
 
-    mat->setShader(SHADER_TYPE::kNormal);
+    mat->setShader(manager.m_shaderPrograms["GBuffer"]);
 
     model->addMaterial(mat);
 

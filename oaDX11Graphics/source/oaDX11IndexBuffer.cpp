@@ -34,8 +34,8 @@ DX11IndexBuffer::init(Vector<uint32>& data)
 void 
 DX11IndexBuffer::set()
 {
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  m_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); 
+  //reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+  //m_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ); 
 
   reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   m_context->IASetIndexBuffer(m_buffer,DXGI_FORMAT_R32_UINT,0 );

@@ -156,6 +156,16 @@ class OA_UTILITY_EXPORT Matrix4f
   invert();
 
   /**
+   * @brief gets the raw data of the matrix
+   * @return 
+  */
+  FORCEINLINE const void*
+  getData() const 
+  {
+    return &row1.x;
+  }
+
+  /**
    * @brief creates a translate matrix for the given position
   */
   static Matrix4f 

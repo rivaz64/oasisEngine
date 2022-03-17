@@ -10,25 +10,6 @@
 
 namespace oaEngineSDK{
 
-namespace TEXTURE_TYPE{
-enum E{
-  kDiffuse = 0,
-  kSpecular,
-  kNormalMap,
-  kDepthMap
-};
-}
-
-namespace SHADER_TYPE{
-enum E {
-  kNormal = 0,
-  kAnimation,
-  kParalax,
-  kTransparent,
-  kDebug
-};
-}
-
 /**
  * @brief a class for materials
 */
@@ -51,7 +32,7 @@ class OA_CORE_EXPORT Material :
    * @param texture the texture
   */
   void
-  setTexture(TEXTURE_TYPE::E type,SPtr<Texture>  texture);
+  setTexture(const String& channel,SPtr<Texture>  texture);
 
   /**
    * @brief gets a texture being used by this material
@@ -59,21 +40,21 @@ class OA_CORE_EXPORT Material :
    * @return the texture of that type
   */
   SPtr<Texture>
-  getTexture(TEXTURE_TYPE::E type);
+  getTexture(const String& channel);
   
-  Vector<TEXTURE_TYPE::E>
-  getTextureTypes();
+  Vector<String>
+  getTextureChannels();
 
   /**
    * @brief sets the shader to be used by this material
    * @param shader 
   */
   FORCEINLINE void
-  setShader(SHADER_TYPE::E shader){
+  setShader(SPtr<ShaderProgram> shader){
     m_shader = shader;
   }
 
-  FORCEINLINE SHADER_TYPE::E
+  FORCEINLINE SPtr<ShaderProgram>
   getShader(){
     return m_shader;
   }
@@ -82,12 +63,12 @@ class OA_CORE_EXPORT Material :
   /**
    * @brief the textures used for this shader
   */
-  Map<TEXTURE_TYPE::E,SPtr<Texture>> m_textures;
+  Map<String,SPtr<Texture>> m_textures;
 
   /**
    * @brief the shaders program that is going to be using
   */
-  SHADER_TYPE::E m_shader;
+  SPtr<ShaderProgram> m_shader;
   
 };
 

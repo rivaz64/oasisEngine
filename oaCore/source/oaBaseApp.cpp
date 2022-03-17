@@ -24,9 +24,8 @@
 
 namespace oaEngineSDK{
 
-
-
 using Function = const void* (*)();
+
 
 BaseApp::BaseApp()
   : m_windowName("Oasis Engine"), m_windowSize(800,600)
@@ -67,8 +66,6 @@ BaseApp::run()
   onInit();
 
   auto& graphicsApi = GraphicAPI::instance();
-
-  m_window = graphicsApi.createWindow(this,m_windowSize,m_windowName);
 
   m_windowSize = graphicsApi.getWindowSize(m_window);
 

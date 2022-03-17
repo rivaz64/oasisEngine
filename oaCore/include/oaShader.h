@@ -7,13 +7,15 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaResourse.h"
 
 namespace oaEngineSDK{
 
 /**
  * @brief class for all kinds of shaders
 */
-class OA_CORE_EXPORT Shader
+class OA_CORE_EXPORT Shader :
+  public Resourse
 {
  public:
   
@@ -34,8 +36,6 @@ class OA_CORE_EXPORT Shader
 
   virtual void
   set() {}
-
-  String m_name;
 
 };
 

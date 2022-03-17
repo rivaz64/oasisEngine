@@ -7,7 +7,7 @@ namespace oaEngineSDK{
 OA_EXTERN OA_PLUGIN_EXPORT void
 initPlugIn(){
   GraphicAPI::startUp<DX11GraphicAPI>();
-  GraphicAPI::instancePtr()->m_actualGraphicAPI = GRAPHIC_API::DIRECTX11;
+  GraphicAPI::instancePtr()->m_actualGraphicAPI = "DIRECTX11";
 }
 
 }

@@ -53,6 +53,7 @@ Deferred::onStartUp()
   m_finalRender->init(graphicsAPI.getBackBuffer());
 
   m_colorTexture = graphicsAPI.createTexture();
+  //ResoureManager::instance().m_textures.insert({"color",m_colorTexture});
   m_normalTexture = graphicsAPI.createTexture();
   m_positionTexture = graphicsAPI.createTexture();
   m_specularTexture = graphicsAPI.createTexture();
@@ -64,17 +65,19 @@ Deferred::onStartUp()
 
   m_gBuffer = {m_colorRender,m_normalRender,m_positionRender,m_specularRender};
   Vector<SimpleVertex> points{
-    SimpleVertex(Vector4f(-0.5f, -0.5f, 0.0f,0),Vector2f(0,0)),
-    SimpleVertex(Vector4f(0.5f, -0.5f, 0.0f,0),Vector2f(0,0)),
-    SimpleVertex(Vector4f(0.0f,  0.5f, 0.0f,0),Vector2f(0,0))
-    //SimpleVertex(Vector4f(1,1,.5f,0),Vector2f(1,1)),
+    SimpleVertex(Vector4f( -1.0f, 1.0f, 0.5f, 1.0f ),Vector2f(0,0)),
+    SimpleVertex(Vector4f( 1.0f, -1.0f, 0.5f, 1.0f ),Vector2f(1,1)),
+    SimpleVertex(Vector4f( -1.0f, -1.0f, 0.5f, 1.0f),Vector2f(0,1)),
+    SimpleVertex(Vector4f( 1.0f, 1.0f, 0.5f, 1.0f),  Vector2f(1,0)),
   };
   
   screen = makeSPtr<Mesh>();
 
-  screen->setIndex({0,1,2});
+  screen->setIndex({0,1,2,1,0,3});
 
-  screen->create(points.data(),sizeof(SimpleVertex),points.size()*sizeof(SimpleVertex));
+  screen->create(points.data(),sizeof(SimpleVertex),points.size());
+
+  graphicsAPI.setRenderTarget(m_finalRender);
 }
 
 void 
@@ -91,7 +94,7 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   graphicsAPI.clearRenderTarget(m_finalRender);
   graphicsAPI.clearDepthStencil(m_finalDepthStencil);
 
-  /*resourseManager.m_shaderPrograms["GBuffer"]->set();
+  resourseManager.m_shaderPrograms["GBuffer"]->set();
 
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
 
@@ -107,10 +110,10 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
 
   scene->meshesToRender(scene->getRoot(),frustrum,toRender);
 
-  m_viewBuffer->write(&camForView->getViewMatrix().m11);
+  m_viewBuffer->write(camForView->getViewMatrix().getData());
   graphicsAPI.setVSBuffer(m_viewBuffer,1);
   
-  m_projectionBuffer->write(&camForView->getProjectionMatrix().m11);
+  m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
 
 
@@ -123,20 +126,20 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
     renderData.m_material->set();
 
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }*/
+  }
 
   graphicsAPI.setRenderTarget(m_finalRender);
-
+  
   resourseManager.m_shaderPrograms["lights"]->set();
-
-  //graphicsAPI.setTexture(m_colorTexture,0);
+  
+  graphicsAPI.setTexture(m_colorTexture,0);
   //graphicsAPI.setTexture(m_normalTexture,1);
   //graphicsAPI.setTexture(m_positionTexture,2);
   //graphicsAPI.setTexture(m_specularTexture,3);
-
+  
   screen->set();
-
-  graphicsAPI.draw(3);
+  
+  graphicsAPI.draw(6);
 
   //graphicsAPI.unsetRenderTargetAndDepthStencil();
   

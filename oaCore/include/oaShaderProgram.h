@@ -7,10 +7,12 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaShader.h"
 
 namespace oaEngineSDK{
 
-class OA_CORE_EXPORT ShaderProgram
+class OA_CORE_EXPORT ShaderProgram :
+  public Shader
 {
  public:
   
@@ -26,6 +28,25 @@ class OA_CORE_EXPORT ShaderProgram
   */
   virtual void
   set(){}
+
+  FORCEINLINE void
+  setChannels(const Vector<String>& channels)
+  {
+    m_channels = channels;
+  }
+
+  FORCEINLINE const Vector<String>&
+  getChannels()
+  {
+    return m_channels;
+  }
+
+ protected:
+  
+  /**
+   * @brief the channels that this shader needs;
+  */
+  Vector<String> m_channels;
 };
 
 }

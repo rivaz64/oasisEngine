@@ -16,21 +16,30 @@ DX11VertexShader::compileFromFile(String file)
 {
   m_version = "vs_4_0";
 
-  if(!DX11Shader::compileFromFile("shader/" + file + ".hlsl")){
+  ID3DBlob* blob;
+
+  if(!readFromFile("shader/" + file + ".hlsl",&blob)){
     return false;
   }
 
-  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-  m_device->CreateVertexShader(m_blob->GetBufferPointer(), 
-                               m_blob->GetBufferSize(), 
-                               nullptr, 
-                               &m_shader);
+  auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
+
+  HRESULT hr = device->CreateVertexShader(blob->GetBufferPointer(), 
+                                          blob->GetBufferSize(), 
+                                          nullptr, 
+                                          &m_shader);
   
   if (FAILED(hr)) {
     return false;
   }
 
-  createInputLayout();
+  if(!createInputLayout(blob)){
+    return false;
+  }
+  
+  blob->Release();
+
+  //m_blob = blob;
 
   return true;
 }
@@ -38,22 +47,35 @@ DX11VertexShader::compileFromFile(String file)
 void 
 DX11VertexShader::set()
 {
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_context->VSSetShader( m_shader, NULL, 0 );
+  auto& context = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_context;
 
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_context->IASetInputLayout( m_inputLayout );
+  context->VSSetShader( m_shader, NULL, 0 );
+
+  context->IASetInputLayout( m_inputLayout );
 }
 
-void 
-DX11VertexShader::createInputLayout()
+bool 
+DX11VertexShader::createInputLayout(ID3DBlob* blob)
 {
+  //D3D11_INPUT_ELEMENT_DESC layout[] =
+  //{
+  //    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+  //};
+	//UINT numElements = ARRAYSIZE( layout );
+  //
+  //auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
+  //auto& context = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_context;
+  //
+  //  // Create the input layout
+	//device->CreateInputLayout( layout, numElements, blob->GetBufferPointer(),
+  //                                        blob->GetBufferSize(), &m_inputLayout );
+  //
   ID3D11ShaderReflection* reflection = nullptr;
-  D3DReflect(m_blob->GetBufferPointer(), 
-             m_blob->GetBufferSize(), 
+  D3DReflect(blob->GetBufferPointer(), 
+             blob->GetBufferSize(), 
              IID_ID3D11ShaderReflection, 
              reinterpret_cast<void**>(&reflection));
-
+  
   D3D11_SHADER_DESC shaderDesc;
   reflection->GetDesc(&shaderDesc);
   int32 actual = 0;
@@ -61,7 +83,7 @@ DX11VertexShader::createInputLayout()
   for (uint32 i = 0; i < shaderDesc.InputParameters; ++i){
     D3D11_SIGNATURE_PARAMETER_DESC paramDesc;
     reflection->GetInputParameterDesc(i, &paramDesc);
-
+  
     D3D11_INPUT_ELEMENT_DESC elementDesc;
     elementDesc.SemanticName = paramDesc.SemanticName;
     elementDesc.SemanticIndex = paramDesc.SemanticIndex;
@@ -69,7 +91,7 @@ DX11VertexShader::createInputLayout()
     elementDesc.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
     elementDesc.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
     elementDesc.InstanceDataStepRate = 0;
-
+  
     
     elementDesc.AlignedByteOffset = actual;
     if (paramDesc.Mask == 1){
@@ -85,7 +107,7 @@ DX11VertexShader::createInputLayout()
         elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
       }
     }
-
+  
     else if (paramDesc.Mask <= 3){
       actual +=8;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
@@ -98,7 +120,7 @@ DX11VertexShader::createInputLayout()
         elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
       }
     }
-
+  
     else if (paramDesc.Mask <= 7){
       actual +=12;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
@@ -111,7 +133,7 @@ DX11VertexShader::createInputLayout()
         elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
       }
     }
-
+  
     else if (paramDesc.Mask <= 15){
       actual +=16;
       if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32){
@@ -124,22 +146,27 @@ DX11VertexShader::createInputLayout()
         elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
       }
     }
-
+  
     inputLayoutDesc.push_back(elementDesc);
-
+  
   }
-
+  
   //inputLayoutDesc[0].AlignedByteOffset = 0;
   //inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-  reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_device->CreateInputLayout(&inputLayoutDesc[0], 
-                              static_cast<uint32>(inputLayoutDesc.size()), 
-                              m_blob->GetBufferPointer(), 
-                              m_blob->GetBufferSize(), &m_inputLayout);//*/
-
+  auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
+  auto& context = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_context;
+  HRESULT hr = device->CreateInputLayout(&inputLayoutDesc[0], 
+                                          inputLayoutDesc.size(), 
+                                          blob->GetBufferPointer(), 
+                                          blob->GetBufferSize(), &m_inputLayout);//*/
+  context->IASetInputLayout( m_inputLayout );
   //reflection->Release();
-  m_blob->Release();
-
+  //m_blob->Release();
+  
+  if(FAILED(hr)){
+    return false;
+  }
+  return true;
 }
 
 }

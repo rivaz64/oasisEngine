@@ -123,6 +123,15 @@ DX11Texture::initForRenderTarget(const Vector2U& size)
    
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateTexture2D( &desc, nullptr, &m_texture );
+
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+  srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  srvDesc.Texture2D.MipLevels = 1;
+  srvDesc.Texture2D.MostDetailedMip = 0;
+
+  hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+   m_device->CreateShaderResourceView(m_texture,&srvDesc,&m_shaderResourceView);
 }
 
 }

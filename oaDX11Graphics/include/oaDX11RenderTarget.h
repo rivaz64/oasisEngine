@@ -24,7 +24,7 @@ class DX11RenderTarget :
   void
   release();
 
- private:
+ public:
 
   ID3D11RenderTargetView* m_renderTargetView = nullptr;
 

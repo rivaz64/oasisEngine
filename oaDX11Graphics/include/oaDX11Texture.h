@@ -5,6 +5,7 @@
 */
 
 #pragma once
+
 #include <oaTexture.h>
 #include <oaPath.h>
 #include <d3d11.h>
@@ -36,7 +37,7 @@ class DX11Texture:
   void
   initForRenderTarget(const Vector2U& size) override;
 
- private:
+ public:
 
   ID3D11ShaderResourceView* m_shaderResourceView;
 

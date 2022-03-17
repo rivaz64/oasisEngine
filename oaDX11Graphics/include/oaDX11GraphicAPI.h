@@ -25,7 +25,7 @@ class DX11GraphicAPI :
   initialize(void* window) override;
 
   void*
-  createWindow(void* app, const Vector2U& size, const String& name) override;
+  createWindow(void* function, void* app, const Vector2U& size, const String& name) override;
 
   bool
   isRunning() override;
@@ -122,6 +122,9 @@ class DX11GraphicAPI :
   unsetRenderTargetAndDepthStencil() override;
 
   void
+  setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology) override;
+
+  void
   clearRenderTarget(SPtr<RenderTarget> renderTarget) override;
 
   void 
@@ -142,6 +145,12 @@ class DX11GraphicAPI :
   virtual void*
   getContext() override;
 
+  void
+  initTest();
+
+  void
+  renderTest();
+
  protected:
 
   DX11GraphicAPI() = default;
@@ -156,6 +165,8 @@ class DX11GraphicAPI :
   MSG m_msg = MSG();
 
   Color m_backgroundColor;
+
+  ID3D11Buffer* g_pVertexBuffer = NULL;
 
   friend class GraphicAPI;
   friend class Module<GraphicAPI>;

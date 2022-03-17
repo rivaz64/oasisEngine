@@ -378,16 +378,35 @@ void ResoureManager::loadDefaultShaders()
   m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
+  m_vertexShaders["default"]->setName("default");
+  
   m_vertexShaders["animation"]->compileFromFile("animVertexShader");
+  m_vertexShaders["animation"]->setName("animation");
+  
   m_vertexShaders["debug"]->compileFromFile("vertexDebug");
+  m_vertexShaders["debug"]->setName("debug");
+
   m_vertexShaders["screen"]->compileFromFile("screen");
+  m_vertexShaders["screen"]->setName("screen");
+
 
   m_pixelShaders["default"]->compileFromFile("pixelShader");
+  m_pixelShaders["default"]->setName("default");
+  
   m_pixelShaders["paralax"]->compileFromFile("paralax");
+  m_pixelShaders["paralax"]->setName("paralax");
+  
   m_pixelShaders["transparent"]->compileFromFile("transparent");
+  m_pixelShaders["transparent"]->setName("transparent");
+  
   m_pixelShaders["debug"]->compileFromFile("pixelDebug");
+  m_pixelShaders["debug"]->setName("debug");
+  
   m_pixelShaders["GBuffer"]->compileFromFile("GBuffer");
+  m_pixelShaders["GBuffer"]->setName("GBuffer");
+
   m_pixelShaders["lights"]->compileFromFile("lights");
+  m_pixelShaders["lights"]->setName("lights");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -412,36 +431,42 @@ ResoureManager::generateDefaultShaderPrograms()
 
   m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
-
+  m_shaderPrograms["default"]->setName("default");
+  
   m_shaderPrograms["animation"]->attach(m_vertexShaders["animation"]);
   m_shaderPrograms["animation"]->attach(m_pixelShaders["default"]);
-
+  m_shaderPrograms["animation"]->setName("animation");
+  
   m_shaderPrograms["paralax"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["paralax"]->attach(m_pixelShaders["paralax"]);
-
+  m_shaderPrograms["paralax"]->setName("paralax");
+  
+  
   m_shaderPrograms["transparent"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["transparent"]->attach(m_pixelShaders["transparent"]);
-
+  m_shaderPrograms["transparent"]->setName("transparent");
+  
   m_shaderPrograms["debug"]->attach(m_vertexShaders["debug"]);
   m_shaderPrograms["debug"]->attach(m_pixelShaders["debug"]);
-
+  m_shaderPrograms["debug"]->setName("debug");
+  
   m_shaderPrograms["GBuffer"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["GBuffer"]->attach(m_pixelShaders["GBuffer"]);
+  m_shaderPrograms["GBuffer"]->setName("GBuffer");
+  m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap"});
 
   m_shaderPrograms["lights"]->attach(m_vertexShaders["screen"]);
   m_shaderPrograms["lights"]->attach(m_pixelShaders["lights"]);
+  m_shaderPrograms["lights"]->setName("lights");
 }
 
 void 
 ResoureManager::generateDefaultMaterials()
 {
-  auto material = makeSPtr<Material>();
-
-  material->setName("debug");
-
-  material->setShader(SHADER_TYPE::kDebug);
-
-  m_materials.insert({material->getName(),material});
+  //auto material = makeSPtr<Material>();
+  //material->setName("debug");
+  //material->setShader(m_shaderPrograms["debug"]);
+  //m_materials.insert({material->getName(),material});
 }
 
 }

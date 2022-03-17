@@ -27,7 +27,7 @@ class DX11VertexBuffer :
   void
   release() override;
 
- private:
+ public:
 
   ID3D11Buffer* m_buffer = nullptr;
 

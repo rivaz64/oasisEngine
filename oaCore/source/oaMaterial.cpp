@@ -19,74 +19,88 @@ Material::Material()
 void 
 Material::set()
 {
-  
   auto& graphicsAPI = GraphicAPI::instance();
-  
-  switch (m_shader)
-  {
-  case SHADER_TYPE::kNormal:
-  case SHADER_TYPE::kAnimation:
-  case SHADER_TYPE::kTransparent:
-    if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
-    }
-    if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
-    }
-    if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
-    }
+  auto& channels = m_shader->getChannels();
 
-    break;
+  uint32 channelNum = 0;
 
-  case SHADER_TYPE::kParalax:
-    if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
+  for(auto& channel : channels){
+    auto& texture = m_textures[channel];
+    if(texture){
+      graphicsAPI.setTexture(m_textures[channel],channelNum);
     }
-    if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
-    }
-    if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
-    }
-    if(m_textures.find(TEXTURE_TYPE::kDepthMap) != m_textures.end()){
-      graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDepthMap],3);
-    }
-
-    break;
-
-  default:
-    break;
+    ++channelNum;
   }
+
+  //auto& graphicsAPI = GraphicAPI::instance();
+  //
+  //m_shader->set();
+  
+  //switch (m_shader)
+  //{
+  //case SHADER_TYPE::kNormal:
+  //case SHADER_TYPE::kAnimation:
+  //case SHADER_TYPE::kTransparent:
+  //  if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
+  //  }
+  //  if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
+  //  }
+  //  if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
+  //  }
+  //
+  //  break;
+  //
+  //case SHADER_TYPE::kParalax:
+  //  if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
+  //  }
+  //  if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
+  //  }
+  //  if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
+  //  }
+  //  if(m_textures.find(TEXTURE_TYPE::kDepthMap) != m_textures.end()){
+  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDepthMap],3);
+  //  }
+  //
+  //  break;
+  //
+  //default:
+  //  break;
+  //}
 }
 
 void 
-Material::setTexture(TEXTURE_TYPE::E type, SPtr<Texture> texture)
+Material::setTexture(const String& channel, SPtr<Texture> texture)
 {
-  if(m_textures.find(type) == m_textures.end()){
-    m_textures.insert({type,texture});
+  if(m_textures.find(channel) == m_textures.end()){
+    m_textures.insert({channel,texture});
   }
   else{
-    m_textures[type] = texture;
+    m_textures[channel] = texture;
   }
 }
 
 SPtr<Texture> 
-Material::getTexture(TEXTURE_TYPE::E type)
+Material::getTexture(const String& channel)
 {
-  if(m_textures.find(type) == m_textures.end()){
+  if(m_textures.find(channel) == m_textures.end()){
     return SPtr<Texture>();
   }
   else{
-    return m_textures[type];
+    return m_textures[channel];
   }
 }
 
-Vector<TEXTURE_TYPE::E> 
-Material::getTextureTypes()
+Vector<String> 
+Material::getTextureChannels()
 {
-  Vector<TEXTURE_TYPE::E> types;
-  for(Map<TEXTURE_TYPE::E,SPtr<Texture>>::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
+  Vector<String> types;
+  for(Map<String,SPtr<Texture>>::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
     types.push_back(it->first);
   }
   return types;

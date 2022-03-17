@@ -27,7 +27,7 @@ GraphicAPI::initialize(void*)
 }
 
 void*
-GraphicAPI::createWindow(void*, const Vector2U&, const String&)
+GraphicAPI::createWindow(void*,void*, const Vector2U&, const String&)
 {
   return nullptr;
 }

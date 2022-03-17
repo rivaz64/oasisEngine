@@ -25,14 +25,16 @@ public DX11Shader
   void
   set() override;
 
- private:
+ public:
 
-  void
-  createInputLayout();
+  bool
+  createInputLayout(ID3DBlob* blob);
 
   ID3D11VertexShader* m_shader = nullptr;
 
   ID3D11InputLayout* m_inputLayout = NULL;
+
+  ID3DBlob*m_blob;
 
   friend class DX11GraphicAPI;
 };

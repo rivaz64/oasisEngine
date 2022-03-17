@@ -6,7 +6,6 @@
 
 #pragma once
 
-
 #include <oaShader.h>
 #include <d3d11.h>
 
@@ -20,12 +19,18 @@ class DX11Shader :
   virtual 
   ~DX11Shader()=default;
 
-  virtual bool 
-  compileFromFile(String file);
+public:
+  
+  /**
+   * @brief reads the shader from the file to a blob
+   * @param file 
+   * @param blob 
+   * @return 
+  */
+  bool
+  readFromFile(String file,ID3DBlob** blob);
 
-protected:
-
-  ID3DBlob* m_blob = nullptr;
+  //ID3DBlob* m_blob = nullptr;
 
   String m_version;
 };

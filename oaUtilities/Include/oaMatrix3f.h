@@ -136,8 +136,13 @@ class OA_UTILITY_EXPORT Matrix3f
   void
   invert();
 
+  /**
+   * @brief gets the raw data of the matrix
+   * @return 
+  */
   FORCEINLINE const void*
-  getData(){
+  getData() const 
+  {
     return &row1.x;
   }
 
