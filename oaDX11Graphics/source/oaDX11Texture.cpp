@@ -83,11 +83,11 @@ DX11Texture::initForDepthStencil(const Vector2U& size)
   desc.Height =  size.y;
   desc.MipLevels = 1;
   desc.ArraySize = 1;
-  desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+  desc.Format = DXGI_FORMAT_R24G8_TYPELESS;
   desc.SampleDesc.Count = 1;
   desc.SampleDesc.Quality = 0;
   desc.Usage = D3D11_USAGE_DEFAULT;
-  desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;//D3D11_BIND_SHADER_RESOURCE;
+  desc.BindFlags = D3D11_BIND_SHADER_RESOURCE|D3D11_BIND_DEPTH_STENCIL;//D3D11_BIND_SHADER_RESOURCE;
   desc.CPUAccessFlags = 0;
   desc.MiscFlags = 0;
 
@@ -97,6 +97,15 @@ DX11Texture::initForDepthStencil(const Vector2U& size)
    
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateTexture2D( &desc, nullptr, &m_texture );
+
+  D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+  srvDesc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+  srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+  srvDesc.Texture2D.MipLevels = 1;
+  srvDesc.Texture2D.MostDetailedMip = 0;
+
+  hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
+   m_device->CreateShaderResourceView(m_texture,&srvDesc,&m_shaderResourceView);
 }
 
 void 

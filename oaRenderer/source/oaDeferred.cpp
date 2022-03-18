@@ -29,7 +29,7 @@ Deferred::onStartUp()
   m_globalTransformBuffer->init(sizeof(Matrix4f));
 
   m_normalRasterizer = graphicsAPI.createRasterizer();
-  m_normalRasterizer->init(CULLING::kNone,FILL_MODE::kSolid);
+  m_normalRasterizer->init(CULLING::kFront,FILL_MODE::kSolid);
 
   m_hairRasterizer = graphicsAPI.createRasterizer();
   m_hairRasterizer->init(CULLING::kNone,FILL_MODE::kSolid);
@@ -40,6 +40,9 @@ Deferred::onStartUp()
   m_viewLocationBuffer = graphicsAPI.createBuffer();
   m_viewLocationBuffer->init(sizeof(Vector4f));
 
+  m_LightLocation = graphicsAPI.createBuffer();
+  m_LightLocation->init(sizeof(Vector4f));
+
   m_viewBuffer = graphicsAPI.createBuffer();
   m_viewBuffer->init(sizeof(Matrix4f));
 
@@ -47,7 +50,9 @@ Deferred::onStartUp()
   m_projectionBuffer->init(sizeof(Matrix4f));
 
   m_depthTexture = graphicsAPI.createTexture();
+  //m_depthTexture->initForDepthStencil();
   m_finalDepthStencil = graphicsAPI.createDepthStencil();
+  //m_finalDepthStencil->init(m_depthTexture);
 
   m_finalRender = graphicsAPI.createRenderTarget();
   m_finalRender->init(graphicsAPI.getBackBuffer());
@@ -81,7 +86,7 @@ Deferred::onStartUp()
 }
 
 void 
-Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camForFrustrum)
+Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camForFrustrum, const Vector4f& light)
 {
   auto& resourseManager = ResoureManager::instance();
   
@@ -96,8 +101,9 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
 
   resourseManager.m_shaderPrograms["GBuffer"]->set();
 
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
-
+  graphicsAPI.setRasterizer(m_normalRasterizer);
   Vector<RenderData> toRender;
 
   Frustum frustrum(camForFrustrum->getLocation(),
@@ -116,7 +122,7 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
 
-
+  
 
   for(auto& renderData : toRender){
     m_globalTransformBuffer->write(&renderData.m_transform);
@@ -127,16 +133,22 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
 
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
   }
-
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTarget(m_finalRender);
   
   resourseManager.m_shaderPrograms["lights"]->set();
+
+  m_viewLocationBuffer->write(&camForView->getLocation());
+  graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
+
+  m_LightLocation->write(&light);
+  graphicsAPI.setPSBuffer(m_LightLocation,1);
   
   graphicsAPI.setTexture(m_colorTexture,0);
-  //graphicsAPI.setTexture(m_normalTexture,1);
-  //graphicsAPI.setTexture(m_positionTexture,2);
-  //graphicsAPI.setTexture(m_specularTexture,3);
-  
+  graphicsAPI.setTexture(m_normalTexture,1);
+  graphicsAPI.setTexture(m_positionTexture,2);
+  graphicsAPI.setTexture(m_specularTexture,3);
+  graphicsAPI.setTexture(m_depthTexture,4);
   screen->set();
   
   graphicsAPI.draw(6);

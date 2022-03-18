@@ -19,7 +19,7 @@ class Deferred :
   onStartUp() override;
 
   void
-  render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum) override;
+  render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum, const Vector4f& light) override;
 
   void
   setSize(const Vector2U& size) override;
@@ -45,6 +45,30 @@ class Deferred :
   Vector<SPtr<RenderTarget>> m_gBuffer;
 
   SPtr<Mesh> screen;
+
+  SPtr<Buffer> m_globalTransformBuffer;
+
+  SPtr<Buffer> m_viewBuffer;
+
+  SPtr<Buffer> m_projectionBuffer;
+
+  SPtr<Buffer> m_viewLocationBuffer;
+
+  SPtr<Buffer> m_LightLocation;
+
+  SPtr<Texture> m_depthTexture;
+
+  SPtr<Texture> m_renderTexture;
+
+  SPtr<Rasterizer> m_normalRasterizer;
+
+  SPtr<Rasterizer> m_hairRasterizer;
+
+  SPtr<Rasterizer> m_debugRasterizer;
+  
+  SPtr<RenderTarget> m_finalRender;
+
+  SPtr<DepthStencil> m_finalDepthStencil;
 };
 
 }

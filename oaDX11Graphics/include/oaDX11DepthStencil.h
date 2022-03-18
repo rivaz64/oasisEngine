@@ -23,9 +23,9 @@ class DX11DepthStencil :
   void
   release();
 
-  ID3D11DepthStencilView* m_depthStencil = nullptr;
+  ID3D11DepthStencilView* m_depthStencilView = nullptr;
 
-  ID3D11DepthStencilState* m_depthState = nullptr;
+  ID3D11DepthStencilState* m_depthStencilState = nullptr;
 };
 
 }

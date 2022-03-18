@@ -20,7 +20,7 @@ namespace oaEngineSDK{
 
 
 void
-Renderer::render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum)
+Renderer::render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum, const Vector4f& light)
 {
   
   //

@@ -356,9 +356,9 @@ DX11GraphicAPI::setRenderTargetAndDepthStencil(
   m_context->OMSetRenderTargets( 
     1,
     &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencil
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView
   );
-  m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthState, 1);
+  m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
 }
 
 void
@@ -376,8 +376,10 @@ DX11GraphicAPI::setRenderTargetsAndDepthStencil(
   m_context->OMSetRenderTargets( 
     numOfRenders,
     renders, 
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencil
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView
   );
+  m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
+
 }
 
 void 
@@ -405,7 +407,7 @@ void
 DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
 {
   m_context->ClearDepthStencilView(
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencil,
+    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView,
     D3D11_CLEAR_DEPTH, 
     1.0f, 
     0
@@ -451,44 +453,6 @@ DX11GraphicAPI::getContext()
   return m_context;
 }
 
-
-
-void DX11GraphicAPI::initTest()
-{
-  
-
-//  D3D11_BUFFER_DESC bd;
-//ZeroMemory( &bd, sizeof(bd) );
-//  bd.Usage = D3D11_USAGE_DEFAULT;
-//  bd.ByteWidth = sizeof( SimpleVertex ) * 3;
-//  bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-//bd.CPUAccessFlags = 0;
-//  D3D11_SUBRESOURCE_DATA InitData;
-//ZeroMemory( &InitData, sizeof(InitData) );
-//  InitData.pSysMem = vertices;
-//
-//  HRESULT hr = m_device->CreateBuffer( &bd, &InitData, &g_pVertexBuffer );
-//  UINT stride = sizeof( SimpleVertex );
-//  UINT offset = 0;
-//  m_context->IASetVertexBuffers( 0, 1, &g_pVertexBuffer, &stride, &offset );
-//  m_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-//  // Set vertex buffer
-}
-
-void DX11GraphicAPI::renderTest()
-{
-  
-
-  auto& man = ResoureManager::instance();
-  auto ren = Renderer::instancePtr();
-  auto ps = cast<DX11PixelShader>(man.m_pixelShaders["lights"])->m_shader;
-  man.m_vertexShaders["screen"]->set();
-	m_context->PSSetShader(ps, NULL, 0 );
-  setRenderTarget(ren->m_finalRender);
-  m_context->Draw(3,0 );
-
-  
-}
 
 
 }

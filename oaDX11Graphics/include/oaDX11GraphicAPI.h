@@ -145,12 +145,6 @@ class DX11GraphicAPI :
   virtual void*
   getContext() override;
 
-  void
-  initTest();
-
-  void
-  renderTest();
-
  protected:
 
   DX11GraphicAPI() = default;

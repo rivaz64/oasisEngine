@@ -33,6 +33,12 @@ class Input :
   virtual uint32
   createDeviceKeyboard();
 
+  /**
+   * @brief maps an input that can be on and off
+  */
+  virtual void
+  mapBool(uint32 inputId,uint32 deviceId, uint32 input);
+
  private:
   friend class Module<Input>;
 };

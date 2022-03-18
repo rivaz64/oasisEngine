@@ -29,6 +29,7 @@ DX11Rasterizer::init(CULLING::E culling, FILL_MODE::E fillMode)
   descriptor.ScissorEnable = false;
   descriptor.MultisampleEnable = false;
   descriptor.AntialiasedLineEnable = false;
+  //descriptor.
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
    m_device->CreateRasterizerState(&descriptor,&m_id);

@@ -87,13 +87,13 @@ public:
 
   SPtr<ShaderProgram> m_program; 
 
-  SPtr<Buffer> lights;
+  //SPtr<Buffer> lights;
 
   SPtr<Actor> m_controlledActor;
 
   SPtr<Camera> m_debugCamera;
 
-  Vector4f dir;
+  Vector4f m_light;
 
   Loader* loader;
 

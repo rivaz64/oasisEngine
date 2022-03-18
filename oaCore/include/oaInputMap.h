@@ -5,12 +5,19 @@
 */
 
 #pragma once
+#include "oaPrerequisitesCore.h"
 
 namespace oaEngineSDK{
 
 class InputMap
 {
+ public:
+  
 
+  /**
+   * @brief maps an input that can be on an axis
+  */
+  void mapFloat();
 };
 
 

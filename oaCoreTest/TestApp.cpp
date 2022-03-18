@@ -136,12 +136,6 @@ TestApp::postInit()
   
   m_samplerState = graphicAPI.createSamplerState(sampDesc);
 
-  lights = graphicAPI.createBuffer();
-
-  lights->init(sizeof(Vector4f));
-
-  
-
   IMGUI_CHECKVERSION();
 
   initImGui();
@@ -204,15 +198,15 @@ TestApp::draw()
 
   //graphicsAPI.renderTest();
 
-  if(m_controlledActor){
-    renderer.render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
-  }
-  else if(m_debugCamera){
-    renderer.render(m_actualScene,m_camera,m_debugCamera);
-  }
-  else{
-    renderer.render(m_actualScene,m_camera,m_camera);
-  }
+  //if(m_controlledActor){
+  //  renderer.render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
+  //}
+  //else if(m_debugCamera){
+  //  renderer.render(m_actualScene,m_camera,m_debugCamera);
+  //}
+  //else{
+    renderer.render(m_actualScene,m_camera,m_camera,m_light);
+  //}
   
   newImGuiFrame();
   drawImGui();
@@ -482,8 +476,8 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("lights");
-  ImGui::DragFloat3("direction",&dir.x,.01f,-1.0f,1.0f);
-  ImGui::DragFloat("paralax",&dir.w,1.0f);
+  ImGui::DragFloat3("direction",&m_light.x,.01f,-1.0f,1.0f);
+  //ImGui::DragFloat("paralax",&dir.w,1.0f);
   ImGui::End();
 
   if(isCreatingActor){
