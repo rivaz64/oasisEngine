@@ -148,29 +148,29 @@ PlatformMath::overlap(const Capsule& _capsule1, const Capsule& _capsule2)
 float 
 PlatformMath::distance(const Line& _line, const Vector3f& _point)
 {
-  Vector3f u = _point - _line.startingPoint;
-  return Vector3f::cross(_line.direction,u).magnitud();
+  Vector3f u = _point - _line.getStaringPoint();
+  return Vector3f::cross(_line.getDirection(),u).magnitud();
 }
 
-float 
-PlatformMath::distance(const Line& _line1, const Line& _line2)
-{
-  auto dif = _line2.startingPoint - _line1.startingPoint;
-  float v12 = Vector3f::dot(_line1.direction,_line1.direction);
-  float v22 = Vector3f::dot(_line2.direction,_line2.direction);
-  float v1v2 = Vector3f::dot(_line1.direction,_line2.direction);
-  float det = v1v2 * v1v2 - v12 * v22;
-  if (Math::abs(det) > FLT_MIN) {
-    det = 1.f / det;
-    float dpvl = Vector3f::dot(dif,_line1.direction);
-    float dpv2 = Vector3f::dot(dif,_line2.direction);
-    float t1 = (v1v2 * dpv2 - v22 * dpvl)* det;
-    float t2 = (v12 * dpv2 - v1v2 * dpvl) * det;
-    return (dif + _line2.direction * t2 - _line1.direction * t1).magnitud();
-  }
-  Vector3f a = Vector3f::cross(dif,_line1.direction);
-  return (sqrt( Vector3f::dot(a,a) / v12));
-}
+//float 
+//PlatformMath::distance(const Line& _line1, const Line& _line2)
+//{
+//  auto dif = _line2.getStaringPoint() - _line1..getStaringPoint();
+//  float v12 = Vector3f::dot(_line1.direction,_line1.direction);
+//  float v22 = Vector3f::dot(_line2.direction,_line2.direction);
+//  float v1v2 = Vector3f::dot(_line1.direction,_line2.direction);
+//  float det = v1v2 * v1v2 - v12 * v22;
+//  if (Math::abs(det) > FLT_MIN) {
+//    det = 1.f / det;
+//    float dpvl = Vector3f::dot(dif,_line1.direction);
+//    float dpv2 = Vector3f::dot(dif,_line2.direction);
+//    float t1 = (v1v2 * dpv2 - v22 * dpvl)* det;
+//    float t2 = (v12 * dpv2 - v1v2 * dpvl) * det;
+//    return (dif + _line2.direction * t2 - _line1.direction * t1).magnitud();
+//  }
+//  Vector3f a = Vector3f::cross(dif,_line1.direction);
+//  return (sqrt( Vector3f::dot(a,a) / v12));
+//}
 
 float 
 PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
@@ -181,10 +181,11 @@ PlatformMath::distance(const Plane& _plane, const Vector3f& _point)
 bool 
 PlatformMath::intersect(const Plane& _plane, const Line& _line, Vector3f& _point)
 {
-  float fv = Vector3f::dot(_plane.getNormal(),_line.direction);
+  auto direction = _line.getDirection();
+  float fv = Vector3f::dot(_plane.getNormal(),direction);
   if (Math::abs(fv) > FLT_MIN) {
-    _point = _line.startingPoint 
-           - _line.direction 
+    _point = _line.getStaringPoint() 
+           - direction
            * ((Vector3f::dot(_plane.getNormal(),_line.getStaringPoint())+_plane.getD()) / fv);
     return true;
   }

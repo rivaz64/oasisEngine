@@ -457,14 +457,14 @@ class OA_UTILITY_EXPORT PlatformMath {
   static float 
   distance(const Line& _line, const Vector3f& _point);
 
-  /**
-   * @brief calculates the distance between two lines
-   * @param _line1 
-   * @param _line2 
-   * @return 
-  */
-  static float 
-  distance(const Line& _line1, const Line& _line2);
+  ///**
+  // * @brief calculates the distance between two lines
+  // * @param _line1 
+  // * @param _line2 
+  // * @return 
+  //*/
+  //static float 
+  //distance(const Line& _line1, const Line& _line2);
 
   /**
    * @brief calculates the distance between a point and a plane

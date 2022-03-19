@@ -8,7 +8,7 @@
 #include "oaLine.h"
 
 namespace oaEngineSDK {
-
+/*
 Line::Line(Vector3f& A, Vector3f& B)
 {
   startingPoint = A;
@@ -22,7 +22,7 @@ Line::pointAt(float f)
 {
   return startingPoint+direction*lenght*f;
 }
-
+*/
 
 }
 
