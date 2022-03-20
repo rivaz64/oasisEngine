@@ -135,13 +135,7 @@
     <ClInclude Include="include\oaResourse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaRasterizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\oaBlender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaDebugMesh.h">
@@ -151,6 +145,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaInputMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaRasterizerState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaBlendState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -254,16 +254,7 @@
     <ClCompile Include="source\oaResourse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaRazteriser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaRasterizer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaBlender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaDebugMesh.cpp">
@@ -273,6 +264,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaInputMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaRasterizerState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaBlendState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,6 +33,11 @@ BaseApp::BaseApp()
 
 }
 
+BaseApp::~BaseApp()
+{
+  onShutDown();
+}
+
 void 
 BaseApp::onShutDown()
 {
@@ -41,6 +46,7 @@ BaseApp::onShutDown()
   ResoureManager::shutDown();
   InputManager::shutDown();
   Time::shutDown();
+  Renderer::shutDown();
   Logger::shutDown();
 }
 

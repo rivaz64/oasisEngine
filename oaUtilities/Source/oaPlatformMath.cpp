@@ -212,13 +212,13 @@ PlatformMath::intersect(const Plane& _plane1,
 bool 
 PlatformMath::intersect(const Plane& _plane1, const Plane& _plane2, Line& _line)
 {
-  Vector3f dir = Vector3f::cross(_plane1.getNormal(),_plane2.getNormal());
-  _line.setDirection(dir);
-  float det = Vector3f::dot(dir,dir);
-  if (det > FLT_MIN) {
-    _line.setStaringPoint((Vector3f::cross(dir,_plane1.getNormal()) * _plane2.getD() + Vector3f::cross(dir,_plane2.getNormal()) * _plane1.getD()) / det);
-    return true;
-  }
+  //Vector3f dir = Vector3f::cross(_plane1.getNormal(),_plane2.getNormal());
+  //_line.setDirection(dir);
+  //float det = Vector3f::dot(dir,dir);
+  //if (det > FLT_MIN) {
+  //  _line.setStaringPoint((Vector3f::cross(dir,_plane1.getNormal()) * _plane2.getD() + Vector3f::cross(dir,_plane2.getNormal()) * _plane1.getD()) / det);
+  //  return true;
+  //}
   return false;
 }
 

@@ -64,11 +64,11 @@ class DX11GraphicAPI :
   createDepthStencil() override;
 
   
-  SPtr<Rasterizer>
-  createRasterizer() override;
+  SPtr<RasterizerState>
+  createRasterizerState() override;
 
-  SPtr<Blender>
-  createBlender() override;
+  SPtr<BlendState>
+  createBlendState() override;
   
   void
   setBackgroundColor(const Color& color) override;
@@ -95,10 +95,10 @@ class DX11GraphicAPI :
   setSamplerState(const SPtr<SamplerState> sampler) override;
 
   void
-  setRasterizer(const SPtr<Rasterizer> rasterizer) override;
+  setRasterizerState(const SPtr<RasterizerState> rasterizer) override;
 
   void
-  setBlender(const SPtr<Blender> blender) override;
+  setBlendState(const SPtr<BlendState> blender) override;
 
   void
   setRenderTarget(const SPtr<RenderTarget> renderTarget) override;

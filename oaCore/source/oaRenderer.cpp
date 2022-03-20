@@ -12,7 +12,7 @@
 #include "oaBuffer.h"
 #include "oaGraphicAPI.h"
 #include "oaCamera.h"
-#include "oaRasterizer.h"
+#include "oaRasterizerState.h"
 #include "oaCameraComponent.h"
 #include "oaDebugMesh.h"
 

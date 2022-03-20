@@ -12,12 +12,13 @@
 #include <oaBuffer.h>
 #include <oaGraphicAPI.h>
 #include <oaCamera.h>
-#include <oaRasterizer.h>
+#include <oaRasterizerState.h>
 #include <oaCameraComponent.h>
 #include <oaDebugMesh.h>
 #include <oaTexture.h>
 #include <oaDepthStencil.h>
 #include <oaRenderTarget.h>
+#include <oaBlendState.h>
 
 namespace oaEngineSDK{
 
@@ -28,13 +29,15 @@ Deferred::onStartUp()
   m_globalTransformBuffer = graphicsAPI.createBuffer();
   m_globalTransformBuffer->init(sizeof(Matrix4f));
 
-  m_normalRasterizer = graphicsAPI.createRasterizer();
+  m_normalRasterizer = graphicsAPI.createRasterizerState();
   m_normalRasterizer->init(CULLING::kFront,FILL_MODE::kSolid);
 
-  m_hairRasterizer = graphicsAPI.createRasterizer();
-  m_hairRasterizer->init(CULLING::kNone,FILL_MODE::kSolid);
+  m_hairRasterizer1 = graphicsAPI.createRasterizerState();
+  m_hairRasterizer1->init(CULLING::kNone,FILL_MODE::kSolid);
+  m_hairRasterizer2 = graphicsAPI.createRasterizerState();
+  m_hairRasterizer2->init(CULLING::kBack,FILL_MODE::kSolid);
 
-  m_debugRasterizer = graphicsAPI.createRasterizer();
+  m_debugRasterizer = graphicsAPI.createRasterizerState();
   m_debugRasterizer->init(CULLING::kNone,FILL_MODE::kWireFrame);
 
   m_viewLocationBuffer = graphicsAPI.createBuffer();
@@ -68,6 +71,9 @@ Deferred::onStartUp()
   m_positionRender = graphicsAPI.createRenderTarget();
   m_specularRender = graphicsAPI.createRenderTarget();
 
+  m_blendState = graphicsAPI.createBlendState();
+  m_blendState->init();
+
   m_gBuffer = {m_colorRender,m_normalRender,m_positionRender,m_specularRender};
   Vector<SimpleVertex> points{
     SimpleVertex(Vector4f( -1.0f, 1.0f, 0.5f, 1.0f ),Vector2f(0,0)),
@@ -99,12 +105,15 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   graphicsAPI.clearRenderTarget(m_finalRender);
   graphicsAPI.clearDepthStencil(m_finalDepthStencil);
 
-  resourseManager.m_shaderPrograms["GBuffer"]->set();
+  graphicsAPI.setBlendState(m_blendState);
+
+  //resourseManager.m_shaderPrograms["GBuffer"]->set();
 
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
-  graphicsAPI.setRasterizer(m_normalRasterizer);
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
   Vector<RenderData> toRender;
+  Vector<RenderData> transparents;
 
   Frustum frustrum(camForFrustrum->getLocation(),
                    camForFrustrum->getAxisMatrix(),
@@ -114,7 +123,7 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
                    camForFrustrum->getRatio());
   
 
-  scene->meshesToRender(scene->getRoot(),frustrum,toRender);
+  scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
 
   m_viewBuffer->write(camForView->getViewMatrix().getData());
   graphicsAPI.setVSBuffer(m_viewBuffer,1);
@@ -122,17 +131,12 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
 
+  gBuffer(toRender);
+  
+  gTransparents(transparents);
   
 
-  for(auto& renderData : toRender){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-
-    renderData.m_mesh->set();
-    renderData.m_material->set();
-
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTarget(m_finalRender);
   
@@ -152,49 +156,67 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   screen->set();
   
   graphicsAPI.draw(6);
+}
 
-  //graphicsAPI.unsetRenderTargetAndDepthStencil();
+void 
+Deferred::gBuffer(Vector<RenderData>& toRender)
+{
+  auto& resourseManager = ResoureManager::instance();
   
-  /*
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
   for(auto& renderData : toRender){
-    renderData.m_material->set();
-    switch (renderData.m_material->getShader())
-    {
-    case SHADER_TYPE::kNormal:
-      resourseManager.m_shaderPrograms["default"]->set();
-      graphicsAPI.setRasterizer(m_normalRasterizer);
-      break;
-    
-    case SHADER_TYPE::kAnimation:
-      resourseManager.m_shaderPrograms["animation"]->set();
-      graphicsAPI.setRasterizer(m_normalRasterizer);
-      break;
-    
-    case SHADER_TYPE::kParalax:
-      resourseManager.m_shaderPrograms["paralax"]->set();
-      graphicsAPI.setRasterizer(m_normalRasterizer);
-      break;
-    
-    case SHADER_TYPE::kTransparent:
-      resourseManager.m_shaderPrograms["transparent"]->set();
-      graphicsAPI.setRasterizer(m_normalRasterizer);
-      break;
-    
-    case SHADER_TYPE::kDebug:
-      resourseManager.m_shaderPrograms["debug"]->set();
-      graphicsAPI.setRasterizer(m_debugRasterizer);
-      break;
-    
-    default:
-      break;
-    }
-
     m_globalTransformBuffer->write(&renderData.m_transform);
     graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
 
     renderData.m_mesh->set();
+    renderData.m_material->set();
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }*/
+  }
+}
+
+void Deferred::gTransparents(Vector<RenderData>& transparents)
+{
+  auto& resourseManager = ResoureManager::instance();
+
+  auto& graphicsAPI = GraphicAPI::instance();
+
+  graphicsAPI.setRasterizerState(m_hairRasterizer1);
+  for(auto& renderData : transparents){
+    m_globalTransformBuffer->write(&renderData.m_transform);
+    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+
+    renderData.m_mesh->set();
+    renderData.m_material->set();
+    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+  }
+
+  graphicsAPI.setRasterizerState(m_hairRasterizer2);
+  
+  for(auto& renderData : transparents){
+    m_globalTransformBuffer->write(&renderData.m_transform);
+    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+  
+    renderData.m_mesh->set();
+    renderData.m_material->set();
+    resourseManager.m_shaderPrograms["GBuffer"]->set();
+    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+  }
+
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
+  for(auto& renderData : transparents){
+    m_globalTransformBuffer->write(&renderData.m_transform);
+    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+  
+    renderData.m_mesh->set();
+    renderData.m_material->set();
+    resourseManager.m_shaderPrograms["GBuffer"]->set();
+    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+  }
+}
+
+void Deferred::lights()
+{
 }
 
 void 

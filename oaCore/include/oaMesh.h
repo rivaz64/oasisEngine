@@ -53,6 +53,7 @@ struct SimpleVertex{
  * @brief a structure for all the information at a certain point of a Mesh
 */
 struct Vertex{
+  
   /**
    * @brief the location in a tridimencional space of this vetrex
   */

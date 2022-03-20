@@ -174,7 +174,7 @@
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaBaseApp.h" />
-    <ClInclude Include="include\oaBlender.h" />
+    <ClInclude Include="include\oaBlendState.h" />
     <ClInclude Include="include\oaBoundComponent.h" />
     <ClInclude Include="include\oaBuffer.h" />
     <ClInclude Include="include\oaCamera.h" />
@@ -198,7 +198,7 @@
     <ClInclude Include="include\oaModel.h" />
     <ClInclude Include="include\oaPath.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
-    <ClInclude Include="include\oaRasterizer.h" />
+    <ClInclude Include="include\oaRasterizerState.h" />
     <ClInclude Include="include\oaRenderer.h" />
     <ClInclude Include="include\oaRenderTarget.h" />
     <ClInclude Include="include\oaResoureManager.h" />
@@ -221,7 +221,6 @@
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="oaRazteriser.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -234,7 +233,7 @@
     <ClCompile Include="source\oaBaseApp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="source\oaBlender.cpp" />
+    <ClCompile Include="source\oaBlendState.cpp" />
     <ClCompile Include="source\oaBoundComponent.cpp" />
     <ClCompile Include="source\oaBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -279,7 +278,7 @@
     <ClCompile Include="source\oaPath.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="source\oaRasterizer.cpp" />
+    <ClCompile Include="source\oaRasterizerState.cpp" />
     <ClCompile Include="source\oaRenderer.cpp" />
     <ClCompile Include="source\oaRenderTarget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

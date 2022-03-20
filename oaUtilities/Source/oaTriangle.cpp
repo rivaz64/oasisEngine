@@ -11,7 +11,6 @@ analizeLine(const Plane& plane, const Vector3f& point1, const Vector3f& point2, 
     Math::intersect(plane,Line(point1,point2),intersection);
     points.push_back(intersection);
   }
-  return false;
 }
 
 void 

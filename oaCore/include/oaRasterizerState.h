@@ -25,7 +25,7 @@ enum E{
 };
 }
 
-class OA_CORE_EXPORT Rasterizer
+class OA_CORE_EXPORT RasterizerState
 {
  public:
   

@@ -54,10 +54,10 @@
     <ClInclude Include="include\oaDX11ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaDX11Rasterizer.h">
+    <ClInclude Include="include\oaDX11RasterizerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaDX11Blender.h">
+    <ClInclude Include="include\oaDX11BlendState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -104,10 +104,10 @@
     <ClCompile Include="source\oaDX11ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaDX11Rasterizer.cpp">
+    <ClCompile Include="source\oaDX11RasterizerState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaDX11Blender.cpp">
+    <ClCompile Include="source\oaDX11BlendState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

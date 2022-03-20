@@ -8,6 +8,8 @@
 #include "oaCamera.h"
 #include "oaDebugMesh.h"
 #include "oaResoureManager.h"
+#include "oaShaderProgram.h"
+#include "oaMaterial.h"
 
 namespace oaEngineSDK{
 
@@ -17,7 +19,7 @@ Scene::init(){
 }
 
 void 
-Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderData>& toRender)
+Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderData>& toRender,Vector<RenderData>& transparentMeshes)
 {
   auto& childs = actor->getChilds();
 
@@ -40,7 +42,13 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
           auto& mesh = model->getMesh(i);
 
           if(true){//frustum.isInside(mesh->getBoundingSphere(),finalTransform) || frustum.isInside(mesh->getBoundingBox(),finalTransform)){
-            toRender.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
+            if(model->getMaterial(i)->getShader()->getName() == "transparent"){
+              transparentMeshes.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
+            }
+            else{
+              toRender.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
+            }
+            
           }
         }
 
@@ -92,7 +100,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
       toRender.push_back(RenderData(mesh,ResoureManager::instance().m_materials["debug"],Matrix4f::IDENTITY));
     }
     
-    meshesToRender(actor,frustum,toRender);
+    meshesToRender(actor,frustum,toRender,transparentMeshes);
   }
 
 }

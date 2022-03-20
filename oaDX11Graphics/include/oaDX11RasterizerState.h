@@ -6,20 +6,29 @@
 
 #pragma once
 
-#include <oaRasterizer.h>
+#include <oaRasterizerState.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK{
 
-class DX11Rasterizer:
-  public Rasterizer
+class DX11RasterizerState:
+  public RasterizerState
 {
  public:
+
+  ~DX11RasterizerState();
 
   bool 
   init(CULLING::E culling, FILL_MODE::E fillMode) override;
 
-  ID3D11RasterizerState* m_id;
+  void
+  release();
+
+ private:
+
+  ID3D11RasterizerState* m_id = nullptr;
+
+  friend class DX11GraphicAPI;
 };
 
 }

@@ -10,7 +10,7 @@
 
 namespace oaEngineSDK{
 
-class OA_CORE_EXPORT Blender
+class OA_CORE_EXPORT BlendState
 {
  public:
 

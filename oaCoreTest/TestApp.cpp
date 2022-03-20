@@ -29,7 +29,7 @@
 #include <oaShaderProgram.h>
 #include <oaResoureManager.h>
 #include <oaScene.h>
-#include <oaRasterizer.h>
+#include <oaRasterizerState.h>
 #include <oaRenderer.h>
 #include <oaCameraComponent.h>
 #include <Windows.h>
@@ -669,8 +669,23 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("Model Editor");
   if(m_selectedModel){
-    if(ImGui::Button("select material")){
-      m_selectedModel->addMaterial(m_selectedMaterial);
+    int32 matNum = m_selectedModel->getNumOfMaterials();
+    for(int32 i = 0; i<matNum;++i){
+      auto& material = m_selectedModel->getMaterial(i);
+      if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
+        m_selectedMaterial = material;
+      }
+    }
+  }
+  ImGui::End();
+
+  ImGui::Begin("Shaders");
+  if(m_selectedMaterial){
+    if(ImGui::Button("normal")){
+       m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["GBuffer"]);
+    }
+    if(ImGui::Button("transparent")){
+      m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["transparent"]);
     }
   }
   ImGui::End();
@@ -726,88 +741,74 @@ oaEngineSDK::TestApp::octahedron()
   return ans;
 }
 
-SubMesh
-oaEngineSDK::TestApp::icosahedron()
+Mesh
+TestApp::icosahedron()
 {
   float phi = (Math::sqrt(5)+1.0f)/2.0f;
   Vector2f v{1.0f,phi};
   v.normalize();
 
-  SubMesh ans;
+  Mesh ans;
 
-  ans.points = {
-    {-v.x, v.y,0.0f,0.0f},
-    { v.x, v.y,0.0f,0.0f},
-    {-v.x,-v.y,0.0f,0.0f},
-    { v.x,-v.y,0.0f,0.0f},
-
-    {0.0f,-v.x, v.y,0.0f},
-    {0.0f, v.x, v.y,0.0f},
-    {0.0f,-v.x,-v.y,0.0f},
-    {0.0f, v.x,-v.y,0.0f},
-    
-    { v.y,0.0f,-v.x,0.0f},
-    { v.y,0.0f, v.x,0.0f},
-    {-v.y,0.0f,-v.x,0.0f},
-    {-v.y,0.0f, v.x,0.0f},
+  Vector<Vector4f> points = {
+    Vector4f(-v.x, v.y,0.0f,0.0f), 
+    Vector4f( v.x, v.y,0.0f,0.0f), 
+    Vector4f(-v.x,-v.y,0.0f,0.0f), 
+    Vector4f( v.x,-v.y,0.0f,0.0f), 
+    Vector4f(0.0f,-v.x, v.y,0.0f), 
+    Vector4f(0.0f, v.x, v.y,0.0f), 
+    Vector4f(0.0f,-v.x,-v.y,0.0f), 
+    Vector4f(0.0f, v.x,-v.y,0.0f), 
+    Vector4f( v.y,0.0f,-v.x,0.0f), 
+    Vector4f( v.y,0.0f, v.x,0.0f), 
+    Vector4f(-v.y,0.0f,-v.x,0.0f), 
+    Vector4f(-v.y,0.0f, v.x,0.0f)
     
   };
 
-  ans.indices = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
-                 7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
-                 9,8,1};
+  Vector<uint32> index = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
+                          7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
+                          9,8,1});
 
   return ans;
 }
 
 SubMesh 
-oaEngineSDK::TestApp::SubDivide(const SubMesh& data)
+oaEngineSDK::TestApp::SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices)
 {
-  uint32 size = static_cast<uint32>(data.indices.size());
-
-  SubMesh ans;
-
+  SIZE_T size = indices.size();
+  SIZE_T actualSize = size;
+  Map<Pair<uint32, uint32>, uint32> used;
   for(uint32 i = 0; i < size; i+=3){
     Vector3f oldPoints[3]={
-      data.points[data.indices[i]].xyz,
-      data.points[data.indices[i+1]].xyz,
-      data.points[data.indices[i+2]].xyz,
+      vertices[indices[i]].xyz,
+      vertices[indices[i+1]].xyz,
+      vertices[indices[i+2]].xyz,
     };
-    Vector3f newPoints[3]={
-    Vector3f::interpolate(oldPoints[1],oldPoints[2],.5f).normalized(),
-    Vector3f::interpolate(oldPoints[0],oldPoints[2],.5f).normalized(),
-    Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized()
-    };
-
-    uint32 actual = static_cast<uint32>(ans.points.size());
-
-    ans.points.push_back(Vector4f(oldPoints[0],0.0f));
-    ans.points.push_back(Vector4f(oldPoints[1],0.0f));
-    ans.points.push_back(Vector4f(oldPoints[2],0.0f));
-    ans.points.push_back(Vector4f(newPoints[0],0.0f));
-    ans.points.push_back(Vector4f(newPoints[1],0.0f));
-    ans.points.push_back(Vector4f(newPoints[2],0.0f));
-
-    
-
-    ans.indices.push_back(actual);
-    ans.indices.push_back(actual+5);
-    ans.indices.push_back(actual+4);
-
-    ans.indices.push_back(actual+1);
-    ans.indices.push_back(actual+3);
-    ans.indices.push_back(actual+5);
-
-    ans.indices.push_back(actual+2);
-    ans.indices.push_back(actual+4);
-    ans.indices.push_back(actual+3);
-
-    ans.indices.push_back(actual+3);
-    ans.indices.push_back(actual+4);
-    ans.indices.push_back(actual+5);
-
+    ;
+    Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
+    if(used.find(pair)==used.end()){
+      used.insert({pair,actualSize});
+      ++actualSize;
+      
+      vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+    }
   }
   return ans;
+}
+
+void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
+                            Vector<Vector4f>& vertices, 
+                            uint32 index1, 
+                            uint32 index2)
+{
+  Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
+  if(used.find(pair)==used.end()){
+    used.insert({pair,actualSize});
+    ++actualSize;
+    
+    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+  }
 }
 
 void 

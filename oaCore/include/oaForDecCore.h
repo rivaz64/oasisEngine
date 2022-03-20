@@ -32,8 +32,8 @@ class Camera;
 class Scene;
 class Image;
 class Resourse;
-class Rasterizer;
+class RasterizerState;
 class Renderer;
-class Blender;
+class BlendState;
 class DebugMesh;
 }

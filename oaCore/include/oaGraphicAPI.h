@@ -129,15 +129,15 @@ class OA_CORE_EXPORT GraphicAPI :
    * @brief creates a new rasterizer
    * @return 
   */
-  virtual SPtr<Rasterizer>
-  createRasterizer();
+  virtual SPtr<RasterizerState>
+  createRasterizerState();
 
    /**
    * @brief creates a new blender
    * @return 
   */
-  virtual SPtr<Blender>
-  createBlender();
+  virtual SPtr<BlendState>
+  createBlendState();
 
   /**
   * @brief sets the color of the background
@@ -206,14 +206,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param  
   */
   virtual void
-  setRasterizer(const SPtr<Rasterizer> /*rasterizer*/) {}
+  setRasterizerState(const SPtr<RasterizerState> /*rasterizer*/) {}
 
   /**
    * @brief sets a blender to be used
    * @param  
   */
   virtual void
-  setBlender(const SPtr<Blender> /*blender*/) {}
+  setBlendState(const SPtr<BlendState> /*blender*/) {}
 
   /**
    * @brief clears a render target

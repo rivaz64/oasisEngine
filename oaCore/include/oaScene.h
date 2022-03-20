@@ -40,7 +40,7 @@ class OA_CORE_EXPORT Scene
   }
 
   void
-  meshesToRender(SPtr<Actor> actor,const Frustum& frustum,Vector<RenderData>& meshes);
+  meshesToRender(SPtr<Actor> actor,const Frustum& frustum,Vector<RenderData>& meshes,Vector<RenderData>& transparentMeshes);
 
  private:
 

@@ -58,11 +58,17 @@ public:
   SubMesh
   octahedron();
 
-  SubMesh
+  Mesh
   icosahedron();
 
   SubMesh
-  SubDivide(const SubMesh& data);
+  SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices);
+
+  void
+  vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
+                Vector<Vector4f>& vertices, 
+                uint32 index1, 
+                uint32 index2);
 
   void
   onKeyBoardInput(char input);

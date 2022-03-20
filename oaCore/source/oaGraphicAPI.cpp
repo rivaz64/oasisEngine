@@ -15,8 +15,8 @@
 #include "oaVertexBuffer.h"
 #include "oaIndexBuffer.h"
 #include "oaShaderProgram.h"
-#include "oaRasterizer.h"
-#include "oaBlender.h"
+#include "oaRasterizerState.h"
+#include "oaBlendState.h"
 
 namespace oaEngineSDK{
 
@@ -93,16 +93,16 @@ GraphicAPI::createDepthStencil()
   return SPtr<DepthStencil>();
 }
 
-SPtr<Rasterizer> 
-GraphicAPI::createRasterizer()
+SPtr<RasterizerState> 
+GraphicAPI::createRasterizerState()
 {
-  return makeSPtr<Rasterizer>();
+  return makeSPtr<RasterizerState>();
 }
 
-SPtr<Blender> 
-GraphicAPI::createBlender()
+SPtr<BlendState> 
+GraphicAPI::createBlendState()
 {
-  return makeSPtr<Blender>();
+  return makeSPtr<BlendState>();
 }
 
 SPtr<Texture> 

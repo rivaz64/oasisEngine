@@ -6,20 +6,29 @@
 
 #pragma once
 
-#include <oaBlender.h>
+#include <oaBlendState.h>
 #include <d3d11.h>
 
 namespace oaEngineSDK{
 
-class DX11Blender :
-  public Blender
+class DX11BlendState :
+  public BlendState
 {
  public:
+
+  ~DX11BlendState();
 
   bool 
   init() override;
 
+  void
+  release();
+
+ private:
+
   ID3D11BlendState* m_id;
+
+  friend class DX11GraphicAPI;
 };
 
 }

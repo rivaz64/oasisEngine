@@ -20,7 +20,7 @@ class OA_CORE_EXPORT BaseApp
 
   BaseApp();
 
-  ~BaseApp() = default;
+  ~BaseApp();
 
  public:
 

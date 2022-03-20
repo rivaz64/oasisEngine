@@ -23,7 +23,7 @@ Material::set()
   auto& channels = m_shader->getChannels();
 
   uint32 channelNum = 0;
-
+  m_shader->set();
   for(auto& channel : channels){
     auto& texture = m_textures[channel];
     if(texture){

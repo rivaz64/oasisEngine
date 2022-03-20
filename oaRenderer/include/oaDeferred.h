@@ -7,6 +7,7 @@
 #pragma once
 
 #include <oaRenderer.h>
+#include <oaScene.h>
 
 namespace oaEngineSDK{
 
@@ -20,6 +21,10 @@ class Deferred :
 
   void
   render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum, const Vector4f& light) override;
+
+  void gBuffer(Vector<RenderData>& torender);
+  void gTransparents(Vector<RenderData>& torender);
+  void lights();
 
   void
   setSize(const Vector2U& size) override;
@@ -60,15 +65,18 @@ class Deferred :
 
   SPtr<Texture> m_renderTexture;
 
-  SPtr<Rasterizer> m_normalRasterizer;
+  SPtr<RasterizerState> m_normalRasterizer;
 
-  SPtr<Rasterizer> m_hairRasterizer;
+  SPtr<RasterizerState> m_hairRasterizer1;
+  SPtr<RasterizerState> m_hairRasterizer2;
 
-  SPtr<Rasterizer> m_debugRasterizer;
+  SPtr<RasterizerState> m_debugRasterizer;
   
   SPtr<RenderTarget> m_finalRender;
 
   SPtr<DepthStencil> m_finalDepthStencil;
+
+  SPtr<BlendState> m_blendState;
 };
 
 }

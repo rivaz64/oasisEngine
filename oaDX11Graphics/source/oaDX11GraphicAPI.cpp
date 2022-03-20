@@ -16,8 +16,8 @@
 #include "oaDX11VertexBuffer.h"
 #include "oaDX11IndexBuffer.h"
 #include "oaDX11ShaderProgram.h"
-#include "oaDX11Rasterizer.h"
-#include "oaDX11Blender.h"
+#include "oaDX11RasterizerState.h"
+#include "oaDX11BlendState.h"
 #include "oaResoureManager.h"
 #include "oaRenderer.h"
 #include "oaDX11Flags.h"
@@ -237,14 +237,15 @@ DX11GraphicAPI::createDepthStencil()
   return makeSPtr<DX11DepthStencil>();
 }
 
-SPtr<Rasterizer> DX11GraphicAPI::createRasterizer()
+SPtr<RasterizerState> DX11GraphicAPI::createRasterizerState()
 {
-  return makeSPtr<DX11Rasterizer>();
+  return makeSPtr<DX11RasterizerState>();
 }
 
-SPtr<Blender> DX11GraphicAPI::createBlender()
+SPtr<BlendState>
+DX11GraphicAPI::createBlendState()
 {
-  return makeSPtr<DX11Blender>();
+  return makeSPtr<DX11BlendState>();
 }
 
 void 
@@ -309,15 +310,15 @@ DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
 }
 
 void 
-DX11GraphicAPI::setRasterizer(const SPtr<Rasterizer> rasterizer)
+DX11GraphicAPI::setRasterizerState(const SPtr<RasterizerState> rasterizer)
 {
-  m_context->RSSetState(cast<DX11Rasterizer>(rasterizer)->m_id);
+  m_context->RSSetState(cast<DX11RasterizerState>(rasterizer)->m_id);
 }
 
 void 
-DX11GraphicAPI::setBlender(const SPtr<Blender> blender)
+DX11GraphicAPI::setBlendState(const SPtr<BlendState> blender)
 {
-  //m_context->OMSetBlendState(cast<DX11Blender>(blender)->m_id);
+  m_context->OMSetBlendState(cast<DX11BlendState>(blender)->m_id,nullptr,0xffffffff);
 }
 
 void 

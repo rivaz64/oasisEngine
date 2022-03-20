@@ -396,7 +396,7 @@ void ResoureManager::loadDefaultShaders()
   m_pixelShaders["paralax"]->compileFromFile("paralax");
   m_pixelShaders["paralax"]->setName("paralax");
   
-  m_pixelShaders["transparent"]->compileFromFile("transparent");
+  m_pixelShaders["transparent"]->compileFromFile("Gtransparent");
   m_pixelShaders["transparent"]->setName("transparent");
   
   m_pixelShaders["debug"]->compileFromFile("pixelDebug");
@@ -445,6 +445,8 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms["transparent"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["transparent"]->attach(m_pixelShaders["transparent"]);
   m_shaderPrograms["transparent"]->setName("transparent");
+  m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
+
   
   m_shaderPrograms["debug"]->attach(m_vertexShaders["debug"]);
   m_shaderPrograms["debug"]->attach(m_pixelShaders["debug"]);

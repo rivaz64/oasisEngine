@@ -1,4 +1,4 @@
-#include "oaDX11Rasterizer.h"
+#include "oaDX11RasterizerState.h"
 #include "oaDX11GraphicAPI.h"
 
 namespace oaEngineSDK{
@@ -14,8 +14,13 @@ Map<FILL_MODE::E,D3D11_FILL_MODE> g_fillFlags {
   {FILL_MODE::kWireFrame,D3D11_FILL_WIREFRAME},
 };
 
-bool 
-DX11Rasterizer::init(CULLING::E culling, FILL_MODE::E fillMode)
+DX11RasterizerState::~DX11RasterizerState()
+{
+  release();
+}
+
+bool
+DX11RasterizerState::init(CULLING::E culling, FILL_MODE::E fillMode)
 {
   D3D11_RASTERIZER_DESC descriptor;
 
@@ -39,6 +44,15 @@ DX11Rasterizer::init(CULLING::E culling, FILL_MODE::E fillMode)
   }
 
   return true;
+}
+
+void 
+DX11RasterizerState::release()
+{
+  if(m_id){
+    m_id->Release();
+  }
+  m_id = 0;
 }
 
 
