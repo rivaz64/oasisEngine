@@ -42,17 +42,14 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
           auto& mesh = model->getMesh(i);
 
           if(true){//frustum.isInside(mesh->getBoundingSphere(),finalTransform) || frustum.isInside(mesh->getBoundingBox(),finalTransform)){
-            if(model->getMaterial(i)->getShader()->getName() == "transparent"){
+            if(model->getMaterial(i)->getShader() && model->getMaterial(i)->getShader()->getName() == "transparent"){
               transparentMeshes.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
             }
             else{
               toRender.push_back(RenderData(mesh,model->getMaterial(i),finalTransform));
             }
-            
           }
         }
-
-        
       }
     }
 

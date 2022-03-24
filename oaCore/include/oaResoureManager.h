@@ -84,6 +84,9 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateCube();
 
+  void
+  generateTriangle();
+
   /**
    * @brief loads the defaault shaders
   */

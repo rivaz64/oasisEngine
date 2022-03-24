@@ -11,7 +11,10 @@
 
 namespace oaEngineSDK{
 
-class Triangle
+/**
+ * @brief a geometrical triangle to be divided
+*/
+class OA_UTILITY_EXPORT Triangle
 {
  public:
   Triangle() = default;
@@ -23,8 +26,11 @@ class Triangle
    * @brief separates the triangle cutting it by the given plane
    * @param plane 
   */
-  void
-  separate(const Plane& plane);
+  bool
+  separate(const Plane& plane,
+           Vector<Vector3f>& points, 
+           Vector<uint32>& finalIndexPositiveSide,
+           Vector<uint32>& finalIndexNegativeSide);
 
   
  private:

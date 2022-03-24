@@ -1,4 +1,6 @@
 #include "oaResoureManager.h"
+#include <oaPlane.h>
+#include <oaTriangle.h>
 #include "oaGraphicAPI.h"
 #include "oaMesh.h"
 #include "oaTexture.h"
@@ -9,6 +11,7 @@
 #include "oaPath.h"
 #include "oaShaderProgram.h"
 #include "oaStaticMesh.h"
+#include "oaOctree.h"
 
 
 namespace oaEngineSDK{
@@ -54,6 +57,8 @@ ResoureManager::onStartUp()
   loadDefaultShaders();
   generateDefaultShaderPrograms();
   generateDefaultMaterials();
+  generateTriangle();
+  generateCube();
 }
 /*
 void 
@@ -301,63 +306,157 @@ ResoureManager::generateQuad()
 
 }
 
+void
+divide(const Plane& plane, Vector<Vector4f>& vertices, Vector<uint32>& index){
+  
+  Vector<Vector3f> newPoints;
+  Vector<uint32> newIndexes;
+  Vector<uint32> replaceIndexes;
+  Vector<uint32> finalIndexes;
+  
+  int32 trisNum = index.size()/3;
+  for(int32 i = 0; i<trisNum; ++i){
+    replaceIndexes.clear();
+    newIndexes.clear();
+    newPoints.clear();
+    Triangle tri(vertices[index[i*3]].xyz,vertices[index[i*3+1]].xyz,vertices[index[i*3+2]].xyz);
+    if(tri.separate(plane,newPoints,newIndexes)){
+      replaceIndexes.push_back(index[i*3]);
+      replaceIndexes.push_back(index[i*3+1]);
+      replaceIndexes.push_back(index[i*3+2]);
+      replaceIndexes.push_back(vertices.size());
+      vertices.push_back(Vector4f(newPoints[0],0));
+      replaceIndexes.push_back(vertices.size());
+      vertices.push_back(Vector4f(newPoints[1],0));
+      if(i==1)
+      for(int32 newIndex = 0; newIndex<3; ++newIndex){
+        finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      }
+      else
+      for(int32 newIndex = 0; newIndex<9; ++newIndex){
+        finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      }
+      
+    }
+    else{
+      finalIndexes.push_back(index[i*3]);
+      finalIndexes.push_back(index[i*3+1]);
+      finalIndexes.push_back(index[i*3+2]);
+    }
+  }
+  index = finalIndexes;
+}
+
 void 
 ResoureManager::generateCube()
 {
-  /*meshes.insert({ "cube",makeSPtr<Mesh>() });
-  Vector<Vertex> vertices = {
-    Vertex{ Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, .5f,  .5f ,0.0f), Vector4f(0.0f,1.0f,  0.0f,0.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f(-.5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f) },
+  //meshes.insert({ "cube",makeSPtr<Mesh>() });
 
-    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f) },
+  auto cube = makeSPtr<Mesh>();
 
-    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f), Vector4f(-1.0f,0.0f, 0.0f,0.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 1.0f) },
-
-    Vertex{ Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 0.0f) },
-    Vertex{ Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(1.0f, 0.0f) },
-    Vertex{ Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(1.0f, 1.0f) },
-    Vertex{ Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f), Vector2f(0.0f, 1.0f) },
+  Vector<Vector4f> vertices = {
+    /*Vertex{*/ Vector4f(-.5f, .5f, -.5f ,0.0f)/*,Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f( .5f, .5f, -.5f ,0.0f)/*,Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f( .5f, .5f,  .5f ,0.0f)/*,Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 1.0f)}*/,
+    /*Vertex{*/ Vector4f(-.5f, .5f,  .5f ,0.0f)/*,Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f)}*/,
+    /*       */                                /*                                                        */
+    /*Vertex{*/ Vector4f(-.5f, -.5f, -.5f,0.0f)/*,Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f( .5f, -.5f, -.5f,0.0f)/*,Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f( .5f, -.5f,  .5f,0.0f)/*,Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)}*/,
+    /*Vertex{*/ Vector4f(-.5f, -.5f,  .5f,0.0f)/*,Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)}*/,
+    /*       */                                /*                                                        */
+    /*Vertex{*/ Vector4f(-.5f, -.5f,  .5f,0.0f)/*, Vector4f(-1.0f,0.0f, 0.0f,0.0f), Vector2f(0.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f(-.5f, -.5f, -.5f,0.0f)/*,Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)}*/,
+    /*Vertex{*/ Vector4f(-.5f,  .5f, -.5f,0.0f)/*,Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)}*/,
+    /*Vertex{*/ Vector4f(-.5f,  .5f,  .5f,0.0f)/*,Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)}*/,
+    /*       */                                /*                                                        */
+    /*Vertex{*/ Vector4f( .5f, -.5f,  .5f,0.0f)/*,Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f, -.5f, -.5f,0.0f)/*,Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f,  .5f, -.5f,0.0f)/*,Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f,  .5f,  .5f,0.0f)/*,Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) }*/,
+    /*       */                                /*                                                        */
+    /*Vertex{*/ Vector4f(-.5f, -.5f, -.5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f, -.5f, -.5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f,  .5f, -.5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) }*/,
+    /*Vertex{*/ Vector4f(-.5f,  .5f, -.5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) }*/,
+    /*       */                                /*                                                        */
+    /*Vertex{*/ Vector4f(-.5f, -.5f,  .5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f, -.5f,  .5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) }*/,
+    /*Vertex{*/ Vector4f( .5f,  .5f,  .5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) }*/,
+    /*Vertex{*/ Vector4f(-.5f,  .5f,  .5f,0.0f)/*,Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) }*/,
   };
 
   Vector<uint32> index = {
     3,1,0,
     2,1,3,
-
+    
     6,4,5,
     7,4,6,
-
+    
     11,9,8,
     10,9,11,
-
+    
     14,12,13,
     15,12,14,
-
+    
     19,17,16,
     18,17,19,
-
+    
     22,20,21,
     23,20,22
   };
 
-  meshes["cube"]->create(vertices,index);*/
+  //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
+
+  Octree tree;
+  auto planes = tree.getPlanes();
+
+  for(auto& plane: planes){
+    divide(plane, vertices,index);
+  }
+
+
+
+  cube->setIndex(index);
+  cube->create(vertices.data(),sizeof(Vector4f),vertices.size());
+  m_models.insert({"cube",makeSPtr<Model>()});
+  m_models["cube"]->addMesh(cube);
+  m_models["cube"]->setName("cube");
+  m_models["cube"]->addMaterial(makeSPtr<Material>());
+
+}
+
+void ResoureManager::generateTriangle()
+{
+  Vector<Vector4f> vertex = {
+    Vector4f(0,1,1,0),
+    Vector4f(.5,0,1,0),
+    Vector4f(-.5,0,1,0),
+  };
+  Vector<uint32> index = {0,1,2};
+
+  Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
+
+  Triangle tri(vertex[0].xyz,vertex[1].xyz,vertex[2].xyz);
+  Vector<Vector3f> newPoints;
+  Vector<uint32> newIndexes;
+  
+  if(tri.separate(plane,newPoints,newIndexes)){
+    vertex.push_back(Vector4f(newPoints[0],0));
+    vertex.push_back(Vector4f(newPoints[1],0));
+    index = newIndexes;
+  }
+
+  
+
+  auto triangle = makeSPtr<Mesh>();
+  triangle->setIndex(index);
+  triangle->create(vertex.data(),sizeof(Vector4f),vertex.size());
+  m_models.insert({"triangle",makeSPtr<Model>()});
+  m_models["triangle"]->addMesh(triangle);
+  m_models["triangle"]->setName("triangle");
+  m_models["triangle"]->addMaterial(makeSPtr<Material>());
+
 
 }
 
@@ -369,6 +468,7 @@ void ResoureManager::loadDefaultShaders()
   m_vertexShaders.insert({"animation",graphicsApi.createVertexShader()});
   m_vertexShaders.insert({"debug",graphicsApi.createVertexShader()});
   m_vertexShaders.insert({"screen",graphicsApi.createVertexShader()});
+  m_vertexShaders.insert({"position",graphicsApi.createVertexShader()});
 
   m_pixelShaders.insert({"default",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"paralax",graphicsApi.createPixelShader()});
@@ -376,6 +476,8 @@ void ResoureManager::loadDefaultShaders()
   m_pixelShaders.insert({"debug",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"GBuffer",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
+
+   m_pixelShaders.insert({"color",graphicsApi.createPixelShader()});
 
   m_vertexShaders["default"]->compileFromFile("vertexShader");
   m_vertexShaders["default"]->setName("default");
@@ -388,6 +490,9 @@ void ResoureManager::loadDefaultShaders()
 
   m_vertexShaders["screen"]->compileFromFile("screen");
   m_vertexShaders["screen"]->setName("screen");
+
+  //m_vertexShaders["position"]->compileFromFile("position");
+  //m_vertexShaders["position"]->setName("position");
 
 
   m_pixelShaders["default"]->compileFromFile("pixelShader");
@@ -407,6 +512,9 @@ void ResoureManager::loadDefaultShaders()
 
   m_pixelShaders["lights"]->compileFromFile("lights");
   m_pixelShaders["lights"]->setName("lights");
+
+  m_pixelShaders["color"]->compileFromFile("color");
+  m_pixelShaders["color"]->setName("color");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -428,6 +536,7 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms.insert({"debug",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"GBuffer",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"lights",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"color",graphicApi.createShaderProgram()});
 
   m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
@@ -460,6 +569,10 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms["lights"]->attach(m_vertexShaders["screen"]);
   m_shaderPrograms["lights"]->attach(m_pixelShaders["lights"]);
   m_shaderPrograms["lights"]->setName("lights");
+
+  m_shaderPrograms["color"]->attach(m_vertexShaders["debug"]);
+  m_shaderPrograms["color"]->attach(m_pixelShaders["color"]);
+  m_shaderPrograms["color"]->setName("color");
 }
 
 void 

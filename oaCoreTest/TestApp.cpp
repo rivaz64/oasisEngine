@@ -672,6 +672,7 @@ void oaEngineSDK::TestApp::drawImGui()
     int32 matNum = m_selectedModel->getNumOfMaterials();
     for(int32 i = 0; i<matNum;++i){
       auto& material = m_selectedModel->getMaterial(i);
+      if(material->getShader())
       if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
         m_selectedMaterial = material;
       }
@@ -768,7 +769,7 @@ TestApp::icosahedron()
 
   Vector<uint32> index = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
                           7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
-                          9,8,1});
+                          9,8,1};
 
   return ans;
 }
@@ -776,25 +777,26 @@ TestApp::icosahedron()
 SubMesh 
 oaEngineSDK::TestApp::SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices)
 {
-  SIZE_T size = indices.size();
-  SIZE_T actualSize = size;
-  Map<Pair<uint32, uint32>, uint32> used;
-  for(uint32 i = 0; i < size; i+=3){
-    Vector3f oldPoints[3]={
-      vertices[indices[i]].xyz,
-      vertices[indices[i+1]].xyz,
-      vertices[indices[i+2]].xyz,
-    };
-    ;
-    Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
-    if(used.find(pair)==used.end()){
-      used.insert({pair,actualSize});
-      ++actualSize;
-      
-      vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-    }
-  }
-  return ans;
+  //SIZE_T size = indices.size();
+  //SIZE_T actualSize = size;
+  //Map<Pair<uint32, uint32>, uint32> used;
+  //for(uint32 i = 0; i < size; i+=3){
+  //  Vector3f oldPoints[3]={
+  //    vertices[indices[i]].xyz,
+  //    vertices[indices[i+1]].xyz,
+  //    vertices[indices[i+2]].xyz,
+  //  };
+  //  ;
+  //  Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
+  //  if(used.find(pair)==used.end()){
+  //    used.insert({pair,actualSize});
+  //    ++actualSize;
+  //    
+  //    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+  //  }
+  //}
+  //return ans;
+  return SubMesh();
 }
 
 void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
@@ -802,13 +804,13 @@ void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used,
                             uint32 index1, 
                             uint32 index2)
 {
-  Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
-  if(used.find(pair)==used.end()){
-    used.insert({pair,actualSize});
-    ++actualSize;
-    
-    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-  }
+  //Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
+  //if(used.find(pair)==used.end()){
+  //  used.insert({pair,actualSize});
+  //  ++actualSize;
+  //  
+  //  vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+  //}
 }
 
 void 

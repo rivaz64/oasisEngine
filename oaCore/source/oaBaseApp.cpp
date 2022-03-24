@@ -105,7 +105,8 @@ BaseApp::run()
   }
 }
 
-void BaseApp::loadPlugIn(String DLL)
+void 
+BaseApp::loadPlugIn(String DLL)
 {
 #if OA_PLATFORM == OA_PLATFORM_WIN32
   HINSTANCE hGetProcIDDLL = LoadLibrary(DLL.c_str());

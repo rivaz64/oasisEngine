@@ -188,6 +188,7 @@
     <ClInclude Include="include\oaModule.h" />
     <ClInclude Include="Include\oaNoise2D.h" />
     <ClInclude Include="Include\oaOctavesNoise.h" />
+    <ClInclude Include="Include\oaOctree.h" />
     <ClInclude Include="Include\oaPerlinNoise2D.h" />
     <ClInclude Include="Include\oaPerlinNoise3D.h" />
     <ClInclude Include="include\oaPlane.h" />
@@ -230,6 +231,7 @@
     <ClCompile Include="Source\oaMatrix4f.cpp" />
     <ClCompile Include="Source\oaNoise2D.cpp" />
     <ClCompile Include="Source\oaOctavesNoise.cpp" />
+    <ClCompile Include="Source\oaOctree.cpp" />
     <ClCompile Include="Source\oaPerlinNoise2D.cpp" />
     <ClCompile Include="Source\oaPerlinNoise3D.cpp" />
     <ClCompile Include="source\oaPlane.cpp" />

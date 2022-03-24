@@ -61,11 +61,11 @@ void Mesh::createNormals(Vector<Vertex>& vertices)
 }
 
 void
-Mesh::create(void* data, SIZE_T vertexSize, SIZE_T dataSize)
+Mesh::create(void* data, SIZE_T vertexSize, SIZE_T numOfVertex)
 {
   create();
 
-  m_vertexB->init(data,vertexSize,dataSize);
+  m_vertexB->init(data,vertexSize,numOfVertex);
 }
 
 }
