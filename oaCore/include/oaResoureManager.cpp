@@ -57,8 +57,8 @@ ResoureManager::onStartUp()
   loadDefaultShaders();
   generateDefaultShaderPrograms();
   generateDefaultMaterials();
-  generateTriangle();
-  generateCube();
+  //generateTriangle();
+  //generateCube();
 }
 /*
 void 

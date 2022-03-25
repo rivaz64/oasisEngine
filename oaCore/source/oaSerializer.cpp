@@ -9,6 +9,7 @@
 #include "oaTexture.h"
 #include "oaResoureManager.h"
 #include "oaShaderProgram.h"
+#include "oaActor.h"
 
 namespace oaEngineSDK{
 
@@ -226,6 +227,28 @@ Serializer::decodeModel()
   
   return model;
 }
+
+void 
+Serializer::encodeActor(SPtr<Actor> actor)
+{
+  encodeString(actor->getName());
+  auto& transform = actor->GetActorTransform();
+  file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
+}
+
+SPtr<Actor> 
+Serializer::decodeActor()
+{
+  auto actor = makeSPtr<Actor>();
+
+  actor->setName(decodeString());
+
+  auto& transform = actor->GetActorTransform();
+  file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
+
+  return actor;
+}
+
 
 }
 

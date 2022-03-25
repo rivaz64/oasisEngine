@@ -29,7 +29,7 @@ class OA_UTILITY_EXPORT Triangle
   bool
   separate(const Plane& plane,
            Vector<Vector3f>& points, 
-           Vector<uint32>& finalIndexPositiveSide,
+           //Vector<uint32>& finalIndexPositiveSide,
            Vector<uint32>& finalIndexNegativeSide);
 
   

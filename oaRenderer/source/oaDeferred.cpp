@@ -94,92 +94,19 @@ Deferred::onStartUp()
 void 
 Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camForFrustrum, const Vector4f& light)
 {
-   auto& resourseManager = ResoureManager::instance();
-  
-  auto& graphicsAPI = GraphicAPI::instance();
-  
-  graphicsAPI.clearRenderTarget(m_finalRender);
-  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
-  graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
-
-  graphicsAPI.setBlendState(m_blendState);
-  
-  //resourseManager.m_shaderPrograms["GBuffer"]->set();
-  graphicsAPI.setRasterizerState(m_debugRasterizer);
-  
-  Vector<RenderData> toRender;
-  Vector<RenderData> transparents;
-  
-  Frustum frustrum(camForFrustrum->getLocation(),
-                   camForFrustrum->getAxisMatrix(),
-                   camForFrustrum->getNearPlaneDistance(),
-                   camForFrustrum->getFarPlaneDistance(),
-                   camForFrustrum->getViewAngle(),
-                   camForFrustrum->getRatio());
-  
-  
-  scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
-  resourseManager.m_shaderPrograms["color"]->set();
-
-  
-  
-  m_viewBuffer->write(camForView->getViewMatrix().getData());
-  graphicsAPI.setVSBuffer(m_viewBuffer,1);
-  
-  m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
-  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
-  
-  for(auto& renderData : toRender){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-
-    renderData.m_mesh->set();
-    //renderData.m_material->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
-  }
-  //gBuffer(toRender);
-  //
-  //gTransparents(transparents);
-  
-  
-  //graphicsAPI.setRasterizerState(m_normalRasterizer);
-  //graphicsAPI.unsetRenderTargetAndDepthStencil();
-  //graphicsAPI.setRenderTarget(m_finalRender);
-  
-  //resourseManager.m_shaderPrograms["lights"]->set();
-  //
-  //m_viewLocationBuffer->write(&camForView->getLocation());
-  //graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
-  //
-  //m_LightLocation->write(&light);
-  //graphicsAPI.setPSBuffer(m_LightLocation,1);
-  //
-  //graphicsAPI.setTexture(m_colorTexture,0);
-  //graphicsAPI.setTexture(m_normalTexture,1);
-  //graphicsAPI.setTexture(m_positionTexture,2);
-  //graphicsAPI.setTexture(m_specularTexture,3);
-  //graphicsAPI.setTexture(m_depthTexture,4);
-  //screen->set();
-  //
-  //graphicsAPI.draw(6);
-  //auto& resourseManager = ResoureManager::instance();
+  // auto& resourseManager = ResoureManager::instance();
   //
   //auto& graphicsAPI = GraphicAPI::instance();
   //
-  //graphicsAPI.clearRenderTarget(m_colorRender);
-  //graphicsAPI.clearRenderTarget(m_normalRender);
-  //graphicsAPI.clearRenderTarget(m_positionRender);
-  //graphicsAPI.clearRenderTarget(m_specularRender);
   //graphicsAPI.clearRenderTarget(m_finalRender);
   //graphicsAPI.clearDepthStencil(m_finalDepthStencil);
+  //graphicsAPI.setRenderTargetAndDepthStencil(m_finalRender,m_finalDepthStencil);
   //
   //graphicsAPI.setBlendState(m_blendState);
   //
   ////resourseManager.m_shaderPrograms["GBuffer"]->set();
+  //graphicsAPI.setRasterizerState(m_debugRasterizer);
   //
-  //graphicsAPI.unsetRenderTargetAndDepthStencil();
-  //graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
-  //graphicsAPI.setRasterizerState(m_normalRasterizer);
   //Vector<RenderData> toRender;
   //Vector<RenderData> transparents;
   //
@@ -192,6 +119,9 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   //
   //
   //scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
+  //resourseManager.m_shaderPrograms["color"]->set();
+  //
+  //
   //
   //m_viewBuffer->write(camForView->getViewMatrix().getData());
   //graphicsAPI.setVSBuffer(m_viewBuffer,1);
@@ -199,31 +129,77 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   //m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   //graphicsAPI.setVSBuffer(m_projectionBuffer,2);
   //
-  //gBuffer(toRender);
+  //for(auto& renderData : toRender){
+  //  m_globalTransformBuffer->write(&renderData.m_transform);
+  //  graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
   //
-  //gTransparents(transparents);
-  //
-  //
-  //graphicsAPI.setRasterizerState(m_normalRasterizer);
-  //graphicsAPI.unsetRenderTargetAndDepthStencil();
-  //graphicsAPI.setRenderTarget(m_finalRender);
-  //
-  //resourseManager.m_shaderPrograms["lights"]->set();
-  //
-  //m_viewLocationBuffer->write(&camForView->getLocation());
-  //graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
-  //
-  //m_LightLocation->write(&light);
-  //graphicsAPI.setPSBuffer(m_LightLocation,1);
-  //
-  //graphicsAPI.setTexture(m_colorTexture,0);
-  //graphicsAPI.setTexture(m_normalTexture,1);
-  //graphicsAPI.setTexture(m_positionTexture,2);
-  //graphicsAPI.setTexture(m_specularTexture,3);
-  //graphicsAPI.setTexture(m_depthTexture,4);
-  //screen->set();
-  //
-  //graphicsAPI.draw(6);
+  //  renderData.m_mesh->set();
+  //  //renderData.m_material->set();
+  //  graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+  //}
+
+  auto& resourseManager = ResoureManager::instance();
+  
+  auto& graphicsAPI = GraphicAPI::instance();
+  
+  graphicsAPI.clearRenderTarget(m_colorRender);
+  graphicsAPI.clearRenderTarget(m_normalRender);
+  graphicsAPI.clearRenderTarget(m_positionRender);
+  graphicsAPI.clearRenderTarget(m_specularRender);
+  graphicsAPI.clearRenderTarget(m_finalRender);
+  graphicsAPI.clearDepthStencil(m_finalDepthStencil);
+  
+  graphicsAPI.setBlendState(m_blendState);
+  
+  //resourseManager.m_shaderPrograms["GBuffer"]->set();
+  
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_finalDepthStencil);
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
+  Vector<RenderData> toRender;
+  Vector<RenderData> transparents;
+  
+  Frustum frustrum(camForFrustrum->getLocation(),
+                   camForFrustrum->getAxisMatrix(),
+                   camForFrustrum->getNearPlaneDistance(),
+                   camForFrustrum->getFarPlaneDistance(),
+                   camForFrustrum->getViewAngle(),
+                   camForFrustrum->getRatio());
+  
+  
+  scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
+  
+  m_viewBuffer->write(camForView->getViewMatrix().getData());
+  graphicsAPI.setVSBuffer(m_viewBuffer,1);
+  
+  m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
+  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
+  
+  gBuffer(toRender);
+  
+  gTransparents(transparents);
+  
+  
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  graphicsAPI.setRenderTarget(m_finalRender);
+  
+  resourseManager.m_shaderPrograms["lights"]->set();
+  
+  m_viewLocationBuffer->write(&camForView->getLocation());
+  graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
+  
+  m_LightLocation->write(&light);
+  graphicsAPI.setPSBuffer(m_LightLocation,1);
+  
+  graphicsAPI.setTexture(m_colorTexture,0);
+  graphicsAPI.setTexture(m_normalTexture,1);
+  graphicsAPI.setTexture(m_positionTexture,2);
+  graphicsAPI.setTexture(m_specularTexture,3);
+  graphicsAPI.setTexture(m_depthTexture,4);
+  screen->set();
+  
+  graphicsAPI.draw(6);
 }
 
 void 

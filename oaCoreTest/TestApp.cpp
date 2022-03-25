@@ -589,6 +589,12 @@ void oaEngineSDK::TestApp::drawImGui()
         serializer.encodeModel(model.second);
       }
 
+      auto actors = m_actualScene->getRoot()->getChilds();
+      serializer.encodeNumber(actors.size());
+      for(auto& actor : actors){
+        serializer.encodeActor(actor);
+      }
+
     }
   }
 
@@ -603,19 +609,25 @@ void oaEngineSDK::TestApp::drawImGui()
         auto image = serializer.decodeImage();
         SPtr<Texture> texture = GraphicAPI::instance().createTexture();
         texture->initFromImage(image);
-        ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
+        resourceManager.m_textures.insert({ texture->getName(),texture});
       }
 
       number = serializer.decodeNumber();
       for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
         auto material = serializer.decodeMaterial();
-        ResoureManager::instance().m_materials.insert({ material->getName(),material});
+        resourceManager.m_materials.insert({ material->getName(),material});
       }
       
       number = serializer.decodeNumber();
       for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
         auto model = serializer.decodeModel();
-        ResoureManager::instance().m_models.insert({ model->getName(),model});
+        resourceManager.m_models.insert({ model->getName(),model});
+      }
+
+      number = serializer.decodeNumber();
+      for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+        auto actor = serializer.decodeActor();
+        m_actualScene->getRoot()->attach(actor);
       }
     }
   }

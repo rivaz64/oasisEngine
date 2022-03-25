@@ -50,6 +50,12 @@ class OA_CORE_EXPORT Serializer
   SPtr<Model>
   decodeModel();
 
+  void
+  encodeActor(SPtr<Actor> actor);
+
+  SPtr<Actor>
+  decodeActor();
+
   FStream file;
 };
 

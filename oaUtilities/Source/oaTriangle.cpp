@@ -18,23 +18,28 @@ analizeLine(const Plane& plane, const Vector3f& point1, const Vector3f& point2, 
 bool 
 Triangle::separate(const Plane& plane,
            Vector<Vector3f>& points, 
-           Vector<uint32>& finalIndexPositiveSide,
+           //Vector<uint32>& finalIndexPositiveSide,
            Vector<uint32>& finalIndexNegativeSide)
 {
   Vector<int32> index;
  
-  int32 actualIndex = 3;
-  int32 init = 1;
+  int32 otherside;
+  
+  float dist1 = Math::distance(plane,m_point1);
+  float dist2 = Math::distance(plane,m_point2);
+  float dist3 = Math::distance(plane,m_point3);
 
-  if(analizeLine(plane,m_point1,m_point2,points)){
+  if(analizeLine(plane,m_point1,m_point2,points)){    
     index.push_back(1);
     if(analizeLine(plane,m_point2,m_point3,points)){
       index.push_back(4);
       index.push_back(2);
+      otherside = 1;
     }
     else if(analizeLine(plane,m_point3,m_point1,points)){
       index.push_back(2);
       index.push_back(4);
+      otherside = 0;
     }
     else{
       return false;
@@ -46,15 +51,22 @@ Triangle::separate(const Plane& plane,
     index.push_back(4);
     index.push_back(0);
     index.push_back(1);
+    otherside = 2;
   }
   else{
     return false;
   }
 
   for(int32 i=0;i<3;i++){
-    finalIndex.push_back(3);
-    finalIndex.push_back(index[i]);
-    finalIndex.push_back(index[i+1]);
+    if(i==otherside){
+    
+    }
+    else{
+      finalIndexNegativeSide.push_back(3);
+      finalIndexNegativeSide.push_back(index[i]);
+      finalIndexNegativeSide.push_back(index[i+1]);
+    }
+    
   }
   return true;
 }
