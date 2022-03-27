@@ -287,6 +287,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     aiString notMyString;
 
+
     material->Get(AI_MATKEY_NAME,notMyString);
 
     WString MaterialName = StringUtilities::toWString(notMyString.C_Str());
@@ -299,18 +300,32 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     WString textureName = MaterialName;
 
-    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+    material->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE,0),notMyString);
+
+    WString defuseName = StringUtilities::toWString(notMyString.C_Str());
+
+    Path newPath;
+
+    newPath.setCompletePath(defuseName);
+
+    //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+    texturePath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
 
     if(loadImage(texturePath)){
-      mat->setTexture("diffuse", manager.m_textures[ StringUtilities::toString(textureName)]);
+      mat->setTexture("diffuse", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
     }
 
     textureName = MaterialName+L"N";
 
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
+    material->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS,0),notMyString);
+
+    WString normalName = StringUtilities::toWString(notMyString.C_Str());
+    texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
+
     if(loadImage(texturePath)){
-      mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(textureName)]);
+      mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
     }
 
     textureName = MaterialName+L"S";
@@ -510,6 +525,7 @@ LOADERFLAGS::E
 Loader::checkForLoad(const Path& file)
 {
   auto flags = aiProcess_Triangulate | 
+               //aiProcess_GenNormals |
                aiProcess_GenSmoothNormals | 
                aiProcess_OptimizeMeshes | 
                aiProcess_OptimizeGraph |

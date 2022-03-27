@@ -153,6 +153,9 @@ TestApp::postInit()
   graphicAPI.initTest();
 
   graphicAPI.setPrimitiveTopology(oaEngineSDK::PRIMITIVE_TOPOLOGY::kTrianlgeList);
+  m_ssaoConfig.x=.01;
+  m_ssaoConfig.y=0;
+  m_ssaoConfig.z=1;
 }
 
 
@@ -205,7 +208,7 @@ TestApp::draw()
   //  renderer.render(m_actualScene,m_camera,m_debugCamera);
   //}
   //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_light);
+    renderer.render(m_actualScene,m_camera,m_camera,m_light,m_ssaoConfig);
   //}
   
   newImGuiFrame();
@@ -312,9 +315,10 @@ void oaEngineSDK::TestApp::drawImGui()
         if(ImGui::DragFloat3("scale", &vec.x, .01f)){
           transform.setScale(vec);
         }
-        vec = transform.getRotation();
+        vec = transform.getRotation()*Math::RAD_TO_DEG;
+        
         if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          transform.setRotation(vec);
+          transform.setRotation(vec*Math::DEG_TO_RAD);
         };
       }
     }
@@ -332,7 +336,10 @@ void oaEngineSDK::TestApp::drawImGui()
         auto& transform = graphicsComponent->getTransform();
         ImGui::DragFloat3("location Model",&transform.getLocation().x);
         ImGui::DragFloat3("scale Model",&transform.getScale().x);
-        ImGui::DragFloat3("rotation Model",&transform.getRotation().x);
+        auto vec = transform.getRotation()*Math::RAD_TO_DEG;
+        if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+          transform.setRotation(vec*Math::DEG_TO_RAD);
+        };
       }
 
     }
@@ -405,6 +412,7 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
     for(auto texture : resourceManager.m_textures){
+      if(texture.second)
       if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
         m_selectedTexture = texture.second;
       }
@@ -477,6 +485,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("lights");
   ImGui::DragFloat3("direction",&m_light.x,.01f,-1.0f,1.0f);
+  ImGui::DragFloat4("ssao",&m_ssaoConfig.x,.001f);
   //ImGui::DragFloat("paralax",&dir.w,1.0f);
   ImGui::End();
 
@@ -684,7 +693,7 @@ void oaEngineSDK::TestApp::drawImGui()
     int32 matNum = m_selectedModel->getNumOfMaterials();
     for(int32 i = 0; i<matNum;++i){
       auto& material = m_selectedModel->getMaterial(i);
-      if(material->getShader())
+      if(material && material->getShader())
       if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
         m_selectedMaterial = material;
       }

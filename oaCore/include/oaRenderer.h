@@ -18,7 +18,11 @@ class OA_CORE_EXPORT Renderer :
  public:
 
   virtual void
-  render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum, const Vector4f& light);
+  render(SPtr<Scene> scene,
+         SPtr<Camera> camForView,
+         SPtr<Camera> camForFrustrum, 
+         const Vector4f& light,
+         const Vector4f& config);
 
   virtual void
   setSize(const Vector2U& size) {}

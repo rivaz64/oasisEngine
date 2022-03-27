@@ -52,11 +52,11 @@ ResoureManager::onStartUp()
   generateCone(36);
   generateCilinder(36);
   generateTorus(36,36,.5f);*/
-  //generateQuad();
   //loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultShaderPrograms();
   generateDefaultMaterials();
+  generateQuad();
   //generateTriangle();
   //generateCube();
 }
@@ -304,6 +304,9 @@ ResoureManager::generateQuad()
 
   m_models.insert({ "quad",modelQuad });
 
+  m_models["quad"]->setName("quad");
+  m_models["quad"]->addMaterial(makeSPtr<Material>());
+
 }
 
 void
@@ -476,6 +479,7 @@ void ResoureManager::loadDefaultShaders()
   m_pixelShaders.insert({"debug",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"GBuffer",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"ssao",graphicsApi.createPixelShader()});
 
    m_pixelShaders.insert({"color",graphicsApi.createPixelShader()});
 
@@ -515,6 +519,9 @@ void ResoureManager::loadDefaultShaders()
 
   m_pixelShaders["color"]->compileFromFile("color");
   m_pixelShaders["color"]->setName("color");
+
+  m_pixelShaders["ssao"]->compileFromFile("ssao");
+  m_pixelShaders["ssao"]->setName("ssao");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -537,6 +544,7 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms.insert({"GBuffer",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"lights",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"color",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"ssao",graphicApi.createShaderProgram()});
 
   m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
@@ -573,6 +581,10 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms["color"]->attach(m_vertexShaders["debug"]);
   m_shaderPrograms["color"]->attach(m_pixelShaders["color"]);
   m_shaderPrograms["color"]->setName("color");
+
+  m_shaderPrograms["ssao"]->attach(m_vertexShaders["screen"]);
+  m_shaderPrograms["ssao"]->attach(m_pixelShaders["ssao"]);
+  m_shaderPrograms["ssao"]->setName("ssao");
 }
 
 void 

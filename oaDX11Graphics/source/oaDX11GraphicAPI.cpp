@@ -288,6 +288,7 @@ DX11GraphicAPI::show()
 void 
 DX11GraphicAPI::setTexture(const SPtr<Texture> texture, uint8 location)
 {
+  if(texture)
   m_context->PSSetShaderResources(location, 1, &cast<DX11Texture>(texture)->m_shaderResourceView );
 }
 

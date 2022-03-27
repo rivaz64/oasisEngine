@@ -101,6 +101,8 @@ public:
 
   Vector4f m_light;
 
+  Vector4f m_ssaoConfig;
+
   Loader* loader;
 
   bool isCreatingActor = false;

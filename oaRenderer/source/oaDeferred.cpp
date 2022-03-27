@@ -46,6 +46,15 @@ Deferred::onStartUp()
   m_LightLocation = graphicsAPI.createBuffer();
   m_LightLocation->init(sizeof(Vector4f));
 
+  m_LightLocation = graphicsAPI.createBuffer();
+  m_LightLocation->init(sizeof(Vector4f));
+
+  m_configs = graphicsAPI.createBuffer();
+  m_configs->init(sizeof(Vector4f));
+
+  m_size = graphicsAPI.createBuffer();
+  m_size->init(sizeof(Vector4f));
+
   m_viewBuffer = graphicsAPI.createBuffer();
   m_viewBuffer->init(sizeof(Matrix4f));
 
@@ -92,7 +101,11 @@ Deferred::onStartUp()
 }
 
 void 
-Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camForFrustrum, const Vector4f& light)
+Deferred::render(SPtr<Scene> scene, 
+                 SPtr<Camera> camForView, 
+                 SPtr<Camera> camForFrustrum, 
+                 const Vector4f& light,
+                 const Vector4f& config)
 {
   // auto& resourseManager = ResoureManager::instance();
   //
@@ -141,6 +154,8 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   auto& resourseManager = ResoureManager::instance();
   
   auto& graphicsAPI = GraphicAPI::instance();
+
+
   
   graphicsAPI.clearRenderTarget(m_colorRender);
   graphicsAPI.clearRenderTarget(m_normalRender);
@@ -184,13 +199,21 @@ Deferred::render(SPtr<Scene> scene, SPtr<Camera> camForView, SPtr<Camera> camFor
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTarget(m_finalRender);
   
-  resourseManager.m_shaderPrograms["lights"]->set();
-  
+  //resourseManager.m_shaderPrograms["lights"]->set();
+  resourseManager.m_shaderPrograms["ssao"]->set();
+
   m_viewLocationBuffer->write(&camForView->getLocation());
   graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
   
   m_LightLocation->write(&light);
   graphicsAPI.setPSBuffer(m_LightLocation,1);
+
+  m_configs->write(&config);
+  graphicsAPI.setPSBuffer(m_configs,2);
+
+  
+  graphicsAPI.setPSBuffer(m_size,3);
+
   
   graphicsAPI.setTexture(m_colorTexture,0);
   graphicsAPI.setTexture(m_normalTexture,1);
@@ -214,7 +237,8 @@ Deferred::gBuffer(Vector<RenderData>& toRender)
     graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
 
     renderData.m_mesh->set();
-    renderData.m_material->set();
+    //renderData.m_material->set();
+    resourseManager.m_shaderPrograms["GBuffer"]->set();
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
   }
 }
@@ -291,6 +315,8 @@ Deferred::setSize(const Vector2U& size)
   m_normalRender->init(m_normalTexture);
   m_positionRender->init(m_positionTexture);
   m_specularRender->init(m_specularTexture);
+  auto sizef = Vector2f(size.x,size.y);
+  m_size->write(&sizef);
 }
 
 }

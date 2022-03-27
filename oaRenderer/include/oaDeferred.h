@@ -20,7 +20,11 @@ class Deferred :
   onStartUp() override;
 
   void
-  render(SPtr<Scene> scene,SPtr<Camera> camForView,SPtr<Camera> camForFrustrum, const Vector4f& light) override;
+  render(SPtr<Scene> scene,
+         SPtr<Camera> camForView,
+         SPtr<Camera> camForFrustrum, 
+         const Vector4f& light,
+         const Vector4f& config) override;
 
   void gBuffer(Vector<RenderData>& torender);
   void gTransparents(Vector<RenderData>& torender);
@@ -60,6 +64,10 @@ class Deferred :
   SPtr<Buffer> m_viewLocationBuffer;
 
   SPtr<Buffer> m_LightLocation;
+
+  SPtr<Buffer> m_configs;
+
+  SPtr<Buffer> m_size;
 
   SPtr<Texture> m_depthTexture;
 
