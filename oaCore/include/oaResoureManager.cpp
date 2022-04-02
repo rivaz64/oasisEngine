@@ -58,7 +58,7 @@ ResoureManager::onStartUp()
   generateDefaultMaterials();
   generateQuad();
   //generateTriangle();
-  //generateCube();
+  generateCube();
 }
 /*
 void 
@@ -310,20 +310,23 @@ ResoureManager::generateQuad()
 }
 
 void
-divide(const Plane& plane, Vector<Vector4f>& vertices, Vector<uint32>& index){
+divide(const Plane& plane, Vector<Vector4f>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
   
   Vector<Vector3f> newPoints;
-  Vector<uint32> newIndexes;
+  Vector<uint32> newIndexesFront;
+  Vector<uint32> newIndexesBack;
   Vector<uint32> replaceIndexes;
-  Vector<uint32> finalIndexes;
-  
+  Vector<uint32> finalIndexesFront;
+  Vector<uint32> finalIndexesBack;
   int32 trisNum = index.size()/3;
+  bool isFront;
   for(int32 i = 0; i<trisNum; ++i){
     replaceIndexes.clear();
-    newIndexes.clear();
+    newIndexesFront.clear();
+    newIndexesBack.clear();
     newPoints.clear();
     Triangle tri(vertices[index[i*3]].xyz,vertices[index[i*3+1]].xyz,vertices[index[i*3+2]].xyz);
-    if(tri.separate(plane,newPoints,newIndexes)){
+    if(tri.separate(plane,newPoints,newIndexesFront,newIndexesBack,isFront)){
       replaceIndexes.push_back(index[i*3]);
       replaceIndexes.push_back(index[i*3+1]);
       replaceIndexes.push_back(index[i*3+2]);
@@ -331,23 +334,36 @@ divide(const Plane& plane, Vector<Vector4f>& vertices, Vector<uint32>& index){
       vertices.push_back(Vector4f(newPoints[0],0));
       replaceIndexes.push_back(vertices.size());
       vertices.push_back(Vector4f(newPoints[1],0));
-      if(i==1)
-      for(int32 newIndex = 0; newIndex<3; ++newIndex){
-        finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      //if(i==1)
+      //for(int32 newIndex = 0; newIndex<3; ++newIndex){
+      //  finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      //}
+      //else
+      for(int32 newIndex : newIndexesFront){
+        finalIndexesFront.push_back(replaceIndexes[newIndex]);
       }
-      else
-      for(int32 newIndex = 0; newIndex<9; ++newIndex){
-        finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      for(int32 newIndex : newIndexesBack){
+        finalIndexesBack.push_back(replaceIndexes[newIndex]);
       }
       
     }
     else{
-      finalIndexes.push_back(index[i*3]);
-      finalIndexes.push_back(index[i*3+1]);
-      finalIndexes.push_back(index[i*3+2]);
+      if(isFront){
+        finalIndexesFront.push_back(index[i*3]);
+        finalIndexesFront.push_back(index[i*3+1]);
+        finalIndexesFront.push_back(index[i*3+2]);
+      }
+      else{
+        finalIndexesBack.push_back(index[i*3]);
+        finalIndexesBack.push_back(index[i*3+1]);
+        finalIndexesBack.push_back(index[i*3+2]);
+      }
+      
     }
   }
-  index = finalIndexes;
+  //indexFrin = finalIndexes;
+  indexFront = finalIndexesFront;
+  indexBack = finalIndexesBack;
 }
 
 void 
@@ -355,7 +371,7 @@ ResoureManager::generateCube()
 {
   //meshes.insert({ "cube",makeSPtr<Mesh>() });
 
-  auto cube = makeSPtr<Mesh>();
+  //Vector<SPtr<Mesh>> cubes;
 
   Vector<Vector4f> vertices = {
     /*Vertex{*/ Vector4f(-.5f, .5f, -.5f ,0.0f)/*,Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)}*/,
@@ -413,19 +429,36 @@ ResoureManager::generateCube()
 
   Octree tree;
   auto planes = tree.getPlanes();
-
+  Vector<uint32> indexFront;
+  Vector<uint32> indexBack;
+  Vector<Vector<uint32>> meshes;
+  meshes.push_back(index);
+  Vector<Vector<uint32>> newMeshes;
   for(auto& plane: planes){
-    divide(plane, vertices,index);
+    for(Vector<uint32>& m : meshes){
+      indexBack.clear();
+      indexFront.clear();
+      divide(plane, vertices,m,indexBack,indexFront);
+      newMeshes.push_back(indexBack);
+      newMeshes.push_back(indexFront);
+    }
+    meshes = newMeshes;
+    newMeshes.clear();
   }
 
+  for(int32 i = 0; i<8; ++i){
+    String name = "cube"+StringUtilities::intToString(i);
+    m_models.insert({name,makeSPtr<Model>()});
+    auto& model = m_models[name];
+    model->setName(name);
+    model->addMaterial(makeSPtr<Material>());
+    model->addMesh(makeSPtr<Mesh>());
+    auto& mesh = model->getMesh(0);
+    mesh->setIndex(meshes[i]);
+    mesh->create(vertices.data(),sizeof(Vector4f),vertices.size());
+  }
 
-
-  cube->setIndex(index);
-  cube->create(vertices.data(),sizeof(Vector4f),vertices.size());
-  m_models.insert({"cube",makeSPtr<Model>()});
-  m_models["cube"]->addMesh(cube);
-  m_models["cube"]->setName("cube");
-  m_models["cube"]->addMaterial(makeSPtr<Material>());
+  
 
 }
 
@@ -444,21 +477,21 @@ void ResoureManager::generateTriangle()
   Vector<Vector3f> newPoints;
   Vector<uint32> newIndexes;
   
-  if(tri.separate(plane,newPoints,newIndexes)){
-    vertex.push_back(Vector4f(newPoints[0],0));
-    vertex.push_back(Vector4f(newPoints[1],0));
-    index = newIndexes;
-  }
+  //if(tri.separate(plane,newPoints,newIndexes)){
+  //  vertex.push_back(Vector4f(newPoints[0],0));
+  //  vertex.push_back(Vector4f(newPoints[1],0));
+  //  index = newIndexes;
+  //}
 
   
 
-  auto triangle = makeSPtr<Mesh>();
-  triangle->setIndex(index);
-  triangle->create(vertex.data(),sizeof(Vector4f),vertex.size());
-  m_models.insert({"triangle",makeSPtr<Model>()});
-  m_models["triangle"]->addMesh(triangle);
-  m_models["triangle"]->setName("triangle");
-  m_models["triangle"]->addMaterial(makeSPtr<Material>());
+  //auto triangle = makeSPtr<Mesh>();
+  //triangle->setIndex(index);
+  //triangle->create(vertex.data(),sizeof(Vector4f),vertex.size());
+  //m_models.insert({"triangle",makeSPtr<Model>()});
+  //m_models["triangle"]->addMesh(triangle);
+  //m_models["triangle"]->setName("triangle");
+  //m_models["triangle"]->addMaterial(makeSPtr<Material>());
 
 
 }
@@ -480,6 +513,9 @@ void ResoureManager::loadDefaultShaders()
   m_pixelShaders.insert({"GBuffer",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
   m_pixelShaders.insert({"ssao",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"convolution",graphicsApi.createPixelShader()});
+  m_pixelShaders.insert({"copy",graphicsApi.createPixelShader()});
+
 
    m_pixelShaders.insert({"color",graphicsApi.createPixelShader()});
 
@@ -522,6 +558,12 @@ void ResoureManager::loadDefaultShaders()
 
   m_pixelShaders["ssao"]->compileFromFile("ssao");
   m_pixelShaders["ssao"]->setName("ssao");
+
+  m_pixelShaders["convolution"]->compileFromFile("convolution");
+  m_pixelShaders["convolution"]->setName("convolution");
+
+  m_pixelShaders["copy"]->compileFromFile("copy");
+  m_pixelShaders["copy"]->setName("copy");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -545,6 +587,9 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms.insert({"lights",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"color",graphicApi.createShaderProgram()});
   m_shaderPrograms.insert({"ssao",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"convolution",graphicApi.createShaderProgram()});
+  m_shaderPrograms.insert({"copy",graphicApi.createShaderProgram()});
+
 
   m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
   m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
@@ -585,6 +630,14 @@ ResoureManager::generateDefaultShaderPrograms()
   m_shaderPrograms["ssao"]->attach(m_vertexShaders["screen"]);
   m_shaderPrograms["ssao"]->attach(m_pixelShaders["ssao"]);
   m_shaderPrograms["ssao"]->setName("ssao");
+
+  m_shaderPrograms["convolution"]->attach(m_vertexShaders["screen"]);
+  m_shaderPrograms["convolution"]->attach(m_pixelShaders["convolution"]);
+  m_shaderPrograms["convolution"]->setName("convolution");
+
+  m_shaderPrograms["copy"]->attach(m_vertexShaders["screen"]);
+  m_shaderPrograms["copy"]->attach(m_pixelShaders["copy"]);
+  m_shaderPrograms["copy"]->setName("copy");
 }
 
 void 

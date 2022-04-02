@@ -81,18 +81,6 @@ GraphicAPI::createSamplerState(const SamplerDesc&)
   return makeSPtr<SamplerState>();
 }
 
-SPtr<RenderTarget> 
-GraphicAPI::createRenderTarget()
-{
-  return makeSPtr<RenderTarget>();
-}
-
-SPtr<DepthStencil> 
-GraphicAPI::createDepthStencil()
-{
-  return SPtr<DepthStencil>();
-}
-
 SPtr<RasterizerState> 
 GraphicAPI::createRasterizerState()
 {

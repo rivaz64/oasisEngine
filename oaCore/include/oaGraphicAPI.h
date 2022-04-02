@@ -109,23 +109,6 @@ class OA_CORE_EXPORT GraphicAPI :
   createSamplerState(const SamplerDesc& /*descriptor*/);
 
   /**
-   * @brief creates a render target
-   * @param texture the texture for the render target
-   * @return 
-  */
-  virtual SPtr<RenderTarget>
-  createRenderTarget();
-
-  /**
-   * @brief creates a depth stencil
-   * @param description 
-   * @param texture 
-   * @return 
-  */
-  virtual SPtr<DepthStencil>
-  createDepthStencil();
-
-  /**
    * @brief creates a new rasterizer
    * @return 
   */
@@ -220,28 +203,28 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param renderTarget 
   */
   virtual void
-  clearRenderTarget(SPtr<RenderTarget> renderTarget){}
+  clearRenderTarget(SPtr<Texture> renderTarget){}
 
   /**
    * @brief clears a depth stencil to 1s
    * @param depthStencil 
   */
   virtual void 
-  clearDepthStencil(SPtr<DepthStencil> depthStencil) {}
+  clearDepthStencil(SPtr<Texture> depthStencil) {}
 
   /**
    * @brief sets the render target to be used
    * @param renderTarget 
   */
   virtual void
-  setRenderTarget(const SPtr<RenderTarget> /*renderTarget*/) {}
+  setRenderTarget(const SPtr<Texture> /*renderTarget*/) {}
 
   /**
    * @brief sets the renders target to be used
    * @param renderTarget 
   */
   virtual void
-  setRenderTargets(const Vector<SPtr<RenderTarget>>& /*renderTargets*/) {}
+  setRenderTargets(const Vector<SPtr<Texture>>& /*renderTargets*/) {}
 
   /**
    * @brief sets a render target and a depth stencil
@@ -250,8 +233,8 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setRenderTargetAndDepthStencil(
-    const SPtr<RenderTarget> /*renderTarget*/,
-    const SPtr<DepthStencil> /*depthStencil*/
+    const SPtr<Texture> /*renderTarget*/,
+    const SPtr<Texture> /*depthStencil*/
   ) {}
 
    /**
@@ -261,8 +244,8 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   setRenderTargetsAndDepthStencil(
-    const Vector<SPtr<RenderTarget>>& /*renderTarget*/,
-    const SPtr<DepthStencil> /*depthStencil*/
+    const Vector<SPtr<Texture>>& /*renderTarget*/,
+    const SPtr<Texture> /*depthStencil*/
   ) {}
 
   /**
@@ -270,6 +253,12 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   unsetRenderTargetAndDepthStencil() {}
+
+  /**
+   * @brief sets the render target and the depth stencil to null
+  */
+  virtual void
+  unsetTextures(uint32 n) {}
 
   /**
    * @brief sets the primitive topology to be used

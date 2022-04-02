@@ -11,8 +11,7 @@ enum E{
   kIndex,
   kDepthStencil,
   kShaderResourse,
-  kRenderTarget,
-  kShaderResourseRenderTarget
+  kRenderTarget
 };
 }
  
@@ -112,7 +111,7 @@ enum E{
 
 namespace FORMAT{
 enum E{
-  kD24UNormS8UInt = 0,
+  kR24G8 = 0,
   kR32G32B32A32Float,
   kB8G8R8A8UnormSRGB,
 };

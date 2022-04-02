@@ -56,13 +56,6 @@ class DX11GraphicAPI :
 
   SPtr<SamplerState>
   createSamplerState(const SamplerDesc& descriptor) override;
-
-  SPtr<RenderTarget>
-  createRenderTarget() override;
-
-  SPtr<DepthStencil>
-  createDepthStencil() override;
-
   
   SPtr<RasterizerState>
   createRasterizerState() override;
@@ -101,34 +94,37 @@ class DX11GraphicAPI :
   setBlendState(const SPtr<BlendState> blender) override;
 
   void
-  setRenderTarget(const SPtr<RenderTarget> renderTarget) override;
+  setRenderTarget(const SPtr<Texture> renderTarget) override;
 
   void
-  setRenderTargets(const Vector<SPtr<RenderTarget>>& renderTargets) override;
+  setRenderTargets(const Vector<SPtr<Texture>>& renderTargets) override;
 
   void
   setRenderTargetAndDepthStencil(
-    const SPtr<RenderTarget> renderTarget,
-    const SPtr<DepthStencil> depthStencil
+    const SPtr<Texture> renderTarget,
+    const SPtr<Texture> depthStencil
   ) override;
 
   void
   setRenderTargetsAndDepthStencil(
-    const Vector<SPtr<RenderTarget>>& renderTargets,
-    const SPtr<DepthStencil> depthStencil
+    const Vector<SPtr<Texture>>& renderTargets,
+    const SPtr<Texture> depthStencil
   ) override;
 
   void
   unsetRenderTargetAndDepthStencil() override;
 
   void
+  unsetTextures(uint32 n) override;
+
+  void
   setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology) override;
 
   void
-  clearRenderTarget(SPtr<RenderTarget> renderTarget) override;
+  clearRenderTarget(SPtr<Texture> renderTarget) override;
 
   void 
-  clearDepthStencil(SPtr<DepthStencil> depthStencil) override;
+  clearDepthStencil(SPtr<Texture> depthStencil) override;
 
   Vector2U
   getWindowSize(void* window);

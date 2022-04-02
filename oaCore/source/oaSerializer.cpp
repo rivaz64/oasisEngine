@@ -66,7 +66,7 @@ Serializer::encodeImage(SPtr<Image> image)
   file.write(reinterpret_cast<const char*>(&image->getSize()),
              sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
 
-  file.write(reinterpret_cast<const char*>(image->getPixels().data()),
+  file.write(reinterpret_cast<const char*>(image->getPixels()),
              image->getNumberOfBytes());
 }
 
@@ -82,7 +82,7 @@ Serializer::decodeImage()
 
   image->init();
 
-  file.read(reinterpret_cast<char*>(unconstPointer(image->getPixels().data())),
+  file.read(reinterpret_cast<char*>(unconstPointer(image->getPixels())),
              image->getNumberOfBytes());
 
   return image;

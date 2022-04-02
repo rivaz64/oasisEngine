@@ -28,24 +28,29 @@ class DX11Texture:
   void*
   getId() override;
 
-  void
-  initFromImage(SPtr<Image> image) override;
+  bool
+  init(const Vector2I& size,BIND::E bind, FORMAT::E format, const void* data = nullptr, uint32 pitch = 0) override;
 
-  void
-  initForDepthStencil(const Vector2U& size) override;
+  bool
+  createShaderResource(FORMAT::E format) override;
 
-  void
-  initForRenderTarget(const Vector2U& size) override;
+  bool
+  createRenderTarget(FORMAT::E format) override;
+
+  bool
+  createDepthStencil(FORMAT::E format) override;
 
  public:
 
-  ID3D11ShaderResourceView* m_shaderResourceView;
+  ID3D11Texture2D* m_texture = nullptr;
 
-  ID3D11Texture2D* m_texture;
+  ID3D11ShaderResourceView* m_shaderResourceView = nullptr;
+
+  ID3D11RenderTargetView* m_renderTargetView = nullptr;
+
+  ID3D11DepthStencilView* m_depthStencilView = nullptr;
 
   friend class DX11GraphicAPI;
-  friend class DX11DepthStencil;
-  friend class DX11RenderTarget;
 };
 
 }

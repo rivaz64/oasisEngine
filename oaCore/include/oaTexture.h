@@ -88,7 +88,8 @@ struct ShaderResourseViewDesc{
 /**
  * @brief class for all kinds of textures
 */
-class OA_CORE_EXPORT Texture
+class OA_CORE_EXPORT Texture :
+  public Resourse
 {
  public:
 
@@ -102,17 +103,39 @@ class OA_CORE_EXPORT Texture
 
  public:
 
-  virtual void
-  init(uint32 width,uint32 height){}
+  /**
+   * @brief initializes a texture
+   * @param size 
+   * @param bind 
+   * @param format 
+   * @param data 
+   * @param pitch 
+   * @return 
+  */
+  virtual bool
+  init(const Vector2I& size,BIND::E bind, FORMAT::E format,const void* data = nullptr, uint32 pitch = 0);
 
-  virtual void
-  initFromImage(SPtr<Image> /*image*/){}
+  /**
+   * @brief initializes the texture from an image
+   * @param image 
+  */
+  void
+  initFromImage(SPtr<Image> image);
 
-  virtual void
-  initForDepthStencil(const Vector2U& size) {}
+  virtual bool
+  createShaderResource(FORMAT::E format);
 
-  virtual void
-  initForRenderTarget(const Vector2U& size) {}
+  virtual bool
+  createRenderTarget(FORMAT::E format);
+
+  virtual bool
+  createDepthStencil(FORMAT::E format);
+
+  //virtual void
+  //initForDepthStencil(const Vector2U& size) {}
+  //
+  //virtual void
+  //initForRenderTarget(const Vector2U& size) {}
 
   virtual void
   release(){}
@@ -124,31 +147,21 @@ class OA_CORE_EXPORT Texture
   virtual void*
   getId();
 
-  FORCEINLINE SPtr<Image>
-  getimage(){
+  FORCEINLINE const FORMAT::E&
+  getFormat(){
+    return m_format;
+  }
+
+  FORCEINLINE const SPtr<Image>&
+  getImage(){
     return m_image;
   }
 
-  FORCEINLINE void
-  setimage(SPtr<Image> image){
-    m_image = image;
-  }
-
-  FORCEINLINE const String&
-  getName(){
-    return m_image->getName();
-  }
-
-  FORCEINLINE const FORMAT::E&
-  getFormat(){
-    return m_image->getFormat();
-  }
-
  protected:
-  /**
-   * @brief the image this texture is using
-  */
+
   SPtr<Image> m_image;
+
+  FORMAT::E m_format;
 
   friend class ResoureManager;
 

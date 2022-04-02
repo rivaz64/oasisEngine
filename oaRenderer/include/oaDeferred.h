@@ -25,10 +25,53 @@ class Deferred :
          SPtr<Camera> camForFrustrum, 
          const Vector4f& light,
          const Vector4f& config) override;
+  /**
+   * @brief the gBuffer pass
+   * @param torender 
+  */
+  void 
+  gBuffer(Vector<RenderData>& torender);
 
-  void gBuffer(Vector<RenderData>& torender);
-  void gTransparents(Vector<RenderData>& torender);
-  void lights();
+  /**
+   * @brief gBuffer for things with transparnecy
+   * @param torender 
+  */
+  void 
+  gTransparents(Vector<RenderData>& torender);
+
+  /**
+   * @brief draw debug meshes
+  */
+  void 
+  debug(Vector<RenderData>& toRender);
+
+  /**
+   * @brief screen space ambient oclution
+  */
+  void
+  ssao(const Vector4f& config);
+
+  /**
+   * @brief blurrs a texture
+  */
+  void
+  blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut, const Matrix3f& kernel);
+
+  /**
+   * @brief copys the texture from in to out
+   * @param textureIn 
+   * @param textureOut 
+  */
+  void
+  copy(SPtr<Texture> textureIn,SPtr<Texture> textureOut);
+
+  
+
+  /**
+   * @brief lights as screen space
+  */
+  void 
+  lights(const Vector3f& camLocation, const Vector4f& light);
 
   void
   setSize(const Vector2U& size) override;
@@ -43,15 +86,13 @@ class Deferred :
 
   SPtr<Texture> m_specularTexture;
 
-  SPtr<RenderTarget> m_colorRender;
+  SPtr<Texture> m_ssao;
 
-  SPtr<RenderTarget> m_normalRender;
+  Vector<SPtr<Texture>> m_gBuffer;
 
-  SPtr<RenderTarget> m_positionRender;
+  SPtr<Texture> m_renderTarget;
 
-  SPtr<RenderTarget> m_specularRender;
-
-  Vector<SPtr<RenderTarget>> m_gBuffer;
+  SPtr<Texture> m_depthStencil;
 
   SPtr<Mesh> screen;
 
@@ -69,9 +110,7 @@ class Deferred :
 
   SPtr<Buffer> m_size;
 
-  SPtr<Texture> m_depthTexture;
-
-  SPtr<Texture> m_renderTexture;
+  SPtr<Buffer> m_matrix;
 
   SPtr<RasterizerState> m_normalRasterizer;
 
@@ -79,10 +118,6 @@ class Deferred :
   SPtr<RasterizerState> m_hairRasterizer2;
 
   SPtr<RasterizerState> m_debugRasterizer;
-  
-  SPtr<RenderTarget> m_finalRender;
-
-  SPtr<DepthStencil> m_finalDepthStencil;
 
   SPtr<BlendState> m_blendState;
 };

@@ -225,18 +225,6 @@ DX11GraphicAPI::createSamplerState(const SamplerDesc& descriptor)
   return sampler;
 }
 
-SPtr<RenderTarget> 
-DX11GraphicAPI::createRenderTarget()
-{
-  return makeSPtr<DX11RenderTarget>();
-}
-
-SPtr<DepthStencil> 
-DX11GraphicAPI::createDepthStencil()
-{
-  return makeSPtr<DX11DepthStencil>();
-}
-
 SPtr<RasterizerState> DX11GraphicAPI::createRasterizerState()
 {
   return makeSPtr<DX11RasterizerState>();
@@ -323,23 +311,23 @@ DX11GraphicAPI::setBlendState(const SPtr<BlendState> blender)
 }
 
 void 
-DX11GraphicAPI::setRenderTarget(const SPtr<RenderTarget> renderTarget)
+DX11GraphicAPI::setRenderTarget(const SPtr<Texture> renderTarget)
 {
   m_context->OMSetRenderTargets( 
     1,
-    &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
+    &cast<DX11Texture>(renderTarget)->m_renderTargetView, 
     nullptr
   );
 }
 
 void
-DX11GraphicAPI::setRenderTargets(const Vector<SPtr<RenderTarget>>& renderTargets)
+DX11GraphicAPI::setRenderTargets(const Vector<SPtr<Texture>>& renderTargets)
 {
   SIZE_T numOfRenders = renderTargets.size();
   ID3D11RenderTargetView** renders = new ID3D11RenderTargetView*[numOfRenders];
 
   for(SIZE_T renderNum = 0; renderNum<numOfRenders; ++renderNum){
-    renders[renderNum] = cast<DX11RenderTarget>(renderTargets[renderNum])->m_renderTargetView;
+    renders[renderNum] = cast<DX11Texture>(renderTargets[renderNum])->m_renderTargetView;
   }
 
   m_context->OMSetRenderTargets( 
@@ -351,36 +339,36 @@ DX11GraphicAPI::setRenderTargets(const Vector<SPtr<RenderTarget>>& renderTargets
 
 void 
 DX11GraphicAPI::setRenderTargetAndDepthStencil(
-  const SPtr<RenderTarget> renderTarget, 
-  const SPtr<DepthStencil> depthStencil
+  const SPtr<Texture> renderTarget, 
+  const SPtr<Texture> depthStencil
 )
 {
   m_context->OMSetRenderTargets( 
     1,
-    &cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView
+    &cast<DX11Texture>(renderTarget)->m_renderTargetView, 
+    cast<DX11Texture>(depthStencil)->m_depthStencilView
   );
-  m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
+  //m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
 }
 
 void
 DX11GraphicAPI::setRenderTargetsAndDepthStencil(
-  const Vector<SPtr<RenderTarget>>& renderTargets, 
-  const SPtr<DepthStencil> depthStencil)
+  const Vector<SPtr<Texture>>& renderTargets, 
+  const SPtr<Texture> depthStencil)
 {
   SIZE_T numOfRenders = renderTargets.size();
   ID3D11RenderTargetView** renders = new ID3D11RenderTargetView*[numOfRenders];
 
   for(SIZE_T renderNum = 0; renderNum<numOfRenders; ++renderNum){
-    renders[renderNum] = cast<DX11RenderTarget>(renderTargets[renderNum])->m_renderTargetView;
+    renders[renderNum] = cast<DX11Texture>(renderTargets[renderNum])->m_renderTargetView;
   }
 
   m_context->OMSetRenderTargets( 
     numOfRenders,
     renders, 
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView
+    cast<DX11Texture>(depthStencil)->m_depthStencilView
   );
-  m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
+  //m_context->OMSetDepthStencilState(cast<DX11DepthStencil>(depthStencil)->m_depthStencilState, 1);
 
 }
 
@@ -391,6 +379,13 @@ DX11GraphicAPI::unsetRenderTargetAndDepthStencil()
   m_context->OMSetRenderTargets(0,0,0);
 }
 
+void DX11GraphicAPI::unsetTextures(uint32 n)
+{
+  Vector<ID3D11ShaderResourceView*> v;
+  v.resize(n,nullptr);
+  m_context->PSSetShaderResources(0,n,v.data());
+}
+
 void 
 DX11GraphicAPI::setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology)
 {
@@ -398,18 +393,18 @@ DX11GraphicAPI::setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology)
 }
 
 void 
-DX11GraphicAPI::clearRenderTarget(SPtr<RenderTarget> renderTarget)
+DX11GraphicAPI::clearRenderTarget(SPtr<Texture> renderTarget)
 {
   m_context->ClearRenderTargetView(
-    cast<DX11RenderTarget>(renderTarget)->m_renderTargetView, 
+    cast<DX11Texture>(renderTarget)->m_renderTargetView, 
     &m_backgroundColor.r );
 }
 
 void 
-DX11GraphicAPI::clearDepthStencil(SPtr<DepthStencil> depthStencil)
+DX11GraphicAPI::clearDepthStencil(SPtr<Texture> depthStencil)
 {
   m_context->ClearDepthStencilView(
-    cast<DX11DepthStencil>(depthStencil)->m_depthStencilView,
+    cast<DX11Texture>(depthStencil)->m_depthStencilView,
     D3D11_CLEAR_DEPTH, 
     1.0f, 
     0

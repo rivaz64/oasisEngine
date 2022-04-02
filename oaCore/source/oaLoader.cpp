@@ -10,8 +10,8 @@
 #include <assimp/postprocess.h>
 #include <stdlib.h>
 #include <freeimage\FreeImage.h>
-//#define STB_IMAGE_IMPLEMENTATION
-//#include <stb_image\stb_image.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image\stb_image.h>
 #include "oaPath.h"
 #include "oaMesh.h"
 #include "oaModel.h"
@@ -214,52 +214,59 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 bool
 loadImage(const Path& path){
   String s = StringUtilities::toString(path.getCompletePath());
-  FIBITMAP* dib(0);
-  FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+  //FIBITMAP* dib(0);
+  //FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+  //
+  //auto file = s.c_str();
+  //fif = FreeImage_GetFileType(file,0);
+  //
+  //if (fif == FIF_UNKNOWN){
+  //  
+  //  fif = FreeImage_GetFIFFromFilename(file);
+  //}
+  //
+  //if (fif == FIF_UNKNOWN){
+  //  //OA_WARNING_LOG("unknown format of image"+file);
+  //  return false;
+  //}
+  //  
+  //if (FreeImage_FIFSupportsReading(fif)) {
+  //  dib = FreeImage_Load(fif, file);
+  //  if (!dib){
+  //    //OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
+  //    return false;
+  //  }
+  //  dib = FreeImage_ConvertTo32Bits(dib);
+  //}
+  //
+  //
+  //
+  // auto image = makeSPtr<Image>(Vector2I(FreeImage_GetWidth(dib),FreeImage_GetHeight(dib)),
+  //                              FreeImage_GetBPP(dib),
+  //                              FORMAT::kB8G8R8A8UnormSRGB);
+  //
+  //image->fillFromPointer(FreeImage_GetBits(dib));
 
-  auto file = s.c_str();
-  fif = FreeImage_GetFileType(file,0);
-
-  if (fif == FIF_UNKNOWN){
-    
-    fif = FreeImage_GetFIFFromFilename(file);
-  }
-
-  if (fif == FIF_UNKNOWN){
-    //OA_WARNING_LOG("unknown format of image"+file);
-    return false;
-  }
-    
-  if (FreeImage_FIFSupportsReading(fif)) {
-    dib = FreeImage_Load(fif, file);
-    if (!dib){
-      //OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
-      return false;
-    }
-    dib = FreeImage_ConvertTo32Bits(dib);
-  }
-
-
-  
-   auto image = makeSPtr<Image>(Vector2I(FreeImage_GetWidth(dib),FreeImage_GetHeight(dib)),
-                                FreeImage_GetBPP(dib),
-                                FORMAT::kB8G8R8A8UnormSRGB);
-
-  image->fillFromPointer(FreeImage_GetBits(dib));
-
-  /*int32 desiredChanels = 4;
+  int32 desiredChanels = 4;
   int32 channels = 0;
-
-  image->m_pixels = stbi_load(s.c_str(),
-                           &image->m_width,
-                           &image->m_height,
+  
+  //image->m_pitch = 4;
+  int32 width;
+  int32 height;
+  uint8* pixels = stbi_load(s.c_str(),
+                           &width,
+                           &height,
                            &channels,
-                           desiredChanels);*/
+                           desiredChanels);
 
+  auto image = makeSPtr<Image>(Vector2I(width,height),8*4,FORMAT::kB8G8R8A8UnormSRGB);
+  image->fillFromPointer(pixels);
   if (image->getSize().x == 0 || image->getSize().y == 0){
     //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
     return false;
   }
+
+  //auto pitch = FreeImage_GetPitch(dib);
 
   image->setName(StringUtilities::toString(path.getName()));
 

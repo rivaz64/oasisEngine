@@ -585,7 +585,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
       serializer.encodeNumber(resourceManager.m_textures.size());
       for(auto& image: resourceManager.m_textures){
-        serializer.encodeImage(image.second->getimage());
+        serializer.encodeImage(image.second->getImage());
       }
 
       serializer.encodeNumber(resourceManager.m_materials.size());

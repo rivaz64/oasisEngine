@@ -12,6 +12,7 @@ namespace oaEngineSDK{
 
 void Logger::log(const String& message,LOGGER_CHANNEL::E channel)
 {
+  print(message);
   m_allLogs.push_back({message,channel});
 }
 
@@ -53,7 +54,7 @@ void Logger::flush()
       sChannel = "[WARNING]";
       break;
 
-    case LOGGER_CHANNEL::ERROR:
+    case LOGGER_CHANNEL::ERRORCODE:
       sChannel = "[ERROR]";
       break;
 

@@ -33,7 +33,7 @@ class Image :
 
   FORCEINLINE int32
   getPitch(){
-    return (m_size.x*m_bitsPerPixel)/8;
+    return m_pitch*m_size.x;//(m_size.x*m_bitsPerPixel)/8;
   }
 
   FORCEINLINE int32
@@ -61,13 +61,14 @@ class Image :
     return m_size;
   }
 
-  FORCEINLINE const Vector<uint8>&
+  FORCEINLINE const void*
   getPixels(){
-    return m_pixels;
+    return m_pixels.data();
   }
 
   FORCEINLINE void
   fillFromPointer(uint8* data){
+    //m_pixels = data;
     memcpy(unconstPointer(m_pixels.data()),data,getNumberOfBytes());
   }
 
@@ -88,6 +89,8 @@ class Image :
   */
   int32 m_bitsPerPixel;
 
+  int32 m_pitch;
+
   /**
    * @brief the format of the data
   */
@@ -97,7 +100,7 @@ class Image :
    * @brief the pixels of the image
   */
   Vector<uint8> m_pixels;  
-
+  //void* m_pixels; 
   
 };
 
