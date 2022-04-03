@@ -306,6 +306,20 @@ class OA_UTILITY_EXPORT Vector3f
     };
   }
 
+  /**
+   * @brief calculates the interpolation between a and b of c
+   * @param a 
+   * @param b 
+   * @param c 
+   * @return 
+  */
+  FORCEINLINE static float
+  getInterpolation(const Vector3f& a, const Vector3f& b, const Vector3f& c){
+    auto total = (b-a).magnitud();
+    auto partial = (c-a).magnitud();
+    return partial/total;
+  }
+
  public:
   static const Vector3f RIGHT;
   static const Vector3f LEFT;

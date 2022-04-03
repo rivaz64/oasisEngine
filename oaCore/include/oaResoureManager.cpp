@@ -12,6 +12,7 @@
 #include "oaShaderProgram.h"
 #include "oaStaticMesh.h"
 #include "oaOctree.h"
+#include "oaVertexBuffer.h"
 
 
 namespace oaEngineSDK{
@@ -46,7 +47,6 @@ void
 ResoureManager::onStartUp()
 {
   /*
-  generateCube();
   generateCircle(36);
   generateCone(36);
   generateCone(36);
@@ -427,36 +427,36 @@ ResoureManager::generateCube()
 
   //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
 
-  Octree tree;
-  auto planes = tree.getPlanes();
-  Vector<uint32> indexFront;
-  Vector<uint32> indexBack;
-  Vector<Vector<uint32>> meshes;
-  meshes.push_back(index);
-  Vector<Vector<uint32>> newMeshes;
-  for(auto& plane: planes){
-    for(Vector<uint32>& m : meshes){
-      indexBack.clear();
-      indexFront.clear();
-      divide(plane, vertices,m,indexBack,indexFront);
-      newMeshes.push_back(indexBack);
-      newMeshes.push_back(indexFront);
-    }
-    meshes = newMeshes;
-    newMeshes.clear();
-  }
-
-  for(int32 i = 0; i<8; ++i){
-    String name = "cube"+StringUtilities::intToString(i);
-    m_models.insert({name,makeSPtr<Model>()});
-    auto& model = m_models[name];
-    model->setName(name);
-    model->addMaterial(makeSPtr<Material>());
-    model->addMesh(makeSPtr<Mesh>());
-    auto& mesh = model->getMesh(0);
-    mesh->setIndex(meshes[i]);
-    mesh->create(vertices.data(),sizeof(Vector4f),vertices.size());
-  }
+  //Octree tree;
+  //auto planes = tree.getPlanes();
+  //Vector<uint32> indexFront;
+  //Vector<uint32> indexBack;
+  //Vector<Vector<uint32>> meshes;
+  //meshes.push_back(index);
+  //Vector<Vector<uint32>> newMeshes;
+  //for(auto& plane: planes){
+  //  for(Vector<uint32>& m : meshes){
+  //    indexBack.clear();
+  //    indexFront.clear();
+  //    divide(plane, vertices,m,indexBack,indexFront);
+  //    newMeshes.push_back(indexBack);
+  //    newMeshes.push_back(indexFront);
+  //  }
+  //  meshes = newMeshes;
+  //  newMeshes.clear();
+  //}
+  
+ 
+  String name = "cube";//+StringUtilities::intToString(i);
+  m_models.insert({name,makeSPtr<Model>()});
+  auto& model = m_models[name];
+  model->setName(name);
+  model->addMaterial(makeSPtr<Material>());
+  model->addMesh(makeSPtr<Mesh>());
+  auto& mesh = model->getMesh(0);
+  mesh->setIndex(index);
+  mesh->create(vertices.data(),sizeof(Vector4f),vertices.size());
+  
 
   
 
@@ -647,6 +647,52 @@ ResoureManager::generateDefaultMaterials()
   //material->setName("debug");
   //material->setShader(m_shaderPrograms["debug"]);
   //m_materials.insert({material->getName(),material});
+}
+
+Vector<SPtr<Model>>
+ResoureManager::separate(SPtr<Model> model)
+{
+  auto& mesh = model->getMesh(0);
+  auto& indices = mesh->getIndex();
+  auto& vertices = mesh->getVertex();
+  
+  Octree tree;
+  auto planes = tree.getPlanes();
+  Vector<uint32> indexFront;
+  Vector<uint32> indexBack;
+  Vector<Vector<uint32>> meshes;
+  meshes.push_back(indices);
+  Vector<Vector<uint32>> newMeshes;
+  for(auto& plane: planes){
+    for(Vector<uint32>& m : meshes){
+      indexBack.clear();
+      indexFront.clear();
+      divide(plane, vertices,m,indexBack,indexFront);
+      newMeshes.push_back(indexBack);
+      newMeshes.push_back(indexFront);
+    }
+    meshes = newMeshes;
+    newMeshes.clear();
+  }
+
+  Vector<SPtr<Model>> models;
+  auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+  vertexB->init(vertices.data(),sizeof(Vector4f),vertices.size());
+
+  for(int32 i = 0; i<8; ++i){
+    String name = "cube"+StringUtilities::intToString(i);
+    auto model = makeSPtr<Model>();
+    model->setName(name);
+    model->addMaterial(makeSPtr<Material>());
+    model->addMesh(makeSPtr<Mesh>());
+    auto& newMesh = model->getMesh(0);
+    newMesh->setIndex(meshes[i]);
+    newMesh->create(vertexB);
+    models.push_back(model);
+  }
+
+  return models;
+  
 }
 
 }

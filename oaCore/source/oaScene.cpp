@@ -31,11 +31,12 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
 
     actorTransform = actor->getGlobalTransform();
   
-    auto component = actor->getComponent<GraphicsComponent>();
-    if(component){
-      auto model = component->getModel();
+    auto components = actor->getComponents<GraphicsComponent>();
+    for(auto& component : components){
+      auto meshComponent = cast<GraphicsComponent>(component);
+      auto model = meshComponent->getModel();
       if(model){
-        finalTransform = actorTransform*component->getTransform().getMatrix();
+        finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
 
         SIZE_T meshes = model->getNumOfMeshes();
         for(SIZE_T i = 0; i<meshes;++i){

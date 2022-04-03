@@ -3,12 +3,25 @@
 
 namespace oaEngineSDK{
 
+Vertex
+interpolateVertex(const Vertex& v1,const Vertex& v2, float w){
+  Vertex vertex;
+  vertex.location = Vector4f::interpolate(v1.location,v2.location,w);
+  vertex.textureCord = Vector2f::interpolate(v1.textureCord,v2.textureCord,w);
+  vertex.normal = Vector4f::interpolate(v1.normal,v2.normal,w);
+  vertex.tangent = Vector4f::interpolate(v1.tangent,v2.tangent,w);
+  vertex.bitangent = Vector4f::interpolate(v1.bitangent,v2.bitangent,w);
+  return vertex;
+}
+
 bool
 analizeLine(const Plane& plane, const Vector3f& point1, const Vector3f& point2, Vector<Vector3f>& points){
   
   Vector3f intersection;
   if(Math::distance(plane,point1)*Math::distance(plane,point2) < 0.0f){
     Math::intersect(plane,Line(point1,point2),intersection);
+    //auto w = Vector3f::getInterpolation(point1.,point2.,intersection);
+    //points.push_back(interpolateVector3f(point1,point2,w));
     points.push_back(intersection);
     return  true;
   }

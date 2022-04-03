@@ -78,11 +78,11 @@ class OA_CORE_EXPORT Actor :
   }
 
   template<class T>
-  Vector<Component>
+  Vector<SPtr<Component>>
   getComponents(){
     T temp;
     if(m_components.find(temp.getType()) == m_components.end()){
-      return SPtr<T>();
+      return Vector<SPtr<Component>>();
     }
     return m_components[temp.getType()];
   }

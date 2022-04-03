@@ -324,23 +324,31 @@ void oaEngineSDK::TestApp::drawImGui()
     }
 
     SPtr<Component> component;
-    component = m_selectedActor->getComponent<GraphicsComponent>();
-    if (component && ImGui::CollapsingHeader("models")){
-      auto graphicsComponent = cast<GraphicsComponent>(component);
-      if(ImGui::Button("select model") && m_selectedModel.get()){
-        graphicsComponent->setModel(m_selectedModel);
+    Vector<SPtr<Component>> components;
+    components = m_selectedActor->getComponents<GraphicsComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("models"+StringUtilities::intToString(i)).c_str())){
+          auto graphicsComponent = cast<GraphicsComponent>(components[i]);
+          if(ImGui::Button("select model") && m_selectedModel.get()){
+            graphicsComponent->setModel(m_selectedModel);
+          }
+          auto& model = graphicsComponent->getModel();
+          if(model){
+            ImGui::Text(model->getName().c_str());
+            auto& transform = graphicsComponent->getTransform();
+            ImGui::DragFloat3("location Model",&transform.getLocation().x);
+            ImGui::DragFloat3("scale Model",&transform.getScale().x);
+            auto vec = transform.getRotation()*Math::RAD_TO_DEG;
+            if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+              transform.setRotation(vec*Math::DEG_TO_RAD);
+            };
+          }
+        }
+        
       }
-      auto& model = graphicsComponent->getModel();
-      if(model){
-        ImGui::Text(model->getName().c_str());
-        auto& transform = graphicsComponent->getTransform();
-        ImGui::DragFloat3("location Model",&transform.getLocation().x);
-        ImGui::DragFloat3("scale Model",&transform.getScale().x);
-        auto vec = transform.getRotation()*Math::RAD_TO_DEG;
-        if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          transform.setRotation(vec*Math::DEG_TO_RAD);
-        };
-      }
+      
 
     }
 
@@ -709,6 +717,20 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button("transparent")){
       m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["transparent"]);
     }
+  }
+  ImGui::End();
+
+  ImGui::Begin("spatial Separation");
+  if(m_selectedModel && ImGui::Button("divide")){
+    auto models = resourceManager.separate(m_selectedModel);
+    auto actor = makeSPtr<Actor>();
+    for(auto& model : models){
+      auto component = makeSPtr<GraphicsComponent>();
+      component->setModel(model);
+      actor->attachComponent(component);
+    }
+    actor->setName("cube");
+    m_actualScene->getRoot()->attach(actor);
   }
   ImGui::End();
 }

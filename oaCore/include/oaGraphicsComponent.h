@@ -45,18 +45,11 @@ class OA_CORE_EXPORT GraphicsComponent :
 {
  public:
 
-  void
-  onAttach(SPtr<Actor> actor);
+  //void
+  //onAttach(SPtr<Actor> actor);
 
   COMPONENT_TYPE::E
   getType() override; 
-
-  /**
-   * @brief attach a model componet to the actual component
-   * @param component 
-  */
-  void
-  attach(SPtr<GraphicsComponent> component);
 
   /**
    * @brief updates the transforms of the 

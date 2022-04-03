@@ -65,7 +65,25 @@ Mesh::create(void* data, SIZE_T vertexSize, SIZE_T numOfVertex)
 {
   create();
 
+  m_vertices.resize(vertexSize*numOfVertex);
+
+  m_vertices.data();
+
+  void* vertexData = reinterpret_cast<void*>(m_vertices.data());
+
+  memcpy(vertexData,data,vertexSize*numOfVertex);
+
   m_vertexB->init(data,vertexSize,numOfVertex);
+}
+
+void
+Mesh::create(SPtr<VertexBuffer> vertexB){
+
+  m_vertexB = vertexB;
+
+  m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
+
+  m_indexB->init(m_index);
 }
 
 }

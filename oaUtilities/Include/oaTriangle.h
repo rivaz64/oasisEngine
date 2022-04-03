@@ -8,8 +8,41 @@
 
 #include "oaPrerequisitesUtilities.h"
 #include "oaVector3f.h"
-
+#include "oaVector4f.h"
 namespace oaEngineSDK{
+
+
+/**
+ * @brief a structure for all the information at a certain point of a Mesh
+*/
+struct Vertex{
+  
+  /**
+   * @brief the location in a tridimencional space of this vetrex
+  */
+  Vector4f location;
+
+  /**
+   * @brief the normal at this vertex
+  */
+  Vector4f normal;
+
+  /**
+   * @brief the tangent at this vertex
+  */
+  Vector4f tangent;
+
+  /**
+   * @brief the bitangent at this vertex
+  */
+  Vector4f bitangent;
+
+  /**
+   * @brief the part of the texture that is going to be drawn at a certain point
+  */
+  Vector2f textureCord;
+
+};
 
 /**
  * @brief a geometrical triangle to be divided

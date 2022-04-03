@@ -14,6 +14,7 @@
 #include <oaMatrix4f.h>
 #include <oaSphere.h>
 #include <oaAABB.h>
+#include <oaTriangle.h>
 
 namespace oaEngineSDK{
 /**
@@ -47,38 +48,6 @@ struct SimpleVertex{
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
-};
-
-/**
- * @brief a structure for all the information at a certain point of a Mesh
-*/
-struct Vertex{
-  
-  /**
-   * @brief the location in a tridimencional space of this vetrex
-  */
-  Vector4f location;
-
-  /**
-   * @brief the normal at this vertex
-  */
-  Vector4f normal;
-
-  /**
-   * @brief the tangent at this vertex
-  */
-  Vector4f tangent;
-
-  /**
-   * @brief the bitangent at this vertex
-  */
-  Vector4f bitangent;
-
-  /**
-   * @brief the part of the texture that is going to be drawn at a certain point
-  */
-  Vector2f textureCord;
-
 };
 
 /**
@@ -147,6 +116,9 @@ class OA_CORE_EXPORT Mesh
   void
   create(void* data, SIZE_T vertexSize, SIZE_T dataSize);
 
+  void
+  create(SPtr<VertexBuffer> m_vertexB);
+
   /**
    * @brief sets the buffers to the GPU
   */
@@ -204,6 +176,12 @@ class OA_CORE_EXPORT Mesh
     m_index = index;
   }
 
+  //template <class T>
+  FORCEINLINE Vector<Vector4f>&
+  getVertex(){
+    return *reinterpret_cast<Vector<Vector4f>*>(&m_vertices);
+  }
+
   FORCEINLINE const Sphere&
   getBoundingSphere(){
     return m_boundingSphere;
@@ -214,7 +192,7 @@ class OA_CORE_EXPORT Mesh
     return m_boundingBox;
   }
 
- protected:
+ public:
 
   /**
    * @brief the number of indices this mesh has
@@ -237,9 +215,16 @@ class OA_CORE_EXPORT Mesh
   Sphere m_boundingSphere;
 
   /**
+   * @brief the vertices of this mesh
+  */
+  Vector<char> m_vertices;
+
+  /**
    * @brief the bounding box of this mesh
   */
   AABB m_boundingBox;
+
+  friend class ResourceManager;
 };
 
 }

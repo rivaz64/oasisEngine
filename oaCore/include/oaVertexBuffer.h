@@ -28,7 +28,7 @@ class OA_CORE_EXPORT VertexBuffer
    * @return if the buffer initialized correctly
   */
   virtual bool
-  init(void* /*data*/, uint32 /*vertexSize*/, SIZE_T /*numberOfVertices*/) { return true; }
+  init(void* data, uint32 vertexSize, SIZE_T numberOfVertices) { return true; }
 
   /**
    * @brief set this buffer to be used

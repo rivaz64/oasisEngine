@@ -11,12 +11,6 @@
 
 namespace oaEngineSDK{
 
-void 
-GraphicsComponent::onAttach(SPtr<Actor> actor)
-{
-  //ResoureManager::instancePtr()->rendereableActors.push_back(actor);
-}
-
 COMPONENT_TYPE::E
 GraphicsComponent::getType()
 {

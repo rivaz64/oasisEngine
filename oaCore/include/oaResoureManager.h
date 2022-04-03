@@ -111,6 +111,13 @@ class OA_CORE_EXPORT ResoureManager :
   void
   generateDefaultMaterials();
 
+  /**
+   * @brief does spatial separation to a model
+   * @param model 
+  */
+  Vector<SPtr<Model>>
+  separate(SPtr<Model> model);
+
  public:
 
   /**
