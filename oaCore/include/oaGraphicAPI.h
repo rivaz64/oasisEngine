@@ -268,6 +268,14 @@ class OA_CORE_EXPORT GraphicAPI :
   setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E /*topology*/){}
 
   /**
+   * @brief loads a .dds if the graphics api can
+   * @param path 
+   * @return 
+  */
+  virtual bool
+  loadDDS(const Path& path);
+
+  /**
    * @brief initializes everything needed for the window
    * @param window 
   */

@@ -9,20 +9,22 @@ interpolateVertex(const Vertex& v1,const Vertex& v2, float w){
   vertex.location = Vector4f::interpolate(v1.location,v2.location,w);
   vertex.textureCord = Vector2f::interpolate(v1.textureCord,v2.textureCord,w);
   vertex.normal = Vector4f::interpolate(v1.normal,v2.normal,w);
-  vertex.tangent = Vector4f::interpolate(v1.tangent,v2.tangent,w);
-  vertex.bitangent = Vector4f::interpolate(v1.bitangent,v2.bitangent,w);
+  vertex.tangent = Vector4f(7,7,7,7);//Vector4f::interpolate(v1.tangent,v2.tangent,w);
+  vertex.bitangent = Vector4f(7,7,7,7);//Vector4f::interpolate(v1.bitangent,v2.bitangent,w);
   return vertex;
 }
 
 bool
-analizeLine(const Plane& plane, const Vector3f& point1, const Vector3f& point2, Vector<Vector3f>& points){
+analizeLine(const Plane& plane, const Vertex& point1, const Vertex& point2, Vector<Vertex>& points){
   
   Vector3f intersection;
-  if(Math::distance(plane,point1)*Math::distance(plane,point2) < 0.0f){
-    Math::intersect(plane,Line(point1,point2),intersection);
-    //auto w = Vector3f::getInterpolation(point1.,point2.,intersection);
-    //points.push_back(interpolateVector3f(point1,point2,w));
-    points.push_back(intersection);
+  if(Math::distance(plane,point1.location.xyz)*Math::distance(plane,point2.location.xyz) < 0.0f){
+    Math::intersect(plane,Line(point1.location.xyz,point2.location.xyz),intersection);
+    auto w = Vector3f::getInterpolation(point1.location.xyz,point2.location.xyz,intersection);
+    auto inter = interpolateVertex(point1,point2,w);
+    //inter.location = Vector4f(intersection,0);
+    points.push_back(inter);
+    //points.push_back(intersection);
     return  true;
   }
   return false;
@@ -30,7 +32,7 @@ analizeLine(const Plane& plane, const Vector3f& point1, const Vector3f& point2, 
 
 bool 
 Triangle::separate(const Plane& plane,
-           Vector<Vector3f>& points, 
+           Vector<Vertex>& points, 
            Vector<uint32>& finalIndexPositiveSide,
            Vector<uint32>& finalIndexNegativeSide,
            bool& isTriFront)
@@ -39,9 +41,9 @@ Triangle::separate(const Plane& plane,
  
   int32 otherside;
   
-  float dist1 = Math::distance(plane,m_point1);
-  float dist2 = Math::distance(plane,m_point2);
-  float dist3 = Math::distance(plane,m_point3);
+  float dist1 = Math::distance(plane,m_point1.location.xyz);
+  float dist2 = Math::distance(plane,m_point2.location.xyz);
+  float dist3 = Math::distance(plane,m_point3.location.xyz);
   isTriFront = dist1>0;
   Vector<bool> isFront;
 

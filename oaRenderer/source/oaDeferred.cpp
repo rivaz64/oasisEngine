@@ -186,9 +186,9 @@ Deferred::render(SPtr<Scene> scene,
   
   m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
-  debug(toRender);
-  //gBuffer(toRender);
-  //copy(m_colorTexture,m_renderTarget);
+  //debug(toRender);
+  gBuffer(toRender);
+  copy(m_colorTexture,m_renderTarget);
   //gTransparents(transparents);
   
   //lights(camForView->getLocation(),light);
@@ -247,8 +247,9 @@ Deferred::gBuffer(Vector<RenderData>& toRender)
     renderData.m_material->set();
     resourseManager.m_shaderPrograms["GBuffer"]->set();
     graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.unsetTextures(m_gBuffer.size());
   }
-  graphicsAPI.unsetTextures(m_gBuffer.size());
+  
 }
 
 void Deferred::gTransparents(Vector<RenderData>& transparents)

@@ -93,14 +93,14 @@ BaseApp::run()
 
     postInit();
 
-    try {
+    //try {
       mainLoop();
-    }
-    catch (...) {
-      Logger::instance().flush();
-      return;
-    }
-    Logger::instance().flush();
+    //}
+    //catch (...) {
+    //  Logger::instance().flush();
+    //  return;
+    //}
+    //Logger::instance().flush();
 
   }
 }

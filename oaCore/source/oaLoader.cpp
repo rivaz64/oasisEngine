@@ -213,6 +213,14 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
 bool
 loadImage(const Path& path){
+
+  if(path.getExtencion()==L".dds"){
+    if(GraphicAPI::instance().loadDDS(path)){
+      return true;
+    }
+  }
+
+
   String s = StringUtilities::toString(path.getCompletePath());
   //FIBITMAP* dib(0);
   //FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
@@ -247,6 +255,8 @@ loadImage(const Path& path){
   //
   //image->fillFromPointer(FreeImage_GetBits(dib));
 
+  
+
   int32 desiredChanels = 4;
   int32 channels = 0;
   
@@ -258,8 +268,11 @@ loadImage(const Path& path){
                            &height,
                            &channels,
                            desiredChanels);
-
-  auto image = makeSPtr<Image>(Vector2I(width,height),8*4,FORMAT::kB8G8R8A8UnormSRGB);
+  if (pixels == nullptr){
+    OA_WARNING_LOG(StringUtilities::toString(path.getCompletePath()) + " is an invalid image");
+    return false;
+  }
+  auto image = makeSPtr<Image>(Vector2I(width,height),32,FORMAT::kB8G8R8A8UnormSRGB);
   image->fillFromPointer(pixels);
   if (image->getSize().x == 0 || image->getSize().y == 0){
     //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
@@ -318,8 +331,8 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
 
-    if(loadImage(texturePath)){
-      mat->setTexture("diffuse", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
+    if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
+      mat->setTexture("diffuse", manager.m_textures[StringUtilities::toString(texturePath.getName())]);
     }
 
     textureName = MaterialName+L"N";
@@ -331,17 +344,17 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     WString normalName = StringUtilities::toWString(notMyString.C_Str());
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
 
-    if(loadImage(texturePath)){
+    if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
       mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
     }
 
-    textureName = MaterialName+L"S";
-
-    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
-
-    if(loadImage(texturePath)){
-      mat->setTexture("specular",manager.m_textures[ StringUtilities::toString(textureName)]);
-    }
+    //textureName = MaterialName+L"S";
+    //
+    //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+    //
+    //if(loadImage(texturePath)){
+    //  mat->setTexture("specular",manager.m_textures[ StringUtilities::toString(textureName)]);
+    //}
 
     mat->setShader(manager.m_shaderPrograms["GBuffer"]);
 

@@ -6,9 +6,9 @@
 
 #define OA_DEBUG_LOG(message) Logger::instance().log(String(message)+" at file: "+__FILE__+" in line "+StringUtilities::intToString(__LINE__) + " at function "+__PRETTY_FUNCTION__,LOGGER_CHANNEL::DEBUG);
 
-#define OA_WARNING_LOG(message) Logger::instance().log(String(message)+" at file: "+__FILE__+" in line "+toString(__LINE__) + " at function "+__PRETTY_FUNCTION__,LOGGER_CHANNEL::WARNING);
+#define OA_WARNING_LOG(message) Logger::instance().log(String(message)+" at file: "+__FILE__+" in line "+StringUtilities::intToString(__LINE__) + " at function "+__PRETTY_FUNCTION__,LOGGER_CHANNEL::WARNING);
 
-#define OA_ERROR_LOG(message) Logger::instance().log(String(message)+" at file: "+__FILE__+" in line "+toString(__LINE__) + " at function "+__PRETTY_FUNCTION__,LOGGER_CHANNEL::ERRORCODE);
+#define OA_ERROR_LOG(message) Logger::instance().log(String(message)+" at file: "+__FILE__+" in line "+StringUtilities::intToString(__LINE__) + " at function "+__PRETTY_FUNCTION__,LOGGER_CHANNEL::ERRORCODE);
 
 #pragma once
 

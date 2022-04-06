@@ -21,6 +21,8 @@
 #include "oaResoureManager.h"
 #include "oaRenderer.h"
 #include "oaDX11Flags.h"
+#include "oaPath.h"
+#include "oaResoureManager.h"
 
 
 namespace oaEngineSDK{
@@ -409,6 +411,34 @@ DX11GraphicAPI::clearDepthStencil(SPtr<Texture> depthStencil)
     1.0f, 
     0
   );
+}
+
+bool 
+DX11GraphicAPI::loadDDS(const Path& path)
+{
+  ID3D11ShaderResourceView* srv;
+  String s = StringUtilities::toString(path.getCompletePath());
+  LPCTSTR file = s.c_str();
+  HRESULT hr = D3DX11CreateShaderResourceViewFromFile( m_device, 
+                                                       file, 
+                                                       NULL, 
+                                                       NULL,
+                                                       &srv, 
+                                                       NULL );
+  if(FAILED(hr)){
+    return false;
+  }
+  auto& graphicsApi = GraphicAPI::instance();
+  auto texture = createTexture();
+  cast<DX11Texture>(texture)->m_shaderResourceView = srv;
+  auto& instance = ResoureManager::instance();
+  auto textureName = StringUtilities::toString(path.getName());
+  texture->setName(textureName);
+  instance.m_textures.insert({textureName,texture});
+  //ID3D11Resource* tempResource;
+  //srv->GetResource(&tempResource);
+  //D3DX11CreateTextureFromFile()
+  return true;
 }
 
 Vector2U 

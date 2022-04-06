@@ -99,6 +99,12 @@ GraphicAPI::getBackBuffer()
   return makeSPtr<Texture>();
 }
 
+bool 
+GraphicAPI::loadDDS(const Path& path)
+{
+  return false;
+}
+
 Vector2U
 GraphicAPI::getWindowSize(void* /*window*/)
 {

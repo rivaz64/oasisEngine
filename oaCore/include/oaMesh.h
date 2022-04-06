@@ -177,9 +177,9 @@ class OA_CORE_EXPORT Mesh
   }
 
   //template <class T>
-  FORCEINLINE Vector<Vector4f>&
+  FORCEINLINE Vector<Vertex>&
   getVertex(){
-    return *reinterpret_cast<Vector<Vector4f>*>(&m_vertices);
+    return *reinterpret_cast<Vector<Vertex>*>(&m_vertices);
   }
 
   FORCEINLINE const Sphere&

@@ -33,7 +33,7 @@ class Image :
 
   FORCEINLINE int32
   getPitch(){
-    return m_pitch*m_size.x;//(m_size.x*m_bitsPerPixel)/8;
+    return (m_size.x*m_bitsPerPixel)/8;
   }
 
   FORCEINLINE int32

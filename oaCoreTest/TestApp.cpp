@@ -296,6 +296,13 @@ void oaEngineSDK::TestApp::drawImGui()
   }
   ImGui::End();
   */
+  ImGui::Begin("shaders");
+  if(ImGui::Button("ReloadShaders")){
+    resourceManager.loadDefaultShaders();
+  }
+  ImGui::End();
+
+ 
 
   ImGui::Begin("Actor atributes");
   if(m_selectedActor){
@@ -716,6 +723,34 @@ void oaEngineSDK::TestApp::drawImGui()
     }
     if(ImGui::Button("transparent")){
       m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["transparent"]);
+    }
+  }
+  ImGui::End();
+
+  ImGui::Begin("material textures");
+  if(m_selectedMaterial){
+
+    if (ImGui::CollapsingHeader("add")){
+      ImGui::InputText("new",imguiString,64);
+      if(m_selectedTexture){
+        ImGui::Image(m_selectedTexture->getId(),ImVec2(100,100));
+      }
+      if(ImGui::Button("add texture")){
+        m_selectedMaterial->setTexture(imguiString,m_selectedTexture);
+      }
+    }
+    
+    for(auto& textureChannel : m_selectedMaterial->getTextureChannels()){
+      if(ImGui::Button(textureChannel.c_str()) && m_selectedTexture){
+        m_selectedMaterial->setTexture(textureChannel,m_selectedTexture);
+      }
+      auto texture = m_selectedMaterial->getTexture(textureChannel);
+      if(texture){
+        ImGui::Image(texture->getId(),ImVec2(100,100));
+      }
+      //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
+      //  m_selectedTexture = texture.second;
+      //}
     }
   }
   ImGui::End();

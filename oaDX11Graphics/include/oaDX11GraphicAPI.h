@@ -126,8 +126,11 @@ class DX11GraphicAPI :
   void 
   clearDepthStencil(SPtr<Texture> depthStencil) override;
 
+  bool
+  loadDDS(const Path& path) override;
+
   Vector2U
-  getWindowSize(void* window);
+  getWindowSize(void* window) override;
 
   void
   setViewport(const Vector2U& size) override;

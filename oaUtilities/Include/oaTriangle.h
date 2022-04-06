@@ -16,7 +16,10 @@ namespace oaEngineSDK{
  * @brief a structure for all the information at a certain point of a Mesh
 */
 struct Vertex{
-  
+  Vertex() = default;
+
+  Vertex(const Vector4f& _location,const Vector4f& _normal,const Vector2f& _textureCord) :
+    location(_location), normal(_normal),textureCord(_textureCord){}
   /**
    * @brief the location in a tridimencional space of this vetrex
   */
@@ -52,7 +55,7 @@ class OA_UTILITY_EXPORT Triangle
  public:
   Triangle() = default;
 
-  Triangle(const Vector3f& point1, const Vector3f& point2, const Vector3f& point3) :
+  Triangle(const Vertex& point1, const Vertex& point2, const Vertex& point3) :
     m_point1(point1), m_point2(point2), m_point3(point3) {}
 
   /**
@@ -61,7 +64,7 @@ class OA_UTILITY_EXPORT Triangle
   */
   bool
   separate(const Plane& plane,
-           Vector<Vector3f>& points, 
+           Vector<Vertex>& points, 
            Vector<uint32>& finalIndexPositiveSide,
            Vector<uint32>& finalIndexNegativeSide,
            bool& isTriFront);
@@ -69,9 +72,9 @@ class OA_UTILITY_EXPORT Triangle
   
  private:
 
-  Vector3f m_point1;
-  Vector3f m_point2;
-  Vector3f m_point3;
+  Vertex m_point1;
+  Vertex m_point2;
+  Vertex m_point3;
 
 };
 
