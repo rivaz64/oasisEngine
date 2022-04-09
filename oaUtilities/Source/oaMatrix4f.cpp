@@ -77,6 +77,8 @@ Matrix4f::operator*=(float m)
 Vector4f
 Matrix4f::operator*(const Vector4f& v) const
 {
+  //auto mat = this->transposed();
+  //return Vector4f(mat.row1.dot(v),mat.row2.dot(v),mat.row3.dot(v),mat.row4.dot(v));
   return Vector4f(row1.dot(v),row2.dot(v),row3.dot(v),row4.dot(v));
 }
 Matrix4f

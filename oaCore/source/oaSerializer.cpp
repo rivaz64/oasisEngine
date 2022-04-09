@@ -172,7 +172,9 @@ Serializer::encodeModel(SPtr<Model> model)
 
     file.write(reinterpret_cast<const char*>(vertexData),sizeof(Vertex)*vertexNum);
 
-    encodeString(model->getMaterial(meshN)->getName());
+    auto matName = model->getMaterial(meshN)->getName();
+    if(matName != "")
+    encodeString(matName);
   }
 }
 

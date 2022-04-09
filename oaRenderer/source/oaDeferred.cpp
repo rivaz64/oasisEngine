@@ -72,6 +72,7 @@ Deferred::onStartUp()
   m_positionTexture = graphicsAPI.createTexture();
   m_specularTexture = graphicsAPI.createTexture();
   m_ssao = graphicsAPI.createTexture();
+  m_blur = graphicsAPI.createTexture();
 
   m_blendState = graphicsAPI.createBlendState();
   m_blendState->init();
@@ -188,7 +189,7 @@ Deferred::render(SPtr<Scene> scene,
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
   //debug(toRender);
   gBuffer(toRender);
-  copy(m_colorTexture,m_renderTarget);
+  //copy(m_specularTexture,m_renderTarget);
   //gTransparents(transparents);
   
   //lights(camForView->getLocation(),light);
@@ -197,10 +198,11 @@ Deferred::render(SPtr<Scene> scene,
   //graphicsAPI.setRenderTarget(m_renderTarget);
 
   
-  //ssao(config);
-  //float n = 1.f/9.f;
+  ssao(config);
+  float n = 1.f/9.f;
+  blur(m_ssao,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
+  lights(camForView->getViewMatrix()*light);
   //
-  //blur(m_ssao,m_renderTarget,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
   //copy(m_ssao,m_renderTarget);
   //
   
@@ -329,11 +331,9 @@ Deferred::ssao( const Vector4f& config)
 
   graphicsAPI.setRenderTarget(m_ssao);
 
-  graphicsAPI.setTexture(m_colorTexture,0);
-  graphicsAPI.setTexture(m_normalTexture,1);
-  graphicsAPI.setTexture(m_positionTexture,2);
-  graphicsAPI.setTexture(m_specularTexture,3);
-  graphicsAPI.setTexture(m_depthStencil,4);
+  graphicsAPI.setTexture(m_normalTexture,0);
+  graphicsAPI.setTexture(m_positionTexture,1);
+  graphicsAPI.setTexture(m_depthStencil,2);
   screen->set();
   
   graphicsAPI.draw(6);
@@ -341,13 +341,13 @@ Deferred::ssao( const Vector4f& config)
 }
 
 void
-Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut, const Matrix3f& kernel)
+Deferred::blur(SPtr<Texture> texture, const Matrix3f& kernel)
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   resourseManager.m_shaderPrograms["convolution"]->set();
-  graphicsAPI.setRenderTarget(m_renderTarget);
+  graphicsAPI.setRenderTarget(m_blur);
   graphicsAPI.setTexture(m_ssao,0);
   Matrix4f newKernel(kernel);
   m_matrix->write(newKernel.getData());
@@ -357,6 +357,7 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut, const Matrix3f&
   screen->set();
   
   graphicsAPI.draw(6);
+  copy(m_blur,texture);
   //auto& resourseManager = ResoureManager::instance();
   //auto& graphicsAPI = GraphicAPI::instance();
   //graphicsAPI.unsetRenderTargetAndDepthStencil();
@@ -392,18 +393,15 @@ Deferred::copy(SPtr<Texture> textureIn, SPtr<Texture> textureOut)
 
 
 void
-Deferred::lights(const Vector3f& camLocation, const Vector4f& light)
+Deferred::lights(const Vector4f& light)
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
 
   resourseManager.m_shaderPrograms["lights"]->set();
   
-  m_viewLocationBuffer->write(&camLocation);
-  graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
-  
   m_LightLocation->write(&light);
-  graphicsAPI.setPSBuffer(m_LightLocation,1);
+  graphicsAPI.setPSBuffer(m_LightLocation,0);
   
   
   graphicsAPI.setPSBuffer(m_size,3);
@@ -412,7 +410,8 @@ Deferred::lights(const Vector3f& camLocation, const Vector4f& light)
   graphicsAPI.setTexture(m_normalTexture,1);
   graphicsAPI.setTexture(m_positionTexture,2);
   graphicsAPI.setTexture(m_specularTexture,3);
-  graphicsAPI.setTexture(m_depthStencil,4);
+  graphicsAPI.setTexture(m_ssao,4);
+  graphicsAPI.setTexture(m_depthStencil,5);
   screen->set();
   
   graphicsAPI.draw(6);
@@ -445,6 +444,7 @@ Deferred::setSize(const Vector2U& size)
   m_positionTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_ssao->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  m_blur->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   auto sizef = Vector2f(size.x,size.y);
   m_size->write(&sizef);
 }

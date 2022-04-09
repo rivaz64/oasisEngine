@@ -87,7 +87,7 @@ void
 Camera::moveCamera(const Vector3f& delta)
 {
   m_axis.transpose();
-  Vector3f realDelta = m_axis*delta;
+  Vector3f realDelta = m_axis*delta*36.f;
   m_axis.transpose();
   m_location += realDelta;
   lookAt(m_lookingAt+realDelta);

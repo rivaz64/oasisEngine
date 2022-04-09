@@ -55,9 +55,9 @@ ResoureManager::onStartUp()
   //loadDefaulTextures();
   loadDefaultShaders();
   generateDefaultMaterials();
-  generateQuad();
+  //generateQuad();
   //generateTriangle();
-  generateCube();
+  //generateCube();
 }
 /*
 void 

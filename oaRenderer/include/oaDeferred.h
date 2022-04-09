@@ -55,7 +55,7 @@ class Deferred :
    * @brief blurrs a texture
   */
   void
-  blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut, const Matrix3f& kernel);
+  blur(SPtr<Texture> texture, const Matrix3f& kernel);
 
   /**
    * @brief copys the texture from in to out
@@ -71,7 +71,7 @@ class Deferred :
    * @brief lights as screen space
   */
   void 
-  lights(const Vector3f& camLocation, const Vector4f& light);
+  lights(const Vector4f& light);
 
   void
   setSize(const Vector2U& size) override;
@@ -87,6 +87,8 @@ class Deferred :
   SPtr<Texture> m_specularTexture;
 
   SPtr<Texture> m_ssao;
+
+  SPtr<Texture> m_blur;
 
   Vector<SPtr<Texture>> m_gBuffer;
 

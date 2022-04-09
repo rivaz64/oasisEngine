@@ -85,18 +85,21 @@ readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
     actualVertex.normal.x = aMesh->mNormals[numVertex].x;
     actualVertex.normal.y = aMesh->mNormals[numVertex].y;
     actualVertex.normal.z = aMesh->mNormals[numVertex].z;
+    actualVertex.normal.w = 0;
     
     actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
     actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
     actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
+    actualVertex.tangent.w = 0;
     
     actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
     actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
     actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
+    actualVertex.bitangent.w = 0;
 
     if(aMesh->HasTextureCoords(0)){
       actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
-      actualVertex.textureCord.y = aMesh->mTextureCoords[0][numVertex].y;
+      actualVertex.textureCord.y = 1-aMesh->mTextureCoords[0][numVertex].y;
     }
   }
 }
@@ -321,32 +324,50 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     WString textureName = MaterialName;
 
     material->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE,0),notMyString);
-
-    WString defuseName = StringUtilities::toWString(notMyString.C_Str());
-
-    Path newPath;
-
-    newPath.setCompletePath(defuseName);
-
-    //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
-    texturePath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
-
-    if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
-      mat->setTexture("diffuse", manager.m_textures[StringUtilities::toString(texturePath.getName())]);
+    if(notMyString != aiString("")){
+      WString defuseName = StringUtilities::toWString(notMyString.C_Str());
+      
+      Path newPath;
+      
+      newPath.setCompletePath(defuseName);
+      
+      //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
+      texturePath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
+      
+      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
+        mat->setTexture("diffuse", manager.m_textures[StringUtilities::toString(texturePath.getName())]);
+      }
     }
+    
 
     textureName = MaterialName+L"N";
 
     texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
 
     material->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS,0),notMyString);
+    if(notMyString != aiString("")){
 
-    WString normalName = StringUtilities::toWString(notMyString.C_Str());
-    texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
+      WString normalName = StringUtilities::toWString(notMyString.C_Str());
+      texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
 
-    if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
-      mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
+      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
+        mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
+      }
+
     }
+
+    material->Get(AI_MATKEY_TEXTURE(aiTextureType_SPECULAR,0),notMyString);
+    if(notMyString != aiString("")){
+
+      WString normalName = StringUtilities::toWString(notMyString.C_Str());
+      texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
+
+      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
+        mat->setTexture("specular", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
+      }
+
+    }
+    
 
     //textureName = MaterialName+L"S";
     //

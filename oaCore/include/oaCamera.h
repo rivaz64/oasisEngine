@@ -35,7 +35,7 @@ class OA_CORE_EXPORT Camera
   init(const float ratio,
        const float viewAngle = Math::PI/4.f,
        const float nearPlaneDistance = 1.0f,
-       const float farPlaneDistance = 100.0f);
+       const float farPlaneDistance = 600.0f);
 
   /**
    * @brief updates the campera
