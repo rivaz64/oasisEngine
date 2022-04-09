@@ -489,79 +489,76 @@ void ResoureManager::generateTriangle()
 
 }
 
-void ResoureManager::loadDefaultShaders()
+void 
+createVertexShader(const String& name){
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto shader = graphicsApi.createVertexShader();
+  resourceManager.m_vertexShaders.insert({name,shader});
+  shader->compileFromFile(name);
+  shader->setName(name);
+}
+
+void 
+createPixelShader(const String& name){
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({name,shader});
+  shader->compileFromFile(name);
+  shader->setName(name);
+}
+
+void 
+createShaderProgram(const String& name, const String& vertex, const String& pixel){
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto program = graphicsApi.createShaderProgram();
+  resourceManager.m_shaderPrograms.insert({name,program});
+  program->attach(resourceManager.m_vertexShaders[vertex]);
+  program->attach(resourceManager.m_pixelShaders[pixel]);
+  program->setName(name);
+}
+
+void 
+ResoureManager::loadDefaultShaders()
 {
   m_vertexShaders.clear();
   m_pixelShaders.clear();
   m_shaderPrograms.clear();
   auto& graphicsApi = GraphicAPI::instance();
 
-  m_vertexShaders.insert({"default",graphicsApi.createVertexShader()});
-  m_vertexShaders.insert({"animation",graphicsApi.createVertexShader()});
-  m_vertexShaders.insert({"debug",graphicsApi.createVertexShader()});
-  m_vertexShaders.insert({"screen",graphicsApi.createVertexShader()});
-  m_vertexShaders.insert({"position",graphicsApi.createVertexShader()});
+  createVertexShader("vertexShader");
+  createVertexShader("animVertexShader");
+  createVertexShader("vertexDebug");
+  createVertexShader("screen");
+  createVertexShader("position");
 
-  m_pixelShaders.insert({"default",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"paralax",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"transparent",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"debug",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"GBuffer",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"lights",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"ssao",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"convolution",graphicsApi.createPixelShader()});
-  m_pixelShaders.insert({"copy",graphicsApi.createPixelShader()});
+  createPixelShader("default");
+  createPixelShader("paralax");
+  createPixelShader("transparent");
+  createPixelShader("debug");
+  createPixelShader("GBuffer");
+  createPixelShader("lights");
+  createPixelShader("ssao");
+  createPixelShader("convolution");
+  createPixelShader("copy");
+  createPixelShader("diffuse");
+  createPixelShader("color");
 
-
-   m_pixelShaders.insert({"color",graphicsApi.createPixelShader()});
-
-  m_vertexShaders["default"]->compileFromFile("vertexShader");
-  m_vertexShaders["default"]->setName("default");
-  
-  m_vertexShaders["animation"]->compileFromFile("animVertexShader");
-  m_vertexShaders["animation"]->setName("animation");
-  
-  m_vertexShaders["debug"]->compileFromFile("vertexDebug");
-  m_vertexShaders["debug"]->setName("debug");
-
-  m_vertexShaders["screen"]->compileFromFile("screen");
-  m_vertexShaders["screen"]->setName("screen");
-
-  //m_vertexShaders["position"]->compileFromFile("position");
-  //m_vertexShaders["position"]->setName("position");
-
-
-  m_pixelShaders["default"]->compileFromFile("pixelShader");
-  m_pixelShaders["default"]->setName("default");
-  
-  m_pixelShaders["paralax"]->compileFromFile("paralax");
-  m_pixelShaders["paralax"]->setName("paralax");
-  
-  m_pixelShaders["transparent"]->compileFromFile("Gtransparent");
-  m_pixelShaders["transparent"]->setName("transparent");
-  
-  m_pixelShaders["debug"]->compileFromFile("pixelDebug");
-  m_pixelShaders["debug"]->setName("debug");
-  
-  m_pixelShaders["GBuffer"]->compileFromFile("GBuffer");
-  m_pixelShaders["GBuffer"]->setName("GBuffer");
-
-  m_pixelShaders["lights"]->compileFromFile("lights");
-  m_pixelShaders["lights"]->setName("lights");
-
-  m_pixelShaders["color"]->compileFromFile("color");
-  m_pixelShaders["color"]->setName("color");
-
-  m_pixelShaders["ssao"]->compileFromFile("ssao");
-  m_pixelShaders["ssao"]->setName("ssao");
-
-  m_pixelShaders["convolution"]->compileFromFile("convolution");
-  m_pixelShaders["convolution"]->setName("convolution");
-
-  m_pixelShaders["copy"]->compileFromFile("copy");
-  m_pixelShaders["copy"]->setName("copy");
-
-  generateDefaultShaderPrograms();
+  createShaderProgram("default","vertexShader","default");
+  createShaderProgram("animation","animVertexShader","default");
+  createShaderProgram("paralax","vertexShader","paralax");
+  createShaderProgram("transparent","vertexShader","transparent");
+  m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
+  createShaderProgram("debug","vertexDebug","debug");
+  createShaderProgram("GBuffer","vertexShader","GBuffer");
+  m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap"});
+  createShaderProgram("lights","screen","lights");
+  createShaderProgram("color","debug","color");
+  createShaderProgram("ssao","screen","ssao");
+  createShaderProgram("convolution","screen","convolution");
+  createShaderProgram("copy","screen","copy");
 }
 
 void ResoureManager::loadDefaulTextures()
@@ -570,72 +567,6 @@ void ResoureManager::loadDefaulTextures()
   Path path;
   path.setCompletePath("textures/defaultTexture.png");
   //m_textures["default"]->loadFromFile(path);
-}
-
-void
-ResoureManager::generateDefaultShaderPrograms()
-{
-  auto& graphicApi = GraphicAPI::instance();
-  m_shaderPrograms.insert({"default",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"paralax",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"animation",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"transparent",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"debug",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"GBuffer",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"lights",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"color",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"ssao",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"convolution",graphicApi.createShaderProgram()});
-  m_shaderPrograms.insert({"copy",graphicApi.createShaderProgram()});
-
-
-  m_shaderPrograms["default"]->attach(m_vertexShaders["default"]);
-  m_shaderPrograms["default"]->attach(m_pixelShaders["default"]);
-  m_shaderPrograms["default"]->setName("default");
-  
-  m_shaderPrograms["animation"]->attach(m_vertexShaders["animation"]);
-  m_shaderPrograms["animation"]->attach(m_pixelShaders["default"]);
-  m_shaderPrograms["animation"]->setName("animation");
-  
-  m_shaderPrograms["paralax"]->attach(m_vertexShaders["default"]);
-  m_shaderPrograms["paralax"]->attach(m_pixelShaders["paralax"]);
-  m_shaderPrograms["paralax"]->setName("paralax");
-  
-  
-  m_shaderPrograms["transparent"]->attach(m_vertexShaders["default"]);
-  m_shaderPrograms["transparent"]->attach(m_pixelShaders["transparent"]);
-  m_shaderPrograms["transparent"]->setName("transparent");
-  m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
-
-  
-  m_shaderPrograms["debug"]->attach(m_vertexShaders["debug"]);
-  m_shaderPrograms["debug"]->attach(m_pixelShaders["debug"]);
-  m_shaderPrograms["debug"]->setName("debug");
-  
-  m_shaderPrograms["GBuffer"]->attach(m_vertexShaders["default"]);
-  m_shaderPrograms["GBuffer"]->attach(m_pixelShaders["GBuffer"]);
-  m_shaderPrograms["GBuffer"]->setName("GBuffer");
-  m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap"});
-
-  m_shaderPrograms["lights"]->attach(m_vertexShaders["screen"]);
-  m_shaderPrograms["lights"]->attach(m_pixelShaders["lights"]);
-  m_shaderPrograms["lights"]->setName("lights");
-
-  m_shaderPrograms["color"]->attach(m_vertexShaders["debug"]);
-  m_shaderPrograms["color"]->attach(m_pixelShaders["color"]);
-  m_shaderPrograms["color"]->setName("color");
-
-  m_shaderPrograms["ssao"]->attach(m_vertexShaders["screen"]);
-  m_shaderPrograms["ssao"]->attach(m_pixelShaders["ssao"]);
-  m_shaderPrograms["ssao"]->setName("ssao");
-
-  m_shaderPrograms["convolution"]->attach(m_vertexShaders["screen"]);
-  m_shaderPrograms["convolution"]->attach(m_pixelShaders["convolution"]);
-  m_shaderPrograms["convolution"]->setName("convolution");
-
-  m_shaderPrograms["copy"]->attach(m_vertexShaders["screen"]);
-  m_shaderPrograms["copy"]->attach(m_pixelShaders["copy"]);
-  m_shaderPrograms["copy"]->setName("copy");
 }
 
 void 
