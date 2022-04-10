@@ -15,7 +15,7 @@ class OA_CORE_EXPORT BlendState
  public:
 
   virtual bool
-  init();
+  init(bool adds);
 
 };
 

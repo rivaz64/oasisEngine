@@ -19,7 +19,7 @@ class DX11BlendState :
   ~DX11BlendState();
 
   bool 
-  init() override;
+  init(bool adds) override;
 
   void
   release();

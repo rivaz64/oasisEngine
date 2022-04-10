@@ -9,14 +9,17 @@ DX11BlendState::~DX11BlendState()
 }
 
 bool
-DX11BlendState::init()
+DX11BlendState::init(bool adds)
 {
   D3D11_BLEND_DESC desc;
   memset( &desc,0, sizeof(desc) );
   desc.AlphaToCoverageEnable = true;
   desc.IndependentBlendEnable = false;
   desc.RenderTarget[0].BlendEnable = true;
-  desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+  desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE ;
+  if(adds)
+  desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+  else
   desc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
   desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
   desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;

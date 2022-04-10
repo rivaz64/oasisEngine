@@ -399,7 +399,7 @@ DX11GraphicAPI::clearRenderTarget(SPtr<Texture> renderTarget)
 {
   m_context->ClearRenderTargetView(
     cast<DX11Texture>(renderTarget)->m_renderTargetView, 
-    &m_backgroundColor.r );
+    &Color::BLACK.r );
 }
 
 void 

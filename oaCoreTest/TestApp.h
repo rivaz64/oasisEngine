@@ -12,7 +12,7 @@
 #include "oaProceduralTerrain.h"
 #include "oaNoise2D.h"
 #include "oaLoader.h"
-
+#include "oaLights.h"
 namespace oaEngineSDK{
 
 struct ModelComponent;
@@ -99,7 +99,8 @@ public:
 
   SPtr<Camera> m_debugCamera;
 
-  Vector4f m_light;
+  //Vector4f m_light;
+  Vector<DirectionalLight> m_lights;
 
   Vector4f m_ssaoConfig;
 

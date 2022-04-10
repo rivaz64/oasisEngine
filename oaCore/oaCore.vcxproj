@@ -191,6 +191,7 @@
     <ClInclude Include="include\oaInput.h" />
     <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaInputMap.h" />
+    <ClInclude Include="include\oaLights.h" />
     <ClInclude Include="include\oaLoader.h" />
     <ClInclude Include="include\oaLogger.h" />
     <ClInclude Include="include\oaMaterial.h" />

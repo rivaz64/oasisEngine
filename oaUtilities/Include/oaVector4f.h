@@ -39,7 +39,7 @@ public:
   Vector4f(const Vector3f& _xyz, float _w):xyz(_xyz),w(_w){}
 
   ~Vector4f() = default;
-  
+
   /**
   * @brief compares if two vectors are equal
   * @param v 

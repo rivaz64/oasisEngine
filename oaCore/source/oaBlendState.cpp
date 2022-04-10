@@ -3,7 +3,7 @@
 namespace oaEngineSDK{
 
 bool 
-BlendState::init()
+BlendState::init(bool adds)
 {
   return false;
 }

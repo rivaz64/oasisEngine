@@ -156,6 +156,10 @@ TestApp::postInit()
   m_ssaoConfig.x=.01;
   m_ssaoConfig.y=0;
   m_ssaoConfig.z=1;
+
+  m_lights.push_back(DirectionalLight());
+  m_lights[0].direction = {0,0,0,0};
+  m_lights[0].color = Color::WHITE;
 }
 
 
@@ -208,7 +212,7 @@ TestApp::draw()
   //  renderer.render(m_actualScene,m_camera,m_debugCamera);
   //}
   //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_light,m_ssaoConfig);
+    renderer.render(m_actualScene,m_camera,m_camera,m_lights,m_ssaoConfig);
   //}
   
   newImGuiFrame();
@@ -499,7 +503,14 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("lights");
-  ImGui::DragFloat3("direction",&m_light.x,.01f,-1.0f,1.0f);
+  if(ImGui::Button("add light")){
+    m_lights.push_back(DirectionalLight());
+  }
+  auto lightNum = m_lights.size();
+  for(int32 i = 0;i<lightNum;++i){
+    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_lights[i].direction.x,.01f,-1.0f,1.0f);
+    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_lights[i].color.r,.01f,-1.0f,1.0f);
+  }
   ImGui::DragFloat4("ssao",&m_ssaoConfig.x,.001f);
   //ImGui::DragFloat("paralax",&dir.w,1.0f);
   ImGui::End();

@@ -36,4 +36,5 @@ class RasterizerState;
 class Renderer;
 class BlendState;
 class DebugMesh;
+struct DirectionalLight;
 }

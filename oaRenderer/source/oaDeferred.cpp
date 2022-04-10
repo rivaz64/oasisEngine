@@ -20,6 +20,7 @@
 #include <oaRenderTarget.h>
 #include <oaBlendState.h>
 #include <oaMatrix3f.h>
+#include <oaLights.h>
 
 namespace oaEngineSDK{
 
@@ -44,11 +45,9 @@ Deferred::onStartUp()
   m_viewLocationBuffer = graphicsAPI.createBuffer();
   m_viewLocationBuffer->init(sizeof(Vector4f));
 
-  m_LightLocation = graphicsAPI.createBuffer();
-  m_LightLocation->init(sizeof(Vector4f));
+  m_Light = graphicsAPI.createBuffer();
+  m_Light->init(sizeof(DirectionalLight));
 
-  m_LightLocation = graphicsAPI.createBuffer();
-  m_LightLocation->init(sizeof(Vector4f));
 
   m_configs = graphicsAPI.createBuffer();
   m_configs->init(sizeof(Vector4f));
@@ -74,8 +73,11 @@ Deferred::onStartUp()
   m_ssao = graphicsAPI.createTexture();
   m_blur = graphicsAPI.createTexture();
 
-  m_blendState = graphicsAPI.createBlendState();
-  m_blendState->init();
+  m_blendState0 = graphicsAPI.createBlendState();
+  m_blendState0->init(false);
+
+  m_blendState1 = graphicsAPI.createBlendState();
+  m_blendState1->init(true);
 
   m_gBuffer = {m_colorTexture,m_normalTexture,m_positionTexture,m_specularTexture};
   Vector<SimpleVertex> points{
@@ -102,7 +104,7 @@ void
 Deferred::render(SPtr<Scene> scene, 
                  SPtr<Camera> camForView, 
                  SPtr<Camera> camForFrustrum, 
-                 const Vector4f& light,
+                 const Vector<DirectionalLight>& lights,
                  const Vector4f& config)
 {
   // auto& resourseManager = ResoureManager::instance();
@@ -163,7 +165,7 @@ Deferred::render(SPtr<Scene> scene,
   graphicsAPI.clearRenderTarget(m_ssao);
   graphicsAPI.clearDepthStencil(m_depthStencil);
   
-  graphicsAPI.setBlendState(m_blendState);
+  graphicsAPI.setBlendState(m_blendState0);
   
   //resourseManager.m_shaderPrograms["GBuffer"]->set();
   
@@ -192,44 +194,14 @@ Deferred::render(SPtr<Scene> scene,
   //copy(m_specularTexture,m_renderTarget);
   //gTransparents(transparents);
   
-  //lights(camForView->getLocation(),light);
-  //graphicsAPI.setRasterizerState(m_normalRasterizer);
-  //graphicsAPI.unsetRenderTargetAndDepthStencil();
-  //graphicsAPI.setRenderTarget(m_renderTarget);
+  diffuse(camForView->getViewMatrix(),lights);
 
   
-  ssao(config);
-  float n = 1.f/9.f;
-  blur(m_ssao,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
-  lights(camForView->getViewMatrix()*light);
-  //
-  //copy(m_ssao,m_renderTarget);
-  //
+  //ssao(config);
+  //float n = 1.f/9.f;
+  //blur(m_ssao,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
+  //lights(camForView->getViewMatrix()*light);
   
-  //resourseManager.m_shaderPrograms["lights"]->set();
-  //resourseManager.m_shaderPrograms["ssao"]->set();
-  //
-  //m_viewLocationBuffer->write(&camForView->getLocation());
-  //graphicsAPI.setPSBuffer(m_viewLocationBuffer,0);
-  //
-  //m_LightLocation->write(&light);
-  //graphicsAPI.setPSBuffer(m_LightLocation,1);
-  //
-  //m_configs->write(&config);
-  //graphicsAPI.setPSBuffer(m_configs,2);
-  //
-  //
-  //graphicsAPI.setPSBuffer(m_size,3);
-  //
-  //
-  //graphicsAPI.setTexture(m_colorTexture,0);
-  //graphicsAPI.setTexture(m_normalTexture,1);
-  //graphicsAPI.setTexture(m_positionTexture,2);
-  //graphicsAPI.setTexture(m_specularTexture,3);
-  //graphicsAPI.setTexture(m_depthTexture,4);
-  //screen->set();
-  //
-  //graphicsAPI.draw(6);
 }
 
 void 
@@ -400,8 +372,8 @@ Deferred::lights(const Vector4f& light)
 
   resourseManager.m_shaderPrograms["lights"]->set();
   
-  m_LightLocation->write(&light);
-  graphicsAPI.setPSBuffer(m_LightLocation,0);
+  //m_LightLocation->write(&light);
+  //graphicsAPI.setPSBuffer(m_LightLocation,0);
   
   
   graphicsAPI.setPSBuffer(m_size,3);
@@ -416,6 +388,34 @@ Deferred::lights(const Vector4f& light)
   
   graphicsAPI.draw(6);
   graphicsAPI.unsetTextures(5);
+}
+
+void 
+Deferred::diffuse(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights)
+{
+  auto& resourseManager = ResoureManager::instance();
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  resourseManager.m_shaderPrograms["diffuse"]->set();
+  graphicsAPI.setBlendState(m_blendState1);
+  graphicsAPI.setRenderTarget(m_renderTarget);
+  
+
+  graphicsAPI.setTexture(m_normalTexture,0);
+  graphicsAPI.setTexture(m_depthStencil,1);
+  
+  for(auto& light : lights){
+    auto viewLight = light;
+    viewLight.direction = viewMatrix*viewLight.direction;
+    m_Light->write(&light);
+    graphicsAPI.setPSBuffer(m_Light,0);
+    screen->set();
+    graphicsAPI.draw(6);
+    
+  }
+  graphicsAPI.unsetTextures(2);
+  //graphicsAPI.draw(6);
+  //graphicsAPI.unsetTextures(2);
 }
 
 void 

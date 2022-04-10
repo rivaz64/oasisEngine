@@ -23,7 +23,7 @@ class Deferred :
   render(SPtr<Scene> scene,
          SPtr<Camera> camForView,
          SPtr<Camera> camForFrustrum, 
-         const Vector4f& light,
+         const Vector<DirectionalLight>& lights,
          const Vector4f& config) override;
   /**
    * @brief the gBuffer pass
@@ -73,6 +73,9 @@ class Deferred :
   void 
   lights(const Vector4f& light);
 
+  void 
+  diffuse(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
+
   void
   setSize(const Vector2U& size) override;
 
@@ -106,7 +109,7 @@ class Deferred :
 
   SPtr<Buffer> m_viewLocationBuffer;
 
-  SPtr<Buffer> m_LightLocation;
+  SPtr<Buffer> m_Light;
 
   SPtr<Buffer> m_configs;
 
@@ -121,7 +124,8 @@ class Deferred :
 
   SPtr<RasterizerState> m_debugRasterizer;
 
-  SPtr<BlendState> m_blendState;
+  SPtr<BlendState> m_blendState0;
+  SPtr<BlendState> m_blendState1;
 };
 
 }
