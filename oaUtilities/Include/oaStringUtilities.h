@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
+//#include "oaVector3f.h"
 
 namespace oaEngineSDK{
 
@@ -32,6 +33,9 @@ class OA_UTILITY_EXPORT StringUtilities
   floatToString(float param){
     return to_string(param);
   }
+
+  static FORCEINLINE String
+  vector4ToString(const Vector4f& param);
 
   static FORCEINLINE WString
   toWString(const String& string){

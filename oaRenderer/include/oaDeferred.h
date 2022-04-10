@@ -71,10 +71,13 @@ class Deferred :
    * @brief lights as screen space
   */
   void 
-  lights(const Vector4f& light);
+  aplylights();
 
   void 
   diffuse(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
+
+  void 
+  specular(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
 
   void
   setSize(const Vector2U& size) override;
@@ -92,6 +95,10 @@ class Deferred :
   SPtr<Texture> m_ssao;
 
   SPtr<Texture> m_blur;
+
+  SPtr<Texture> m_diffuseLight;
+
+  SPtr<Texture> m_specularLight;
 
   Vector<SPtr<Texture>> m_gBuffer;
 

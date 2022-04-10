@@ -546,6 +546,7 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("diffuse");
   createPixelShader("color");
   createPixelShader("diffuse");
+  createPixelShader("specular");
 
   createShaderProgram("default","vertexShader","default");
   createShaderProgram("animation","animVertexShader","default");
@@ -561,6 +562,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("convolution","screen","convolution");
   createShaderProgram("copy","screen","copy");
   createShaderProgram("diffuse","screen","diffuse");
+  createShaderProgram("specular","screen","specular");
 }
 
 void ResoureManager::loadDefaulTextures()

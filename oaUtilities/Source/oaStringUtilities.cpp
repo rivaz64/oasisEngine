@@ -1,5 +1,5 @@
 #include "oaStringUtilities.h"
-
+#include "oaVector4f.h"
 namespace oaEngineSDK{
 
 using std::locale;
@@ -89,6 +89,14 @@ StringUtilities::toString(const WString& string)
   }
 
   return output;
+}
+
+String
+StringUtilities::vector4ToString(const Vector4f& param){
+  return floatToString(param.x)+", "+
+         floatToString(param.y)+", "+
+         floatToString(param.z)+", "+
+         floatToString(param.w);
 }
 
 }

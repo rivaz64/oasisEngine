@@ -170,7 +170,11 @@ public:
   */
   FORCEINLINE Vector4f const
   normalized() const {
-    return *this * Math::invSqrt(x * x + y * y + z * z + w * w);
+    float squaredMagnitud = x * x + y * y + z * z + w * w;
+    if(squaredMagnitud>.001){
+      return *this * Math::invSqrt(x * x + y * y + z * z + w * w);
+    }
+    return Vector4f::ZERO;
   }
 
   /**
