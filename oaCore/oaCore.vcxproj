@@ -290,6 +290,7 @@
     </ClCompile>
     <ClCompile Include="source\oaScene.cpp" />
     <ClCompile Include="source\oaSerializer.cpp" />
+    <ClCompile Include="source\oaShader.cpp" />
     <ClCompile Include="source\oaShaderProgram.cpp" />
     <ClCompile Include="source\oaSkeletalComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

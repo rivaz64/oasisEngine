@@ -29,4 +29,25 @@ struct DirectionalLight{
 
 };
 
+/**
+ * @brief the structure fir a point that is a light source
+*/
+struct PointLight{
+  
+  /**
+   * @brief the color of the light
+  */
+  Color color;
+
+  /**
+   * @brief the point where the light is
+  */
+  Vector3f location;
+
+  /**
+   * @brief how far he light can reach
+  */
+  float intensity;
+};
+
 }

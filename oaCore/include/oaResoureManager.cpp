@@ -447,7 +447,7 @@ ResoureManager::generateCube()
   model->setName(name);
   model->addMaterial(makeSPtr<Material>());
   auto& material = model->getMaterial(0);
-  material->setShader(m_shaderPrograms["GBuffer"]);
+  material->setShader(0);
   m_materials.insert({"wall",material});
   model->addMesh(makeSPtr<Mesh>());
   auto& mesh = model->getMesh(0);
@@ -500,13 +500,53 @@ createVertexShader(const String& name){
 }
 
 void 
-createPixelShader(const String& name){
+createPixelShader(const String& name)
+{
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
   resourceManager.m_pixelShaders.insert({name,shader});
   shader->compileFromFile(name);
   shader->setName(name);
+}
+
+void 
+createPixelShaders(const String& name, 
+                   SPtr<Shader> vertexShader,
+                   const Vector<String>& allDefines,
+                   Vector<SPtr<ShaderProgram>>& shaderPrograms,
+                   Vector<String>& defines, 
+                   uint8 num)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  
+  if(num < allDefines.size()){
+    createPixelShaders(name, vertexShader, allDefines, shaderPrograms, defines, num+1);
+    defines.push_back(allDefines[num]);
+    createPixelShaders(name, vertexShader, allDefines, shaderPrograms, defines, num+1);
+    defines.pop_back();
+  }
+  else{
+    auto shader = graphicsApi.createPixelShader();
+    shader->compileFromFile(name,defines);
+    auto shaderProgram = graphicsApi.createShaderProgram();
+    shaderProgram->attach(vertexShader);
+    shaderProgram->attach(shader);
+    shaderProgram->setChannels({"diffuse","specular","normalMap","emisive"});
+    shaderPrograms.push_back(shaderProgram);
+
+  }
+}
+
+void 
+createPixelShaders(const String& name, 
+                   SPtr<Shader> vertexShader,
+                   const Vector<String>& allDefines,
+                   Vector<SPtr<ShaderProgram>>& shaderProgram)
+{
+  Vector<String> defines;
+  createPixelShaders(name, vertexShader, allDefines, shaderProgram,defines,0);
 }
 
 void 
@@ -526,8 +566,7 @@ ResoureManager::loadDefaultShaders()
   m_vertexShaders.clear();
   m_pixelShaders.clear();
   m_shaderPrograms.clear();
-  auto& graphicsApi = GraphicAPI::instance();
-
+  m_multiShaderPrograms.clear();
   createVertexShader("vertexShader");
   createVertexShader("animVertexShader");
   createVertexShader("vertexDebug");
@@ -538,15 +577,26 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("paralax");
   createPixelShader("transparent");
   createPixelShader("debug");
-  createPixelShader("GBuffer");
+  //createPixelShader("GBuffer");
   createPixelShader("lights");
   createPixelShader("ssao");
   createPixelShader("convolution");
   createPixelShader("copy");
-  createPixelShader("diffuse");
   createPixelShader("color");
-  createPixelShader("diffuse");
-  createPixelShader("specular");
+  //createPixelShader("directionalLight");
+  //createPixelShader("pointLight");
+
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({"directionalLight",shader});
+  shader->compileFromFile("light",{"DIRECTIONAL"});
+  shader->setName("directionalLight");
+
+  shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({"pointLight",shader});
+  shader->compileFromFile("light",{"POINT"});
+  shader->setName("pointLight");
 
   createShaderProgram("default","vertexShader","default");
   createShaderProgram("animation","animVertexShader","default");
@@ -554,15 +604,33 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("transparent","vertexShader","transparent");
   m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
   createShaderProgram("debug","vertexDebug","debug");
-  createShaderProgram("GBuffer","vertexShader","GBuffer");
-  m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap"});
+  //createShaderProgram("GBuffer","vertexShader","GBuffer");
+  //m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap","emisive"});
   createShaderProgram("lights","screen","lights");
   createShaderProgram("color","debug","color");
   createShaderProgram("ssao","screen","ssao");
   createShaderProgram("convolution","screen","convolution");
   createShaderProgram("copy","screen","copy");
-  createShaderProgram("diffuse","screen","diffuse");
-  createShaderProgram("specular","screen","specular");
+  createShaderProgram("directionalLight","screen","directionalLight");
+  createShaderProgram("pointLight","screen","pointLight");
+
+  Vector<SPtr<ShaderProgram>> gBuffer;
+  createPixelShaders("GBuffer",
+                     m_vertexShaders["vertexShader"],
+                     {"EMISIVE","SPECULAR","NORMALS","DIFFUSE"},
+                     gBuffer);
+  //auto pixelShader = graphicsApi.createPixelShader();
+  //resourceManager.m_pixelShaders.insert({"colorGbuffer",shader});
+  //pixelShader->compileFromFile("GBuffer",{"DIFFUSE"});
+  //pixelShader->setName("colorGbuffer");
+  //auto program = graphicsApi.createShaderProgram(); 
+  //program->attach(m_vertexShaders["vertexShader"]);
+  //program->attach(pixelShader);
+  //program->setChannels({"diffuse","specular","normalMap","emisive"});
+  //if(gBuffer.size()==0){
+  //  gBuffer.push_back(program);
+  //}
+  m_multiShaderPrograms.insert({"gBuffer",gBuffer});
 }
 
 void ResoureManager::loadDefaulTextures()

@@ -8,22 +8,26 @@
 #include "oaGraphicAPI.h"
 #include "oaTexture.h"
 #include "oaShaderProgram.h"
+#include "oaResoureManager.h"
 
 namespace oaEngineSDK{
 
 Material::Material()
 {
-  auto& graphicsAPI = GraphicAPI::instance();
 }
 
 void 
 Material::set()
 {
   auto& graphicsAPI = GraphicAPI::instance();
-  auto& channels = m_shader->getChannels();
+  auto& resourseManager = ResoureManager::instance();
+
+  auto& shader = resourseManager.m_multiShaderPrograms["gBuffer"][m_shader];
+
+  auto& channels = shader->getChannels();
 
   uint32 channelNum = 0;
-  m_shader->set();
+  shader->set();
   for(auto& channel : channels){
     if(m_textures.find(channel)!=m_textures.end()){
       graphicsAPI.setTexture(m_textures[channel],channelNum);

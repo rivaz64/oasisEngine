@@ -23,7 +23,8 @@ class Deferred :
   render(SPtr<Scene> scene,
          SPtr<Camera> camForView,
          SPtr<Camera> camForFrustrum, 
-         const Vector<DirectionalLight>& lights,
+         const Vector<DirectionalLight>& directionalLights,
+         const Vector<PointLight>& pointLights,
          const Vector4f& config) override;
   /**
    * @brief the gBuffer pass
@@ -74,10 +75,16 @@ class Deferred :
   aplylights();
 
   void 
-  diffuse(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
+  directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
 
   void 
-  specular(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
+  pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+
+  void 
+  diffusePoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+
+  void 
+  specularPoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
 
   void
   setSize(const Vector2U& size) override;
@@ -92,6 +99,8 @@ class Deferred :
 
   SPtr<Texture> m_specularTexture;
 
+  SPtr<Texture> m_emisiveTexture;
+
   SPtr<Texture> m_ssao;
 
   SPtr<Texture> m_blur;
@@ -101,6 +110,8 @@ class Deferred :
   SPtr<Texture> m_specularLight;
 
   Vector<SPtr<Texture>> m_gBuffer;
+
+  Vector<SPtr<Texture>> m_lightBuffer;
 
   SPtr<Texture> m_renderTarget;
 

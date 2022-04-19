@@ -20,7 +20,7 @@ public DX11Shader
   ~DX11VertexShader();
 
   bool 
-  compileFromFile(String file);
+  compileFromFile(const String& file,const Vector<String>& defines) override;
 
   void
   set() override;

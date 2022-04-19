@@ -157,9 +157,9 @@ TestApp::postInit()
   m_ssaoConfig.y=0;
   m_ssaoConfig.z=1;
 
-  m_lights.push_back(DirectionalLight());
-  m_lights[0].direction = {0,0,0,0};
-  m_lights[0].color = Color::WHITE;
+  //m_lights.push_back(DirectionalLight());
+  //m_lights[0].direction = {0,0,0,0};
+  //m_lights[0].color = Color::WHITE;
 }
 
 
@@ -212,7 +212,7 @@ TestApp::draw()
   //  renderer.render(m_actualScene,m_camera,m_debugCamera);
   //}
   //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_lights,m_ssaoConfig);
+    renderer.render(m_actualScene,m_camera,m_camera,m_directionalLights,m_pointLights,m_ssaoConfig);
   //}
   
   newImGuiFrame();
@@ -502,17 +502,32 @@ void oaEngineSDK::TestApp::drawImGui()
   childsInImgui(m_actualScene->getRoot());
   ImGui::End();
 
-  ImGui::Begin("lights");
-  if(ImGui::Button("add light")){
-    m_lights.push_back(DirectionalLight());
-  }
-  auto lightNum = m_lights.size();
-  for(int32 i = 0;i<lightNum;++i){
-    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_lights[i].direction.x,.01f,-1.0f,1.0f);
-    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_lights[i].color.r,.01f,-1.0f,1.0f);
-  }
+  ImGui::Begin("ssao");
   ImGui::DragFloat4("ssao",&m_ssaoConfig.x,.001f);
-  //ImGui::DragFloat("paralax",&dir.w,1.0f);
+  ImGui::End();
+
+  ImGui::Begin("directional lights");
+  if(ImGui::Button("add light")){
+    m_directionalLights.push_back(DirectionalLight());
+  }
+  auto lightNum = m_directionalLights.size();
+  for(int32 i = 0;i<lightNum;++i){
+    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_directionalLights[i].direction.x,.01f,-1.0f,1.0f);
+    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_directionalLights[i].color.r,.01f,0.0f,1.0f);
+  }
+  ImGui::End();
+
+  ImGui::Begin("point lights");
+  if(ImGui::Button("add light")){
+    m_pointLights.push_back(PointLight());
+  }
+  lightNum = m_pointLights.size();
+  for(int32 i = 0;i<lightNum;++i){
+    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].color.r,.01f,0.0f,1.0f);
+    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].location.x,.01f,-1.0f,1.0f);
+    ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].intensity);
+
+  }
   ImGui::End();
 
   if(isCreatingActor){
@@ -714,29 +729,29 @@ void oaEngineSDK::TestApp::drawImGui()
   //}
   //ImGui::End();
 
-  ImGui::Begin("Model Editor");
-  if(m_selectedModel){
-    int32 matNum = m_selectedModel->getNumOfMaterials();
-    for(int32 i = 0; i<matNum;++i){
-      auto& material = m_selectedModel->getMaterial(i);
-      if(material && material->getShader())
-      if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
-        m_selectedMaterial = material;
-      }
-    }
-  }
-  ImGui::End();
+  //ImGui::Begin("Model Editor");
+  //if(m_selectedModel){
+  //  int32 matNum = m_selectedModel->getNumOfMaterials();
+  //  for(int32 i = 0; i<matNum;++i){
+  //    auto& material = m_selectedModel->getMaterial(i);
+  //    if(material && material->getShader())
+  //    if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
+  //      m_selectedMaterial = material;
+  //    }
+  //  }
+  //}
+  //ImGui::End();
 
-  ImGui::Begin("Shaders");
-  if(m_selectedMaterial){
-    if(ImGui::Button("normal")){
-       m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["GBuffer"]);
-    }
-    if(ImGui::Button("transparent")){
-      m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["transparent"]);
-    }
-  }
-  ImGui::End();
+  //ImGui::Begin("Shaders");
+  //if(m_selectedMaterial){
+  //  if(ImGui::Button("normal")){
+  //     m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["GBuffer"]);
+  //  }
+  //  if(ImGui::Button("transparent")){
+  //    m_selectedMaterial->setShader(resourceManager.m_shaderPrograms["transparent"]);
+  //  }
+  //}
+  //ImGui::End();
 
   ImGui::Begin("material textures");
   if(m_selectedMaterial){

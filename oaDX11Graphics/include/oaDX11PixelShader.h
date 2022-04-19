@@ -19,7 +19,7 @@ class DX11PixelShader :
   ~DX11PixelShader();
 
   bool 
-  compileFromFile(String file);
+  compileFromFile(const String& file,const Vector<String>& defines) override;
 
   void
   set() override;

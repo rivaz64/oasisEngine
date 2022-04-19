@@ -21,7 +21,8 @@ class OA_CORE_EXPORT Renderer :
   render(SPtr<Scene> scene,
          SPtr<Camera> camForView,
          SPtr<Camera> camForFrustrum, 
-         const Vector<DirectionalLight>& lights,
+         const Vector<DirectionalLight>& directionalLights,
+         const Vector<PointLight>& pointLights,
          const Vector4f& config){}
 
   virtual void

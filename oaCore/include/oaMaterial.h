@@ -50,11 +50,11 @@ class OA_CORE_EXPORT Material :
    * @param shader 
   */
   FORCEINLINE void
-  setShader(SPtr<ShaderProgram> shader){
+  setShader(uint32 shader){
     m_shader = shader;
   }
 
-  FORCEINLINE SPtr<ShaderProgram>
+  FORCEINLINE uint32
   getShader(){
     return m_shader;
   }
@@ -68,8 +68,7 @@ class OA_CORE_EXPORT Material :
   /**
    * @brief the shaders program that is going to be using
   */
-  SPtr<ShaderProgram> m_shader;
-  
+  uint32 m_shader;
 };
 
 }

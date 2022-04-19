@@ -11,13 +11,13 @@ DX11PixelShader::~DX11PixelShader()
 }
 
 bool 
-DX11PixelShader::compileFromFile(String file)
+DX11PixelShader::compileFromFile(const String& file,const Vector<String>& defines)
 {
   m_version = "ps_4_0";
 
   ID3DBlob* blob;
 
-  if(!readFromFile("shader/" + file + ".hlsl",&blob)){
+  if(!readFromFile("shader/" + file + ".hlsl", defines, &blob)){
     return false;
   }
 

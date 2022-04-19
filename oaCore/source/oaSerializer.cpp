@@ -95,7 +95,7 @@ Serializer::encodeMaterial(SPtr<Material> material)
 
   auto shader = material->getShader();
 
-  encodeString(material->getShader()->getName());
+  encodeNumber(material->getShader());
 
   auto types = material->getTextureChannels();
 
@@ -120,7 +120,7 @@ Serializer::decodeMaterial()
 
   material->setName(decodeString());
 
-  material->setShader(resourseManager.m_shaderPrograms[decodeString()]);
+  material->setShader(decodeNumber());
 
   SIZE_T numOfTypes;
 

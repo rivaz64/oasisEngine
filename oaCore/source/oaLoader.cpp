@@ -31,6 +31,30 @@ using Assimp::Importer;
 
 namespace oaEngineSDK {
 
+namespace GBUFFER_FLAGS{
+enum E {
+  NONE = 0,
+  DIFFUSE = 1,
+  NORMALS = 2,
+  SPECULAR = 4,
+  EMISIVE = 8
+};
+}
+
+inline GBUFFER_FLAGS::E operator | (GBUFFER_FLAGS::E lhs, GBUFFER_FLAGS::E rhs)
+{
+    return static_cast<GBUFFER_FLAGS::E>(static_cast<uint8>(lhs) | 
+                                         static_cast<uint8>(rhs));
+}
+
+inline GBUFFER_FLAGS::E& operator |= (GBUFFER_FLAGS::E& lhs, GBUFFER_FLAGS::E rhs)
+{
+    lhs = lhs | rhs;
+    return lhs;
+}
+
+
+
 void
 loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 {
@@ -300,6 +324,33 @@ Loader::loadTexture(const Path& path){
   return loadImage(path);
 }
 
+void
+tryLoadTextureChannel(aiMaterial* material, 
+                      aiTextureType textureType, 
+                      const Path& path,
+                      const String textureChannel,
+                      GBUFFER_FLAGS::E gbufferFlag,
+                      GBUFFER_FLAGS::E& gbufferFlags,
+                      SPtr<Material>& mat)
+{
+  auto& manager = ResoureManager::instance();
+  aiString notMyString;
+  material->Get(AI_MATKEY_TEXTURE(textureType,0),notMyString);
+  if(notMyString != aiString("")){
+    WString defuseName = StringUtilities::toWString(notMyString.C_Str());
+    
+    Path newPath;
+    newPath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
+    auto stringName = StringUtilities::toString(newPath.getName());
+    if(loadImage(newPath) || 
+       manager.m_textures.find(stringName) != manager.m_textures.end()){
+
+      gbufferFlags |= gbufferFlag;
+      mat->setTexture(textureChannel, manager.m_textures[stringName]);
+    }
+  }
+}
+
 void 
 loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
@@ -319,65 +370,78 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     auto mat = makeSPtr<Material>();
 
-    Path texturePath;
+    GBUFFER_FLAGS::E gbufferFlags = GBUFFER_FLAGS::NONE;
 
-    WString textureName = MaterialName;
+    tryLoadTextureChannel(material,
+                          aiTextureType_DIFFUSE,
+                          path,
+                          "diffuse",
+                          GBUFFER_FLAGS::DIFFUSE,
+                          gbufferFlags,
+                          mat);
 
-    material->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE,0),notMyString);
-    if(notMyString != aiString("")){
-      WString defuseName = StringUtilities::toWString(notMyString.C_Str());
-      
-      Path newPath;
-      
-      newPath.setCompletePath(defuseName);
-      
-      //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
-      texturePath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
-      
-      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
-        mat->setTexture("diffuse", manager.m_textures[StringUtilities::toString(texturePath.getName())]);
-      }
-    }
+    tryLoadTextureChannel(material,
+                          aiTextureType_NORMALS,
+                          path,
+                          "normalMap",
+                          GBUFFER_FLAGS::NORMALS,
+                          gbufferFlags,
+                          mat);
     
-
-    textureName = MaterialName+L"N";
-
-    texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
-
-    material->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS,0),notMyString);
-    if(notMyString != aiString("")){
-
-      WString normalName = StringUtilities::toWString(notMyString.C_Str());
-      texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
-
-      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
-        mat->setTexture("normalMap", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
-      }
-
-    }
-
-    material->Get(AI_MATKEY_TEXTURE(aiTextureType_SPECULAR,0),notMyString);
-    if(notMyString != aiString("")){
-
-      WString normalName = StringUtilities::toWString(notMyString.C_Str());
-      texturePath.setCompletePath(path.getDrive()+path.getDirection()+normalName);
-
-      if(loadImage(texturePath) || manager.m_textures.find(StringUtilities::toString(texturePath.getName())) != manager.m_textures.end()){
-        mat->setTexture("specular", manager.m_textures[ StringUtilities::toString(texturePath.getName())]);
-      }
-
-    }
+    tryLoadTextureChannel(material,
+                          aiTextureType_SPECULAR,
+                          path,
+                          "specular",
+                          GBUFFER_FLAGS::SPECULAR,
+                          gbufferFlags,
+                          mat);
     
-
-    //textureName = MaterialName+L"S";
-    //
-    //texturePath.setCompletePath(path.getDrive()+path.getDirection()+textureName+L".png");
-    //
-    //if(loadImage(texturePath)){
-    //  mat->setTexture("specular",manager.m_textures[ StringUtilities::toString(textureName)]);
-    //}
-
-    mat->setShader(manager.m_shaderPrograms["GBuffer"]);
+    tryLoadTextureChannel(material,
+                          aiTextureType_SHININESS,
+                          path,
+                          "emisive",
+                          GBUFFER_FLAGS::EMISIVE,
+                          gbufferFlags,
+                          mat);
+    
+    //print("looking for textures");
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_AMBIENT,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_AMBIENT_OCCLUSION,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_BASE_COLOR,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_CLEARCOAT,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE_ROUGHNESS,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_DISPLACEMENT,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_EMISSION_COLOR,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_EMISSIVE,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_HEIGHT,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_METALNESS,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMAL_CAMERA,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_OPACITY,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_REFLECTION,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_SHEEN,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_SHININESS,0),notMyString);
+    //print(notMyString.C_Str());
+    //material->Get(AI_MATKEY_TEXTURE(aiTextureType_TRANSMISSION,0),notMyString);
+    //print(notMyString.C_Str());
+    //print("looking finish");
+    print(StringUtilities::intToString(gbufferFlags));
+    mat->setShader(gbufferFlags);
 
     model->addMaterial(mat);
 

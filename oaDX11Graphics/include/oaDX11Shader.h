@@ -28,7 +28,7 @@ public:
    * @return 
   */
   bool
-  readFromFile(String file,ID3DBlob** blob);
+  readFromFile(String file, const Vector<String>& defines, ID3DBlob** blob);
 
   //ID3DBlob* m_blob = nullptr;
 

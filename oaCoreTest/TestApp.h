@@ -99,8 +99,9 @@ public:
 
   SPtr<Camera> m_debugCamera;
 
-  //Vector4f m_light;
-  Vector<DirectionalLight> m_lights;
+  Vector<DirectionalLight> m_directionalLights;
+
+  Vector<PointLight> m_pointLights;
 
   Vector4f m_ssaoConfig;
 

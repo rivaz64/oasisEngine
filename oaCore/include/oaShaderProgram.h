@@ -15,6 +15,10 @@ class OA_CORE_EXPORT ShaderProgram :
   public Shader
 {
  public:
+
+  ShaderProgram(const Vector<SPtr<Shader>>& shaders);
+
+  ShaderProgram() = default;
   
   /**
    * @brief attach a shader to this program

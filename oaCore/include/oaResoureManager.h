@@ -145,6 +145,11 @@ class OA_CORE_EXPORT ResoureManager :
   Map<String,SPtr<ShaderProgram>> m_shaderPrograms;
 
   /**
+   * @brief all the loaded pixel shaders
+  */
+  Map<String,Vector<SPtr<ShaderProgram>>> m_multiShaderPrograms;
+
+  /**
    * @brief all the materials
   */
   Map<String,SPtr<Material>> m_materials;

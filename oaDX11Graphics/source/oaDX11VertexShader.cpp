@@ -12,13 +12,13 @@ DX11VertexShader::~DX11VertexShader()
   if( m_inputLayout ) m_inputLayout->Release();
 }
 bool
-DX11VertexShader::compileFromFile(String file)
+DX11VertexShader::compileFromFile(const String& file,const Vector<String>& defines)
 {
   m_version = "vs_4_0";
 
   ID3DBlob* blob;
 
-  if(!readFromFile("shader/" + file + ".hlsl",&blob)){
+  if(!readFromFile("shader/" + file + ".hlsl", defines, &blob)){
     return false;
   }
 
