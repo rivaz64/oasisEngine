@@ -75,8 +75,6 @@ public:
 
  public:
 
-  SPtr<SamplerState> m_samplerState; 
-
   SPtr<Actor> m_selectedActor;
 
   SPtr<Texture> m_selectedTexture;

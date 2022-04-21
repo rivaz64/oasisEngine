@@ -222,4 +222,11 @@ PlatformMath::intersect(const Plane& _plane1, const Plane& _plane2, Line& _line)
   return false;
 }
 
+float 
+PlatformMath::computeGaussianValue(float x, float mean, float std_deviation)
+{
+  return ( 1.0f / sqrt( 2.0f * PI * std_deviation * std_deviation ) )
+       * expf( ( -( ( x - mean ) * ( x - mean ) ) ) / ( 2.0f * std_deviation * std_deviation ) );
+}
+
 }

@@ -9,25 +9,25 @@ DX11SamplerState::~DX11SamplerState()
   if (m_samplerState) m_samplerState->Release();
 }
 
-bool DX11SamplerState::init(SamplerDesc descriptor)
+bool DX11SamplerState::init(TEXTURE_ADDRESS_MODE::E textureAdressMode)
 {
   D3D11_SAMPLER_DESC sampDesc;
 
   memset(&sampDesc, 0, sizeof(sampDesc));
 
-  sampDesc.Filter = Flags::FILTER_FLAGS[descriptor.filter];
+  sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
-  sampDesc.AddressU = Flags::TEXTURE_ADDRESS_FLAGS[descriptor.addressU];
+  sampDesc.AddressU = Flags::TEXTURE_ADDRESS_FLAGS[textureAdressMode];
 
-  sampDesc.AddressV = Flags::TEXTURE_ADDRESS_FLAGS[descriptor.addressV];
+  sampDesc.AddressV = Flags::TEXTURE_ADDRESS_FLAGS[textureAdressMode];
 
-  sampDesc.AddressW = Flags::TEXTURE_ADDRESS_FLAGS[descriptor.addressW];
+  sampDesc.AddressW = Flags::TEXTURE_ADDRESS_FLAGS[textureAdressMode];
 
-  sampDesc.ComparisonFunc = Flags::COMPARISON_FLAGS[descriptor.comparison];
+  sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
-  sampDesc.MinLOD = descriptor.minLOD;
+  sampDesc.MinLOD = -Math::MAX_FLOAT;
 
-  sampDesc.MaxLOD = descriptor.maxLOD;
+  sampDesc.MaxLOD = Math::MAX_FLOAT;
 
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
   m_device->CreateSamplerState( &sampDesc, &m_samplerState );

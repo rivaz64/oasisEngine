@@ -583,6 +583,7 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("convolution");
   createPixelShader("copy");
   createPixelShader("color");
+  createPixelShader("downSample");
   //createPixelShader("directionalLight");
   //createPixelShader("pointLight");
 
@@ -597,6 +598,16 @@ ResoureManager::loadDefaultShaders()
   resourceManager.m_pixelShaders.insert({"pointLight",shader});
   shader->compileFromFile("light",{"POINT"});
   shader->setName("pointLight");
+
+  shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({"HBlur",shader});
+  shader->compileFromFile("blur",{"HORIZONTAL"});
+  shader->setName("HBlur");
+
+  shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({"VBlur",shader});
+  shader->compileFromFile("blur",{"VERTICAL"});
+  shader->setName("VBlur");
 
   createShaderProgram("default","vertexShader","default");
   createShaderProgram("animation","animVertexShader","default");
@@ -613,7 +624,9 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("copy","screen","copy");
   createShaderProgram("directionalLight","screen","directionalLight");
   createShaderProgram("pointLight","screen","pointLight");
-
+  createShaderProgram("HBlur","screen","HBlur");
+  createShaderProgram("VBlur","screen","VBlur");
+  createShaderProgram("downSample","screen","downSample");
   Vector<SPtr<ShaderProgram>> gBuffer;
   createPixelShaders("GBuffer",
                      m_vertexShaders["vertexShader"],

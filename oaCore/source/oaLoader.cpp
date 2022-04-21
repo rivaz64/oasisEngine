@@ -31,16 +31,6 @@ using Assimp::Importer;
 
 namespace oaEngineSDK {
 
-namespace GBUFFER_FLAGS{
-enum E {
-  NONE = 0,
-  DIFFUSE = 1,
-  NORMALS = 2,
-  SPECULAR = 4,
-  EMISIVE = 8
-};
-}
-
 inline GBUFFER_FLAGS::E operator | (GBUFFER_FLAGS::E lhs, GBUFFER_FLAGS::E rhs)
 {
     return static_cast<GBUFFER_FLAGS::E>(static_cast<uint8>(lhs) | 
@@ -370,13 +360,13 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     auto mat = makeSPtr<Material>();
 
-    GBUFFER_FLAGS::E gbufferFlags = GBUFFER_FLAGS::NONE;
+    GBUFFER_FLAGS::E gbufferFlags = GBUFFER_FLAGS::kNone;
 
     tryLoadTextureChannel(material,
                           aiTextureType_DIFFUSE,
                           path,
                           "diffuse",
-                          GBUFFER_FLAGS::DIFFUSE,
+                          GBUFFER_FLAGS::kDiffuse,
                           gbufferFlags,
                           mat);
 
@@ -384,7 +374,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
                           aiTextureType_NORMALS,
                           path,
                           "normalMap",
-                          GBUFFER_FLAGS::NORMALS,
+                          GBUFFER_FLAGS::kNormals,
                           gbufferFlags,
                           mat);
     
@@ -392,15 +382,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
                           aiTextureType_SPECULAR,
                           path,
                           "specular",
-                          GBUFFER_FLAGS::SPECULAR,
-                          gbufferFlags,
-                          mat);
-    
-    tryLoadTextureChannel(material,
-                          aiTextureType_SHININESS,
-                          path,
-                          "emisive",
-                          GBUFFER_FLAGS::EMISIVE,
+                          GBUFFER_FLAGS::kSpecular,
                           gbufferFlags,
                           mat);
     

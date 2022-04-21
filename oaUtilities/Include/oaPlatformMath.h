@@ -506,6 +506,16 @@ class OA_UTILITY_EXPORT PlatformMath {
   static bool
   intersect(const Plane& _plane1, const Plane& _plane2, Line& _line);
 
+  /**
+   * @brief calculates a gausean value at a certain point in x
+   * @param x 
+   * @param mean 
+   * @param std_deviation 
+   * @return 
+  */
+  static float 
+  computeGaussianValue( float x, float mean, float std_deviation );
+
   static const float PI;
   static const float HALF_PI;
   static const float TWO_PI;

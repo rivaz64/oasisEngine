@@ -220,11 +220,9 @@ DX11GraphicAPI::createTexture()
 }
 
 SPtr<SamplerState> 
-DX11GraphicAPI::createSamplerState(const SamplerDesc& descriptor)
+DX11GraphicAPI::createSamplerState()
 {
-  auto sampler = makeSPtr<DX11SamplerState>();
-  sampler->init(descriptor);
-  return sampler;
+  return makeSPtr<DX11SamplerState>();
 }
 
 SPtr<RasterizerState> DX11GraphicAPI::createRasterizerState()

@@ -11,45 +11,7 @@
 
 namespace oaEngineSDK {
 
-/**
- * @brief the descriptor for the sampler
-*/
-struct SamplerDesc {
-  /**
-   * @brief how it is going to filter
-  */
-  FILTER::E filter;
 
-  /**
-   * @brief who it handles the execes in u
-  */
-  TEXTURE_ADDRESS_MODE::E addressU;
-
-  /**
-   * @brief who it handles the execes in v
-  */
-  TEXTURE_ADDRESS_MODE::E addressV;
-
-  /**
-   * @brief who it handles the execes in w
-  */
-  TEXTURE_ADDRESS_MODE::E addressW;
-
-  /**
-   * @brief the funcion for comparicion
-  */
-  COMPARISON_FUNC::E comparison;
-
-  /**
-   * @brief the minimum number of LODs
-  */
-  float minLOD;
-
-  /**
-   * @brief the maximum number of LODs
-  */
-  float maxLOD;
-};
 
 /**
  * @brief the state for the sampler for textures
@@ -66,7 +28,7 @@ public:
    * @return 
   */
   virtual bool
-  init(SamplerDesc /*descriptor*/) { return true; }
+  init(TEXTURE_ADDRESS_MODE::E textureAdressMode) { return true; }
 };
 
 }

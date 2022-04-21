@@ -10,6 +10,16 @@
 
 namespace oaEngineSDK{
 
+namespace GBUFFER_FLAGS{
+enum E {
+  kNone = 0,
+  kDiffuse = 1,
+  kNormals = 2,
+  kSpecular = 4,
+  kEmisive = 8
+};
+}
+
 /**
  * @brief a class for materials
 */

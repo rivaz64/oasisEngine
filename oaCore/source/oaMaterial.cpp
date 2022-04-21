@@ -82,6 +82,18 @@ Material::setTexture(const String& channel, SPtr<Texture> texture)
 {
   if(m_textures.find(channel) == m_textures.end()){
     m_textures.insert({channel,texture});
+    if(channel == "diffuse"){
+      m_shader |= GBUFFER_FLAGS::kDiffuse;
+    }
+    else if(channel == "normalMap"){
+      m_shader |= GBUFFER_FLAGS::kNormals;
+    }
+    else if(channel == "specular"){
+      m_shader |= GBUFFER_FLAGS::kSpecular;
+    }
+    else if(channel == "emisive"){
+      m_shader |= GBUFFER_FLAGS::kEmisive;
+    }
   }
   else{
     m_textures[channel] = texture;

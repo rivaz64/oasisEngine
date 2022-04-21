@@ -22,7 +22,7 @@ DX11Buffer::init(uint32 size)
   bd.ByteWidth = size;
   bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
   bd.CPUAccessFlags = 0;
-  
+  //bd.StructureByteStride
   HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
     m_device->CreateBuffer( &bd, nullptr, &m_buffer );
 

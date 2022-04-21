@@ -55,7 +55,7 @@ class DX11GraphicAPI :
   createTexture() override;
 
   SPtr<SamplerState>
-  createSamplerState(const SamplerDesc& descriptor) override;
+  createSamplerState() override;
   
   SPtr<RasterizerState>
   createRasterizerState() override;

@@ -76,7 +76,7 @@ GraphicAPI::createTexture()
 }
 
 SPtr<SamplerState> 
-GraphicAPI::createSamplerState(const SamplerDesc&)
+GraphicAPI::createSamplerState()
 {
   return makeSPtr<SamplerState>();
 }

@@ -21,7 +21,7 @@ class DX11SamplerState:
   ~DX11SamplerState();
 
   bool
-  init(SamplerDesc descriptor) override;
+  init(TEXTURE_ADDRESS_MODE::E textureAdressMode) override;
 
  public:
 

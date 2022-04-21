@@ -125,6 +125,23 @@ class OA_UTILITY_EXPORT Vector2I
     return *this;
   }
 
+  /**
+  * @brief calculates a vector with the same direction as this and a lenght divided by v
+  * @param v
+  * @return
+  */
+  FORCEINLINE Vector2I const
+  operator/(int32 v) const {
+    return { x / v , y / v };
+  }
+
+  FORCEINLINE Vector2I&
+  operator/=(int32 v) {
+    x /= v;
+    y /= v;
+    return *this;
+  }
+
  public:
   /**
   * @brief the x component of the vector

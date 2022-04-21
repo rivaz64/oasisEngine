@@ -122,19 +122,19 @@ TestApp::postInit()
 {
   InputManager::instancePtr()->addInput(VK_RBUTTON);
 
-  SamplerDesc sampDesc;
-  ZeroMemory( &sampDesc, sizeof(sampDesc) );
-  sampDesc.filter = FILTER::kMinMagMipLinear;
-  sampDesc.addressU = TEXTURE_ADDRESS_MODE::kWrap;
-  sampDesc.addressV = TEXTURE_ADDRESS_MODE::kWrap;
-  sampDesc.addressW = TEXTURE_ADDRESS_MODE::kWrap;
-  sampDesc.comparison = COMPARISON_FUNC::kNever;
-  sampDesc.minLOD = 0.0f;
-  sampDesc.maxLOD = Math::MAX_FLOAT;
+  //SamplerDesc sampDesc;
+  //ZeroMemory( &sampDesc, sizeof(sampDesc) );
+  //sampDesc.filter = FILTER::kMinMagMipLinear;
+  //sampDesc.addressU = TEXTURE_ADDRESS_MODE::kWrap;
+  //sampDesc.addressV = TEXTURE_ADDRESS_MODE::kWrap;
+  //sampDesc.addressW = TEXTURE_ADDRESS_MODE::kWrap;
+  //sampDesc.comparison = COMPARISON_FUNC::kNever;
+  //sampDesc.minLOD = 0.0f;
+  //sampDesc.maxLOD = Math::MAX_FLOAT;
 
   auto& graphicAPI = GraphicAPI::instance();
   
-  m_samplerState = graphicAPI.createSamplerState(sampDesc);
+
 
   IMGUI_CHECKVERSION();
 
@@ -193,7 +193,6 @@ TestApp::draw()
 
   auto& resourseManager = ResoureManager::instance();
    
-  graphicsAPI.setSamplerState(m_samplerState);
   //
   ////m_camera->setCamera();
   //
@@ -502,9 +501,11 @@ void oaEngineSDK::TestApp::drawImGui()
   childsInImgui(m_actualScene->getRoot());
   ImGui::End();
 
-  ImGui::Begin("ssao");
+  ImGui::Begin("configs");
   ImGui::DragFloat4("ssao",&m_ssaoConfig.x,.001f);
+  ImGui::DragFloat("blur",&Renderer::instance().std_deviation,.01f);
   ImGui::End();
+
 
   ImGui::Begin("directional lights");
   if(ImGui::Button("add light")){
@@ -729,18 +730,18 @@ void oaEngineSDK::TestApp::drawImGui()
   //}
   //ImGui::End();
 
-  //ImGui::Begin("Model Editor");
-  //if(m_selectedModel){
-  //  int32 matNum = m_selectedModel->getNumOfMaterials();
-  //  for(int32 i = 0; i<matNum;++i){
-  //    auto& material = m_selectedModel->getMaterial(i);
-  //    if(material && material->getShader())
-  //    if(ImGui::Button((material->getShader()->getName()+StringUtilities::intToString(i)).c_str())){
-  //      m_selectedMaterial = material;
-  //    }
-  //  }
-  //}
-  //ImGui::End();
+  ImGui::Begin("Model Editor");
+  if(m_selectedModel){
+    int32 matNum = m_selectedModel->getNumOfMaterials();
+    for(int32 i = 0; i<matNum;++i){
+      auto& material = m_selectedModel->getMaterial(i);
+      if(material)
+      if(ImGui::Button((material->getName()).c_str())){
+        m_selectedMaterial = material;
+      }
+    }
+  }
+  ImGui::End();
 
   //ImGui::Begin("Shaders");
   //if(m_selectedMaterial){

@@ -30,7 +30,7 @@ class OA_CORE_EXPORT Renderer :
 
 
  public:
-  
+  float std_deviation = 8;
   
 
 };

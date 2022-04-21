@@ -56,7 +56,7 @@ class Deferred :
    * @brief blurrs a texture
   */
   void
-  blur(SPtr<Texture> texture, const Matrix3f& kernel);
+  blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut);
 
   /**
    * @brief copys the texture from in to out
@@ -86,8 +86,13 @@ class Deferred :
   void 
   specularPoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
 
+  void 
+  downSapmle(SPtr<Texture> texture);
+
   void
   setSize(const Vector2U& size) override;
+
+
 
  private:
   
@@ -100,6 +105,8 @@ class Deferred :
   SPtr<Texture> m_specularTexture;
 
   SPtr<Texture> m_emisiveTexture;
+
+  SPtr<Texture> m_downSapmle;
 
   SPtr<Texture> m_ssao;
 
@@ -133,7 +140,10 @@ class Deferred :
 
   SPtr<Buffer> m_size;
 
-  SPtr<Buffer> m_matrix;
+  //SPtr<Buffer> m_smallSize;
+
+  //SPtr<Buffer> m_matrix;
+  SPtr<Buffer> m_kernel;
 
   SPtr<RasterizerState> m_normalRasterizer;
 
@@ -144,6 +154,10 @@ class Deferred :
 
   SPtr<BlendState> m_blendState0;
   SPtr<BlendState> m_blendState1;
+
+  SPtr<SamplerState> m_samplerState; 
+
+  Vector<float> m_blurKernel;
 };
 
 }

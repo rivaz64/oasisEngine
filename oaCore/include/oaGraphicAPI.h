@@ -106,7 +106,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @return 
   */
   virtual SPtr<SamplerState>
-  createSamplerState(const SamplerDesc& /*descriptor*/);
+  createSamplerState();
 
   /**
    * @brief creates a new rasterizer

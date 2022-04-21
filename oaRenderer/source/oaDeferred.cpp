@@ -21,6 +21,7 @@
 #include <oaBlendState.h>
 #include <oaMatrix3f.h>
 #include <oaLights.h>
+#include <oaSamplerState.h>
 
 namespace oaEngineSDK{
 
@@ -55,8 +56,11 @@ Deferred::onStartUp()
   m_size = graphicsAPI.createBuffer();
   m_size->init(sizeof(Vector4f));
 
-  m_matrix = graphicsAPI.createBuffer();
-  m_matrix->init(sizeof(Matrix4f));
+  //m_smallSize = graphicsAPI.createBuffer();
+  //m_smallSize->init(sizeof(Vector4f));
+
+  m_kernel = graphicsAPI.createBuffer();
+  m_kernel->init(sizeof(float)*16);
 
   m_viewBuffer = graphicsAPI.createBuffer();
   m_viewBuffer->init(sizeof(Matrix4f));
@@ -71,10 +75,12 @@ Deferred::onStartUp()
   m_positionTexture = graphicsAPI.createTexture();
   m_specularTexture = graphicsAPI.createTexture();
   m_emisiveTexture = graphicsAPI.createTexture();
+  m_downSapmle = graphicsAPI.createTexture();
   m_ssao = graphicsAPI.createTexture();
   m_blur = graphicsAPI.createTexture();
   m_diffuseLight = graphicsAPI.createTexture();
   m_specularLight = graphicsAPI.createTexture();
+
 
   m_blendState0 = graphicsAPI.createBlendState();
   m_blendState0->init(false);
@@ -102,7 +108,12 @@ Deferred::onStartUp()
   //m_renderTarget->createShaderResource(FORMAT::kR32G32B32A32Float);
   m_renderTarget->createRenderTarget(FORMAT::kR32G32B32A32Float);
   graphicsAPI.setRenderTarget(m_renderTarget);
+  m_blurKernel.resize(16);
 
+  m_samplerState = graphicsAPI.createSamplerState();
+  m_samplerState->init(TEXTURE_ADDRESS_MODE::kBorder);
+  graphicsAPI.setSamplerState(m_samplerState);
+  
 }
 
 void 
@@ -129,6 +140,8 @@ Deferred::render(SPtr<Scene> scene,
   graphicsAPI.clearRenderTarget(m_diffuseLight);
   graphicsAPI.clearRenderTarget(m_specularLight);
   graphicsAPI.clearDepthStencil(m_depthStencil);
+    graphicsAPI.clearRenderTarget(m_downSapmle);
+
   
   graphicsAPI.setBlendState(m_blendState0);
   
@@ -156,12 +169,13 @@ Deferred::render(SPtr<Scene> scene,
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
   //debug(toRender);
   gBuffer(toRender);
-  copy(m_emisiveTexture,m_renderTarget);
+  downSapmle(m_emisiveTexture);
+  blur(m_downSapmle,m_blur);
   //gTransparents(transparents);
 
-  //directionalLight(camForView->getViewMatrix(),directionalLights);
-  //pointLight(camForView->getViewMatrix(),pointLights);
-  //aplylights();
+  directionalLight(camForView->getViewMatrix(),directionalLights);
+  pointLight(camForView->getViewMatrix(),pointLights);
+  aplylights();
   
   //ssao(config);
   //float n = 1.f/9.f;
@@ -279,23 +293,36 @@ Deferred::ssao( const Vector4f& config)
 }
 
 void
-Deferred::blur(SPtr<Texture> texture, const Matrix3f& kernel)
+Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
 {
+  //print(StringUtilities::floatToString(std_deviation));
+  for(int32 i = -4; i<5; ++i){
+    m_blurKernel[i+4] = Math::computeGaussianValue(static_cast<float>(i)/4.0f,0,std_deviation);
+    //print(StringUtilities::floatToString(i+4));
+    //print(StringUtilities::floatToString(m_blurKernel[i+4]));
+  }
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
-  resourseManager.m_shaderPrograms["convolution"]->set();
-  graphicsAPI.setRenderTarget(m_blur);
-  graphicsAPI.setTexture(m_ssao,0);
-  Matrix4f newKernel(kernel);
-  m_matrix->write(newKernel.getData());
-  graphicsAPI.setPSBuffer(m_matrix,0);
+  
+  graphicsAPI.setRenderTarget(textureOut);
+  graphicsAPI.setTexture(textureIn,0);
+  m_kernel->write(m_blurKernel.data());
+  resourseManager.m_shaderPrograms["HBlur"]->set();
+  graphicsAPI.setPSBuffer(m_kernel,0);
   graphicsAPI.setPSBuffer(m_size,1);
+  //graphicsAPI.setPSBuffer(m_smallSize,1);
+  
   
   screen->set();
-  
   graphicsAPI.draw(6);
-  copy(m_blur,texture);
+
+  graphicsAPI.setRenderTarget(textureIn);
+  graphicsAPI.setTexture(textureOut,0);
+  resourseManager.m_shaderPrograms["VBlur"]->set();
+  screen->set();
+  graphicsAPI.draw(6);
+  //copy(m_blur,texture);
   //auto& resourseManager = ResoureManager::instance();
   //auto& graphicsAPI = GraphicAPI::instance();
   //graphicsAPI.unsetRenderTargetAndDepthStencil();
@@ -348,7 +375,8 @@ Deferred::aplylights()
   graphicsAPI.setTexture(m_diffuseLight,1);
   graphicsAPI.setTexture(m_specularLight,2);
   graphicsAPI.setTexture(m_ssao,3);
-  graphicsAPI.setTexture(m_depthStencil,4);
+  graphicsAPI.setTexture(m_downSapmle,4);
+  graphicsAPI.setTexture(m_depthStencil,5);
   screen->set();
   
   graphicsAPI.draw(6);
@@ -466,6 +494,21 @@ Deferred::specularPoint(const Matrix4f& viewMatrix, const Vector<PointLight>& li
 }
 
 void 
+Deferred::downSapmle(SPtr<Texture> texture)
+{
+  auto& resourseManager = ResoureManager::instance();
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  resourseManager.m_shaderPrograms["downSample"]->set();
+  graphicsAPI.setTexture(texture,0);
+  graphicsAPI.setRenderTarget(m_downSapmle);
+  graphicsAPI.setPSBuffer(m_size,0);
+  screen->set();
+  graphicsAPI.draw(6);
+  graphicsAPI.unsetTextures(1);
+}
+
+void 
 Deferred::setSize(const Vector2U& size)
 {
   auto& graphicsApi = GraphicAPI::instance();
@@ -481,6 +524,7 @@ Deferred::setSize(const Vector2U& size)
   m_ssao->release();
   m_diffuseLight->release();
   m_specularLight->release();
+  m_downSapmle->release();
   auto iSize = Vector2I(size.x,size.y);
 
   m_depthStencil->init(iSize,BIND::kDepthStencil,FORMAT::kR24G8);
@@ -498,8 +542,12 @@ Deferred::setSize(const Vector2U& size)
   m_blur->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_diffuseLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  m_downSapmle->init(iSize/4,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+
   auto sizef = Vector2f(size.x,size.y);
   m_size->write(&sizef);
+  sizef /= 4.f;
+  //m_smallSize->write(&sizef);
 }
 
 }
