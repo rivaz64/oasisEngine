@@ -9,7 +9,7 @@ DX11VertexBuffer::~DX11VertexBuffer()
 }
 
 bool DX11VertexBuffer::init(
-  void* data,
+  const void* data,
   uint32 vertexSize,
   SIZE_T numberOfVertices)
 {

@@ -45,7 +45,7 @@ class StaticMesh :
     return m_vertices[n];
   }
 
-  FORCEINLINE const Vector<Vertex>&
+  FORCEINLINE Vector<Vertex>
   getVertex(){
     return m_vertices;
   }

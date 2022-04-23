@@ -666,44 +666,77 @@ ResoureManager::generateDefaultMaterials()
 Vector<SPtr<Model>>
 ResoureManager::separate(SPtr<Model> model)
 {
-  auto& mesh = model->getMesh(0);
-  auto& indices = mesh->getIndex();
-  auto vertices = mesh->getVertex();
-  auto material = model->getMaterial(0);
-  Octree tree;
-  auto planes = tree.getPlanes();
   Vector<uint32> indexFront;
   Vector<uint32> indexBack;
   Vector<Vector<uint32>> meshes;
-  meshes.push_back(indices);
   Vector<Vector<uint32>> newMeshes;
-  for(auto& plane: planes){
+   Vector<SPtr<Model>> models;
+
+  Octree tree;
+  auto planes = tree.getPlanes();
+
+  for(int32 i = 0; i<2; ++i){
+    String name = "model"+StringUtilities::intToString(i);
+    auto model = makeSPtr<Model>();
+    model->setName(name);
+    models.push_back(model);
+  }
+
+  auto numOfMeshes = model->getNumOfMeshes();
+
+  for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
+    meshes.clear();
+
+    auto& mesh = model->getMesh(meshNum);
+    auto& material = model->getMaterial(meshNum);
+    auto& indices = mesh->getIndex();
+    auto vertices = cast<StaticMesh>(mesh)->getVertex();
+
+    meshes.push_back(indices);
+
     for(Vector<uint32>& m : meshes){
       indexBack.clear();
       indexFront.clear();
-      divide(plane, vertices,m,indexBack,indexFront);
+      divide(planes[0], vertices,m,indexBack,indexFront);
       newMeshes.push_back(indexBack);
       newMeshes.push_back(indexFront);
     }
     meshes = newMeshes;
     newMeshes.clear();
+
+   
+    auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+    vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
+
+    for(uint32 i = 0; i<2; ++i){
+      auto newModel = models[i];
+      newModel->addMaterial(material);
+      auto newMesh = makeSPtr<Mesh>();
+      newModel->addMesh(newMesh);
+      newMesh->setIndex(meshes[i]);
+      newMesh->create(vertexB);
+    }
   }
 
-  Vector<SPtr<Model>> models;
-  auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-  vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
-
-  for(int32 i = 0; i<8; ++i){
-    String name = "cube"+StringUtilities::intToString(i);
-    auto model = makeSPtr<Model>();
-    model->setName(name);
-    model->addMaterial(material);
-    model->addMesh(makeSPtr<Mesh>());
-    auto& newMesh = model->getMesh(0);
-    newMesh->setIndex(meshes[i]);
-    newMesh->create(vertexB);
-    models.push_back(model);
-  }
+  
+  
+  //for(auto& plane: planes){
+  //  
+  //}
+  //
+  //
+  //
+  //for(int32 i = 0; i<8; ++i){
+  //  String name = "cube"+StringUtilities::intToString(i);
+  //  auto model = makeSPtr<Model>();
+  //  model->setName(name);
+  //  model->addMaterial(material);
+  //  model->addMesh(makeSPtr<Mesh>());
+  //  auto& newMesh = model->getMesh(0);
+  //  newMesh->setIndex(meshes[i]);
+  //  newMesh->create(vertexB);
+  //  models.push_back(model);
+  //}
 
   return models;
   

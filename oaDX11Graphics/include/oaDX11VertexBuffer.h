@@ -19,7 +19,7 @@ class DX11VertexBuffer :
   ~DX11VertexBuffer();
 
   bool
-  init(void* data, uint32 vertexSize, SIZE_T numberOfVertices) override;
+  init(const void* data, uint32 vertexSize, SIZE_T numberOfVertices) override;
 
   void
   set() override;
