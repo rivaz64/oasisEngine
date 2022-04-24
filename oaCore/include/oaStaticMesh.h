@@ -50,6 +50,11 @@ class StaticMesh :
     return m_vertices;
   }
 
+  FORCEINLINE void
+  setVertex(Vector<Vertex> vertices){
+    m_vertices = vertices;
+  }
+
  protected:
   
   /**

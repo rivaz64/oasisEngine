@@ -40,12 +40,17 @@ class OA_UTILITY_EXPORT Octree
 {
  public:
 
+  Octree(const Vector3f& center) :
+   m_center(center){}
   /**
    * @brief gets the planes that divides the cube of the root
    * @return 
   */
   Vector<Plane> 
-  getPlanes(const Vector3f& center);
+  getPlanes();
+
+  Vector<Vector3f> 
+  getCenters(float size);
 
  private:
   
@@ -54,6 +59,7 @@ class OA_UTILITY_EXPORT Octree
   */
   SPtr<OctreeNode> m_root;
 
+  Vector3f m_center;
 };
 
 }

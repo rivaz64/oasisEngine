@@ -663,29 +663,31 @@ ResoureManager::generateDefaultMaterials()
   //m_materials.insert({material->getName(),material});
 }
 
-Vector<SPtr<Model>>
-ResoureManager::separate(SPtr<Model> model)
+void
+ResoureManager::separate(SPtr<Model> model, uint32 n, const Vector3f& center, Vector<SPtr<Model>>& division,float size)
 {
   Vector<uint32> indexFront;
   Vector<uint32> indexBack;
   Vector<Vector<uint32>> meshes;
   Vector<Vector<uint32>> newMeshes;
-  Vector<SPtr<Model>> models;
-
-  Octree tree;
-  auto center = model->getCenter();
-  auto planes = tree.getPlanes(center);
-  print(StringUtilities::floatToString(center.x));
-  print(StringUtilities::floatToString(center.y));
-  print(StringUtilities::floatToString(center.z));
+  Vector<SPtr<Model>> newModels;
+  Vector<uint32> finalIndex;
+  Vector<Vertex> finalVertex;
+  Octree tree(center);
+  auto planes = tree.getPlanes();
+  //print(StringUtilities::floatToString(center.x));
+  //print(StringUtilities::floatToString(center.y));
+  //print(StringUtilities::floatToString(center.z));
+  
   for(int32 i = 0; i<8; ++i){
     String name = "model"+StringUtilities::intToString(i);
     auto model = makeSPtr<Model>();
     model->setName(name);
-    models.push_back(model);
+    newModels.push_back(model);
   }
 
   auto numOfMeshes = model->getNumOfMeshes();
+  
 
   for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
     meshes.clear();
@@ -694,7 +696,7 @@ ResoureManager::separate(SPtr<Model> model)
     auto& material = model->getMaterial(meshNum);
     auto& indices = mesh->getIndex();
     auto vertices = cast<StaticMesh>(mesh)->getVertex();
-
+    
     meshes.push_back(indices);
 
     for(auto& plane: planes){
@@ -712,19 +714,51 @@ ResoureManager::separate(SPtr<Model> model)
     
 
    
-    auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-    vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
-
+    //auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+    //vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
+    uint32 indexNum;
     for(uint32 i = 0; i<8; ++i){
-      auto newModel = models[i];
+      if(meshes[i].size()==0) continue;
+      auto newModel = newModels[i];
       newModel->addMaterial(material);
-      auto newMesh = makeSPtr<Mesh>();
+      auto newMesh = makeSPtr<StaticMesh>();
       newModel->addMesh(newMesh);
-      newMesh->setIndex(meshes[i]);
-      newMesh->create(vertexB);
+
+      finalIndex.clear();
+      finalVertex.clear();
+      indexNum = 0;
+      for(uint32 index : meshes[i]){
+        finalVertex.push_back(vertices[index]);
+        finalIndex.push_back(indexNum);
+        ++indexNum;
+      }
+
+      newMesh->setIndex(finalIndex);
+      newMesh->setVertex(finalVertex);
+      newMesh->create();
+      //newMesh->create(vertexB);
     }
   }
 
+  for(uint32 i = 0; i<8; ++i){
+
+    uint32 totalTris = 0;
+    for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
+      auto& mesh = model->getMesh(meshNum);
+      auto& indices = mesh->getIndex();
+      totalTris += indices.size()/3;
+    }
+    if(totalTris>5000){
+      auto newCenter = tree.getCenters(size);//model->farestPoint(center));
+      separate(newModels[i],0,newCenter[i],division,size/2.f);
+    }
+    else if(newModels[i]->getNumOfMeshes()>0){
+
+      division.push_back(newModels[i]);
+      print(newModels[i]->getName());
+    }
+  }
+  
   
   
   //for(auto& plane: planes){
@@ -745,7 +779,7 @@ ResoureManager::separate(SPtr<Model> model)
   //  models.push_back(model);
   //}
 
-  return models;
+  //return models;
   
 }
 

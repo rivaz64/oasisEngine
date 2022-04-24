@@ -81,6 +81,9 @@ class OA_CORE_EXPORT Model :
   Vector3f 
   getCenter();
 
+  float
+  farestPoint(const Vector3f& pont);
+
  private:
   
   /**

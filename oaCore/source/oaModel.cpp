@@ -29,5 +29,21 @@ Model::getCenter()
   return center/totalVertices;
 }
 
+float 
+Model::farestPoint(const Vector3f& point)
+{
+  float maxDistance = 0;
+  for(auto& mesh : m_meshes){
+    auto vertices = cast<StaticMesh>(mesh)->getVertex();
+    for(auto& vertex : vertices){
+      auto distance = (point-vertex.location.xyz).magnitud();
+      if(maxDistance<distance){
+        maxDistance = distance;
+      }
+    }
+  }
+  return maxDistance;
+}
+
 }
 

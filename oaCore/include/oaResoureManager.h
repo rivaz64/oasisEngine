@@ -109,8 +109,8 @@ class OA_CORE_EXPORT ResoureManager :
    * @brief does spatial separation to a model
    * @param model 
   */
-  Vector<SPtr<Model>>
-  separate(SPtr<Model> model);
+  void
+  separate(SPtr<Model> model, uint32 n, const Vector3f& center, Vector<SPtr<Model>>& division,float size);
 
  public:
 

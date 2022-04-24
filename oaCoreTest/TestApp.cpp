@@ -784,14 +784,16 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("spatial Separation");
   if(m_selectedModel && ImGui::Button("divide")){
-    auto models = resourceManager.separate(m_selectedModel);
+    Vector<SPtr<Model>> models;
+    auto center = m_selectedModel->getCenter();
+    resourceManager.separate(m_selectedModel,1,center,models,m_selectedModel->farestPoint(center));
     auto actor = makeSPtr<Actor>();
     for(auto& model : models){
       auto component = makeSPtr<GraphicsComponent>();
       component->setModel(model);
       actor->attachComponent(component);
     }
-    actor->setName("cube");
+    actor->setName("divided");
     m_actualScene->getRoot()->attach(actor);
   }
   ImGui::End();
