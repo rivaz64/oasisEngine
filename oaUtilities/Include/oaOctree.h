@@ -45,7 +45,7 @@ class OA_UTILITY_EXPORT Octree
    * @return 
   */
   Vector<Plane> 
-  getPlanes();
+  getPlanes(const Vector3f& center);
 
  private:
   

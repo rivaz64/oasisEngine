@@ -670,12 +670,15 @@ ResoureManager::separate(SPtr<Model> model)
   Vector<uint32> indexBack;
   Vector<Vector<uint32>> meshes;
   Vector<Vector<uint32>> newMeshes;
-   Vector<SPtr<Model>> models;
+  Vector<SPtr<Model>> models;
 
   Octree tree;
-  auto planes = tree.getPlanes();
-
-  for(int32 i = 0; i<2; ++i){
+  auto center = model->getCenter();
+  auto planes = tree.getPlanes(center);
+  print(StringUtilities::floatToString(center.x));
+  print(StringUtilities::floatToString(center.y));
+  print(StringUtilities::floatToString(center.z));
+  for(int32 i = 0; i<8; ++i){
     String name = "model"+StringUtilities::intToString(i);
     auto model = makeSPtr<Model>();
     model->setName(name);
@@ -694,21 +697,25 @@ ResoureManager::separate(SPtr<Model> model)
 
     meshes.push_back(indices);
 
-    for(Vector<uint32>& m : meshes){
-      indexBack.clear();
-      indexFront.clear();
-      divide(planes[0], vertices,m,indexBack,indexFront);
-      newMeshes.push_back(indexBack);
-      newMeshes.push_back(indexFront);
+    for(auto& plane: planes){
+      for(Vector<uint32>& m : meshes){
+        indexBack.clear();
+        indexFront.clear();
+        divide(plane, vertices,m,indexBack,indexFront);
+        newMeshes.push_back(indexBack);
+        newMeshes.push_back(indexFront);
+      }
+      meshes = newMeshes;
+      newMeshes.clear();
     }
-    meshes = newMeshes;
-    newMeshes.clear();
+    
+    
 
    
     auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
     vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
 
-    for(uint32 i = 0; i<2; ++i){
+    for(uint32 i = 0; i<8; ++i){
       auto newModel = models[i];
       newModel->addMaterial(material);
       auto newMesh = makeSPtr<Mesh>();

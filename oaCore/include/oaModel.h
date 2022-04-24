@@ -78,6 +78,9 @@ class OA_CORE_EXPORT Model :
     return m_materials[n] = material;
   }
 
+  Vector3f 
+  getCenter();
+
  private:
   
   /**

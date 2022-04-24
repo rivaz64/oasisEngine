@@ -3,15 +3,12 @@
 namespace oaEngineSDK{
 
 Vector<Plane>
-Octree::getPlanes()
+Octree::getPlanes(const Vector3f& center)
 {
-  
-  //auto& pos = m_root->location;
-  auto pos = Vector3f(.125,.25,.375);
   return {
-    Plane( pos,pos+Vector3f(0,0,1),pos+Vector3f(0,1,0)),
-    Plane( pos,pos+Vector3f(0,1,0),pos+Vector3f(1,0,0)),
-    Plane( pos,pos+Vector3f(1,0,0),pos+Vector3f(0,0,1))
+    Plane(center,center+Vector3f(0,0,1),center+Vector3f(0,1,0)),
+    Plane(center,center+Vector3f(0,1,0),center+Vector3f(1,0,0)),
+    Plane(center,center+Vector3f(1,0,0),center+Vector3f(0,0,1))
   };
 
 }
