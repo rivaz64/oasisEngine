@@ -426,16 +426,12 @@ DX11GraphicAPI::loadDDS(const Path& path)
   if(FAILED(hr)){
     return false;
   }
-  auto& graphicsApi = GraphicAPI::instance();
   auto texture = createTexture();
   cast<DX11Texture>(texture)->m_shaderResourceView = srv;
   auto& instance = ResoureManager::instance();
   auto textureName = StringUtilities::toString(path.getName());
   texture->setName(textureName);
   instance.m_textures.insert({textureName,texture});
-  //ID3D11Resource* tempResource;
-  //srv->GetResource(&tempResource);
-  //D3DX11CreateTextureFromFile()
   return true;
 }
 

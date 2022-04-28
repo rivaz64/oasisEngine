@@ -100,7 +100,7 @@ GraphicAPI::getBackBuffer()
 }
 
 bool 
-GraphicAPI::loadDDS(const Path& path)
+GraphicAPI::loadDDS(const Path& /*path*/)
 {
   return false;
 }

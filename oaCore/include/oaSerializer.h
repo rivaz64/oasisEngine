@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaFlags.h"
 
 namespace oaEngineSDK{
 
@@ -17,8 +18,8 @@ class OA_CORE_EXPORT Serializer
 {
  public:
 
-  void 
-  init(const Path& path);
+  bool 
+  init(const Path& path,FILE::E flag);
 
   void
   encodeNumber(SIZE_T n);

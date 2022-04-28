@@ -111,7 +111,7 @@ class OA_CORE_EXPORT BaseApp
    * @param input 
   */
   virtual void
-  onKeyBoardInput(char input){}
+  onKeyBoardInput(char /*input*/){}
 
   /**
    * @brief if the app is running

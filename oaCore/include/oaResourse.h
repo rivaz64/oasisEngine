@@ -11,7 +11,7 @@
 
 namespace oaEngineSDK{
 
-class Resourse
+class OA_CORE_EXPORT Resourse
 {
  public:
 

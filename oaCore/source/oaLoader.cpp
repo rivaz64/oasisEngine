@@ -587,7 +587,7 @@ loadAnimations()
 
 
 void
-Loader::load(LOADERFLAGS::E flags)
+Loader::load(LOADERFLAGS::E /*flags*/)
 {
 /*
   auto model = makeSPtr<Model>();

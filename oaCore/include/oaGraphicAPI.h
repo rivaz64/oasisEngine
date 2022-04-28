@@ -258,7 +258,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @brief sets the render target and the depth stencil to null
   */
   virtual void
-  unsetTextures(uint32 n) {}
+  unsetTextures(uint32 /*n*/) {}
 
   /**
    * @brief sets the primitive topology to be used

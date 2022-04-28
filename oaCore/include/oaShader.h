@@ -32,7 +32,7 @@ class OA_CORE_EXPORT Shader :
    * @return if it was compiled correctly
   */
   virtual bool 
-  compileFromFile(const String& file,const Vector<String>& defines) {return true;}
+  compileFromFile(const String& /*file*/,const Vector<String>& /*defines*/) {return true;}
 
   FORCEINLINE bool 
   compileFromFile(const String& file){

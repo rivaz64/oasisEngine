@@ -123,7 +123,7 @@ Matrix3f::inverse() const
     Vector3f(+(row2.y * row3.z - row3.y * row2.z),-(row1.y * row3.z - row3.y * row1.z),+(row1.y * row2.z - row2.y * row1.z)),
     Vector3f(-(row2.x * row3.z - row3.x * row2.z),+(row1.x * row3.z - row3.x * row1.z),-(row1.x * row2.z - row2.x * row1.z)),
     Vector3f(+(row2.x * row3.y - row3.x * row2.y),-(row1.x * row3.y - row3.x * row1.y),+(row1.x * row2.y - row2.x * row1.y))
-  );
+  )*invDet;
 }
 
 void 

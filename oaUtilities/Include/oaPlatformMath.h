@@ -503,8 +503,8 @@ class OA_UTILITY_EXPORT PlatformMath {
   * @param _line the line where the intersection occures
   * @return 
   */
-  static bool
-  intersect(const Plane& _plane1, const Plane& _plane2, Line& _line);
+  //static bool
+  //intersect(const Plane& _plane1, const Plane& _plane2, Line& _line);
 
   /**
    * @brief calculates a gausean value at a certain point in x

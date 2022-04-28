@@ -27,11 +27,11 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
   
   Matrix4f finalTransform;
 
-  for(auto actor : childs){
+  for(auto child : childs){
 
-    actorTransform = actor->getGlobalTransform();
+    actorTransform = child->getGlobalTransform();
   
-    auto components = actor->getComponents<GraphicsComponent>();
+    auto components = child->getComponents<GraphicsComponent>();
     for(auto& component : components){
       auto meshComponent = cast<GraphicsComponent>(component);
       auto model = meshComponent->getModel();

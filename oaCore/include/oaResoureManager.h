@@ -28,13 +28,6 @@ class OA_CORE_EXPORT ResoureManager :
  public:
 
   /**
-   * @brief loads a texture from a file
-   * @return if the texture was loaded
-  */
-  bool
-  loadTexture(const Path& file);
-
-  /**
    * @brief loads the default things
   */
   void
@@ -110,7 +103,10 @@ class OA_CORE_EXPORT ResoureManager :
    * @param model 
   */
   void
-  separate(SPtr<Model> model, uint32 n, const Vector3f& center, Vector<SPtr<Model>>& division,float size);
+  separate(SPtr<Model> model, 
+           const Vector3f& center, 
+           Vector<SPtr<Model>>& division,
+           float size);
 
  public:
 

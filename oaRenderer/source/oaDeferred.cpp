@@ -124,11 +124,7 @@ Deferred::render(SPtr<Scene> scene,
          const Vector<PointLight>& pointLights,
          const Vector4f& config)
 {
-  auto& resourseManager = ResoureManager::instance();
-  
   auto& graphicsAPI = GraphicAPI::instance();
-
-  //graphicsAPI.unsetRenderTtextures();
   
   graphicsAPI.clearRenderTarget(m_colorTexture);
   graphicsAPI.clearRenderTarget(m_normalTexture);
@@ -174,6 +170,9 @@ Deferred::render(SPtr<Scene> scene,
   //gTransparents(transparents);
 
   directionalLight(camForView->getViewMatrix(),directionalLights);
+
+  ssao(config);
+
   pointLight(camForView->getViewMatrix(),pointLights);
   aplylights();
   
@@ -186,13 +185,12 @@ Deferred::render(SPtr<Scene> scene,
 
 void 
 Deferred::gBuffer(Vector<RenderData>& toRender)
-{
-  auto& resourseManager = ResoureManager::instance();
-  
+{ 
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
   graphicsAPI.setRasterizerState(m_normalRasterizer);
+
   for(auto& renderData : toRender){
     m_globalTransformBuffer->write(&renderData.m_transform);
     graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);

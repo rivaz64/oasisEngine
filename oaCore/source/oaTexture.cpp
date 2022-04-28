@@ -11,7 +11,7 @@
 namespace oaEngineSDK{
 
 bool
-Texture::init(const Vector2I& size, BIND::E bind, FORMAT::E format, const void* data, uint32 pitch)
+Texture::init(const Vector2I& /*size*/, BIND::E /*bind*/, FORMAT::E /*format*/, const void* /*data*/, uint32 /*pitch*/)
 {
   return false;
 }
@@ -25,19 +25,19 @@ Texture::initFromImage(SPtr<Image> image)
 }
 
 bool 
-Texture::createShaderResource(FORMAT::E format)
+Texture::createShaderResource(FORMAT::E /*format*/)
 {
   return false;
 }
 
 bool
-Texture::createRenderTarget(FORMAT::E format)
+Texture::createRenderTarget(FORMAT::E /*format*/)
 {
   return false;
 }
 
 bool
-Texture::createDepthStencil(FORMAT::E format)
+Texture::createDepthStencil(FORMAT::E /*format*/)
 {
   return false;
 }

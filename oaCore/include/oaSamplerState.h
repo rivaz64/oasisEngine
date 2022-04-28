@@ -28,7 +28,7 @@ public:
    * @return 
   */
   virtual bool
-  init(TEXTURE_ADDRESS_MODE::E textureAdressMode) { return true; }
+  init(TEXTURE_ADDRESS_MODE::E /*textureAdressMode*/) { return true; }
 };
 
 }

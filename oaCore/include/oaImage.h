@@ -48,7 +48,7 @@ class Image :
 
   FORCEINLINE int32
   getNumberOfBytes(){
-    return (m_size.x*m_size.y)*getBytesPerPixel();
+    return static_cast<int32>((m_size.x*m_size.y)*getBytesPerPixel());
   }
 
   FORCEINLINE FORMAT::E

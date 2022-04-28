@@ -44,7 +44,7 @@ class OA_UTILITY_EXPORT Line
    * @brief getter for the direction
    * @return 
   */
-  FORCEINLINE const Vector3f&
+  FORCEINLINE Vector3f
   getDirection() const {
     return (m_endpoint-m_startingPoint).normalized();
   }

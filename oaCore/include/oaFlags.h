@@ -136,5 +136,12 @@ enum E{
 };
 }
 
+namespace FILE{
+enum E{
+  kRead,
+  kWrite
+};
+}
+
 }
 

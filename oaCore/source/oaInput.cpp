@@ -14,9 +14,9 @@ Input::createDeviceKeyboard()
   return 0;
 }
 
-void 
-Input::mapBool(uint32 inputId, uint32 deviceId, uint32 input)
-{
-}
+//void 
+//Input::mapBool(uint32 inputId, uint32 deviceId, uint32 input)
+//{
+//}
 
 }

@@ -21,13 +21,20 @@ DX11PixelShader::compileFromFile(const String& file,const Vector<String>& define
     return false;
   }
 
-  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-    m_device->CreatePixelShader(blob->GetBufferPointer(), 
-                                blob->GetBufferSize(), 
-                                nullptr, 
-                                &m_shader);
+  auto graphicsApi = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr());
+  auto& device = graphicsApi->m_device;
+
+  HRESULT hr = device->CreatePixelShader(blob->GetBufferPointer(), 
+                                         blob->GetBufferSize(), 
+                                         nullptr, 
+                                         &m_shader);
 
   blob->Release();
+
+  if(FAILED(hr)){
+    return false;
+  }
+
   return true;
 }
 

@@ -17,32 +17,6 @@
 
 namespace oaEngineSDK{
 
-bool 
-ResoureManager::loadTexture(const Path& file)
-{
-/*
-  if(m_textures.find(file.getCompletePath())!=m_textures.end()){
-    print("texture already loaded");
-    return true;
-  }
-
-  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-
-  if(!texture->loadFromFile(file)){
-    print("texture not loaded");
-    return false;
-  }
-
-  m_textures[file.getCompletePath()] = texture;
-
-  Path path(file);
-
-  texture->m_name = path.getName();
-  */
-  return true;
-  
-}
-
 void
 ResoureManager::onStartUp()
 {
@@ -317,9 +291,9 @@ divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vect
   Vector<uint32> replaceIndexes;
   Vector<uint32> finalIndexesFront;
   Vector<uint32> finalIndexesBack;
-  int32 trisNum = index.size()/3;
+  SIZE_T trisNum = index.size()/3;
   bool isFront;
-  for(int32 i = 0; i<trisNum; ++i){
+  for(SIZE_T i = 0; i<trisNum; ++i){
     replaceIndexes.clear();
     newIndexesFront.clear();
     newIndexesBack.clear();
@@ -519,7 +493,6 @@ createPixelShaders(const String& name,
                    uint8 num)
 {
   auto& graphicsApi = GraphicAPI::instance();
-  auto& resourceManager = ResoureManager::instance();
   
   if(num < allDefines.size()){
     createPixelShaders(name, vertexShader, allDefines, shaderPrograms, defines, num+1);
@@ -664,7 +637,10 @@ ResoureManager::generateDefaultMaterials()
 }
 
 void
-ResoureManager::separate(SPtr<Model> model, uint32 n, const Vector3f& center, Vector<SPtr<Model>>& division,float size)
+ResoureManager::separate(SPtr<Model> model,
+                         const Vector3f& center, 
+                         Vector<SPtr<Model>>& division,
+                         float size)
 {
   Vector<uint32> indexFront;
   Vector<uint32> indexBack;
@@ -681,9 +657,9 @@ ResoureManager::separate(SPtr<Model> model, uint32 n, const Vector3f& center, Ve
   
   for(int32 i = 0; i<8; ++i){
     String name = "model"+StringUtilities::intToString(i);
-    auto model = makeSPtr<Model>();
-    model->setName(name);
-    newModels.push_back(model);
+    auto newModel = makeSPtr<Model>();
+    newModel->setName(name);
+    newModels.push_back(newModel);
   }
 
   auto numOfMeshes = model->getNumOfMeshes();
@@ -742,7 +718,7 @@ ResoureManager::separate(SPtr<Model> model, uint32 n, const Vector3f& center, Ve
 
   for(uint32 i = 0; i<8; ++i){
 
-    uint32 totalTris = 0;
+    SIZE_T totalTris = 0;
     for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
       auto& mesh = model->getMesh(meshNum);
       auto& indices = mesh->getIndex();
@@ -750,7 +726,7 @@ ResoureManager::separate(SPtr<Model> model, uint32 n, const Vector3f& center, Ve
     }
     if(totalTris>5000){
       auto newCenter = tree.getCenters(size);//model->farestPoint(center));
-      separate(newModels[i],0,newCenter[i],division,size/2.f);
+      separate(newModels[i],newCenter[i],division,size/2.f);
     }
     else if(newModels[i]->getNumOfMeshes()>0){
 

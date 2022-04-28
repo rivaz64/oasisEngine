@@ -67,8 +67,6 @@ Mesh::create(void* data, SIZE_T vertexSize, SIZE_T numOfVertex)
 
   m_vertices.resize(vertexSize*numOfVertex);
 
-  m_vertices.data();
-
   void* vertexData = reinterpret_cast<void*>(m_vertices.data());
 
   memcpy(vertexData,data,vertexSize*numOfVertex);

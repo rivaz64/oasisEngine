@@ -13,21 +13,39 @@
 
 namespace oaEngineSDK{
 
-
-
-void
-Serializer::init(const Path& path)
+bool
+Serializer::init(const Path& path,FILE::E flag)
 {
-  file.open(StringUtilities::toString(path.getCompletePath()),std::fstream::out | std::fstream::in | std::ios::binary);
+  int flags;
+  String firm;
+  if(flag == FILE::kWrite){
+    flags = fstream::out | ios::binary;
+    firm = "oasisFile";
+    file.open(StringUtilities::toString(path.getCompletePath()),flags);
+    file.write(firm.c_str(),firm.size()*sizeof(char));
+  }
+  else if(flag == FILE::kRead){
+    flags = fstream::in | ios::binary;
+    firm.resize(9);
+    SIZE_T nameData = reinterpret_cast<SIZE_T>(firm.data());
+    file.open(StringUtilities::toString(path.getCompletePath()),flags);
+    file.read(reinterpret_cast<char*>(nameData),sizeof(char)*9);
+    if(firm != "oasisFile"){
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void 
-Serializer::encodeNumber(SIZE_T n)
+Serializer::encodeNumber(SIZE_T number)
 {
-  file.write(reinterpret_cast<char*>(&n),sizeof(SIZE_T));
+  file.write(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
 }
 
-SIZE_T Serializer::decodeNumber()
+SIZE_T
+Serializer::decodeNumber()
 {
   SIZE_T number;
   file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
@@ -37,9 +55,9 @@ SIZE_T Serializer::decodeNumber()
 void
 Serializer::encodeString(const String& string)
 {
-  uint32 nameSize = string.size();
+  SIZE_T nameSize = string.size();
 
-  file.write(reinterpret_cast<char*>(&nameSize),sizeof(int32));
+  file.write(reinterpret_cast<char*>(&nameSize),sizeof(SIZE_T));
   file.write(string.c_str(),nameSize);
 }
 
@@ -47,12 +65,12 @@ String
 Serializer::decodeString()
 {
   String string;
-  uint32 nameSize;
+  SIZE_T nameSize;
 
-  file.read(reinterpret_cast<char*>(&nameSize),sizeof(int32));
+  file.read(reinterpret_cast<char*>(&nameSize),sizeof(SIZE_T));
   string.resize(nameSize);
 
-   SIZE_T nameData = reinterpret_cast<SIZE_T>(string.data());
+  SIZE_T nameData = reinterpret_cast<SIZE_T>(string.data());
   file.read(reinterpret_cast<char*>(nameData),sizeof(char)*nameSize);
 
   return string;
@@ -93,8 +111,6 @@ Serializer::encodeMaterial(SPtr<Material> material)
 {
   encodeString(material->getName());
 
-  auto shader = material->getShader();
-
   encodeNumber(material->getShader());
 
   auto types = material->getTextureChannels();
@@ -102,8 +118,6 @@ Serializer::encodeMaterial(SPtr<Material> material)
   SIZE_T numOfTypes = types.size();
 
   file.write(reinterpret_cast<char*>(&numOfTypes),sizeof(SIZE_T));
-
-  SIZE_T nameSize;
 
   for(auto& type : types){
     encodeString(type);
@@ -168,7 +182,8 @@ Serializer::encodeModel(SPtr<Model> model)
 
     file.write(reinterpret_cast<char*>(&vertexNum),sizeof(SIZE_T));
 
-    auto vertexData = staticMesh->getVertex().data();
+    auto vertices = staticMesh->getVertex();
+    auto vertexData = vertices.data();
 
     file.write(reinterpret_cast<const char*>(vertexData),sizeof(Vertex)*vertexNum);
 

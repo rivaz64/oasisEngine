@@ -106,12 +106,12 @@ Frustum::isInside(const Sphere& sphere, const Matrix4f& transform) const
   auto radius = sphere.getRadius()*Math::max(Math::max(scale.x,scale.y),scale.z);
   
   return 
-    Math::distance(m_nearPlane, center) > -sphere.getRadius() &&
-    Math::distance(m_farPlane, center) > -sphere.getRadius() &&
-    Math::distance(m_topPlane, center) > -sphere.getRadius() &&
-    Math::distance(m_bottomPlane, center) > -sphere.getRadius() &&
-    Math::distance(m_rightPlane, center) > -sphere.getRadius() &&
-    Math::distance(m_leftPlane, center) > -sphere.getRadius();
+    Math::distance(m_nearPlane, center) > -radius &&
+    Math::distance(m_farPlane, center) > -radius &&
+    Math::distance(m_topPlane, center) > -radius &&
+    Math::distance(m_bottomPlane, center) > -radius &&
+    Math::distance(m_rightPlane, center) > -radius &&
+    Math::distance(m_leftPlane, center) > -radius;
 }
 
 bool 

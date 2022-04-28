@@ -623,13 +623,13 @@ void oaEngineSDK::TestApp::drawImGui()
     Path path;
     if(path.searchForPath()){
 
-      serializer.init(path);
+      serializer.init(path,FILE::kWrite);
 
       serializer.encodeNumber(resourceManager.m_textures.size());
       for(auto& image: resourceManager.m_textures){
         serializer.encodeImage(image.second->getImage());
       }
-
+      
       serializer.encodeNumber(resourceManager.m_materials.size());
       for(auto& material: resourceManager.m_materials){
         serializer.encodeMaterial(material.second);
@@ -639,7 +639,7 @@ void oaEngineSDK::TestApp::drawImGui()
       for(auto& model: resourceManager.m_models){
         serializer.encodeModel(model.second);
       }
-
+      
       auto actors = m_actualScene->getRoot()->getChilds();
       serializer.encodeNumber(actors.size());
       for(auto& actor : actors){
@@ -653,33 +653,35 @@ void oaEngineSDK::TestApp::drawImGui()
     Serializer serializer;
     Path path;
     if(path.searchForPath()){
-      serializer.init(path);
+      if(serializer.init(path,FILE::kRead)){
+        SIZE_T number = serializer.decodeNumber();
+        for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+          auto image = serializer.decodeImage();
+          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+          texture->initFromImage(image);
+          resourceManager.m_textures.insert({ texture->getName(),texture});
+        }
 
-      SIZE_T number = serializer.decodeNumber();
-      for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-        auto image = serializer.decodeImage();
-        SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-        texture->initFromImage(image);
-        resourceManager.m_textures.insert({ texture->getName(),texture});
+        number = serializer.decodeNumber();
+        for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+          auto material = serializer.decodeMaterial();
+          resourceManager.m_materials.insert({ material->getName(),material});
+        }
+        
+        number = serializer.decodeNumber();
+        for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+          auto model = serializer.decodeModel();
+          resourceManager.m_models.insert({ model->getName(),model});
+        }
+
+        number = serializer.decodeNumber();
+        for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+          auto actor = serializer.decodeActor();
+          m_actualScene->getRoot()->attach(actor);
+        }
       }
 
-      number = serializer.decodeNumber();
-      for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-        auto material = serializer.decodeMaterial();
-        resourceManager.m_materials.insert({ material->getName(),material});
-      }
       
-      number = serializer.decodeNumber();
-      for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-        auto model = serializer.decodeModel();
-        resourceManager.m_models.insert({ model->getName(),model});
-      }
-
-      number = serializer.decodeNumber();
-      for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-        auto actor = serializer.decodeActor();
-        m_actualScene->getRoot()->attach(actor);
-      }
     }
   }
   ImGui::End();
@@ -732,8 +734,8 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("Model Editor");
   if(m_selectedModel){
-    int32 matNum = m_selectedModel->getNumOfMaterials();
-    for(int32 i = 0; i<matNum;++i){
+    SIZE_T matNum = m_selectedModel->getNumOfMaterials();
+    for(SIZE_T i = 0; i<matNum;++i){
       auto& material = m_selectedModel->getMaterial(i);
       if(material)
       if(ImGui::Button((material->getName()).c_str())){
@@ -786,7 +788,7 @@ void oaEngineSDK::TestApp::drawImGui()
   if(m_selectedModel && ImGui::Button("divide")){
     Vector<SPtr<Model>> models;
     auto center = m_selectedModel->getCenter();
-    resourceManager.separate(m_selectedModel,1,center,models,m_selectedModel->farestPoint(center));
+    resourceManager.separate(m_selectedModel,center,models,m_selectedModel->farestPoint(center));
     auto actor = makeSPtr<Actor>();
     for(auto& model : models){
       auto component = makeSPtr<GraphicsComponent>();

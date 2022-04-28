@@ -258,6 +258,8 @@ Matrix4f::invert()
   row4.y = +(row1.x * a3423 - row1.z * a1423 + row1.w * a1323);
   row4.z = -(row1.x * a2423 - row1.y * a1423 + row1.w * a1223);
   row4.w = +(row1.x * a2323 - row1.y * a1323 + row1.z * a1223);
+
+  *this *= invDet;
 }
 
 Matrix4f
