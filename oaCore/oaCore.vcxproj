@@ -191,12 +191,14 @@
     <ClInclude Include="include\oaInput.h" />
     <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaInputMap.h" />
+    <ClInclude Include="include\oaKeyboard.h" />
     <ClInclude Include="include\oaLights.h" />
     <ClInclude Include="include\oaLoader.h" />
     <ClInclude Include="include\oaLogger.h" />
     <ClInclude Include="include\oaMaterial.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
+    <ClInclude Include="include\oaMouse.h" />
     <ClInclude Include="include\oaPath.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaRasterizerState.h" />
@@ -261,6 +263,7 @@
     </ClCompile>
     <ClCompile Include="source\oaInput.cpp" />
     <ClCompile Include="source\oaInputMap.cpp" />
+    <ClCompile Include="source\oaKeyboard.cpp" />
     <ClCompile Include="source\oaLoader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -276,6 +279,7 @@
     <ClCompile Include="source\oaModel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaMouse.cpp" />
     <ClCompile Include="source\oaPath.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

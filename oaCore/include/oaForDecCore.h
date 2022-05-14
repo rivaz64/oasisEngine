@@ -38,4 +38,6 @@ class BlendState;
 class DebugMesh;
 struct DirectionalLight;
 struct PointLight;
+class Mouse;
+class Keyboard;
 }

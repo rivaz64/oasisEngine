@@ -16,10 +16,10 @@ class Ga_Input :
 {
  public:
 
-  uint32
+  SPtr<Mouse>
   createDeviceMouse() override;
 
-  uint32
+  SPtr<Keyboard>
   createDeviceKeyboard() override;
 
  private:

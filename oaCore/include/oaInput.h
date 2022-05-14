@@ -23,14 +23,14 @@ class Input :
    * @brief creates the interface for the inputs of a mouse
    * @return 
   */
-  virtual uint32
+  virtual SPtr<Mouse>
   createDeviceMouse();
 
   /**
    * @brief creates the interface for the inputs of a keyboard
    * @return 
   */
-  virtual uint32
+  virtual SPtr<Keyboard>
   createDeviceKeyboard();
 
   /**

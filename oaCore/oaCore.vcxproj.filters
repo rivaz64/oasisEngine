@@ -156,6 +156,12 @@
     <ClInclude Include="include\oaLights.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaMouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaKeyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -276,6 +282,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaMouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
