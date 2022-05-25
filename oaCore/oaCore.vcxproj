@@ -189,7 +189,6 @@
     <ClInclude Include="include\oaImage.h" />
     <ClInclude Include="include\oaIndexBuffer.h" />
     <ClInclude Include="include\oaInput.h" />
-    <ClInclude Include="include\oaInputManager.h" />
     <ClInclude Include="include\oaInputMap.h" />
     <ClInclude Include="include\oaKeyboard.h" />
     <ClInclude Include="include\oaLights.h" />

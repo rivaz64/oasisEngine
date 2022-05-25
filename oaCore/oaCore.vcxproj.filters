@@ -60,9 +60,6 @@
     <ClInclude Include="include\oaShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaInputManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -4,7 +4,6 @@
 #include <oaModel.h>
 #include <oaSamplerState.h>
 #include <oaShader.h>
-#include <oaInputManager.h>
 #include <oaGrid2D.h>
 #include <oaPerlinNoise2D.h>
 #include <oaPerlinNoise3D.h>
@@ -32,6 +31,8 @@
 #include <oaRasterizerState.h>
 #include <oaRenderer.h>
 #include <oaCameraComponent.h>
+#include <oaInput.h>
+#include <oaKeyboard.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -77,7 +78,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   
 
   case WM_KEYDOWN:
-    app->processInputs(wParam);
+    app->processInputs({hWnd,message,wParam,lParam});
     break;
     
   //case WM_NCCREATE:
@@ -120,8 +121,6 @@ TestApp::onInit()
 void 
 TestApp::postInit()
 {
-  InputManager::instancePtr()->addInput(VK_RBUTTON);
-
   //SamplerDesc sampDesc;
   //ZeroMemory( &sampDesc, sizeof(sampDesc) );
   //sampDesc.filter = FILTER::kMinMagMipLinear;
@@ -157,6 +156,9 @@ TestApp::postInit()
   m_ssaoConfig.y=0;
   m_ssaoConfig.z=1;
 
+  auto& input = Input::instance();
+  m_keyboard = input.createDeviceKeyboard();
+
   //m_lights.push_back(DirectionalLight());
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
@@ -166,23 +168,103 @@ TestApp::postInit()
 void 
 TestApp::onUpdate(float delta)
 { 
-  auto& inputManager = InputManager::instance();
-
-  if(m_controlledActor){
-    if (inputManager.getInput(VK_RBUTTON))
-    {
-      m_controlledActor->getComponent<CameraComponent>()->
-        getCamera()->rotateWithMouse(inputManager.getMouseDelta());
-    }
+  auto& inputManager = Input::instance();
+  inputManager.update();
+  //if(m_controlledActor){
+  //  if (inputManager.(VK_RBUTTON))
+  //  {
+  //    m_controlledActor->getComponent<CameraComponent>()->
+  //      getCamera()->rotateWithMouse(inputManager.getMouseDelta());
+  //  }
+  //}
+  //else{
+  //  if (inputManager.getInput(VK_RBUTTON))
+  //  {
+  //    m_camera->rotateWithMouse(inputManager.getMouseDelta());
+  //  }
+  //
+  //  m_camera->update();
+  //}
+  if(m_keyboard->isKeyDown(KEY::kA)){
+    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
   }
-  else{
-    if (inputManager.getInput(VK_RBUTTON))
-    {
-      m_camera->rotateWithMouse(inputManager.getMouseDelta());
-    }
-
-    m_camera->update();
-  }
+ //if(m_keyboard->isKeyDown(KEY::kD)){
+ //  m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+ //}
+ //if(m_keyboard->isKeyDown(KEY::kW)){
+ //  m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+ //}
+ //if(m_keyboard->isKeyDown(KEY::kS)){
+ //  m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+ //}
+ //if(m_keyboard->isKeyDown(KEY::kQ)){
+ //  m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+ //}
+ //if(m_keyboard->isKeyDown(KEY::kE)){
+ //  m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+ //}
+  //if(!m_controlledActor){
+  //  switch (input)
+  //  {
+  //  case 'A':
+  //    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
+  //    break;
+  //
+  //  case 'D':
+  //    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+  //    break;
+  //
+  //  case 'W':
+  //    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+  //    break;
+  //
+  //  case 'S':
+  //    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+  //    break;
+  //
+  //  case 'Q':
+  //    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+  //    break;
+  //
+  //  case 'E':
+  //    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+  //    break;
+  //
+  //  default:
+  //    break;
+  //  }
+  //}
+  //else{
+  //  switch (input)
+  //  {
+  //  case 'A':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(-m_secondPerFrame,0,0));
+  //    break;
+  //
+  //  case 'D':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(m_secondPerFrame,0,0));
+  //    break;
+  //
+  //  case 'W':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(0,0,m_secondPerFrame));
+  //    break;
+  //
+  //  case 'S':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(0,0,-m_secondPerFrame));
+  //    break;
+  //
+  //  case 'Q':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(0,m_secondPerFrame,0));
+  //    break;
+  //
+  //  case 'E':
+  //    m_controlledActor->GetActorTransform().move(Vector3f(0,-m_secondPerFrame,0));
+  //    break;
+  //
+  //  default:
+  //    break;
+  //  }
+  //}
   
 }
 
@@ -922,73 +1004,7 @@ void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used,
   //}
 }
 
-void 
-TestApp::onKeyBoardInput(char input)
-{
-  if(!m_controlledActor){
-    switch (input)
-    {
-    case 'A':
-      m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
-      break;
 
-    case 'D':
-      m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
-      break;
-
-    case 'W':
-      m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
-      break;
-
-    case 'S':
-      m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
-      break;
-
-    case 'Q':
-      m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
-      break;
-
-    case 'E':
-      m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
-      break;
-
-    default:
-      break;
-    }
-  }
-  else{
-    switch (input)
-    {
-    case 'A':
-      m_controlledActor->GetActorTransform().move(Vector3f(-m_secondPerFrame,0,0));
-      break;
-
-    case 'D':
-      m_controlledActor->GetActorTransform().move(Vector3f(m_secondPerFrame,0,0));
-      break;
-
-    case 'W':
-      m_controlledActor->GetActorTransform().move(Vector3f(0,0,m_secondPerFrame));
-      break;
-
-    case 'S':
-      m_controlledActor->GetActorTransform().move(Vector3f(0,0,-m_secondPerFrame));
-      break;
-
-    case 'Q':
-      m_controlledActor->GetActorTransform().move(Vector3f(0,m_secondPerFrame,0));
-      break;
-
-    case 'E':
-      m_controlledActor->GetActorTransform().move(Vector3f(0,-m_secondPerFrame,0));
-      break;
-
-    default:
-      break;
-    }
-  }
-  
-}
 
 }
 

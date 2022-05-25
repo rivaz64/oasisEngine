@@ -7,11 +7,21 @@ namespace oaEngineSDK{
 class GaKeyboard :
   public Keyboard
 {
+ public:
+  
+  GaKeyboard();
+
+  bool
+	isKeyDown(const KEY::E key) override;
+
+  //void
+  //map(const String& name, const KEY::E key) override;
+  
  private:
 
-  uint32 id;
+  uint32 m_id;
 
-  friend class Ga_Input;
+  friend class GaInput;
 };
 
 }

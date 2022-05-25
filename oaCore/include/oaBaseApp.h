@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include <oaVector2U.h>
+#include "oaInput.h"
 
 namespace oaEngineSDK{
 
@@ -104,7 +105,7 @@ class OA_CORE_EXPORT BaseApp
    * @param input 
   */
   void
-  processInputs(char input);
+  processInputs(const MSG& msg);
 
   /**
    * @brief for the subclass to test the imputs
@@ -156,8 +157,6 @@ class OA_CORE_EXPORT BaseApp
   Vector2U m_windowSize;
 
   void* m_window;
-
-
 
 };
 

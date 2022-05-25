@@ -5,9 +5,9 @@
 */
 
 #include "oaBaseApp.h"
+#include <oaVector3f.h>
 #include "oaGraphicAPI.h"
 #include "oaResoureManager.h"
-#include <oaVector3f.h>
 #include "oaInputManager.h"
 #include "oaTime.h"
 #include "oaActor.h"
@@ -19,6 +19,7 @@
 #include "oaCamera.h"
 #include "oaScene.h"
 #include "oaRenderer.h"
+#include "oaInput.h"
 #include <exception>
 #include <Windows.h>
 
@@ -44,7 +45,7 @@ BaseApp::onShutDown()
   onDestroy();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
-  InputManager::shutDown();
+  Input::shutDown();
   Time::shutDown();
   Renderer::shutDown();
   Logger::shutDown();
@@ -60,10 +61,13 @@ BaseApp::run()
   #else
   loadPlugIn("oaDX11Graphics.dll");
   #endif
-  //loadPlugIn("oaDX11Graphics.dll");
-  //loadPlugIn("oaOGL_Grafics.dll");
 
   
+  loadPlugIn("oaGa_Inputd.dll");
+  //loadPlugIn("oaDX11Graphics.dll");
+  //loadPlugIn("oaOGL_Grafics.dll");
+  auto& input = Input::instance();
+  input.init(m_windowSize);
 
   if (!GraphicAPI::isStarted()) {
     GraphicAPI::startUp();
@@ -178,10 +182,10 @@ BaseApp::resizeWindow()
 }
 
 void 
-BaseApp::processInputs(char input)
+BaseApp::processInputs(const MSG& msg)
 {
-  onKeyBoardInput(input);
-  
+  auto& inputManager = Input::instance();
+  inputManager.HandleMessage(msg);
 }
 
 }

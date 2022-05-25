@@ -4,6 +4,18 @@
 * @date 3/3/2022
 */
 
+# define GAINPUT_PLATFORM_WIN
+
+#if defined(GAINPUT_PLATFORM_WIN)
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <windows.h>
+
+#include <stdio.h>
+#define LOG(...) {char buf[256]; sprintf(buf, __VA_ARGS__); OutputDebugStringA(buf); }
+#endif
+
 #pragma once
 
 #include <oaInput.h>
@@ -11,10 +23,21 @@
 
 namespace oaEngineSDK{
 
-class Ga_Input :
+using GaInputManager = gainput::InputManager;
+using GaInputMap = gainput::InputMap;
+
+class GaInput :
   public Input
 {
  public:
+
+  GaInput();
+
+  void
+  init(const Vector2U& size) override;
+
+  void
+  update() override;
 
   SPtr<Mouse>
   createDeviceMouse() override;
@@ -22,8 +45,16 @@ class Ga_Input :
   SPtr<Keyboard>
   createDeviceKeyboard() override;
 
+  void
+  HandleMessage(const MSG& msg) override;
+
  private:
-  gainput::InputManager m_manager;
+
+  GaInputManager m_manager;
+
+  GaInputMap m_inputMap;
+
+  friend class GaKeyboard;
 };
 
 }

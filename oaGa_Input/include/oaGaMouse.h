@@ -9,9 +9,9 @@ class GaMouse :
 {
  private:
 
-  uint32 id;
+  uint32 m_id;
 
-  friend class Ga_Input;
+  friend class GaInput;
 };
 
 }

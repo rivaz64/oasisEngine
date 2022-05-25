@@ -91,6 +91,12 @@ StringUtilities::toString(const WString& string)
   return output;
 }
 
+uint32
+StringUtilities::getStringId(const String&)
+{
+  return uint32();
+}
+
 String
 StringUtilities::vector4ToString(const Vector4f& param){
   return floatToString(param.x)+", "+

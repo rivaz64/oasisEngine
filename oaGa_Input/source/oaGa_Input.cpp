@@ -1,23 +1,52 @@
 #include "oaGa_Input.h"
 #include "oaGaMouse.h"
 #include "oaGaKeyboard.h"
+#include <Windows.h>
+#include <oaVector2U.h>
 
 namespace oaEngineSDK{
 
+GaInput::GaInput() :
+  m_manager(), m_inputMap(m_manager)
+{
+}
+
+void GaInput::init(const Vector2U& size)
+{
+  m_manager.SetDisplaySize(size.x, size.y);
+}
+
+void
+GaInput::update()
+{
+  m_manager.Update();
+}
+
 SPtr<Mouse>
-Ga_Input::createDeviceMouse()
+GaInput::createDeviceMouse()
 {
   auto mouse = makeSPtr<GaMouse>();
-  mouse->id = m_manager.CreateDevice<gainput::InputDeviceMouse>();
+  mouse->m_id = m_manager.CreateDevice<gainput::InputDeviceMouse>();
   return mouse;
 }
 
 SPtr<Keyboard>
-Ga_Input::createDeviceKeyboard()
+GaInput::createDeviceKeyboard()
 {
   auto keyboard = makeSPtr<GaKeyboard>();
-  keyboard->id = m_manager.CreateDevice<gainput::InputDeviceKeyboard>();
+  keyboard->m_id = m_manager.CreateDevice<gainput::InputDeviceKeyboard>();
   return keyboard;
+}
+
+void 
+GaInput::HandleMessage(const MSG& msg)
+{
+  tagMSG wmsg;
+  wmsg.hwnd = reinterpret_cast<HWND>(msg.HWND);
+  wmsg.message = msg.message;
+  wmsg.wParam = msg.wParam;
+  wmsg.lParam = msg.lParam;
+  m_manager.HandleMessage(wmsg);
 }
 
 }

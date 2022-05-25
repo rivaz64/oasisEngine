@@ -12,13 +12,29 @@
 namespace oaEngineSDK{
 
 /**
+ * @brief for handling system messages
+*/
+struct MSG{
+  void* HWND;
+  uint32 message;
+  uint64 wParam;
+  int64  lParam;
+};
+
+/**
  * @brief class for creating things for inputs
 */
-class Input :
+class OA_CORE_EXPORT Input :
   public Module<Input>
 {
  public:
   
+  virtual void
+  init(const Vector2U& size) {}
+
+  virtual void
+  update() {}
+
   /**
    * @brief creates the interface for the inputs of a mouse
    * @return 
@@ -32,6 +48,13 @@ class Input :
   */
   virtual SPtr<Keyboard>
   createDeviceKeyboard();
+
+  /**
+   * @brief handles the message of the sistem
+   * @param msg 
+  */
+  virtual void
+  HandleMessage(const MSG& msg) {}
 
   /**
    * @brief maps an input that can be on and off

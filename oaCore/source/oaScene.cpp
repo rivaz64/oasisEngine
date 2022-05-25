@@ -52,6 +52,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
           }
         }
       }
+      meshesToRender(actor,frustum,toRender,transparentMeshes);
     }
 
     auto camComponent = actor->getComponent<CameraComponent>();
@@ -98,7 +99,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
       toRender.push_back(RenderData(mesh,ResoureManager::instance().m_materials["debug"],Matrix4f::IDENTITY));
     }
     
-    meshesToRender(actor,frustum,toRender,transparentMeshes);
+    //meshesToRender(actor,frustum,toRender,transparentMeshes);
   }
 
 }

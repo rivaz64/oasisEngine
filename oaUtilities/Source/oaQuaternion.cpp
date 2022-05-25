@@ -5,6 +5,7 @@
  */
 
 #include "oaQuaternion.h"
+#include "oaVector3f.h"
 #include "oaVector4f.h"
 #include "oaMatrix4f.h"
 

@@ -70,9 +70,6 @@ public:
                 uint32 index1, 
                 uint32 index2);
 
-  void
-  onKeyBoardInput(char input);
-
  public:
 
   SPtr<Actor> m_selectedActor;
@@ -90,6 +87,10 @@ public:
   SPtr<Animation> m_selectedAnimation;
 
   SPtr<ShaderProgram> m_program; 
+
+  SPtr<Keyboard> m_keyboard;
+
+  SPtr<Mouse> m_mouse;
 
   //SPtr<Buffer> lights;
 

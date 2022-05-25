@@ -7,9 +7,11 @@ namespace oaEngineSDK{
 /**
  * @brief class for mosue inputs
 */
-class Mouse
+class OA_CORE_EXPORT Mouse
 {
+ public:
   
+
 };
 
 }

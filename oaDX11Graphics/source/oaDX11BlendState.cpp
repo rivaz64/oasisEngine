@@ -27,8 +27,8 @@ DX11BlendState::init(bool adds)
   desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
   desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-  HRESULT hr = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->
-   m_device->CreateBlendState(&desc,&m_id);
+  auto device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
+  HRESULT hr = device->CreateBlendState(&desc,&m_id);
 
   if(FAILED(hr)){
     return false;
