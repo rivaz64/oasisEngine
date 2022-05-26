@@ -25,7 +25,7 @@ GaInput::update()
 SPtr<Mouse>
 GaInput::createDeviceMouse()
 {
-  auto mouse = makeSPtr<GaMouse>();
+  auto mouse = makeSPtr<GaMouse>(m_manager.CreateDevice<gainput::InputDeviceMouse>());
   return mouse;
 }
 

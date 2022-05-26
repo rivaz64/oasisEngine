@@ -6,7 +6,6 @@ namespace oaEngineSDK{
 GaKeyboard::GaKeyboard(uint32 id) :
   m_id(id)
 {
-
   auto& inputMap = reinterpret_cast<GaInput*>(GaInput::instancePtr())->m_inputMap;
   inputMap.MapBool(KEY::kEscape, m_id,gainput::KeyEscape);
   inputMap.MapBool(KEY::kF1, m_id,gainput::KeyF1);

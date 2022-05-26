@@ -55,6 +55,8 @@ class GaInput :
   GaInputMap m_inputMap;
 
   friend class GaKeyboard;
+
+  friend class GaMouse;
 };
 
 }

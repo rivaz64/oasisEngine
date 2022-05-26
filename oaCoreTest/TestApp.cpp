@@ -33,6 +33,7 @@
 #include <oaCameraComponent.h>
 #include <oaInput.h>
 #include <oaKeyboard.h>
+#include <oaMouse.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -160,6 +161,7 @@ TestApp::postInit()
 
   auto& input = Input::instance();
   m_keyboard = input.createDeviceKeyboard();
+  m_mouse = input.createDeviceMouse();
 
   //m_lights.push_back(DirectionalLight());
   //m_lights[0].direction = {0,0,0,0};
@@ -172,6 +174,14 @@ TestApp::onUpdate(float delta)
 { 
   auto& inputManager = Input::instance();
   inputManager.update();
+
+  if(m_mouse->isButtonDown(BUTTON::kRight)){
+    auto axisX = m_mouse->getAxis(AXIS::kX);
+    auto axisY = m_mouse->getAxis(AXIS::kY);
+    auto mouseDelta = Vector2f(axisX,axisY).normalized()*6.f;
+    m_camera->rotateWithMouse(mouseDelta);
+  }
+
   //if(m_controlledActor){
   //  if (inputManager.(VK_RBUTTON))
   //  {
