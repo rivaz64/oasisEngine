@@ -9,7 +9,7 @@ class GaKeyboard :
 {
  public:
   
-  GaKeyboard();
+  GaKeyboard(uint32 id);
 
   bool
 	isKeyDown(const KEY::E key) override;

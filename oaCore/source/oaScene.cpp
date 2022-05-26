@@ -52,7 +52,7 @@ Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderDa
           }
         }
       }
-      meshesToRender(actor,frustum,toRender,transparentMeshes);
+      meshesToRender(child,frustum,toRender,transparentMeshes);
     }
 
     auto camComponent = actor->getComponent<CameraComponent>();

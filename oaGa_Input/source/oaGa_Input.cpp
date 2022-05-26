@@ -26,15 +26,13 @@ SPtr<Mouse>
 GaInput::createDeviceMouse()
 {
   auto mouse = makeSPtr<GaMouse>();
-  mouse->m_id = m_manager.CreateDevice<gainput::InputDeviceMouse>();
   return mouse;
 }
 
 SPtr<Keyboard>
 GaInput::createDeviceKeyboard()
 {
-  auto keyboard = makeSPtr<GaKeyboard>();
-  keyboard->m_id = m_manager.CreateDevice<gainput::InputDeviceKeyboard>();
+  auto keyboard = makeSPtr<GaKeyboard>(m_manager.CreateDevice<gainput::InputDeviceKeyboard>());
   return keyboard;
 }
 

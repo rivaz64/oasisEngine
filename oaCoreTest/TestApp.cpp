@@ -56,6 +56,8 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   if(ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
     return 1;
 
+  app->processInputs({hWnd,message,wParam,lParam});
+
   switch( message )
   {
   case WM_PAINT:
@@ -78,7 +80,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   
 
   case WM_KEYDOWN:
-    app->processInputs({hWnd,message,wParam,lParam});
+   
     break;
     
   //case WM_NCCREATE:
@@ -188,21 +190,21 @@ TestApp::onUpdate(float delta)
   if(m_keyboard->isKeyDown(KEY::kA)){
     m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
   }
- //if(m_keyboard->isKeyDown(KEY::kD)){
- //  m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
- //}
- //if(m_keyboard->isKeyDown(KEY::kW)){
- //  m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
- //}
- //if(m_keyboard->isKeyDown(KEY::kS)){
- //  m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
- //}
- //if(m_keyboard->isKeyDown(KEY::kQ)){
- //  m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
- //}
- //if(m_keyboard->isKeyDown(KEY::kE)){
- //  m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
- //}
+  if(m_keyboard->isKeyDown(KEY::kD)){
+    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+  }
+  if(m_keyboard->isKeyDown(KEY::kW)){
+    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+  }
+  if(m_keyboard->isKeyDown(KEY::kS)){
+    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+  }
+  if(m_keyboard->isKeyDown(KEY::kQ)){
+    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+  }
+  if(m_keyboard->isKeyDown(KEY::kE)){
+    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+  }
   //if(!m_controlledActor){
   //  switch (input)
   //  {
@@ -265,7 +267,7 @@ TestApp::onUpdate(float delta)
   //    break;
   //  }
   //}
-  
+  m_camera->update();
 }
 
 void 
