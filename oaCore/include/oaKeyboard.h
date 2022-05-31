@@ -20,6 +20,22 @@ class OA_CORE_EXPORT Keyboard
 	virtual bool
 	isKeyDown(const KEY::E key);
 
+  /**
+   * @brief if this key has been pressed in this frame
+   * @param key 
+   * @return 
+  */
+  virtual bool
+	wasKeyPressed(const KEY::E key);
+
+  /**
+   * @brief if this key has been released in this frame
+   * @param key 
+   * @return 
+  */
+  virtual bool
+	wasKeyReleased(const KEY::E key);
+
   ///**
   // * @brief map maps a key to a string
   // * @param name the name of the input

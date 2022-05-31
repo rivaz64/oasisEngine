@@ -21,6 +21,20 @@ GaMouse::isButtonDown(const BUTTON::E button)
   return inputMap.GetBool(button);
 }
 
+bool
+GaMouse::wasButtonPressed(const BUTTON::E button)
+{
+  auto& inputMap = reinterpret_cast<GaInput*>(GaInput::instancePtr())->m_inputMap;
+  return inputMap.GetBoolIsNew(button);
+}
+
+bool 
+GaMouse::wasButtonReleased(const BUTTON::E button)
+{
+  auto& inputMap = reinterpret_cast<GaInput*>(GaInput::instancePtr())->m_inputMap;
+  return inputMap.GetBoolWasDown(button);
+}
+
 float 
 GaMouse::getAxis(const AXIS::E axis)
 {

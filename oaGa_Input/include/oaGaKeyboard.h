@@ -14,6 +14,12 @@ class GaKeyboard :
   bool
 	isKeyDown(const KEY::E key) override;
 
+  bool
+	wasKeyPressed(const KEY::E key) override;
+
+  bool
+	wasKeyReleased(const KEY::E key) override;
+
   //void
   //map(const String& name, const KEY::E key) override;
   

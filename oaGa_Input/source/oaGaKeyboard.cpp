@@ -122,6 +122,20 @@ GaKeyboard::isKeyDown(const KEY::E key)
   return inputMap.GetBool(key);
 }
 
+bool 
+GaKeyboard::wasKeyPressed(const KEY::E key)
+{
+  auto& inputMap = reinterpret_cast<GaInput*>(GaInput::instancePtr())->m_inputMap;
+  return inputMap.GetBoolIsNew(key);
+}
+
+bool 
+GaKeyboard::wasKeyReleased(const KEY::E key)
+{
+  auto& inputMap = reinterpret_cast<GaInput*>(GaInput::instancePtr())->m_inputMap;
+  return inputMap.GetBoolWasDown(key);
+}
+
 
 //void 
 //GaKeyboard::map(const String& name, const KEY::E key)

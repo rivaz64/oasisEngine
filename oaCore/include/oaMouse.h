@@ -21,6 +21,22 @@ class OA_CORE_EXPORT Mouse
 	isButtonDown(const BUTTON::E button);
 
   /**
+   * @brief if this key has been pressed in this frame
+   * @param key 
+   * @return 
+  */
+  virtual bool
+	wasButtonPressed(const BUTTON::E button);
+
+  /**
+   * @brief if this key has been released in this frame
+   * @param key 
+   * @return 
+  */
+  virtual bool
+	wasButtonReleased(const BUTTON::E button);
+
+  /**
    * @brief gets the direction the mouse moved in a certain axis
    * @param axis 
    * @return 
