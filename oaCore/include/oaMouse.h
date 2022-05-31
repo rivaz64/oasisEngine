@@ -1,3 +1,9 @@
+/**
+* @file oaMouse.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 5/30/2022
+*/
+
 #pragma once
 
 #include "oaPrerequisitesCore.h"
@@ -6,7 +12,7 @@
 namespace oaEngineSDK{
 
 /**
- * @brief class for mosue inputs
+ * @brief class for mouse inputs
 */
 class OA_CORE_EXPORT Mouse
 {

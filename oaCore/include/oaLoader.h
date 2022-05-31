@@ -54,6 +54,8 @@ class OA_CORE_EXPORT Loader
   bool
   loadTexture(const Path& path);
 
+
+
  private:
 
   uint8 m_loadedFlags = 0;

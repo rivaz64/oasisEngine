@@ -45,8 +45,8 @@ class OA_UTILITY_EXPORT StringUtilities
   static String
   toString(const WString& string);
 
-  static uint32
-  getStringId(const String&);
+  static uint64
+  getStringId(const String& string);
 
 
 };

@@ -1,3 +1,9 @@
+/**
+* @file oaGaMouse.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 5/30/2022
+*/
+
 #pragma once
 
 #include <oaMouse.h>

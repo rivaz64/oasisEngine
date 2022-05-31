@@ -1,3 +1,9 @@
+/**
+* @file oaKeyboard.h
+* @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
+* @date 5/30/2022
+*/
+
 #pragma once
 
 #include "oaPrerequisitesCore.h"
@@ -5,6 +11,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief class for keyboard inputs
+*/
 class OA_CORE_EXPORT Keyboard
 {
 

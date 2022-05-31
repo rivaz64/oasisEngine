@@ -95,11 +95,6 @@ class OA_CORE_EXPORT Actor :
   Vector<SPtr<Actor>> m_subActors;
 
   /**
-   * @brief the Actor this one is a child of
-  */
-  SPtr<Actor> m_parent;
-
-  /**
    * @brief the local transform of this actor
   */
   Transform m_localTransform;

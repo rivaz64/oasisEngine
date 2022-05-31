@@ -40,4 +40,5 @@ struct DirectionalLight;
 struct PointLight;
 class Mouse;
 class Keyboard;
+class Sound;
 }

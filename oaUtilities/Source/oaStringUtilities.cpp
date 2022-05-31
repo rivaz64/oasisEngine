@@ -91,10 +91,17 @@ StringUtilities::toString(const WString& string)
   return output;
 }
 
-uint32
-StringUtilities::getStringId(const String&)
+uint64
+StringUtilities::getStringId(const String& string)
 {
-  return uint32();
+  uint64 id = 0;
+
+  for(auto letter : string){
+    id *= 95;
+    id += static_cast<uint64>(letter)-32;
+  }
+
+  return id;
 }
 
 String
