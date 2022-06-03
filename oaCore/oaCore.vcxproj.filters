@@ -138,9 +138,6 @@
     <ClInclude Include="include\oaDebugMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaInput.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaInputMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -157,6 +154,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaKeyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oaEventSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaInputAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaAudioAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -266,9 +275,6 @@
     <ClCompile Include="source\oaDebugMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaInput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaInputMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -285,6 +291,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaKeyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaEventSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaSound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaInputAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaAudioAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,7 +19,8 @@
 #include "oaCamera.h"
 #include "oaScene.h"
 #include "oaRenderer.h"
-#include "oaInput.h"
+#include "oaInputAPI.h"
+#include "oaAudioAPI.h"
 #include <exception>
 #include <Windows.h>
 
@@ -45,7 +46,8 @@ BaseApp::onShutDown()
   onDestroy();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
-  Input::shutDown();
+  InputAPI::shutDown();
+  AudioAPI::shutDown();
   Time::shutDown();
   Renderer::shutDown();
   Logger::shutDown();
@@ -64,9 +66,10 @@ BaseApp::run()
 
   
   loadPlugIn("oaGa_Inputd.dll");
+  loadPlugIn("C:/Users/roriv/Documents/GitHub/oasisEngine/bin/x64/oaFmodAudiod.dll");
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
-  auto& input = Input::instance();
+  auto& input = InputAPI::instance();
   input.init(m_windowSize);
 
   if (!GraphicAPI::isStarted()) {
@@ -116,7 +119,8 @@ BaseApp::loadPlugIn(String DLL)
   HINSTANCE hGetProcIDDLL = LoadLibrary(DLL.c_str());
   if(!hGetProcIDDLL)
   {
-    print("Could not load Dll");
+    auto error = GetLastError();
+    print("Could not load " + DLL + " Dll");
     return;
   }
 
@@ -184,7 +188,7 @@ BaseApp::resizeWindow()
 void 
 BaseApp::processInputs(const MSG& msg)
 {
-  auto& inputManager = Input::instance();
+  auto& inputManager = InputAPI::instance();
   inputManager.HandleMessage(msg);
 }
 

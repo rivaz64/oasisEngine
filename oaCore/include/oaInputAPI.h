@@ -24,8 +24,8 @@ struct MSG{
 /**
  * @brief class for creating things for inputs
 */
-class OA_CORE_EXPORT Input :
-  public Module<Input>
+class OA_CORE_EXPORT InputAPI :
+  public Module<InputAPI>
 {
  public:
   
@@ -63,7 +63,7 @@ class OA_CORE_EXPORT Input :
   //mapBool(uint32 inputId,uint32 deviceId, uint32 input);
 
  private:
-  friend class Module<Input>;
+  friend class Module<InputAPI>;
 };
 
 }

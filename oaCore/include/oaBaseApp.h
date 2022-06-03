@@ -8,7 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include <oaVector2U.h>
-#include "oaInput.h"
+#include "oaInputAPI.h"
 
 namespace oaEngineSDK{
 

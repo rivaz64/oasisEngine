@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include <oaInput.h>
+#include <oaInputAPI.h>
 #include <gainput\gainput.h>
 
 namespace oaEngineSDK{
@@ -27,7 +27,7 @@ using GaInputManager = gainput::InputManager;
 using GaInputMap = gainput::InputMap;
 
 class GaInput :
-  public Input
+  public InputAPI
 {
  public:
 

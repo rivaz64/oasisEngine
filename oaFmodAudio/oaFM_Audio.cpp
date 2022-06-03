@@ -30,7 +30,16 @@ FM_Audio::onStartUp()
 SPtr<Sound>
 FM_Audio::createSound()
 {
+  //audioSystem->createSound()
   return makeSPtr<FM_Sound>();
+}
+
+void 
+FM_Audio::playSound(SPtr<Sound> sound)
+{
+  auto fModSound = cast<FM_Sound>(sound);
+  Channel* channel = nullptr;
+  audioSystem->playSound(fModSound->sound,nullptr,false,&channel);
 }
 
 }

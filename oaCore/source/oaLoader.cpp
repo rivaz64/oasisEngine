@@ -25,6 +25,9 @@
 #include "oaImage.h"
 #include "oaTexture.h"
 #include "oaGraphicAPI.h"
+#include "oaAudioAPI.h"
+#include "oaSound.h"
+
 
 
 using Assimp::Importer;
@@ -608,8 +611,8 @@ Loader::load(LOADERFLAGS::E /*flags*/)
   */
 }
 
-LOADERFLAGS::E
-Loader::checkForLoad(const Path& file)
+bool//LOADERFLAGS::E
+Loader::loadScene(const Path& file)
 {
   auto flags = aiProcess_Triangulate | 
                //aiProcess_GenNormals |
@@ -628,7 +631,7 @@ Loader::checkForLoad(const Path& file)
   if(!importedScene){
     //OA_DEBUG_LOG("file "+completePath+"not found");
     //__PRETTY_FUNCTION__;
-    return static_cast<LOADERFLAGS::E>(m_loadedFlags);
+    return false;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
   }
  
   if(importedScene->HasMeshes()){
@@ -648,7 +651,39 @@ Loader::checkForLoad(const Path& file)
   ResoureManager::instance().m_models.insert({StringUtilities::toString(file.getCompletePath()),model});
   model->setName(StringUtilities::toString(file.getName()));
 
-  return static_cast<LOADERFLAGS::E>(m_loadedFlags);
+  return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
+}
+
+bool
+Loader::loadResource(const Path & path)
+{
+  auto extencion = StringUtilities::toString(path.getExtencion());
+  if(extencion == ".png" || extencion == ".jpg"){
+    return loadTexture(path);
+  }
+
+  if(extencion == ".obj" || extencion == ".fbx"){
+    return loadScene(path);
+  }
+
+  if(extencion == ".wav"){
+    loadSound(path);
+  }
+
+  return false;
+}
+
+bool 
+Loader::loadSound(const Path & path)
+{
+  auto& audioApi = AudioAPI::instance();
+  auto sound = audioApi.createSound();
+  if(!sound->loadFromFile(path)){
+    return false;
+  }
+  auto name = StringUtilities::toString(path.getName());
+  sound->setName(name);
+  ResoureManager::instance().m_sounds.insert({name,sound});
 }
 
 }

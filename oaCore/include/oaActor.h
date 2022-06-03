@@ -95,6 +95,11 @@ class OA_CORE_EXPORT Actor :
   Vector<SPtr<Actor>> m_subActors;
 
   /**
+   * @brief the parent of this actor
+  */
+  SPtr<Actor> m_parent;
+
+  /**
    * @brief the local transform of this actor
   */
   Transform m_localTransform;

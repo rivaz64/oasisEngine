@@ -173,6 +173,7 @@
     <ClInclude Include="include\oaActor.h" />
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
+    <ClInclude Include="include\oaAudioAPI.h" />
     <ClInclude Include="include\oaBaseApp.h" />
     <ClInclude Include="include\oaBlendState.h" />
     <ClInclude Include="include\oaBoundComponent.h" />
@@ -188,7 +189,7 @@
     <ClInclude Include="include\oaGraphicsComponent.h" />
     <ClInclude Include="include\oaImage.h" />
     <ClInclude Include="include\oaIndexBuffer.h" />
-    <ClInclude Include="include\oaInput.h" />
+    <ClInclude Include="include\oaInputAPI.h" />
     <ClInclude Include="include\oaInputMap.h" />
     <ClInclude Include="include\oaKeyboard.h" />
     <ClInclude Include="include\oaLights.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="include\oaSkeletalComponent.h" />
     <ClInclude Include="include\oaSkeletalMesh.h" />
     <ClInclude Include="include\oaSkeleton.h" />
+    <ClInclude Include="include\oaSound.h" />
     <ClInclude Include="include\oaStaticMesh.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
@@ -234,6 +236,7 @@
     <ClCompile Include="source\oaAnimationComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaAudioAPI.cpp" />
     <ClCompile Include="source\oaBaseApp.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -262,7 +265,7 @@
     <ClCompile Include="source\oaIndexBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="source\oaInput.cpp" />
+    <ClCompile Include="source\oaInputAPI.cpp" />
     <ClCompile Include="source\oaInputMap.cpp" />
     <ClCompile Include="source\oaKeyboard.cpp" />
     <ClCompile Include="source\oaLoader.cpp">
@@ -304,6 +307,7 @@
     <ClCompile Include="source\oaSkeleton.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaSound.cpp" />
     <ClCompile Include="source\oaStaticMesh.cpp" />
     <ClCompile Include="source\oaTexture.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

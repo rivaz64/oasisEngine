@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <oaAudio.h>
+#include <oaAudioAPI.h>
 #include "oaFM_Sound.h"
 
 #ifndef _AUDIO_ENGINE_H_
@@ -22,10 +22,11 @@ namespace oaEngineSDK{
 using AudioSystem = FMOD::System;
 using AudioStudioSystem = FMOD::Studio::System;
 using AudioBank = FMOD::Studio::Bank;
+using Channel = FMOD::Channel;
 using FMOD::System_Create;
 
 class FM_Audio :
-  public Audio
+  public AudioAPI
 {
  public:
   
@@ -36,9 +37,7 @@ class FM_Audio :
   createSound() override;
 
   void
-  loadAudio(const Path& file) override;
-
-  
+  playSound(SPtr<Sound> sound) override;
 
  private:
   
@@ -47,6 +46,8 @@ class FM_Audio :
   AudioStudioSystem* audioStudioSystem;
 
   AudioBank* audioBank;
+
+  friend class FM_Sound;
 
 };
 

@@ -160,7 +160,10 @@ class OA_CORE_EXPORT ResoureManager :
   */
   Map<String,SPtr<Animation>> m_animations;
 
-
+  /**
+   * @brief all the loaded sounds
+  */
+  Map<String,SPtr<Sound>> m_sounds;
 
   friend class Module<ResoureManager>;
   friend class TestApp;

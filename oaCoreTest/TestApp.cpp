@@ -31,9 +31,11 @@
 #include <oaRasterizerState.h>
 #include <oaRenderer.h>
 #include <oaCameraComponent.h>
-#include <oaInput.h>
+#include <oaInputAPI.h>
 #include <oaKeyboard.h>
 #include <oaMouse.h>
+#include <oaAudioAPI.h>
+#include <oaSound.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -159,7 +161,7 @@ TestApp::postInit()
   m_ssaoConfig.y=0;
   m_ssaoConfig.z=1;
 
-  auto& input = Input::instance();
+  auto& input = InputAPI::instance();
   m_keyboard = input.createDeviceKeyboard();
   m_mouse = input.createDeviceMouse();
 
@@ -172,7 +174,7 @@ TestApp::postInit()
 void 
 TestApp::onUpdate(float delta)
 { 
-  auto& inputManager = Input::instance();
+  auto& inputManager = InputAPI::instance();
   inputManager.update();
 
   if(m_mouse->isButtonDown(BUTTON::kRight)){
@@ -381,6 +383,7 @@ void TestApp::renderImGui()
 void oaEngineSDK::TestApp::drawImGui()
 {
   auto& resourceManager = ResoureManager::instance();
+  auto& audioApi = AudioAPI::instance();
   /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
@@ -511,7 +514,16 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("resources");
-  
+  if(ImGui::Button("load resurse")){
+    Path path;
+    if(path.searchForPath()){
+      loader = new Loader;
+      loader->loadResource(path);
+      //loadflags = loader->checkForLoad(path);
+      delete loader;
+      loader = 0;
+    }
+  }
   if (ImGui::CollapsingHeader("textures")){
     if(ImGui::Button("load Texture")){
       Path path;
@@ -552,7 +564,7 @@ void oaEngineSDK::TestApp::drawImGui()
       Path path;
       if(path.searchForPath()){
         loader = new Loader;
-        loader->checkForLoad(path);
+        loader->loadScene(path);
         //loadflags = loader->checkForLoad(path);
         delete loader;
         loader = 0;
@@ -579,6 +591,14 @@ void oaEngineSDK::TestApp::drawImGui()
     for(auto animation : resourceManager.m_animations){
       if(ImGui::Button(animation.second->m_name.c_str(),ImVec2(100,100))){
         m_selectedAnimation = animation.second;
+      }
+    }
+  }
+
+   if (ImGui::CollapsingHeader("sounds")){
+    for(auto sound : resourceManager.m_sounds){
+      if(ImGui::Button(sound.second->getName().c_str(),ImVec2(100,100))){
+        audioApi.playSound(sound.second);
       }
     }
   }

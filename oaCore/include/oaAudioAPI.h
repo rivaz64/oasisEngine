@@ -14,8 +14,8 @@ namespace oaEngineSDK{
 /**
  * @brief the api dor the audio plugin
 */
-class OA_CORE_EXPORT Audio :
-  public Module<Audio>
+class OA_CORE_EXPORT AudioAPI :
+  public Module<AudioAPI>
 {
  public:
   
@@ -23,10 +23,11 @@ class OA_CORE_EXPORT Audio :
   createSound();
 
   virtual void
-  loadAudio(const Path& file){}
+  playSound(SPtr<Sound> sound) {}
 
  private:
-  friend class Module<Audio>;
+
+  friend class Module<AudioAPI>;
 };
 
 }

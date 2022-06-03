@@ -35,8 +35,8 @@ class OA_CORE_EXPORT Loader
    * @param file th file to check
    * @return the things the file has
   */
-  LOADERFLAGS::E
-  checkForLoad(const Path& file);
+  bool//LOADERFLAGS::E
+  loadScene(const Path& file);
 
   /**
    * @brief loads certain things of a file
@@ -54,7 +54,21 @@ class OA_CORE_EXPORT Loader
   bool
   loadTexture(const Path& path);
 
+  /**
+   * @brief reads a sound from a file
+   * @param path 
+   * @return 
+  */
+  bool 
+  loadSound(const Path& path);
 
+  /**
+   * @brief detects what type of file it is and loads it
+   * @param path 
+   * @return 
+  */
+  bool 
+  loadResource(const Path& path);
 
  private:
 

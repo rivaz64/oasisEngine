@@ -1,10 +1,10 @@
-#include "oaGa_Input.h"
+#include "oaFM_Audio.h"
 
 namespace oaEngineSDK{
 
 OA_EXTERN OA_PLUGIN_EXPORT void
 initPlugIn(){
-  InputAPI::startUp<GaInput>();
+  AudioAPI::startUp<FM_Audio>();
 }
 
 }

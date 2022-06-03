@@ -1,17 +1,17 @@
-#include "oaInput.h"
+#include "oaInputAPI.h"
 #include "oaKeyboard.h"
 #include "oaMouse.h"
 
 namespace oaEngineSDK{
 
 SPtr<Mouse>
-Input::createDeviceMouse()
+InputAPI::createDeviceMouse()
 {
   return makeSPtr<Mouse>();
 }
 
 SPtr<Keyboard>
-Input::createDeviceKeyboard()
+InputAPI::createDeviceKeyboard()
 {
   return makeSPtr<Keyboard>();
 }

@@ -14,10 +14,17 @@ namespace oaEngineSDK{
 /**
  * @brief can be reproduced to sound
 */
-class Sound :
+class OA_CORE_EXPORT Sound :
   public Resourse
 {
-  
+ public:
+
+  virtual bool
+  loadFromFile(const Path& path);
+
+  virtual void
+  unload() {}
+
 };
 
 }
