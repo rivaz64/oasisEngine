@@ -21,6 +21,13 @@
 #include "oaRenderer.h"
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
+
+extern "C" {
+#include <lua\lua.h>
+#include <lua\lualib.h>
+#include <lua/lauxlib.h>
+}
+
 #include <exception>
 #include <Windows.h>
 
@@ -28,11 +35,41 @@ namespace oaEngineSDK{
 
 using Function = const void* (*)();
 
+lua_State *luaState;
+
+void
+initLua(){
+  luaState = luaL_newstate();
+  luaL_openlibs(luaState);
+}
+
+void
+closeLua(){
+  lua_close(luaState);
+}
+//
+int luaSetWindowName(lua_State* L){
+  BaseApp* ba = reinterpret_cast<BaseApp*>(luaL_checkudata(L,1,"baseApp"));
+  String windowName = lua_tostring(L,2);
+  ba->setWindowName(windowName);
+  return 1;
+}
+int createObject(lua_State* L){
+  return 1;
+}
+
+void
+registerBaseClass(){
+  lua_register(luaState,"baseApp",createObject);
+  luaL_newmetatable(luaState,"baseApp");
+  lua_pushvalue(luaState, -1); lua_setfield(luaState, -2, "__index");
+  lua_pushcfunction(luaState,luaSetWindowName); lua_setfield(luaState,-2,"setName");
+  lua_pop(luaState,1);
+}
 
 BaseApp::BaseApp()
   : m_windowName("Oasis Engine"), m_windowSize(800,600)
 {
-
 }
 
 BaseApp::~BaseApp()
@@ -44,10 +81,11 @@ void
 BaseApp::onShutDown()
 {
   onDestroy();
+  //closeLua();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
-  AudioAPI::shutDown();
+  ///AudioAPI::shutDown();
   Time::shutDown();
   Renderer::shutDown();
   Logger::shutDown();
@@ -57,6 +95,30 @@ void
 BaseApp::run()
 {
   Logger::startUp();
+
+   initLua();
+   registerBaseClass();
+  if(luaL_dofile(luaState, "scripts/start.lua")){
+    print(lua_tostring(luaState,-1));
+  }
+  
+  //lua_getglobal(luaState,"setApp");
+  //lua_pushlightuserdata(luaState,this);
+  //if(lua_pcall(luaState,1,0,0)){
+  //  print(lua_tostring(luaState,-1));
+  //}
+
+  
+
+  lua_getglobal(luaState,"configs");
+
+  lua_pushlightuserdata(luaState,this);
+  luaL_getmetatable(luaState,"baseApp");
+  lua_setmetatable(luaState,-2);
+
+  if(lua_pcall(luaState,1,0,0)){
+    print(lua_tostring(luaState,-1));
+  }
 
   #ifdef _DEBUG
   loadPlugIn("oaDX11Graphicsd.dll");
@@ -70,6 +132,12 @@ BaseApp::run()
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
   auto& input = InputAPI::instance();
+
+ 
+
+  //if(luaL_dofile(luaState, "scripts/configs.lua")){
+  //  print(lua_tostring(luaState,-1));
+  //}
   input.init(m_windowSize);
 
   if (!GraphicAPI::isStarted()) {

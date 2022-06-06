@@ -114,6 +114,11 @@ class OA_CORE_EXPORT BaseApp
   virtual void
   onKeyBoardInput(char /*input*/){}
 
+  FORCEINLINE void
+  setWindowName(const String& name){
+    m_windowName = name;
+  }
+
   /**
    * @brief if the app is running
   */
