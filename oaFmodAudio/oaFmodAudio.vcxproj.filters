@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="oaFM_Audio.h">
+    <ClInclude Include="include\oaFM_Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaFM_Sound.h">
+    <ClInclude Include="include\oaFM_Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="oaFM_Audio.cpp">
+    <ClCompile Include="source\oaFM_Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="oaFM_Sound.cpp">
+    <ClCompile Include="source\oaFM_Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="source\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

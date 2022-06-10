@@ -17,7 +17,7 @@ FM_Sound::~FM_Sound()
 bool
 FM_Sound::loadFromFile(const Path& path)
 {
-  auto& audioSystem = reinterpret_cast<FM_Audio*>(FM_Audio::instancePtr())->audioSystem;
+  auto& audioSystem = reinterpret_cast<FM_Audio*>(FM_Audio::instancePtr())->m_audioSystem;
   auto wPath = path.getCompletePath();
   auto sPath = StringUtilities::toString(wPath);
   FMOD_CREATESOUNDEXINFO soundInfo;

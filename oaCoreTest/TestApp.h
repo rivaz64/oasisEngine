@@ -123,6 +123,8 @@ public:
   ModelComponent* m_selectedModelComponent = nullptr;
 
   bool animInPlay=false;
+
+  
 };
 
 }

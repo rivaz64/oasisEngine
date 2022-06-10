@@ -7,6 +7,7 @@
 #include "oaFM_Audio.h"
 #include <oaPath.h>
 #include "oaFM_Sound.h"
+//#include "common.h"
 
 namespace oaEngineSDK{
 
@@ -23,8 +24,15 @@ void
 FM_Audio::onStartUp()
 {
   FMOD_RESULT result;
-  
-  result = System_Create(&audioSystem);
+  FMOD::Debug_Initialize(FMOD_DEBUG_LEVEL_LOG);
+  //Common_Init(&m_extradriverdata);
+  result = System_Create(&m_audioSystem);
+  result = m_audioSystem->init(3,FMOD_INIT_NORMAL,nullptr);
+  result = m_audioSystem->setDriver(0);
+  //ERRCHECK(result);
+  //bool check = audioSystem->
+  //AudioStudioSystem::create(&audioStudioSystem);
+
 }
 
 SPtr<Sound>
@@ -39,7 +47,7 @@ FM_Audio::playSound(SPtr<Sound> sound)
 {
   auto fModSound = cast<FM_Sound>(sound);
   Channel* channel = nullptr;
-  audioSystem->playSound(fModSound->sound,nullptr,false,&channel);
+  m_audioSystem->playSound(fModSound->sound,nullptr,false,&channel);
 }
 
 }

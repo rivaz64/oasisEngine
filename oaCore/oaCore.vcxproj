@@ -144,8 +144,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)assimp/lib/$(PlatformTarget)/;$(DEVLIBS)freeimage;$(DEVLIBS)stb_image;$(DEVLIBS)lua/lib/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>oaUtilitiesd.lib;assimp-vc142-mtd.lib;FreeImage.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)assimp/lib/$(PlatformTarget)/;$(DEVLIBS)freeimage;$(DEVLIBS)stb_image;$(DEVLIBS)lua/lib/;$(DEVLIBS)sol/lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>oaUtilitiesd.lib;assimp-vc142-mtd.lib;FreeImage.lib;lua.lib;lua-5.3.5.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib/$(PlatformTarget)/$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>

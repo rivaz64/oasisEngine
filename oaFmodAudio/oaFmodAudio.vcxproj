@@ -18,6 +18,15 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\oaFM_Audio.h" />
+    <ClInclude Include="include\oaFM_Sound.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\oaFM_Audio.cpp" />
+    <ClCompile Include="source\oaFM_Sound.cpp" />
+    <ClCompile Include="source\Source.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -119,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaFM_Audio\Include;$(DEVLIBS)FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(DEVLIBS)FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaFmodAudio\Include;$(DEVLIBS)FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;$(DEVLIBS)FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,15 +153,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="oaFM_Audio.h" />
-    <ClInclude Include="oaFM_Sound.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="oaFM_Audio.cpp" />
-    <ClCompile Include="oaFM_Sound.cpp" />
-    <ClCompile Include="Source.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

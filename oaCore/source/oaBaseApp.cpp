@@ -22,11 +22,13 @@
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
 
-extern "C" {
-#include <lua\lua.h>
-#include <lua\lualib.h>
-#include <lua/lauxlib.h>
-}
+//extern "C" {
+//#include <lua\lua.h>
+//#include <lua\lualib.h>
+//#include <lua/lauxlib.h>
+//}
+#define SOL_ALL_SAFETIES_ON 1
+#include <sol\sol.hpp>
 
 #include <exception>
 #include <Windows.h>
@@ -35,12 +37,14 @@ namespace oaEngineSDK{
 
 using Function = const void* (*)();
 
-lua_State *luaState;
+//lua_State *luaState;
+sol::state lua;
 
 void
 initLua(){
-  luaState = luaL_newstate();
-  luaL_openlibs(luaState);
+  lua.open_libraries(sol::lib::base, sol::lib::package);
+  //luaState = luaL_newstate();
+  //luaL_openlibs(luaState);
 }
 
 void
@@ -60,11 +64,13 @@ int createObject(lua_State* L){
 
 void
 registerBaseClass(){
-  lua_register(luaState,"baseApp",createObject);
-  luaL_newmetatable(luaState,"baseApp");
-  lua_pushvalue(luaState, -1); lua_setfield(luaState, -2, "__index");
-  lua_pushcfunction(luaState,luaSetWindowName); lua_setfield(luaState,-2,"setName");
-  lua_pop(luaState,1);
+  sol::usertyoe<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
+  baseApp_type["name"] = &BaseApp::m_windowName;
+  //lua_register(luaState,"baseApp",createObject);
+  //luaL_newmetatable(luaState,"baseApp");
+  //lua_pushvalue(luaState, -1); lua_setfield(luaState, -2, "__index");
+  //lua_pushcfunction(luaState,luaSetWindowName); lua_setfield(luaState,-2,"setName");
+  //lua_pop(luaState,1);
 }
 
 BaseApp::BaseApp()
@@ -85,7 +91,7 @@ BaseApp::onShutDown()
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
-  ///AudioAPI::shutDown();
+  AudioAPI::shutDown();
   Time::shutDown();
   Renderer::shutDown();
   Logger::shutDown();
@@ -98,9 +104,11 @@ BaseApp::run()
 
    initLua();
    registerBaseClass();
-  if(luaL_dofile(luaState, "scripts/start.lua")){
-    print(lua_tostring(luaState,-1));
-  }
+
+  lua.script_file("scripts/start.lua");
+  //if(luaL_dofile(luaState, "scripts/start.lua")){
+  //  print(lua_tostring(luaState,-1));
+  //}
   
   //lua_getglobal(luaState,"setApp");
   //lua_pushlightuserdata(luaState,this);
@@ -128,7 +136,7 @@ BaseApp::run()
 
   
   loadPlugIn("oaGa_Inputd.dll");
-  loadPlugIn("C:/Users/roriv/Documents/GitHub/oasisEngine/bin/x64/oaFmodAudiod.dll");
+  loadPlugIn("oaFmodAudiod.dll");
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
   auto& input = InputAPI::instance();

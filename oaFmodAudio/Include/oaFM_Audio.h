@@ -24,6 +24,8 @@ using AudioStudioSystem = FMOD::Studio::System;
 using AudioBank = FMOD::Studio::Bank;
 using Channel = FMOD::Channel;
 using FMOD::System_Create;
+//using FMOD::co
+
 
 class FM_Audio :
   public AudioAPI
@@ -41,11 +43,13 @@ class FM_Audio :
 
  private:
   
-  AudioSystem* audioSystem;
+  AudioSystem* m_audioSystem;
 
-  AudioStudioSystem* audioStudioSystem;
+  AudioStudioSystem* m_audioStudioSystem;
 
-  AudioBank* audioBank;
+  AudioBank* m_audioBank;
+
+  void* m_extradriverdata = 0;
 
   friend class FM_Sound;
 
