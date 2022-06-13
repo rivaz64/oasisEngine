@@ -150,12 +150,12 @@ class OA_CORE_EXPORT BaseApp
    * @brief the camera for the editor
   */
   SPtr<Camera> m_camera;
-
+ public:
   /**
    * @brief the name of the window of the app
   */
   String m_windowName;
-
+ protected:
   /**
    * @brief the size of the window of the app
   */

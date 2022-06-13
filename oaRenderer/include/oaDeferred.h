@@ -25,6 +25,7 @@ class Deferred :
          SPtr<Camera> camForFrustrum, 
          const Vector<DirectionalLight>& directionalLights,
          const Vector<PointLight>& pointLights,
+         const Vector<SpotLight>& spotLights,
          const Vector4f& config) override;
   /**
    * @brief the gBuffer pass
@@ -80,17 +81,26 @@ class Deferred :
   void 
   pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
 
-  void 
-  diffusePoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+  void
+  spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights);
 
-  void 
-  specularPoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+  //void 
+  //diffusePoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+  //
+  //void 
+  //specularPoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
 
   void 
   downSapmle(SPtr<Texture> texture);
 
   void
   setSize(const Vector2U& size) override;
+
+  SPtr<Texture>
+  getShadowMap(const PointLight& lights,Vector<RenderData>& toRender);
+
+  SPtr<Texture>
+  applyShadowMap(SPtr<Texture>& scene,SPtr<Texture>& map);
 
 
 
@@ -116,6 +126,8 @@ class Deferred :
 
   SPtr<Texture> m_specularLight;
 
+  SPtr<Texture> m_shadowMap;
+
   Vector<SPtr<Texture>> m_gBuffer;
 
   Vector<SPtr<Texture>> m_lightBuffer;
@@ -134,7 +146,8 @@ class Deferred :
 
   SPtr<Buffer> m_viewLocationBuffer;
 
-  SPtr<Buffer> m_Light;
+  SPtr<Buffer> m_LightBuffer;
+  SPtr<Buffer> m_spotLightBuffer;
 
   SPtr<Buffer> m_configs;
 

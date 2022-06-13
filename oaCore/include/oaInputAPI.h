@@ -30,7 +30,7 @@ class OA_CORE_EXPORT InputAPI :
  public:
   
   virtual void
-  init(const Vector2U& size) {}
+  init(const Vector2U& /*size*/) {}
 
   virtual void
   update() {}
@@ -54,7 +54,7 @@ class OA_CORE_EXPORT InputAPI :
    * @param msg 
   */
   virtual void
-  HandleMessage(const MSG& msg) {}
+  HandleMessage(const MSG& /*msg*/) {}
 
   /**
    * @brief maps an input that can be on and off

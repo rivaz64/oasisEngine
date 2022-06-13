@@ -102,6 +102,8 @@ public:
 
   Vector<PointLight> m_pointLights;
 
+  Vector<SpotLight> m_spotLights;
+
   Vector4f m_ssaoConfig;
 
   Loader* loader;

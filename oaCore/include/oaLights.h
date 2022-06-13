@@ -18,15 +18,14 @@ namespace oaEngineSDK{
 struct DirectionalLight{
   
   /**
-   * @brief the direction of the light
-  */
-  Vector4f direction;
-
-  /**
    * @brief the color of the light
   */
   Color color;
 
+  /**
+   * @brief the direction of the light
+  */
+  Vector4f direction;
 };
 
 /**
@@ -49,5 +48,35 @@ struct PointLight{
   */
   float intensity;
 };
+
+struct SpotLight{
+/**
+   * @brief the color of the light
+  */
+  Color color;
+
+  /**
+   * @brief the point where the light is
+  */
+  Vector3f location;
+
+  /**
+   * @brief how far he light can reach
+  */
+  float intensity;
+
+  
+  /**
+   * @brief the direction the light is pointed at
+  */
+  Vector3f direction;
+
+  /**
+   * @brief the angle of the light 
+  */
+  float angle;
+};
+
+
 
 }

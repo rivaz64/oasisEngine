@@ -23,6 +23,7 @@ class OA_CORE_EXPORT Renderer :
          SPtr<Camera> /*camForFrustrum*/, 
          const Vector<DirectionalLight>& /*directionalLights*/,
          const Vector<PointLight>& /*pointLights*/,
+         const Vector<SpotLight>& /*spotLights*/,
          const Vector4f& /*config*/){}
 
   virtual void

@@ -49,7 +49,7 @@ initLua(){
 
 void
 closeLua(){
-  lua_close(luaState);
+  //lua_close(luaState);
 }
 //
 int luaSetWindowName(lua_State* L){
@@ -58,13 +58,13 @@ int luaSetWindowName(lua_State* L){
   ba->setWindowName(windowName);
   return 1;
 }
-int createObject(lua_State* L){
+int createObject(lua_State* /*L*/){
   return 1;
 }
 
 void
 registerBaseClass(){
-  sol::usertyoe<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
+  sol::usertype<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
   baseApp_type["name"] = &BaseApp::m_windowName;
   //lua_register(luaState,"baseApp",createObject);
   //luaL_newmetatable(luaState,"baseApp");
@@ -102,10 +102,10 @@ BaseApp::run()
 {
   Logger::startUp();
 
-   initLua();
-   registerBaseClass();
-
-  lua.script_file("scripts/start.lua");
+  //initLua();
+  //registerBaseClass();
+  //
+  //lua.script_file("scripts/start.lua");
   //if(luaL_dofile(luaState, "scripts/start.lua")){
   //  print(lua_tostring(luaState,-1));
   //}
@@ -118,15 +118,15 @@ BaseApp::run()
 
   
 
-  lua_getglobal(luaState,"configs");
-
-  lua_pushlightuserdata(luaState,this);
-  luaL_getmetatable(luaState,"baseApp");
-  lua_setmetatable(luaState,-2);
-
-  if(lua_pcall(luaState,1,0,0)){
-    print(lua_tostring(luaState,-1));
-  }
+  //lua_getglobal(luaState,"configs");
+  //
+  //lua_pushlightuserdata(luaState,this);
+  //luaL_getmetatable(luaState,"baseApp");
+  //lua_setmetatable(luaState,-2);
+  //
+  //if(lua_pcall(luaState,1,0,0)){
+  //  print(lua_tostring(luaState,-1));
+  //}
 
   #ifdef _DEBUG
   loadPlugIn("oaDX11Graphicsd.dll");
@@ -195,7 +195,6 @@ BaseApp::loadPlugIn(String DLL)
   HINSTANCE hGetProcIDDLL = LoadLibrary(DLL.c_str());
   if(!hGetProcIDDLL)
   {
-    auto error = GetLastError();
     print("Could not load " + DLL + " Dll");
     return;
   }

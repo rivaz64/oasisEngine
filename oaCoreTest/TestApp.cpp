@@ -307,7 +307,7 @@ TestApp::draw()
   //  renderer.render(m_actualScene,m_camera,m_debugCamera);
   //}
   //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_directionalLights,m_pointLights,m_ssaoConfig);
+    renderer.render(m_actualScene,m_camera,m_camera,m_directionalLights,m_pointLights,m_spotLights,m_ssaoConfig);
   //}
   
   newImGuiFrame();
@@ -639,9 +639,22 @@ void oaEngineSDK::TestApp::drawImGui()
   lightNum = m_pointLights.size();
   for(int32 i = 0;i<lightNum;++i){
     ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].color.r,.01f,0.0f,1.0f);
-    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].location.x,.01f,-1.0f,1.0f);
+    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].location.x,.01f);
     ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].intensity);
+  }
+  ImGui::End();
 
+  ImGui::Begin("spot lights");
+  if(ImGui::Button("add light")){
+    m_spotLights.push_back(SpotLight());
+  }
+  lightNum = m_spotLights.size();
+  for(int32 i = 0;i<lightNum;++i){
+    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].color.r,.01f,0.0f,1.0f);
+    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].location.x,.01f);
+    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].direction.x,.01f,-1.f,1.f);
+    ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].intensity);
+    ImGui::DragFloat(("angle"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].angle,.01f,-1.f,1.f);
   }
   ImGui::End();
 

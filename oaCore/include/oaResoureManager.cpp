@@ -557,6 +557,7 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("copy");
   createPixelShader("color");
   createPixelShader("downSample");
+  createPixelShader("shadowMapper");
   //createPixelShader("directionalLight");
   //createPixelShader("pointLight");
 
@@ -571,6 +572,12 @@ ResoureManager::loadDefaultShaders()
   resourceManager.m_pixelShaders.insert({"pointLight",shader});
   shader->compileFromFile("light",{"POINT"});
   shader->setName("pointLight");
+
+  shader = graphicsApi.createPixelShader();
+  resourceManager.m_pixelShaders.insert({"spotLight",shader});
+  shader->compileFromFile("light",{"SPOT"});
+  shader->setName("spotLight");
+
 
   shader = graphicsApi.createPixelShader();
   resourceManager.m_pixelShaders.insert({"HBlur",shader});
@@ -597,9 +604,11 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("copy","screen","copy");
   createShaderProgram("directionalLight","screen","directionalLight");
   createShaderProgram("pointLight","screen","pointLight");
+  createShaderProgram("spotLight","screen","spotLight");
   createShaderProgram("HBlur","screen","HBlur");
   createShaderProgram("VBlur","screen","VBlur");
   createShaderProgram("downSample","screen","downSample");
+  createShaderProgram("shadowMapper","vertexShader","shadowMapper");
   Vector<SPtr<ShaderProgram>> gBuffer;
   createPixelShaders("GBuffer",
                      m_vertexShaders["vertexShader"],
