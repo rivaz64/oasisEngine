@@ -140,7 +140,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>OA_UTILITY_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>./include/;$(DEVLIBS)boost</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
     </ClCompile>
@@ -176,6 +176,7 @@
     <ClInclude Include="Include\oaAABB.h" />
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaColor.h" />
+    <ClInclude Include="Include\oaEventSystem.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
     <ClInclude Include="Include\oaFrustum.h" />
     <ClInclude Include="Include\oaGrid2D.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="oaVector4I.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="oaVector4I.cpp" />
     <ClCompile Include="Source\oaAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />

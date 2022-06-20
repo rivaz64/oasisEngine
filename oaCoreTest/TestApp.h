@@ -1,6 +1,7 @@
 #pragma once
 
 #include "oaBaseApp.h"
+#include <oaEventSystem.h>
 #include "oaActor.h"
 #include "oaCamera.h"
 #include "oaSamplerState.h"
@@ -13,6 +14,7 @@
 #include "oaNoise2D.h"
 #include "oaLoader.h"
 #include "oaLights.h"
+
 namespace oaEngineSDK{
 
 struct ModelComponent;
@@ -126,7 +128,7 @@ public:
 
   bool animInPlay=false;
 
-  
+  EventHandler<const Vector3f&> handler;
 };
 
 }

@@ -36,6 +36,7 @@
 #include <oaMouse.h>
 #include <oaAudioAPI.h>
 #include <oaSound.h>
+#include <oaEventSystem.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -165,6 +166,8 @@ TestApp::postInit()
   m_keyboard = input.createDeviceKeyboard();
   m_mouse = input.createDeviceMouse();
 
+  //auto& eventSystem = EventSystem::instance();
+  handler.suscribe<Camera,&Camera::moveCamera>(StringUtilities::getStringId("moveUp"),m_camera.get());
   //m_lights.push_back(DirectionalLight());
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
@@ -206,7 +209,8 @@ TestApp::onUpdate(float delta)
     m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
   }
   if(m_keyboard->isKeyDown(KEY::kW)){
-    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+    //m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+    handler.publish(StringUtilities::getStringId("moveUp"),Vector3f(0,0,m_secondPerFrame));
   }
   if(m_keyboard->isKeyDown(KEY::kS)){
     m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));

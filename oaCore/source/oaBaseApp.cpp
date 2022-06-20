@@ -6,6 +6,7 @@
 
 #include "oaBaseApp.h"
 #include <oaVector3f.h>
+#include <oaEventSystem.h>
 #include "oaGraphicAPI.h"
 #include "oaResoureManager.h"
 #include "oaInputManager.h"
@@ -21,7 +22,6 @@
 #include "oaRenderer.h"
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
-
 //extern "C" {
 //#include <lua\lua.h>
 //#include <lua\lualib.h>
@@ -65,7 +65,8 @@ int createObject(lua_State* /*L*/){
 void
 registerBaseClass(){
   sol::usertype<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
-  baseApp_type["name"] = &BaseApp::m_windowName;
+  baseApp_type.set_function("setWindowName",&BaseApp::setWindowName);
+  //baseApp_type["name"] = &BaseApp::m_windowName;
   //lua_register(luaState,"baseApp",createObject);
   //luaL_newmetatable(luaState,"baseApp");
   //lua_pushvalue(luaState, -1); lua_setfield(luaState, -2, "__index");
@@ -88,6 +89,7 @@ BaseApp::onShutDown()
 {
   onDestroy();
   //closeLua();
+  //EventSystem::shutDown();
   GraphicAPI::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
@@ -102,14 +104,16 @@ BaseApp::run()
 {
   Logger::startUp();
 
-  //initLua();
-  //registerBaseClass();
-  //
-  //lua.script_file("scripts/start.lua");
+  initLua();
+  registerBaseClass();
+  
+  lua.script_file("scripts/start.lua");
   //if(luaL_dofile(luaState, "scripts/start.lua")){
   //  print(lua_tostring(luaState,-1));
   //}
-  
+  sol::function configs = lua["configs"];
+  std::function<void(BaseApp*)> stdconfigs = configs;
+  stdconfigs(this);
   //lua_getglobal(luaState,"setApp");
   //lua_pushlightuserdata(luaState,this);
   //if(lua_pcall(luaState,1,0,0)){
@@ -167,7 +171,7 @@ BaseApp::run()
     ResoureManager::startUp();
     InputManager::startUp();
     Time::startUp();
-    
+    //EventSystem::startUp();
     graphicsApi.setViewport(m_windowSize);
 
     m_camera = makeSPtr<Camera>();

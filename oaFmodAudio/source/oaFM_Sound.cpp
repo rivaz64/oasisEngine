@@ -20,8 +20,7 @@ FM_Sound::loadFromFile(const Path& path)
   auto& audioSystem = reinterpret_cast<FM_Audio*>(FM_Audio::instancePtr())->m_audioSystem;
   auto wPath = path.getCompletePath();
   auto sPath = StringUtilities::toString(wPath);
-  FMOD_CREATESOUNDEXINFO soundInfo;
-  auto result = audioSystem->createSound(sPath.c_str(),FMOD_DEFAULT,&soundInfo,&sound);
+  auto result = audioSystem->createSound(sPath.c_str(),FMOD_DEFAULT,0,&sound);
 
   if(result == FMOD_OK){
     return true;
