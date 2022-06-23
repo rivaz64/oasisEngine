@@ -29,11 +29,11 @@ class EventHandler
   */
   template <class T,void (T::*Method)(Types...)>
   void
-  suscribe(uint64 eventId, T* objectPtr){
+  suscribe(T* objectPtr){
     Event<Types...> newEvent;
     newEvent.objectPtr = objectPtr;
     newEvent.function = &methodToFunction<T,Method>;
-    events[eventId].push_back(newEvent);
+    events.push_back(newEvent);
   }
 
   /**
@@ -41,8 +41,8 @@ class EventHandler
    * @tparam ..._Types 
   */
   void 
-  publish(uint64 eventId, Types... _Args){
-    for(auto &thisEvent : events[eventId]){
+  publish(Types... _Args){
+    for(auto &thisEvent : events){
       (*thisEvent.function)(thisEvent.objectPtr,std::forward<Types>(_Args)...);
     }
   }
@@ -56,7 +56,7 @@ class EventHandler
     return (p->*method)(std::forward<Types>(_Args)...); 
   }
 
-  Map<uint64, vector<Event<Types...>>> events;
+  vector<Event<Types...>> events;
 };
 
 }

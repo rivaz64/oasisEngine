@@ -1,21 +1,20 @@
 /**
-* @file oaDX11VertexShader.h
+* @file oaDX11HullShader.h
 * @author Rivaz (idv19c.rrivera@uartesdigitales.edu.mx)
-* @date 10/14/2021
+* @date 6/23/2021
 */
 
 #pragma once
-
 #include "oaDX11Shader.h"
 
 namespace oaEngineSDK{
 
-class DX11VertexShader :
-public DX11Shader
+class DX11HullShader :
+  public DX11Shader
 {
  public:
 
-  ~DX11VertexShader();
+  ~DX11HullShader();
 
   bool 
   compileFromFile(const String& file,const Vector<String>& defines) override;
@@ -23,17 +22,9 @@ public DX11Shader
   void
   set() override;
 
- public:
-
-  bool
-  createInputLayout(ID3DBlob* blob);
-
  private:
-  ID3D11VertexShader* m_shader = nullptr;
 
-  ID3D11InputLayout* m_inputLayout = NULL;
-
-  ID3DBlob*m_blob;
+  ID3D11HullShader* m_shader = nullptr;
 
   friend class DX11GraphicAPI;
 };

@@ -73,6 +73,20 @@ class OA_CORE_EXPORT GraphicAPI :
   createPixelShader(); 
 
   /**
+   * @brief creates a pixel shader
+   * @return 
+  */
+  virtual SPtr<Shader>
+  createHullShader(); 
+
+  /**
+   * @brief creates a pixel shader
+   * @return 
+  */
+  virtual SPtr<Shader>
+  createDomainShader(); 
+
+  /**
    * @brief creates a buffer
    * @return 
   */

@@ -167,7 +167,7 @@ TestApp::postInit()
   m_mouse = input.createDeviceMouse();
 
   //auto& eventSystem = EventSystem::instance();
-  handler.suscribe<Camera,&Camera::moveCamera>(StringUtilities::getStringId("moveUp"),m_camera.get());
+  handler.suscribe<Camera,&Camera::moveCamera>(m_camera.get());
   //m_lights.push_back(DirectionalLight());
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
@@ -210,7 +210,7 @@ TestApp::onUpdate(float delta)
   }
   if(m_keyboard->isKeyDown(KEY::kW)){
     //m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
-    handler.publish(StringUtilities::getStringId("moveUp"),Vector3f(0,0,m_secondPerFrame));
+    handler.publish(Vector3f(0,0,m_secondPerFrame));
   }
   if(m_keyboard->isKeyDown(KEY::kS)){
     m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));

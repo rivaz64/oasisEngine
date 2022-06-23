@@ -42,6 +42,12 @@ class DX11GraphicAPI :
   SPtr<Shader>
   createPixelShader () override;
 
+  SPtr<Shader>
+  createHullShader() override; 
+
+  SPtr<Shader>
+  createDomainShader() override; 
+
   SPtr<Buffer>
   createBuffer() override;
 

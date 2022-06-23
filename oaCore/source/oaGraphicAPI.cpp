@@ -38,17 +38,32 @@ GraphicAPI::isRunning()
   return true;
 }
 
-SPtr<ShaderProgram> GraphicAPI::createShaderProgram()
+SPtr<ShaderProgram>
+GraphicAPI::createShaderProgram()
 {
     return makeSPtr<ShaderProgram>();
 }
 
-SPtr<Shader> GraphicAPI::createVertexShader()
+SPtr<Shader>
+GraphicAPI::createVertexShader()
 {
   return makeSPtr<Shader>();
 }
 
-SPtr<Shader> GraphicAPI::createPixelShader()
+SPtr<Shader>
+GraphicAPI::createPixelShader()
+{
+  return makeSPtr<Shader>();
+}
+
+SPtr<Shader> 
+GraphicAPI::createHullShader()
+{
+  return makeSPtr<Shader>();
+}
+
+SPtr<Shader> 
+GraphicAPI::createDomainShader()
 {
   return makeSPtr<Shader>();
 }

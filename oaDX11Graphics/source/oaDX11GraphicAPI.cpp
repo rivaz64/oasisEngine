@@ -23,6 +23,8 @@
 #include "oaDX11Flags.h"
 #include "oaPath.h"
 #include "oaResoureManager.h"
+#include "oaDX11HullShader.h"
+#include "oaDX11DomainShader.h"
 
 
 namespace oaEngineSDK{
@@ -193,6 +195,18 @@ SPtr<Shader>
 DX11GraphicAPI::createPixelShader()
 {
   return makeSPtr<DX11PixelShader>();
+}
+
+SPtr<Shader> 
+DX11GraphicAPI::createHullShader()
+{
+  return makeSPtr<DX11HullShader>();
+}
+
+SPtr<Shader>
+DX11GraphicAPI::createDomainShader()
+{
+  return makeSPtr<DX11DomainShader>();
 }
 
 SPtr<Buffer> 

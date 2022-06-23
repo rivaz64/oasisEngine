@@ -27,6 +27,7 @@ class Deferred :
          const Vector<PointLight>& pointLights,
          const Vector<SpotLight>& spotLights,
          const Vector4f& config) override;
+
   /**
    * @brief the gBuffer pass
    * @param torender 
