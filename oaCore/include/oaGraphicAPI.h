@@ -192,6 +192,22 @@ class OA_CORE_EXPORT GraphicAPI :
   setPSBuffer(const SPtr<Buffer> /*buffer*/,uint32 /*location*/){}
 
   /**
+   * @brief sets a constant buffer to be used in a hull shader
+   * @param buffer 
+   * @param location the location in th shader
+  */
+  virtual void
+  setHSBuffer(const SPtr<Buffer> /*buffer*/,uint32 /*location*/){}
+
+  /**
+   * @brief sets a constant buffer to be used in a hull shader
+   * @param buffer 
+   * @param location the location in th shader
+  */
+  virtual void
+  setDSBuffer(const SPtr<Buffer> /*buffer*/,uint32 /*location*/){}
+
+  /**
    * @brief sets a sampler tate
    * @param  
   */

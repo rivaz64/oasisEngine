@@ -14,7 +14,7 @@ DX11VertexShader::~DX11VertexShader()
 bool
 DX11VertexShader::compileFromFile(const String& file,const Vector<String>& defines)
 {
-  m_version = "vs_4_0";
+  m_version = "vs_5_0";
 
   ID3DBlob* blob;
 

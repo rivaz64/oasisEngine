@@ -135,6 +135,16 @@ class OA_CORE_EXPORT ResoureManager :
   */
   Map<String,SPtr<Shader>> m_pixelShaders;
 
+   /**
+   * @brief all the loaded pixel shaders
+  */
+  Map<String,SPtr<Shader>> m_hullShaders;
+
+   /**
+   * @brief all the loaded pixel shaders
+  */
+  Map<String,SPtr<Shader>> m_domainShaders;
+
   /**
    * @brief all the loaded pixel shaders
   */

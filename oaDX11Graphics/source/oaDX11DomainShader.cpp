@@ -15,6 +15,8 @@ DX11DomainShader::~DX11DomainShader()
 bool 
 DX11DomainShader::compileFromFile(const String& file, const Vector<String>& defines)
 {
+  m_version = "ds_5_0";
+
   auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
 
   ID3DBlob* blob;
@@ -31,6 +33,14 @@ DX11DomainShader::compileFromFile(const String& file, const Vector<String>& defi
   if (FAILED(hr)) {
     return false;
   }
+}
+
+void 
+DX11DomainShader::set()
+{
+  auto& context = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_context;
+
+  context->DSSetShader( m_shader, NULL, 0 );
 }
 
 }

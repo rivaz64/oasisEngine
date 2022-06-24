@@ -15,6 +15,8 @@ DX11HullShader::~DX11HullShader()
 bool 
 DX11HullShader::compileFromFile(const String& file, const Vector<String>& defines)
 {
+  m_version = "hs_5_0";
+
   auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
 
   ID3DBlob* blob;

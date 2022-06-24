@@ -306,6 +306,17 @@ DX11GraphicAPI::setPSBuffer(const SPtr<Buffer> buffer, uint32 location)
   m_context->PSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->m_buffer );
 }
 
+void
+DX11GraphicAPI::setHSBuffer(const SPtr<Buffer> buffer, uint32 location)
+{
+  m_context->HSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->m_buffer );
+}
+
+void DX11GraphicAPI::setDSBuffer(const SPtr<Buffer> buffer, uint32 location)
+{
+  m_context->DSSetConstantBuffers( location, 1, &cast<DX11Buffer>(buffer)->m_buffer );
+}
+
 void 
 DX11GraphicAPI::setSamplerState(const SPtr<SamplerState> sampler)
 {

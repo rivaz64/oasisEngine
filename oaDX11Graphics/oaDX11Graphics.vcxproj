@@ -22,8 +22,10 @@
     <ClInclude Include="include\oaDX11BlendState.h" />
     <ClInclude Include="include\oaDX11Buffer.h" />
     <ClInclude Include="include\oaDX11DepthStencil.h" />
+    <ClInclude Include="include\oaDX11DomainShader.h" />
     <ClInclude Include="include\oaDX11Flags.h" />
     <ClInclude Include="include\oaDX11GraphicAPI.h" />
+    <ClInclude Include="include\oaDX11HullShader.h" />
     <ClInclude Include="include\oaDX11IndexBuffer.h" />
     <ClInclude Include="include\oaDX11PixelShader.h" />
     <ClInclude Include="include\oaDX11RasterizerState.h" />
@@ -40,8 +42,10 @@
     <ClCompile Include="source\oaDX11BlendState.cpp" />
     <ClCompile Include="source\oaDX11Buffer.cpp" />
     <ClCompile Include="source\oaDX11DepthStencil.cpp" />
+    <ClCompile Include="source\oaDX11DomainShader.cpp" />
     <ClCompile Include="source\oaDX11Flags.cpp" />
     <ClCompile Include="source\oaDX11GraphicAPI.cpp" />
+    <ClCompile Include="source\oaDX11HullShader.cpp" />
     <ClCompile Include="source\oaDX11IndexBuffer.cpp" />
     <ClCompile Include="source\oaDX11RasterizerState.cpp" />
     <ClCompile Include="source\oaDX11RenderTarget.cpp" />

@@ -91,6 +91,12 @@ class DX11GraphicAPI :
   setPSBuffer(const SPtr<Buffer> buffer,uint32 location) override;
 
   void
+  setHSBuffer(const SPtr<Buffer> buffer,uint32 location) override;
+
+  void
+  setDSBuffer(const SPtr<Buffer> buffer,uint32 location) override;
+
+  void
   setSamplerState(const SPtr<SamplerState> sampler) override;
 
   void

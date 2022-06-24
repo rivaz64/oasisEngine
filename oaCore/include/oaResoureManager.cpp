@@ -485,6 +485,28 @@ createPixelShader(const String& name)
 }
 
 void 
+createHullShader(const String& name)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto shader = graphicsApi.createHullShader();
+  resourceManager.m_hullShaders.insert({name,shader});
+  shader->compileFromFile(name);
+  shader->setName(name);
+}
+
+void 
+createDomainShader(const String& name)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto shader = graphicsApi.createHullShader();
+  resourceManager.m_hullShaders.insert({name,shader});
+  shader->compileFromFile(name);
+  shader->setName(name);
+}
+
+void 
 createPixelShaders(const String& name, 
                    SPtr<Shader> vertexShader,
                    const Vector<String>& allDefines,
@@ -561,6 +583,9 @@ ResoureManager::loadDefaultShaders()
   //createPixelShader("directionalLight");
   //createPixelShader("pointLight");
 
+  //createHullShader("hull");
+  //createDomainShader("domain");
+
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
@@ -588,6 +613,16 @@ ResoureManager::loadDefaultShaders()
   resourceManager.m_pixelShaders.insert({"VBlur",shader});
   shader->compileFromFile("blur",{"VERTICAL"});
   shader->setName("VBlur");
+
+  shader = graphicsApi.createHullShader();
+  resourceManager.m_hullShaders.insert({"hullTris",shader});
+  shader->compileFromFile("hull",{"TRIS"});
+  shader->setName("hullTris");
+
+  shader = graphicsApi.createHullShader();
+  resourceManager.m_hullShaders.insert({"hullQuad",shader});
+  shader->compileFromFile("hull",{"QUAD"});
+  shader->setName("hullQuad");
 
   createShaderProgram("default","vertexShader","default");
   createShaderProgram("animation","animVertexShader","default");

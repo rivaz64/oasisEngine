@@ -13,7 +13,7 @@ DX11PixelShader::~DX11PixelShader()
 bool 
 DX11PixelShader::compileFromFile(const String& file,const Vector<String>& defines)
 {
-  m_version = "ps_4_0";
+  m_version = "ps_5_0";
 
   ID3DBlob* blob;
 
