@@ -147,11 +147,18 @@ class OA_CORE_EXPORT GraphicAPI :
   getBackBuffer();
 
   /**
-   * @brief draws to the back buffer
-   * @param indexes 
+   * @brief draws without using index for the tris
+   * @param the number of vertices
   */
   virtual void
-  draw(uint32 /*indexes*/) {}
+  draw(uint32 /*vertices*/) {}
+
+  /**
+   * @brief draws using index for the tris
+   * @param the number of indexes 
+  */
+  virtual void
+  drawIndex(uint32 /*indexes*/) {}
 
   /**
    * @brief shows the things that where rendered
@@ -289,6 +296,12 @@ class OA_CORE_EXPORT GraphicAPI :
   */
   virtual void
   unsetTextures(uint32 /*n*/) {}
+
+  /**
+   * @brief unsets all the shaders that have been set
+  */
+  virtual void 
+  unsetShaders() {}
 
   /**
    * @brief sets the primitive topology to be used

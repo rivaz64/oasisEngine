@@ -15,9 +15,11 @@ namespace oaEngineSDK{
 void
 Mesh::create(){
 
-  m_vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+  auto& graphicsApi = GraphicAPI::instance();
 
-  m_indexB = GraphicAPI::instancePtr()->createIndexBuffer();
+  m_vertexB = graphicsApi.createVertexBuffer();
+
+  m_indexB = graphicsApi.createIndexBuffer();
 
   m_indexB->init(m_index);
 
@@ -58,6 +60,16 @@ void Mesh::createNormals(Vector<Vertex>& vertices)
     vertices[i+1].normal = Vector4f(normal,0.0f);
     vertices[i+2].normal = Vector4f(normal,0.0f);
   }
+}
+
+void
+Mesh::setControlPoints(const Vector<Vector4f>& points)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+
+  m_controlPoints = graphicsApi.createVertexBuffer();
+  m_controlPoints->init(points.data(),sizeof(Vector4f),points.size());
+  m_numOfControlPoints = points.size();
 }
 
 void

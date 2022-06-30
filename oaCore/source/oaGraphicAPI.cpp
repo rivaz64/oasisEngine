@@ -74,12 +74,14 @@ GraphicAPI::createBuffer()
   return makeSPtr<Buffer>();
 }
 
-SPtr<VertexBuffer> GraphicAPI::createVertexBuffer()
+SPtr<VertexBuffer>
+GraphicAPI::createVertexBuffer()
 {
   return makeSPtr<VertexBuffer>();
 }
 
-SPtr<IndexBuffer> GraphicAPI::createIndexBuffer()
+SPtr<IndexBuffer> 
+GraphicAPI::createIndexBuffer()
 {
   return makeSPtr<IndexBuffer>();
 }

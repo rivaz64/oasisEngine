@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <list>
+#include <set>
 #include <string>
 #include <memory>
 #include <algorithm>
@@ -20,6 +21,7 @@ namespace oaEngineSDK {
 
 using std::vector;
 using std::list;
+using std::set;
 using std::shared_ptr;
 using std::weak_ptr;
 using std::map;
@@ -37,6 +39,7 @@ using std::endl;
 using std::copy;
 using std::cout;
 using std::to_string;
+using std::find;
 
 
 
@@ -53,6 +56,13 @@ using Vector = vector<T>;
 */
 template <typename T>
 using List = list<T>;
+
+/**
+ * @brief wraper of the std::list, can be changed in the future
+ * @tparam T
+*/
+template <typename T>
+using Set = set<T>;
 
 /**
  * @brief wraper of the std::string, can be changed in the future

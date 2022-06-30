@@ -37,6 +37,7 @@
 #include <oaAudioAPI.h>
 #include <oaSound.h>
 #include <oaEventSystem.h>
+#include <oaTransform.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -97,6 +98,88 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   }
 
   return 0;
+}
+
+void
+TestApp::genMorbiusTrip(){
+  auto& grapgicApi = GraphicAPI::instance();
+  m_morbiusTrip = makeSPtr<Mesh>();
+  m_morbModel = makeSPtr<Model>();
+  m_morbComponent = makeSPtr<GraphicsComponent>();
+  m_morbActor = makeSPtr<Actor>();
+  m_morbComponent->setModel(m_morbModel);
+  m_morbActor->attachComponent(m_morbComponent);
+  m_morbActor->GetActorTransform().setScale({1.f,1.f,1.f});
+  
+  m_morbModel->addMesh(m_morbiusTrip);
+  m_morbiusTrip->setControlPoints({
+	{ 1.0f, -0.5f, 0.0f, 0.0f },
+	{ 1.0f, -0.5f, 0.5f, 0.0f },
+	{ 0.5f, -0.3536f, 1.354f, 0.0f },
+	{ 0.0f, -0.3536f, 1.354f, 0.0f },
+	{ 1.0f, -0.1667f, 0.0f, 0.0f },
+	{ 1.0f, -0.1667f, 0.5f, 0.0f },
+	{ 0.5f, -0.1179f, 1.118f, 0.0f },
+	{ 0.0f, -0.1179f, 1.118f, 0.0f },
+	{ 1.0f, 0.1667f, 0.0f, 0.0f },
+	{ 1.0f, 0.1667f, 0.5f, 0.0f },
+	{ 0.5f, 0.1179f, 0.8821f, 0.0f },
+	{ 0.0f, 0.1179f, 0.8821f, 0.0f },
+	{ 1.0f, 0.5f, 0.0f, 0.0f },
+	{ 1.0f, 0.5f, 0.5f, 0.0f },
+	{ 0.5f, 0.3536f, 0.6464f, 0.0f },
+	{ 0.0f, 0.3536f, 0.6464f, 0.0f },
+	{ 0.0f, -0.3536f, 1.354f, 0.0f },
+	{ -0.5f, -0.3536f, 1.354f, 0.0f },
+	{ -1.5f, 0.0f, 0.5f, 0.0f },
+	{ -1.5f, 0.0f, 0.0f, 0.0f },
+	{ 0.0f, -0.1179f, 1.118f, 0.0f },
+	{ -0.5f, -0.1179f, 1.118f , 0.0f},
+	{ -1.167f, 0.0f, 0.5f , 0.0f},
+	{ -1.167f, 0.0f, 0.0f , 0.0f},
+	{ 0.0f, 0.1179f, 0.8821f , 0.0f},
+	{ -0.5f, 0.1179f, 0.8821f , 0.0f},
+	{ -0.8333f, 0.0f, 0.5f , 0.0f},
+	{ -0.8333f, 0.0f, 0.0f , 0.0f},
+	{ 0.0f, 0.3536f, 0.6464f , 0.0f},
+	{ -0.5f, 0.3536f, 0.6464f , 0.0f},
+	{ -0.5f, 0.0f, 0.5f , 0.0f},
+	{ -0.5f, 0.0f, 0.0f , 0.0f},
+	{ -1.5f, 0.0f, 0.0f , 0.0f},
+	{ -1.5f, 0.0f, -0.5f , 0.0f},
+	{ -0.5f, 0.3536f, -1.354f , 0.0f},
+	{ 0.0f, 0.3536f, -1.354f , 0.0f},
+	{ -1.167f, 0.0f, 0.0f , 0.0f},
+	{ -1.167f, 0.0f, -0.5f , 0.0f},
+	{ -0.5f, 0.1179f, -1.118f , 0.0f},
+	{ 0.0f, 0.1179f, -1.118f , 0.0f},
+	{ -0.8333f, 0.0f, 0.0f , 0.0f},
+	{ -0.8333f, 0.0f, -0.5f , 0.0f},
+	{ -0.5f, -0.1179f, -0.8821f , 0.0f},
+	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
+	{ -0.5f, 0.0f, 0.0f , 0.0f},
+	{ -0.5f, 0.0f, -0.5f , 0.0f},
+	{ -0.5f, -0.3536f, -0.6464f , 0.0f},
+	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
+	{ 0.0f, 0.3536f, -1.354f , 0.0f},
+	{ 0.5f, 0.3536f, -1.354f , 0.0f},
+	{ 1.0f, 0.5f, -0.5f , 0.0f},
+	{ 1.0f, 0.5f, 0.0f , 0.0f},
+	{ 0.0f, 0.1179f, -1.118f , 0.0f},
+	{ 0.5f, 0.1179f, -1.118f , 0.0f},
+	{ 1.0f, 0.1667f, -0.5f , 0.0f},
+	{ 1.0f, 0.1667f, 0.0f , 0.0f},
+	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
+	{ 0.5f, -0.1179f, -0.8821f , 0.0f},
+	{ 1.0f, -0.1667f, -0.5f , 0.0f},
+	{ 1.0f, -0.1667f, 0.0f , 0.0f},
+	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
+	{ 0.5f, -0.3536f, -0.6464f , 0.0f},
+	{ 1.0f, -0.5f, -0.5f , 0.0f},
+	{ 1.0f, -0.5f, 0.0f , 0.0f},
+});
+
+  m_actualScene->getRoot()->attach(m_morbActor);
 }
 
 void 
@@ -171,6 +254,9 @@ TestApp::postInit()
   //m_lights.push_back(DirectionalLight());
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
+
+  genMorbiusTrip();
+
 }
 
 

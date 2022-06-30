@@ -22,6 +22,7 @@
 #include <oaMatrix3f.h>
 #include <oaLights.h>
 #include <oaSamplerState.h>
+#include <oaVertexBuffer.h>
 
 namespace oaEngineSDK{
 
@@ -57,6 +58,10 @@ Deferred::onStartUp()
 
   m_size = graphicsAPI.createBuffer();
   m_size->init(sizeof(Vector4f));
+
+  m_tessBufer = graphicsAPI.createBuffer();
+  m_tessBufer->init(sizeof(Vector4f));
+  
 
   //m_smallSize = graphicsAPI.createBuffer();
   //m_smallSize->init(sizeof(Vector4f));
@@ -159,32 +164,93 @@ Deferred::render(SPtr<Scene> scene,
                    camForFrustrum->getRatio());
   
   
-  scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
+  //scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
   
   m_viewBuffer->write(camForView->getViewMatrix().getData());
   graphicsAPI.setVSBuffer(m_viewBuffer,1);
+  graphicsAPI.setDSBuffer(m_viewBuffer,1);
   
   m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
   graphicsAPI.setVSBuffer(m_projectionBuffer,2);
+  graphicsAPI.setDSBuffer(m_projectionBuffer,2);
   //debug(toRender);
-  gBuffer(toRender);
-  downSapmle(m_emisiveTexture);
-  blur(m_downSapmle,m_blur);
+  //gBuffer(toRender);
+  m_tessBufer->write(&config);
+  vertex(scene->getRoot(),frustrum);
+  graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
+  graphicsAPI.unsetShaders();
+  copy(m_colorTexture,m_renderTarget);
+  //downSapmle(m_emisiveTexture);
+  //blur(m_downSapmle,m_blur);
   //gTransparents(transparents);
 
-  directionalLight(camForView->getViewMatrix(),directionalLights);
-
-  ssao(config);
-
-  pointLight(camForView->getViewMatrix(),pointLights);
-  spotLight(camForView->getViewMatrix(),spotLights);
-  aplylights();
+  //directionalLight(camForView->getViewMatrix(),directionalLights);
+  //
+  //ssao(config);
+  //
+  //pointLight(camForView->getViewMatrix(),pointLights);
+  //spotLight(camForView->getViewMatrix(),spotLights);
+  //aplylights();
   
   //ssao(config);
   //float n = 1.f/9.f;
   //blur(m_ssao,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
   //lights(camForView->getViewMatrix()*light);
   
+}
+
+void
+Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
+{
+  auto& childs = actor->getChilds();
+  auto& resourseManager = ResoureManager::instance();
+
+  Matrix4f actorTransform;
+  Matrix4f finalTransform;
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
+  graphicsAPI.setRasterizerState(m_normalRasterizer);
+  for(auto child : childs){
+    actorTransform = child->getGlobalTransform();
+    auto components = child->getComponents<GraphicsComponent>();
+    for(auto& component : components){
+      auto meshComponent = cast<GraphicsComponent>(component);
+      auto model = meshComponent->getModel();
+      if(model){
+        finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
+        SIZE_T meshes = model->getNumOfMeshes();
+        for(SIZE_T i = 0; i<meshes;++i){
+          
+          auto& mesh = model->getMesh(i);
+          
+          auto controlPoints = mesh->getControlPoints();
+          if(controlPoints){
+            graphicsAPI.setRasterizerState(m_debugRasterizer);
+            graphicsAPI.setHSBuffer(m_tessBufer,0);
+            m_globalTransformBuffer->write(finalTransform.getData());
+            graphicsAPI.setDSBuffer(m_globalTransformBuffer, 0);
+            resourseManager.m_shaderPrograms["Tesselator"]->set();
+            controlPoints->set();
+            graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::k16ContolPointPathlist);
+            graphicsAPI.draw(mesh->getNumOfControlPoints());
+          }
+          else{
+            graphicsAPI.setRasterizerState(m_normalRasterizer);
+            auto& mat = model->getMaterial(i);
+            m_globalTransformBuffer->write(&finalTransform);
+            graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+            mesh->set();
+            mat->set();
+            graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
+            graphicsAPI.drawIndex(mesh->getIndexNum());
+          }
+          
+        }
+      }
+    }
+    vertex(child,frustum);
+  }
 }
 
 void 
@@ -202,7 +268,7 @@ Deferred::gBuffer(Vector<RenderData>& toRender)
     renderData.m_mesh->set();
     renderData.m_material->set();
     //resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
     graphicsAPI.unsetTextures(m_gBuffer.size());
   }
   
@@ -221,7 +287,7 @@ void Deferred::gTransparents(Vector<RenderData>& transparents)
 
     renderData.m_mesh->set();
     renderData.m_material->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
   }
 
   graphicsAPI.setRasterizerState(m_hairRasterizer2);
@@ -233,7 +299,7 @@ void Deferred::gTransparents(Vector<RenderData>& transparents)
     renderData.m_mesh->set();
     renderData.m_material->set();
     resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
   }
 
   graphicsAPI.setRasterizerState(m_normalRasterizer);
@@ -244,7 +310,7 @@ void Deferred::gTransparents(Vector<RenderData>& transparents)
     renderData.m_mesh->set();
     renderData.m_material->set();
     resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
   }
 }
 
@@ -264,7 +330,7 @@ Deferred::debug(Vector<RenderData>& toRender)
     renderData.m_mesh->set();
     //renderData.m_material->set();
     //resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.draw(renderData.m_mesh->getIndexNum());
+    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
   }
   
   graphicsAPI.setRasterizerState(m_normalRasterizer);
@@ -290,7 +356,7 @@ Deferred::ssao( const Vector4f& config)
   graphicsAPI.setTexture(m_depthStencil,2);
   screen->set();
   
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
   graphicsAPI.unsetTextures(5);
 }
 
@@ -317,13 +383,13 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
   
   
   screen->set();
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
 
   graphicsAPI.setRenderTarget(textureIn);
   graphicsAPI.setTexture(textureOut,0);
   resourseManager.m_shaderPrograms["VBlur"]->set();
   screen->set();
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
   //copy(m_blur,texture);
   //auto& resourseManager = ResoureManager::instance();
   //auto& graphicsAPI = GraphicAPI::instance();
@@ -352,7 +418,7 @@ Deferred::copy(SPtr<Texture> textureIn, SPtr<Texture> textureOut)
   
   screen->set();
 
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
 
   graphicsAPI.unsetTextures(5);
 }
@@ -381,7 +447,7 @@ Deferred::aplylights()
   graphicsAPI.setTexture(m_depthStencil,5);
   screen->set();
   
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
   graphicsAPI.unsetTextures(5);
 }
 
@@ -405,7 +471,7 @@ Deferred::directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalL
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
     screen->set();
-    graphicsAPI.draw(6);
+    graphicsAPI.drawIndex(6);
   }
 
   graphicsAPI.unsetTextures(4);
@@ -434,7 +500,7 @@ Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& light
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
     screen->set();
-    graphicsAPI.draw(6);
+    graphicsAPI.drawIndex(6);
   }
   graphicsAPI.unsetTextures(4);
   graphicsAPI.setBlendState(m_blendState0);
@@ -461,7 +527,7 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
     screen->set();
-    graphicsAPI.draw(6);
+    graphicsAPI.drawIndex(6);
   }
 }
 
@@ -531,7 +597,7 @@ Deferred::downSapmle(SPtr<Texture> texture)
   graphicsAPI.setRenderTarget(m_downSapmle);
   graphicsAPI.setPSBuffer(m_size,0);
   screen->set();
-  graphicsAPI.draw(6);
+  graphicsAPI.drawIndex(6);
   graphicsAPI.unsetTextures(1);
 }
 

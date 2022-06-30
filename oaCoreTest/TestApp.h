@@ -71,6 +71,9 @@ public:
                 Vector<Vector4f>& vertices, 
                 uint32 index1, 
                 uint32 index2);
+  
+  void
+  genMorbiusTrip();
 
  public:
 
@@ -93,6 +96,8 @@ public:
   SPtr<Keyboard> m_keyboard;
 
   SPtr<Mouse> m_mouse;
+
+  SPtr<Mesh> m_morbiusTrip;
 
   //SPtr<Buffer> lights;
 
@@ -129,6 +134,10 @@ public:
   bool animInPlay=false;
 
   EventHandler<const Vector3f&> handler;
+
+  SPtr<Actor> m_morbActor;
+  SPtr<GraphicsComponent> m_morbComponent;
+  SPtr<Model> m_morbModel;
 };
 
 }

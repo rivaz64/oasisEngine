@@ -275,10 +275,15 @@ DX11GraphicAPI::getBackBuffer()
 }
 
 void 
-DX11GraphicAPI::draw(uint32 indexes)
+DX11GraphicAPI::draw(uint32 vertices)
+{
+  m_context->Draw(vertices,0);
+}
+
+void
+DX11GraphicAPI::drawIndex(uint32 indexes)
 {
   m_context->DrawIndexed(indexes, 0, 0);
-  //m_context->Draw(indexes,0);
 }
 
 void 
@@ -409,6 +414,15 @@ void DX11GraphicAPI::unsetTextures(uint32 n)
   Vector<ID3D11ShaderResourceView*> v;
   v.resize(n,nullptr);
   m_context->PSSetShaderResources(0,n,v.data());
+}
+
+void
+DX11GraphicAPI::unsetShaders()
+{
+  m_context->VSSetShader( nullptr, NULL, 0 );
+  m_context->HSSetShader( nullptr, NULL, 0 );
+  m_context->DSSetShader( nullptr, NULL, 0 );
+  m_context->PSSetShader( nullptr, NULL, 0 );
 }
 
 void 

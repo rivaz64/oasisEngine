@@ -192,6 +192,19 @@ class OA_CORE_EXPORT Mesh
     return m_boundingBox;
   }
 
+  void
+  setControlPoints(const Vector<Vector4f>& points);
+
+  FORCEINLINE SPtr<VertexBuffer>
+  getControlPoints(){
+    return m_controlPoints;
+  }
+
+  FORCEINLINE int32
+  getNumOfControlPoints(){
+    return m_numOfControlPoints;
+  }
+
  public:
 
   /**
@@ -223,6 +236,13 @@ class OA_CORE_EXPORT Mesh
    * @brief the bounding box of this mesh
   */
   AABB m_boundingBox;
+
+  /**
+   * @brief the control points used for bezier curbes
+  */
+  SPtr<VertexBuffer> m_controlPoints;
+
+  int32 m_numOfControlPoints;
 
   friend class ResourceManager;
 };

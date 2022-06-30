@@ -19,7 +19,10 @@ Scene::init(){
 }
 
 void 
-Scene::meshesToRender(SPtr<Actor> actor, const Frustum& frustum, Vector<RenderData>& toRender,Vector<RenderData>& transparentMeshes)
+Scene::meshesToRender(SPtr<Actor> actor, 
+                      const Frustum& frustum, 
+                      Vector<RenderData>& toRender,
+                      Vector<RenderData>& transparentMeshes)
 {
   auto& childs = actor->getChilds();
 

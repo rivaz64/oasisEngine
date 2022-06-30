@@ -556,6 +556,22 @@ createShaderProgram(const String& name, const String& vertex, const String& pixe
 }
 
 void 
+createShaderProgram(const String& name, const String& vertex,
+                                        const String& hull,
+                                        const String& domain,
+                                        const String& pixel){
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& resourceManager = ResoureManager::instance();
+  auto program = graphicsApi.createShaderProgram();
+  resourceManager.m_shaderPrograms.insert({name,program});
+  program->attach(resourceManager.m_vertexShaders[vertex]);
+  program->attach(resourceManager.m_hullShaders[hull]);
+  program->attach(resourceManager.m_domainShaders[domain]);
+  program->attach(resourceManager.m_pixelShaders[pixel]);
+  program->setName(name);
+}
+
+void 
 ResoureManager::loadDefaultShaders()
 {
   m_vertexShaders.clear();
@@ -624,6 +640,16 @@ ResoureManager::loadDefaultShaders()
   shader->compileFromFile("hull",{"QUAD"});
   shader->setName("hullQuad");
 
+  shader = graphicsApi.createDomainShader();
+  resourceManager.m_domainShaders.insert({"domainQuad",shader});
+  shader->compileFromFile("domain",{"QUAD"});
+  shader->setName("domainQuad");
+
+  shader = graphicsApi.createVertexShader();
+  resourceManager.m_vertexShaders.insert({"Tesselation",shader});
+  shader->compileFromFile("vertexShader",{"TESSEL"});
+  shader->setName("Tesselation");
+
   createShaderProgram("default","vertexShader","default");
   createShaderProgram("animation","animVertexShader","default");
   createShaderProgram("paralax","vertexShader","paralax");
@@ -644,6 +670,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("VBlur","screen","VBlur");
   createShaderProgram("downSample","screen","downSample");
   createShaderProgram("shadowMapper","vertexShader","shadowMapper");
+  createShaderProgram("Tesselator","Tesselation","hullQuad","domainQuad","color");
   Vector<SPtr<ShaderProgram>> gBuffer;
   createPixelShaders("GBuffer",
                      m_vertexShaders["vertexShader"],

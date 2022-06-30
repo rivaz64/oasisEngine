@@ -76,7 +76,10 @@ class DX11GraphicAPI :
   getBackBuffer() override;
 
   void
-  draw(uint32 indexes) override;
+  draw(uint32 vertices) override;
+
+  void
+  drawIndex(uint32 indexes) override;
 
   void
   show() override;
@@ -128,6 +131,9 @@ class DX11GraphicAPI :
 
   void
   unsetTextures(uint32 n) override;
+
+  virtual void 
+  unsetShaders() override;
 
   void
   setPrimitiveTopology(PRIMITIVE_TOPOLOGY::E topology) override;

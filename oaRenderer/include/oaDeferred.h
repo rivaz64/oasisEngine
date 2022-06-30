@@ -29,6 +29,12 @@ class Deferred :
          const Vector4f& config) override;
 
   /**
+   * @brief all the vertex shaders
+  */
+  void
+  vertex(SPtr<Actor> actor,const Frustum& frustum);
+
+  /**
    * @brief the gBuffer pass
    * @param torender 
   */
@@ -172,6 +178,9 @@ class Deferred :
   SPtr<SamplerState> m_samplerState; 
 
   Vector<float> m_blurKernel;
+
+  float m_tessAmount = 8.0f;
+  SPtr<Buffer> m_tessBufer;
 };
 
 }
