@@ -34,6 +34,7 @@ class AStar
   FORCEINLINE void
   run()
   {
+    reset();
     while(step() != SEARCH_STATE::kSearching);
   }
 
@@ -61,9 +62,24 @@ class AStar
   FORCEINLINE void
   reset()
   {
-    m_closedList.clear();
     m_openList.clear();
+    m_nodes.clear();
+    m_paths.clear();
+    m_path.clear();
+    addNode(m_sourceId,-1);
     m_openList.push_back(m_sourceId);
+  }
+
+  FORCEINLINE Vector<uint32>
+  getPath()
+  {
+    return m_path;
+  }
+
+  FORCEINLINE void
+  setGraph(SPtr<AStarGraph> graph)
+  {
+    m_graph = graph;
   }
 
  private:
@@ -107,7 +123,7 @@ class AStar
   /**
    * @brief the paths that have been searched
   */
-  Vector<uint32> m_closedList;
+  //Vector<uint32> m_closedList;
 
   /**
    * @brief the paths in wait for search
@@ -135,6 +151,9 @@ class AStar
   */
   uint32 m_goalId;
 
+  /**
+   * @brief the graph to do the search in
+  */
   SPtr<AStarGraph> m_graph;
 };
 

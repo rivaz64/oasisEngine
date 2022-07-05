@@ -64,17 +64,21 @@ struct SpotLight{
    * @brief how far he light can reach
   */
   float intensity;
-
   
   /**
    * @brief the direction the light is pointed at
   */
-  Vector3f direction;
+  Vector3f direction = {0.f,1.f,0.f};
 
   /**
    * @brief the angle of the light 
   */
   float angle;
+
+  /**
+   * @brief if this light generates shadows
+  */
+  bool castShadows;
 };
 
 

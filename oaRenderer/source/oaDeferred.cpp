@@ -50,7 +50,7 @@ Deferred::onStartUp()
   m_LightBuffer = graphicsAPI.createBuffer();
   m_LightBuffer->init(sizeof(DirectionalLight));
   m_spotLightBuffer = graphicsAPI.createBuffer();
-  m_spotLightBuffer->init(sizeof(SpotLight));
+  m_spotLightBuffer->init(sizeof(Vector4f)*3);
 
 
   m_configs = graphicsAPI.createBuffer();
@@ -88,7 +88,7 @@ Deferred::onStartUp()
   m_diffuseLight = graphicsAPI.createTexture();
   m_specularLight = graphicsAPI.createTexture();
   m_shadowMap = graphicsAPI.createTexture();
-
+  m_shadowMap->init({2048,2048},BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_blendState0 = graphicsAPI.createBlendState();
   m_blendState0->init(false);
 
@@ -120,7 +120,17 @@ Deferred::onStartUp()
   m_samplerState = graphicsAPI.createSamplerState();
   m_samplerState->init(TEXTURE_ADDRESS_MODE::kBorder);
   graphicsAPI.setSamplerState(m_samplerState);
+
+  m_shadowMaps.resize(4);
+  for(int32 i = 0; i<4; ++i){
+    m_shadowMaps[i] = graphicsAPI.createTexture();
+    auto& shadowMap = m_shadowMaps[i];
+    shadowMap->init({2048,2048},BIND::kDepthStencil,FORMAT::kR24G8);
+  }
   
+
+  m_shadowsCamera = makeSPtr<Camera>();
+  m_shadowsCamera->init(1);
 }
 
 void 
@@ -144,7 +154,7 @@ Deferred::render(SPtr<Scene> scene,
   graphicsAPI.clearRenderTarget(m_diffuseLight);
   graphicsAPI.clearRenderTarget(m_specularLight);
   graphicsAPI.clearDepthStencil(m_depthStencil);
-    graphicsAPI.clearRenderTarget(m_downSapmle);
+  graphicsAPI.clearRenderTarget(m_downSapmle);
 
   
   graphicsAPI.setBlendState(m_blendState0);
@@ -166,36 +176,25 @@ Deferred::render(SPtr<Scene> scene,
   
   //scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
   
-  m_viewBuffer->write(camForView->getViewMatrix().getData());
-  graphicsAPI.setVSBuffer(m_viewBuffer,1);
-  graphicsAPI.setDSBuffer(m_viewBuffer,1);
-  
-  m_projectionBuffer->write(camForView->getProjectionMatrix().getData());
-  graphicsAPI.setVSBuffer(m_projectionBuffer,2);
-  graphicsAPI.setDSBuffer(m_projectionBuffer,2);
+  setCamera(camForView);
   //debug(toRender);
   //gBuffer(toRender);
   m_tessBufer->write(&config);
   vertex(scene->getRoot(),frustrum);
   graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
   graphicsAPI.unsetShaders();
-  copy(m_colorTexture,m_renderTarget);
+  //copy(m_colorTexture,m_renderTarget);
   //downSapmle(m_emisiveTexture);
   //blur(m_downSapmle,m_blur);
   //gTransparents(transparents);
 
-  //directionalLight(camForView->getViewMatrix(),directionalLights);
-  //
-  //ssao(config);
-  //
-  //pointLight(camForView->getViewMatrix(),pointLights);
-  //spotLight(camForView->getViewMatrix(),spotLights);
-  //aplylights();
+  ssao(config);
+  directionalLight(camForView->getViewMatrix(),directionalLights);
+  pointLight(camForView->getViewMatrix(),pointLights);
+  spotLight(camForView->getViewMatrix(),spotLights);
+  shadows(spotLights,scene);
+  aplylights();
   
-  //ssao(config);
-  //float n = 1.f/9.f;
-  //blur(m_ssao,Matrix3f(Vector3f(n,n,n),Vector3f(n,n,n),Vector3f(n,n,n)));
-  //lights(camForView->getViewMatrix()*light);
   
 }
 
@@ -518,6 +517,7 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
   for(auto& light : lights){
     auto viewLight = light;
     viewLight.location = (viewMatrix*Vector4f(viewLight.location,1.0f)).xyz;
+    viewLight.direction = (viewMatrix*Vector4f(viewLight.direction.normalized(),0.0f)).normalized().xyz;
     viewLight.direction.normalize();
     m_spotLightBuffer->write(&viewLight);
     graphicsAPI.setPSBuffer(m_spotLightBuffer,0);
@@ -528,6 +528,33 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
     graphicsAPI.setTexture(m_depthStencil,3);
     screen->set();
     graphicsAPI.drawIndex(6);
+
+    //if(light.castShadows){
+    //  generateShadowMap(light,scene)
+    //}
+  }
+}
+
+void 
+Deferred::shadows(const Vector<SpotLight>& lights, SPtr<Scene> scene)
+{
+  int8 i = 0;
+  auto& resourseManager = ResoureManager::instance();
+  auto& graphicsAPI = GraphicAPI::instance();
+  resourseManager.m_shaderPrograms["shadowMapper"]->set();
+  for(auto& light : lights){
+    if(light.castShadows){
+      m_shadowsCamera->setLocation(light.location);
+      m_shadowsCamera->lookAt(light.location+light.direction);
+      setCamera(m_shadowsCamera);
+      graphicsAPI.unsetRenderTargetAndDepthStencil();
+      graphicsAPI.setRenderTargetAndDepthStencil(m_shadowMap,m_shadowMaps[i]);
+      generateShadowMap(light,scene->getRoot());
+    }
+    ++i;
+    if(i==4){
+      break;
+    }
   }
 }
 
@@ -637,11 +664,43 @@ Deferred::setSize(const Vector2U& size)
   m_diffuseLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_downSapmle->init(iSize/4,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
-  m_shadowMap->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  
   auto sizef = Vector2f(size.x,size.y);
   m_size->write(&sizef);
   sizef /= 4.f;
   //m_smallSize->write(&sizef);
+}
+
+void
+Deferred::generateShadowMap(const SpotLight& light,SPtr<Actor> actor)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+  auto& childs = actor->getChilds();
+  Matrix4f actorTransform;
+  Matrix4f finalTransform;
+  for(auto child : childs){
+    actorTransform = child->getGlobalTransform();
+    auto components = child->getComponents<GraphicsComponent>();
+    for(auto& component : components){
+      auto meshComponent = cast<GraphicsComponent>(component);
+      auto model = meshComponent->getModel();
+      if(model){
+        finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
+        SIZE_T meshes = model->getNumOfMeshes();
+        for(SIZE_T i = 0; i<meshes;++i){
+        
+          if(model->getMaterial(i)->getCastShadows()){
+            auto& mesh =  model->getMesh(i);
+            m_globalTransformBuffer->write(&finalTransform);
+            graphicsApi.setVSBuffer(m_globalTransformBuffer, 0);
+            mesh->set();
+            graphicsApi.drawIndex(mesh->getIndexNum());
+          }
+        }
+      }
+    }
+    generateShadowMap(light,child);
+  }
 }
 
 //SPtr<Texture>
@@ -664,6 +723,26 @@ Deferred::setSize(const Vector2U& size)
 SPtr<Texture> Deferred::applyShadowMap(SPtr<Texture>& scene, SPtr<Texture>& map)
 {
   return SPtr<Texture>();
+}
+
+void
+Deferred::setCamera(SPtr<Camera> camera)
+{
+  auto& graphicsApi = GraphicAPI::instance();
+
+  m_viewBuffer->write(camera->getViewMatrix().getData());
+  graphicsApi.setVSBuffer(m_viewBuffer,1);
+  graphicsApi.setDSBuffer(m_viewBuffer,1);
+  
+  m_projectionBuffer->write(camera->getProjectionMatrix().getData());
+  graphicsApi.setVSBuffer(m_projectionBuffer,2);
+  graphicsApi.setDSBuffer(m_projectionBuffer,2);
+}
+
+SPtr<Texture> 
+Deferred::getShadowMap()
+{
+  return m_shadowMap;
 }
 
 }

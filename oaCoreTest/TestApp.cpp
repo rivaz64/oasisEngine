@@ -255,7 +255,7 @@ TestApp::postInit()
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
 
-  genMorbiusTrip();
+  //genMorbiusTrip();
 
 }
 
@@ -474,6 +474,8 @@ void oaEngineSDK::TestApp::drawImGui()
 {
   auto& resourceManager = ResoureManager::instance();
   auto& audioApi = AudioAPI::instance();
+  auto& renderer = Renderer::instance();
+  auto shadowMap = renderer.getShadowMap();
   /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
   }
@@ -737,6 +739,7 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::Begin("spot lights");
   if(ImGui::Button("add light")){
     m_spotLights.push_back(SpotLight());
+
   }
   lightNum = m_spotLights.size();
   for(int32 i = 0;i<lightNum;++i){
@@ -745,6 +748,8 @@ void oaEngineSDK::TestApp::drawImGui()
     ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].direction.x,.01f,-1.f,1.f);
     ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].intensity);
     ImGui::DragFloat(("angle"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].angle,.01f,-1.f,1.f);
+    ImGui::Checkbox(("cast shadows"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].castShadows);
+    ImGui::Image(shadowMap->getId(),ImVec2(100.f,100.f));
   }
   ImGui::End();
 

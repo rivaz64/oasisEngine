@@ -303,9 +303,9 @@ divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vect
       replaceIndexes.push_back(index[i*3]);
       replaceIndexes.push_back(index[i*3+1]);
       replaceIndexes.push_back(index[i*3+2]);
-      replaceIndexes.push_back(vertices.size());
+      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
       vertices.push_back(newPoints[0]);
-      replaceIndexes.push_back(vertices.size());
+      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
       vertices.push_back(newPoints[1]);
       //if(i==1)
       //for(int32 newIndex = 0; newIndex<3; ++newIndex){
@@ -582,12 +582,11 @@ ResoureManager::loadDefaultShaders()
   createVertexShader("animVertexShader");
   createVertexShader("vertexDebug");
   createVertexShader("screen");
-  createVertexShader("position");
+  //createVertexShader("position");
 
-  createPixelShader("default");
   createPixelShader("paralax");
   createPixelShader("transparent");
-  createPixelShader("debug");
+  //createPixelShader("debug");
   //createPixelShader("GBuffer");
   createPixelShader("lights");
   createPixelShader("ssao");
@@ -595,7 +594,7 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("copy");
   createPixelShader("color");
   createPixelShader("downSample");
-  createPixelShader("shadowMapper");
+  //createPixelShader("shadowMapper");
   //createPixelShader("directionalLight");
   //createPixelShader("pointLight");
 
@@ -650,8 +649,14 @@ ResoureManager::loadDefaultShaders()
   shader->compileFromFile("vertexShader",{"TESSEL"});
   shader->setName("Tesselation");
 
-  createShaderProgram("default","vertexShader","default");
-  createShaderProgram("animation","animVertexShader","default");
+  shader = graphicsApi.createVertexShader();
+  resourceManager.m_vertexShaders.insert({"SimpleVertex",shader});
+  shader->compileFromFile("vertexShader",{"SIMPLE"});
+  shader->setName("SimpleVertex");
+
+  //createShaderProgram("default","vertexShader","default");
+  //todo: cambiarlo a gbuffer
+  //("animation","animVertexShader","default");
   createShaderProgram("paralax","vertexShader","paralax");
   createShaderProgram("transparent","vertexShader","transparent");
   m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
@@ -659,7 +664,7 @@ ResoureManager::loadDefaultShaders()
   //createShaderProgram("GBuffer","vertexShader","GBuffer");
   //m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap","emisive"});
   createShaderProgram("lights","screen","lights");
-  createShaderProgram("color","debug","color");
+  //createShaderProgram("color","debug","color");
   createShaderProgram("ssao","screen","ssao");
   createShaderProgram("convolution","screen","convolution");
   createShaderProgram("copy","screen","copy");
@@ -669,7 +674,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("HBlur","screen","HBlur");
   createShaderProgram("VBlur","screen","VBlur");
   createShaderProgram("downSample","screen","downSample");
-  createShaderProgram("shadowMapper","vertexShader","shadowMapper");
+  createShaderProgram("shadowMapper","SimpleVertex","color");
   createShaderProgram("Tesselator","Tesselation","hullQuad","domainQuad","color");
   Vector<SPtr<ShaderProgram>> gBuffer;
   createPixelShaders("GBuffer",

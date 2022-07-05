@@ -29,6 +29,9 @@ class OA_CORE_EXPORT Renderer :
   virtual void
   setSize(const Vector2U& /*size*/) {}
 
+  virtual SPtr<Texture>
+  getShadowMap(){return SPtr<Texture>();}
+
 
  public:
   float std_deviation = 1;

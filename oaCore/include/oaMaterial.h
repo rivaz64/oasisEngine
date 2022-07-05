@@ -60,13 +60,21 @@ class OA_CORE_EXPORT Material :
    * @param shader 
   */
   FORCEINLINE void
-  setShader(uint32 shader){
+  setShader(uint32 shader)
+  {
     m_shader = shader;
   }
 
   FORCEINLINE uint32
-  getShader(){
+  getShader()
+  {
     return m_shader;
+  }
+
+  FORCEINLINE bool
+  getCastShadows()
+  {
+    return m_castShadows; 
   }
 
  private:
@@ -79,6 +87,11 @@ class OA_CORE_EXPORT Material :
    * @brief the shaders program that is going to be using
   */
   uint32 m_shader;
+
+  /**
+   * @brief if meshes with this material cast shadows
+  */
+  bool m_castShadows = true;
 };
 
 }

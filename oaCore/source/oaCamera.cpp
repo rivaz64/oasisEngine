@@ -162,6 +162,15 @@ Camera::setLocation(const Vector3f& newLocation)
   dirtyFlags = true;
 }
 
+void 
+Camera::setRotation(const Vector3f& newRotation)
+{
+  //newRotation = Matrix4f::rotationMatrix(newRotation);
+  //m_axisX = Vector3f(1,0,0)*newRotation;
+  //m_axisY = Vector3f(0,1,0)*newRotation;
+  //m_axisZ = Vector3f(0,0,1)*newRotation;
+}
+
 
 }
 

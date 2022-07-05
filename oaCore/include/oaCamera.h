@@ -26,8 +26,9 @@ class OA_CORE_EXPORT Camera
   Camera();
 
   /**
-   * @brief initializes the camera with standart atributes
-   * @param viewAngle 
+   * @brief initializes the camera
+   * @param ratio height / width
+   * @param viewAngle in radians
    * @param nearPlaneDistance 
    * @param farPlaneDistance 
   */
@@ -75,20 +76,19 @@ class OA_CORE_EXPORT Camera
   */
   void
   rotateWithMouse(const Vector2f& delta);
-  
-  /**
-   * @brief sees the Actors in a scene
-   * @param the sceen to be sceen
-   * @param the Actors seen by this camera
-  */
-  //void
-  //seeActors(SPtr<Actor> scene,Vector<SPtr<Actor>>& seenActors);
 
   /**
    * @brief sets the global location of the camera
   */
   void
   setLocation(const Vector3f& newLocation);
+
+  /**
+   * @brief sets the rotation of the camera
+   * @param newRotation 
+  */
+  void
+  setRotation(const Vector3f& newRotation);
 
   /**
    * @brief getter for the view matrix

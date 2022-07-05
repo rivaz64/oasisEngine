@@ -7,7 +7,7 @@ uint32
 AStar::getNextNodeForSearch(){
   uint32 id = *m_openList.begin();
   m_openList.pop_front();
-  m_closedList.push_back(id);
+  //m_closedList.push_back(id);
   return id;
 }
 
@@ -74,6 +74,7 @@ AStar::step()
       addNodeToOpenList(adjacentId);
     }
   }
+  return SEARCH_STATE::kSearching;
 }
 
 }

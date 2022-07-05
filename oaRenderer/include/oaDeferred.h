@@ -91,6 +91,9 @@ class Deferred :
   void
   spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights);
 
+  void
+  shadows(const Vector<SpotLight>& lights, SPtr<Scene> scene);
+
   //void 
   //diffusePoint(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
   //
@@ -103,13 +106,17 @@ class Deferred :
   void
   setSize(const Vector2U& size) override;
 
-  SPtr<Texture>
-  getShadowMap(const PointLight& lights,Vector<RenderData>& toRender);
+  void
+  generateShadowMap(const SpotLight& light,SPtr<Actor> actor);
 
   SPtr<Texture>
   applyShadowMap(SPtr<Texture>& scene,SPtr<Texture>& map);
 
+  void
+  setCamera(SPtr<Camera> camera);
 
+  SPtr<Texture>
+  getShadowMap() override;
 
  private:
   
@@ -181,6 +188,10 @@ class Deferred :
 
   float m_tessAmount = 8.0f;
   SPtr<Buffer> m_tessBufer;
+
+  Vector<SPtr<Texture>> m_shadowMaps;
+
+  SPtr<Camera> m_shadowsCamera;
 };
 
 }

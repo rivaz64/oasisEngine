@@ -38,7 +38,7 @@ DX11Texture::release()
 void* 
 DX11Texture::getId()
 {
-  return m_shaderResourceView;
+  return m_texture;
 }
 
 bool
