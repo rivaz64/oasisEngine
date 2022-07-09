@@ -3,7 +3,7 @@
 #include "oaIAForDec.h"
 namespace oaEngineSDK{
 
-class oaPlansGraph :
+class PlansGraph :
     public AStarGraph
 {
  public:

@@ -18,7 +18,7 @@ SkeletalComponent::getType()
   return COMPONENT_TYPE::kSkeleton;
 }
 
-void SkeletalComponent::update(SPtr<Actor> actor)
+void SkeletalComponent::update(WPtr<Actor> actor)
 {
   //if(m_skeleton)
   //for(auto it= m_sockets.begin(); it!=m_sockets.end(); ++it){
@@ -49,15 +49,15 @@ void SkeletalComponent::update(SPtr<Actor> actor)
 }
 
 bool 
-SkeletalComponent::attachToBone(SPtr<Model> model, String bone)
+SkeletalComponent::attachToBone(WPtr<Model> model, String bone)
 {
-  if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
-    return false;
-  }
-  
-  m_sockets.insert({model,bone});
-
-  return true;
+  //if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
+  //  return false;
+  //}
+  //
+  //m_sockets.insert({model,bone});
+  //
+  //return true;
 }
 
 }

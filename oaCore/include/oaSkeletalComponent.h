@@ -24,7 +24,7 @@ class OA_CORE_EXPORT SkeletalComponent :
   getType() override; 
 
   void
-  update(SPtr<Actor> actor) override;
+  update(WPtr<Actor> actor) override;
 
   /**
    * @brief attach a model to a bone 
@@ -33,22 +33,34 @@ class OA_CORE_EXPORT SkeletalComponent :
    * @return if the model was attached
   */
   bool
-  attachToBone(SPtr<Model> model,String bone);
+  attachToBone(WPtr<Model> model,String bone);
 
+  FORCEINLINE void
+  setSkeleton(WPtr<Skeleton> skeleton){
+    m_skeleton = skeleton;
+  }
+
+  FORCEINLINE WPtr<Skeleton> 
+  getSkeleton(){
+    return m_skeleton;
+  }
+  
+
+ private:
   /**
    * @brief the skeleton this component is using
   */
-  SPtr<Skeleton> m_skeleton;
+  WPtr<Skeleton> m_skeleton;
 
   /**
    * @brief the model this component is using
   */
-  SPtr<Model> m_model;
+  //SPtr<Model> m_model;
 
   /**
    * @brief the sockets this skeleton has
   */
-  Map<SPtr<Model>,String> m_sockets;
+  //Map<SPtr<Model>,String> m_sockets;
 };
 
 }

@@ -215,8 +215,9 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
     auto components = child->getComponents<GraphicsComponent>();
     for(auto& component : components){
       auto meshComponent = cast<GraphicsComponent>(component);
-      auto model = meshComponent->getModel();
-      if(model){
+      auto wModel = meshComponent->getModel();
+      if(!wModel.expired()){
+        auto model = wModel.lock();
         finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
         SIZE_T meshes = model->getNumOfMeshes();
         for(SIZE_T i = 0; i<meshes;++i){
@@ -683,8 +684,9 @@ Deferred::generateShadowMap(const SpotLight& light,SPtr<Actor> actor)
     auto components = child->getComponents<GraphicsComponent>();
     for(auto& component : components){
       auto meshComponent = cast<GraphicsComponent>(component);
-      auto model = meshComponent->getModel();
-      if(model){
+      auto wModel = meshComponent->getModel();
+      if(!wModel.expired()){
+        auto model = wModel.lock();
         finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
         SIZE_T meshes = model->getNumOfMeshes();
         for(SIZE_T i = 0; i<meshes;++i){

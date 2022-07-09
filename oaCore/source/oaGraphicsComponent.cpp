@@ -18,7 +18,7 @@ GraphicsComponent::getType()
 }
 
 void 
-GraphicsComponent::update(SPtr<Actor> actor)
+GraphicsComponent::update(WPtr<Actor> actor)
 { 
   
   /*for(SPtr<GraphicsComponent> component : childs){

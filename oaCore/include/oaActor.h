@@ -68,11 +68,11 @@ class OA_CORE_EXPORT Actor :
    * @return 
   */
   template<class T>
-  SPtr<T>
+  WPtr<T>
   getComponent(){
     T temp;
     if(m_components.find(temp.getType()) == m_components.end()){
-      return SPtr<T>();
+      return WPtr<T>();
     }
     return cast<T>(m_components[temp.getType()][0]);
   }

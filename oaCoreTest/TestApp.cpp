@@ -255,7 +255,7 @@ TestApp::postInit()
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
 
-  //genMorbiusTrip();
+  genMorbiusTrip();
 
 }
 
@@ -475,6 +475,7 @@ void oaEngineSDK::TestApp::drawImGui()
   auto& resourceManager = ResoureManager::instance();
   auto& audioApi = AudioAPI::instance();
   auto& renderer = Renderer::instance();
+
   auto shadowMap = renderer.getShadowMap();
   /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
     return;
@@ -522,7 +523,7 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
 
-    SPtr<Component> component;
+    WPtr<Component> wComponent;
     Vector<SPtr<Component>> components;
     components = m_selectedActor->getComponents<GraphicsComponent>();
     if (components.size()>0){
@@ -533,8 +534,9 @@ void oaEngineSDK::TestApp::drawImGui()
           if(ImGui::Button("select model") && m_selectedModel.get()){
             graphicsComponent->setModel(m_selectedModel);
           }
-          auto& model = graphicsComponent->getModel();
-          if(model){
+          auto& wModel = graphicsComponent->getModel();
+          if(!wModel.expired()){
+            auto model = wModel.lock();
             ImGui::Text(model->getName().c_str());
             auto& transform = graphicsComponent->getTransform();
             ImGui::DragFloat3("location Model",&transform.getLocation().x);
@@ -551,24 +553,27 @@ void oaEngineSDK::TestApp::drawImGui()
 
     }
 
-    component = m_selectedActor->getComponent<SkeletalComponent>();
-
-    if (component && ImGui::CollapsingHeader("skeleton")){
-      
+    wComponent = m_selectedActor->getComponent<SkeletalComponent>();
+    
+    if (!wComponent.expired() && ImGui::CollapsingHeader("skeleton")){
+      auto component = wComponent.lock();
       if(ImGui::Button("select Skeleton")){
-        cast<SkeletalComponent>(component)->m_skeleton = m_selectedSkeleton;
+        cast<SkeletalComponent>(component)->setSkeleton(m_selectedSkeleton);
+
       }
-      if(cast<SkeletalComponent>(component)->m_skeleton){
-        if(ImGui::Button("add socket")){
-          isAddingSocket = true;
-        }
-      }
+
+      //if(cast<SkeletalComponent>(component)->m_skeleton){
+      //  if(ImGui::Button("add socket")){
+      //    isAddingSocket = true;
+      //  }
+      //}
 
     }
 
-    component = m_selectedActor->getComponent<AnimationComponent>();
+    wComponent = m_selectedActor->getComponent<AnimationComponent>();
 
-    if (component && ImGui::CollapsingHeader("animation")){
+    if (!wComponent.expired() && ImGui::CollapsingHeader("animation")){
+      auto component = wComponent.lock();
       auto animComponent = cast<AnimationComponent>(component);
       //if(ImGui::Button("select Animation")){
       //  animComponent->m_animation = m_selectedAnimation;
@@ -584,9 +589,10 @@ void oaEngineSDK::TestApp::drawImGui()
       //}
     }
 
-    component = m_selectedActor->getComponent<CameraComponent>();
+    wComponent = m_selectedActor->getComponent<CameraComponent>();
 
-    if (component && ImGui::CollapsingHeader("camera")){
+    if (!wComponent.expired() && ImGui::CollapsingHeader("camera")){
+      auto component = wComponent.lock();
       auto cameraComponent = cast<CameraComponent>(component);
       if(ImGui::Button("view from this")){
         if(m_controlledActor == m_selectedActor){
@@ -782,16 +788,16 @@ void oaEngineSDK::TestApp::drawImGui()
       isAddingComponent = false;
     }
 
-    if(ImGui::Button("Camera")){
-      m_selectedActor->attachComponent(makeSPtr<CameraComponent>());
-      m_selectedActor->getComponent<CameraComponent>()->setCamera(makeSPtr<Camera>());
-
-      m_selectedActor->getComponent<CameraComponent>()->getCamera()->init(
-        static_cast<float>(m_windowSize.y)/static_cast<float>(m_windowSize.x)
-      );
-
-      isAddingComponent = false;
-    }
+    //if(ImGui::Button("Camera")){
+    //  m_selectedActor->attachComponent(makeSPtr<CameraComponent>());
+    //  m_selectedActor->getComponent<CameraComponent>()->setCamera(makeSPtr<Camera>());
+    //
+    //  m_selectedActor->getComponent<CameraComponent>()->getCamera()->init(
+    //    static_cast<float>(m_windowSize.y)/static_cast<float>(m_windowSize.x)
+    //  );
+    //
+    //  isAddingComponent = false;
+    //}
 
     ImGui::End();
   }
@@ -831,13 +837,13 @@ void oaEngineSDK::TestApp::drawImGui()
     ImGui::End();
   }
 
-  if(isAddingSocket){
-    ImGui::InputText("bone name",imguiString,64);
-    if(ImGui::Button("ok")){
-      m_selectedActor->getComponent<SkeletalComponent>()->attachToBone(m_selectedModel,imguiString);
-      isAddingSocket = false;
-    }
-  }
+  //if(isAddingSocket){
+  //  ImGui::InputText("bone name",imguiString,64);
+  //  if(ImGui::Button("ok")){
+  //    m_selectedActor->getComponent<SkeletalComponent>()->attachToBone(m_selectedModel,imguiString);
+  //    isAddingSocket = false;
+  //  }
+  //}
 
   ImGui::Begin("file");
   if(ImGui::Button("save all")){

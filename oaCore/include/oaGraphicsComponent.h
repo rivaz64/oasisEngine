@@ -12,31 +12,6 @@
 
 namespace oaEngineSDK{
 
-struct ModelComponent{
-
-  ModelComponent(SPtr<Model> _model) : model(_model){}
-
-  ModelComponent(){}
-
-  FORCEINLINE Matrix4f 
-  getFinalTransform(){
-    return transform*
-           Matrix4f::translateMatrix(location)*
-           Matrix4f::rotationMatrix(rotation)*
-           Matrix4f::scaleMatrix(scale);
-  }
-
-  SPtr<Model> model;
-
-  Vector3f location = Vector3f(0,0,0);
-
-  Vector3f scale = Vector3f(1,1,1);
-
-  Vector3f rotation = Vector3f(0,0,0);
-
-  Matrix4f transform  = Matrix4f::IDENTITY;
-};
-
 /**
  * @brief the grafical part of the Actor
 */
@@ -56,14 +31,14 @@ class OA_CORE_EXPORT GraphicsComponent :
    * @param actor 
   */
   void
-  update(SPtr<Actor> actor) override;
+  update(WPtr<Actor> actor) override;
 
   /**
    * @brief set the model of this component
    * @param model 
   */
   FORCEINLINE void
-  setModel(SPtr<Model> model){
+  setModel(WPtr<Model> model){
     m_model = model;
   }
 
@@ -71,7 +46,7 @@ class OA_CORE_EXPORT GraphicsComponent :
    * @brief gets the model of this component
    * @return 
   */
-  FORCEINLINE const SPtr<Model>&
+  FORCEINLINE const WPtr<Model>&
   getModel(){
     return m_model;
   }
@@ -86,7 +61,7 @@ class OA_CORE_EXPORT GraphicsComponent :
   /**
    * @brief the model of the component
   */
-  SPtr<Model> m_model;
+  WPtr<Model> m_model;
 
   /**
    * @brief the transform of the model

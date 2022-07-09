@@ -22,14 +22,14 @@ class OA_CORE_EXPORT Component
    * @param actor 
   */
   virtual void
-  onAttach(SPtr<Actor> actor) {};
+  onAttach(WPtr<Actor> actor) {};
 
   /**
    * @brief updates this component
    * @param actor the actor that has this component
   */
   virtual void
-  update(SPtr<Actor> actor) {}
+  update(WPtr<Actor> actor) {}
 
   /**
    * @brief get what is the type of this component
