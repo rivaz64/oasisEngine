@@ -37,7 +37,7 @@ Model::load(Serializer& serializer)
   m_meshes.resize(num);
   m_materials.resize(num);
   for(SIZE_T n=0; n<num; ++n){
-    m_meshes[n] = makeSPtr<Mesh<StaticVertex>>();
+    m_meshes[n] = makeSPtr<Mesh<Vertex>>();
     m_meshes[n]->load(serializer);
     auto materialName = serializer.decodeString();
     addMaterial(ResoureManager::instance().m_materials[materialName]);

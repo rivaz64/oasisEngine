@@ -67,7 +67,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 }
 
 void
-readStaticMesh(SPtr<Mesh<StaticVertex>> mesh, aiMesh* aMesh){
+readStaticMesh(SPtr<Mesh<Vertex>> mesh, aiMesh* aMesh){
   
   mesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
 
@@ -192,7 +192,7 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    auto mesh = makeSPtr<Mesh<StaticVertex>>();
+    auto mesh = makeSPtr<Mesh<Vertex>>();
 
     readStaticMesh(mesh,aMesh);
 

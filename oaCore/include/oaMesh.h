@@ -199,6 +199,11 @@ class OA_CORE_EXPORT Mesh :
     m_index = index;
   }
 
+  FORCEINLINE void
+  setVertex(const Vector<VertexType>& vertices){
+    m_vertices = vertices;
+  }
+
   FORCEINLINE Vector<VertexType>&
   getVertex(){
     return m_vertices;

@@ -51,7 +51,7 @@ class OA_CORE_EXPORT Model :
   }
 
   FORCEINLINE void
-  addMaterial(SPtr<Material> material){
+  addMaterial(WPtr<Material> material){
     m_materials.push_back(material);
   }
 
@@ -80,7 +80,7 @@ class OA_CORE_EXPORT Model :
     return m_materials[n];
   }
 
-  FORCEINLINE const SPtr<Material>&
+  FORCEINLINE const WPtr<Material>
   setMaterial(WPtr<Material> material,SIZE_T n){
     m_materials[n] = material;
   }

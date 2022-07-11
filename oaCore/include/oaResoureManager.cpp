@@ -282,9 +282,9 @@ ResoureManager::generateQuad()
 }
 
 void
-divide(const Plane& plane, Vector<StaticVertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
+divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
   
-  Vector<StaticVertex> newPoints;
+  Vector<Vertex> newPoints;
   Vector<uint32> newIndexesFront;
   Vector<uint32> newIndexesBack;
   Vector<uint32> replaceIndexes;
@@ -772,7 +772,7 @@ ResoureManager::separate(SPtr<Model> model,
       if(meshes[i].size()==0) continue;
       auto newModel = newModels[i];
       newModel->addMaterial(material);
-      auto newMesh = makeSPtr<StaticMesh>();
+      auto newMesh = makeSPtr<Mesh<Vertex>>();
       newModel->addMesh(newMesh);
 
       finalIndex.clear();
@@ -786,7 +786,7 @@ ResoureManager::separate(SPtr<Model> model,
 
       newMesh->setIndex(finalIndex);
       newMesh->setVertex(finalVertex);
-      newMesh->create();
+      newMesh->writeBuffers();
       //newMesh->create(vertexB);
     }
   }
@@ -795,7 +795,7 @@ ResoureManager::separate(SPtr<Model> model,
 
     SIZE_T totalTris = 0;
     for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
-      auto& mesh = model->getMesh(meshNum);
+      auto mesh = model->getMesh(meshNum).lock();
       auto& indices = mesh->getIndex();
       totalTris += indices.size()/3;
     }
