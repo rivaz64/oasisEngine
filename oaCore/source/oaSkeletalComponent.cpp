@@ -59,7 +59,7 @@ SkeletalComponent::attachToBone(WPtr<Model> model, String bone)
     return false;
   }
   
-  m_sockets.insert({model,bone});
+  //m_sockets.insert({model,bone});
   
   return true;
 }

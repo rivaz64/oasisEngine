@@ -18,6 +18,9 @@
 #include <oaTriangle.h>
 #include <oaSerializer.h>
 #include "oaBuffer.h"
+#include "oaIndexBuffer.h"
+#include "oaVertexBuffer.h"
+#include "oaGraphicAPI.h"
 
 
 
@@ -123,7 +126,7 @@ class OA_CORE_EXPORT Mesh :
   load(Serializer& serializer) override
   {
     SIZE_T num;
-    serializer.encodeNumber(num);
+    num = serializer.decodeNumber();
     m_vertices.resize(num);
     serializer.file.read(reinterpret_cast<char*>(m_vertices.data()),
                           sizeof(VertexType)*num);
@@ -274,6 +277,12 @@ class OA_CORE_EXPORT Mesh :
    * @brief the control points used for bezier curbes
   */
   SPtr<VertexBuffer> m_controlPoints;
+
+  Map<String,uint32> m_boneMaping;
+
+  Vector<Matrix4f> m_ofset;
+
+  Vector<Matrix4f> m_bones;
 
   int32 m_numOfControlPoints;
 

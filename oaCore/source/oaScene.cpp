@@ -6,7 +6,6 @@
 #include "oaMesh.h"
 #include "oaCameraComponent.h"
 #include "oaCamera.h"
-#include "oaDebugMesh.h"
 #include "oaResoureManager.h"
 #include "oaShaderProgram.h"
 #include "oaMaterial.h"

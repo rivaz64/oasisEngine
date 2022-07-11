@@ -60,7 +60,7 @@ class OA_CORE_EXPORT SkeletalComponent :
   /**
    * @brief the sockets this skeleton has
   */
-  Map<WPtr<Model>,String> m_sockets;
+  //Map<WPtr<Model>,String> m_sockets;
 };
 
 }

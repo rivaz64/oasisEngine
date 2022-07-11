@@ -80,7 +80,7 @@ class OA_CORE_EXPORT Model :
     return m_materials[n];
   }
 
-  FORCEINLINE const WPtr<Material>
+  FORCEINLINE void
   setMaterial(WPtr<Material> material,SIZE_T n){
     m_materials[n] = material;
   }

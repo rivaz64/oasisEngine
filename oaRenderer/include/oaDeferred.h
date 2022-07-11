@@ -38,21 +38,21 @@ class Deferred :
    * @brief the gBuffer pass
    * @param torender 
   */
-  void 
-  gBuffer(Vector<RenderData>& torender);
-
+  //void 
+  //gBuffer(Vector<RenderData>& torender);
+  //
   /**
-   * @brief gBuffer for things with transparnecy
-   * @param torender 
-  */
-  void 
-  gTransparents(Vector<RenderData>& torender);
+  // * @brief gBuffer for things with transparnecy
+  // * @param torender 
+  //*/
+  //void 
+  //gTransparents(Vector<RenderData>& torender);
 
   /**
    * @brief draw debug meshes
   */
-  void 
-  debug(Vector<RenderData>& toRender);
+  //void 
+  //debug(Vector<RenderData>& toRender);
 
   /**
    * @brief screen space ambient oclution
@@ -150,7 +150,7 @@ class Deferred :
 
   SPtr<Texture> m_depthStencil;
 
-  SPtr<Mesh> screen;
+  SPtr<Mesh<Vertex>> screen;
 
   SPtr<Buffer> m_globalTransformBuffer;
 

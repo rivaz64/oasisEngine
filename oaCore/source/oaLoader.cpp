@@ -19,7 +19,6 @@
 #include "oaMaterial.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
-#include "oaSkeletalMesh.h"
 #include "oaLogger.h"
 #include "oaImage.h"
 #include "oaTexture.h"
@@ -104,7 +103,7 @@ readStaticMesh(SPtr<Mesh<Vertex>> mesh, aiMesh* aMesh){
 }
 
 void
-readSkeletalMesh(SPtr<SkeletalMesh> mesh, aiMesh* aMesh){
+readSkeletalMesh(SPtr<Mesh<AnimationVertex>> mesh, aiMesh* aMesh){
 
   auto& bones = mesh->m_bones;
 

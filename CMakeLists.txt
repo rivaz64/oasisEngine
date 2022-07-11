@@ -79,8 +79,6 @@ function(assign_source_group)
     endforeach()
 endfunction(assign_source_group)
 
-add_library(oaUtilities SHARED CMakeLists.txt)
-
 add_subdirectory(oaUtilities)
 add_subdirectory(oaUtilitiesTest)
 add_subdirectory(oaCore)

@@ -13,7 +13,6 @@
 #include "oaSkeleton.h"
 #include "oaMesh.h"
 #include "oaModel.h"
-#include "oaSkeletalMesh.h"
 
 namespace oaEngineSDK{
 
@@ -82,14 +81,14 @@ AnimationComponent::readNodeHeirarchy(
   globalTransform = parentTransform*nodeTransform;
 
   for(auto oaMesh : model->m_meshes){
-    auto mesh = cast<SkeletalMesh>(oaMesh);
+    auto mesh = cast<Mesh<AnimationVertex>>(oaMesh);
     if(mesh->m_boneMaping.find(node->name) != mesh->m_boneMaping.end()){
       uint32 boneIndex = mesh->m_boneMaping[node->name];
-
+    
       mesh->m_ofset[boneIndex] = skeleton->m_globalInverse*
                                  globalTransform*
                                  mesh->m_bones[boneIndex];
-
+    
       skeleton->m_finalMatrix[node->name] = globalTransform;
     }
   }

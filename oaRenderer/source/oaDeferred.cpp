@@ -14,7 +14,6 @@
 #include <oaCamera.h>
 #include <oaRasterizerState.h>
 #include <oaCameraComponent.h>
-#include <oaDebugMesh.h>
 #include <oaTexture.h>
 #include <oaDepthStencil.h>
 #include <oaRenderTarget.h>
@@ -105,11 +104,11 @@ Deferred::onStartUp()
     SimpleVertex(Vector4f( 1.0f, 1.0f, 0.5f, 1.0f),  Vector2f(1,0)),
   };
   
-  screen = makeSPtr<Mesh>();
+  screen = makeSPtr<Mesh<SimpleVertex>>();
 
   screen->setIndex({0,1,2,1,0,3});
-
-  screen->create(points.data(),sizeof(SimpleVertex),points.size());
+  screen->setVertex(points);
+  screen->writeBuffers();
 
   m_renderTarget = graphicsAPI.getBackBuffer();
   //m_renderTarget->createShaderResource(FORMAT::kR32G32B32A32Float);
@@ -163,8 +162,8 @@ Deferred::render(SPtr<Scene> scene,
   
   
   graphicsAPI.setRasterizerState(m_normalRasterizer);
-  Vector<RenderData> toRender;
-  Vector<RenderData> transparents;
+  //Vector<RenderData> toRender;
+  //Vector<RenderData> transparents;
   
   Frustum frustrum(camForFrustrum->getLocation(),
                    camForFrustrum->getAxisMatrix(),
@@ -222,29 +221,32 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
         SIZE_T meshes = model->getNumOfMeshes();
         for(SIZE_T i = 0; i<meshes;++i){
           
-          auto& mesh = model->getMesh(i);
+          auto& wMesh = model->getMesh(i);
+          if(!wMesh.expired()){
+            auto mesh = wMesh.lock();
+            auto controlPoints = mesh->getControlPoints();
+            if(controlPoints){
+              graphicsAPI.setRasterizerState(m_debugRasterizer);
+              graphicsAPI.setHSBuffer(m_tessBufer,0);
+              m_globalTransformBuffer->write(finalTransform.getData());
+              graphicsAPI.setDSBuffer(m_globalTransformBuffer, 0);
+              resourseManager.m_shaderPrograms["Tesselator"]->set();
+              controlPoints->set();
+              graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::k16ContolPointPathlist);
+              graphicsAPI.draw(mesh->getNumOfControlPoints());
+            }
+            else{
+              graphicsAPI.setRasterizerState(m_normalRasterizer);
+              auto& mat = model->getMaterial(i);
+              m_globalTransformBuffer->write(&finalTransform);
+              graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+              mesh->set();
+              mat.lock()->set();
+              graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
+              graphicsAPI.drawIndex(mesh->getIndexNum());
+            }
+          }
           
-          auto controlPoints = mesh->getControlPoints();
-          if(controlPoints){
-            graphicsAPI.setRasterizerState(m_debugRasterizer);
-            graphicsAPI.setHSBuffer(m_tessBufer,0);
-            m_globalTransformBuffer->write(finalTransform.getData());
-            graphicsAPI.setDSBuffer(m_globalTransformBuffer, 0);
-            resourseManager.m_shaderPrograms["Tesselator"]->set();
-            controlPoints->set();
-            graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::k16ContolPointPathlist);
-            graphicsAPI.draw(mesh->getNumOfControlPoints());
-          }
-          else{
-            graphicsAPI.setRasterizerState(m_normalRasterizer);
-            auto& mat = model->getMaterial(i);
-            m_globalTransformBuffer->write(&finalTransform);
-            graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-            mesh->set();
-            mat->set();
-            graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
-            graphicsAPI.drawIndex(mesh->getIndexNum());
-          }
           
         }
       }
@@ -253,88 +255,88 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
   }
 }
 
-void 
-Deferred::gBuffer(Vector<RenderData>& toRender)
-{ 
-  auto& graphicsAPI = GraphicAPI::instance();
-  graphicsAPI.unsetRenderTargetAndDepthStencil();
-  graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
-  graphicsAPI.setRasterizerState(m_normalRasterizer);
+//void 
+//Deferred::gBuffer(Vector<RenderData>& toRender)
+//{ 
+//  auto& graphicsAPI = GraphicAPI::instance();
+//  graphicsAPI.unsetRenderTargetAndDepthStencil();
+//  graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
+//  graphicsAPI.setRasterizerState(m_normalRasterizer);
+//
+//  for(auto& renderData : toRender){
+//    m_globalTransformBuffer->write(&renderData.m_transform);
+//    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//
+//    renderData.m_mesh->set();
+//    renderData.m_material->set();
+//    //resourseManager.m_shaderPrograms["GBuffer"]->set();
+//    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
+//    graphicsAPI.unsetTextures(m_gBuffer.size());
+//  }
+//  
+//}
 
-  for(auto& renderData : toRender){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//void Deferred::gTransparents(Vector<RenderData>& transparents)
+//{
+//  auto& resourseManager = ResoureManager::instance();
+//
+//  auto& graphicsAPI = GraphicAPI::instance();
+//
+//  graphicsAPI.setRasterizerState(m_hairRasterizer1);
+//  for(auto& renderData : transparents){
+//    m_globalTransformBuffer->write(&renderData.m_transform);
+//    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//
+//    renderData.m_mesh->set();
+//    renderData.m_material->set();
+//    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
+//  }
+//
+//  graphicsAPI.setRasterizerState(m_hairRasterizer2);
+//  
+//  for(auto& renderData : transparents){
+//    m_globalTransformBuffer->write(&renderData.m_transform);
+//    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//  
+//    renderData.m_mesh->set();
+//    renderData.m_material->set();
+//    resourseManager.m_shaderPrograms["GBuffer"]->set();
+//    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
+//  }
+//
+//  graphicsAPI.setRasterizerState(m_normalRasterizer);
+//  for(auto& renderData : transparents){
+//    m_globalTransformBuffer->write(&renderData.m_transform);
+//    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//  
+//    renderData.m_mesh->set();
+//    renderData.m_material->set();
+//    resourseManager.m_shaderPrograms["GBuffer"]->set();
+//    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
+//  }
+//}
 
-    renderData.m_mesh->set();
-    renderData.m_material->set();
-    //resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
-    graphicsAPI.unsetTextures(m_gBuffer.size());
-  }
-  
-}
-
-void Deferred::gTransparents(Vector<RenderData>& transparents)
-{
-  auto& resourseManager = ResoureManager::instance();
-
-  auto& graphicsAPI = GraphicAPI::instance();
-
-  graphicsAPI.setRasterizerState(m_hairRasterizer1);
-  for(auto& renderData : transparents){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-
-    renderData.m_mesh->set();
-    renderData.m_material->set();
-    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
-  }
-
-  graphicsAPI.setRasterizerState(m_hairRasterizer2);
-  
-  for(auto& renderData : transparents){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-  
-    renderData.m_mesh->set();
-    renderData.m_material->set();
-    resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
-  }
-
-  graphicsAPI.setRasterizerState(m_normalRasterizer);
-  for(auto& renderData : transparents){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-  
-    renderData.m_mesh->set();
-    renderData.m_material->set();
-    resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
-  }
-}
-
-void 
-Deferred::debug(Vector<RenderData>& toRender)
-{
-  auto& resourseManager = ResoureManager::instance();
-  auto& graphicsAPI = GraphicAPI::instance();
-  graphicsAPI.unsetRenderTargetAndDepthStencil();
-  resourseManager.m_shaderPrograms["debug"]->set();
-  graphicsAPI.setRenderTargetAndDepthStencil(m_renderTarget,m_depthStencil);
-  graphicsAPI.setRasterizerState(m_debugRasterizer);
-  for(auto& renderData : toRender){
-    m_globalTransformBuffer->write(&renderData.m_transform);
-    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-
-    renderData.m_mesh->set();
-    //renderData.m_material->set();
-    //resourseManager.m_shaderPrograms["GBuffer"]->set();
-    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
-  }
-  
-  graphicsAPI.setRasterizerState(m_normalRasterizer);
-}
+//void 
+//Deferred::debug(Vector<RenderData>& toRender)
+//{
+//  auto& resourseManager = ResoureManager::instance();
+//  auto& graphicsAPI = GraphicAPI::instance();
+//  graphicsAPI.unsetRenderTargetAndDepthStencil();
+//  resourseManager.m_shaderPrograms["debug"]->set();
+//  graphicsAPI.setRenderTargetAndDepthStencil(m_renderTarget,m_depthStencil);
+//  graphicsAPI.setRasterizerState(m_debugRasterizer);
+//  for(auto& renderData : toRender){
+//    m_globalTransformBuffer->write(&renderData.m_transform);
+//    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+//
+//    renderData.m_mesh->set();
+//    //renderData.m_material->set();
+//    //resourseManager.m_shaderPrograms["GBuffer"]->set();
+//    graphicsAPI.drawIndex(renderData.m_mesh->getIndexNum());
+//  }
+//  
+//  graphicsAPI.setRasterizerState(m_normalRasterizer);
+//}
 
 void 
 Deferred::ssao( const Vector4f& config)

@@ -47,32 +47,32 @@ Model::load(Serializer& serializer)
 Vector3f 
 Model::getCenter()
 {
-  //Vector3f center(0,0,0);
-  //float totalVertices = 0;
-  //for(auto& mesh : m_meshes){
-  //  auto vertices = cast<StaticMesh>(mesh)->getVertex();
-  //  totalVertices += vertices.size();
-  //  for(auto& vertex : vertices){
-  //    center += vertex.location.xyz;
-  //  }
-  //}
-  //return center/totalVertices;
+  Vector3f center(0,0,0);
+  float totalVertices = 0;
+  for(auto& mesh : m_meshes){
+    auto vertices = mesh->getVertex();
+    totalVertices += vertices.size();
+    for(auto& vertex : vertices){
+      center += vertex.location.xyz;
+    }
+  }
+  return center/totalVertices;
 }
 
 float 
 Model::farestPoint(const Vector3f& point)
 {
-  //float maxDistance = 0;
-  //for(auto& mesh : m_meshes){
-  //  auto vertices = cast<StaticMesh>(mesh)->getVertex();
-  //  for(auto& vertex : vertices){
-  //    auto distance = (point-vertex.location.xyz).magnitud();
-  //    if(maxDistance<distance){
-  //      maxDistance = distance;
-  //    }
-  //  }
-  //}
-  //return maxDistance;
+  float maxDistance = 0;
+  for(auto& mesh : m_meshes){
+    auto vertices = mesh->getVertex();
+    for(auto& vertex : vertices){
+      auto distance = (point-vertex.location.xyz).magnitud();
+      if(maxDistance<distance){
+        maxDistance = distance;
+      }
+    }
+  }
+  return maxDistance;
 }
 
 }
