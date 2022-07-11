@@ -18,9 +18,6 @@
 #include <oaTriangle.h>
 #include <oaSerializer.h>
 #include "oaBuffer.h"
-#include "oaVertexBuffer.h"
-#include "oaGraphicAPI.h"
-#include "oaIndexBuffer.h"
 
 
 
@@ -42,38 +39,6 @@ struct SimpleVertex{
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
-};
-
-/**
- * @brief a structure for all the information at a certain point of a static mesh
-*/
-struct StaticVertex{
-
-  /**
-   * @brief the location in a tridimencional space of this vetrex
-  */
-  Vector4f location;
-
-  /**
-   * @brief the normal at this vertex
-  */
-  Vector4f normal;
-
-  /**
-   * @brief the tangent at this vertex
-  */
-  Vector4f tangent;
-
-  /**
-   * @brief the bitangent at this vertex
-  */
-  Vector4f bitangent;
-
-  /**
-   * @brief the part of the texture that is going to be drawn at a certain point
-  */
-  Vector2f textureCord;
-
 };
 
 /**

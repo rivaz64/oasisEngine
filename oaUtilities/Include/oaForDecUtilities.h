@@ -25,4 +25,6 @@ class Capsule;
 class Frustum;
 class Transform;
 class Path;
+struct Vertex;
+class Triangle;
 }

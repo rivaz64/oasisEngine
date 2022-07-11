@@ -9,7 +9,6 @@ class IndexBuffer;
 class SamplerState;
 struct SamplerDesc;
 struct DepthStencilDesc;
-class StaticVertex;
 
 template<class T>
 class Mesh;

@@ -15,20 +15,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\oaGa_Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaGaKeyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaGaMouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaGaInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\oaGa_Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaGaKeyboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,6 +33,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaGaInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

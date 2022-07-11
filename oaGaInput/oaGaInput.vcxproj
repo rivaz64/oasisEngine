@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\oaGaInput.h" />
     <ClInclude Include="include\oaGaKeyboard.h" />
     <ClInclude Include="include\oaGaMouse.h" />
-    <ClInclude Include="include\oaGa_Input.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="source\oaGaInput.cpp" />
     <ClCompile Include="source\oaGaKeyboard.cpp" />
     <ClCompile Include="source\oaGaMouse.cpp" />
-    <ClCompile Include="source\oaGa_Input.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

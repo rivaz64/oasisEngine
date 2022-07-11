@@ -145,34 +145,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="source\oaOGL_Buffer.cpp" />
-    <ClCompile Include="source\oaOGL_DepthStencil.cpp" />
-    <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />
-    <ClCompile Include="source\oaOGL_IndexBuffer.cpp" />
-    <ClCompile Include="source\oaOGL_PixelShader.cpp" />
-    <ClCompile Include="source\oaOGL_RenderTarget.cpp" />
-    <ClCompile Include="source\oaOGL_SamplerState.cpp" />
-    <ClCompile Include="source\oaOGL_Shader.cpp" />
-    <ClCompile Include="source\oaOGL_ShaderProgram.cpp" />
-    <ClCompile Include="source\oaOGL_Texture.cpp" />
-    <ClCompile Include="source\oaOGL_VertexBuffer.cpp" />
-    <ClCompile Include="source\oaOGL_VertexShader.cpp" />
+    <ClCompile Include="source\oaOglBuffer.cpp" />
+    <ClCompile Include="source\oaOglDepthStencil.cpp" />
+    <ClCompile Include="source\oaOglGraphicsAPI.cpp" />
+    <ClCompile Include="source\oaOglIndexBuffer.cpp" />
+    <ClCompile Include="source\oaOglPixelShader.cpp" />
+    <ClCompile Include="source\oaOglRenderTarget.cpp" />
+    <ClCompile Include="source\oaOglSamplerState.cpp" />
+    <ClCompile Include="source\oaOglShader.cpp" />
+    <ClCompile Include="source\oaOglShaderProgram.cpp" />
+    <ClCompile Include="source\oaOglTexture.cpp" />
+    <ClCompile Include="source\oaOglVertexBuffer.cpp" />
+    <ClCompile Include="source\oaOglVertexShader.cpp" />
     <ClCompile Include="source\oaSource.cpp" />
-    <ClCompile Include="source\OGL_GraphicsAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\oaOGL_Buffer.h" />
-    <ClInclude Include="include\oaOGL_DepthStencil.h" />
-    <ClInclude Include="include\oaOGL_GraphicsAPI.h" />
-    <ClInclude Include="include\oaOGL_IndexBuffer.h" />
-    <ClInclude Include="include\oaOGL_PixelShader.h" />
-    <ClInclude Include="include\oaOGL_RenderTarget.h" />
-    <ClInclude Include="include\oaOGL_SamplerState.h" />
-    <ClInclude Include="include\oaOGL_Shader.h" />
-    <ClInclude Include="include\oaOGL_ShaderProgram.h" />
-    <ClInclude Include="include\oaOGL_Texture.h" />
-    <ClInclude Include="include\oaOGL_VertexBuffer.h" />
-    <ClInclude Include="include\oaOGL_VertexShader.h" />
+    <ClInclude Include="include\oaOglBuffer.h" />
+    <ClInclude Include="include\oaOglDepthStencil.h" />
+    <ClInclude Include="include\oaOglGraphicsAPI.h" />
+    <ClInclude Include="include\oaOglIndexBuffer.h" />
+    <ClInclude Include="include\oaOglPixelShader.h" />
+    <ClInclude Include="include\oaOglRenderTarget.h" />
+    <ClInclude Include="include\oaOglSamplerState.h" />
+    <ClInclude Include="include\oaOglShader.h" />
+    <ClInclude Include="include\oaOglShaderProgram.h" />
+    <ClInclude Include="include\oaOglTexture.h" />
+    <ClInclude Include="include\oaOglVertexBuffer.h" />
+    <ClInclude Include="include\oaOglVertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

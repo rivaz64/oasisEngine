@@ -282,9 +282,9 @@ ResoureManager::generateQuad()
 }
 
 void
-divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
+divide(const Plane& plane, Vector<StaticVertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
   
-  Vector<Vertex> newPoints;
+  Vector<StaticVertex> newPoints;
   Vector<uint32> newIndexesFront;
   Vector<uint32> newIndexesBack;
   Vector<uint32> replaceIndexes;
@@ -743,10 +743,10 @@ ResoureManager::separate(SPtr<Model> model,
   for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
     meshes.clear();
 
-    auto& mesh = model->getMesh(meshNum);
+    auto mesh = model->getMesh(meshNum).lock();
     auto& material = model->getMaterial(meshNum);
     auto& indices = mesh->getIndex();
-    auto vertices = cast<StaticMesh>(mesh)->getVertex();
+    auto vertices = mesh->getVertex();
     
     meshes.push_back(indices);
 
@@ -754,7 +754,7 @@ ResoureManager::separate(SPtr<Model> model,
       for(Vector<uint32>& m : meshes){
         indexBack.clear();
         indexFront.clear();
-        divide(plane, vertices,m,indexBack,indexFront);
+        divide(plane, vertices, m, indexBack, indexFront);
         newMeshes.push_back(indexBack);
         newMeshes.push_back(indexFront);
       }
@@ -800,7 +800,7 @@ ResoureManager::separate(SPtr<Model> model,
       totalTris += indices.size()/3;
     }
     if(totalTris>5000){
-      auto newCenter = tree.getCenters(size);//model->farestPoint(center));
+      auto newCenter = tree.getCenters(size);
       separate(newModels[i],newCenter[i],division,size/2.f);
     }
     else if(newModels[i]->getNumOfMeshes()>0){
@@ -810,27 +810,6 @@ ResoureManager::separate(SPtr<Model> model,
     }
   }
   
-  
-  
-  //for(auto& plane: planes){
-  //  
-  //}
-  //
-  //
-  //
-  //for(int32 i = 0; i<8; ++i){
-  //  String name = "cube"+StringUtilities::intToString(i);
-  //  auto model = makeSPtr<Model>();
-  //  model->setName(name);
-  //  model->addMaterial(material);
-  //  model->addMesh(makeSPtr<Mesh>());
-  //  auto& newMesh = model->getMesh(0);
-  //  newMesh->setIndex(meshes[i]);
-  //  newMesh->create(vertexB);
-  //  models.push_back(model);
-  //}
-
-  //return models;
   
 }
 
