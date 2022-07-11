@@ -10,6 +10,7 @@
 #include "oaComponent.h"
 #include "oaBuffer.h"
 #include "oaComponent.h"
+#include "oaGraphicsComponent.h"
 
 namespace oaEngineSDK{
 
@@ -21,10 +22,45 @@ enum FLAGS{
 };*/
 
 void 
-Actor::attach(SPtr<Actor> Actor)
+Actor::save(Serializer& serializer)
 {
-  m_subActors.push_back(Actor);
-  Actor->m_parent = shared_from_this();
+  serializer.encodeString(getName());
+  auto& transform = GetActorTransform();
+  serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
+  SIZE_T num = m_components.size();
+  serializer.encodeNumber(m_components.size());
+  for(auto component : m_components){
+    serializer.encodeNumber(component.first);
+    component.second[0]->save(serializer);
+  }
+}
+
+void 
+Actor::load(Serializer& serializer)
+{
+  setName(serializer.decodeString());
+  auto& transform = GetActorTransform();
+  serializer.file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
+  SIZE_T num = serializer.decodeNumber();
+  for(SIZE_T n = 0; n<num; ++n){
+    auto componentType = serializer.decodeNumber();
+    if(componentType == COMPONENT_TYPE::kGrpahics){
+      auto component = makeSPtr<GraphicsComponent>();
+      attachComponent(component);
+      component->load(serializer);
+    }
+  }
+}
+
+void
+Actor::attach(SPtr<Actor> actor)
+{
+  //if(wActor.expired()){
+  //  return;
+  //}
+  //auto actor = wActor.lock();
+  m_subActors.push_back(actor);
+  actor->m_parent = shared_from_this();
 }
 
 void 
@@ -61,8 +97,9 @@ Actor::getGlobalTransform()
 {
   if(true /*dirtyFlag & FLAGS::GLOBAL*/){
     
-    if(m_parent.get()){
-      m_globalTransform = m_parent->getGlobalTransform()*m_localTransform.getMatrix();
+    if(!m_parent.expired()){
+      auto parent = m_parent.lock();
+      m_globalTransform = parent->getGlobalTransform()*m_localTransform.getMatrix();
     }
     else{
       m_globalTransform = Matrix4f::IDENTITY;

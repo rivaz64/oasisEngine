@@ -28,7 +28,13 @@ class OA_CORE_EXPORT Material :
 {
  public:
 
-  Material();
+  Material() = default;
+
+  void
+  save(Serializer& serializer) override;
+
+  void
+  load(Serializer& serializer) override;
 
   /**
    * @brief sets this material to be used in the shader
@@ -42,14 +48,14 @@ class OA_CORE_EXPORT Material :
    * @param texture the texture
   */
   void
-  setTexture(const String& channel,SPtr<Texture>  texture);
+  setTexture(const String& channel,WPtr<Texture>  texture);
 
   /**
    * @brief gets a texture being used by this material
    * @param type the type of texture to get
    * @return the texture of that type
   */
-  SPtr<Texture>
+  WPtr<Texture>
   getTexture(const String& channel);
   
   Vector<String>
@@ -81,7 +87,7 @@ class OA_CORE_EXPORT Material :
   /**
    * @brief the textures used for this shader
   */
-  Map<String,SPtr<Texture>> m_textures;
+  Map<String,WPtr<Texture>> m_textures;
 
   /**
    * @brief the shaders program that is going to be using

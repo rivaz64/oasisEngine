@@ -27,7 +27,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @param actor 
   */
   void
-  update(SPtr<Actor> actor) override;
+  update(WPtr<Actor> actor) override;
 
   /**
    * @brief reads each node to update it to the right time
@@ -35,7 +35,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @param parentTransform the transform of the parent node
   */
   void
-  readNodeHeirarchy(SPtr<SkeletalNode> node, const Matrix4f& parentTransform);
+  readNodeHeirarchy(WPtr<SkeletalNode> wNode, const Matrix4f& parentTransform);
   
   /**
    * @brief calculates the interpolation of the location
@@ -44,7 +44,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Vector3f
-  interpolatedLocation(SPtr<AnimNode> node);
+  interpolatedLocation(WPtr<AnimNode> wNode);
 
   /**
    * @brief calculates the interpolation of the scale
@@ -53,7 +53,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Vector3f
-  interpolatedScale(SPtr<AnimNode> node);
+  interpolatedScale(WPtr<AnimNode> wNode);
 
   /**
    * @brief calculates the interpolation of the rotation
@@ -62,7 +62,7 @@ class OA_CORE_EXPORT AnimationComponent :
    * @return 
   */
   Quaternion
-  interpolatedRotation(SPtr<AnimNode> node);
+  interpolatedRotation(WPtr<AnimNode> wNode);
 
   
 
@@ -95,17 +95,17 @@ class OA_CORE_EXPORT AnimationComponent :
   /**
    * @brief the animation this component uses
   */
-  SPtr<Animation> m_animation;
+  WPtr<Animation> m_animation;
 
   /**
    * @brief the model using the animation
   */
-  SPtr<Model> m_model;
+  WPtr<Model> m_model;
 
   /**
    * @brief the skeleton using the animation
   */
-  SPtr<Skeleton> m_skeleton;
+  WPtr<Skeleton> m_skeleton;
 };
 
 }

@@ -19,7 +19,6 @@
 #include "oaMaterial.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
-#include "oaStaticMesh.h"
 #include "oaSkeletalMesh.h"
 #include "oaLogger.h"
 #include "oaImage.h"
@@ -67,33 +66,16 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
   }
 }
 
-
-
 void
-readIndexes(SPtr<Mesh> mesh, aiMesh* aMesh){
-  
-  uint32 numIndices = aMesh->mNumFaces * 3;
-  mesh->setIndexNum(numIndices);
-
-  for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
-  {
-    aiFace* face = &aMesh->mFaces[t];
-    uint32 numIndice = t*3;
-
-    mesh->setIndexAt(numIndice,face->mIndices[0]);
-    mesh->setIndexAt(numIndice+1,face->mIndices[1]);
-    mesh->setIndexAt(numIndice+2,face->mIndices[2]);
-  }
-}
-
-void
-readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
+readStaticMesh(SPtr<Mesh<StaticVertex>> mesh, aiMesh* aMesh){
   
   mesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
 
+  auto& vertices = mesh->getVertex();
+
   for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
 
-    auto& actualVertex = mesh->getVertexAt(numVertex);
+    auto& actualVertex = vertices[numVertex];
 
     actualVertex.location.x = aMesh->mVertices[numVertex].x;
     actualVertex.location.y = aMesh->mVertices[numVertex].y;
@@ -210,9 +192,9 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    auto mesh = makeSPtr<StaticMesh>();
+    auto mesh = makeSPtr<Mesh<StaticVertex>>();
 
-    readStaticMesh(cast<StaticMesh>(mesh),aMesh);
+    readStaticMesh(mesh,aMesh);
 
     //model->addMaterial(ResoureManager::instance().m_materials["default"]);
 
@@ -224,9 +206,20 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
       
     }*/
 
-    readIndexes(mesh,aMesh);
-    
-    mesh->create();
+    uint32 numIndices = aMesh->mNumFaces * 3;
+    mesh->setIndexNum(numIndices);
+
+    for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
+    {
+      aiFace* face = &aMesh->mFaces[t];
+      uint32 numIndice = t*3;
+
+      mesh->setIndexAt(numIndice,face->mIndices[0]);
+      mesh->setIndexAt(numIndice+1,face->mIndices[1]);
+      mesh->setIndexAt(numIndice+2,face->mIndices[2]);
+    }
+    //ResoureManager::instance().m_meshes.insert({model->getName()})
+    //mesh->create();
     model->addMesh(mesh);
   }
 }

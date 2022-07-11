@@ -122,7 +122,8 @@ enum E{
   kNone = 0,
   kGrpahics,
   kSkeleton,
-  kAnimation
+  kAnimation,
+	kCamera
 };
 }
 

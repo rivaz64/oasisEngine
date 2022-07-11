@@ -141,6 +141,12 @@
     <ClInclude Include="Include\oaEventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\oaSerializer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\oaPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\oaMath.cpp">
@@ -246,6 +252,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EventSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaSerializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\oaPath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

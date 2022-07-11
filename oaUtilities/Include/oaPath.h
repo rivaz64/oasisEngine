@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "oaPrerequisitesCore.h"
+#include "oaPrerequisitesUtilities.h"
 
 namespace oaEngineSDK{
 
-class OA_CORE_EXPORT Path
+class OA_UTILITY_EXPORT Path
 {
  public:
   Path() = default;

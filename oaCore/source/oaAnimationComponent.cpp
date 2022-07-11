@@ -23,40 +23,50 @@ COMPONENT_TYPE::E oaEngineSDK::AnimationComponent::getType()
 }
 
 void 
-AnimationComponent::update(SPtr<Actor> actor)
+AnimationComponent::update(WPtr<Actor> actor)
 {
-  OA_ASSERT(actor->getComponent<SkeletalComponent>().get());
-
-  if(!m_animation){
-    return;
-  }
-
-  //m_animTimeInSecs += Time::instancePtr()->getDelta();
-
-  //float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
-
-  float temp = m_animationTime;
-
-  m_animationTime = Math::modf(m_animTimeInSecs/m_animation->m_ticksPerSecond,
-                               m_animation->m_duration);
-
-  if(temp>m_animationTime){
-    m_actualLocationKey = 0;
-    m_actualScaleKey = 0;
-    m_actualRotationKey = 0;
-  }
-  if(m_skeleton)
-  readNodeHeirarchy(m_skeleton->m_skeleton,Matrix4f::IDENTITY);
+  //OA_ASSERT(actor->getComponent<SkeletalComponent>().get());
+  //
+  //if(!m_animation){
+  //  return;
+  //}
+  //
+  ////m_animTimeInSecs += Time::instancePtr()->getDelta();
+  //
+  ////float timeInTicks = animation->ticksPerSecond * Time::instancePtr()->getDelta();
+  //
+  //float temp = m_animationTime;
+  //
+  //m_animationTime = Math::modf(m_animTimeInSecs/m_animation->m_ticksPerSecond,
+  //                             m_animation->m_duration);
+  //
+  //if(temp>m_animationTime){
+  //  m_actualLocationKey = 0;
+  //  m_actualScaleKey = 0;
+  //  m_actualRotationKey = 0;
+  //}
+  //if(m_skeleton)
+  //readNodeHeirarchy(m_skeleton->m_skeleton,Matrix4f::IDENTITY);
 }
 
 
 void 
 AnimationComponent::readNodeHeirarchy(
-  SPtr<SkeletalNode> skeletalNode, 
+  WPtr<SkeletalNode> wNode, 
   const Matrix4f& parentTransform
   )
 {
-  auto animNode = m_animation->m_nodes[skeletalNode->name];
+  if(wNode.expired()) return;
+  if(m_animation.expired()) return;
+  if(m_skeleton.expired()) return;
+  if(m_model.expired()) return;
+
+  auto node = wNode.lock();
+  auto animation = m_animation.lock();
+  auto skeleton = m_skeleton.lock();
+  auto model = m_model.lock();
+
+  auto animNode = animation->m_nodes[node->name];
 
   Matrix4f globalTransform;
 
@@ -71,28 +81,32 @@ AnimationComponent::readNodeHeirarchy(
 
   globalTransform = parentTransform*nodeTransform;
 
-  for(auto oaMesh : m_model->m_meshes){
+  for(auto oaMesh : model->m_meshes){
     auto mesh = cast<SkeletalMesh>(oaMesh);
-    if(mesh->m_boneMaping.find(skeletalNode->name) != mesh->m_boneMaping.end()){
-      uint32 boneIndex = mesh->m_boneMaping[skeletalNode->name];
+    if(mesh->m_boneMaping.find(node->name) != mesh->m_boneMaping.end()){
+      uint32 boneIndex = mesh->m_boneMaping[node->name];
 
-      mesh->m_ofset[boneIndex] = m_skeleton->m_globalInverse*
+      mesh->m_ofset[boneIndex] = skeleton->m_globalInverse*
                                  globalTransform*
                                  mesh->m_bones[boneIndex];
 
-      m_skeleton->m_finalMatrix[skeletalNode->name] = globalTransform;
+      skeleton->m_finalMatrix[node->name] = globalTransform;
     }
   }
 
-  for(auto child : skeletalNode->childs){
+  for(auto child : node->childs){
     readNodeHeirarchy(child,globalTransform);
   }
 
 }
 
 Vector3f
-AnimationComponent::interpolatedLocation(SPtr<AnimNode> node)
+AnimationComponent::interpolatedLocation(WPtr<AnimNode> wNode)
 {
+  if(wNode.expired()) return Vector3f();
+
+  auto node = wNode.lock();
+
   if(node->locations.size() == 1){
     return node->locations[0].second;
   }
@@ -114,8 +128,12 @@ AnimationComponent::interpolatedLocation(SPtr<AnimNode> node)
 }
 
 Vector3f 
-AnimationComponent::interpolatedScale(SPtr<AnimNode> node)
+AnimationComponent::interpolatedScale(WPtr<AnimNode> wNode)
 {
+  if(wNode.expired()) return Vector3f();
+
+  auto node = wNode.lock();
+
   if(node->scales.size() == 1){
     return node->scales[0].second;
   }
@@ -137,8 +155,12 @@ AnimationComponent::interpolatedScale(SPtr<AnimNode> node)
 }
 
 Quaternion
-AnimationComponent::interpolatedRotation(SPtr<AnimNode> node)
+AnimationComponent::interpolatedRotation(WPtr<AnimNode> wNode)
 {
+  if(wNode.expired()) return Quaternion();
+
+  auto node = wNode.lock();
+
   //return node->rotations[0].second;
   if(node->rotations.size() == 1){
     return node->rotations[0].second;

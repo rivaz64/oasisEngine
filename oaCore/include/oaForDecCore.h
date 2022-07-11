@@ -8,10 +8,12 @@ class VertexBuffer;
 class IndexBuffer;
 class SamplerState;
 struct SamplerDesc;
-//class RenderTarget;
-//class DepthStencil;
 struct DepthStencilDesc;
+class StaticVertex;
+
+template<class T>
 class Mesh;
+
 class Texture;
 class Model;
 class Material;

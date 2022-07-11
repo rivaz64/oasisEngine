@@ -93,9 +93,6 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaPath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -106,12 +103,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaShaderProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\oaStaticMesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\oaSkeletalMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaBoundComponent.h">
@@ -126,16 +117,10 @@
     <ClInclude Include="include\oaImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\oaSerializer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaResourse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\oaDebugMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaInputMap.h">
@@ -233,9 +218,6 @@
     <ClCompile Include="source\oaAnimationComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaPath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -248,12 +230,6 @@
     <ClCompile Include="source\oaShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaStaticMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaSkeletalMesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaBoundComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -263,16 +239,10 @@
     <ClCompile Include="source\oaCameraComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\oaSerializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\oaResourse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\oaDebugMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaInputMap.cpp">
@@ -303,6 +273,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\oaAudioAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\oaImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

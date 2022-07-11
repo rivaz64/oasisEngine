@@ -15,11 +15,14 @@ class OA_CORE_EXPORT CameraComponent :
 {
  public:
   
+  COMPONENT_TYPE::E
+  getType() override;
+
   /**
    * @brief getter for the camera
    * @return 
   */
-  FORCEINLINE SPtr<Camera>&
+  FORCEINLINE WPtr<Camera>
   getCamera(){
     return m_camera;
   }
@@ -29,12 +32,12 @@ class OA_CORE_EXPORT CameraComponent :
    * @param camera 
   */
   FORCEINLINE void
-  setCamera(SPtr<Camera> camera){
+  setCamera(WPtr<Camera> camera){
     m_camera = camera;
   }
 
   void
-  update(SPtr<Actor> actor) override;
+  update(WPtr<Actor> actor) override;
 
   /**
    * @brief if true draws the 
@@ -47,7 +50,7 @@ class OA_CORE_EXPORT CameraComponent :
   /**
    * @brief the camera that this component has
   */
-  SPtr<Camera> m_camera;
+  WPtr<Camera> m_camera;
 };
 
 }

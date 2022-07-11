@@ -51,13 +51,17 @@ void SkeletalComponent::update(WPtr<Actor> actor)
 bool 
 SkeletalComponent::attachToBone(WPtr<Model> model, String bone)
 {
-  //if(m_skeleton->m_boneMaping.find(bone)==m_skeleton->m_boneMaping.end()){
-  //  return false;
-  //}
-  //
-  //m_sockets.insert({model,bone});
-  //
-  //return true;
+  if(m_skeleton.expired()) return false;
+
+  auto skeleton = m_skeleton.lock();
+
+  if(skeleton->m_boneMaping.find(bone)==skeleton->m_boneMaping.end()){
+    return false;
+  }
+  
+  m_sockets.insert({model,bone});
+  
+  return true;
 }
 
 }

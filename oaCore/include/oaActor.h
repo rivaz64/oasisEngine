@@ -23,6 +23,12 @@ class OA_CORE_EXPORT Actor :
 
   Actor() : m_localTransform(){}
 
+  void
+  save(Serializer& serializer) override;
+
+  void
+  load(Serializer& serializer) override;
+
   /**
    * @brief makes the Actor a sub Actor of this one
    * @param Actor 
@@ -97,7 +103,7 @@ class OA_CORE_EXPORT Actor :
   /**
    * @brief the parent of this actor
   */
-  SPtr<Actor> m_parent;
+  WPtr<Actor> m_parent;
 
   /**
    * @brief the local transform of this actor

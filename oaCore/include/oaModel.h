@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaResourse.h"
 #include "oaSphere.h"
+#include "oaMesh.h"
 
 namespace oaEngineSDK{
 
@@ -34,12 +35,18 @@ class OA_CORE_EXPORT Model :
 
   ~Model() = default;
 
+  void
+  save(Serializer& serializer) override;
+
+  void
+  load(Serializer& serializer) override;
+
   /**
    * @brief adds a mesh to this model
    * @param mesh the new mesh
   */
   FORCEINLINE void
-  addMesh(SPtr<Mesh> mesh){
+  addMesh(SPtr<Mesh<StaticVertex>> mesh){
     m_meshes.push_back(mesh);
   }
 
@@ -63,19 +70,19 @@ class OA_CORE_EXPORT Model :
     return m_meshes.resize(n);
   }
 
-  FORCEINLINE const SPtr<Mesh>&
+  FORCEINLINE const WPtr<Mesh<StaticVertex>>&
   getMesh(SIZE_T n){
     return m_meshes[n];
   }
 
-  FORCEINLINE const SPtr<Material>&
+  FORCEINLINE const WPtr<Material>&
   getMaterial(SIZE_T n){
     return m_materials[n];
   }
 
   FORCEINLINE const SPtr<Material>&
-  setMaterial(SPtr<Material> material,SIZE_T n){
-    return m_materials[n] = material;
+  setMaterial(WPtr<Material> material,SIZE_T n){
+    m_materials[n] = material;
   }
 
   Vector3f 
@@ -89,12 +96,12 @@ class OA_CORE_EXPORT Model :
   /**
    * @brief the materials of the model
   */
-  Vector<SPtr<Material>> m_materials;
+  Vector<WPtr<Material>> m_materials;
 
   /**
    * @brief the meshes of the model
   */
-  Vector<SPtr<Mesh>> m_meshes;
+  Vector<SPtr<Mesh<StaticVertex>>> m_meshes;
 
   friend class Loader;
   friend class AnimationComponent;

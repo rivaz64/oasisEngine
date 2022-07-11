@@ -46,6 +46,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaGa_Input", "oaGa_Input\oa
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaFmodAudio", "oaFmodAudio\oaFmodAudio.vcxproj", "{948D2A81-5F90-4D5D-AAE8-E94248395D4B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E4B7560F-49A3-4CC5-939B-200F07A39496} = {E4B7560F-49A3-4CC5-939B-200F07A39496}
+		{B245B1E0-0384-4FB1-BDD0-1C596B0323B0} = {B245B1E0-0384-4FB1-BDD0-1C596B0323B0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aoArtificialInteligence", "aoArtificialInteligence\aoArtificialInteligence.vcxproj", "{3EE31DC5-A1CA-4BE3-A751-190E14FB44E9}"
 EndProject

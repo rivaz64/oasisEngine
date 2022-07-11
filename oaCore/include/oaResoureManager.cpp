@@ -10,7 +10,6 @@
 #include "oaMesh.h"
 #include "oaPath.h"
 #include "oaShaderProgram.h"
-#include "oaStaticMesh.h"
 #include "oaOctree.h"
 #include "oaVertexBuffer.h"
 
@@ -251,7 +250,7 @@ void ResoureManager::generateTorus(const uint8 n, const uint8 m, const float rat
 void
 ResoureManager::generateQuad()
 {
-  auto quad = makeSPtr<StaticMesh>();
+  //auto quad = makeSPtr<StaticMesh>();
 
   //quad->m_vertices = {
   //  Vertex{ Vector4f(-.5f,-.5f, 0.0f, 0.0f),Vector4f(0.0f,0.0f, 1.0f, 0.0f),Vector4f(1.0f,0.0f, 0.0f, 0.0f),Vector4f(0.0f,1.0f, 0.0f, 0.0f), Vector2f(0.0f, 0.0f) },
@@ -415,18 +414,18 @@ ResoureManager::generateCube()
   //}
   
  
-  String name = "cube";//+StringUtilities::intToString(i);
-  m_models.insert({name,makeSPtr<Model>()});
-  auto& model = m_models[name];
-  model->setName(name);
-  model->addMaterial(makeSPtr<Material>());
-  auto& material = model->getMaterial(0);
-  material->setShader(0);
-  m_materials.insert({"wall",material});
-  model->addMesh(makeSPtr<Mesh>());
-  auto& mesh = model->getMesh(0);
-  mesh->setIndex(index);
-  mesh->create(vertices.data(),sizeof(Vertex),vertices.size());
+  //String name = "cube";//+StringUtilities::intToString(i);
+  //m_models.insert({name,makeSPtr<Model>()});
+  //auto& model = m_models[name];
+  //model->setName(name);
+  //model->addMaterial(makeSPtr<Material>());
+  //auto& material = model->getMaterial(0);
+  //material->setShader(0);
+  //m_materials.insert({"wall",material});
+  //model->addMesh(makeSPtr<Mesh>());
+  //auto& mesh = model->getMesh(0);
+  //mesh->setIndex(index);
+  //mesh->create(vertices.data(),sizeof(Vertex),vertices.size());
 }
 
 void ResoureManager::generateTriangle()

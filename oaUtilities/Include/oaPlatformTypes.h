@@ -40,7 +40,7 @@ using int64 = int64_t;
  * Character types
  */
  /************************************************************************/
-#if CH_COMPILER == CH_COMPILER_MSVC
+#if OA_COMPILER == OA_COMPILER_MSVC
 using WCHAR = wchar_t;
 #else
 using WCHAR = unsigned short;

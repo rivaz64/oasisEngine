@@ -8,12 +8,19 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaPath.h"
+#include "oaSerializer.h"
 
 namespace oaEngineSDK{
 
 class OA_CORE_EXPORT Resourse
 {
  public:
+
+  virtual void
+  save(Serializer& serializer){}
+
+  virtual void
+  load(Serializer& serializer){}
 
   FORCEINLINE const String&
   getName(){

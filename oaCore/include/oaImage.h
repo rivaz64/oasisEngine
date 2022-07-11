@@ -13,6 +13,9 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief conains the raw data of an image
+*/
 class Image :
   public Resourse
 {
@@ -25,6 +28,12 @@ class Image :
   {
     init();
   }
+
+  void
+  save(Serializer& serializer) override;
+
+  void
+  load(Serializer& serializer) override;
 
   FORCEINLINE void
   init(){

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
+#include "oaResourse.h"
 #include <oaVector2f.h>
 #include <oaVector3f.h>
 #include <oaVector4U.h>
@@ -15,22 +16,15 @@
 #include <oaSphere.h>
 #include <oaAABB.h>
 #include <oaTriangle.h>
+#include <oaSerializer.h>
+#include "oaBuffer.h"
+#include "oaVertexBuffer.h"
+#include "oaGraphicAPI.h"
+#include "oaIndexBuffer.h"
+
+
 
 namespace oaEngineSDK{
-/**
- * @brief previus data for creating a mesh
-*/
-struct SubMesh{
-  /**
-   * @brief the location of the vertex
-  */
-  Vector<Vector4f> points;
-
-  /**
-   * @brief a temporal list of index
-  */
-  Vector<uint32> indices;
-};
 
 /**
  * @brief a structure for all the information at a certain point of a Mesh
@@ -48,6 +42,38 @@ struct SimpleVertex{
    * @brief the part of the texture that is going to be drawn at a certain point
   */
   Vector2f textureCord;
+};
+
+/**
+ * @brief a structure for all the information at a certain point of a static mesh
+*/
+struct StaticVertex{
+
+  /**
+   * @brief the location in a tridimencional space of this vetrex
+  */
+  Vector4f location;
+
+  /**
+   * @brief the normal at this vertex
+  */
+  Vector4f normal;
+
+  /**
+   * @brief the tangent at this vertex
+  */
+  Vector4f tangent;
+
+  /**
+   * @brief the bitangent at this vertex
+  */
+  Vector4f bitangent;
+
+  /**
+   * @brief the part of the texture that is going to be drawn at a certain point
+  */
+  Vector2f textureCord;
+
 };
 
 /**
@@ -92,38 +118,74 @@ struct AnimationVertex{
 
 };
 
+class OA_CORE_EXPORT MeshType{
+
+};
 
 /**
  * @brief a class for a mesh
 */
-class OA_CORE_EXPORT Mesh
+template<class VertexType>
+class OA_CORE_EXPORT Mesh :
+  public Resourse, public MeshType
 {
  public:
 
   /**
    * @brief default consturctor for the mesh
   */
-  Mesh() = default;
+  Mesh()
+  {
+    auto& graphicApi = GraphicAPI::instance();
+    m_vertexB = graphicApi.createVertexBuffer();
+    m_indexB = graphicApi.createIndexBuffer();
+  }
 
   ~Mesh() = default;
 
-  /**
-   * @brief creates and fils the buffers
-  */
-  virtual void
-  create();
+  void
+  save(Serializer& serializer) override
+  {
+    serializer.encodeNumber(m_vertices.size());
+    serializer.file.write(reinterpret_cast<const char*>(m_vertices.data()),
+                          sizeof(VertexType)*m_vertices.size());
+    serializer.encodeNumber(m_index.size());
+    serializer.file.write(reinterpret_cast<const char*>(m_index.data()),
+                          sizeof(uint32)*m_index.size());
+  }
+  
+  void
+  load(Serializer& serializer) override
+  {
+    SIZE_T num;
+    serializer.encodeNumber(num);
+    m_vertices.resize(num);
+    serializer.file.read(reinterpret_cast<char*>(m_vertices.data()),
+                          sizeof(VertexType)*num);
+    serializer.encodeNumber(num);
+    m_index.resize(num);
+    serializer.file.write(reinterpret_cast<char*>(m_index.data()),
+                          sizeof(uint32)*num);
+  }
 
   void
-  create(void* data, SIZE_T vertexSize, SIZE_T dataSize);
-
-  void
-  create(SPtr<VertexBuffer> m_vertexB);
+  writeBuffers()
+  {
+    m_vertexB->release();
+    m_indexB->release();
+    m_vertexB->init(m_vertices.data(),sizeof(VertexType),m_vertices.size());
+    m_indexB->init(m_index);
+  }
 
   /**
    * @brief sets the buffers to the GPU
   */
-  virtual void
-  set();
+  FORCEINLINE void
+  set()
+  {
+    m_vertexB->set();
+    m_indexB->set();
+  }
 
   /**
    * @brief calculates the boundings for this mesh
@@ -131,24 +193,20 @@ class OA_CORE_EXPORT Mesh
   virtual void
   calculateBounding(){}
 
-  void
-  initFromSubMesh(const SubMesh& sm);
+  FORCEINLINE void
+  setVertexNum(SIZE_T n){
+    m_vertices.resize(n);
+  }
 
-  /**
-   * @brief creates the normals based on the the triangles
-   * @param vertices 
-   * @param index 
-  */
-  static void
-  createNormals(Vector<Vertex>& vertices);
-
-  /**
-   * @brief sets how much indexes this mesh has
-   * @param n the new number of indexes
-  */
   FORCEINLINE void
   setIndexNum(SIZE_T n){
     m_index.resize(n);
+  }
+
+
+  FORCEINLINE SIZE_T
+  getVertexNum(){
+    return m_vertices.size();
   }
 
   FORCEINLINE SIZE_T
@@ -156,11 +214,11 @@ class OA_CORE_EXPORT Mesh
     return m_index.size();
   }
 
-  /**
-   * @brief sets an index
-   * @param place where the index is in the list
-   * @param index the value of the index
-  */
+  FORCEINLINE void
+  setVertexAt(SIZE_T place,VertexType vertex){
+    m_vertices[place] = vertex;
+  }
+
   FORCEINLINE void
   setIndexAt(SIZE_T place,SIZE_T index){
     m_index[place] = index;
@@ -176,10 +234,9 @@ class OA_CORE_EXPORT Mesh
     m_index = index;
   }
 
-  //template <class T>
-  FORCEINLINE Vector<Vertex>&
+  FORCEINLINE Vector<VertexType>&
   getVertex(){
-    return *reinterpret_cast<Vector<Vertex>*>(&m_vertices);
+    return m_vertices;
   }
 
   FORCEINLINE const Sphere&
@@ -193,7 +250,13 @@ class OA_CORE_EXPORT Mesh
   }
 
   void
-  setControlPoints(const Vector<Vector4f>& points);
+  setControlPoints(const Vector<Vector4f>& points)
+  {
+    auto& graphicsApi = GraphicAPI::instance();
+    m_controlPoints = graphicsApi.createVertexBuffer();
+    m_controlPoints->init(points.data(),sizeof(Vector4f),points.size());
+    m_numOfControlPoints = points.size();
+  }
 
   FORCEINLINE SPtr<VertexBuffer>
   getControlPoints(){
@@ -208,7 +271,7 @@ class OA_CORE_EXPORT Mesh
  public:
 
   /**
-   * @brief the number of indices this mesh has
+   * @brief the indices of this mesh
   */
   Vector<uint32> m_index;
 
@@ -223,14 +286,14 @@ class OA_CORE_EXPORT Mesh
   SPtr<VertexBuffer> m_vertexB;
 
   /**
+   * @brief the vertices of this mesh
+  */
+  Vector<VertexType> m_vertices;
+
+  /**
    * @brief the bounding sphere of this mesh
   */
   Sphere m_boundingSphere;
-
-  /**
-   * @brief the vertices of this mesh
-  */
-  Vector<char> m_vertices;
 
   /**
    * @brief the bounding box of this mesh

@@ -31,6 +31,12 @@ class OA_CORE_EXPORT Component
   virtual void
   update(WPtr<Actor> actor) {}
 
+  virtual void
+  save(Serializer& serializer){}
+
+  virtual void
+  load(Serializer& serializer){}
+
   /**
    * @brief get what is the type of this component
   */

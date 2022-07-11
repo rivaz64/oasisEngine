@@ -54,17 +54,17 @@ public:
   void
   childsInImgui(SPtr<Actor> parentActor);
 
-  SubMesh
-  tetrahedron();
-
-  SubMesh
-  octahedron();
-
-  Mesh
-  icosahedron();
-
-  SubMesh
-  SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices);
+  //SubMesh
+  //tetrahedron();
+  //
+  //SubMesh
+  //octahedron();
+  //
+  //Mesh
+  //icosahedron();
+  //
+  //SubMesh
+  //SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices);
 
   void
   vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
@@ -77,33 +77,29 @@ public:
 
  public:
 
-  SPtr<Actor> m_selectedActor;
+  WPtr<Actor> m_selectedActor;
 
-  SPtr<Texture> m_selectedTexture;
+  WPtr<Texture> m_selectedTexture;
 
-  SPtr<Material> m_selectedMaterial;
+  WPtr<Material> m_selectedMaterial;
 
-  SPtr<Mesh> m_selectedMesh;
+  WPtr<MeshType> m_selectedMesh;
 
-  SPtr<Model> m_selectedModel;
+  WPtr<Model> m_selectedModel;
 
-  SPtr<Skeleton> m_selectedSkeleton;
+  WPtr<Skeleton> m_selectedSkeleton;
 
-  SPtr<Animation> m_selectedAnimation;
-
-  SPtr<ShaderProgram> m_program; 
+  WPtr<Animation> m_selectedAnimation;
 
   SPtr<Keyboard> m_keyboard;
 
   SPtr<Mouse> m_mouse;
 
-  SPtr<Mesh> m_morbiusTrip;
+  SPtr<Mesh<StaticVertex>> m_morbiusTrip;
 
-  //SPtr<Buffer> lights;
+  WPtr<Actor> m_controlledActor;
 
-  SPtr<Actor> m_controlledActor;
-
-  SPtr<Camera> m_debugCamera;
+  WPtr<Camera> m_debugCamera;
 
   Vector<DirectionalLight> m_directionalLights;
 
@@ -128,8 +124,6 @@ public:
   uint32 loadflags0 = 0;
 
   uint8 loaderFlagsActive;
-
-  ModelComponent* m_selectedModelComponent = nullptr;
 
   bool animInPlay=false;
 

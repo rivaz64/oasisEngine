@@ -55,12 +55,12 @@ class OA_CORE_EXPORT SkeletalComponent :
   /**
    * @brief the model this component is using
   */
-  //SPtr<Model> m_model;
+  WPtr<Model> m_model;
 
   /**
    * @brief the sockets this skeleton has
   */
-  //Map<SPtr<Model>,String> m_sockets;
+  Map<WPtr<Model>,String> m_sockets;
 };
 
 }

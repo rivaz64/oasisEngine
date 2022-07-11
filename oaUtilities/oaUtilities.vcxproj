@@ -190,6 +190,7 @@
     <ClInclude Include="Include\oaNoise2D.h" />
     <ClInclude Include="Include\oaOctavesNoise.h" />
     <ClInclude Include="Include\oaOctree.h" />
+    <ClInclude Include="Include\oaPath.h" />
     <ClInclude Include="Include\oaPerlinNoise2D.h" />
     <ClInclude Include="Include\oaPerlinNoise3D.h" />
     <ClInclude Include="include\oaPlane.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Include\oaPrerequisitesUtilities.h" />
     <ClInclude Include="Include\oaQuaternion.h" />
     <ClInclude Include="Include\oaRandom.h" />
+    <ClInclude Include="Include\oaSerializer.h" />
     <ClInclude Include="Include\oaSimplexNoise.h" />
     <ClInclude Include="include\oaSphere.h" />
     <ClInclude Include="Include\oaStdHeaders.h" />
@@ -234,12 +236,14 @@
     <ClCompile Include="Source\oaNoise2D.cpp" />
     <ClCompile Include="Source\oaOctavesNoise.cpp" />
     <ClCompile Include="Source\oaOctree.cpp" />
+    <ClCompile Include="Source\oaPath.cpp" />
     <ClCompile Include="Source\oaPerlinNoise2D.cpp" />
     <ClCompile Include="Source\oaPerlinNoise3D.cpp" />
     <ClCompile Include="source\oaPlane.cpp" />
     <ClCompile Include="Source\oaPlatformMath.cpp" />
     <ClCompile Include="Source\oaQuaternion.cpp" />
     <ClCompile Include="Source\oaRandom.cpp" />
+    <ClCompile Include="Source\oaSerializer.cpp" />
     <ClCompile Include="Source\oaSimplexNoise.cpp" />
     <ClCompile Include="source\oaSphere.cpp" />
     <ClCompile Include="Source\oaStringUtilities.cpp" />

@@ -38,6 +38,7 @@
 #include <oaSound.h>
 #include <oaEventSystem.h>
 #include <oaTransform.h>
+#include <oaMesh.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -103,7 +104,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 void
 TestApp::genMorbiusTrip(){
   auto& grapgicApi = GraphicAPI::instance();
-  m_morbiusTrip = makeSPtr<Mesh>();
+  m_morbiusTrip = makeSPtr<Mesh<StaticVertex>>();
   m_morbModel = makeSPtr<Model>();
   m_morbComponent = makeSPtr<GraphicsComponent>();
   m_morbActor = makeSPtr<Actor>();
@@ -498,42 +499,43 @@ void oaEngineSDK::TestApp::drawImGui()
  
 
   ImGui::Begin("Actor atributes");
-  if(m_selectedActor){
+  if(!m_selectedActor.expired()){
+    auto selectedActor = m_selectedActor.lock();
     if(ImGui::Button("Add Component")){
       isAddingComponent = true;
     }
 
     if (ImGui::CollapsingHeader("transform")){
       
-      if(m_selectedActor.get()){
-        auto& transform = m_selectedActor->GetActorTransform();
-        Vector3f vec = transform.getLocation();
-        if(ImGui::DragFloat3("location", &vec.x, .01f)){
-          transform.setLocation(vec);
-        }
-        vec = transform.getScale();
-        if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-          transform.setScale(vec);
-        }
-        vec = transform.getRotation()*Math::RAD_TO_DEG;
-        
-        if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-          transform.setRotation(vec*Math::DEG_TO_RAD);
-        };
+      auto& transform = selectedActor->GetActorTransform();
+      Vector3f vec = transform.getLocation();
+      if(ImGui::DragFloat3("location", &vec.x, .01f)){
+        transform.setLocation(vec);
       }
+      vec = transform.getScale();
+      if(ImGui::DragFloat3("scale", &vec.x, .01f)){
+        transform.setScale(vec);
+      }
+      vec = transform.getRotation()*Math::RAD_TO_DEG;
+      
+      if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+        transform.setRotation(vec*Math::DEG_TO_RAD);
+      };
     }
 
     WPtr<Component> wComponent;
     Vector<SPtr<Component>> components;
-    components = m_selectedActor->getComponents<GraphicsComponent>();
+    components = selectedActor->getComponents<GraphicsComponent>();
     if (components.size()>0){
       SIZE_T numComponents = components.size();
       for(SIZE_T i=0;i<numComponents;++i){
         if( ImGui::CollapsingHeader(("models"+StringUtilities::intToString(i)).c_str())){
           auto graphicsComponent = cast<GraphicsComponent>(components[i]);
-          if(ImGui::Button("select model") && m_selectedModel.get()){
+
+          if(ImGui::Button("select model") && !m_selectedModel.expired()){
             graphicsComponent->setModel(m_selectedModel);
           }
+
           auto& wModel = graphicsComponent->getModel();
           if(!wModel.expired()){
             auto model = wModel.lock();
@@ -553,7 +555,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
     }
 
-    wComponent = m_selectedActor->getComponent<SkeletalComponent>();
+    wComponent = selectedActor->getComponent<SkeletalComponent>();
     
     if (!wComponent.expired() && ImGui::CollapsingHeader("skeleton")){
       auto component = wComponent.lock();
@@ -570,7 +572,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
     }
 
-    wComponent = m_selectedActor->getComponent<AnimationComponent>();
+    wComponent = selectedActor->getComponent<AnimationComponent>();
 
     if (!wComponent.expired() && ImGui::CollapsingHeader("animation")){
       auto component = wComponent.lock();
@@ -589,19 +591,20 @@ void oaEngineSDK::TestApp::drawImGui()
       //}
     }
 
-    wComponent = m_selectedActor->getComponent<CameraComponent>();
+    wComponent = selectedActor->getComponent<CameraComponent>();
 
     if (!wComponent.expired() && ImGui::CollapsingHeader("camera")){
       auto component = wComponent.lock();
       auto cameraComponent = cast<CameraComponent>(component);
-      if(ImGui::Button("view from this")){
-        if(m_controlledActor == m_selectedActor){
-          m_controlledActor = SPtr<Actor>();
-        }
-        else{
-          m_controlledActor = m_selectedActor;
-        }
-      }
+      //if(ImGui::Button("view from this") ){
+      //
+      //  if(m_controlledActor == selectedActor){
+      //    m_controlledActor = SPtr<Actor>();
+      //  }
+      //  else{
+      //    m_controlledActor = m_selectedActor;
+      //  }
+      //}
 
       ImGui::Checkbox("debug",&cameraComponent->m_debug);
       if(cameraComponent->m_debug){
@@ -765,26 +768,33 @@ void oaEngineSDK::TestApp::drawImGui()
     if(ImGui::Button("create")){
       auto actor = makeSPtr<Actor>();
       actor->setName(imguiString);
-      m_selectedActor->attach(actor);
+      if(!m_selectedActor.expired()){
+        auto selectedActor = m_selectedActor.lock();
+        selectedActor->attach(actor);
+      }
+      
       isCreatingActor = false;
     }
     ImGui::End();
   }
 
-  if(isAddingComponent){
+  if(isAddingComponent && !m_selectedActor.expired()){
+    auto selectedActor = m_selectedActor.lock();
+
     ImGui::Begin("add component");
+
     if(ImGui::Button("Graphics")){
-      m_selectedActor->attachComponent(makeSPtr<GraphicsComponent>());
+      selectedActor->attachComponent(makeSPtr<GraphicsComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Skeletal")){
-      m_selectedActor->attachComponent(makeSPtr<SkeletalComponent>());
+      selectedActor->attachComponent(makeSPtr<SkeletalComponent>());
       isAddingComponent = false;
     }
 
     if(ImGui::Button("Animation")){
-      m_selectedActor->attachComponent(makeSPtr<AnimationComponent>());
+      selectedActor->attachComponent(makeSPtr<AnimationComponent>());
       isAddingComponent = false;
     }
 
@@ -851,27 +861,28 @@ void oaEngineSDK::TestApp::drawImGui()
     Path path;
     if(path.searchForPath()){
 
-      serializer.init(path,FILE::kWrite);
+      serializer.init(path,true);
 
       serializer.encodeNumber(resourceManager.m_textures.size());
       for(auto& image: resourceManager.m_textures){
-        serializer.encodeImage(image.second->getImage());
+        image.second->save(serializer);
       }
       
       serializer.encodeNumber(resourceManager.m_materials.size());
       for(auto& material: resourceManager.m_materials){
-        serializer.encodeMaterial(material.second);
+        material.second->save(serializer);
       }
       
       serializer.encodeNumber(resourceManager.m_models.size());
       for(auto& model: resourceManager.m_models){
-        serializer.encodeModel(model.second);
+        model.second->save(serializer);
       }
       
       auto actors = m_actualScene->getRoot()->getChilds();
       serializer.encodeNumber(actors.size());
       for(auto& actor : actors){
-        serializer.encodeActor(actor);
+        
+        actor->save(serializer);
       }
 
     }
@@ -961,14 +972,29 @@ void oaEngineSDK::TestApp::drawImGui()
   //ImGui::End();
 
   ImGui::Begin("Model Editor");
-  if(m_selectedModel){
-    SIZE_T matNum = m_selectedModel->getNumOfMaterials();
+  if(!m_selectedModel.expired()){
+    auto selectedModel = m_selectedModel.lock();
+    SIZE_T matNum = selectedModel->getNumOfMaterials();
     for(SIZE_T i = 0; i<matNum;++i){
-      auto& material = m_selectedModel->getMaterial(i);
+      auto& material = selectedModel->getMaterial(i);
       if(material)
       if(ImGui::Button((material->getName()).c_str())){
         m_selectedMaterial = material;
       }
+    }
+
+    if(ImGui::Button("divide")){
+      Vector<SPtr<Model>> models;
+      auto center = selectedModel->getCenter();
+      resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
+      auto actor = makeSPtr<Actor>();
+      for(auto& model : models){
+        auto component = makeSPtr<GraphicsComponent>();
+        component->setModel(model);
+        actor->attachComponent(component);
+      }
+      actor->setName("divided");
+      m_actualScene->getRoot()->attach(actor);
     }
   }
   ImGui::End();
@@ -985,15 +1011,16 @@ void oaEngineSDK::TestApp::drawImGui()
   //ImGui::End();
 
   ImGui::Begin("material textures");
-  if(m_selectedMaterial){
-
+  if(!m_selectedMaterial.expired()){
+    auto selectedMaterial = m_selectedMaterial.lock();
     if (ImGui::CollapsingHeader("add")){
       ImGui::InputText("new",imguiString,64);
-      if(m_selectedTexture){
-        ImGui::Image(m_selectedTexture->getId(),ImVec2(100,100));
+      if(!m_selectedTexture.expired()){
+        auto selectedTexture = m_selectedTexture.lock();
+        ImGui::Image(selectedTexture->getId(),ImVec2(100,100));
       }
       if(ImGui::Button("add texture")){
-        m_selectedMaterial->setTexture(imguiString,m_selectedTexture);
+        selectedMaterial->setTexture(imguiString,m_selectedTexture);
       }
     }
     
@@ -1009,22 +1036,6 @@ void oaEngineSDK::TestApp::drawImGui()
       //  m_selectedTexture = texture.second;
       //}
     }
-  }
-  ImGui::End();
-
-  ImGui::Begin("spatial Separation");
-  if(m_selectedModel && ImGui::Button("divide")){
-    Vector<SPtr<Model>> models;
-    auto center = m_selectedModel->getCenter();
-    resourceManager.separate(m_selectedModel,center,models,m_selectedModel->farestPoint(center));
-    auto actor = makeSPtr<Actor>();
-    for(auto& model : models){
-      auto component = makeSPtr<GraphicsComponent>();
-      component->setModel(model);
-      actor->attachComponent(component);
-    }
-    actor->setName("divided");
-    m_actualScene->getRoot()->attach(actor);
   }
   ImGui::End();
 }
@@ -1044,111 +1055,111 @@ void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)
   }
 }
 
-SubMesh
-oaEngineSDK::TestApp::tetrahedron()
-{
-  SubMesh ans;
-  float sq2 = Math::sqrt(2.0f);
-  float sq3 = Math::sqrt(3.0f);
-  ans.points = {
-    {0.0f,0.0f,1.0f,0.0f},
-    {2.0f*sq2/3.0f,0.0f,-1.0f/3.0f,0.0f},
-    {-sq2/3.0f,sq2/sq3,-1.0f/3.0f,0.0f},
-    {-sq2/3.0f,-sq2/sq3,-1.0f/3.0f,0.0f},
-  };
+//SubMesh
+//oaEngineSDK::TestApp::tetrahedron()
+//{
+//  SubMesh ans;
+//  float sq2 = Math::sqrt(2.0f);
+//  float sq3 = Math::sqrt(3.0f);
+//  ans.points = {
+//    {0.0f,0.0f,1.0f,0.0f},
+//    {2.0f*sq2/3.0f,0.0f,-1.0f/3.0f,0.0f},
+//    {-sq2/3.0f,sq2/sq3,-1.0f/3.0f,0.0f},
+//    {-sq2/3.0f,-sq2/sq3,-1.0f/3.0f,0.0f},
+//  };
+//
+//  ans.indices = {0,1,2,0,2,3,0,3,1,1,3,2};
+//
+//  return ans;
+//}
 
-  ans.indices = {0,1,2,0,2,3,0,3,1,1,3,2};
+//SubMesh
+//oaEngineSDK::TestApp::octahedron()
+//{
+//  SubMesh ans;
+//  ans.points = {
+//    {0.0f,0.0f, 1.0f,0.0f},
+//    {0.0f,0.0f,-1.0f,0.0f},
+//    {0.0f, 1.0f,0.0f,0.0f},
+//    {0.0f,-1.0f,0.0f,0.0f},
+//    { 1.0f,0.0f,0.0f,0.0f},
+//    {-1.0f,0.0f,0.0f,0.0f},
+//  };
+//  ans.indices = {0,4,2,0,3,4,0,5,3,0,2,5,1,2,4,1,4,3,1,3,5,1,5,2};
+//
+//  return ans;
+//}
 
-  return ans;
-}
-
-SubMesh
-oaEngineSDK::TestApp::octahedron()
-{
-  SubMesh ans;
-  ans.points = {
-    {0.0f,0.0f, 1.0f,0.0f},
-    {0.0f,0.0f,-1.0f,0.0f},
-    {0.0f, 1.0f,0.0f,0.0f},
-    {0.0f,-1.0f,0.0f,0.0f},
-    { 1.0f,0.0f,0.0f,0.0f},
-    {-1.0f,0.0f,0.0f,0.0f},
-  };
-  ans.indices = {0,4,2,0,3,4,0,5,3,0,2,5,1,2,4,1,4,3,1,3,5,1,5,2};
-
-  return ans;
-}
-
-Mesh
-TestApp::icosahedron()
-{
-  float phi = (Math::sqrt(5)+1.0f)/2.0f;
-  Vector2f v{1.0f,phi};
-  v.normalize();
-
-  Mesh ans;
-
-  Vector<Vector4f> points = {
-    Vector4f(-v.x, v.y,0.0f,0.0f), 
-    Vector4f( v.x, v.y,0.0f,0.0f), 
-    Vector4f(-v.x,-v.y,0.0f,0.0f), 
-    Vector4f( v.x,-v.y,0.0f,0.0f), 
-    Vector4f(0.0f,-v.x, v.y,0.0f), 
-    Vector4f(0.0f, v.x, v.y,0.0f), 
-    Vector4f(0.0f,-v.x,-v.y,0.0f), 
-    Vector4f(0.0f, v.x,-v.y,0.0f), 
-    Vector4f( v.y,0.0f,-v.x,0.0f), 
-    Vector4f( v.y,0.0f, v.x,0.0f), 
-    Vector4f(-v.y,0.0f,-v.x,0.0f), 
-    Vector4f(-v.y,0.0f, v.x,0.0f)
-    
-  };
-
-  Vector<uint32> index = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
-                          7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
-                          9,8,1};
-
-  return ans;
-}
-
-SubMesh 
-oaEngineSDK::TestApp::SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices)
-{
-  //SIZE_T size = indices.size();
-  //SIZE_T actualSize = size;
-  //Map<Pair<uint32, uint32>, uint32> used;
-  //for(uint32 i = 0; i < size; i+=3){
-  //  Vector3f oldPoints[3]={
-  //    vertices[indices[i]].xyz,
-  //    vertices[indices[i+1]].xyz,
-  //    vertices[indices[i+2]].xyz,
-  //  };
-  //  ;
-  //  Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
-  //  if(used.find(pair)==used.end()){
-  //    used.insert({pair,actualSize});
-  //    ++actualSize;
-  //    
-  //    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-  //  }
-  //}
-  //return ans;
-  return SubMesh();
-}
-
-void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
-                            Vector<Vector4f>& vertices, 
-                            uint32 index1, 
-                            uint32 index2)
-{
-  //Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
-  //if(used.find(pair)==used.end()){
-  //  used.insert({pair,actualSize});
-  //  ++actualSize;
-  //  
-  //  vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-  //}
-}
+//Mesh
+//TestApp::icosahedron()
+//{
+//  float phi = (Math::sqrt(5)+1.0f)/2.0f;
+//  Vector2f v{1.0f,phi};
+//  v.normalize();
+//
+//  Mesh ans;
+//
+//  Vector<Vector4f> points = {
+//    Vector4f(-v.x, v.y,0.0f,0.0f), 
+//    Vector4f( v.x, v.y,0.0f,0.0f), 
+//    Vector4f(-v.x,-v.y,0.0f,0.0f), 
+//    Vector4f( v.x,-v.y,0.0f,0.0f), 
+//    Vector4f(0.0f,-v.x, v.y,0.0f), 
+//    Vector4f(0.0f, v.x, v.y,0.0f), 
+//    Vector4f(0.0f,-v.x,-v.y,0.0f), 
+//    Vector4f(0.0f, v.x,-v.y,0.0f), 
+//    Vector4f( v.y,0.0f,-v.x,0.0f), 
+//    Vector4f( v.y,0.0f, v.x,0.0f), 
+//    Vector4f(-v.y,0.0f,-v.x,0.0f), 
+//    Vector4f(-v.y,0.0f, v.x,0.0f)
+//    
+//  };
+//
+//  Vector<uint32> index = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
+//                          7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
+//                          9,8,1};
+//
+//  return ans;
+//}
+//
+//SubMesh 
+//oaEngineSDK::TestApp::SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices)
+//{
+//  //SIZE_T size = indices.size();
+//  //SIZE_T actualSize = size;
+//  //Map<Pair<uint32, uint32>, uint32> used;
+//  //for(uint32 i = 0; i < size; i+=3){
+//  //  Vector3f oldPoints[3]={
+//  //    vertices[indices[i]].xyz,
+//  //    vertices[indices[i+1]].xyz,
+//  //    vertices[indices[i+2]].xyz,
+//  //  };
+//  //  ;
+//  //  Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
+//  //  if(used.find(pair)==used.end()){
+//  //    used.insert({pair,actualSize});
+//  //    ++actualSize;
+//  //    
+//  //    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+//  //  }
+//  //}
+//  //return ans;
+//  return SubMesh();
+//}
+//
+//void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
+//                            Vector<Vector4f>& vertices, 
+//                            uint32 index1, 
+//                            uint32 index2)
+//{
+//  //Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
+//  //if(used.find(pair)==used.end()){
+//  //  used.insert({pair,actualSize});
+//  //  ++actualSize;
+//  //  
+//  //  vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
+//  //}
+//}
 
 
 

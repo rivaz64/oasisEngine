@@ -12,8 +12,55 @@
 
 namespace oaEngineSDK{
 
-Material::Material()
+void 
+Material::save(Serializer& serializer)
 {
+  serializer.encodeString(getName());
+
+  serializer.encodeNumber(getShader());
+
+  auto types = getTextureChannels();
+
+  SIZE_T numOfTypes = types.size();
+
+  serializer.file.write(reinterpret_cast<char*>(&numOfTypes),sizeof(SIZE_T));
+
+  for(auto& type : types){
+    serializer.encodeString(type);
+    auto wTexture = getTexture(type);
+    if(wTexture.expired()){
+      serializer.encodeString("");
+    }
+    else{
+      auto texture = wTexture.lock();
+      serializer.encodeString(texture->getName());
+    }
+
+  }
+}
+
+void
+Material::load(Serializer& serializer)
+{
+  auto& resourseManager = ResoureManager::instance();
+
+  setName(serializer.decodeString());
+
+  setShader(serializer.decodeNumber());
+
+  SIZE_T numOfTypes;
+
+  serializer.file.read(reinterpret_cast<char*>(&numOfTypes),sizeof(SIZE_T));
+
+  String channel, name;
+
+  for(SIZE_T typeNum = 0; typeNum<numOfTypes; ++typeNum){
+    channel = serializer.decodeString();
+    name =  serializer.decodeString();
+    if(name != ""){
+       setTexture(channel, resourseManager.m_textures[name]);
+    }
+  }
 }
 
 void 
@@ -30,7 +77,12 @@ Material::set()
   shader->set();
   for(auto& channel : channels){
     if(m_textures.find(channel)!=m_textures.end()){
-      graphicsAPI.setTexture(m_textures[channel],channelNum);
+      if(!m_textures[channel].expired()){
+        auto texture = m_textures[channel].lock();
+        graphicsAPI.setTexture(texture,channelNum);
+
+      }
+
     }
     ++channelNum;
   }
@@ -78,7 +130,7 @@ Material::set()
 }
 
 void 
-Material::setTexture(const String& channel, SPtr<Texture> texture)
+Material::setTexture(const String& channel, WPtr<Texture> texture)
 {
   if(m_textures.find(channel) == m_textures.end()){
     m_textures.insert({channel,texture});
@@ -100,7 +152,7 @@ Material::setTexture(const String& channel, SPtr<Texture> texture)
   }
 }
 
-SPtr<Texture> 
+WPtr<Texture> 
 Material::getTexture(const String& channel)
 {
   if(m_textures.find(channel) == m_textures.end()){
@@ -115,7 +167,7 @@ Vector<String>
 Material::getTextureChannels()
 {
   Vector<String> types;
-  for(Map<String,SPtr<Texture>>::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
+  for(Map<String,WPtr<Texture>>::iterator it = m_textures.begin(); it != m_textures.end(); ++it){
     types.push_back(it->first);
   }
   return types;
