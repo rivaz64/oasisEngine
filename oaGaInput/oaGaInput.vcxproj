@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -18,11 +18,22 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\oaGaKeyboard.h" />
+    <ClInclude Include="include\oaGaMouse.h" />
+    <ClInclude Include="include\oaGa_Input.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="source\oaGaKeyboard.cpp" />
+    <ClCompile Include="source\oaGaMouse.cpp" />
+    <ClCompile Include="source\oaGa_Input.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{09fdb588-f92a-4efb-816b-d67038c988ae}</ProjectGuid>
-    <RootNamespace>oaOGLGrafics</RootNamespace>
+    <ProjectGuid>{90B2F5D9-4A6A-4A3E-B16C-E3E660B6CBE0}</ProjectGuid>
+    <RootNamespace>oaGaInput</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,7 +54,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -79,7 +90,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin/$(PlatformTarget)/</OutDir>
-    <TargetExt>.dll</TargetExt>
+    <TargetName>$(ProjectName)d</TargetName>
+    <IntDir>$(SolutionDir)intermediate/$(ProjectName)/$(PlatformTarget)/$(Configuration)/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -114,17 +126,17 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;OA_OGL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS);$(SolutionDir)oaOGL_Grafics\Include;$(DEVLIBS)imgui/backends;$(DEVLIBS)imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(SolutionDir)oaGa_input\Include;$(DEVLIBS)gainput\lib/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>oaCored.lib;glfw3.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(DEVLIBS)freeimage</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/$(PlatformTarget)/;$(DEVLIBS)gainput\lib;$(SolutionDir)bin/$(PlatformTarget)/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>oaUtilitiesd.lib;oaCored.lib;gainput-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,37 +155,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="source\oaOGL_Buffer.cpp" />
-    <ClCompile Include="source\oaOGL_DepthStencil.cpp" />
-    <ClCompile Include="source\oaOGL_GraphicsAPI.cpp" />
-    <ClCompile Include="source\oaOGL_IndexBuffer.cpp" />
-    <ClCompile Include="source\oaOGL_PixelShader.cpp" />
-    <ClCompile Include="source\oaOGL_RenderTarget.cpp" />
-    <ClCompile Include="source\oaOGL_SamplerState.cpp" />
-    <ClCompile Include="source\oaOGL_Shader.cpp" />
-    <ClCompile Include="source\oaOGL_ShaderProgram.cpp" />
-    <ClCompile Include="source\oaOGL_Texture.cpp" />
-    <ClCompile Include="source\oaOGL_VertexBuffer.cpp" />
-    <ClCompile Include="source\oaOGL_VertexShader.cpp" />
-    <ClCompile Include="source\oaSource.cpp" />
-    <ClCompile Include="source\OGL_GraphicsAPI.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\oaOGL_Buffer.h" />
-    <ClInclude Include="include\oaOGL_DepthStencil.h" />
-    <ClInclude Include="include\oaOGL_GraphicsAPI.h" />
-    <ClInclude Include="include\oaOGL_IndexBuffer.h" />
-    <ClInclude Include="include\oaOGL_PixelShader.h" />
-    <ClInclude Include="include\oaOGL_RenderTarget.h" />
-    <ClInclude Include="include\oaOGL_SamplerState.h" />
-    <ClInclude Include="include\oaOGL_Shader.h" />
-    <ClInclude Include="include\oaOGL_ShaderProgram.h" />
-    <ClInclude Include="include\oaOGL_Texture.h" />
-    <ClInclude Include="include\oaOGL_VertexBuffer.h" />
-    <ClInclude Include="include\oaOGL_VertexShader.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -55,6 +55,29 @@ if (CMAKE_GENERATOR STREQUAL "Ninja")
     endif()
 endif()
 
+find_path(UTILITIES_SUBMODULE_SOURCES "oaUtilities/Include/booPrerequisitesUtilities.h")
+if (NOT UTILITIES_SUBMODULE_SOURCES)
+    include(FetchContent)
+  	FetchContent_Declare(googletest URL https://github.com/google/googletest/archive/refs/heads/master.zip)
+	
+	#For Windows: Prevent overriding the parent project's compiler/linker settings.
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+	#FetchContent_MakeAvailable(googletest)
+endif()
+
+#FILTER CREATION FUNCTION
+function(assign_source_group)
+    foreach(_source IN ITEMS ${ARGN})
+        if (IS_ABSOLUTE "${_source}")
+            file(RELATIVE_PATH _source_rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_source}")
+        else()
+            set(_source_rel "${_source}")
+        endif()
+        get_filename_component(_source_path "${_source_rel}" PATH)
+        string(REPLACE "/" "\\" _source_path_msvc "${_source_path}")
+        source_group("${_source_path_msvc}" FILES "${_source}")
+    endforeach()
+endfunction(assign_source_group)
 
 add_library(oaUtilities SHARED CMakeLists.txt)
 
