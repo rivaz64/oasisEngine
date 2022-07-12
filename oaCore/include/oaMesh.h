@@ -29,7 +29,9 @@ namespace oaEngineSDK{
 /**
  * @brief a structure for all the information at a certain point of a Mesh
 */
-struct SimpleVertex{
+struct OA_CORE_EXPORT SimpleVertex{
+
+  SimpleVertex() = default;
 
   SimpleVertex(const Vector4f& _location, const Vector2f& _textureCord) :
     location(_location), textureCord(_textureCord){}
@@ -47,7 +49,7 @@ struct SimpleVertex{
 /**
  * @brief a structure for all the information at a certain point of a Mesh whit animations
 */
-struct AnimationVertex{
+struct OA_CORE_EXPORT AnimationVertex{
 
   /**
    * @brief the ids of the bones that are afecting this vertex
@@ -86,7 +88,9 @@ struct AnimationVertex{
 
 };
 
-class OA_CORE_EXPORT MeshType{
+class OA_CORE_EXPORT MeshType:
+  public Resourse
+{
 
 };
 
@@ -95,7 +99,7 @@ class OA_CORE_EXPORT MeshType{
 */
 template<class VertexType>
 class OA_CORE_EXPORT Mesh :
-  public Resourse, public MeshType
+  public MeshType
 {
  public:
 
@@ -141,7 +145,7 @@ class OA_CORE_EXPORT Mesh :
   {
     m_vertexB->release();
     m_indexB->release();
-    m_vertexB->init(m_vertices.data(),sizeof(VertexType),m_vertices.size());
+    m_vertexB->init(m_vertices.data(),sizeof(Vertex),m_vertices.size());
     m_indexB->init(m_index);
   }
 
@@ -183,7 +187,7 @@ class OA_CORE_EXPORT Mesh :
   }
 
   FORCEINLINE void
-  setVertexAt(SIZE_T place,VertexType vertex){
+  setVertexAt(SIZE_T place,Vertex vertex){
     m_vertices[place] = vertex;
   }
 
@@ -288,6 +292,10 @@ class OA_CORE_EXPORT Mesh :
 
   friend class ResourceManager;
 };
+
+
+//typedef OA_CORE_EXPORT Mesh<AnimationVertex>;
+//typedef OA_CORE_EXPORT Mesh<SimpleVertex>;
 
 }
 

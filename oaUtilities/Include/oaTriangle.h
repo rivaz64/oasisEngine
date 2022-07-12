@@ -15,7 +15,7 @@ namespace oaEngineSDK{
 /**
  * @brief a structure for all the information at a certain point of a Mesh
 */
-struct Vertex{
+struct OA_UTILITY_EXPORT Vertex{
   Vertex() = default;
 
   Vertex(const Vector4f& _location,const Vector4f& _normal,const Vector2f& _textureCord) :

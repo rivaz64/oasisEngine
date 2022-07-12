@@ -16,7 +16,7 @@ namespace oaEngineSDK{
 /**
  * @brief conains the raw data of an image
 */
-class Image :
+class OA_CORE_EXPORT Image :
   public Resourse
 {
  public:

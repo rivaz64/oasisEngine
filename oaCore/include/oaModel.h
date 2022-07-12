@@ -46,7 +46,7 @@ class OA_CORE_EXPORT Model :
    * @param mesh the new mesh
   */
   FORCEINLINE void
-  addMesh(SPtr<Mesh<Vertex>> mesh){
+  addMesh(SPtr<StaticMesh> mesh){
     m_meshes.push_back(mesh);
   }
 
@@ -70,7 +70,7 @@ class OA_CORE_EXPORT Model :
     return m_meshes.resize(n);
   }
 
-  FORCEINLINE const WPtr<Mesh<Vertex>>&
+  FORCEINLINE const WPtr<StaticMesh>&
   getMesh(SIZE_T n){
     return m_meshes[n];
   }
@@ -101,7 +101,7 @@ class OA_CORE_EXPORT Model :
   /**
    * @brief the meshes of the model
   */
-  Vector<SPtr<Mesh<Vertex>>> m_meshes;
+  Vector<SPtr<StaticMesh>> m_meshes;
 
   friend class Loader;
   friend class AnimationComponent;

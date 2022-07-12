@@ -104,7 +104,7 @@ Deferred::onStartUp()
     SimpleVertex(Vector4f( 1.0f, 1.0f, 0.5f, 1.0f),  Vector2f(1,0)),
   };
   
-  screen = makeSPtr<Mesh<SimpleVertex>>();
+  screen = makeSPtr<DebugMesh>();
 
   screen->setIndex({0,1,2,1,0,3});
   screen->setVertex(points);
@@ -133,14 +133,19 @@ Deferred::onStartUp()
 }
 
 void 
-Deferred::render(SPtr<Scene> scene,
-         SPtr<Camera> camForView,
-         SPtr<Camera> camForFrustrum, 
+Deferred::render(WPtr<Scene> wScene,
+         WPtr<Camera> wCamForView,
+         WPtr<Camera> wCamForFrustrum, 
          const Vector<DirectionalLight>& directionalLights,
          const Vector<PointLight>& pointLights,
          const Vector<SpotLight>& spotLights,
          const Vector4f& config)
 {
+  if(wScene.expired() || wCamForView.expired()) return;
+
+  auto scene = wScene.lock();
+  auto camForView = wCamForView.lock();
+
   auto& graphicsAPI = GraphicAPI::instance();
   
   graphicsAPI.clearRenderTarget(m_colorTexture);
@@ -165,12 +170,12 @@ Deferred::render(SPtr<Scene> scene,
   //Vector<RenderData> toRender;
   //Vector<RenderData> transparents;
   
-  Frustum frustrum(camForFrustrum->getLocation(),
-                   camForFrustrum->getAxisMatrix(),
-                   camForFrustrum->getNearPlaneDistance(),
-                   camForFrustrum->getFarPlaneDistance(),
-                   camForFrustrum->getViewAngle(),
-                   camForFrustrum->getRatio());
+  Frustum frustrum(camForView->getLocation(),
+                   camForView->getAxisMatrix(),
+                   camForView->getNearPlaneDistance(),
+                   camForView->getFarPlaneDistance(),
+                   camForView->getViewAngle(),
+                   camForView->getRatio());
   
   
   //scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
@@ -367,7 +372,7 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
 {
   //print(StringUtilities::floatToString(std_deviation));
   for(int32 i = -4; i<5; ++i){
-    m_blurKernel[i+4] = Math::computeGaussianValue(static_cast<float>(i)/4.0f,0,std_deviation);
+    m_blurKernel[i+4] = Math::computeGaussianValue(static_cast<float>(i)/4.0f,0,1);
     //print(StringUtilities::floatToString(i+4));
     //print(StringUtilities::floatToString(m_blurKernel[i+4]));
   }
@@ -693,12 +698,16 @@ Deferred::generateShadowMap(const SpotLight& light,SPtr<Actor> actor)
         SIZE_T meshes = model->getNumOfMeshes();
         for(SIZE_T i = 0; i<meshes;++i){
         
-          if(model->getMaterial(i)->getCastShadows()){
-            auto& mesh =  model->getMesh(i);
+          if(model->getMaterial(i).lock()->getCastShadows()){
+            auto& wMesh =  model->getMesh(i);
             m_globalTransformBuffer->write(&finalTransform);
             graphicsApi.setVSBuffer(m_globalTransformBuffer, 0);
-            mesh->set();
-            graphicsApi.drawIndex(mesh->getIndexNum());
+            if(!wMesh.expired()){
+              auto mesh = wMesh.lock();
+              mesh->set();
+              graphicsApi.drawIndex(mesh->getIndexNum());
+            }
+            
           }
         }
       }
@@ -743,7 +752,7 @@ Deferred::setCamera(SPtr<Camera> camera)
   graphicsApi.setDSBuffer(m_projectionBuffer,2);
 }
 
-SPtr<Texture> 
+WPtr<Texture> 
 Deferred::getShadowMap()
 {
   return m_shadowMap;

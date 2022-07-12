@@ -20,9 +20,9 @@ class Deferred :
   onStartUp() override;
 
   void
-  render(SPtr<Scene> scene,
-         SPtr<Camera> camForView,
-         SPtr<Camera> camForFrustrum, 
+  render(WPtr<Scene> scene,
+         WPtr<Camera> camForView,
+         WPtr<Camera> camForFrustrum, 
          const Vector<DirectionalLight>& directionalLights,
          const Vector<PointLight>& pointLights,
          const Vector<SpotLight>& spotLights,
@@ -115,7 +115,7 @@ class Deferred :
   void
   setCamera(SPtr<Camera> camera);
 
-  SPtr<Texture>
+  WPtr<Texture>
   getShadowMap() override;
 
  private:
@@ -150,7 +150,7 @@ class Deferred :
 
   SPtr<Texture> m_depthStencil;
 
-  SPtr<Mesh<Vertex>> screen;
+  SPtr<DebugMesh> screen;
 
   SPtr<Buffer> m_globalTransformBuffer;
 

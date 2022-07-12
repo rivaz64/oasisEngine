@@ -8,9 +8,6 @@
 #include "oaRenderTarget.h"
 #include "oaDepthStencil.h"
 #include "oaVector4f.h"
-#include "oaChunk.h"
-#include "oaMarchingCubes.h"
-#include "oaProceduralTerrain.h"
 #include "oaNoise2D.h"
 #include "oaLoader.h"
 #include "oaLights.h"
@@ -95,7 +92,7 @@ public:
 
   SPtr<Mouse> m_mouse;
 
-  SPtr<Mesh<StaticVertex>> m_morbiusTrip;
+  SPtr<StaticMesh> m_morbiusTrip;
 
   WPtr<Actor> m_controlledActor;
 

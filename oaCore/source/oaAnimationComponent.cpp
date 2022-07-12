@@ -81,16 +81,16 @@ AnimationComponent::readNodeHeirarchy(
   globalTransform = parentTransform*nodeTransform;
 
   for(auto oaMesh : model->m_meshes){
-    auto mesh = cast<Mesh<AnimationVertex>>(oaMesh);
-    if(mesh->m_boneMaping.find(node->name) != mesh->m_boneMaping.end()){
-      uint32 boneIndex = mesh->m_boneMaping[node->name];
-    
-      mesh->m_ofset[boneIndex] = skeleton->m_globalInverse*
-                                 globalTransform*
-                                 mesh->m_bones[boneIndex];
-    
-      skeleton->m_finalMatrix[node->name] = globalTransform;
-    }
+    //auto mesh = cast<Mesh<AnimationVertex>>(oaMesh);
+    //if(mesh->m_boneMaping.find(node->name) != mesh->m_boneMaping.end()){
+    //  uint32 boneIndex = mesh->m_boneMaping[node->name];
+    //
+    //  mesh->m_ofset[boneIndex] = skeleton->m_globalInverse*
+    //                             globalTransform*
+    //                             mesh->m_bones[boneIndex];
+    //
+    //  skeleton->m_finalMatrix[node->name] = globalTransform;
+    //}
   }
 
   for(auto child : node->childs){

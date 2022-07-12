@@ -18,9 +18,9 @@ class OA_CORE_EXPORT Renderer :
  public:
 
   virtual void
-  render(SPtr<Scene> /*scene*/,
-         SPtr<Camera> /*camForView*/,
-         SPtr<Camera> /*camForFrustrum*/, 
+  render(WPtr<Scene> /*scene*/,
+         WPtr<Camera> /*camForView*/,
+         WPtr<Camera> /*camForFrustrum*/, 
          const Vector<DirectionalLight>& /*directionalLights*/,
          const Vector<PointLight>& /*pointLights*/,
          const Vector<SpotLight>& /*spotLights*/,
@@ -29,12 +29,11 @@ class OA_CORE_EXPORT Renderer :
   virtual void
   setSize(const Vector2U& /*size*/) {}
 
-  virtual SPtr<Texture>
-  getShadowMap(){return SPtr<Texture>();}
+  virtual WPtr<Texture>
+  getShadowMap(){return WPtr<Texture>();}
 
 
  public:
-  float std_deviation = 1;
   
 
 };

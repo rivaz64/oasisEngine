@@ -9,9 +9,14 @@ class IndexBuffer;
 class SamplerState;
 struct SamplerDesc;
 struct DepthStencilDesc;
+struct SimpleVertex;
+class MeshType;
 
 template<class T>
 class Mesh;
+
+typedef Mesh<Vertex> StaticMesh;
+typedef Mesh<SimpleVertex> DebugMesh;
 
 class Texture;
 class Model;
@@ -36,11 +41,11 @@ class Resourse;
 class RasterizerState;
 class Renderer;
 class BlendState;
-class DebugMesh;
 struct DirectionalLight;
 struct PointLight;
 struct SpotLight;
 class Mouse;
 class Keyboard;
 class Sound;
+struct SimpleVertex;
 }

@@ -772,7 +772,7 @@ ResoureManager::separate(SPtr<Model> model,
       if(meshes[i].size()==0) continue;
       auto newModel = newModels[i];
       newModel->addMaterial(material);
-      auto newMesh = makeSPtr<Mesh<Vertex>>();
+      auto newMesh = makeSPtr<StaticMesh>();
       newModel->addMesh(newMesh);
 
       finalIndex.clear();

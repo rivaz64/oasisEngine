@@ -66,7 +66,7 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 }
 
 void
-readStaticMesh(SPtr<Mesh<Vertex>> mesh, aiMesh* aMesh){
+readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
   
   mesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
 
@@ -102,87 +102,87 @@ readStaticMesh(SPtr<Mesh<Vertex>> mesh, aiMesh* aMesh){
   }
 }
 
-void
-readSkeletalMesh(SPtr<Mesh<AnimationVertex>> mesh, aiMesh* aMesh){
-
-  auto& bones = mesh->m_bones;
-
-  auto& vertices = mesh->m_vertices;
-
-  vertices.resize( aMesh->mNumVertices);
-  for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
-    auto& actualVertex = vertices[numVertex];
-
-    actualVertex.location.x = aMesh->mVertices[numVertex].x;
-    actualVertex.location.y = aMesh->mVertices[numVertex].y;
-    actualVertex.location.z = aMesh->mVertices[numVertex].z;
-
-    actualVertex.normal.x = aMesh->mNormals[numVertex].x;
-    actualVertex.normal.y = aMesh->mNormals[numVertex].y;
-    actualVertex.normal.z = aMesh->mNormals[numVertex].z;
-    
-    actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
-    actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
-    actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
-    
-    actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
-    actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
-    actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
-
-    if(aMesh->HasTextureCoords(0)){
-      actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
-      actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
-    }
-  }
-
-  if(aMesh->HasBones()){
-
-    SIZE_T bonesNum=0;
-
-    for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
-
-      auto actualBone = aMesh->mBones[boneNum];
-
-      String boneName = actualBone->mName.C_Str();
-
-      SIZE_T boneIndex;
-
-      if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
-        boneIndex = bonesNum;
-        mesh->m_boneMaping.insert({boneName,bonesNum});
-        bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
-        //boneNames.push_back(boneName);
-        ++bonesNum;
-      }
-      else{
-
-        boneIndex = mesh->m_boneMaping[boneName];
-      }
-
-      //boneIndex = skeleton->boneMaping[boneName];
-
-      actualBone = aMesh->mBones[boneIndex];
-
-      for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
-      
-        auto& actualWeight = actualBone->mWeights[weightNum];
-
-        SIZE_T vertexId = actualWeight.mVertexId;
-
-        auto& actualVertex = vertices[vertexId];
-
-        for(uint8 i = 0; i < 8; ++i){
-          if(((float*)&actualVertex.weights)[i] == 0){
-            ((uint32*)&actualVertex.ids)[i] = boneIndex;
-            ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
-            break;
-
-          }
-        } 
-      }
-    }
-  }
-}
+//void
+//readSkeletalMesh(SPtr<Mesh<AnimationVertex>> mesh, aiMesh* aMesh){
+//
+//  auto& bones = mesh->m_bones;
+//
+//  auto& vertices = mesh->m_vertices;
+//
+//  vertices.resize( aMesh->mNumVertices);
+//  for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
+//    auto& actualVertex = vertices[numVertex];
+//
+//    actualVertex.location.x = aMesh->mVertices[numVertex].x;
+//    actualVertex.location.y = aMesh->mVertices[numVertex].y;
+//    actualVertex.location.z = aMesh->mVertices[numVertex].z;
+//
+//    actualVertex.normal.x = aMesh->mNormals[numVertex].x;
+//    actualVertex.normal.y = aMesh->mNormals[numVertex].y;
+//    actualVertex.normal.z = aMesh->mNormals[numVertex].z;
+//    
+//    actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
+//    actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
+//    actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
+//    
+//    actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
+//    actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
+//    actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
+//
+//    if(aMesh->HasTextureCoords(0)){
+//      actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
+//      actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+//    }
+//  }
+//
+//  if(aMesh->HasBones()){
+//
+//    SIZE_T bonesNum=0;
+//
+//    for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
+//
+//      auto actualBone = aMesh->mBones[boneNum];
+//
+//      String boneName = actualBone->mName.C_Str();
+//
+//      SIZE_T boneIndex;
+//
+//      if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
+//        boneIndex = bonesNum;
+//        mesh->m_boneMaping.insert({boneName,bonesNum});
+//        bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+//        //boneNames.push_back(boneName);
+//        ++bonesNum;
+//      }
+//      else{
+//
+//        boneIndex = mesh->m_boneMaping[boneName];
+//      }
+//
+//      //boneIndex = skeleton->boneMaping[boneName];
+//
+//      actualBone = aMesh->mBones[boneIndex];
+//
+//      for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
+//      
+//        auto& actualWeight = actualBone->mWeights[weightNum];
+//
+//        SIZE_T vertexId = actualWeight.mVertexId;
+//
+//        auto& actualVertex = vertices[vertexId];
+//
+//        for(uint8 i = 0; i < 8; ++i){
+//          if(((float*)&actualVertex.weights)[i] == 0){
+//            ((uint32*)&actualVertex.ids)[i] = boneIndex;
+//            ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
+//            break;
+//
+//          }
+//        } 
+//      }
+//    }
+//  }
+//}
 
 void 
 loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
@@ -191,7 +191,7 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    auto mesh = makeSPtr<Mesh<Vertex>>();
+    auto mesh = makeSPtr<StaticMesh>();
 
     readStaticMesh(mesh,aMesh);
 

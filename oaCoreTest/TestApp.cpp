@@ -104,7 +104,7 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 void
 TestApp::genMorbiusTrip(){
   auto& grapgicApi = GraphicAPI::instance();
-  m_morbiusTrip = makeSPtr<Mesh<StaticVertex>>();
+  m_morbiusTrip = makeSPtr<StaticMesh>();
   m_morbModel = makeSPtr<Model>();
   m_morbComponent = makeSPtr<GraphicsComponent>();
   m_morbActor = makeSPtr<Actor>();
@@ -718,7 +718,7 @@ void oaEngineSDK::TestApp::drawImGui()
 
   ImGui::Begin("configs");
   ImGui::DragFloat4("ssao",&m_ssaoConfig.x,.001f);
-  ImGui::DragFloat("blur",&Renderer::instance().std_deviation,.01f);
+  //ImGui::DragFloat("blur",1,.01f);
   ImGui::End();
 
 
@@ -758,7 +758,7 @@ void oaEngineSDK::TestApp::drawImGui()
     ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].intensity);
     ImGui::DragFloat(("angle"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].angle,.01f,-1.f,1.f);
     ImGui::Checkbox(("cast shadows"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].castShadows);
-    ImGui::Image(shadowMap->getId(),ImVec2(100.f,100.f));
+    //ImGui::Image(shadowMap->getId(),ImVec2(100.f,100.f));
   }
   ImGui::End();
 
@@ -895,7 +895,8 @@ void oaEngineSDK::TestApp::drawImGui()
       if(serializer.init(path,FILE::kRead)){
         SIZE_T number = serializer.decodeNumber();
         for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-          auto image = serializer.decodeImage();
+          auto image = makeSPtr<Image>();
+          image->load(serializer);
           SPtr<Texture> texture = GraphicAPI::instance().createTexture();
           texture->initFromImage(image);
           resourceManager.m_textures.insert({ texture->getName(),texture});
@@ -903,19 +904,22 @@ void oaEngineSDK::TestApp::drawImGui()
 
         number = serializer.decodeNumber();
         for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-          auto material = serializer.decodeMaterial();
+          auto material = makeSPtr<Material>();
+          material->load(serializer);
           resourceManager.m_materials.insert({ material->getName(),material});
         }
         
         number = serializer.decodeNumber();
         for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-          auto model = serializer.decodeModel();
+          auto model = makeSPtr<Model>();
+          model->load(serializer);
           resourceManager.m_models.insert({ model->getName(),model});
         }
 
         number = serializer.decodeNumber();
         for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-          auto actor = serializer.decodeActor();
+          auto actor = makeSPtr<Actor>();
+          actor->load(serializer);
           m_actualScene->getRoot()->attach(actor);
         }
       }
@@ -976,11 +980,14 @@ void oaEngineSDK::TestApp::drawImGui()
     auto selectedModel = m_selectedModel.lock();
     SIZE_T matNum = selectedModel->getNumOfMaterials();
     for(SIZE_T i = 0; i<matNum;++i){
-      auto& material = selectedModel->getMaterial(i);
-      if(material)
-      if(ImGui::Button((material->getName()).c_str())){
-        m_selectedMaterial = material;
+      auto& wMaterial = selectedModel->getMaterial(i);
+      if(!wMaterial.expired()){
+        auto material = wMaterial.lock();
+        if(ImGui::Button((material->getName()).c_str())){
+          m_selectedMaterial = material;
+        }
       }
+      
     }
 
     if(ImGui::Button("divide")){
@@ -1024,13 +1031,14 @@ void oaEngineSDK::TestApp::drawImGui()
       }
     }
     
-    for(auto& textureChannel : m_selectedMaterial->getTextureChannels()){
-      if(ImGui::Button(textureChannel.c_str()) && m_selectedTexture){
-        m_selectedMaterial->setTexture(textureChannel,m_selectedTexture);
+    for(auto& textureChannel : selectedMaterial->getTextureChannels()){
+      if(ImGui::Button(textureChannel.c_str()) && !m_selectedTexture.expired()){
+
+        selectedMaterial->setTexture(textureChannel,m_selectedTexture);
       }
-      auto texture = m_selectedMaterial->getTexture(textureChannel);
-      if(texture){
-        ImGui::Image(texture->getId(),ImVec2(100,100));
+      auto texture = selectedMaterial->getTexture(textureChannel);
+      if(!texture.expired()){
+        ImGui::Image(texture.lock()->getId(),ImVec2(100,100));
       }
       //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
       //  m_selectedTexture = texture.second;

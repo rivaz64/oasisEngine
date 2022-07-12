@@ -113,7 +113,7 @@ class OA_CORE_EXPORT ResoureManager :
   /**
   * @brief all the loaded meshes
   */
-  Map<String,SPtr<Mesh<Vertex>>> m_meshes;
+  Map<String,SPtr<StaticMesh>> m_meshes;
 
   /**
    * @brief all the loaded textures
