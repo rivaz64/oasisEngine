@@ -17,7 +17,7 @@ bool DX11VertexBuffer::init(
   D3D11_BUFFER_DESC bd;
   memset( &bd, 0, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
-  bd.ByteWidth = vertexSize*numberOfVertices;
+  bd.ByteWidth = vertexSize*static_cast<uint32>(numberOfVertices);
   bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
   bd.CPUAccessFlags = 0;
   

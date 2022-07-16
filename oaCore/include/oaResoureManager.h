@@ -65,11 +65,6 @@ class OA_CORE_EXPORT ResoureManager :
 //
 // private:
 //
-  /**
-   * @brief generates a 1*1 plane
-  */
-  void 
-  generateQuad();
 
   /**
    * @brief generates a 1*1*1 cube

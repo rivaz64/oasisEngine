@@ -151,14 +151,14 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param the number of vertices
   */
   virtual void
-  draw(uint32 /*vertices*/) {}
+  draw(SIZE_T /*vertices*/) {}
 
   /**
    * @brief draws using index for the tris
    * @param the number of indexes 
   */
   virtual void
-  drawIndex(uint32 /*indexes*/) {}
+  drawIndex(SIZE_T /*indexes*/) {}
 
   /**
    * @brief shows the things that where rendered
@@ -180,7 +180,7 @@ class OA_CORE_EXPORT GraphicAPI :
    * @param location 
   */
   virtual void
-  setTexture(const SPtr<Texture> /*texture*/,uint8 /*location*/){}
+  setTexture(const SPtr<Texture> /*texture*/,uint32 /*location*/){}
 
   /**
    * @brief sets a constant buffer to be used in a vertex shader

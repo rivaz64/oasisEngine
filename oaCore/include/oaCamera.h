@@ -87,8 +87,8 @@ class OA_CORE_EXPORT Camera
    * @brief sets the rotation of the camera
    * @param newRotation 
   */
-  void
-  setRotation(const Vector3f& newRotation);
+  //void
+  //setRotation(const Vector3f& newRotation);
 
   /**
    * @brief getter for the view matrix

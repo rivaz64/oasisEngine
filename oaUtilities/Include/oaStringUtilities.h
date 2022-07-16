@@ -24,8 +24,13 @@ class OA_UTILITY_EXPORT StringUtilities
    * @tparam T the tipe of the argument
    * @return the string
   */
+  //static FORCEINLINE String
+  //intToString(int32 param){
+  //  return to_string(param);
+  //}
+
   static FORCEINLINE String
-  intToString(int32 param){
+  intToString(int64 param){
     return to_string(param);
   }
 

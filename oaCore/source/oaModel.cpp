@@ -20,7 +20,7 @@ void
 Model::save(Serializer& serializer)
 { 
   auto num = m_meshes.size();
-  serializer.encodeNumber(m_meshes.size());
+  serializer.encodeSize(m_meshes.size());
   for(SIZE_T n=0; n<num; ++n){
     m_meshes[n]->save(serializer);
     if(!m_materials[n].expired()){

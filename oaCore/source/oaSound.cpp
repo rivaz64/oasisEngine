@@ -3,7 +3,7 @@
 namespace oaEngineSDK{
 
 bool 
-Sound::loadFromFile(const Path& path)
+Sound::loadFromFile(const Path& /*path*/)
 {
     return false;
 }

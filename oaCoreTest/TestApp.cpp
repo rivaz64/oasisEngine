@@ -242,7 +242,7 @@ TestApp::postInit()
   graphicAPI.initTest();
 
   graphicAPI.setPrimitiveTopology(oaEngineSDK::PRIMITIVE_TOPOLOGY::kTrianlgeList);
-  m_ssaoConfig.x=.01;
+  m_ssaoConfig.x=.01f;
   m_ssaoConfig.y=0;
   m_ssaoConfig.z=1;
 
@@ -863,23 +863,23 @@ void oaEngineSDK::TestApp::drawImGui()
 
       serializer.init(path,true);
 
-      serializer.encodeNumber(resourceManager.m_textures.size());
+      serializer.encodeSize(resourceManager.m_textures.size());
       for(auto& image: resourceManager.m_textures){
         image.second->save(serializer);
       }
       
-      serializer.encodeNumber(resourceManager.m_materials.size());
+      serializer.encodeSize(resourceManager.m_materials.size());
       for(auto& material: resourceManager.m_materials){
         material.second->save(serializer);
       }
       
-      serializer.encodeNumber(resourceManager.m_models.size());
+      serializer.encodeSize(resourceManager.m_models.size());
       for(auto& model: resourceManager.m_models){
         model.second->save(serializer);
       }
       
       auto actors = m_actualScene->getRoot()->getChilds();
-      serializer.encodeNumber(actors.size());
+      serializer.encodeSize(actors.size());
       for(auto& actor : actors){
         
         actor->save(serializer);

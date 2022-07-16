@@ -28,7 +28,7 @@ Actor::save(Serializer& serializer)
   auto& transform = GetActorTransform();
   serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
   SIZE_T num = m_components.size();
-  serializer.encodeNumber(m_components.size());
+  serializer.encodeSize(num);
   for(auto component : m_components){
     serializer.encodeNumber(component.first);
     component.second[0]->save(serializer);

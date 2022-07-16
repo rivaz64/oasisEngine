@@ -118,26 +118,15 @@ class OA_CORE_EXPORT Mesh :
   void
   save(Serializer& serializer) override
   {
-    serializer.encodeNumber(m_vertices.size());
-    serializer.file.write(reinterpret_cast<const char*>(m_vertices.data()),
-                          sizeof(VertexType)*m_vertices.size());
-    serializer.encodeNumber(m_index.size());
-    serializer.file.write(reinterpret_cast<const char*>(m_index.data()),
-                          sizeof(uint32)*m_index.size());
+    serializer.encodeVector(m_vertices);
+    serializer.encodeVector(m_index);
   }
   
   void
   load(Serializer& serializer) override
   {
-    SIZE_T num;
-    num = serializer.decodeNumber();
-    m_vertices.resize(num);
-    serializer.file.read(reinterpret_cast<char*>(m_vertices.data()),
-                          sizeof(VertexType)*num);
-    serializer.encodeNumber(num);
-    m_index.resize(num);
-    serializer.file.write(reinterpret_cast<char*>(m_index.data()),
-                          sizeof(uint32)*num);
+    serializer.decodeVector(m_vertices);
+    serializer.decodeVector(m_index);
   }
 
   void
@@ -192,7 +181,7 @@ class OA_CORE_EXPORT Mesh :
   }
 
   FORCEINLINE void
-  setIndexAt(SIZE_T place,SIZE_T index){
+  setIndexAt(SIZE_T place,uint32 index){
     m_index[place] = index;
   }
 
@@ -240,7 +229,7 @@ class OA_CORE_EXPORT Mesh :
     return m_controlPoints;
   }
 
-  FORCEINLINE int32
+  FORCEINLINE SIZE_T
   getNumOfControlPoints(){
     return m_numOfControlPoints;
   }
@@ -288,7 +277,7 @@ class OA_CORE_EXPORT Mesh :
 
   Vector<Matrix4f> m_bones;
 
-  int32 m_numOfControlPoints;
+  SIZE_T m_numOfControlPoints;
 
   friend class ResourceManager;
 };

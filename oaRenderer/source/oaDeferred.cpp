@@ -673,7 +673,7 @@ Deferred::setSize(const Vector2U& size)
   m_specularLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_downSapmle->init(iSize/4,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   
-  auto sizef = Vector2f(size.x,size.y);
+  auto sizef = Vector2f(static_cast<float>(size.x),static_cast<float>(size.y));
   m_size->write(&sizef);
   sizef /= 4.f;
   //m_smallSize->write(&sizef);
@@ -733,7 +733,8 @@ Deferred::generateShadowMap(const SpotLight& light,SPtr<Actor> actor)
 //  }
 //}
 
-SPtr<Texture> Deferred::applyShadowMap(SPtr<Texture>& scene, SPtr<Texture>& map)
+SPtr<Texture> 
+Deferred::applyShadowMap(SPtr<Texture>& /*scene*/, SPtr<Texture>& /*map*/)
 {
   return SPtr<Texture>();
 }

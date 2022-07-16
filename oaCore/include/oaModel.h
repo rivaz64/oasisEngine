@@ -70,12 +70,12 @@ class OA_CORE_EXPORT Model :
     return m_meshes.resize(n);
   }
 
-  FORCEINLINE const WPtr<StaticMesh>&
+  FORCEINLINE const WPtr<StaticMesh>
   getMesh(SIZE_T n){
     return m_meshes[n];
   }
 
-  FORCEINLINE const WPtr<Material>&
+  FORCEINLINE const WPtr<Material>
   getMaterial(SIZE_T n){
     return m_materials[n];
   }

@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <d3dx11.h>
 #include <d3dcompiler.h>
-#include <xnamath.h>
 #include <oaVector2U.h>
 #include <oaInputManager.h>
 #include "oaDX11VertexShader.h"
@@ -275,15 +274,15 @@ DX11GraphicAPI::getBackBuffer()
 }
 
 void 
-DX11GraphicAPI::draw(uint32 vertices)
+DX11GraphicAPI::draw(SIZE_T vertices)
 {
-  m_context->Draw(vertices,0);
+  m_context->Draw(static_cast<uint32>(vertices),0);
 }
 
 void
-DX11GraphicAPI::drawIndex(uint32 indexes)
+DX11GraphicAPI::drawIndex(SIZE_T indexes)
 {
-  m_context->DrawIndexed(indexes, 0, 0);
+  m_context->DrawIndexed(static_cast<uint32>(indexes), 0, 0);
 }
 
 void 
@@ -293,7 +292,7 @@ DX11GraphicAPI::show()
 }
 
 void 
-DX11GraphicAPI::setTexture(const SPtr<Texture> texture, uint8 location)
+DX11GraphicAPI::setTexture(const SPtr<Texture> texture, uint32 location)
 {
   if(texture)
   m_context->PSSetShaderResources(location, 1, &cast<DX11Texture>(texture)->m_shaderResourceView );
@@ -361,7 +360,7 @@ DX11GraphicAPI::setRenderTargets(const Vector<SPtr<Texture>>& renderTargets)
   }
 
   m_context->OMSetRenderTargets( 
-    numOfRenders,
+    static_cast<uint32>(numOfRenders),
     renders, 
     nullptr
   );
@@ -394,7 +393,7 @@ DX11GraphicAPI::setRenderTargetsAndDepthStencil(
   }
 
   m_context->OMSetRenderTargets( 
-    numOfRenders,
+    static_cast<uint32>(numOfRenders),
     renders, 
     cast<DX11Texture>(depthStencil)->m_depthStencilView
   );

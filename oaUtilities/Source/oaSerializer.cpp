@@ -39,19 +39,46 @@ Serializer::init(const Path& path,bool write)
   return true;
 }
 
-void 
-Serializer::encodeNumber(SIZE_T number)
+void
+Serializer::encodeNumber(int32 number)
 {
   file.write(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
 }
 
-SIZE_T
+int32
 Serializer::decodeNumber()
 {
-  SIZE_T number;
+  int32 number;
   file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
   return number;
 }
+
+void 
+Serializer::encodeSize(SIZE_T size)
+{
+  file.write(reinterpret_cast<char*>(&size),sizeof(SIZE_T));
+}
+
+SIZE_T Serializer::decodeSize()
+{
+  int32 number;
+  file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
+  return number;
+}
+
+//void 
+//Serializer::encodeNumber(SIZE_T number)
+//{
+//  file.write(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
+//}
+//
+//SIZE_T
+//Serializer::decodeNumber()
+//{
+//  SIZE_T number;
+//  file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
+//  return number;
+//}
 
 void
 Serializer::encodeString(const String& string)
@@ -76,6 +103,7 @@ Serializer::decodeString()
 
   return string;
 }
+
 //
 //SPtr<Actor> 
 //Serializer::decodeActor()

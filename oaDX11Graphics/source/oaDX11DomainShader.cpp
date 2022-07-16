@@ -33,6 +33,8 @@ DX11DomainShader::compileFromFile(const String& file, const Vector<String>& defi
   if (FAILED(hr)) {
     return false;
   }
+
+  return true;
 }
 
 void 

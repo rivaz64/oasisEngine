@@ -156,7 +156,7 @@ DX11VertexShader::createInputLayout(ID3DBlob* blob)
   auto& device = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_device;
   auto& context = reinterpret_cast<DX11GraphicAPI*>(DX11GraphicAPI::instancePtr())->m_context;
   HRESULT hr = device->CreateInputLayout(&inputLayoutDesc[0], 
-                                          inputLayoutDesc.size(), 
+                                          static_cast<uint32>(inputLayoutDesc.size()), 
                                           blob->GetBufferPointer(), 
                                           blob->GetBufferSize(), &m_inputLayout);//*/
   context->IASetInputLayout( m_inputLayout );

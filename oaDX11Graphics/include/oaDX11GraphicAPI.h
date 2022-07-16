@@ -76,16 +76,16 @@ class DX11GraphicAPI :
   getBackBuffer() override;
 
   void
-  draw(uint32 vertices) override;
+  draw(SIZE_T vertices) override;
 
   void
-  drawIndex(uint32 indexes) override;
+  drawIndex(SIZE_T indexes) override;
 
   void
   show() override;
 
   void
-  setTexture(const SPtr<Texture> texture,uint8 location) override;
+  setTexture(const SPtr<Texture> texture,uint32 location) override;
 
   void
   setVSBuffer(const SPtr<Buffer> buffer,uint32 location) override;

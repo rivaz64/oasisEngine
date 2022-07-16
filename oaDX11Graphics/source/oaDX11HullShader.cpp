@@ -33,6 +33,8 @@ DX11HullShader::compileFromFile(const String& file, const Vector<String>& define
   if (FAILED(hr)) {
     return false;
   }
+
+  return true;
 }
 
 void 

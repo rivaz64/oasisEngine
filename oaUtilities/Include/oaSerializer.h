@@ -22,16 +22,43 @@ class OA_UTILITY_EXPORT Serializer
   init(const Path& path,bool write);
 
   void
-  encodeNumber(SIZE_T n);
+  encodeNumber(int32 number);
+
+  int32
+  decodeNumber();
+
+  void
+  encodeSize(SIZE_T size);
 
   SIZE_T
-  decodeNumber();
+  decodeSize();
 
   void
   encodeString(const String& string);
 
   String
   decodeString();
+
+  template<class T>
+  void 
+  encodeVector(const Vector<T>& vector)
+  {
+    auto size = vector.size();
+    encodeSize(size);
+    file.write(reinterpret_cast<const char*>(vector.data()),
+                          sizeof(T)*vector.size());
+  }
+
+  template<class T>
+  void
+  decodeVector(Vector<T>& vector)
+  {
+    SIZE_T num;
+    num = decodeSize();
+    vector.resize(num);
+    file.read(reinterpret_cast<char*>(vector.data()),
+              sizeof(T)*num);
+  }
  //
  //void
  //encodeActor(WPtr<Actor> actor);

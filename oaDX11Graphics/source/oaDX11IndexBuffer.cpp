@@ -14,7 +14,7 @@ DX11IndexBuffer::init(Vector<uint32>& data)
   D3D11_BUFFER_DESC bd;
   memset( &bd, 0, sizeof(bd) );
   bd.Usage = D3D11_USAGE_DEFAULT;
-  bd.ByteWidth = sizeof(uint32)*data.size();
+  bd.ByteWidth = sizeof(uint32)*static_cast<uint32>(data.size());
   bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
   bd.CPUAccessFlags = 0;
   

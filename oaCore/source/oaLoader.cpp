@@ -676,6 +676,7 @@ Loader::loadSound(const Path & path)
   auto name = StringUtilities::toString(path.getName());
   sound->setName(name);
   ResoureManager::instance().m_sounds.insert({name,sound});
+  return true;
 }
 
 }

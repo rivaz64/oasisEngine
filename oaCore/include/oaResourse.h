@@ -17,10 +17,10 @@ class OA_CORE_EXPORT Resourse
  public:
 
   virtual void
-  save(Serializer& serializer){}
+  save(Serializer& /*serializer*/){}
 
   virtual void
-  load(Serializer& serializer){}
+  load(Serializer& /*serializer*/){}
 
   FORCEINLINE const String&
   getName(){
