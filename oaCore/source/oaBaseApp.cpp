@@ -16,35 +16,47 @@
 #include "oaDepthStencil.h"
 #include "oaTexture.h"
 #include "oaLogger.h"
-#include "oaPath.h"
 #include "oaCamera.h"
 #include "oaScene.h"
 #include "oaRenderer.h"
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
-//extern "C" {
-//#include <lua\lua.h>
-//#include <lua\lualib.h>
-//#include <lua/lauxlib.h>
-//}
-#define SOL_ALL_SAFETIES_ON 1
-#include <sol\sol.hpp>
+extern "C" {
+#include <lua\lua.h>
+#include <lua\lualib.h>
+#include <lua/lauxlib.h>
+}
+//#define SOL_ALL_SAFETIES_ON 1
+//#include <sol\sol.hpp>
 
 #include <exception>
 #include <Windows.h>
+
+#define LUA_ASSERT_ARGS_NUM(L,x) OA_ASSERT(lua_gettop(L) != x);
+
+#define checkint luaL_checkinteger
+#define checkstring luaL_checklstring
+#define checkfloat luaL_checknumber
+
+#define LUA_CHECK_PARAM(L,ty,x) check##ty##(L,x);
+
+//static char** functions = 
+//{
+//#include "oaLuaFunctions.h"
+//};
 
 namespace oaEngineSDK{
 
 using Function = const void* (*)();
 
-//lua_State *luaState;
-sol::state lua;
+lua_State *luaState;
+//sol::state lua;
 
 void
 initLua(){
-  lua.open_libraries(sol::lib::base, sol::lib::package);
-  //luaState = luaL_newstate();
-  //luaL_openlibs(luaState);
+  //lua.open_libraries(sol::lib::base, sol::lib::package);
+  luaState = luaL_newstate();
+  luaL_openlibs(luaState);
 }
 
 void
@@ -64,8 +76,8 @@ int createObject(lua_State* /*L*/){
 
 void
 registerBaseClass(){
-  sol::usertype<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
-  baseApp_type.set_function("setWindowName",&BaseApp::setWindowName);
+  //sol::usertype<BaseApp> baseApp_type = lua.new_usertype<BaseApp>("baseApp",sol::constructors<BaseApp()>());
+  //baseApp_type.set_function("setWindowName",&BaseApp::setWindowName);
   //baseApp_type["name"] = &BaseApp::m_windowName;
   //lua_register(luaState,"baseApp",createObject);
   //luaL_newmetatable(luaState,"baseApp");
@@ -107,13 +119,13 @@ BaseApp::run()
   initLua();
   registerBaseClass();
   
-  lua.script_file("scripts/start.lua");
-  //if(luaL_dofile(luaState, "scripts/start.lua")){
-  //  print(lua_tostring(luaState,-1));
-  //}
-  sol::function configs = lua["configs"];
-  std::function<void(BaseApp*)> stdconfigs = configs;
-  stdconfigs(this);
+  //lua.script_file("scripts/start.lua");
+  ////if(luaL_dofile(luaState, "scripts/start.lua")){
+  ////  print(lua_tostring(luaState,-1));
+  ////}
+  //sol::function configs = lua["configs"];
+  //std::function<void(BaseApp*)> stdconfigs = configs;
+  //stdconfigs(this);
   //lua_getglobal(luaState,"setApp");
   //lua_pushlightuserdata(luaState,this);
   //if(lua_pcall(luaState,1,0,0)){

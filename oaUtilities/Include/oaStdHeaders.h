@@ -16,6 +16,7 @@
 #include <map>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 namespace oaEngineSDK {
 
@@ -40,7 +41,7 @@ using std::copy;
 using std::cout;
 using std::to_string;
 using std::find;
-
+using std::filesystem::path;
 
 
 /**
@@ -146,6 +147,11 @@ copy(const SPtr<T>& pointer){
 */
 template<typename T>
 using SharedEnabled = enable_shared_from_this<T>;
+
+/**
+ * @brief class for paths
+*/
+using Path = path;
 
 /**
  * @brief prints a string to the console

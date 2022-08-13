@@ -144,7 +144,7 @@
     <ClInclude Include="Include\oaSerializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\oaPath.h">
+    <ClInclude Include="Include\oaLuaFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -255,9 +255,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\oaSerializer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\oaPath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

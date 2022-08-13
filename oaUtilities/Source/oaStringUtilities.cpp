@@ -1,5 +1,7 @@
 #include "oaStringUtilities.h"
 #include "oaVector4f.h"
+#include <string.h>
+
 namespace oaEngineSDK{
 
 using std::locale;
@@ -102,6 +104,19 @@ StringUtilities::getStringId(const String& string)
   }
 
   return id;
+}
+
+Vector<String> 
+StringUtilities::split(String string, const String& separator)
+{
+  Vector<String> strings;
+  auto chars = string.data();
+  auto token = strtok(chars, separator.c_str());
+  while (token != NULL){
+    strings.push_back(token);
+    token = strtok(NULL, separator.c_str());
+  }
+  return strings;
 }
 
 String

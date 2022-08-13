@@ -182,6 +182,7 @@
     <ClInclude Include="Include\oaGrid2D.h" />
     <ClInclude Include="Include\oaGrid3D.h" />
     <ClInclude Include="include\oaLine.h" />
+    <ClInclude Include="Include\oaLuaFunctions.h" />
     <ClInclude Include="Include\oaMath.h" />
     <ClInclude Include="Include\oaMatrix3f.h" />
     <ClInclude Include="Include\oaMatrix4f.h" />
@@ -190,7 +191,6 @@
     <ClInclude Include="Include\oaNoise2D.h" />
     <ClInclude Include="Include\oaOctavesNoise.h" />
     <ClInclude Include="Include\oaOctree.h" />
-    <ClInclude Include="Include\oaPath.h" />
     <ClInclude Include="Include\oaPerlinNoise2D.h" />
     <ClInclude Include="Include\oaPerlinNoise3D.h" />
     <ClInclude Include="include\oaPlane.h" />
@@ -236,7 +236,6 @@
     <ClCompile Include="Source\oaNoise2D.cpp" />
     <ClCompile Include="Source\oaOctavesNoise.cpp" />
     <ClCompile Include="Source\oaOctree.cpp" />
-    <ClCompile Include="Source\oaPath.cpp" />
     <ClCompile Include="Source\oaPerlinNoise2D.cpp" />
     <ClCompile Include="Source\oaPerlinNoise3D.cpp" />
     <ClCompile Include="source\oaPlane.cpp" />

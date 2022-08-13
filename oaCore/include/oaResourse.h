@@ -7,7 +7,6 @@
 #pragma once
 
 #include "oaPrerequisitesCore.h"
-#include "oaPath.h"
 #include "oaSerializer.h"
 
 namespace oaEngineSDK{

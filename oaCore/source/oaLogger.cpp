@@ -5,7 +5,6 @@
 */
 
 #include "oaLogger.h"
-#include "oaPath.h"
 #include "oaTime.h"
 
 namespace oaEngineSDK{
@@ -37,9 +36,9 @@ void Logger::flush()
 
   FStream f;
 
-  path.setCompletePath("Logs/log "+StringUtilities::intToString(Time::instance().getTime())+".txt");
+  path = "Logs/log "+StringUtilities::intToString(Time::instance().getTime())+".txt";
 
-  f.open(path.getCompletePath());
+  f.open(path.generic_wstring());
 
   for(auto& message :m_allLogs){
     String sChannel;

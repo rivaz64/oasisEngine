@@ -1,16 +1,4 @@
 #include "oaSerializer.h"
-#include "oaPath.h"
-//#include "oaModel.h"
-//#include "oaPath.h"
-//#include "oaMesh.h"
-//#include "oaStaticMesh.h"
-//#include "oaResoureManager.h"
-//#include "oaMaterial.h"
-//#include "oaImage.h"
-//#include "oaTexture.h"
-//#include "oaResoureManager.h"
-//#include "oaShaderProgram.h"
-//#include "oaActor.h"
 
 namespace oaEngineSDK{
 
@@ -22,14 +10,14 @@ Serializer::init(const Path& path,bool write)
   if(write){
     flags = fstream::out | ios::binary;
     firm = "oasisFile";
-    file.open(StringUtilities::toString(path.getCompletePath()),flags);
+    file.open(path.c_str(),flags);
     file.write(firm.c_str(),firm.size()*sizeof(char));
   }
   else{
     flags = fstream::in | ios::binary;
     firm.resize(9);
     SIZE_T nameData = reinterpret_cast<SIZE_T>(firm.data());
-    file.open(StringUtilities::toString(path.getCompletePath()),flags);
+    file.open(path.c_str(),flags);
     file.read(reinterpret_cast<char*>(nameData),sizeof(char)*9);
     if(firm != "oasisFile"){
       return false;

@@ -27,7 +27,6 @@ class Animation;
 struct AnimNode;
 class Actor;
 class Component;
-class Path;
 class GraphicsComponent;
 class SkeletalComponent;
 class AnimationComponent;

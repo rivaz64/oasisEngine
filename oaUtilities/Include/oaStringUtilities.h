@@ -53,6 +53,8 @@ class OA_UTILITY_EXPORT StringUtilities
   static uint64
   getStringId(const String& string);
 
+  static Vector<String>
+  split(String string, const String& separator);
 
 };
 

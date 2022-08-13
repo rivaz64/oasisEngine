@@ -12,7 +12,6 @@
 #include <freeimage\FreeImage.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image\stb_image.h>
-#include "oaPath.h"
 #include "oaMesh.h"
 #include "oaModel.h"
 #include "oaResoureManager.h"
@@ -226,14 +225,14 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
 bool
 loadImage(const Path& path){
 
-  if(path.getExtencion()==L".dds"){
+  if(path.extension()==L".dds"){
     if(GraphicAPI::instance().loadDDS(path)){
       return true;
     }
   }
 
 
-  String s = StringUtilities::toString(path.getCompletePath());
+  String s = StringUtilities::toString(path.c_str());
   //FIBITMAP* dib(0);
   //FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
   //
@@ -281,7 +280,7 @@ loadImage(const Path& path){
                            &channels,
                            desiredChanels);
   if (pixels == nullptr){
-    OA_WARNING_LOG(StringUtilities::toString(path.getCompletePath()) + " is an invalid image");
+    OA_WARNING_LOG(StringUtilities::toString(path.generic_wstring()) + " is an invalid image");
     return false;
   }
   auto image = makeSPtr<Image>(Vector2I(width,height),32,FORMAT::kB8G8R8A8UnormSRGB);
@@ -293,7 +292,7 @@ loadImage(const Path& path){
 
   //auto pitch = FreeImage_GetPitch(dib);
 
-  image->setName(StringUtilities::toString(path.getName()));
+  image->setName(StringUtilities::toString(path.filename()));
 
   SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
@@ -325,8 +324,8 @@ tryLoadTextureChannel(aiMaterial* material,
     WString defuseName = StringUtilities::toWString(notMyString.C_Str());
     
     Path newPath;
-    newPath.setCompletePath(path.getDrive()+path.getDirection()+defuseName);
-    auto stringName = StringUtilities::toString(newPath.getName());
+    newPath = path.root_path().generic_wstring()+path.relative_path().generic_wstring();
+    auto stringName = StringUtilities::toString(newPath.filename());
     if(loadImage(newPath) || 
        manager.m_textures.find(stringName) != manager.m_textures.end()){
 
@@ -614,7 +613,7 @@ Loader::loadScene(const Path& file)
                aiProcess_CalcTangentSpace;
   Importer importer;
 
-  String completePath = StringUtilities::toString(file.getCompletePath());
+  String completePath = StringUtilities::toString(file.c_str());
 
   const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
   
@@ -640,8 +639,8 @@ Loader::loadScene(const Path& file)
     m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }   
   
-  ResoureManager::instance().m_models.insert({StringUtilities::toString(file.getCompletePath()),model});
-  model->setName(StringUtilities::toString(file.getName()));
+  ResoureManager::instance().m_models.insert({StringUtilities::toString(file.c_str()),model});
+  model->setName(StringUtilities::toString(file.filename()));
 
   return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }
@@ -649,7 +648,7 @@ Loader::loadScene(const Path& file)
 bool
 Loader::loadResource(const Path & path)
 {
-  auto extencion = StringUtilities::toString(path.getExtencion());
+  auto extencion = StringUtilities::toString(path.extension());
   if(extencion == ".png" || extencion == ".jpg"){
     return loadTexture(path);
   }
@@ -673,7 +672,7 @@ Loader::loadSound(const Path & path)
   if(!sound->loadFromFile(path)){
     return false;
   }
-  auto name = StringUtilities::toString(path.getName());
+  auto name = StringUtilities::toString(path.filename());
   sound->setName(name);
   ResoureManager::instance().m_sounds.insert({name,sound});
   return true;

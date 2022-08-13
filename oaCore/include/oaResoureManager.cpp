@@ -8,7 +8,6 @@
 #include "oaShader.h"
 #include "oaMaterial.h"
 #include "oaMesh.h"
-#include "oaPath.h"
 #include "oaShaderProgram.h"
 #include "oaOctree.h"
 #include "oaVertexBuffer.h"
@@ -448,9 +447,9 @@ ResoureManager::loadDefaultShaders()
 
 void ResoureManager::loadDefaulTextures()
 {
-  m_textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
-  Path path;
-  path.setCompletePath("textures/defaultTexture.png");
+  //m_textures.insert({"default",GraphicAPI::instancePtr()->createTexture()});
+  //Path path;
+  //path.setCompletePath("textures/defaultTexture.png");
   //m_textures["default"]->loadFromFile(path);
 }
 
