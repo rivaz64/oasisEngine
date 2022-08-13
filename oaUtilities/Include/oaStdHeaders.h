@@ -41,7 +41,6 @@ using std::copy;
 using std::cout;
 using std::to_string;
 using std::find;
-using std::filesystem::path;
 
 
 /**
@@ -103,7 +102,8 @@ using WPtr = weak_ptr<T>;
  * @param b
 */
 FORCEINLINE void 
-swap(float& a, float& b) {
+swap(float& a, float& b)
+{
   std::swap(a, b);
 }
 
@@ -132,13 +132,15 @@ using Pair = pair<T1,T2>;
 */
 template<typename T,typename U>
 FORCEINLINE SPtr<T> 
-cast(const SPtr<U>& pointer){
+cast(const SPtr<U>& pointer)
+{
   return reinterpret_pointer_cast<T>(pointer);
 }
 
 template<typename T>
 FORCEINLINE SPtr<T> 
-copy(const SPtr<T>& pointer){
+copy(const SPtr<T>& pointer)
+{
   return make_shared<T>(*pointer.get());
 }
 
@@ -151,7 +153,15 @@ using SharedEnabled = enable_shared_from_this<T>;
 /**
  * @brief class for paths
 */
-using Path = path;
+using Path = std::filesystem::path;
+
+using DirectoryIterator = std::filesystem::directory_iterator;
+
+FORCEINLINE Path
+currentPath()
+{
+  return std::filesystem::current_path();
+}
 
 /**
  * @brief prints a string to the console
