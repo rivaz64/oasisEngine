@@ -4,6 +4,34 @@
 using oaEngineSDK::StringUtilities;
 using oaEngineSDK::currentPath;
 using oaEngineSDK::DirectoryIterator;
+using oaEngineSDK::Path;
+using oaEngineSDK::fstream;
+using oaEngineSDK::ios;
+using oaEngineSDK::String;
+using oaEngineSDK::Vector;
+
+void 
+analizeFile(const Path& path)
+{
+  fstream file(path,ios::in);
+
+  String str((std::istreambuf_iterator<char>(file)),
+                 std::istreambuf_iterator<char>());
+
+  auto tokens = StringUtilities::split(str," ");
+  
+
+  for(auto& token : tokens){
+    if(token == "LUAEXPORT"){
+      oaEngineSDK::print(str);
+      break;
+    }
+    
+  }
+
+  file.close();
+}
+
 int main(){
 
   auto splited = StringUtilities::split("hello world"," ");
@@ -26,9 +54,12 @@ int main(){
           for(auto& file : files){
             auto fileName = file.path().filename().string();
             oaEngineSDK::print(fileName);
+            analizeFile(file.path());
+            oaEngineSDK::print("");
           }
         }
       }
+      oaEngineSDK::print("");
       oaEngineSDK::print("");
     }
     

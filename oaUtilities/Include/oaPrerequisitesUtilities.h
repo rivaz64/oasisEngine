@@ -6,3 +6,5 @@
 #include "oaForDecUtilities.h"
 #include "oaStringUtilities.h"
 #include "oaMemory.h"
+
+#define LUAEXPORT

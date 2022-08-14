@@ -14,7 +14,7 @@ namespace oaEngineSDK {
 /**
  * @brief bidimencional vector of floats
 */
-class OA_UTILITY_EXPORT Vector2f
+class OA_UTILITY_EXPORT LUAEXPORT Vector2f
 {
  public:
   /**
