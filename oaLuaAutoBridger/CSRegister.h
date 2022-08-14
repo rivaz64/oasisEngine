@@ -8,6 +8,9 @@ class CSRegister :
 { 
  public:
 
+  CSRegister() :
+    CompilerState("register") {}
+
   void
   evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
 };

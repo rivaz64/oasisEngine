@@ -4,6 +4,7 @@
 void 
 CSRegister::evaluateToken(Compiler* compiler, String& token, fstream& luaFile)
 {
-  luaFile<<"LUA_REGISTER(token)"<<std::endl;
-  compiler->setCurrentState(COMPILER_STATES::kIsForExport);
+  luaFile<<"LUA_REGISTER_CLASS("<<token<<")"<<std::endl;
+  compiler->className = token;
+  compiler->setCurrentState(COMPILER_STATES::kNotPublic);
 }

@@ -36,6 +36,18 @@
     <ClCompile Include="CSNone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CSNotPublic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSPublic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSConstructor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSCodeBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h">
@@ -54,6 +66,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CSNone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSNotPublic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSPublic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSConstructor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSCodeBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

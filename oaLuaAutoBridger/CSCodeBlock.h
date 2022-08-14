@@ -1,17 +1,20 @@
 #pragma once
 #include "CompilerState.h"
-class CSIsForExport :
+
+using oaEngineSDK::uint32;
+
+class CSCodeBlock :
   public CompilerState
-{ 
+{
  public:
 
-  CSIsForExport() :
-    CompilerState("is for export") {}
+  CSCodeBlock() :
+    CompilerState("code block") {}
 
   void
   evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
 
-  void
-  end(fstream& luaFile) override {}
+ private:
+  uint32 brackets = 1;
 };
 

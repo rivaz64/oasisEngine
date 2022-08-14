@@ -119,6 +119,32 @@ StringUtilities::split(String string, const String& separator)
   return strings;
 }
 
+Vector<String> 
+StringUtilities::extract(String string, char separator)
+{
+  Vector<String> strings;
+  String newString;
+  for(auto c : string){
+    if(c == separator){
+      if(newString.size()!=0){
+        strings.push_back(newString);
+      }
+      String sep = "";
+      sep.push_back(separator);
+      strings.push_back(sep);
+      newString = "";
+    }
+    else{
+      newString += c;
+    }
+    
+  }
+  if(newString.size()!=0){
+    strings.push_back(newString);
+  }
+  return strings;
+}
+
 String
 StringUtilities::vector4ToString(const Vector4f& param){
   return floatToString(param.x)+", "+

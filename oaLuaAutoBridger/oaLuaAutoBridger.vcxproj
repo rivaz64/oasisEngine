@@ -148,18 +148,26 @@
   <ItemGroup>
     <ClCompile Include="Compiler.cpp" />
     <ClCompile Include="CompilerState.cpp" />
+    <ClCompile Include="CSCodeBlock.cpp" />
+    <ClCompile Include="CSConstructor.cpp" />
     <ClCompile Include="CSIsClass.cpp" />
     <ClCompile Include="CSIsForExport.cpp" />
     <ClCompile Include="CSNone.cpp" />
+    <ClCompile Include="CSNotPublic.cpp" />
+    <ClCompile Include="CSPublic.cpp" />
     <ClCompile Include="CSRegister.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="CompilerState.h" />
+    <ClInclude Include="CSCodeBlock.h" />
+    <ClInclude Include="CSConstructor.h" />
     <ClInclude Include="CSIsClass.h" />
     <ClInclude Include="CSIsForExport.h" />
     <ClInclude Include="CSNone.h" />
+    <ClInclude Include="CSNotPublic.h" />
+    <ClInclude Include="CSPublic.h" />
     <ClInclude Include="CSRegister.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

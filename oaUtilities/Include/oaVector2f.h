@@ -49,7 +49,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return 
   */
   FORCEINLINE bool const
-  operator==(const Vector2f& v) const {
+  operator==(const Vector2f& v) const
+  {
     return x == v.x && y == v.y;
   }
 
@@ -59,7 +60,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator+(const Vector2f& v) const {
+  operator+(const Vector2f& v) const
+  {
     return { x + v.x , y + v.y };
   }
 
@@ -69,7 +71,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator+(float v) const {
+  operator+(float v) const
+  {
     return { x + v , y + v };
   }
 
@@ -78,7 +81,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator+=(const Vector2f& v) {
+  operator+=(const Vector2f& v)
+  {
     x += v.x;
     y += v.y;
     return *this;
@@ -90,7 +94,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator-(const Vector2f& v) const {
+  operator-(const Vector2f& v) const 
+  {
     return { x - v.x , y - v.y };
   }
 
@@ -100,7 +105,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator-(float v) const {
+  operator-(float v) const 
+  {
     return { x - v , y - v };
   }
 
@@ -109,7 +115,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator-=(const Vector2f& v) {
+  operator-=(const Vector2f& v)
+  {
     x -= v.x;
     y -= v.y;
     return *this;
@@ -121,7 +128,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator*(float v) const {
+  operator*(float v) const
+  {
     return { x * v , y * v };
   }
 
@@ -131,7 +139,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
   */
 
   FORCEINLINE Vector2f&
-  operator*=(float v) {
+  operator*=(float v)
+  {
     x *= v;
     y *= v;
     return *this;
@@ -143,7 +152,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  operator/(float v) const {
+  operator/(float v) const
+  {
     v = 1.f / v;
     return { x * v , y * v };
   }
@@ -153,7 +163,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @param v
   */
   FORCEINLINE Vector2f&
-  operator/=(float v) {
+  operator/=(float v)
+  {
     v = 1.f / v;
     x *= v;
     y *= v;
@@ -166,7 +177,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return 
   */
   FORCEINLINE Vector2f
-  operator*(const Vector2f& v) {
+  operator*(const Vector2f& v)
+  {
     return { x * v.x,y * v.y };
   }
 
@@ -175,7 +187,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE float const
-  magnitud() const {
+  magnitud() const 
+  {
     return Math::sqrt(x * x + y * y);
   }
 
@@ -184,7 +197,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  normalized() const {
+  normalized() const 
+  {
     return *this * Math::invSqrt(x * x + y * y);
   }
 
@@ -193,7 +207,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
   * @return
   */
   FORCEINLINE void
-  normalize() {
+  normalize() 
+  {
     *this *= Math::invSqrt(x * x + y * y);
   }
 
@@ -203,7 +218,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE Vector2f const
-  project(const Vector2f& v) const {
+  project(const Vector2f& v) const 
+  {
     return v * (dot(*this,v) / dot(v,v));
   }
 
@@ -212,7 +228,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE float const
-  getDirection() const {
+  getDirection() const 
+  {
     return Math::atan2(x, y);
   }
 
@@ -221,7 +238,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE void 
-  setDirection(float r) {
+  setDirection(float r) 
+  {
     float l = magnitud();
     x = l * Math::cos(r);
     y = l * Math::sin(r);
@@ -232,7 +250,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return 
   */
   FORCEINLINE Vector2I 
-  floor() const{
+  floor() const
+  {
     return Vector2I(
       static_cast<int32>(Math::floor(x)),
       static_cast<int32>(Math::floor(y))
@@ -244,7 +263,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return 
   */
   FORCEINLINE Vector2f
-  fraction() const{
+  fraction() const
+  {
     return Vector2f(Math::modf(x,1.0f),Math::modf(y,1.0f));
   }
 
@@ -255,7 +275,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return
   */
   FORCEINLINE static float
-  dot(const Vector2f& v1, const Vector2f& v2) {
+  dot(const Vector2f& v1, const Vector2f& v2) 
+  {
     return v1.x * v2.x + v1.y * v2.y;
   }
 
@@ -267,7 +288,8 @@ class OA_UTILITY_EXPORT LUAEXPORT Vector2f
    * @return 
   */
   FORCEINLINE static Vector2f
-  interpolate(const Vector2f& a, const Vector2f& b, float t){
+  interpolate(const Vector2f& a, const Vector2f& b, float t)
+  {
     return {Math::interpolate(a.x,b.x,t),Math::interpolate(a.y,b.y,t)};
   }
 

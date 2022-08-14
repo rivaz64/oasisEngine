@@ -18,6 +18,10 @@ enum E{
 kIsClass = 0,
 kIsForExport,
 kRegister,
+kNotPublic,
+kPublic,
+kConstructor,
+kCodeBlock,
 kNone
 };
 }
@@ -32,10 +36,19 @@ class Compiler
   evaluateToken(String& token, fstream& luaFile);
 
   void
+  end(fstream& luaFile);
+
+  void
   setCurrentState(COMPILER_STATES::E newState);
+
+  void
+  continueSearch();
 
   String className;
 
+  bool isPublic = false;
+
+  bool debug = false;
  private:
 
   Vector<SPtr<CompilerState>> m_states;

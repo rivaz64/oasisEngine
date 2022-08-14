@@ -12,43 +12,78 @@ using oaEngineSDK::String;
 using oaEngineSDK::Vector;
 using oaEngineSDK::int32;
 
-bool 
-isClass(String token, fstream& luaFile)
-{
-  bool ans = token == "class";
+String 
+eliminateComents(String code){
+  String ans;
+  bool inComent = false;
+  auto codeSize = code.size();
+  for(int32 i = 0; i<codeSize-1; ++i){
+    if(!inComent){
+      if(code[i] == '/' && code[i+1] == '*'){
+        inComent = true;
+        ++i;
+      }
+      else{
+        ans.push_back(code[i]);
+      }
+    }
+    else{
+      if(code[i] == '*' && code[i+1] == '/'){
+        inComent = false;
+        ++i;
+      }
+    }
+  }
   return ans;
 }
 
-bool 
-isLua(String token, fstream& luaFile)
-{
-  return token == "class";
-}
-
 void 
-analizeFile(const Path& path, fstream& luaFile)
+analizeFile(const Path& path, fstream& luaFile,bool debug)
 {
   fstream file(path,ios::in);
 
   String str((std::istreambuf_iterator<char>(file)),
                  std::istreambuf_iterator<char>());
 
+  str = eliminateComents(str);
+
   auto tokens = StringUtilities::split(str," \n");
 
-  String keyWord = "class";
+  Vector<String> temTokens;
+
+  for(auto& token : tokens){
+    auto newTokens = StringUtilities::extract(token,'{');
+    temTokens.insert(temTokens.end(), newTokens.begin(), newTokens.end());
+  }
+  tokens = temTokens;
+  temTokens.clear();
+  if(debug){
+    for(auto& token : tokens){
+      oaEngineSDK::print(token);
+    }
+  }
+  for(auto& token : tokens){
+    auto newTokens = StringUtilities::extract(token,'}');
+    temTokens.insert(temTokens.end(), newTokens.begin(), newTokens.end());
+  }
+  tokens = temTokens;
+
+  
 
   Compiler compiler;
+
+  compiler.debug = debug;
 
   for(auto& token : tokens){
     compiler.evaluateToken(token,luaFile);
   }
-
+  compiler.end(luaFile);
   file.close();
 }
 
 int main(){
 
-  auto splited = StringUtilities::split("hello world"," ");
+  auto separated = StringUtilities::extract("};",'}');
 
   auto path = currentPath().parent_path();
   auto luaPath = currentPath().parent_path();
@@ -64,7 +99,7 @@ int main(){
     auto projectPath = project.path();
     auto projectName = projectPath.filename().string();
     if(projectName[0] == 'o' && projectName[1] == 'a' && projectPath.extension().string() != ".sln"){
-      oaEngineSDK::print(projectName);
+      //oaEngineSDK::print(projectName);
       DirectoryIterator folders(projectPath);
       for(auto& folder : folders){
         auto folderPath = folder.path();
@@ -73,17 +108,19 @@ int main(){
           DirectoryIterator files(folderPath);
           for(auto& file : files){
             auto fileName = file.path().filename().string();
-            oaEngineSDK::print(fileName);
+            //oaEngineSDK::print(fileName);
             if("oaVector2f.h" == fileName){
               int deug = 0;
+              analizeFile(file.path(),luaFile,true);
             }
-            analizeFile(file.path(),luaFile);
-            oaEngineSDK::print("");
+            else
+            analizeFile(file.path(),luaFile,false);
+            //oaEngineSDK::print("");
           }
         }
       }
-      oaEngineSDK::print("");
-      oaEngineSDK::print("");
+      //oaEngineSDK::print("");
+      //oaEngineSDK::print("");
     }
     
   }

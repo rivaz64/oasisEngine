@@ -4,6 +4,10 @@ class CSNone :
     public CompilerState
 {
  public:
+
+  CSNone() :
+    CompilerState("none") {}
+
   void
   evaluateToken(Compiler* compiler, String& token, fstream& luaFile){}
 };

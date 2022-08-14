@@ -6,8 +6,14 @@ class CSIsClass :
 {
  public:
 
+  CSIsClass() :
+    CompilerState("is class") {}
+
   void
   evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+
+  void
+  end(fstream& luaFile) override {}
 
 };
 

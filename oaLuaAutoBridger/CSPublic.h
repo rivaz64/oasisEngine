@@ -1,17 +1,14 @@
 #pragma once
 #include "CompilerState.h"
-class CSIsForExport :
+class CSPublic :
   public CompilerState
-{ 
+{
  public:
 
-  CSIsForExport() :
-    CompilerState("is for export") {}
+  CSPublic() :
+    CompilerState("public") {}
 
   void
   evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
-
-  void
-  end(fstream& luaFile) override {}
 };
 

@@ -53,8 +53,23 @@ class OA_UTILITY_EXPORT StringUtilities
   static uint64
   getStringId(const String& string);
 
+  /**
+   * @brief separates a string using the separator as delimiter of each string
+   * @param string 
+   * @param separator 
+   * @return 
+  */
   static Vector<String>
   split(String string, const String& separator);
+
+  /**
+   * @brief like split but saves the delimitator
+   * @param string 
+   * @param separator 
+   * @return 
+  */
+  static Vector<String>
+  extract(String string, char separator);
 
 };
 
