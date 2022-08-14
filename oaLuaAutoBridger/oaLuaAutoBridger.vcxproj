@@ -146,7 +146,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compiler.cpp" />
+    <ClCompile Include="CompilerState.cpp" />
+    <ClCompile Include="CSIsClass.cpp" />
+    <ClCompile Include="CSIsForExport.cpp" />
+    <ClCompile Include="CSNone.cpp" />
+    <ClCompile Include="CSRegister.cpp" />
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Compiler.h" />
+    <ClInclude Include="CompilerState.h" />
+    <ClInclude Include="CSIsClass.h" />
+    <ClInclude Include="CSIsForExport.h" />
+    <ClInclude Include="CSNone.h" />
+    <ClInclude Include="CSRegister.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

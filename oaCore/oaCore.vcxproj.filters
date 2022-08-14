@@ -150,6 +150,12 @@
     <ClInclude Include="include\oaSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="oaLuaRegister.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oaLuaMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">

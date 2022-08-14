@@ -1,5 +1,6 @@
 #include <oaPrerequisitesUtilities.h>
 #include <oaStringUtilities.h>
+#include "Compiler.h"
 
 using oaEngineSDK::StringUtilities;
 using oaEngineSDK::currentPath;
@@ -9,24 +10,37 @@ using oaEngineSDK::fstream;
 using oaEngineSDK::ios;
 using oaEngineSDK::String;
 using oaEngineSDK::Vector;
+using oaEngineSDK::int32;
+
+bool 
+isClass(String token, fstream& luaFile)
+{
+  bool ans = token == "class";
+  return ans;
+}
+
+bool 
+isLua(String token, fstream& luaFile)
+{
+  return token == "class";
+}
 
 void 
-analizeFile(const Path& path)
+analizeFile(const Path& path, fstream& luaFile)
 {
   fstream file(path,ios::in);
 
   String str((std::istreambuf_iterator<char>(file)),
                  std::istreambuf_iterator<char>());
 
-  auto tokens = StringUtilities::split(str," ");
-  
+  auto tokens = StringUtilities::split(str," \n");
+
+  String keyWord = "class";
+
+  Compiler compiler;
 
   for(auto& token : tokens){
-    if(token == "LUAEXPORT"){
-      oaEngineSDK::print(str);
-      break;
-    }
-    
+    compiler.evaluateToken(token,luaFile);
   }
 
   file.close();
@@ -37,7 +51,13 @@ int main(){
   auto splited = StringUtilities::split("hello world"," ");
 
   auto path = currentPath().parent_path();
+  auto luaPath = currentPath().parent_path();
 
+  luaPath.append("oaCore");
+  luaPath.append("oaLuaRegister.h");
+
+  fstream luaFile(luaPath,ios::out);
+  luaFile<<"#include \"oaLuaMacros.h\" "<<std::endl;
   DirectoryIterator projects(path);
 
   for(auto&  project : projects){
@@ -54,7 +74,10 @@ int main(){
           for(auto& file : files){
             auto fileName = file.path().filename().string();
             oaEngineSDK::print(fileName);
-            analizeFile(file.path());
+            if("oaVector2f.h" == fileName){
+              int deug = 0;
+            }
+            analizeFile(file.path(),luaFile);
             oaEngineSDK::print("");
           }
         }
@@ -64,6 +87,8 @@ int main(){
     }
     
   }
+
+  luaFile.close();
 
   return 0;
 
