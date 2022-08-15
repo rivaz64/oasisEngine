@@ -10,6 +10,6 @@ class CSNotPublic :
     CompilerState("not public") {}
 
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+  evaluateToken(Compiler* compiler, String& token) override;
 };
 

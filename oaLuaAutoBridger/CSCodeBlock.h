@@ -12,7 +12,7 @@ class CSCodeBlock :
     CompilerState("code block") {}
 
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+  evaluateToken(Compiler* compiler, String& token) override;
 
  private:
   uint32 brackets = 1;

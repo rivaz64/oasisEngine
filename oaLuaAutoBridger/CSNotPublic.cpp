@@ -2,7 +2,7 @@
 #include "Compiler.h"
 
 void
-CSNotPublic::evaluateToken(Compiler* compiler, String& token, fstream& luaFile)
+CSNotPublic::evaluateToken(Compiler* compiler, String& token)
 {
   if(token == "public:"){
     compiler->isPublic = true;

@@ -11,7 +11,8 @@
 
 using oaEngineSDK::makeSPtr;
 
-Compiler::Compiler()
+Compiler::Compiler(fstream& mt,fstream& t,fstream& f) :
+  metatables(mt), tables(t), functions(f)
 {
   m_states.push_back(makeSPtr<CSIsClass>());
   m_states.push_back(makeSPtr<CSIsForExport>());
@@ -28,19 +29,19 @@ Compiler::Compiler()
 
 
 void
-Compiler::evaluateToken(String& token, fstream& luaFile)
+Compiler::evaluateToken(String& token)
 {
   if(debug){
     oaEngineSDK::print(m_currentState.lock()->m_name);
     oaEngineSDK::print(token);
   }
-  m_currentState.lock()->evaluateToken(this,token,luaFile);
+  m_currentState.lock()->evaluateToken(this,token);
 }
 
 void
-Compiler::end(fstream& luaFile)
+Compiler::end()
 {
-  m_currentState.lock()->end(luaFile);
+  m_currentState.lock()->end(this);
 }
 
 void 

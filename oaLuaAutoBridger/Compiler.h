@@ -30,13 +30,13 @@ class Compiler
 {
  public:
   
-  Compiler();
+  Compiler(fstream& mt,fstream& t,fstream& f);
 
   void
-  evaluateToken(String& token, fstream& luaFile);
+  evaluateToken(String& token);
 
   void
-  end(fstream& luaFile);
+  end();
 
   void
   setCurrentState(COMPILER_STATES::E newState);
@@ -49,6 +49,10 @@ class Compiler
   bool isPublic = false;
 
   bool debug = false;
+
+  fstream& metatables;
+  fstream& tables;
+  fstream& functions;
  private:
 
   Vector<SPtr<CompilerState>> m_states;

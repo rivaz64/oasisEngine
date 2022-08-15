@@ -9,9 +9,9 @@ class CSIsForExport :
     CompilerState("is for export") {}
 
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+  evaluateToken(Compiler* compiler, String& token) override;
 
   void
-  end(fstream& luaFile) override {}
+  end(Compiler* compiler) override {}
 };
 

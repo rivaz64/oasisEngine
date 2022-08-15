@@ -16,10 +16,10 @@ class CompilerState
     m_name(move(name)) {}
 
   virtual void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) = 0;
+  evaluateToken(Compiler* compiler, String& token) = 0;
 
   virtual void
-  end(fstream& luaFile);
+  end(Compiler* compiler);
 
   String m_name;
 };

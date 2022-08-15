@@ -214,8 +214,10 @@
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
+    <ClInclude Include="oaLuaFunctions.h" />
     <ClInclude Include="oaLuaMacros.h" />
-    <ClInclude Include="oaLuaRegister.h" />
+    <ClInclude Include="oaLuaMetatables.h" />
+    <ClInclude Include="oaLuaTable.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
 using oaEngineSDK::StringUtilities;
 
 void 
-CSPublic::evaluateToken(Compiler* compiler, String& token, fstream& luaFile)
+CSPublic::evaluateToken(Compiler* compiler, String& token)
 {
   if(token == "private:" || token == "protected:"){
     compiler->isPublic = false;
@@ -16,12 +16,28 @@ CSPublic::evaluateToken(Compiler* compiler, String& token, fstream& luaFile)
     if(memberName == compiler->className){
       compiler->setCurrentState(COMPILER_STATES::kConstructor);
     }
+    else if(memberName[0] == '~'){
+    
+    }
+    else if(memberName.find("operator") != std::string::npos){
+    
+    }
     else{
-      luaFile<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<memberName<<")"<<std::endl;
+      if(isStatic){
+        compiler->tables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<memberName<<")"<<std::endl;
+        isStatic = false;
+      }
+      else{
+        compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<memberName<<")"<<std::endl;
+      }
+      compiler->functions<<"int LUA_FUNCTION("<<compiler->className<<","<<memberName<<") {}"<<std::endl;
     }
   }
   else if(token == "{"){
     compiler->setCurrentState(COMPILER_STATES::kCodeBlock);
+  }
+  else if(token == "static"){
+    isStatic = true;
   }
   
 }

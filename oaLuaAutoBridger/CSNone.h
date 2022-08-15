@@ -9,6 +9,6 @@ class CSNone :
     CompilerState("none") {}
 
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile){}
+  evaluateToken(Compiler* compiler, String& token){}
 };
 

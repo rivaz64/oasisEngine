@@ -8,6 +8,6 @@ class CSConstructor :
    CSConstructor() :
      CompilerState("constructor") {}
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+  evaluateToken(Compiler* compiler, String& token) override;
 };
 

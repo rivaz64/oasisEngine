@@ -27,4 +27,5 @@ class Transform;
 struct Vertex;
 class Triangle;
 class Serializer;
+class Transform;
 }

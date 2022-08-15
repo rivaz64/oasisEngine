@@ -38,7 +38,7 @@ eliminateComents(String code){
 }
 
 void 
-analizeFile(const Path& path, fstream& luaFile,bool debug)
+analizeFile(const Path& path, fstream& metatables, fstream& tables, fstream& functions,bool debug)
 {
   fstream file(path,ios::in);
 
@@ -68,16 +68,14 @@ analizeFile(const Path& path, fstream& luaFile,bool debug)
   }
   tokens = temTokens;
 
-  
-
-  Compiler compiler;
+  Compiler compiler(metatables,tables,functions);
 
   compiler.debug = debug;
 
   for(auto& token : tokens){
-    compiler.evaluateToken(token,luaFile);
+    compiler.evaluateToken(token);
   }
-  compiler.end(luaFile);
+  compiler.end();
   file.close();
 }
 
@@ -86,13 +84,27 @@ int main(){
   auto separated = StringUtilities::extract("};",'}');
 
   auto path = currentPath().parent_path();
-  auto luaPath = currentPath().parent_path();
+  auto luaMetatablePath = currentPath().parent_path();
+  auto luaTablePath = currentPath().parent_path();
+  auto luaFunctionsPath = currentPath().parent_path();
 
-  luaPath.append("oaCore");
-  luaPath.append("oaLuaRegister.h");
+  luaMetatablePath.append("oaCore");
+  luaTablePath.append("oaCore");
+  luaFunctionsPath.append("oaCore");
+  luaMetatablePath.append("oaLuaMetatables.h");
+  luaTablePath.append("oaLuaTable.h");
+  luaFunctionsPath.append("oaLuaFunctions.h");
 
-  fstream luaFile(luaPath,ios::out);
-  luaFile<<"#include \"oaLuaMacros.h\" "<<std::endl;
+  fstream luaMetatableFile(luaMetatablePath,ios::out);
+  fstream luaTableFile(luaTablePath,ios::out);
+  fstream luaFunctionsFile(luaFunctionsPath,ios::out);
+  luaMetatableFile<<"#include \"oaLuaFunctions.h\" "<<std::endl;
+  luaMetatableFile<<"namespace oaEngineSDK { "<<std::endl;
+  luaTableFile<<"#include \"oaLuaFunctions.h\" "<<std::endl;
+  luaTableFile<<"namespace oaEngineSDK { "<<std::endl;
+  luaFunctionsFile<<"#include \"oaLuaMacros.h\" "<<std::endl;
+  luaFunctionsFile<<"extern \"C\" {"<<std::endl<<"#include <lua/lua.h>"<<std::endl<<"#include <lua/lualib.h>"<<std::endl<<"#include <lua/lauxlib.h>"<<std::endl<<"}"<<std::endl;
+  luaFunctionsFile<<"namespace oaEngineSDK { "<<std::endl;
   DirectoryIterator projects(path);
 
   for(auto&  project : projects){
@@ -111,10 +123,10 @@ int main(){
             //oaEngineSDK::print(fileName);
             if("oaVector2f.h" == fileName){
               int deug = 0;
-              analizeFile(file.path(),luaFile,true);
+              analizeFile(file.path(),luaMetatableFile,luaTableFile,luaFunctionsFile,true);
             }
             else
-            analizeFile(file.path(),luaFile,false);
+            analizeFile(file.path(),luaMetatableFile,luaTableFile,luaFunctionsFile,false);
             //oaEngineSDK::print("");
           }
         }
@@ -125,8 +137,13 @@ int main(){
     
   }
 
-  luaFile.close();
+  luaMetatableFile<<"} "<<std::endl;
+  luaTableFile<<"} "<<std::endl;
+  luaFunctionsFile<<"} "<<std::endl;
 
+  luaMetatableFile.close();
+  luaTableFile.close();
+  luaFunctionsFile.close();
   return 0;
 
 }

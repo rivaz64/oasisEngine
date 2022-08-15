@@ -1,7 +1,9 @@
 #include "CompilerState.h"
+#include "Compiler.h"
 
 void
-CompilerState::end(fstream& luaFile)
+CompilerState::end(Compiler* compiler)
 {
-  luaFile<<"LUA_CLOSE_REGISTER()"<<std::endl;
+  compiler->metatables<<"LUA_CLOSE_REGISTER()"<<std::endl;
+  compiler->tables<<"LUA_CLOSE_REGISTER()"<<std::endl;
 }

@@ -9,6 +9,8 @@ class CSPublic :
     CompilerState("public") {}
 
   void
-  evaluateToken(Compiler* compiler, String& token, fstream& luaFile) override;
+  evaluateToken(Compiler* compiler, String& token) override;
+
+  bool isStatic = false;
 };
 

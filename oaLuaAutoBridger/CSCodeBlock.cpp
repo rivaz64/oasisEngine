@@ -2,7 +2,7 @@
 #include "Compiler.h"
 
 void
-CSCodeBlock::evaluateToken(Compiler* compiler, String& token, fstream& luaFile)
+CSCodeBlock::evaluateToken(Compiler* compiler, String& token)
 {
   if(token == "}"){
     if(brackets == 1){
