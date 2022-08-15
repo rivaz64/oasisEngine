@@ -120,17 +120,18 @@ StringUtilities::split(String string, const String& separator)
 }
 
 Vector<String> 
-StringUtilities::extract(String string, char separator)
+StringUtilities::extract(String string, const String& separator)
 {
   Vector<String> strings;
   String newString;
   for(auto c : string){
-    if(c == separator){
+    auto pos = separator.find(c);
+    if(pos != std::string::npos){
       if(newString.size()!=0){
         strings.push_back(newString);
       }
       String sep = "";
-      sep.push_back(separator);
+      sep.push_back(separator[pos]);
       strings.push_back(sep);
       newString = "";
     }

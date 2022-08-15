@@ -7,12 +7,13 @@
 #include "CSPublic.h"
 #include "CSConstructor.h"
 #include "CSCodeBlock.h"
+#include "CSParams.h"
 #include "CSNone.h"
 
 using oaEngineSDK::makeSPtr;
 
-Compiler::Compiler(fstream& mt,fstream& t,fstream& f) :
-  metatables(mt), tables(t), functions(f)
+Compiler::Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i) :
+  metatables(mt), tables(t), functions(f), fDefinitions(fd), includes(i)
 {
   m_states.push_back(makeSPtr<CSIsClass>());
   m_states.push_back(makeSPtr<CSIsForExport>());
@@ -21,6 +22,7 @@ Compiler::Compiler(fstream& mt,fstream& t,fstream& f) :
   m_states.push_back(makeSPtr<CSPublic>());
   m_states.push_back(makeSPtr<CSConstructor>());
   m_states.push_back(makeSPtr<CSCodeBlock>());
+  m_states.push_back(makeSPtr<CSParams>());
   m_states.push_back(makeSPtr<CSNone>());
 
   m_currentState = m_states[0];

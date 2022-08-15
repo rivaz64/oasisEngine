@@ -162,6 +162,12 @@
     <ClInclude Include="oaLuaFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="oaLuaIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oaLua.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -282,6 +288,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\oaImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaLuaFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaLua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

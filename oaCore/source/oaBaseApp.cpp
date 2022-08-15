@@ -32,13 +32,7 @@ extern "C" {
 #include <exception>
 #include <Windows.h>
 
-#define LUA_ASSERT_ARGS_NUM(L,x) OA_ASSERT(lua_gettop(L) != x);
 
-#define checkint luaL_checkinteger
-#define checkstring luaL_checklstring
-#define checkfloat luaL_checknumber
-
-#define LUA_CHECK_PARAM(L,ty,x) check##ty##(L,x);
 
 //static char** functions = 
 //{

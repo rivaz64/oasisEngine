@@ -214,7 +214,9 @@
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
+    <ClInclude Include="oaLua.h" />
     <ClInclude Include="oaLuaFunctions.h" />
+    <ClInclude Include="oaLuaIncludes.h" />
     <ClInclude Include="oaLuaMacros.h" />
     <ClInclude Include="oaLuaMetatables.h" />
     <ClInclude Include="oaLuaTable.h" />
@@ -225,6 +227,8 @@
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="oaLua.cpp" />
+    <ClCompile Include="oaLuaFunctions.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

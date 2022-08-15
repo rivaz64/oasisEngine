@@ -22,6 +22,7 @@ kNotPublic,
 kPublic,
 kConstructor,
 kCodeBlock,
+kParams,
 kNone
 };
 }
@@ -30,7 +31,7 @@ class Compiler
 {
  public:
   
-  Compiler(fstream& mt,fstream& t,fstream& f);
+  Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i);
 
   void
   evaluateToken(String& token);
@@ -45,14 +46,19 @@ class Compiler
   continueSearch();
 
   String className;
+  String memberName;
 
   bool isPublic = false;
+  bool isStatic = false;
+  String type = "else";
 
   bool debug = false;
 
   fstream& metatables;
   fstream& tables;
   fstream& functions;
+  fstream& fDefinitions;
+  fstream& includes;
  private:
 
   Vector<SPtr<CompilerState>> m_states;

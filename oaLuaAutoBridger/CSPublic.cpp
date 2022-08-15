@@ -11,33 +11,42 @@ CSPublic::evaluateToken(Compiler* compiler, String& token)
     compiler->isPublic = false;
     compiler->setCurrentState(COMPILER_STATES::kNotPublic);
   }
-  else if(token.find("(") != std::string::npos){
-    auto memberName = StringUtilities::split(token,"(")[0];
-    if(memberName == compiler->className){
+  else if(token == "("){
+    compiler->memberName = prevToken;
+    if(compiler->memberName == compiler->className){
       compiler->setCurrentState(COMPILER_STATES::kConstructor);
     }
-    else if(memberName[0] == '~'){
+    else if(compiler->memberName[0] == '~'){
     
     }
-    else if(memberName.find("operator") != std::string::npos){
+    else if(compiler->memberName.find("operator") != std::string::npos){
     
     }
     else{
-      if(isStatic){
-        compiler->tables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<memberName<<")"<<std::endl;
-        isStatic = false;
+      if(compiler->isStatic){
+        compiler->tables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl;
       }
       else{
-        compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<memberName<<")"<<std::endl;
+        compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl;
       }
-      compiler->functions<<"int LUA_FUNCTION("<<compiler->className<<","<<memberName<<") {}"<<std::endl;
+      compiler->functions<<"int LUA_FUNCTION("<<compiler->className<<","<<compiler->memberName<<");"<<std::endl;
+      compiler->fDefinitions<<"int LUA_FUNCTION("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl<<"{"<<std::endl;
+      compiler->setCurrentState(COMPILER_STATES::kParams);
+      
     }
   }
   else if(token == "{"){
     compiler->setCurrentState(COMPILER_STATES::kCodeBlock);
   }
   else if(token == "static"){
-    isStatic = true;
+    compiler->isStatic = true;
+  }
+  else if(token == "int" || token == "int32" || token == "uint32" || token == "float" || token == "string" || token == "void" || token == "bool"){
+    compiler->type = token;
+  }
+  else if(token.find("template") != std::string::npos){
+    compiler->setCurrentState(COMPILER_STATES::kCodeBlock);
   }
   
+  prevToken = token;
 }

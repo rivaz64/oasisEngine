@@ -1,16 +1,21 @@
 #pragma once
 #include "CompilerState.h"
-class CSPublic :
+
+using oaEngineSDK::Vector;
+
+class CSParams :
   public CompilerState
 {
  public:
 
-  CSPublic() :
-    CompilerState("public") {}
+  CSParams() :
+    CompilerState("params") {}
 
   void
   evaluateToken(Compiler* compiler, String& token) override;
 
-  String prevToken;
+  bool forRegister = true;
+
+  Vector<String> types;
 };
 

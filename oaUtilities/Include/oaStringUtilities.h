@@ -69,7 +69,7 @@ class OA_UTILITY_EXPORT StringUtilities
    * @return 
   */
   static Vector<String>
-  extract(String string, char separator);
+  extract(String string, const String& separator);
 
 };
 
