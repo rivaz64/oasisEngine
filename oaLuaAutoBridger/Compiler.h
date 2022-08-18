@@ -31,7 +31,7 @@ class Compiler
 {
  public:
   
-  Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i);
+  Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i,fstream& l);
 
   void
   evaluateToken(String& token);
@@ -59,6 +59,7 @@ class Compiler
   fstream& functions;
   fstream& fDefinitions;
   fstream& includes;
+  fstream& libs;
  private:
 
   Vector<SPtr<CompilerState>> m_states;

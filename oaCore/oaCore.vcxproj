@@ -217,6 +217,9 @@
     <ClInclude Include="oaLua.h" />
     <ClInclude Include="oaLuaFunctions.h" />
     <ClInclude Include="oaLuaIncludes.h" />
+    <ClInclude Include="oaLuaLibs.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="oaLuaMacros.h" />
     <ClInclude Include="oaLuaMetatables.h" />
     <ClInclude Include="oaLuaTable.h" />
