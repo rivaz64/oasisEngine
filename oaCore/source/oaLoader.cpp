@@ -324,7 +324,8 @@ tryLoadTextureChannel(aiMaterial* material,
     WString defuseName = StringUtilities::toWString(notMyString.C_Str());
     
     Path newPath;
-    newPath = path.root_path().generic_wstring()+path.relative_path().generic_wstring();
+    newPath = path.parent_path().generic_wstring();
+    newPath.append(defuseName);
     auto stringName = StringUtilities::toString(newPath.filename());
     if(loadImage(newPath) || 
        manager.m_textures.find(stringName) != manager.m_textures.end()){

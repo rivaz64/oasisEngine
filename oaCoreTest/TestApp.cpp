@@ -614,16 +614,41 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::End();
 
   ImGui::Begin("resources");
-  if(ImGui::Button("load resurse")){
-    Path path;
-    //if(path.searchForPath()){
-    //  loader = new Loader;
-    //  loader->loadResource(path);
+
+  if (ImGui::Button("load resurse"))
+    ImGuiFileDialog::Instance()->OpenDialog("Asset", "Choose File", ".png,.jpg,.hpp,.obj,.fbx,.wav", ".");
+
+  if (ImGuiFileDialog::Instance()->Display("Asset")) 
+  {
+    // action if OK
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      Path path(filePathName);
+      loader = new Loader;
+      loader->loadResource(path);
     //  //loadflags = loader->checkForLoad(path);
-    //  delete loader;
-    //  loader = 0;
-    //}
+      delete loader;
+      loader = 0;
+      // action
+    }
+    
+    // close
+    ImGuiFileDialog::Instance()->Close();
   }
+
+  //if(ImGui::Button("load resurse")){
+  //  Path path;
+  //  
+  //  //if(path.searchForPath()){
+  //  //  loader = new Loader;
+  //  //  loader->loadResource(path);
+  //  //  //loadflags = loader->checkForLoad(path);
+  //  //  delete loader;
+  //  //  loader = 0;
+  //  //}
+  //}
   if (ImGui::CollapsingHeader("textures")){
     if(ImGui::Button("load Texture")){
       Path path;
@@ -931,24 +956,6 @@ void oaEngineSDK::TestApp::drawImGui()
   
 
   ImGui::End();
-
-  if (ImGui::Button("Open File Dialog"))
-    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
-
-  if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) 
-  {
-    // action if OK
-    if (ImGuiFileDialog::Instance()->IsOk())
-    {
-      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-      // action
-    }
-    
-    // close
-    ImGuiFileDialog::Instance()->Close();
-  }
-
   //ImGui::Begin("material editor");
   //if(m_selectedMaterial){
   //  SPtr<Texture> texture;
