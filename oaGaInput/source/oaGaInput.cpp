@@ -4,7 +4,7 @@
 * @date 3/3/2022
 */
 
-#include "oaGa_Input.h"
+#include "oaGaInput.h"
 #include "oaGaMouse.h"
 #include "oaGaKeyboard.h"
 #include <Windows.h>

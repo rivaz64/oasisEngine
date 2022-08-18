@@ -1,6 +1,5 @@
 #include "oaDX11Texture.h"
 #include <oaVector2U.h>
-#include "oaPath.h"
 #include "oaImage.h"
 #include "oaDX11GraphicAPI.h"
 #include "oaDX11Flags.h"

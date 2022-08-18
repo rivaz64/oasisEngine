@@ -20,7 +20,6 @@
 #include "oaResoureManager.h"
 #include "oaRenderer.h"
 #include "oaDX11Flags.h"
-#include "oaPath.h"
 #include "oaResoureManager.h"
 #include "oaDX11HullShader.h"
 #include "oaDX11DomainShader.h"
@@ -453,7 +452,7 @@ bool
 DX11GraphicAPI::loadDDS(const Path& path)
 {
   ID3D11ShaderResourceView* srv;
-  String s = StringUtilities::toString(path.getCompletePath());
+  String s = StringUtilities::toString(path.generic_wstring());
   LPCTSTR file = s.c_str();
   HRESULT hr = D3DX11CreateShaderResourceViewFromFile( m_device, 
                                                        file, 
@@ -467,7 +466,7 @@ DX11GraphicAPI::loadDDS(const Path& path)
   auto texture = createTexture();
   cast<DX11Texture>(texture)->m_shaderResourceView = srv;
   auto& instance = ResoureManager::instance();
-  auto textureName = StringUtilities::toString(path.getName());
+  auto textureName = StringUtilities::toString(path.generic_wstring());
   texture->setName(textureName);
   instance.m_textures.insert({textureName,texture});
   return true;

@@ -6,14 +6,12 @@ using oaEngineSDK::BaseApp;
 using oaEngineSDK::TestApp;
 
 int main(){
-  //BaseApp* app = new TestApp;
-  //app->run();
-
-  auto splited = oaEngineSDK::StringUtilities::split("hello world"," ");
+  BaseApp* app = new TestApp;
+  app->run();
   
-  //delete app;
+  delete app;
 
-  //app = 0;
+  app = 0;
 
   return 0;
 }

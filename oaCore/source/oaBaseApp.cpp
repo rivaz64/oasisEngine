@@ -145,7 +145,7 @@ BaseApp::run()
   #endif
 
   
-  loadPlugIn("oaGa_Inputd.dll");
+  loadPlugIn("oaGaInputd.dll");
   loadPlugIn("oaFmodAudiod.dll");
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");

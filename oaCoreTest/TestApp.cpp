@@ -16,7 +16,6 @@
 #include <oaMesh.h>
 #include <oaSimplexNoise.h>
 #include <oaOctavesNoise.h>
-#include <oaPath.h>
 #include <oaSkeleton.h>
 #include <oaAnimation.h>
 #include <oaVertexBuffer.h>
@@ -44,7 +43,7 @@
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 #include <oaSerializer.h>
-
+#include "ImGuiFileDialog.h"
 
 
 
@@ -617,24 +616,24 @@ void oaEngineSDK::TestApp::drawImGui()
   ImGui::Begin("resources");
   if(ImGui::Button("load resurse")){
     Path path;
-    if(path.searchForPath()){
-      loader = new Loader;
-      loader->loadResource(path);
-      //loadflags = loader->checkForLoad(path);
-      delete loader;
-      loader = 0;
-    }
+    //if(path.searchForPath()){
+    //  loader = new Loader;
+    //  loader->loadResource(path);
+    //  //loadflags = loader->checkForLoad(path);
+    //  delete loader;
+    //  loader = 0;
+    //}
   }
   if (ImGui::CollapsingHeader("textures")){
     if(ImGui::Button("load Texture")){
       Path path;
-      if(path.searchForPath()){
-        loader = new Loader;
-        loader->loadTexture(path);
-        //loadflags = loader->checkForLoad(path);
-        delete loader;
-        loader = 0;
-      }
+      //if(path.searchForPath()){
+      //  loader = new Loader;
+      //  loader->loadTexture(path);
+      //  //loadflags = loader->checkForLoad(path);
+      //  delete loader;
+      //  loader = 0;
+      //}
     }
     for(auto texture : resourceManager.m_textures){
       if(texture.second)
@@ -663,13 +662,13 @@ void oaEngineSDK::TestApp::drawImGui()
   if (ImGui::CollapsingHeader("models")){
     if(ImGui::Button("Load From File")){
       Path path;
-      if(path.searchForPath()){
-        loader = new Loader;
-        loader->loadScene(path);
-        //loadflags = loader->checkForLoad(path);
-        delete loader;
-        loader = 0;
-      }
+      //if(path.searchForPath()){
+      //  loader = new Loader;
+      //  loader->loadScene(path);
+      //  //loadflags = loader->checkForLoad(path);
+      //  delete loader;
+      //  loader = 0;
+      //}
     }
 
     for(auto model : resourceManager.m_models){
@@ -859,75 +858,96 @@ void oaEngineSDK::TestApp::drawImGui()
   if(ImGui::Button("save all")){
     Serializer serializer;
     Path path;
-    if(path.searchForPath()){
-
-      serializer.init(path,true);
-
-      serializer.encodeSize(resourceManager.m_textures.size());
-      for(auto& image: resourceManager.m_textures){
-        image.second->save(serializer);
-      }
-      
-      serializer.encodeSize(resourceManager.m_materials.size());
-      for(auto& material: resourceManager.m_materials){
-        material.second->save(serializer);
-      }
-      
-      serializer.encodeSize(resourceManager.m_models.size());
-      for(auto& model: resourceManager.m_models){
-        model.second->save(serializer);
-      }
-      
-      auto actors = m_actualScene->getRoot()->getChilds();
-      serializer.encodeSize(actors.size());
-      for(auto& actor : actors){
-        
-        actor->save(serializer);
-      }
-
-    }
+    //if(path.searchForPath()){
+    //
+    //  serializer.init(path,true);
+    //
+    //  serializer.encodeSize(resourceManager.m_textures.size());
+    //  for(auto& image: resourceManager.m_textures){
+    //    image.second->save(serializer);
+    //  }
+    //  
+    //  serializer.encodeSize(resourceManager.m_materials.size());
+    //  for(auto& material: resourceManager.m_materials){
+    //    material.second->save(serializer);
+    //  }
+    //  
+    //  serializer.encodeSize(resourceManager.m_models.size());
+    //  for(auto& model: resourceManager.m_models){
+    //    model.second->save(serializer);
+    //  }
+    //  
+    //  auto actors = m_actualScene->getRoot()->getChilds();
+    //  serializer.encodeSize(actors.size());
+    //  for(auto& actor : actors){
+    //    
+    //    actor->save(serializer);
+    //  }
+    //
+    //}
   }
 
   if(ImGui::Button("load")){
     Serializer serializer;
     Path path;
-    if(path.searchForPath()){
-      if(serializer.init(path,FILE::kRead)){
-        SIZE_T number = serializer.decodeNumber();
-        for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-          auto image = makeSPtr<Image>();
-          image->load(serializer);
-          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-          texture->initFromImage(image);
-          resourceManager.m_textures.insert({ texture->getName(),texture});
-        }
-
-        number = serializer.decodeNumber();
-        for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-          auto material = makeSPtr<Material>();
-          material->load(serializer);
-          resourceManager.m_materials.insert({ material->getName(),material});
-        }
-        
-        number = serializer.decodeNumber();
-        for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-          auto model = makeSPtr<Model>();
-          model->load(serializer);
-          resourceManager.m_models.insert({ model->getName(),model});
-        }
-
-        number = serializer.decodeNumber();
-        for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-          auto actor = makeSPtr<Actor>();
-          actor->load(serializer);
-          m_actualScene->getRoot()->attach(actor);
-        }
-      }
-
-      
-    }
+    //if(path.searchForPath()){
+    //  if(serializer.init(path,FILE::kRead)){
+    //    SIZE_T number = serializer.decodeNumber();
+    //    for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+    //      auto image = makeSPtr<Image>();
+    //      image->load(serializer);
+    //      SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+    //      texture->initFromImage(image);
+    //      resourceManager.m_textures.insert({ texture->getName(),texture});
+    //    }
+    //
+    //    number = serializer.decodeNumber();
+    //    for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+    //      auto material = makeSPtr<Material>();
+    //      material->load(serializer);
+    //      resourceManager.m_materials.insert({ material->getName(),material});
+    //    }
+    //    
+    //    number = serializer.decodeNumber();
+    //    for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+    //      auto model = makeSPtr<Model>();
+    //      model->load(serializer);
+    //      resourceManager.m_models.insert({ model->getName(),model});
+    //    }
+    //
+    //    number = serializer.decodeNumber();
+    //    for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+    //      auto actor = makeSPtr<Actor>();
+    //      actor->load(serializer);
+    //      m_actualScene->getRoot()->attach(actor);
+    //    }
+    //  }
+    //
+    //  
+    //}
   }
+
+    
+  
+
   ImGui::End();
+
+  if (ImGui::Button("Open File Dialog"))
+    ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", ".cpp,.h,.hpp", ".");
+
+  if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) 
+  {
+    // action if OK
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      // action
+    }
+    
+    // close
+    ImGuiFileDialog::Instance()->Close();
+  }
 
   //ImGui::Begin("material editor");
   //if(m_selectedMaterial){
