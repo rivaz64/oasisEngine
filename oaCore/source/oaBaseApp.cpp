@@ -26,6 +26,7 @@ extern "C" {
 #include <lua\lualib.h>
 #include <lua/lauxlib.h>
 }
+#include "oaLua.h"
 //#define SOL_ALL_SAFETIES_ON 1
 //#include <sol\sol.hpp>
 
@@ -39,11 +40,11 @@ extern "C" {
 //#include "oaLuaFunctions.h"
 //};
 
+lua_State *luaState;
+
 namespace oaEngineSDK{
 
 using Function = const void* (*)();
-
-lua_State *luaState;
 //sol::state lua;
 
 void
@@ -51,6 +52,7 @@ initLua(){
   //lua.open_libraries(sol::lib::base, sol::lib::package);
   luaState = luaL_newstate();
   luaL_openlibs(luaState);
+  loadLuaOasisLib(luaState);
 }
 
 void
@@ -111,7 +113,7 @@ BaseApp::run()
   Logger::startUp();
 
   initLua();
-  registerBaseClass();
+  //registerBaseClass();
   
   //lua.script_file("scripts/start.lua");
   ////if(luaL_dofile(luaState, "scripts/start.lua")){

@@ -9,6 +9,7 @@ using oaEngineSDK::Vector;
 using oaEngineSDK::SPtr;
 using oaEngineSDK::WPtr;
 using oaEngineSDK::int32;
+using oaEngineSDK::ofstream;
 
 class CompilerState;
 
@@ -31,7 +32,7 @@ class Compiler
 {
  public:
   
-  Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i,fstream& l);
+  Compiler(ofstream& mt,ofstream& t,ofstream& f,ofstream& fd,ofstream& i,ofstream& l);
 
   void
   evaluateToken(String& token);
@@ -54,12 +55,12 @@ class Compiler
 
   bool debug = false;
 
-  fstream& metatables;
-  fstream& tables;
-  fstream& functions;
-  fstream& fDefinitions;
-  fstream& includes;
-  fstream& libs;
+  ofstream& metatables;
+  ofstream& tables;
+  ofstream& functions;
+  ofstream& fDefinitions;
+  ofstream& includes;
+  ofstream& libs;
  private:
 
   Vector<SPtr<CompilerState>> m_states;

@@ -12,7 +12,7 @@
 
 using oaEngineSDK::makeSPtr;
 
-Compiler::Compiler(fstream& mt,fstream& t,fstream& f,fstream& fd,fstream& i,fstream& l) :
+Compiler::Compiler(ofstream& mt,ofstream& t,ofstream& f,ofstream& fd,ofstream& i,ofstream& l) :
   metatables(mt), tables(t), functions(f), fDefinitions(fd), includes(i), libs(l)
 {
   m_states.push_back(makeSPtr<CSIsClass>());

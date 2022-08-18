@@ -194,6 +194,11 @@
     <ClInclude Include="include\oaLights.h" />
     <ClInclude Include="include\oaLoader.h" />
     <ClInclude Include="include\oaLogger.h" />
+    <ClInclude Include="include\oaLua.h" />
+    <ClInclude Include="include\oaLuaFunctions.h" />
+    <ClInclude Include="include\oaLuaIncludes.h" />
+    <ClInclude Include="include\oaLuaMacros.h" />
+    <ClInclude Include="include\oaLuaMetatables.h" />
     <ClInclude Include="include\oaMaterial.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
@@ -214,14 +219,9 @@
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
-    <ClInclude Include="oaLua.h" />
-    <ClInclude Include="oaLuaFunctions.h" />
-    <ClInclude Include="oaLuaIncludes.h" />
     <ClInclude Include="oaLuaLibs.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="oaLuaMacros.h" />
-    <ClInclude Include="oaLuaMetatables.h" />
     <ClInclude Include="oaLuaTable.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
@@ -230,7 +230,6 @@
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="oaLua.cpp" />
     <ClCompile Include="oaLuaFunctions.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

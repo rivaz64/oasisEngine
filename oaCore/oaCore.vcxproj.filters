@@ -150,25 +150,25 @@
     <ClInclude Include="include\oaSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaLuaMacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="oaLuaMetatables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="oaLuaTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oaLuaFunctions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="oaLuaIncludes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="oaLua.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="oaLuaLibs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaLua.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaLuaMetatables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaLuaMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaLuaFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaLuaIncludes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -294,9 +294,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaLuaFunctions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="oaLua.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,6 +33,7 @@ using std::istringstream;
 using std::string;
 using std::wstring;
 using std::fstream;
+using std::ofstream;
 using std::ios;
 using std::make_shared;
 using std::reinterpret_pointer_cast;

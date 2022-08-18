@@ -7,6 +7,7 @@ using oaEngineSDK::currentPath;
 using oaEngineSDK::DirectoryIterator;
 using oaEngineSDK::Path;
 using oaEngineSDK::fstream;
+using oaEngineSDK::ofstream;
 using oaEngineSDK::ios;
 using oaEngineSDK::String;
 using oaEngineSDK::Vector;
@@ -14,6 +15,7 @@ using oaEngineSDK::int32;
 using std::endl;
 String 
 eliminateComents(String code){
+  if(code.size()==0) return code;
   String ans;
   bool inComent = false;
   auto codeSize = code.size();
@@ -38,7 +40,7 @@ eliminateComents(String code){
 }
 
 void 
-analizeFile(const Path& path, fstream& metatables, fstream& tables, fstream& functions, fstream& fDefinitions, fstream& includes, fstream& libs,bool debug)
+analizeFile(const Path& path, ofstream& metatables, ofstream& tables, ofstream& functions, ofstream& fDefinitions, ofstream& includes, ofstream& libs,bool debug)
 {
   fstream file(path,ios::in);
 
@@ -74,6 +76,7 @@ analizeFile(const Path& path, fstream& metatables, fstream& tables, fstream& fun
 Path getPath(String&& file){
   auto path = currentPath().parent_path();
   path.append("oaCore");
+  path.append("include");
   path.append(file);
   return path;
 }
@@ -85,14 +88,14 @@ int main(){
   auto luaFunctionsPath = getPath("oaLuaFunctions.h");
   auto luaFDefinitionsPath = getPath("oaLuaFunctions.cpp");
   auto luaIncludesPath = getPath("oaLuaIncludes.cpp");
-  auto luaLibsPath = getPath("oaLua.cpp");
+  auto luaLibsPath = getPath("oaLua.h");
 
-  fstream luaMetatableFile(luaMetatablePath,ios::out);
-  fstream luaTableFile(luaTablePath,ios::out);
-  fstream luaFunctionsFile(luaFunctionsPath,ios::out);
-  fstream luaFDefinitionsFile(luaFDefinitionsPath,ios::out);
-  fstream luaIncludesFile(luaIncludesPath,ios::out);
-  fstream luaLibsFile(luaLibsPath,ios::out);
+  ofstream luaMetatableFile(luaMetatablePath.generic_string());
+  ofstream luaTableFile(luaTablePath);
+  ofstream luaFunctionsFile(luaFunctionsPath);
+  ofstream luaFDefinitionsFile(luaFDefinitionsPath);
+  ofstream luaIncludesFile(luaIncludesPath);
+  ofstream luaLibsFile(luaLibsPath);
 
   luaMetatableFile<<"#include \"oaLuaFunctions.h\" "<<endl;
   luaMetatableFile<<"namespace oaEngineSDK { "<<endl;
@@ -107,8 +110,8 @@ int main(){
   luaFDefinitionsFile<<"#include \"oaPrerequisitesCore.h\" "<<endl;
   luaFDefinitionsFile<<"#include \"oaLuaIncludes.h\" "<<endl;
   luaFDefinitionsFile<<"namespace oaEngineSDK { "<<endl;
-  luaLibsFile<<"#include \"oaLua.h\""<<endl<<"#include \"oaLuaMetatables.h\""<<endl<<"void oaEngineSDK::loadLuaOasisLib(lua_State *L)"<<endl<<"{"<<endl;
-
+  luaLibsFile<<"#pragma once"<<endl<<"#include \"oaPrerequisitesCore.h\""<<endl<<"#include \"oaLuaMetatables.h\""<<endl<<"class lua_State;"<<endl<<"namespace oaEngineSDK{"<<endl<<"FORCEINLINE void loadLuaOasisLib(lua_State *L)"<<endl<<"{"<<endl;
+  
   DirectoryIterator projects(path);
 
   for(auto&  project : projects){
@@ -145,7 +148,7 @@ int main(){
   luaTableFile<<"} "<<endl;
   luaFunctionsFile<<"} "<<endl;
   luaFDefinitionsFile<<"} "<<endl;
-  luaLibsFile<<"} "<<endl;
+  luaLibsFile<<"} "<<endl<<"} "<<endl;
   luaMetatableFile.close();
   luaTableFile.close();
   luaFunctionsFile.close();
