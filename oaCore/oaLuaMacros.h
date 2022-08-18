@@ -7,6 +7,8 @@
 
 #define LUA_FUNCTION(luaClass,luaFunction) LUA_MEMBER(luaClass,luaFunction) (lua_State* L)
 
+#define LUA_DEFINITION(luaClass,luaFunction) LuaFunctions::##luaClass##_##luaFunction (lua_State* L)
+
 #define LUA_REGISTER_MEMBER(luaClass,luaFunction) { #luaFunction, LUA_MEMBER(luaClass,luaFunction) },
 
 #define LUA_CLOSE_REGISTER() { NULL, NULL } };

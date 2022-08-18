@@ -99,6 +99,8 @@ int main(){
   luaTableFile<<"#include \"oaLuaFunctions.h\" "<<endl;
   luaTableFile<<"namespace oaEngineSDK { "<<endl;
   luaFunctionsFile<<"#include \"oaLuaMacros.h\" "<<endl;
+  luaFunctionsFile<<"#include \"oaPrerequisitesCore.h\" "<<endl;
+  luaFunctionsFile<<"#include \"oaLuaIncludes.h\" "<<endl;
   luaFunctionsFile<<"extern \"C\" {"<<endl<<"#include <lua/lua.h>"<<endl<<"#include <lua/lualib.h>"<<endl<<"#include <lua/lauxlib.h>"<<endl<<"}"<<endl;
   luaFunctionsFile<<"namespace oaEngineSDK { "<<endl;
   luaFDefinitionsFile<<"#include \"oaLuaFunctions.h\" "<<endl;

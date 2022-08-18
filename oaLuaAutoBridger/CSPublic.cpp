@@ -29,8 +29,8 @@ CSPublic::evaluateToken(Compiler* compiler, String& token)
       else{
         compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl;
       }
-      compiler->functions<<"int LUA_FUNCTION("<<compiler->className<<","<<compiler->memberName<<");"<<std::endl;
-      compiler->fDefinitions<<"int LUA_FUNCTION("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl<<"{"<<std::endl;
+      compiler->functions<<"static int LUA_FUNCTION("<<compiler->className<<","<<compiler->memberName<<"){"<<std::endl;
+      //compiler->fDefinitions<<"int LUA_DEFINITION("<<compiler->className<<","<<compiler->memberName<<")"<<std::endl<<"{"<<std::endl;
       compiler->setCurrentState(COMPILER_STATES::kParams);
       
     }
