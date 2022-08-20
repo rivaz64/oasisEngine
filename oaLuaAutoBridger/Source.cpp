@@ -54,7 +54,7 @@ analizeFile(const Path& path, ofstream& metatables, ofstream& tables, ofstream& 
   Vector<String> temTokens;
 
   for(auto& token : tokens){
-    auto newTokens = StringUtilities::extract(token,"{}(),&");
+    auto newTokens = StringUtilities::extract(token,"{}(),&;");
     temTokens.insert(temTokens.end(), newTokens.begin(), newTokens.end());
   }
   tokens = temTokens;
@@ -110,7 +110,7 @@ int main(){
   luaFDefinitionsFile<<"#include \"oaPrerequisitesCore.h\" "<<endl;
   luaFDefinitionsFile<<"#include \"oaLuaIncludes.h\" "<<endl;
   luaFDefinitionsFile<<"namespace oaEngineSDK { "<<endl;
-  luaLibsFile<<"#pragma once"<<endl<<"#include \"oaPrerequisitesCore.h\""<<endl<<"#include \"oaLuaMetatables.h\""<<endl<<"class lua_State;"<<endl<<"namespace oaEngineSDK{"<<endl<<"FORCEINLINE void loadLuaOasisLib(lua_State *L)"<<endl<<"{"<<endl;
+  luaLibsFile<<"#pragma once"<<endl<<"#include \"oaPrerequisitesCore.h\""<<endl<<"#include \"oaLuaMetatables.h\""<<endl<<"#include \"oaLuaTable.h\""<<endl<<"class lua_State;"<<endl<<"namespace oaEngineSDK{"<<endl<<"FORCEINLINE void loadLuaOasisLib(lua_State *L)"<<endl<<"{"<<endl;
   
   DirectoryIterator projects(path);
 

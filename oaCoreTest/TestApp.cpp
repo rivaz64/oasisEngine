@@ -44,7 +44,11 @@
 #include <imgui_impl_win32.h>
 #include <oaSerializer.h>
 #include "ImGuiFileDialog.h"
-
+extern "C" {
+#include <lua\lua.h>
+#include <lua\lualib.h>
+#include <lua/lauxlib.h>
+}
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -1073,6 +1077,30 @@ void oaEngineSDK::TestApp::drawImGui()
     }
   }
   ImGui::End();
+
+  ImGui::Begin("lua");
+  {
+    if (ImGui::Button("execute lua script"))
+      ImGuiFileDialog::Instance()->OpenDialog("Lua", "Choose File", ".lua", ".");
+
+    if (ImGuiFileDialog::Instance()->Display("Lua")) 
+    {
+      // action if OK
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        //luaL_loadfilex(luaState,filePathName.c_str(),NULL);
+        //lua_pcall(luaState, 0, LUA_MULTRET, 0);
+        luaL_dofile(luaState,filePathName.c_str());
+      }
+      
+      // close
+      ImGuiFileDialog::Instance()->Close();
+    }
+  }
+  ImGui::End();
+
 }
 
 void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)

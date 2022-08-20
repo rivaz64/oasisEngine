@@ -10,11 +10,18 @@
 #include <oaVector2U.h>
 #include "oaInputAPI.h"
 
+extern "C" {
+#include <lua\lua.h>
+#include <lua\lualib.h>
+#include <lua/lauxlib.h>
+}
+
 namespace oaEngineSDK{
 
 /**
  * @brief the base app for the engine
 */
+
 class OA_CORE_EXPORT BaseApp
 {
  public:
@@ -119,6 +126,9 @@ class OA_CORE_EXPORT BaseApp
     m_windowName = name;
   }
 
+  void
+  initLua();
+
   /**
    * @brief if the app is running
   */
@@ -163,6 +173,7 @@ class OA_CORE_EXPORT BaseApp
 
   void* m_window;
 
+  lua_State *luaState;
 };
 
 }

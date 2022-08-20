@@ -21,11 +21,6 @@
 #include "oaRenderer.h"
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
-extern "C" {
-#include <lua\lua.h>
-#include <lua\lualib.h>
-#include <lua/lauxlib.h>
-}
 #include "oaLua.h"
 //#define SOL_ALL_SAFETIES_ON 1
 //#include <sol\sol.hpp>
@@ -40,19 +35,18 @@ extern "C" {
 //#include "oaLuaFunctions.h"
 //};
 
-lua_State *luaState;
-
 namespace oaEngineSDK{
 
 using Function = const void* (*)();
 //sol::state lua;
 
 void
-initLua(){
+BaseApp::initLua(){
   //lua.open_libraries(sol::lib::base, sol::lib::package);
   luaState = luaL_newstate();
   luaL_openlibs(luaState);
   loadLuaOasisLib(luaState);
+  luaL_dofile(luaState,"");
 }
 
 void

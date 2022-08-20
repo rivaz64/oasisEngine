@@ -199,6 +199,7 @@
     <ClInclude Include="include\oaLuaIncludes.h" />
     <ClInclude Include="include\oaLuaMacros.h" />
     <ClInclude Include="include\oaLuaMetatables.h" />
+    <ClInclude Include="include\oaLuaTable.h" />
     <ClInclude Include="include\oaMaterial.h" />
     <ClInclude Include="include\oaMesh.h" />
     <ClInclude Include="include\oaModel.h" />
@@ -222,7 +223,6 @@
     <ClInclude Include="oaLuaLibs.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="oaLuaTable.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

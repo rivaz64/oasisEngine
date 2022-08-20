@@ -35,3 +35,32 @@
 #define LUA_PUSH_PARAM(ty,x) push##ty##(L,x);
 
 #define LUA_PUSH_USER_PARAM(x) lua_pushlightuserdata(L,&x);
+
+//LUA_CONSTRUCTOR
+#define TO_STRING(x) #x
+
+#define LUA_CONSTRUCTOR(luaClass)\
+static int LUA_FUNCTION( luaClass ,new){\
+lua_remove(L, 1);\
+*static_cast<##luaClass##**>(lua_newuserdata(L, sizeof(void*))) = new luaClass();\
+luaL_setmetatable(L, TO_STRING( luaClass##_metatable ));\
+return 1;\
+};
+
+#define LUA_GETTER(luaClass,luaAtribute) luaClass##_get_##luaAtribute
+
+#define LUA_GET_ATTRIBUTE(luaClass,luaAtribute,returnType) static int luaClass##_get_##luaAtribute##(lua_State* L) {\
+LUA_CHECK_USER_PARAM( luaClass ,1)\
+auto ret = var1->##luaAtribute;\
+returnType;\
+return 1;};
+
+//#define LUA_SET_ATTRIBUTE_BEGIN(luaClass,luaAtribute) static int luaClass##_##luaAtribute##Set(lua_State* L) { 
+//
+//#define LUA_GET_ATTRIBUTE_END return 0;};
+
+#define LUA_CLASS_REGISTER(luaClass)\
+luaL_newmetatable(L, #luaClass );\
+luaL_setfuncs(L, luaClass##_metatable , 0);\
+luaL_newlib(L, luaClass##_table );\
+
