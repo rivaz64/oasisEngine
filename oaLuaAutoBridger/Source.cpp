@@ -101,6 +101,7 @@ int main(){
   luaMetatableFile<<"namespace oaEngineSDK { "<<endl;
   luaTableFile<<"#include \"oaLuaFunctions.h\" "<<endl;
   luaTableFile<<"namespace oaEngineSDK { "<<endl;
+  luaFunctionsFile<<"#pragma once"<<endl;
   luaFunctionsFile<<"#include \"oaLuaMacros.h\" "<<endl;
   luaFunctionsFile<<"#include \"oaPrerequisitesCore.h\" "<<endl;
   luaFunctionsFile<<"#include \"oaLuaIncludes.h\" "<<endl;

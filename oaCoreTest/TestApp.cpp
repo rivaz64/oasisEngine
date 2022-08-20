@@ -1088,11 +1088,12 @@ void oaEngineSDK::TestApp::drawImGui()
       // action if OK
       if (ImGuiFileDialog::Instance()->IsOk())
       {
-        std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         //luaL_loadfilex(luaState,filePathName.c_str(),NULL);
         //lua_pcall(luaState, 0, LUA_MULTRET, 0);
-        luaL_dofile(luaState,filePathName.c_str());
+        auto ret = luaL_dofile(luaState,filePathName.c_str());
+        print(lua_tostring(luaState,-1));
       }
       
       // close

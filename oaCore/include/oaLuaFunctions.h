@@ -1,3 +1,4 @@
+#pragma once
 #include "oaLuaMacros.h" 
 #include "oaPrerequisitesCore.h" 
 #include "oaLuaIncludes.h" 
@@ -63,7 +64,13 @@ auto ret = var1->getGlobalTransform();
 LUA_PUSH_USER_PARAM(ret)
 return 1;
 }
-LUA_CONSTRUCTOR(Vector2f)
+//LUA_CONSTRUCTOR(Vector2f)
+//#define LUA_CONSTRUCTOR(luaClass)
+static int Vector2f_new(lua_State* L) {
+*static_cast<Vector2f**>(lua_newuserdata(L, sizeof(void*))) = new Vector2f();
+luaL_setmetatable(L, "Vector2f_metatable" );
+return 1;
+};
 static int LUA_FUNCTION(Vector2f,magnitud){
 LUA_ASSERT_ARGS_NUM(1);
 LUA_CHECK_USER_PARAM(Vector2f,1);
