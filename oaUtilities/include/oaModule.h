@@ -25,11 +25,13 @@ public:
   static T&
   instance() {
     if(!isStartedUp()) {
+      print("Trying to access a module but it hasn't been started.");
       /*CH_EXCEPT(InternalErrorException,
                 "Trying to access a module but it hasn't been started.");*/
     }
 
     if(isDestroyed()) {
+      print("Trying to access a destroyed module.");
       /*CH_EXCEPT(InternalErrorException,
                 "Trying to access a destroyed module.");*/
     }
@@ -84,6 +86,7 @@ public:
                   "Provided type isn't derived from type the Module is initialized with.");
 
     if(isStartedUp()) {
+        print("Trying to start an already started module.");
       //CH_EXCEPT(InternalErrorException, "Trying to start an already started module.");
     }
 

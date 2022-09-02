@@ -13,13 +13,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaCore", "oaCore\oaCore.vcxproj", "{E4B7560F-49A3-4CC5-939B-200F07A39496}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaCoreTest", "oaCoreTest\oaCoreTest.vcxproj", "{6BFE5B58-2963-4872-A7B6-4F2AF288FE28}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DA04310A-FFC7-46C9-95B4-39A86BBEE534} = {DA04310A-FFC7-46C9-95B4-39A86BBEE534}
-		{E4B7560F-49A3-4CC5-939B-200F07A39496} = {E4B7560F-49A3-4CC5-939B-200F07A39496}
-		{948D2A81-5F90-4D5D-AAE8-E94248395D4B} = {948D2A81-5F90-4D5D-AAE8-E94248395D4B}
-		{B245B1E0-0384-4FB1-BDD0-1C596B0323B0} = {B245B1E0-0384-4FB1-BDD0-1C596B0323B0}
-		{86117BFC-3888-45C7-BCB4-D0DBC848B096} = {86117BFC-3888-45C7-BCB4-D0DBC848B096}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaDX11Graphics", "oaDX11Graphics\oaDX11Graphics.vcxproj", "{DA04310A-FFC7-46C9-95B4-39A86BBEE534}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -47,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaLuaAutoBridger", "oaLuaAu
 	ProjectSection(ProjectDependencies) = postProject
 		{B245B1E0-0384-4FB1-BDD0-1C596B0323B0} = {B245B1E0-0384-4FB1-BDD0-1C596B0323B0}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "oaOmniverse", "oaOmniverse\oaOmniverse.vcxproj", "{6E95C461-B2F8-474B-BA54-2822107A47F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -136,6 +131,14 @@ Global
 		{5C499C8D-9E04-4071-AB76-BCDE31DC2979}.Release|x64.Build.0 = Release|x64
 		{5C499C8D-9E04-4071-AB76-BCDE31DC2979}.Release|x86.ActiveCfg = Release|Win32
 		{5C499C8D-9E04-4071-AB76-BCDE31DC2979}.Release|x86.Build.0 = Release|Win32
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Debug|x64.ActiveCfg = Debug|x64
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Debug|x64.Build.0 = Debug|x64
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Debug|x86.ActiveCfg = Debug|Win32
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Debug|x86.Build.0 = Debug|Win32
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Release|x64.ActiveCfg = Release|x64
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Release|x64.Build.0 = Release|x64
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Release|x86.ActiveCfg = Release|Win32
+		{6E95C461-B2F8-474B-BA54-2822107A47F2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

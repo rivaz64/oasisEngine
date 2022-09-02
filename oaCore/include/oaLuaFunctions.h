@@ -64,13 +64,7 @@ auto ret = var1->getGlobalTransform();
 LUA_PUSH_USER_PARAM(ret)
 return 1;
 }
-//LUA_CONSTRUCTOR(Vector2f)
-//#define LUA_CONSTRUCTOR(luaClass)
-static int Vector2f_new(lua_State* L) {
-*static_cast<Vector2f**>(lua_newuserdata(L, sizeof(void*))) = new Vector2f();
-luaL_setmetatable(L, "Vector2f_metatable" );
-return 1;
-};
+LUA_CONSTRUCTOR(Vector2f)
 static int LUA_FUNCTION(Vector2f,magnitud){
 LUA_ASSERT_ARGS_NUM(1);
 LUA_CHECK_USER_PARAM(Vector2f,1);
@@ -144,6 +138,14 @@ auto ret = Vector2f::interpolate(*var1,*var2,var3);
 LUA_PUSH_USER_PARAM(ret)
 return 1;
 }
-LUA_GET_ATTRIBUTE(Vector2f,x,LUA_PUSH_PARAM(float,ret))
-LUA_GET_ATTRIBUTE(Vector2f,y,LUA_PUSH_PARAM(float,ret))
+LUA_GET_ATRIBUTE(Vector2f,x,LUA_PUSH_PARAM(float,ret))
+//LUA_SET_ATRIBUTE(Vector2f,x,LUA_CHECK_PARAM(float,2))
+//LUA_SET_ATRIBUTE(luaClass,luaAtribute,check)
+static int Vector2f_set_x(lua_State* L) {
+LUA_CHECK_USER_PARAM( Vector2f ,1);
+LUA_CHECK_PARAM(float,2);
+var1->x = var2;
+return 0;};
+LUA_GET_ATRIBUTE(Vector2f,y,LUA_PUSH_PARAM(float,ret))
+LUA_SET_ATRIBUTE(Vector2f,y,LUA_CHECK_PARAM(float,2))
 } 

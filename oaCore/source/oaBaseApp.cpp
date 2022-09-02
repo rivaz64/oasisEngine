@@ -22,6 +22,7 @@
 #include "oaInputAPI.h"
 #include "oaAudioAPI.h"
 #include "oaLua.h"
+#include "oaOmniverseApi.h"
 //#define SOL_ALL_SAFETIES_ON 1
 //#include <sol\sol.hpp>
 
@@ -93,6 +94,7 @@ BaseApp::onShutDown()
   //closeLua();
   //EventSystem::shutDown();
   GraphicAPI::shutDown();
+  OmniverseApi::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
   AudioAPI::shutDown();
@@ -143,6 +145,8 @@ BaseApp::run()
   
   loadPlugIn("oaGaInputd.dll");
   loadPlugIn("oaFmodAudiod.dll");
+  loadPlugIn("oaOmniversed.dll");
+  auto& omnievrse = OmniverseApi::instance();
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
   auto& input = InputAPI::instance();
@@ -173,6 +177,7 @@ BaseApp::run()
     ResoureManager::startUp();
     InputManager::startUp();
     Time::startUp();
+    //OmniverseApi::startUp();
     //EventSystem::startUp();
     graphicsApi.setViewport(m_windowSize);
 

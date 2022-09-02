@@ -171,6 +171,9 @@
     <ClInclude Include="include\oaLuaTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaOmniverseApi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -294,6 +297,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaLuaFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\oaOmniverseApi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

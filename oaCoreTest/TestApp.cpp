@@ -474,7 +474,22 @@ void TestApp::renderImGui()
 
 }
 
-void oaEngineSDK::TestApp::drawImGui()
+void TestApp::childsInImgui(SPtr<Actor> parentActor)
+{
+  auto& childs = parentActor->getChilds();
+  for(SPtr<Actor> actor : childs){
+    if(ImGui::Button(actor->getName().c_str())){
+      m_selectedActor = actor;
+    }
+    if(actor->getChilds().size()>0){
+      if(ImGui::CollapsingHeader("childs")){
+        childsInImgui(actor);
+      }
+    }
+  }
+}
+
+void TestApp::drawImGui()
 {
   auto& resourceManager = ResoureManager::instance();
   auto& audioApi = AudioAPI::instance();
@@ -847,7 +862,7 @@ void oaEngineSDK::TestApp::drawImGui()
     }
     if(loadflags & LOADERFLAGS::kTexture){
       ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::kTexture);
-    }
+    //}
     if(loadflags & LOADERFLAGS::kSkeleton){
       ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::kSkeleton);
     }
@@ -1104,131 +1119,10 @@ void oaEngineSDK::TestApp::drawImGui()
 
 }
 
-void oaEngineSDK::TestApp::childsInImgui(SPtr<Actor> parentActor)
-{
-  auto& childs = parentActor->getChilds();
-  for(SPtr<Actor> actor : childs){
-    if(ImGui::Button(actor->getName().c_str())){
-      m_selectedActor = actor;
-    }
-    if(actor->getChilds().size()>0){
-      if(ImGui::CollapsingHeader("childs")){
-        childsInImgui(actor);
-      }
-    }
-  }
-}
-
-//SubMesh
-//oaEngineSDK::TestApp::tetrahedron()
-//{
-//  SubMesh ans;
-//  float sq2 = Math::sqrt(2.0f);
-//  float sq3 = Math::sqrt(3.0f);
-//  ans.points = {
-//    {0.0f,0.0f,1.0f,0.0f},
-//    {2.0f*sq2/3.0f,0.0f,-1.0f/3.0f,0.0f},
-//    {-sq2/3.0f,sq2/sq3,-1.0f/3.0f,0.0f},
-//    {-sq2/3.0f,-sq2/sq3,-1.0f/3.0f,0.0f},
-//  };
-//
-//  ans.indices = {0,1,2,0,2,3,0,3,1,1,3,2};
-//
-//  return ans;
-//}
-
-//SubMesh
-//oaEngineSDK::TestApp::octahedron()
-//{
-//  SubMesh ans;
-//  ans.points = {
-//    {0.0f,0.0f, 1.0f,0.0f},
-//    {0.0f,0.0f,-1.0f,0.0f},
-//    {0.0f, 1.0f,0.0f,0.0f},
-//    {0.0f,-1.0f,0.0f,0.0f},
-//    { 1.0f,0.0f,0.0f,0.0f},
-//    {-1.0f,0.0f,0.0f,0.0f},
-//  };
-//  ans.indices = {0,4,2,0,3,4,0,5,3,0,2,5,1,2,4,1,4,3,1,3,5,1,5,2};
-//
-//  return ans;
-//}
-
-//Mesh
-//TestApp::icosahedron()
-//{
-//  float phi = (Math::sqrt(5)+1.0f)/2.0f;
-//  Vector2f v{1.0f,phi};
-//  v.normalize();
-//
-//  Mesh ans;
-//
-//  Vector<Vector4f> points = {
-//    Vector4f(-v.x, v.y,0.0f,0.0f), 
-//    Vector4f( v.x, v.y,0.0f,0.0f), 
-//    Vector4f(-v.x,-v.y,0.0f,0.0f), 
-//    Vector4f( v.x,-v.y,0.0f,0.0f), 
-//    Vector4f(0.0f,-v.x, v.y,0.0f), 
-//    Vector4f(0.0f, v.x, v.y,0.0f), 
-//    Vector4f(0.0f,-v.x,-v.y,0.0f), 
-//    Vector4f(0.0f, v.x,-v.y,0.0f), 
-//    Vector4f( v.y,0.0f,-v.x,0.0f), 
-//    Vector4f( v.y,0.0f, v.x,0.0f), 
-//    Vector4f(-v.y,0.0f,-v.x,0.0f), 
-//    Vector4f(-v.y,0.0f, v.x,0.0f)
-//    
-//  };
-//
-//  Vector<uint32> index = {0,11,5,0,5,1,0,1,7,0,7,10,0,10,11,1,5,9,5,11,4,11,10,2,10,7,6,
-//                          7,1,8,3,9,4,3,4,2,3,2,6,3,6,8,3,8,9,4,9,5,2,4,11,6,2,10,8,6,7,
-//                          9,8,1};
-//
-//  return ans;
-//}
-//
-//SubMesh 
-//oaEngineSDK::TestApp::SubDivide(Vector<Vector4f>& vertices, Vector<uint32>& indices)
-//{
-//  //SIZE_T size = indices.size();
-//  //SIZE_T actualSize = size;
-//  //Map<Pair<uint32, uint32>, uint32> used;
-//  //for(uint32 i = 0; i < size; i+=3){
-//  //  Vector3f oldPoints[3]={
-//  //    vertices[indices[i]].xyz,
-//  //    vertices[indices[i+1]].xyz,
-//  //    vertices[indices[i+2]].xyz,
-//  //  };
-//  //  ;
-//  //  Pair<uint32, uint32> pair(Math::min<uint32>(indices[i],indices[i+1]),Math::max<uint32>(indices[i],indices[i+1]));
-//  //  if(used.find(pair)==used.end()){
-//  //    used.insert({pair,actualSize});
-//  //    ++actualSize;
-//  //    
-//  //    vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-//  //  }
-//  //}
-//  //return ans;
-//  return SubMesh();
-//}
-//
-//void TestApp::vertexForEdge(Map<Pair<uint32, uint32>, uint32>& used, 
-//                            Vector<Vector4f>& vertices, 
-//                            uint32 index1, 
-//                            uint32 index2)
-//{
-//  //Pair<uint32, uint32> pair(Math::min<uint32>(index1,index2),Math::max<uint32>(index1,index2));
-//  //if(used.find(pair)==used.end()){
-//  //  used.insert({pair,actualSize});
-//  //  ++actualSize;
-//  //  
-//  //  vertices.push_back(Vector4f(Vector3f::interpolate(oldPoints[0],oldPoints[1],.5f).normalized(),0.0f));
-//  //}
-//}
-
 
 
 }
 
-
+}
 
 

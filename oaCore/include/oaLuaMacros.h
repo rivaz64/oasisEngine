@@ -48,19 +48,25 @@ return 1;\
 };
 
 #define LUA_GETTER(luaClass,luaAtribute) luaClass##_get_##luaAtribute
+#define LUA_SETTER(luaClass,luaAtribute) luaClass##_set_##luaAtribute
 
-#define LUA_GET_ATTRIBUTE(luaClass,luaAtribute,returnType) static int luaClass##_get_##luaAtribute##(lua_State* L) {\
+#define LUA_GET_ATRIBUTE(luaClass,luaAtribute,returnType)\
+static int luaClass##_get_##luaAtribute##(lua_State* L) {\
 LUA_CHECK_USER_PARAM( luaClass ,1)\
 auto ret = var1->##luaAtribute;\
 returnType;\
 return 1;};
 
-//#define LUA_SET_ATTRIBUTE_BEGIN(luaClass,luaAtribute) static int luaClass##_##luaAtribute##Set(lua_State* L) { 
-//
-//#define LUA_GET_ATTRIBUTE_END return 0;};
+#define LUA_SET_ATRIBUTE(luaClass,luaAtribute,check)\
+static int luaClass##_set_##luaAtribute##(lua_State* L) {\
+LUA_CHECK_USER_PARAM( luaClass ,1)\
+check;\
+var1->##luaAtribute = var2;\
+return 0;};
 
 #define LUA_CLASS_REGISTER(luaClass)\
+lua_register(L,#luaClass,luaClass##_new);\
 luaL_newmetatable(L, #luaClass );\
 luaL_setfuncs(L, luaClass##_metatable , 0);\
-luaL_newlib(L, luaClass##_table );\
+lua_pop(L,1);
 

@@ -20,6 +20,8 @@ LUA_REGISTER_MEMBER(Vector2f,setDirection)
 LUA_REGISTER_MEMBER(Vector2f,floor)
 LUA_REGISTER_MEMBER(Vector2f,fraction)
 LUA_REGISTER_MEMBER(Vector2f, get_x)
+LUA_REGISTER_MEMBER(Vector2f, set_x)
 LUA_REGISTER_MEMBER(Vector2f, get_y)
+LUA_REGISTER_MEMBER(Vector2f, set_y)
 LUA_CLOSE_REGISTER()
 } 

@@ -40,7 +40,7 @@ CSPublic::evaluateToken(Compiler* compiler, String& token)
     if("override" != prevToken && "(" != prevToken && "template<class" != prevToken && "default" != prevToken && "}" != prevToken){
       //oaEngineSDK::print(compiler->className);
       //oaEngineSDK::print(prevToken);
-      compiler->functions<<"LUA_GET_ATTRIBUTE("<<compiler->className<<","<<prevToken<<",";
+      compiler->functions<<"LUA_GET_ATRIBUTE("<<compiler->className<<","<<prevToken<<",";
       if("int" == compiler->type || "int32"  == compiler->type || "uint32"  == compiler->type || "float"  == compiler->type || "string"  == compiler->type || "void" == compiler->type || "bool" == compiler->type){
         compiler->functions<<"LUA_PUSH_PARAM("<<compiler->type<<",ret)";
       }
@@ -50,6 +50,19 @@ CSPublic::evaluateToken(Compiler* compiler, String& token)
       compiler->functions<<")"<<endl;
 
       compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<", get_"<<prevToken<<")"<<endl;
+
+      compiler->functions<<"LUA_SET_ATRIBUTE("<<compiler->className<<","<<prevToken<<",";
+
+      if("int" == compiler->type || "int32"  == compiler->type || "uint32"  == compiler->type || "float"  == compiler->type || "string"  == compiler->type || "void" == compiler->type || "bool" == compiler->type){
+        compiler->functions<<"LUA_CHECK_PARAM("<<compiler->type<<",2)";
+      }
+      else{
+        compiler->functions<<"LUA_CHECK_USER_PARAM("<<prevToken<<")";
+      }
+
+      compiler->functions<<")"<<endl;
+
+      compiler->metatables<<"LUA_REGISTER_MEMBER("<<compiler->className<<", set_"<<prevToken<<")"<<endl;
     }
     
 
