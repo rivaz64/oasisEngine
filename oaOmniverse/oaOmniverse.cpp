@@ -30,7 +30,8 @@ Omniverse::onStartUp()
   omniClientSetLogCallback(logCallback);
   
   if (!omniClientInitialize(kOmniClientVersion)){
-     return;
+    print("omniverse not working");
+    return;
   }
 }
 
@@ -46,6 +47,33 @@ Omniverse::onShutDown()
 
     //omniClientTick(1000);
     omniClientShutdown();
+}
+
+void 
+Omniverse::connect()
+{
+  String destinationPath;
+  if (destinationPath == "")
+  {
+    String userFolder = "omniverse://localhost/Users";
+    print(getConnectedUsername(userFolder));
+  }
+}
+
+String
+Omniverse::getConnectedUsername(String stageUrl)
+{
+  std::string userName = "_none_";
+  omniClientWait(omniClientGetServerInfo(stageUrl.c_str(), &userName, [](void* userData, OmniClientResult result, struct OmniClientServerInfo const * info) noexcept
+  {
+    std::string* userName = static_cast<std::string*>(userData);
+    if (userData && userName && info && info->username)
+    {
+        userName->assign(info->username);
+    }
+  }));
+
+  return userName;
 }
 
 }

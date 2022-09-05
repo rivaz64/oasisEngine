@@ -22,6 +22,12 @@ class Omniverse :
   void
   onShutDown() override;
 
+  void
+  connect() override;
+
+  String
+  getConnectedUsername(String stageUrl) override;
+
 protected:
 
   Omniverse() {print("child constructed"); }

@@ -43,6 +43,7 @@
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 #include <oaSerializer.h>
+#include <oaOmniverseApi.h>
 #include "ImGuiFileDialog.h"
 extern "C" {
 #include <lua\lua.h>
@@ -862,7 +863,7 @@ void TestApp::drawImGui()
     }
     if(loadflags & LOADERFLAGS::kTexture){
       ImGui::CheckboxFlags("texture",&loadflags0,LOADERFLAGS::kTexture);
-    //}
+    }
     if(loadflags & LOADERFLAGS::kSkeleton){
       ImGui::CheckboxFlags("skeleton",&loadflags0,LOADERFLAGS::kSkeleton);
     }
@@ -1117,9 +1118,13 @@ void TestApp::drawImGui()
   }
   ImGui::End();
 
-}
-
-
+  ImGui::Begin("omniverse");
+  {
+    if(ImGui::Button("test")){
+      OmniverseApi::instance().test();
+    }
+  }
+  ImGui::End();
 
 }
 

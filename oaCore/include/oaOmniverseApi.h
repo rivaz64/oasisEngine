@@ -17,11 +17,11 @@ class OA_CORE_EXPORT OmniverseApi :
 {
  public:
 
-  virtual void
-  onStartUp() override {print("wrong start up"); }
+  virtual bool
+  connect() {}
 
-  virtual void
-  onShutDown() override {print("wrong shut down"); }
+  virtual String
+  getConnectedUsername(String stageUrl) {return "";}
 
  protected:
 
