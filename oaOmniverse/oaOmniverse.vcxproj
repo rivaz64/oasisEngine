@@ -116,10 +116,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;$(DEVLIBS)omniverse\usd\debug\include;$(DEVLIBS)omniverse\usd_ext_physics\debug\include;$(DEVLIBS)omniverse\omni_client_library\include;$(DEVLIBS)omniverse\omni_usd_resolver\include;$(DEVLIBS)omniverse\python\include;$(DEVLIBS)omniverse\tinytoml\include;$(DEVLIBS)omniverse\nlohmann-json\include;$(DEVLIBS)omniverse\cppUtils;$(DEVLIBS)omniverse\omniLiveSessionLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;BOOST_ALL_DYN_LINK;TBB_USE_DEBUG=1;_CRT_SECURE_NO_WARNINGS;DEBUG;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

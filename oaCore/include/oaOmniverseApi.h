@@ -18,10 +18,13 @@ class OA_CORE_EXPORT OmniverseApi :
  public:
 
   virtual bool
-  connect() {}
+  connect() {return false;}
 
   virtual String
-  getConnectedUsername(String stageUrl) {return "";}
+  getConnectedUsername() {return "";}
+
+  virtual void
+  createModel(const String& name) {}
 
  protected:
 

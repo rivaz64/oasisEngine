@@ -184,7 +184,7 @@ TestApp::genMorbiusTrip(){
 	{ 1.0f, -0.5f, 0.0f , 0.0f},
 });
 
-  m_actualScene->getRoot()->attach(m_morbActor);
+  //m_actualScene->getRoot()->attach(m_morbActor);
 }
 
 void 
@@ -1120,9 +1120,15 @@ void TestApp::drawImGui()
 
   ImGui::Begin("omniverse");
   {
-    if(ImGui::Button("test")){
-      OmniverseApi::instance().test();
+    if(ImGui::Button("connect")){
+      OmniverseApi::instance().connect();
     }
+
+    ImGui::InputText("name",imguiString,64);
+    if(ImGui::Button("create object")){
+      OmniverseApi::instance().createModel(imguiString);
+    }
+
   }
   ImGui::End();
 

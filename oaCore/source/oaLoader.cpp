@@ -217,7 +217,7 @@ loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
       mesh->setIndexAt(numIndice+2,face->mIndices[2]);
     }
     //ResoureManager::instance().m_meshes.insert({model->getName()})
-    //mesh->create();
+    mesh->writeBuffers();
     model->addMesh(mesh);
   }
 }

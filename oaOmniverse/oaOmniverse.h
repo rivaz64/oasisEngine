@@ -7,6 +7,7 @@
 #pragma once
 
 #include "oaOmniverseApi.h"
+//#include <pxr/usd/usd/stage.h>
 
 namespace oaEngineSDK
 {
@@ -22,15 +23,22 @@ class Omniverse :
   void
   onShutDown() override;
 
-  void
+  bool
   connect() override;
 
   String
-  getConnectedUsername(String stageUrl) override;
+  getConnectedUsername() override;
+
+  void
+  createModel(const String& name) override;
 
 protected:
 
   Omniverse() {print("child constructed"); }
+
+  String m_userFolder = "omniverse://localhost/Users";
+  String m_userName;
+  String m_destinationPath;
 
   friend class OmniverseApi;
   friend class Module<OmniverseApi>;

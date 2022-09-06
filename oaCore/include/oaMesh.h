@@ -134,7 +134,7 @@ class OA_CORE_EXPORT Mesh :
   {
     m_vertexB->release();
     m_indexB->release();
-    m_vertexB->init(m_vertices.data(),sizeof(Vertex),m_vertices.size());
+    m_vertexB->init(m_vertices.data(),sizeof(VertexType),m_vertices.size());
     m_indexB->init(m_index);
   }
 
