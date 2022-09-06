@@ -37,7 +37,7 @@ int32
 Serializer::decodeNumber()
 {
   int32 number;
-  file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
+  file.read(reinterpret_cast<char*>(&number),sizeof(int32));
   return number;
 }
 
@@ -49,7 +49,7 @@ Serializer::encodeSize(SIZE_T size)
 
 SIZE_T Serializer::decodeSize()
 {
-  int32 number;
+  SIZE_T number;
   file.read(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
   return number;
 }
