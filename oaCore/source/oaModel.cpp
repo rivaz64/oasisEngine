@@ -40,7 +40,7 @@ Model::load(Serializer& serializer)
     m_meshes[n] = makeSPtr<StaticMesh>();
     m_meshes[n]->load(serializer);
     auto materialName = serializer.decodeString();
-    addMaterial(ResoureManager::instance().m_materials[materialName]);
+    addMaterial(ResoureManager::instance().m_materials[StringUtilities::getStringId(materialName)]);
   }
 }
 

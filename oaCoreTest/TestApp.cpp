@@ -690,7 +690,7 @@ void TestApp::drawImGui()
   
   if (ImGui::CollapsingHeader("materials")){
     for(auto material : resourceManager.m_materials){
-      if(ImGui::Button(material.first.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(material.second->getName().c_str(),ImVec2(100,100))){
         m_selectedMaterial = material.second;
       }
     }
@@ -698,7 +698,7 @@ void TestApp::drawImGui()
 
   if (ImGui::CollapsingHeader("meshes")){
     for(auto mesh : resourceManager.m_meshes){
-      if(ImGui::Button(mesh.first.c_str(),ImVec2(100,100))){
+      if(ImGui::Button(mesh.second->getName().c_str(),ImVec2(100,100))){
         m_selectedMesh = mesh.second;
       }
     }

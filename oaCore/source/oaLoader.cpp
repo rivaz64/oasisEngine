@@ -298,7 +298,7 @@ loadImage(const Path& path){
 
   texture->initFromImage(image);
 
-  ResoureManager::instance().m_textures.insert({ texture->getName(),texture});
+  ResoureManager::instance().m_textures.insert({StringUtilities::getStringId(texture->getName()),texture});
 
   return true;
 }
@@ -328,10 +328,10 @@ tryLoadTextureChannel(aiMaterial* material,
     newPath.append(defuseName);
     auto stringName = StringUtilities::toString(newPath.filename());
     if(loadImage(newPath) || 
-       manager.m_textures.find(stringName) != manager.m_textures.end()){
+       manager.m_textures.find(StringUtilities::getStringId(stringName)) != manager.m_textures.end()){
 
       gbufferFlags |= gbufferFlag;
-      mat->setTexture(textureChannel, manager.m_textures[stringName]);
+      mat->setTexture(textureChannel, manager.m_textures[StringUtilities::getStringId(stringName)]);
     }
   }
 }
@@ -424,7 +424,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     mat->setName(StringUtilities::toString(MaterialName));
 
-    manager.m_materials.insert({mat->getName(),mat});
+    manager.m_materials.insert({StringUtilities::getStringId(mat->getName()),mat});
   }
 }
 
@@ -639,9 +639,9 @@ Loader::loadScene(const Path& file)
   if(importedScene->HasAnimations()){
     m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }   
-  
-  ResoureManager::instance().m_models.insert({StringUtilities::toString(file.c_str()),model});
-  model->setName(StringUtilities::toString(file.filename()));
+  ;
+  ResoureManager::instance().m_models.insert({StringUtilities::getStringId(file.stem().generic_string()),model});
+  model->setName(file.stem().generic_string());
 
   return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }
@@ -675,7 +675,7 @@ Loader::loadSound(const Path & path)
   }
   auto name = StringUtilities::toString(path.filename());
   sound->setName(name);
-  ResoureManager::instance().m_sounds.insert({name,sound});
+  ResoureManager::instance().m_sounds.insert({StringUtilities::getStringId(name),sound});
   return true;
 }
 

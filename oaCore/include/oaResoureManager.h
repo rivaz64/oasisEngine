@@ -108,67 +108,72 @@ class OA_CORE_EXPORT ResoureManager :
   /**
   * @brief all the loaded meshes
   */
-  Map<String,SPtr<StaticMesh>> m_meshes;
+  Map<uint64,SPtr<StaticMesh>> m_meshes;
 
   /**
    * @brief all the loaded textures
   */
-  Map<String,SPtr<Texture>> m_textures;
+  Map<uint64,SPtr<Texture>> m_textures;
 
   /**
   * @brief all the loaded models
   */
-  Map<String,SPtr<Model>> m_models;
+  Map<uint64,SPtr<Model>> m_models;
 
   /**
    * @brief all the loaded vertex shaders
   */
-  Map<String,SPtr<Shader>> m_vertexShaders;
+  Map<uint64,SPtr<Shader>> m_vertexShaders;
 
   /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,SPtr<Shader>> m_pixelShaders;
+  Map<uint64,SPtr<Shader>> m_pixelShaders;
 
    /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,SPtr<Shader>> m_hullShaders;
+  Map<uint64,SPtr<Shader>> m_hullShaders;
 
    /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,SPtr<Shader>> m_domainShaders;
+  Map<uint64,SPtr<Shader>> m_domainShaders;
 
   /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,SPtr<ShaderProgram>> m_shaderPrograms;
+  Map<uint64,SPtr<ShaderProgram>> m_shaderPrograms;
 
   /**
    * @brief all the loaded pixel shaders
   */
-  Map<String,Vector<SPtr<ShaderProgram>>> m_multiShaderPrograms;
+  Map<uint64,Vector<SPtr<ShaderProgram>>> m_multiShaderPrograms;
 
   /**
    * @brief all the materials
   */
-  Map<String,SPtr<Material>> m_materials;
+  Map<uint64,SPtr<Material>> m_materials;
 
   /**
    * @brief all the loaded skeletons
   */
-  Map<String,SPtr<Skeleton>> m_skeletons;
+  Map<uint64,SPtr<Skeleton>> m_skeletons;
 
   /**
    * @brief all the loaded animations
   */
-  Map<String,SPtr<Animation>> m_animations;
+  Map<uint64,SPtr<Animation>> m_animations;
 
   /**
    * @brief all the loaded sounds
   */
-  Map<String,SPtr<Sound>> m_sounds;
+  Map<uint64,SPtr<Sound>> m_sounds;
+
+  /**
+   * @brief all the ids of the names
+  */
+  Vector<uint64> m_Ids;
 
   friend class Module<ResoureManager>;
   friend class TestApp;

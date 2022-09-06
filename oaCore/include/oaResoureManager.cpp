@@ -218,7 +218,7 @@ createVertexShader(const String& name){
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createVertexShader();
-  resourceManager.m_vertexShaders.insert({name,shader});
+  resourceManager.m_vertexShaders.insert({StringUtilities::getStringId(name),shader});
   shader->compileFromFile(name);
   shader->setName(name);
 }
@@ -229,7 +229,7 @@ createPixelShader(const String& name)
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({name,shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId(name),shader});
   shader->compileFromFile(name);
   shader->setName(name);
 }
@@ -240,7 +240,7 @@ createHullShader(const String& name)
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createHullShader();
-  resourceManager.m_hullShaders.insert({name,shader});
+  resourceManager.m_hullShaders.insert({StringUtilities::getStringId(name),shader});
   shader->compileFromFile(name);
   shader->setName(name);
 }
@@ -251,7 +251,7 @@ createDomainShader(const String& name)
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createHullShader();
-  resourceManager.m_hullShaders.insert({name,shader});
+  resourceManager.m_hullShaders.insert({StringUtilities::getStringId(name),shader});
   shader->compileFromFile(name);
   shader->setName(name);
 }
@@ -299,9 +299,9 @@ createShaderProgram(const String& name, const String& vertex, const String& pixe
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto program = graphicsApi.createShaderProgram();
-  resourceManager.m_shaderPrograms.insert({name,program});
-  program->attach(resourceManager.m_vertexShaders[vertex]);
-  program->attach(resourceManager.m_pixelShaders[pixel]);
+  resourceManager.m_shaderPrograms.insert({StringUtilities::getStringId(name),program});
+  program->attach(resourceManager.m_vertexShaders[StringUtilities::getStringId(vertex)]);
+  program->attach(resourceManager.m_pixelShaders[StringUtilities::getStringId(pixel)]);
   program->setName(name);
 }
 
@@ -313,11 +313,11 @@ createShaderProgram(const String& name, const String& vertex,
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto program = graphicsApi.createShaderProgram();
-  resourceManager.m_shaderPrograms.insert({name,program});
-  program->attach(resourceManager.m_vertexShaders[vertex]);
-  program->attach(resourceManager.m_hullShaders[hull]);
-  program->attach(resourceManager.m_domainShaders[domain]);
-  program->attach(resourceManager.m_pixelShaders[pixel]);
+  resourceManager.m_shaderPrograms.insert({StringUtilities::getStringId(name),program});
+  program->attach(resourceManager.m_vertexShaders[StringUtilities::getStringId(vertex)]);
+  program->attach(resourceManager.m_hullShaders[StringUtilities::getStringId(hull)]);
+  program->attach(resourceManager.m_domainShaders[StringUtilities::getStringId(domain)]);
+  program->attach(resourceManager.m_pixelShaders[StringUtilities::getStringId(pixel)]);
   program->setName(name);
 }
 
@@ -354,53 +354,53 @@ ResoureManager::loadDefaultShaders()
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({"directionalLight",shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId("directionalLight"),shader});
   shader->compileFromFile("light",{"DIRECTIONAL"});
   shader->setName("directionalLight");
 
   shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({"pointLight",shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId("pointLight"),shader});
   shader->compileFromFile("light",{"POINT"});
   shader->setName("pointLight");
 
   shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({"spotLight",shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId("spotLight"),shader});
   shader->compileFromFile("light",{"SPOT"});
   shader->setName("spotLight");
 
 
   shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({"HBlur",shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId("HBlur"),shader});
   shader->compileFromFile("blur",{"HORIZONTAL"});
   shader->setName("HBlur");
 
   shader = graphicsApi.createPixelShader();
-  resourceManager.m_pixelShaders.insert({"VBlur",shader});
+  resourceManager.m_pixelShaders.insert({StringUtilities::getStringId("VBlur"),shader});
   shader->compileFromFile("blur",{"VERTICAL"});
   shader->setName("VBlur");
 
   shader = graphicsApi.createHullShader();
-  resourceManager.m_hullShaders.insert({"hullTris",shader});
+  resourceManager.m_hullShaders.insert({StringUtilities::getStringId("hullTris"),shader});
   shader->compileFromFile("hull",{"TRIS"});
   shader->setName("hullTris");
 
   shader = graphicsApi.createHullShader();
-  resourceManager.m_hullShaders.insert({"hullQuad",shader});
+  resourceManager.m_hullShaders.insert({StringUtilities::getStringId("hullQuad"),shader});
   shader->compileFromFile("hull",{"QUAD"});
   shader->setName("hullQuad");
 
   shader = graphicsApi.createDomainShader();
-  resourceManager.m_domainShaders.insert({"domainQuad",shader});
+  resourceManager.m_domainShaders.insert({StringUtilities::getStringId("domainQuad"),shader});
   shader->compileFromFile("domain",{"QUAD"});
   shader->setName("domainQuad");
 
   shader = graphicsApi.createVertexShader();
-  resourceManager.m_vertexShaders.insert({"Tesselation",shader});
+  resourceManager.m_vertexShaders.insert({StringUtilities::getStringId("Tesselation"),shader});
   shader->compileFromFile("vertexShader",{"TESSEL"});
   shader->setName("Tesselation");
 
   shader = graphicsApi.createVertexShader();
-  resourceManager.m_vertexShaders.insert({"SimpleVertex",shader});
+  resourceManager.m_vertexShaders.insert({StringUtilities::getStringId("SimpleVertex"),shader});
   shader->compileFromFile("vertexShader",{"SIMPLE"});
   shader->setName("SimpleVertex");
 
@@ -409,7 +409,7 @@ ResoureManager::loadDefaultShaders()
   //("animation","animVertexShader","default");
   createShaderProgram("paralax","vertexShader","paralax");
   createShaderProgram("transparent","vertexShader","transparent");
-  m_shaderPrograms["transparent"]->setChannels({"diffuse","specular","normalMap"});
+  m_shaderPrograms[StringUtilities::getStringId("transparent")]->setChannels({"diffuse","specular","normalMap"});
   createShaderProgram("debug","vertexDebug","debug");
   //createShaderProgram("GBuffer","vertexShader","GBuffer");
   //m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap","emisive"});
@@ -428,7 +428,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("Tesselator","Tesselation","hullQuad","domainQuad","color");
   Vector<SPtr<ShaderProgram>> gBuffer;
   createPixelShaders("GBuffer",
-                     m_vertexShaders["vertexShader"],
+                     m_vertexShaders[StringUtilities::getStringId("vertexShader")],
                      {"EMISIVE","SPECULAR","NORMALS","DIFFUSE"},
                      gBuffer);
   //auto pixelShader = graphicsApi.createPixelShader();
@@ -442,7 +442,7 @@ ResoureManager::loadDefaultShaders()
   //if(gBuffer.size()==0){
   //  gBuffer.push_back(program);
   //}
-  m_multiShaderPrograms.insert({"gBuffer",gBuffer});
+  m_multiShaderPrograms.insert({StringUtilities::getStringId("gBuffer"),gBuffer});
 }
 
 void ResoureManager::loadDefaulTextures()

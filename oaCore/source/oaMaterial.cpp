@@ -58,7 +58,7 @@ Material::load(Serializer& serializer)
     channel = serializer.decodeString();
     name =  serializer.decodeString();
     if(name != ""){
-       setTexture(channel, resourseManager.m_textures[name]);
+       setTexture(channel, resourseManager.m_textures[StringUtilities::getStringId(name)]);
     }
   }
 }
@@ -69,7 +69,7 @@ Material::set()
   auto& graphicsAPI = GraphicAPI::instance();
   auto& resourseManager = ResoureManager::instance();
 
-  auto& shader = resourseManager.m_multiShaderPrograms["gBuffer"][m_shader];
+  auto& shader = resourseManager.m_multiShaderPrograms[StringUtilities::getStringId("gBuffer")][m_shader];
 
   auto& channels = shader->getChannels();
 
