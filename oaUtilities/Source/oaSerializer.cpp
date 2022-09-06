@@ -30,7 +30,7 @@ Serializer::init(const Path& path,bool write)
 void
 Serializer::encodeNumber(int32 number)
 {
-  file.write(reinterpret_cast<char*>(&number),sizeof(SIZE_T));
+  file.write(reinterpret_cast<char*>(&number),sizeof(int32));
 }
 
 int32
