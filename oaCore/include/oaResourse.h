@@ -11,6 +11,25 @@
 
 namespace oaEngineSDK{
 
+namespace RESOURSE_TYPE{
+enum E{
+  kNone = 0,
+  kStaticMesh,
+  kTexture,
+  kModel,
+  kShader,
+  kVertexShader,
+  kPixelShader,
+  kHullShader,
+  kDomaniShader,
+  kShaderProgram,
+  kMaterial,
+  kSkeleton,
+  kAnimation,
+  kSound
+};
+}
+
 class OA_CORE_EXPORT Resourse
 {
  public:
@@ -39,6 +58,12 @@ class OA_CORE_EXPORT Resourse
   FORCEINLINE void
   setPath(const Path& path){
     m_path = path;
+  }
+
+  virtual RESOURSE_TYPE::E
+  getType()
+  {
+    return RESOURSE_TYPE::kNone;
   }
 
  private:

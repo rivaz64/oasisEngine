@@ -132,8 +132,8 @@ using Pair = pair<T1,T2>;
  * @return 
 */
 template<typename T,typename U>
-FORCEINLINE SPtr<T> 
-cast(const SPtr<U>& pointer)
+FORCEINLINE WPtr<T> 
+cast(const WPtr<U>& pointer)
 {
   return reinterpret_pointer_cast<T>(pointer);
 }

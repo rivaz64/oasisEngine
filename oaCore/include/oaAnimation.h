@@ -48,6 +48,12 @@ class Animation
  public:
   
   String m_name;
+
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kAnimation;
+  }
   
  private:
 

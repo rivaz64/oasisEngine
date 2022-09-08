@@ -7,6 +7,7 @@
 #pragma once
 #include "oaPrerequisitesCore.h"
 #include "oaMatrix4f.h"
+#include "oaResourse.h"
 
 namespace oaEngineSDK{
 
@@ -35,9 +36,16 @@ struct SkeletalNode{
 /**
  * @brief the skeleton for the animations
 */
-class OA_CORE_EXPORT Skeleton
+class OA_CORE_EXPORT Skeleton :
+  public Resourse
 {
  public:
+
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kSkeleton;
+  }
 
   /**
    * @brief all the nodes of the skeleton

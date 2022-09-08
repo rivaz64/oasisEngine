@@ -8,7 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaModule.h"
-
+#include "oaResourse.h"
 
 
 namespace oaEngineSDK {
@@ -103,77 +103,109 @@ class OA_CORE_EXPORT ResoureManager :
            Vector<SPtr<Model>>& division,
            float size);
 
- public:
+  /**
+   * @brief if this name is aready ocupied it ads a _n
+   * @param name 
+  */
+  String 
+  getUniqueName(String name);
+
+  FORCEINLINE WPtr<Resourse>
+  getResourse(const String& name)
+  {
+    return m_resourses[StringUtilities::getStringId(name)];
+  }
+
+  FORCEINLINE void
+  registerResourse(const String& name, SPtr<Resourse> resourse)
+  {
+    String realName = getUniqueName(name);
+    resourse->setName(realName);
+    m_resourses.insert({StringUtilities::getStringId(realName),resourse});
+    m_types[resourse->getType()].push_back(resourse);
+  }
+
+ private:
+
+  ///**
+  //* @brief all the loaded meshes
+  //*/
+  //Map<uint64,WPtr<StaticMesh>> m_meshes;
+  //
+  ///**
+  // * @brief all the loaded textures
+  //*/
+  //Map<uint64,WPtr<Texture>> m_textures;
+  //
+  ///**
+  //* @brief all the loaded models
+  //*/
+  //Map<uint64,WPtr<Model>> m_models;
+  //
+  ///**
+  // * @brief all the loaded vertex shaders
+  //*/
+  //Map<uint64,WPtr<Shader>> m_vertexShaders;
+  //
+  ///**
+  // * @brief all the loaded pixel shaders
+  //*/
+  //Map<uint64,WPtr<Shader>> m_pixelShaders;
+  //
+  // /**
+  // * @brief all the loaded pixel shaders
+  //*/
+  //Map<uint64,WPtr<Shader>> m_hullShaders;
+  //
+  // /**
+  // * @brief all the loaded pixel shaders
+  //*/
+  //Map<uint64,WPtr<Shader>> m_domainShaders;
+  //
+  ///**
+  // * @brief all the loaded pixel shaders
+  //*/
+  //Map<uint64,WPtr<ShaderProgram>> m_shaderPrograms;
+  //
+  ///**
+  // * @brief all the loaded pixel shaders
+  //*/
+  //Map<uint64,Vector<WPtr<ShaderProgram>>> m_multiShaderPrograms;
+  //
+  ///**
+  // * @brief all the materials
+  //*/
+  //Map<uint64,WPtr<Material>> m_materials;
+  //
+  ///**
+  // * @brief all the loaded skeletons
+  //*/
+  //Map<uint64,WPtr<Skeleton>> m_skeletons;
+  //
+  ///**
+  // * @brief all the loaded animations
+  //*/
+  //Map<uint64,WPtr<Animation>> m_animations;
+  //
+  ///**
+  // * @brief all the loaded sounds
+  //*/
+  //Map<uint64,WPtr<Sound>> m_sounds;
 
   /**
-  * @brief all the loaded meshes
+   * @brief all the resourses for quick search
   */
-  Map<uint64,SPtr<StaticMesh>> m_meshes;
+  Map<uint64,SPtr<Resourse>> m_resourses;
 
   /**
-   * @brief all the loaded textures
+   * @brief the resourses by type
   */
-  Map<uint64,SPtr<Texture>> m_textures;
-
-  /**
-  * @brief all the loaded models
-  */
-  Map<uint64,SPtr<Model>> m_models;
-
-  /**
-   * @brief all the loaded vertex shaders
-  */
-  Map<uint64,SPtr<Shader>> m_vertexShaders;
-
-  /**
-   * @brief all the loaded pixel shaders
-  */
-  Map<uint64,SPtr<Shader>> m_pixelShaders;
-
-   /**
-   * @brief all the loaded pixel shaders
-  */
-  Map<uint64,SPtr<Shader>> m_hullShaders;
-
-   /**
-   * @brief all the loaded pixel shaders
-  */
-  Map<uint64,SPtr<Shader>> m_domainShaders;
-
-  /**
-   * @brief all the loaded pixel shaders
-  */
-  Map<uint64,SPtr<ShaderProgram>> m_shaderPrograms;
-
-  /**
-   * @brief all the loaded pixel shaders
-  */
-  Map<uint64,Vector<SPtr<ShaderProgram>>> m_multiShaderPrograms;
-
-  /**
-   * @brief all the materials
-  */
-  Map<uint64,SPtr<Material>> m_materials;
-
-  /**
-   * @brief all the loaded skeletons
-  */
-  Map<uint64,SPtr<Skeleton>> m_skeletons;
-
-  /**
-   * @brief all the loaded animations
-  */
-  Map<uint64,SPtr<Animation>> m_animations;
-
-  /**
-   * @brief all the loaded sounds
-  */
-  Map<uint64,SPtr<Sound>> m_sounds;
+  Map<RESOURSE_TYPE::E,Vector<WPtr<Resourse>>> m_types;
 
   /**
    * @brief all the ids of the names
   */
-  Vector<uint64> m_Ids;
+  Set<uint64> m_ids;
 
   friend class Module<ResoureManager>;
   friend class TestApp;

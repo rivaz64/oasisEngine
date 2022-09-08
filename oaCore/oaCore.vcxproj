@@ -171,6 +171,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\oaActor.h" />
+    <ClInclude Include="include\oaAdaptativeShader.h" />
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaAudioAPI.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="source\oaAdaptativeShader.cpp" />
     <ClCompile Include="source\oaAnimation.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>

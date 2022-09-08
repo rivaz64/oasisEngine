@@ -36,6 +36,12 @@ class OA_CORE_EXPORT Material :
   void
   load(Serializer& serializer) override;
 
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kMaterial;
+  }
+
   /**
    * @brief sets this material to be used in the shader
   */

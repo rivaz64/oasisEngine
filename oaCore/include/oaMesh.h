@@ -129,6 +129,12 @@ class OA_CORE_EXPORT Mesh :
     serializer.decodeVector(m_index);
   }
 
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kStaticMesh;
+  }
+
   void
   writeBuffers()
   {
@@ -285,6 +291,7 @@ class OA_CORE_EXPORT Mesh :
 
 //typedef OA_CORE_EXPORT Mesh<AnimationVertex>;
 //typedef OA_CORE_EXPORT Mesh<SimpleVertex>;
+
 
 }
 

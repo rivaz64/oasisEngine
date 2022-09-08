@@ -19,6 +19,12 @@ class OA_CORE_EXPORT Sound :
 {
  public:
 
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kSound;
+  }
+
   virtual bool
   loadFromFile(const Path& path);
 

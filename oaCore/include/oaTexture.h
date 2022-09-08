@@ -103,6 +103,12 @@ class OA_CORE_EXPORT Texture :
 
  public:
 
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kTexture;
+  }
+
   /**
    * @brief initializes a texture
    * @param size 

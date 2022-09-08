@@ -11,21 +11,30 @@
 
 namespace oaEngineSDK{
 
+/**
+ * @brief a shader for the complete pipeline
+*/
 class OA_CORE_EXPORT ShaderProgram :
   public Shader
 {
  public:
 
-  ShaderProgram(const Vector<SPtr<Shader>>& shaders);
+  ShaderProgram(const Vector<WPtr<Shader>>& shaders);
 
   ShaderProgram() = default;
+
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kShaderProgram;
+  }
   
   /**
    * @brief attach a shader to this program
    * @param shader the shader to be attached
   */
   virtual void 
-  attach(SPtr<Shader> shader){}
+  attach(WPtr<Shader> shader){}
 
   /**
    * @brief sets this program to be used

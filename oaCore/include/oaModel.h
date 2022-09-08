@@ -41,6 +41,12 @@ class OA_CORE_EXPORT Model :
   void
   load(Serializer& serializer) override;
 
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kModel;
+  }
+
   /**
    * @brief adds a mesh to this model
    * @param mesh the new mesh

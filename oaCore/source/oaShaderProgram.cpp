@@ -3,7 +3,7 @@
 
 namespace oaEngineSDK{
 
-ShaderProgram::ShaderProgram(const Vector<SPtr<Shader>>& shaders)
+ShaderProgram::ShaderProgram(const Vector<WPtr<Shader>>& shaders)
 {
   for(auto& shader : shaders){
     attach(shader);

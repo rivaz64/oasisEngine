@@ -24,7 +24,13 @@ class OA_CORE_EXPORT Shader :
   */
   Shader() = default;
 
-   virtual ~Shader() = default;
+  virtual ~Shader() = default;
+
+  RESOURSE_TYPE::E
+  getType() override
+  {
+    return RESOURSE_TYPE::kShader;
+  }
 
   /**
    * @brief compiles the sahder
