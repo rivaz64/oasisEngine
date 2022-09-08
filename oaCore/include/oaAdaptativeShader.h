@@ -33,6 +33,9 @@ class OA_CORE_EXPORT AdaptativeShader :
   bool
   compile(const String& name, const Vector<String>& allDefines);
 
+  void
+  set(uint32 flags);
+
  protected:
 
   Vector<SPtr<Shader>> m_shaders;

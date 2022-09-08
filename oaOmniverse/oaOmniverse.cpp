@@ -1,5 +1,6 @@
 #include "oaOmniverse.h"
 #include <OmniClient.h>
+#include <OmniUsdLive.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -40,6 +41,11 @@
 
 namespace oaEngineSDK 
 {
+TF_DEFINE_PRIVATE_TOKENS(
+	_tokens,
+	(Root)
+);
+
 
 //static void OmniClientConnectionStatusCallbackImpl(void* userData, const char* url, OmniClientConnectionStatus status) noexcept
 //{
@@ -78,7 +84,7 @@ Omniverse::onStartUp()
 void 
 Omniverse::onShutDown()
 {
-  omniClientLiveWaitForPendingUpdates();
+  omniUsdLiveWaitForPendingUpdates();
 
   g_stage.Reset();
 
@@ -117,7 +123,7 @@ Omniverse::getConnectedUsername()
 void 
 Omniverse::createModel(const String& name)
 {
-  auto stageUrl = m_destinationPath + "/" + name + ".live";//+(doLiveEdit ? ".live" : ".usd");
+  auto stageUrl = m_destinationPath + "/" + name + ".usd";//+(doLiveEdit ? ".live" : ".usd");
   
   print("Waiting for " + stageUrl + " to delete... ");
   omniClientWait(omniClientDelete(stageUrl.c_str(), nullptr, nullptr));
@@ -132,6 +138,8 @@ Omniverse::createModel(const String& name)
   else {
       print("New stage created: " + stageUrl);
   }
+
+  SdfPath::AbsoluteRootPath();
 }
 
 }

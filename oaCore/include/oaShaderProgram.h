@@ -26,7 +26,7 @@ class OA_CORE_EXPORT ShaderProgram :
   RESOURSE_TYPE::E
   getType() override
   {
-    return RESOURSE_TYPE::kShaderProgram;
+    return RESOURSE_TYPE::kShader;
   }
   
   /**

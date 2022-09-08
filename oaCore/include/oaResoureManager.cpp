@@ -282,10 +282,7 @@ createShaderProgram(const String& name, const String& vertex,
 void 
 ResoureManager::loadDefaultShaders()
 {
-  m_vertexShaders.clear();
-  m_pixelShaders.clear();
-  m_shaderPrograms.clear();
-  m_multiShaderPrograms.clear();
+  deleteAllResoursesOfType(RESOURSE_TYPE::kShader);
   createVertexShader("v_vertexShader");
   createVertexShader("v_animVertexShader");
   createVertexShader("v_vertexDebug");

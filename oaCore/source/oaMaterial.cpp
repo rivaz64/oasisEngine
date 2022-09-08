@@ -9,6 +9,7 @@
 #include "oaTexture.h"
 #include "oaShaderProgram.h"
 #include "oaResoureManager.h"
+#include "oaAdaptativeShader.h"
 
 namespace oaEngineSDK{
 
@@ -58,7 +59,7 @@ Material::load(Serializer& serializer)
     channel = serializer.decodeString();
     name =  serializer.decodeString();
     if(name != ""){
-       setTexture(channel, resourseManager.m_textures[StringUtilities::getStringId(name)]);
+       setTexture(channel, cast<Texture>(resourseManager.getResourse(name)));
     }
   }
 }
@@ -69,12 +70,13 @@ Material::set()
   auto& graphicsAPI = GraphicAPI::instance();
   auto& resourseManager = ResoureManager::instance();
 
-  auto& shader = resourseManager.m_multiShaderPrograms[StringUtilities::getStringId("gBuffer")][m_shader];
+  //auto& shader = resourseManager.m_multiShaderPrograms[StringUtilities::getStringId("gBuffer")][m_shader];
+  //shader->set();
+  cast<AdaptativeShader>(resourseManager.getResourse("gBuffer")).lock()->set(m_shader);
 
-  auto& channels = shader->getChannels();
+  auto channels = {"diffuse","specular","normalMap","emisive"};
 
   uint32 channelNum = 0;
-  shader->set();
   for(auto& channel : channels){
     if(m_textures.find(channel)!=m_textures.end()){
       if(!m_textures[channel].expired()){

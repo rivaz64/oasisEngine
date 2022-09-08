@@ -467,8 +467,9 @@ DX11GraphicAPI::loadDDS(const Path& path)
   cast<DX11Texture>(texture)->m_shaderResourceView = srv;
   auto& instance = ResoureManager::instance();
   auto textureName = StringUtilities::toString(path.generic_wstring());
-  texture->setName(textureName);
-  instance.m_textures.insert({StringUtilities::getStringId(textureName),texture});
+  //texture->setName(textureName);
+  instance.registerResourse(textureName,texture);
+  //instance.m_textures.insert({StringUtilities::getStringId(textureName),texture});
   return true;
 }
 

@@ -42,8 +42,9 @@ FM_Audio::createSound()
 }
 
 void 
-FM_Audio::playSound(SPtr<Sound> sound)
+FM_Audio::playSound(WPtr<Sound> wSound)
 {
+  auto sound = wSound.lock();
   auto fModSound = cast<FM_Sound>(sound);
   Channel* channel = nullptr;
   m_audioSystem->playSound(fModSound->sound,nullptr,false,&channel);

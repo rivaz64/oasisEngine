@@ -135,6 +135,13 @@ template<typename T,typename U>
 FORCEINLINE WPtr<T> 
 cast(const WPtr<U>& pointer)
 {
+  return reinterpret_pointer_cast<T>(pointer.lock());
+}
+
+template<typename T,typename U>
+FORCEINLINE SPtr<T> 
+cast(const SPtr<U>& pointer)
+{
   return reinterpret_pointer_cast<T>(pointer);
 }
 

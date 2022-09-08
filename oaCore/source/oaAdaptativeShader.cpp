@@ -29,5 +29,12 @@ AdaptativeShader::compile(const String& name, const Vector<String>& allDefines)
   return true;
 }
 
+void
+AdaptativeShader::set(uint32 flags)
+{
+  m_vertexShader.lock()->set();
+  m_shaders[flags]->set();
+}
+
 }
 

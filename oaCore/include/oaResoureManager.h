@@ -125,6 +125,23 @@ class OA_CORE_EXPORT ResoureManager :
     m_types[resourse->getType()].push_back(resourse);
   }
 
+  FORCEINLINE void
+  deleteAllResoursesOfType(RESOURSE_TYPE::E type)
+  {
+    auto& resourses = m_types[type];
+    for(auto& resourse : resourses)
+    {
+      m_resourses.erase(StringUtilities::getStringId(resourse.lock()->getName()));
+    }
+    resourses.clear();
+  }
+
+  FORCEINLINE Vector<WPtr<Resourse>>
+  getAllResoursesOfType(RESOURSE_TYPE::E type)
+  {
+    return m_types[type];
+  }
+
  private:
 
   ///**

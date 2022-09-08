@@ -39,7 +39,7 @@ class FM_Audio :
   createSound() override;
 
   void
-  playSound(SPtr<Sound> sound) override;
+  playSound(WPtr<Sound> sound) override;
 
  private:
   

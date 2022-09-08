@@ -680,26 +680,26 @@ void TestApp::drawImGui()
       //  loader = 0;
       //}
     }
-    for(auto texture : resourceManager.m_textures){
-      if(texture.second)
-      if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
-        m_selectedTexture = texture.second;
+    for(auto texture : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
+      if(!texture.expired())
+      if(ImGui::ImageButton(cast<Texture>(texture).lock()->getId(),ImVec2(100,100))){
+        m_selectedTexture = cast<Texture>(texture);
       }
     }
   }
   
   if (ImGui::CollapsingHeader("materials")){
-    for(auto material : resourceManager.m_materials){
-      if(ImGui::Button(material.second->getName().c_str(),ImVec2(100,100))){
-        m_selectedMaterial = material.second;
+    for(auto material : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
+      if(ImGui::Button(material.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedMaterial = cast<Material>(material);
       }
     }
   }
 
   if (ImGui::CollapsingHeader("meshes")){
-    for(auto mesh : resourceManager.m_meshes){
-      if(ImGui::Button(mesh.second->getName().c_str(),ImVec2(100,100))){
-        m_selectedMesh = mesh.second;
+    for(auto mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
+      if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedMesh = cast<StaticMesh>(mesh);
       }
     }
   }
@@ -716,34 +716,34 @@ void TestApp::drawImGui()
       //}
     }
 
-    for(auto model : resourceManager.m_models){
-      if(ImGui::Button(model.second->getName().c_str(),ImVec2(100,100))){
-        m_selectedModel = model.second;
+    for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+      if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedModel = cast<Model>(model);
       }
     }
   }
 
   if (ImGui::CollapsingHeader("skeletons")){
-    for(auto skeleton : resourceManager.m_skeletons){
-      if(ImGui::Button(skeleton.second->m_name.c_str(),ImVec2(100,100))){
+    for(auto skeleton : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kSkeleton)){
+      if(ImGui::Button(skeleton.lock()->getName().c_str(),ImVec2(100,100))){
         print("working");
-        m_selectedSkeleton = skeleton.second;
+        m_selectedSkeleton = cast<Skeleton>(skeleton);
       }
     }
   }
 
   if (ImGui::CollapsingHeader("animations")){
-    for(auto animation : resourceManager.m_animations){
-      if(ImGui::Button(animation.second->m_name.c_str(),ImVec2(100,100))){
-        m_selectedAnimation = animation.second;
+    for(auto animation : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kAnimation)){
+      if(ImGui::Button(animation.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedAnimation = cast<Animation>(animation);
       }
     }
   }
 
    if (ImGui::CollapsingHeader("sounds")){
-    for(auto sound : resourceManager.m_sounds){
-      if(ImGui::Button(sound.second->getName().c_str(),ImVec2(100,100))){
-        audioApi.playSound(sound.second);
+    for(auto sound : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kSound)){
+      if(ImGui::Button(sound.lock()->getName().c_str(),ImVec2(100,100))){
+        audioApi.playSound(cast<Sound>(sound));
       }
     }
   }
@@ -913,19 +913,19 @@ void TestApp::drawImGui()
       String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
       Serializer serializer;
       serializer.init(filePathName,true);
-      serializer.encodeSize(resourceManager.m_textures.size());
-      for(auto& texture: resourceManager.m_textures){
-        texture.second->getImage()->save(serializer);
+      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
+      for(auto& texture: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
+        cast<Texture>(texture).lock()->getImage()->save(serializer);
       }
       
-      serializer.encodeSize(resourceManager.m_materials.size());
-      for(auto& material: resourceManager.m_materials){
-        material.second->save(serializer);
+      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
+      for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
+        material.lock()->save(serializer);
       }
       
-      serializer.encodeSize(resourceManager.m_models.size());
-      for(auto& model: resourceManager.m_models){
-        model.second->save(serializer);
+      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
+      for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+        model.lock()->save(serializer);
       }
       
       auto actors = m_actualScene->getRoot()->getChilds();
@@ -948,40 +948,40 @@ void TestApp::drawImGui()
     // action if OK
     if (ImGuiFileDialog::Instance()->IsOk())
     {
-      String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-      Serializer serializer;
-      if(serializer.init(filePathName,FILE::kRead)){
-        SIZE_T number = serializer.decodeSize();
-        for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-          auto image = makeSPtr<Image>();
-          image->load(serializer);
-          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-          texture->initFromImage(image);
-          resourceManager.m_textures.insert({StringUtilities::getStringId(texture->getName()),texture});
-        }
-    
-        number = serializer.decodeSize();
-        for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-          auto material = makeSPtr<Material>();
-          material->load(serializer);
-          resourceManager.m_materials.insert({StringUtilities::getStringId(material->getName()),material});
-        }
-        
-        number = serializer.decodeSize();
-        for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-          auto model = makeSPtr<Model>();
-          model->load(serializer);
-          resourceManager.m_models.insert({StringUtilities::getStringId(model->getName()),model});
-        }
-    
-        number = serializer.decodeSize();
-        for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-          auto actor = makeSPtr<Actor>();
-          actor->load(serializer);
-          m_actualScene->getRoot()->attach(actor);
-        }
-      }
+      //String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      //String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      //Serializer serializer;
+      //if(serializer.init(filePathName,FILE::kRead)){
+      //  SIZE_T number = serializer.decodeSize();
+      //  for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+      //    auto image = makeSPtr<Image>();
+      //    image->load(serializer);
+      //    SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+      //    texture->initFromImage(image);
+      //    resourceManagerm_textures.insert({StringUtilities::getStringId(texture->getName()),texture});
+      //  }
+      //
+      //  number = serializer.decodeSize();
+      //  for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+      //    auto material = makeSPtr<Material>();
+      //    material->load(serializer);
+      //    resourceManager.m_materials.insert({StringUtilities::getStringId(material->getName()),material});
+      //  }
+      //  
+      //  number = serializer.decodeSize();
+      //  for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+      //    auto model = makeSPtr<Model>();
+      //    model->load(serializer);
+      //    resourceManager.m_models.insert({StringUtilities::getStringId(model->getName()),model});
+      //  }
+      //
+      //  number = serializer.decodeSize();
+      //  for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+      //    auto actor = makeSPtr<Actor>();
+      //    actor->load(serializer);
+      //    m_actualScene->getRoot()->attach(actor);
+      //  }
+      //}
     }
     
     // close

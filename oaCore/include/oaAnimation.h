@@ -9,6 +9,7 @@
 #include "oaPrerequisitesCore.h"
 #include "oaVector3f.h"
 #include "oaQuaternion.h"
+#include "oaResourse.h"
 
 namespace oaEngineSDK{
 
@@ -42,7 +43,8 @@ struct AnimNode{
 /**
  * @brief a class to store animations
 */
-class Animation
+class Animation :
+  public Resourse
 {
 
  public:

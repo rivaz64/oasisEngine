@@ -23,7 +23,7 @@ class OA_CORE_EXPORT AudioAPI :
   createSound();
 
   virtual void
-  playSound(SPtr<Sound> sound) {}
+  playSound(WPtr<Sound> sound) {}
 
  private:
 

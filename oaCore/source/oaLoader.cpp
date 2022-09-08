@@ -292,13 +292,13 @@ loadImage(const Path& path){
 
   //auto pitch = FreeImage_GetPitch(dib);
 
-  image->setName(StringUtilities::toString(path.filename()));
+  image->setName(ResoureManager::instance().getUniqueName(path.stem().generic_string()));
 
   SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 
   texture->initFromImage(image);
 
-  ResoureManager::instance().m_textures.insert({StringUtilities::getStringId(texture->getName()),texture});
+  ResoureManager::instance().registerResourse(texture->getName(),texture);
 
   return true;
 }
@@ -327,11 +327,11 @@ tryLoadTextureChannel(aiMaterial* material,
     newPath = path.parent_path().generic_wstring();
     newPath.append(defuseName);
     auto stringName = StringUtilities::toString(newPath.filename());
-    if(loadImage(newPath) || 
-       manager.m_textures.find(StringUtilities::getStringId(stringName)) != manager.m_textures.end()){
+    if(loadImage(newPath) /*|| 
+       manager.m_textures.find(StringUtilities::getStringId(stringName)) != manager.m_textures.end()*/){
 
       gbufferFlags |= gbufferFlag;
-      mat->setTexture(textureChannel, manager.m_textures[StringUtilities::getStringId(stringName)]);
+      mat->setTexture(textureChannel, cast<Texture>(manager.getResourse(stringName)));
     }
   }
 }
@@ -424,7 +424,7 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
 
     mat->setName(StringUtilities::toString(MaterialName));
 
-    manager.m_materials.insert({StringUtilities::getStringId(mat->getName()),mat});
+    manager.registerResourse(StringUtilities::toString(MaterialName),mat); //m_materials.insert({StringUtilities::getStringId(mat->getName()),mat});
   }
 }
 
@@ -640,7 +640,7 @@ Loader::loadScene(const Path& file)
     m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }   
   ;
-  ResoureManager::instance().m_models.insert({StringUtilities::getStringId(file.stem().generic_string()),model});
+  ResoureManager::instance().registerResourse(file.stem().generic_string(),model); 
   model->setName(file.stem().generic_string());
 
   return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
@@ -675,7 +675,7 @@ Loader::loadSound(const Path & path)
   }
   auto name = StringUtilities::toString(path.filename());
   sound->setName(name);
-  ResoureManager::instance().m_sounds.insert({StringUtilities::getStringId(name),sound});
+  ResoureManager::instance().registerResourse(name,sound);  
   return true;
 }
 

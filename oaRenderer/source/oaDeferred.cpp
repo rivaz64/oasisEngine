@@ -235,7 +235,7 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
               graphicsAPI.setHSBuffer(m_tessBufer,0);
               m_globalTransformBuffer->write(finalTransform.getData());
               graphicsAPI.setDSBuffer(m_globalTransformBuffer, 0);
-              resourseManager.m_shaderPrograms[StringUtilities::getStringId("Tesselator")]->set();
+              cast<Shader>(resourseManager.getResourse("Tesselator")).lock()->set(); 
               controlPoints->set();
               graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::k16ContolPointPathlist);
               graphicsAPI.draw(mesh->getNumOfControlPoints());
@@ -350,7 +350,7 @@ Deferred::ssao( const Vector4f& config)
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
 
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("ssao")]->set();
+  cast<Shader>(resourseManager.getResourse("ssao")).lock()->set();
 
   m_configs->write(&config);
   graphicsAPI.setPSBuffer(m_configs,0);
@@ -383,7 +383,7 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
   graphicsAPI.setRenderTarget(textureOut);
   graphicsAPI.setTexture(textureIn,0);
   m_kernel->write(m_blurKernel.data());
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("HBlur")]->set();
+  cast<Shader>(resourseManager.getResourse("HBlur")).lock()->set();
   graphicsAPI.setPSBuffer(m_kernel,0);
   graphicsAPI.setPSBuffer(m_size,1);
   //graphicsAPI.setPSBuffer(m_smallSize,1);
@@ -394,7 +394,7 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
 
   graphicsAPI.setRenderTarget(textureIn);
   graphicsAPI.setTexture(textureOut,0);
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("VBlur")]->set();
+  cast<Shader>(resourseManager.getResourse("VBlur")).lock()->set();
   screen->set();
   graphicsAPI.drawIndex(6);
   //copy(m_blur,texture);
@@ -419,7 +419,7 @@ Deferred::copy(SPtr<Texture> textureIn, SPtr<Texture> textureOut)
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("copy")]->set();
+  cast<Shader>(resourseManager.getResourse("copy")).lock()->set();
   graphicsAPI.setRenderTarget(textureOut);
   graphicsAPI.setTexture(textureIn,0);
   
@@ -437,8 +437,7 @@ Deferred::aplylights()
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
-
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("lights")]->set();
+  cast<Shader>(resourseManager.getResourse("lights")).lock()->set();
   
   //m_LightLocation->write(&light);
   //graphicsAPI.setPSBuffer(m_LightLocation,0);
@@ -465,7 +464,7 @@ Deferred::directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalL
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setBlendState(m_blendState1);
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("directionalLight")]->set();
+  cast<Shader>(resourseManager.getResourse("directionalLight")).lock()->set();
   graphicsAPI.setRenderTargets(m_lightBuffer);
 
   for(auto& light : lights){
@@ -492,7 +491,7 @@ Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& light
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setBlendState(m_blendState1);
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("pointLight")]->set();
+  cast<Shader>(resourseManager.getResourse("pointLight")).lock()->set();
   graphicsAPI.setRenderTargets(m_lightBuffer);
 
 
@@ -520,7 +519,7 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setBlendState(m_blendState1);
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("spotLight")]->set();
+  cast<Shader>(resourseManager.getResourse("spotLight")).lock()->set();
   graphicsAPI.setRenderTargets(m_lightBuffer);
   for(auto& light : lights){
     auto viewLight = light;
@@ -549,7 +548,7 @@ Deferred::shadows(const Vector<SpotLight>& lights, SPtr<Scene> scene)
   int8 i = 0;
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("shadowMapper")]->set();
+  cast<Shader>(resourseManager.getResourse("shadowMapper")).lock()->set();
   for(auto& light : lights){
     if(light.castShadows){
       m_shadowsCamera->setLocation(light.location);
@@ -627,7 +626,7 @@ Deferred::downSapmle(SPtr<Texture> texture)
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
-  resourseManager.m_shaderPrograms[StringUtilities::getStringId("downSample")]->set();
+  cast<Shader>(resourseManager.getResourse("downSample")).lock()->set();
   graphicsAPI.setTexture(texture,0);
   graphicsAPI.setRenderTarget(m_downSapmle);
   graphicsAPI.setPSBuffer(m_size,0);

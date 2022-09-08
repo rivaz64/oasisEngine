@@ -4,7 +4,7 @@
 namespace oaEngineSDK{
 
 void 
-DX11ShaderProgram::attach(SPtr<Shader> shader)
+DX11ShaderProgram::attach(WPtr<Shader> shader)
 {
   m_shaders.push_back(shader);
 }
@@ -12,8 +12,8 @@ DX11ShaderProgram::attach(SPtr<Shader> shader)
 void
 DX11ShaderProgram::set()
 {
-  for(SPtr<Shader> shader: m_shaders){
-    shader->set();
+  for(WPtr<Shader> shader: m_shaders){
+    shader.lock()->set();
   }
 }
 

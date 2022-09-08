@@ -17,7 +17,7 @@ class DX11ShaderProgram :
  public:
 
   void 
-  attach(SPtr<Shader> shader) override;
+  attach(WPtr<Shader> shader) override;
 
   void
   set() override;
@@ -26,7 +26,7 @@ class DX11ShaderProgram :
   /**
    * @brief the shaders used by this program
   */
-  Vector<SPtr<Shader>> m_shaders;
+  Vector<WPtr<Shader>> m_shaders;
 };
 
 }
