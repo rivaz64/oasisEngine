@@ -32,6 +32,9 @@ class Omniverse :
   void
   createModel(const String& name) override;
 
+  void
+  addMesh(WPtr<StaticMesh> mesh) override;
+
 protected:
 
   Omniverse() {print("child constructed"); }

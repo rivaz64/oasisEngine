@@ -1133,13 +1133,17 @@ void TestApp::drawImGui()
 
   ImGui::Begin("omniverse");
   {
+    auto& omniverse = OmniverseApi::instance();
     if(ImGui::Button("connect")){
-      OmniverseApi::instance().connect();
+      omniverse.connect();
     }
 
     ImGui::InputText("name",imguiString,64);
     if(ImGui::Button("create object")){
-      OmniverseApi::instance().createModel(imguiString);
+      omniverse.createModel(imguiString);
+    }
+    if(ImGui::Button("add mesh")){
+      omniverse.addMesh(m_selectedMesh);
     }
 
   }

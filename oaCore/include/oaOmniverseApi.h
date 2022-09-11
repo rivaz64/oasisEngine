@@ -26,6 +26,9 @@ class OA_CORE_EXPORT OmniverseApi :
   virtual void
   createModel(const String& name) {}
 
+  virtual void
+  addMesh(WPtr<StaticMesh> mesh){}
+
  protected:
 
   OmniverseApi() {print("parent constructed"); }

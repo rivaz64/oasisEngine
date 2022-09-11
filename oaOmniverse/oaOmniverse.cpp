@@ -1,51 +1,40 @@
 #include "oaOmniverse.h"
+#include <oaMesh.h>
 #include <OmniClient.h>
 #include <OmniUsdLive.h>
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <cassert>
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
-#include <fstream>
-#ifdef _WIN32
-#include <conio.h>
-#endif
-#include <mutex>
-#include <memory>
-#include <map>
-#include <condition_variable>
-#include <pxr/usd/usd/stage.h>
-#include <pxr/usd/usdGeom/mesh.h>
-#include <pxr/usd/usdGeom/metrics.h>
+#include "pxr/usd/usd/stage.h"
+#include "pxr/usd/usdGeom/mesh.h"
+#include "pxr/usd/usdGeom/metrics.h"
 #include <pxr/base/gf/matrix4f.h>
-#include <pxr/base/gf/vec2f.h>
-#include <pxr/usd/usdUtils/pipeline.h>
-#include <pxr/usd/usdUtils/sparseValueWriter.h>
-#include <pxr/usd/usdShade/material.h>
-#include <pxr/usd/usd/prim.h>
-#include <pxr/usd/usd/primRange.h>
-#include <pxr/usd/usdGeom/primvar.h>
-#include <pxr/usd/usdShade/input.h>
-#include <pxr/usd/usdShade/output.h>
+#include "pxr/base/gf/vec2f.h"
+#include "pxr/usd/usdUtils/pipeline.h"
+#include "pxr/usd/usdUtils/sparseValueWriter.h"
+#include "pxr/usd/usdShade/material.h"
+#include "pxr/usd/usd/prim.h"
+#include "pxr/usd/usd/primRange.h"
+#include "pxr/usd/usdGeom/primvar.h"
+#include "pxr/usd/usdShade/input.h"
+#include "pxr/usd/usdShade/output.h"
 #include <pxr/usd/usdGeom/xform.h>
 #include <pxr/usd/usdGeom/cube.h>
-#include <pxr/usd/usdShade/materialBindingAPI.h>
+#include "pxr/usd/usdShade/materialBindingAPI.h"
 #include <pxr/usd/usdLux/distantLight.h>
 #include <pxr/usd/usdLux/domeLight.h>
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usd/modelAPI.h>
-#include <pxr/usd/usd/common.h>
 
 namespace oaEngineSDK 
 {
+
+PXR_NAMESPACE_USING_DIRECTIVE
+
 TF_DEFINE_PRIVATE_TOKENS(
 	_tokens,
 	(Root)
+  (st)
 );
 
+using std::fill;
 
 //static void OmniClientConnectionStatusCallbackImpl(void* userData, const char* url, OmniClientConnectionStatus status) noexcept
 //{
@@ -138,8 +127,71 @@ Omniverse::createModel(const String& name)
   else {
       print("New stage created: " + stageUrl);
   }
+  
+}
 
-  SdfPath::AbsoluteRootPath();
+void 
+Omniverse::addMesh(WPtr<StaticMesh> wMesh)
+{
+  if(wMesh.expired()) return;
+  auto mesh = wMesh.lock();
+  SdfPath rootPrimPath = SdfPath::AbsoluteRootPath().AppendChild(_tokens->Root);
+  UsdGeomXform rootPrim = UsdGeomXform::Define(g_stage, rootPrimPath);
+  SdfPath boxPrimPath = rootPrimPath.AppendChild(TfToken(mesh->getName()));
+  UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, boxPrimPath);
+
+  if (!UGmesh){
+    print("mesh not created");
+    return;
+  }
+
+  UGmesh.CreateOrientationAttr(VtValue(UsdGeomTokens->rightHanded));
+
+	VtArray<GfVec3f> points;
+  VtArray<GfVec3f> meshNormals;
+  auto vertices = mesh->getVertex();
+  UsdGeomPrimvar attr2 = UGmesh.CreatePrimvar(_tokens->st, SdfValueTypeNames->TexCoord2fArray);
+  VtVec2fArray valueArray;
+
+	for (auto& vertex : vertices)
+	{
+		points.push_back(GfVec3f(vertex.location.x, vertex.location.y, vertex.location.z));
+    meshNormals.push_back(GfVec3f(vertex.normal.x, vertex.normal.y, vertex.normal.z));
+    valueArray.push_back(GfVec2f(vertex.textureCord.x,vertex.textureCord.y));
+	}
+	UGmesh.CreatePointsAttr(VtValue(points));
+  UGmesh.CreatePointsAttr(VtValue(meshNormals));
+
+  UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(0.0f, 100.0f, 0.0f));
+	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(20.0, 0.0, 20.0));
+
+  bool status = attr2.Set(valueArray);
+  attr2.SetInterpolation(UsdGeomTokens->vertex);
+
+  auto indices = mesh->getIndex();
+  VtArray<int> vecIndices;
+  for (auto& index : indices)
+	{
+		vecIndices.push_back(index);
+	}
+	UGmesh.CreateFaceVertexIndicesAttr(VtValue(vecIndices));
+
+  VtArray<int> faceVertexCounts;
+	faceVertexCounts.resize(indices.size()/3); 
+	fill(faceVertexCounts.begin(), faceVertexCounts.end(), 3);
+	UGmesh.CreateFaceVertexCountsAttr(VtValue(faceVertexCounts));
+
+  UsdPrim meshPrim = UGmesh.GetPrim();
+	UsdAttribute displayColorAttr = UGmesh.CreateDisplayColorAttr();
+	{
+		VtVec3fArray valueArray;
+		GfVec3f rgbFace(0.463f, 0.725f, 0.0f);
+		valueArray.push_back(rgbFace);
+		displayColorAttr.Set(valueArray);
+	}
+
+  g_stage->Save();
+  omniUsdLiveProcess();
 }
 
 }

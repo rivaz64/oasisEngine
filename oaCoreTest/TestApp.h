@@ -80,7 +80,7 @@ public:
 
   WPtr<Material> m_selectedMaterial;
 
-  WPtr<MeshType> m_selectedMesh;
+  WPtr<StaticMesh> m_selectedMesh;
 
   WPtr<Model> m_selectedModel;
 

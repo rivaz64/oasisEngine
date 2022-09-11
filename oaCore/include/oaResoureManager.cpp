@@ -30,7 +30,7 @@ ResoureManager::onStartUp()
   generateDefaultMaterials();
   //generateQuad();
   //generateTriangle();
-  //generateCube();
+  generateCube();
 }
 
 void
@@ -95,7 +95,7 @@ ResoureManager::generateCube()
 {
   //meshes.insert({ "cube",makeSPtr<Mesh>() });
 
-  //Vector<SPtr<Mesh>> cubes;
+  auto cube = makeSPtr<StaticMesh>();
 
   Vector<Vertex> vertices = {
     Vertex( Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)),
@@ -144,6 +144,11 @@ ResoureManager::generateCube()
     23,20,22
   };
 
+
+  cube->setVertex(vertices);
+  cube->setIndex(index);
+  cube->writeBuffers();
+  registerResourse("cube",cube);
   //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
 
   //Octree tree;
