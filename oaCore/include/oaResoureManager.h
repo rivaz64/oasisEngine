@@ -209,6 +209,8 @@ class OA_CORE_EXPORT ResoureManager :
   //*/
   //Map<uint64,WPtr<Sound>> m_sounds;
 
+   SPtr<Material> m_defaultMaterial;
+
   /**
    * @brief all the resourses for quick search
   */

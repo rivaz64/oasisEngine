@@ -1,5 +1,10 @@
 #include "oaOmniverse.h"
+#include <oaActor.h>
+#include <oaGraphicsComponent.h>
 #include <oaMesh.h>
+#include <oaModel.h>
+#include <oaResoureManager.h>
+#include <oaActor.h>
 #include <OmniClient.h>
 #include <OmniUsdLive.h>
 #include "pxr/usd/usd/stage.h"
@@ -35,6 +40,22 @@ TF_DEFINE_PRIVATE_TOKENS(
 );
 
 using std::fill;
+
+void SetOp(UsdGeomXformable& xForm, UsdGeomXformOp& op, UsdGeomXformOp::Type opType, const GfVec3d& value, const UsdGeomXformOp::Precision precision)
+{
+	//if (!op)
+	//{
+	//	op = xForm.AddXformOp(opType, precision);
+	//	cout << " Adding " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
+	//}
+
+	//if (op.GetPrecision() == UsdGeomXformOp::Precision::PrecisionFloat)
+		//op.Set(GfVec3d(value));
+	//else
+  op.Set(value);
+
+	cout << " Setting " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
+}
 
 //static void OmniClientConnectionStatusCallbackImpl(void* userData, const char* url, OmniClientConnectionStatus status) noexcept
 //{
@@ -131,15 +152,17 @@ Omniverse::createModel(const String& name)
 }
 
 void 
-Omniverse::addMesh(WPtr<StaticMesh> wMesh)
+Omniverse::addActor(WPtr<Actor> wActor)
 {
-  if(wMesh.expired()) return;
-  auto mesh = wMesh.lock();
+  if(wActor.expired()) return;
+  auto actor = wActor.lock();
+  auto actorName = actor->getName();
+  m_actors.push_back(wActor);
   SdfPath rootPrimPath = SdfPath::AbsoluteRootPath().AppendChild(_tokens->Root);
   UsdGeomXform rootPrim = UsdGeomXform::Define(g_stage, rootPrimPath);
-  SdfPath boxPrimPath = rootPrimPath.AppendChild(TfToken(mesh->getName()));
-  UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, boxPrimPath);
-
+  SdfPath meshPrimPath = rootPrimPath.AppendChild(TfToken(actorName));
+  UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, meshPrimPath);
+  auto mesh = actor->getComponent<GraphicsComponent>().lock()->getModel().lock()->getMesh(0).lock();
   if (!UGmesh){
     print("mesh not created");
     return;
@@ -162,8 +185,9 @@ Omniverse::addMesh(WPtr<StaticMesh> wMesh)
 	UGmesh.CreatePointsAttr(VtValue(points));
   UGmesh.CreatePointsAttr(VtValue(meshNormals));
 
-  UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(0.0f, 100.0f, 0.0f));
-	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(20.0, 0.0, 20.0));
+  UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0f, 0.0f, 0.0f));
+  UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(1.0f, 1.0f, 1.0f));
+	//UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(20.0, 0.0, 20.0));
 
   bool status = attr2.Set(valueArray);
   attr2.SetInterpolation(UsdGeomTokens->vertex);
@@ -192,6 +216,50 @@ Omniverse::addMesh(WPtr<StaticMesh> wMesh)
 
   g_stage->Save();
   omniUsdLiveProcess();
+  //m_meshes.push_back(makeSPtr)
+}
+
+void 
+Omniverse::update()
+{
+  omniUsdLiveWaitForPendingUpdates();
+  UsdGeomXformOp translateOp;
+  GfVec3f position(0);
+  GfVec3f scale(0);
+  auto& resourceManager = ResoureManager::instance();
+  for(auto& wActor : m_actors){
+    auto actor = wActor.lock();
+    auto actorName = actor->getName();
+    SdfPath rootPrimPath = SdfPath::AbsoluteRootPath().AppendChild(_tokens->Root);
+    UsdGeomXform rootPrim = UsdGeomXform::Define(g_stage, rootPrimPath);
+    SdfPath meshPrimPath = rootPrimPath.AppendChild(TfToken(actorName));
+    UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, meshPrimPath);
+    UsdGeomXformable xForm = UGmesh;
+    bool resetXformStack = false;
+    Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
+    for(auto& xFormOp: xFormOps){
+      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+        auto location = actor->getGlobalLocation();
+        xFormOp.Get(&position);
+        xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+        auto myScale = actor->getGlobalScale();
+        xFormOp.Get(&scale);
+        xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+      }
+    }
+    
+    //SetOp(xForm, translateOp, UsdGeomXformOp::TypeTranslate, position, UsdGeomXformOp::Precision::PrecisionFloat);
+    //std::vector<UsdGeomXformOp> xFormOpsReordered;
+	  //xFormOpsReordered.push_back(translateOp);
+    //xForm.SetXformOpOrder(xFormOpsReordered);
+    //g_stage->Save();
+    auto pos = scale.GetArray();
+    print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
+    g_stage->Save();
+  }
+  
 }
 
 }

@@ -99,13 +99,29 @@ Actor::getGlobalTransform()
     
     if(!m_parent.expired()){
       auto parent = m_parent.lock();
-      m_globalTransform = parent->getGlobalTransform()*m_localTransform.getMatrix();
+      m_globalTransform = m_localTransform.getMatrix()*parent->getGlobalTransform();
     }
     else{
-      m_globalTransform = Matrix4f::IDENTITY;
+      m_globalTransform = m_localTransform.getMatrix();
     }
   }
   return m_globalTransform;
+}
+
+Vector3f
+Actor::getGlobalLocation()
+{
+  auto transform = getGlobalTransform();
+  auto ans = transform  *  Vector4f(0,0,0,1);
+  return (ans).xyz;
+}
+
+Vector3f 
+Actor::getGlobalScale()
+{
+  auto transform = getGlobalTransform();
+  auto ans = transform  *  Vector4f(1,1,1,0);
+  return (ans).xyz;
 }
 
 }

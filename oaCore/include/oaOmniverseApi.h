@@ -27,7 +27,10 @@ class OA_CORE_EXPORT OmniverseApi :
   createModel(const String& name) {}
 
   virtual void
-  addMesh(WPtr<StaticMesh> mesh){}
+  addActor(WPtr<Actor> actor){}
+
+  virtual void
+  update(){}
 
  protected:
 

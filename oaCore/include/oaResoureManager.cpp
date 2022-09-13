@@ -148,7 +148,7 @@ ResoureManager::generateCube()
   cube->setVertex(vertices);
   cube->setIndex(index);
   cube->writeBuffers();
-  registerResourse("cube",cube);
+  registerResourse("cubito",cube);
   //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
 
   //Octree tree;
@@ -393,10 +393,9 @@ void ResoureManager::loadDefaulTextures()
 void 
 ResoureManager::generateDefaultMaterials()
 {
-  //auto material = makeSPtr<Material>();
-  //material->setName("debug");
-  //material->setShader(m_shaderPrograms["debug"]);
-  //m_materials.insert({material->getName(),material});
+  m_defaultMaterial = makeSPtr<Material>();
+  m_defaultMaterial->setShader(0);
+  
 }
 
 void

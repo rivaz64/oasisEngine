@@ -33,7 +33,10 @@ class Omniverse :
   createModel(const String& name) override;
 
   void
-  addMesh(WPtr<StaticMesh> mesh) override;
+  addActor(WPtr<Actor> actor) override;
+
+  void
+  update() override;
 
 protected:
 
@@ -42,6 +45,8 @@ protected:
   String m_userFolder = "omniverse://localhost/Users";
   String m_userName;
   String m_destinationPath;
+  
+  Vector<WPtr<Actor>> m_actors;
 
   friend class OmniverseApi;
   friend class Module<OmniverseApi>;

@@ -375,6 +375,7 @@ TestApp::onUpdate(float delta)
   //  }
   //}
   m_camera->update();
+  OmniverseApi::instance().update();
 }
 
 void 
@@ -551,8 +552,17 @@ void TestApp::drawImGui()
         if( ImGui::CollapsingHeader(("models"+StringUtilities::intToString(i)).c_str())){
           auto graphicsComponent = cast<GraphicsComponent>(components[i]);
 
-          if(ImGui::Button("select model") && !m_selectedModel.expired()){
-            graphicsComponent->setModel(m_selectedModel);
+          if(ImGui::Button("select model")){
+            if(!m_selectedModel.expired()){
+              graphicsComponent->setModel(m_selectedModel);
+            }
+            else if(!m_selectedMesh.expired()){
+              auto newModel = makeSPtr<Model>();
+              newModel->addMesh(m_selectedMesh.lock());
+              newModel->addMaterial(resourceManager.m_defaultMaterial);
+              resourceManager.registerResourse(m_selectedMesh.lock()->getName(),newModel);
+              graphicsComponent->setModel(newModel);
+            }
           }
 
           auto& wModel = graphicsComponent->getModel();
@@ -1142,8 +1152,8 @@ void TestApp::drawImGui()
     if(ImGui::Button("create object")){
       omniverse.createModel(imguiString);
     }
-    if(ImGui::Button("add mesh")){
-      omniverse.addMesh(m_selectedMesh);
+    if(ImGui::Button("add actor")){
+      omniverse.addActor(m_selectedActor);
     }
 
   }

@@ -69,6 +69,20 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   getGlobalTransform();
 
   /**
+   * @brief gets the location relative to the origin
+   * @return 
+  */
+  Vector3f
+  getGlobalLocation();
+
+  /**
+   * @brief gets the scale in the world
+   * @return 
+  */
+  Vector3f
+  getGlobalScale();
+
+  /**
    * @brief gets a specific component
    * @tparam T the component to get
    * @return 

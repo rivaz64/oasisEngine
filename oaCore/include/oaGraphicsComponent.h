@@ -46,7 +46,7 @@ class OA_CORE_EXPORT GraphicsComponent :
    * @brief gets the model of this component
    * @return 
   */
-  FORCEINLINE const WPtr<Model>&
+  FORCEINLINE const WPtr<Model>
   getModel(){
     return m_model;
   }
