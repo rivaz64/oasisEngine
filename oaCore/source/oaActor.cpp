@@ -128,7 +128,9 @@ Vector3f
 Actor::getGlobalRotation()
 {
   auto transform = getGlobalTransform();
-  Vector3f ans(Math::atan2(transform.row3.y,transform.row3.z));
+  Vector3f ans(Math::atan2(transform.row3.z,transform.row3.y),
+               Math::atan2(Math::sqrt(transform.row3.y*transform.row3.y+transform.row3.z*transform.row3.z),-transform.row3.x),
+               Math::atan2(transform.row1.x,transform.row2.x));
   return ans;
 }
 

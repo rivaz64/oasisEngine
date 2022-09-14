@@ -226,6 +226,7 @@ Omniverse::update()
   UsdGeomXformOp translateOp;
   GfVec3f position(0);
   GfVec3f scale(0);
+  GfVec3f rotation(0);
   auto& resourceManager = ResoureManager::instance();
   for(auto& wActor : m_actors){
     auto actor = wActor.lock();
@@ -249,9 +250,9 @@ Omniverse::update()
         xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
       }
       else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
-        auto myScale = actor->getGlobalScale();
-        xFormOp.Get(&scale);
-        xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+        auto myRot = actor->getGlobalRotation();
+        xFormOp.Get(&rotation);
+        xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
       }
     }
     
@@ -260,7 +261,7 @@ Omniverse::update()
 	  //xFormOpsReordered.push_back(translateOp);
     //xForm.SetXformOpOrder(xFormOpsReordered);
     //g_stage->Save();
-    auto pos = scale.GetArray();
+    auto pos = rotation.GetArray();
     print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
     g_stage->Save();
   }
