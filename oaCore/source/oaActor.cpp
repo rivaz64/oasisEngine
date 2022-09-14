@@ -124,4 +124,12 @@ Actor::getGlobalScale()
   return (ans).xyz;
 }
 
+Vector3f
+Actor::getGlobalRotation()
+{
+  auto transform = getGlobalTransform();
+  Vector3f ans(Math::atan2(transform.row3.y,transform.row3.z));
+  return ans;
+}
+
 }

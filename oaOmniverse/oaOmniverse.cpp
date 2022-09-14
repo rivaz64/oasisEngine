@@ -187,7 +187,7 @@ Omniverse::addActor(WPtr<Actor> wActor)
 
   UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0f, 0.0f, 0.0f));
   UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(1.0f, 1.0f, 1.0f));
-	//UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionDouble).Set(GfVec3d(20.0, 0.0, 20.0));
+	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3d(0.0, 0.0, 0.0));
 
   bool status = attr2.Set(valueArray);
   attr2.SetInterpolation(UsdGeomTokens->vertex);
@@ -244,6 +244,11 @@ Omniverse::update()
         xFormOp.Set(GfVec3f(location.x, location.y, location.z));
       }
       else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+        auto myScale = actor->getGlobalScale();
+        xFormOp.Get(&scale);
+        xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
         auto myScale = actor->getGlobalScale();
         xFormOp.Get(&scale);
         xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
