@@ -315,24 +315,24 @@ ResoureManager::loadDefaultShaders()
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_directionalLight",shader);
-  shader->compileFromFile("light",{"DIRECTIONAL"});
+  shader->compileFromFile("p_light",{"DIRECTIONAL"});
 
   shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_pointLight",shader);
-  shader->compileFromFile("light",{"POINT"});
+  shader->compileFromFile("p_light",{"POINT"});
 
   shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_spotLight",shader);
-  shader->compileFromFile("light",{"SPOT"});
+  shader->compileFromFile("p_light",{"SPOT"});
 
 
   shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_HBlur",shader);
-  shader->compileFromFile("blur",{"HORIZONTAL"});
+  shader->compileFromFile("p_blur",{"HORIZONTAL"});
 
   shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_VBlur",shader);
-  shader->compileFromFile("blur",{"VERTICAL"});
+  shader->compileFromFile("p_blur",{"VERTICAL"});
 
   shader = graphicsApi.createHullShader();
   resourceManager.registerResourse("h_hullTris",shader);
@@ -348,11 +348,11 @@ ResoureManager::loadDefaultShaders()
 
   shader = graphicsApi.createVertexShader();
   resourceManager.registerResourse("v_Tesselation",shader);
-  shader->compileFromFile("vertexShader",{"TESSEL"});
+  shader->compileFromFile("v_vertexShader",{"TESSEL"});
 
   shader = graphicsApi.createVertexShader();
   resourceManager.registerResourse("v_SimpleVertex",shader);
-  shader->compileFromFile("vertexShader",{"SIMPLE"});
+  shader->compileFromFile("v_SimpleVertex",{"SIMPLE"});
   shader->setName("v_SimpleVertex");
 
   //createShaderProgram("default","vertexShader","default");

@@ -191,14 +191,15 @@ Deferred::render(WPtr<Scene> wScene,
   //downSapmle(m_emisiveTexture);
   //blur(m_downSapmle,m_blur);
   //gTransparents(transparents);
-
-  ssao(config);
-  directionalLight(camForView->getViewMatrix(),directionalLights);
-  pointLight(camForView->getViewMatrix(),pointLights);
-  spotLight(camForView->getViewMatrix(),spotLights);
-  shadows(spotLights,scene);
-  aplylights();
   
+  //ssao(config);
+  //directionalLight(camForView->getViewMatrix(),directionalLights);
+  //pointLight(camForView->getViewMatrix(),pointLights);
+  //spotLight(camForView->getViewMatrix(),spotLights);
+  //// copy(m_colorTexture,m_renderTarget);
+  ////shadows(spotLights,scene);
+  //aplylights();
+  copy(m_colorTexture,m_renderTarget);
   
 }
 

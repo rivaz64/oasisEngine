@@ -27,6 +27,9 @@ class OA_CORE_EXPORT OmniverseApi :
   createModel(const String& name) {}
 
   virtual void
+  connectToModel(const String& name, WPtr<Actor> scene) {}
+
+  virtual void
   addActor(WPtr<Actor> actor){}
 
   virtual void

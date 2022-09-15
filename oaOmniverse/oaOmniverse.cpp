@@ -27,7 +27,9 @@
 #include <pxr/usd/usdLux/domeLight.h>
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usd/modelAPI.h>
-
+#include <oaActor.h>
+#include <oaGraphicsComponent.h>
+#include <oaModel.h>
 namespace oaEngineSDK 
 {
 
@@ -37,6 +39,7 @@ TF_DEFINE_PRIVATE_TOKENS(
 	_tokens,
 	(Root)
   (st)
+  (DistantLight)
 );
 
 using std::fill;
@@ -148,7 +151,57 @@ Omniverse::createModel(const String& name)
   else {
       print("New stage created: " + stageUrl);
   }
+
   
+  
+}
+
+void
+loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor)
+{
+  auto actor = wActor.lock();
+  auto gc = makeSPtr<GraphicsComponent>();
+  auto model = makeSPtr<Model>();
+  
+  gc->setModel(model);
+  actor->attachComponent(gc);
+
+  auto points = UGmesh.GetPointsAttr();
+  auto normals = UGmesh.GetNormalsAttr();
+  auto uvs = UGmesh.get
+
+}
+
+void 
+Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
+{
+  auto scene = wScene.lock();
+  auto stageUrl = m_destinationPath + "/" + name + ".usd";
+  g_stage = UsdStage::Open(stageUrl);
+  if (!g_stage){
+    print("Failure to connect to model in Omniverse");
+    print(stageUrl.c_str());
+    return;
+  }
+  else {
+    print("connected to: " + stageUrl);
+  }
+
+  auto range = g_stage->Traverse();
+	for (const auto& node : range)
+	{
+		if (node.IsA<UsdGeomMesh>())
+		{
+			{
+				std::cout << "Found UsdGeomMesh: " << node.GetName() << std::endl;
+			}
+      auto newActor = makeSPtr<Actor>();
+      scene->attach(newActor);
+      newActor->setName(node.GetName());
+			loadMeshFromUSD(UsdGeomMesh(node),newActor);
+		}
+	}
+
 }
 
 void 
@@ -183,7 +236,7 @@ Omniverse::addActor(WPtr<Actor> wActor)
     valueArray.push_back(GfVec2f(vertex.textureCord.x,vertex.textureCord.y));
 	}
 	UGmesh.CreatePointsAttr(VtValue(points));
-  UGmesh.CreatePointsAttr(VtValue(meshNormals));
+  UGmesh.CreateNormalsAttr(VtValue(meshNormals));
 
   UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0f, 0.0f, 0.0f));
   UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(1.0f, 1.0f, 1.0f));

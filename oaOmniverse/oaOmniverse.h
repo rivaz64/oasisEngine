@@ -33,6 +33,9 @@ class Omniverse :
   createModel(const String& name) override;
 
   void
+  connectToModel(const String& name, WPtr<Actor> scene) override;
+
+  void
   addActor(WPtr<Actor> actor) override;
 
   void

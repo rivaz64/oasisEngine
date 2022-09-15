@@ -1152,6 +1152,9 @@ void TestApp::drawImGui()
     if(ImGui::Button("create object")){
       omniverse.createModel(imguiString);
     }
+    if(ImGui::Button("connect to object")){
+      omniverse.connectToModel(imguiString,m_actualScene->getRoot());
+    }
     if(ImGui::Button("add actor")){
       omniverse.addActor(m_selectedActor);
     }
