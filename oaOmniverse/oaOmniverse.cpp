@@ -30,6 +30,8 @@
 #include <oaActor.h>
 #include <oaGraphicsComponent.h>
 #include <oaModel.h>
+#include <oaMesh.h>
+#include <oaResoureManager.h>
 namespace oaEngineSDK 
 {
 
@@ -159,17 +161,42 @@ Omniverse::createModel(const String& name)
 void
 loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor)
 {
+  auto& resourceManager = ResoureManager::instance();
   auto actor = wActor.lock();
   auto gc = makeSPtr<GraphicsComponent>();
   auto model = makeSPtr<Model>();
-  
+  auto mesh = makeSPtr<StaticMesh>();
+  resourceManager.registerResourse("usd model",model);
+  model->addMesh(mesh);
+  model->addMaterial(resourceManager.m_defaultMaterial);
   gc->setModel(model);
   actor->attachComponent(gc);
+  VtValue value;
+  UGmesh.GetPointsAttr().Get(&value);
+  auto points = value.Get<VtArray<GfVec3f>>();
+  UGmesh.GetNormalsAttr().Get(&value);
+  auto normals = value.Get<VtArray<GfVec3f>>();
+  UGmesh.GetPrimvar(_tokens->st).GetAttr().Get(&value);
+  auto uvs = value.Get<VtVec2fArray>();
+  UGmesh.GetFaceVertexIndicesAttr().Get(&value);
+  auto indices = value.Get<VtArray<int>>();
 
-  auto points = UGmesh.GetPointsAttr();
-  auto normals = UGmesh.GetNormalsAttr();
-  auto uvs = UGmesh.get
+  SIZE_T numOfVertex = points.size();
+  mesh->setVertexNum(numOfVertex);
+  for(SIZE_T i=0; i<numOfVertex; ++i){
+    mesh->setVertexAt(i,Vertex(
+      Vector4f(points[i].data()[0],points[i].data()[1],points[i].data()[2],1.0f),
+      Vector4f(normals[i].data()[0],normals[i].data()[1],normals[i].data()[2],0.0f),
+      Vector2f(uvs[i].data()[0],uvs[i].data()[1])));
+  }
 
+  SIZE_T numOfIndices = indices.size();
+  mesh->setIndexNum(numOfIndices);
+  for(SIZE_T i=0; i<numOfIndices; ++i){
+    mesh->setIndexAt(i,indices[i]);
+  }
+
+  mesh->writeBuffers();
 }
 
 void 
@@ -252,7 +279,6 @@ Omniverse::addActor(WPtr<Actor> wActor)
 		vecIndices.push_back(index);
 	}
 	UGmesh.CreateFaceVertexIndicesAttr(VtValue(vecIndices));
-
   VtArray<int> faceVertexCounts;
 	faceVertexCounts.resize(indices.size()/3); 
 	fill(faceVertexCounts.begin(), faceVertexCounts.end(), 3);

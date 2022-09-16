@@ -142,74 +142,9 @@ class OA_CORE_EXPORT ResoureManager :
     return m_types[type];
   }
 
+  SPtr<Material> m_defaultMaterial;
+
  private:
-
-  ///**
-  //* @brief all the loaded meshes
-  //*/
-  //Map<uint64,WPtr<StaticMesh>> m_meshes;
-  //
-  ///**
-  // * @brief all the loaded textures
-  //*/
-  //Map<uint64,WPtr<Texture>> m_textures;
-  //
-  ///**
-  //* @brief all the loaded models
-  //*/
-  //Map<uint64,WPtr<Model>> m_models;
-  //
-  ///**
-  // * @brief all the loaded vertex shaders
-  //*/
-  //Map<uint64,WPtr<Shader>> m_vertexShaders;
-  //
-  ///**
-  // * @brief all the loaded pixel shaders
-  //*/
-  //Map<uint64,WPtr<Shader>> m_pixelShaders;
-  //
-  // /**
-  // * @brief all the loaded pixel shaders
-  //*/
-  //Map<uint64,WPtr<Shader>> m_hullShaders;
-  //
-  // /**
-  // * @brief all the loaded pixel shaders
-  //*/
-  //Map<uint64,WPtr<Shader>> m_domainShaders;
-  //
-  ///**
-  // * @brief all the loaded pixel shaders
-  //*/
-  //Map<uint64,WPtr<ShaderProgram>> m_shaderPrograms;
-  //
-  ///**
-  // * @brief all the loaded pixel shaders
-  //*/
-  //Map<uint64,Vector<WPtr<ShaderProgram>>> m_multiShaderPrograms;
-  //
-  ///**
-  // * @brief all the materials
-  //*/
-  //Map<uint64,WPtr<Material>> m_materials;
-  //
-  ///**
-  // * @brief all the loaded skeletons
-  //*/
-  //Map<uint64,WPtr<Skeleton>> m_skeletons;
-  //
-  ///**
-  // * @brief all the loaded animations
-  //*/
-  //Map<uint64,WPtr<Animation>> m_animations;
-  //
-  ///**
-  // * @brief all the loaded sounds
-  //*/
-  //Map<uint64,WPtr<Sound>> m_sounds;
-
-   SPtr<Material> m_defaultMaterial;
 
   /**
    * @brief all the resourses for quick search
