@@ -82,7 +82,15 @@ Actor::update()
     for(auto& component : componentList.second){
       component->update(shared_from_this());
     }
-    
+  }
+}
+
+void
+Actor::postUpdate()
+{
+  m_changed = false;
+  for(auto& chlid : m_subActors){
+    chlid->postUpdate();
   }
 }
 
@@ -90,6 +98,39 @@ const Vector<SPtr<Actor>>&
 Actor::getChilds()
 {
   return m_subActors;
+}
+
+void
+Actor::setActorLocation(const Vector3f& v)
+{
+  if(m_localTransform.getLocation() != v){
+    m_localTransform.setLocation(v);
+    m_changed = true;
+    m_localTransform.calculate();
+  }
+  
+}
+
+void 
+Actor::setActorScale(const Vector3f& v)
+{
+  if(m_localTransform.getScale() != v){
+    m_localTransform.setScale(v);
+    m_changed = true;
+    m_localTransform.calculate();
+  }
+  
+}
+
+void 
+Actor::setActorRotation(const Vector3f& v)
+{
+  if(m_localTransform.getRotation() != v){
+    m_localTransform.setRotation(v);
+    m_changed = true;
+    m_localTransform.calculate();
+  }
+  
 }
 
 Matrix4f

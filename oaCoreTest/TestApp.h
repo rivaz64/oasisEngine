@@ -46,7 +46,7 @@ public:
   renderImGui();
 
   void
-  drawImGui();
+  updateImGui();
 
   void
   childsInImgui(SPtr<Actor> parentActor);

@@ -49,6 +49,9 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   void 
   update();
 
+  void 
+  postUpdate();
+
   FORCEINLINE Transform&
   GetActorTransform(){
     return m_localTransform;
@@ -60,6 +63,15 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   const Vector<SPtr<Actor>>&
   getChilds();
+
+  void
+  setActorLocation(const Vector3f& v);
+
+  void
+  setActorScale(const Vector3f& v);
+
+  void
+  setActorRotation(const Vector3f& v);
 
   /**
    * @brief the transform of this Actor in the world
@@ -109,6 +121,12 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
     }
     return m_components[temp.getType()];
   }
+
+   FORCEINLINE bool
+   hasChanged()
+   {
+     return m_changed;
+   }
  
  private:
 
@@ -136,6 +154,11 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
    * @brief all the components this actor has
   */
   Map<COMPONENT_TYPE::E,Vector<SPtr<Component>>> m_components;
+
+  /**
+   * @brief if this actor has been modified in this frame
+  */
+  bool m_changed = false;
 
   /**
    * @brief the dirty flag of the local and global matrix

@@ -66,6 +66,11 @@ class OA_UTILITY_EXPORT Vector3f
     return x == v.x && y == v.y && z == v.z;
   }
 
+  FORCEINLINE bool const
+  operator!=(const Vector3f& v) const {
+    return x != v.x || y != v.y || z != v.z;
+  }
+
   /**
    * @brief adds the vector v and this one
    * @param v

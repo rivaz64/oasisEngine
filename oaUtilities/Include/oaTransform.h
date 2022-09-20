@@ -102,15 +102,15 @@ class OA_UTILITY_EXPORT Transform
     return m_matrix;
   }
 
-
-
- private:
-
-  /**
+   /**
    * @brief calculates the matrix fo this transform
   */
   void 
   calculate();
+
+ private:
+
+ 
 
  private:
   /**

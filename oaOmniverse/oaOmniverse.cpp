@@ -220,11 +220,12 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 		if (node.IsA<UsdGeomMesh>())
 		{
 			{
-				std::cout << "Found UsdGeomMesh: " << node.GetName() << std::endl;
+				print("Found UsdGeomMesh: " + node.GetName().GetString() );
 			}
       auto newActor = makeSPtr<Actor>();
       scene->attach(newActor);
       newActor->setName(node.GetName());
+      m_actors.push_back(newActor);
 			loadMeshFromUSD(UsdGeomMesh(node),newActor);
 		}
 	}
@@ -267,7 +268,7 @@ Omniverse::addActor(WPtr<Actor> wActor)
 
   UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0f, 0.0f, 0.0f));
   UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(1.0f, 1.0f, 1.0f));
-	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3d(0.0, 0.0, 0.0));
+	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0, 0.0, 0.0));
 
   bool status = attr2.Set(valueArray);
   attr2.SetInterpolation(UsdGeomTokens->vertex);
@@ -309,6 +310,7 @@ Omniverse::update()
   auto& resourceManager = ResoureManager::instance();
   for(auto& wActor : m_actors){
     auto actor = wActor.lock();
+
     auto actorName = actor->getName();
     SdfPath rootPrimPath = SdfPath::AbsoluteRootPath().AppendChild(_tokens->Root);
     UsdGeomXform rootPrim = UsdGeomXform::Define(g_stage, rootPrimPath);
@@ -316,33 +318,45 @@ Omniverse::update()
     UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, meshPrimPath);
     UsdGeomXformable xForm = UGmesh;
     bool resetXformStack = false;
-    Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
-    for(auto& xFormOp: xFormOps){
-      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
-        auto location = actor->getGlobalLocation();
-        xFormOp.Get(&position);
-        xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+      Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
+
+    if(actor->hasChanged()){
+      for(auto& xFormOp: xFormOps){
+        if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+          auto location = actor->getGlobalLocation();
+          xFormOp.Get(&position);
+          xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+          auto myScale = actor->getGlobalScale();
+          xFormOp.Get(&scale);
+          xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+          auto myRot = actor->getGlobalRotation();
+          xFormOp.Get(&rotation);
+          xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
+        }
       }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
-        auto myScale = actor->getGlobalScale();
-        xFormOp.Get(&scale);
-        xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
-      }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
-        auto myRot = actor->getGlobalRotation();
-        xFormOp.Get(&rotation);
-        xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
+      g_stage->Save();
+    }
+    else{
+      for(auto& xFormOp: xFormOps){
+        if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+          xFormOp.Get(&position);
+          actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+          xFormOp.Get(&scale);
+          actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+          xFormOp.Get(&rotation);
+          actor->setActorScale(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+        }
       }
     }
     
-    //SetOp(xForm, translateOp, UsdGeomXformOp::TypeTranslate, position, UsdGeomXformOp::Precision::PrecisionFloat);
-    //std::vector<UsdGeomXformOp> xFormOpsReordered;
-	  //xFormOpsReordered.push_back(translateOp);
-    //xForm.SetXformOpOrder(xFormOpsReordered);
-    //g_stage->Save();
-    auto pos = rotation.GetArray();
-    print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
-    g_stage->Save();
   }
   
 }

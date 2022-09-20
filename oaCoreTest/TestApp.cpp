@@ -375,7 +375,13 @@ TestApp::onUpdate(float delta)
   //  }
   //}
   m_camera->update();
+
+  newImGuiFrame();
+  updateImGui();
+
   OmniverseApi::instance().update();
+
+  m_actualScene->getRoot()->postUpdate();
 }
 
 void 
@@ -406,8 +412,7 @@ TestApp::draw()
     renderer.render(m_actualScene,m_camera,m_camera,m_directionalLights,m_pointLights,m_spotLights,m_ssaoConfig);
   //}
   
-  newImGuiFrame();
-  drawImGui();
+  
   renderImGui();
 
 }
@@ -491,7 +496,8 @@ void TestApp::childsInImgui(SPtr<Actor> parentActor)
   }
 }
 
-void TestApp::drawImGui()
+void 
+TestApp::updateImGui()
 {
   auto& resourceManager = ResoureManager::instance();
   auto& audioApi = AudioAPI::instance();
@@ -527,19 +533,19 @@ void TestApp::drawImGui()
 
     if (ImGui::CollapsingHeader("transform")){
       
-      auto& transform = selectedActor->GetActorTransform();
-      Vector3f vec = transform.getLocation();
+      //auto& transform = selectedActor->GetActorTransform();
+      Vector3f vec = selectedActor->getGlobalLocation();
       if(ImGui::DragFloat3("location", &vec.x, .01f)){
-        transform.setLocation(vec);
+        selectedActor->setActorLocation(vec);
       }
-      vec = transform.getScale();
+      vec = selectedActor->getGlobalScale();
       if(ImGui::DragFloat3("scale", &vec.x, .01f)){
-        transform.setScale(vec);
+        selectedActor->setActorScale(vec);
       }
-      vec = transform.getRotation()*Math::RAD_TO_DEG;
+      vec = selectedActor->getGlobalRotation()*Math::RAD_TO_DEG;
       
       if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
-        transform.setRotation(vec*Math::DEG_TO_RAD);
+        selectedActor->setActorRotation(vec*Math::DEG_TO_RAD);
       };
     }
 
