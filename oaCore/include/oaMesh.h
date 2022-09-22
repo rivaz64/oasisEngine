@@ -283,7 +283,7 @@ class OA_CORE_EXPORT Mesh :
 
   Vector<Matrix4f> m_bones;
 
-  SIZE_T m_numOfControlPoints;
+  SIZE_T m_numOfControlPoints = 0;
 
   friend class ResourceManager;
 };

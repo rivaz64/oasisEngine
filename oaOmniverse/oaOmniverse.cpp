@@ -139,7 +139,7 @@ Omniverse::getConnectedUsername()
 void 
 Omniverse::createModel(const String& name)
 {
-  auto stageUrl = m_destinationPath + "/" + name + ".usd";//+(doLiveEdit ? ".live" : ".usd");
+  auto stageUrl = m_destinationPath + "/" + name + ".live";//+(doLiveEdit ? ".live" : ".usd");
   
   print("Waiting for " + stageUrl + " to delete... ");
   omniClientWait(omniClientDelete(stageUrl.c_str(), nullptr, nullptr));
@@ -222,7 +222,7 @@ void
 Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 {
   auto scene = wScene.lock();
-  auto stageUrl = m_destinationPath + "/" + name + ".usd";
+  auto stageUrl = m_destinationPath + "/" + name + ".live";
   g_stage = UsdStage::Open(stageUrl);
   if (!g_stage){
     print("Failure to connect to model in Omniverse");
@@ -246,6 +246,51 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
       newActor->setName(node.GetName());
       m_actors.push_back(newActor);
 			loadMeshFromUSD(UsdGeomMesh(node),newActor);
+
+      UsdGeomMesh xForm = UsdGeomMesh(node);
+      bool resetXformStack = true;
+      Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
+      
+      for(auto& xFormOp: xFormOps){
+        if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f position(0);
+            xFormOp.Get(&position);
+            newActor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d position(0);
+            xFormOp.Get(&position);
+            newActor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+          }
+          
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f scale(0);
+            xFormOp.Get(&scale);
+            newActor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d scale(0);
+            xFormOp.Get(&scale);
+            newActor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+          }
+        }
+        else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f rotation(0);
+            xFormOp.Get(&rotation);
+            newActor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d rotation(0);
+            xFormOp.Get(&rotation);
+            newActor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+          }
+        }
+      }
+      
 		}
 	}
 
@@ -285,9 +330,12 @@ Omniverse::addActor(WPtr<Actor> wActor)
 	UGmesh.CreatePointsAttr(VtValue(points));
   UGmesh.CreateNormalsAttr(VtValue(meshNormals));
 
-  UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0f, 0.0f, 0.0f));
-  UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(1.0f, 1.0f, 1.0f));
-	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(0.0, 0.0, 0.0));
+  auto translate = actor->getGlobalLocation();
+  auto scale = actor->getGlobalScale();
+  auto rotate = actor->getGlobalRotation();
+  UGmesh.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(translate.x, translate.y, translate.z));
+  UGmesh.AddScaleOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(scale.x, scale.y, scale.z));
+	UGmesh.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(rotate.x,rotate.y,rotate.z));
 
   bool status = attr2.Set(valueArray);
   attr2.SetInterpolation(UsdGeomTokens->vertex);
@@ -315,6 +363,7 @@ Omniverse::addActor(WPtr<Actor> wActor)
 
   g_stage->Save();
   omniClientLiveProcess();
+  print("mesh created");
   //m_meshes.push_back(makeSPtr)
 }
 
@@ -337,24 +386,36 @@ Omniverse::update()
     UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, meshPrimPath);
     UsdGeomXformable xForm = UGmesh;
     bool resetXformStack = false;
-      Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
+    Vector<UsdGeomXformOp> xFormOps = xForm.GetOrderedXformOps(&resetXformStack);
 
     if(actor->hasChanged()){
       for(auto& xFormOp: xFormOps){
         if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
           auto location = actor->getGlobalLocation();
-          xFormOp.Get(&position);
-          xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            xFormOp.Set(GfVec3d(location.x, location.y, location.z));
+          }
         }
         else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
           auto myScale = actor->getGlobalScale();
-          xFormOp.Get(&scale);
-          xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            xFormOp.Set(GfVec3d(myScale.x, myScale.y, myScale.z));
+          }
         }
         else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
           auto myRot = actor->getGlobalRotation();
-          xFormOp.Get(&rotation);
-          xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            xFormOp.Set(GfVec3d(myRot.x, myRot.y, myRot.z));
+          }
         }
       }
       g_stage->Save();
@@ -362,16 +423,41 @@ Omniverse::update()
     else{
       for(auto& xFormOp: xFormOps){
         if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
-          xFormOp.Get(&position);
-          actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f position(0);
+            xFormOp.Get(&position);
+            actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d position(0);
+            xFormOp.Get(&position);
+            actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+          }
+          
         }
         else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
-          xFormOp.Get(&scale);
-          actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f scale(0);
+            xFormOp.Get(&scale);
+            actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d scale(0);
+            xFormOp.Get(&scale);
+            actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+          }
         }
         else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
-          xFormOp.Get(&rotation);
-          actor->setActorScale(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+          if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+            GfVec3f rotation(0);
+            xFormOp.Get(&rotation);
+            actor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+          }
+          else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+            GfVec3d rotation(0);
+            xFormOp.Get(&rotation);
+            actor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+          }
         }
       }
     }
@@ -381,8 +467,8 @@ Omniverse::update()
 	  //xFormOpsReordered.push_back(translateOp);
     //xForm.SetXformOpOrder(xFormOpsReordered);
     //g_stage->Save();
-    auto pos = rotation.GetArray();
-    print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
+    //auto pos = rotation.GetArray();
+    //print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
     g_stage->Save();
     omniClientLiveProcess();
   }
