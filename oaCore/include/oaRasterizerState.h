@@ -14,14 +14,16 @@ namespace CULLING{
 enum E{
   kNone=0,
   kFront,
-  kBack
+  kBack,
+  kNum
 };
 }
 
 namespace FILL_MODE{
 enum E{
   kSolid=0,
-  kWireFrame
+  kWireFrame,
+  kNum
 };
 }
 

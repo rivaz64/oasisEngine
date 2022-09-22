@@ -118,13 +118,13 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;E:\omniverse\lib\connectsample-104.1.0\_build\target-deps\nv_usd\debug\include;E:\omniverse\lib\connectsample-104.1.0\_build\target-deps\omni_client_library\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)oaUtilities\Include;$(SolutionDir)oaCore\Include;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\usd\debug\include;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\omni_client_library\include;E:\omniverse\lib\connectsample-200.1.0\source\cppUtils;E:\omniverse\lib\connectsample-200.1.0\source\omniLiveSessionLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;BOOST_ALL_DYN_LINK;TBB_USE_DEBUG=1;_CRT_SECURE_NO_WARNINGS;DEBUG;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(SolutionDir)lib/$(PlatformTarget)/;E:\omniverse\lib\connectsample-104.1.0\_build\target-deps\nv_usd\debug\lib;E:\omniverse\lib\connectsample-104.1.0\_build\target-deps\omni_client_library\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(SolutionDir)lib/$(PlatformTarget)/;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\usd\debug\lib;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\omni_client_library\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>oaUtilitiesd.lib;oaCored.lib;ar.lib;arch.lib;gf.lib;js.lib;kind.lib;pcp.lib;plug.lib;sdf.lib;tf.lib;trace.lib;usd.lib;usdGeom.lib;usdUtils.lib;vt.lib;work.lib;usdShade.lib;usdLux.lib;usdPhysics.lib;omniclient.lib;python37.lib;boost_python37-vc141-mt-gd-x64-1_68.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
