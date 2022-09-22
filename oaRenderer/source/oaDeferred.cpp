@@ -32,8 +32,17 @@ Deferred::onStartUp()
   m_globalTransformBuffer = graphicsAPI.createBuffer();
   m_globalTransformBuffer->init(sizeof(Matrix4f));
 
-  m_normalRasterizer = graphicsAPI.createRasterizerState();
-  m_normalRasterizer->init(CULLING::kFront,FILL_MODE::kSolid);
+  for(int c = 0; c < CULLING::kNum; ++c){
+    for(int f = 0; f < FILL_MODE::kNum; ++f){
+      auto newRasterizer = graphicsAPI.createRasterizerState();
+      m_rasterizers.push_back(newRasterizer);
+      newRasterizer->init(
+        static_cast<CULLING::E>(c),
+        static_cast<FILL_MODE::E>(f)
+      );
+    }
+  }
+  
 
   m_hairRasterizer1 = graphicsAPI.createRasterizerState();
   m_hairRasterizer1->init(CULLING::kNone,FILL_MODE::kSolid);
@@ -166,7 +175,7 @@ Deferred::render(WPtr<Scene> wScene,
   //resourseManager.m_shaderPrograms["GBuffer"]->set();
   
   
-  graphicsAPI.setRasterizerState(m_normalRasterizer);
+  //graphicsAPI.setRasterizerState(m_normalRasterizer);
   //Vector<RenderData> toRender;
   //Vector<RenderData> transparents;
   
@@ -214,7 +223,6 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
-  graphicsAPI.setRasterizerState(m_normalRasterizer);
   for(auto child : childs){
     actorTransform = child->getGlobalTransform();
     auto components = child->getComponents<GraphicsComponent>();
@@ -242,12 +250,12 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
               graphicsAPI.draw(mesh->getNumOfControlPoints());
             }
             else{
-              graphicsAPI.setRasterizerState(m_normalRasterizer);
-              auto& mat = model->getMaterial(i);
+              auto mat = model->getMaterial(i).lock();
               m_globalTransformBuffer->write(&finalTransform);
               graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
               mesh->set();
-              mat.lock()->set();
+              mat->set();
+              graphicsAPI.setRasterizerState(m_rasterizers[mat->m_culling+mat->m_fillMode]);
               graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
               graphicsAPI.drawIndex(mesh->getIndexNum());
             }

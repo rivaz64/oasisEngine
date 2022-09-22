@@ -172,7 +172,7 @@ class Deferred :
   //SPtr<Buffer> m_matrix;
   SPtr<Buffer> m_kernel;
 
-  SPtr<RasterizerState> m_normalRasterizer;
+  Vector<SPtr<RasterizerState>> m_rasterizers;
 
   SPtr<RasterizerState> m_hairRasterizer1;
   SPtr<RasterizerState> m_hairRasterizer2;

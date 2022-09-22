@@ -1045,36 +1045,37 @@ void TestApp::drawImGui()
   //}
   //ImGui::End();
 
-  ImGui::Begin("Model Editor");
-  if(!m_selectedModel.expired()){
-    auto selectedModel = m_selectedModel.lock();
-    SIZE_T matNum = selectedModel->getNumOfMaterials();
-    for(SIZE_T i = 0; i<matNum;++i){
-      auto& wMaterial = selectedModel->getMaterial(i);
-      if(!wMaterial.expired()){
-        auto material = wMaterial.lock();
-        if(ImGui::Button((material->getName()).c_str())){
-          m_selectedMaterial = material;
+  ImGui::Begin("Model Editor");{
+    if(!m_selectedModel.expired()){
+      auto selectedModel = m_selectedModel.lock();
+      SIZE_T matNum = selectedModel->getNumOfMaterials();
+      for(SIZE_T i = 0; i<matNum;++i){
+        auto& wMaterial = selectedModel->getMaterial(i);
+        if(!wMaterial.expired()){
+          auto material = wMaterial.lock();
+          if(ImGui::Button((material->getName()).c_str())){
+            m_selectedMaterial = material;
+          }
         }
+        
       }
-      
-    }
 
-    if(ImGui::Button("divide")){
-      Vector<SPtr<Model>> models;
-      auto center = selectedModel->getCenter();
-      resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
-      auto actor = makeSPtr<Actor>();
-      for(auto& model : models){
-        auto component = makeSPtr<GraphicsComponent>();
-        component->setModel(model);
-        actor->attachComponent(component);
+      if(ImGui::Button("divide")){
+        Vector<SPtr<Model>> models;
+        auto center = selectedModel->getCenter();
+        resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
+        auto actor = makeSPtr<Actor>();
+        for(auto& model : models){
+          auto component = makeSPtr<GraphicsComponent>();
+          component->setModel(model);
+          actor->attachComponent(component);
+        }
+        actor->setName("divided");
+        m_actualScene->getRoot()->attach(actor);
       }
-      actor->setName("divided");
-      m_actualScene->getRoot()->attach(actor);
     }
+    ImGui::End();
   }
-  ImGui::End();
 
   //ImGui::Begin("Shaders");
   //if(m_selectedMaterial){
@@ -1087,35 +1088,43 @@ void TestApp::drawImGui()
   //}
   //ImGui::End();
 
-  ImGui::Begin("material textures");
-  if(!m_selectedMaterial.expired()){
-    auto selectedMaterial = m_selectedMaterial.lock();
-    if (ImGui::CollapsingHeader("add")){
-      ImGui::InputText("new",imguiString,64);
-      if(!m_selectedTexture.expired()){
-        auto selectedTexture = m_selectedTexture.lock();
-        ImGui::Image(selectedTexture->getId(),ImVec2(100,100));
-      }
-      if(ImGui::Button("add texture")){
-        selectedMaterial->setTexture(imguiString,m_selectedTexture);
-      }
-    }
-    
-    for(auto& textureChannel : selectedMaterial->getTextureChannels()){
-      if(ImGui::Button(textureChannel.c_str()) && !m_selectedTexture.expired()){
+  
 
-        selectedMaterial->setTexture(textureChannel,m_selectedTexture);
+  ImGui::Begin("material editor");{
+   
+    if(!m_selectedMaterial.expired()){
+      auto selectedMaterial = m_selectedMaterial.lock();
+
+      ImGui::Combo("cooling",reinterpret_cast<int*>(&selectedMaterial->m_culling),"none\0front\0back");
+
+      if (ImGui::CollapsingHeader("add")){
+        ImGui::InputText("new",imguiString,64);
+        if(!m_selectedTexture.expired()){
+          auto selectedTexture = m_selectedTexture.lock();
+          ImGui::Image(selectedTexture->getId(),ImVec2(100,100));
+        }
+        if(ImGui::Button("add texture")){
+          selectedMaterial->setTexture(imguiString,m_selectedTexture);
+        }
       }
-      auto texture = selectedMaterial->getTexture(textureChannel);
-      if(!texture.expired()){
-        ImGui::Image(texture.lock()->getId(),ImVec2(100,100));
+      
+      for(auto& textureChannel : selectedMaterial->getTextureChannels()){
+        if(ImGui::Button(textureChannel.c_str()) && !m_selectedTexture.expired()){
+
+          selectedMaterial->setTexture(textureChannel,m_selectedTexture);
+        }
+        auto texture = selectedMaterial->getTexture(textureChannel);
+        if(!texture.expired()){
+          ImGui::Image(texture.lock()->getId(),ImVec2(100,100));
+        }
+        //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
+        //  m_selectedTexture = texture.second;
+        //}
       }
-      //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
-      //  m_selectedTexture = texture.second;
-      //}
     }
+    ImGui::End();
   }
-  ImGui::End();
+  
 
   ImGui::Begin("lua");
   {

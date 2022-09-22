@@ -7,6 +7,8 @@
 #pragma once
 #include "oaPrerequisitesCore.h"
 #include "oaResourse.h"
+#include "oaFlags.h"
+#include "oaRasterizerState.h"
 
 namespace oaEngineSDK{
 
@@ -88,6 +90,10 @@ class OA_CORE_EXPORT Material :
   {
     return m_castShadows; 
   }
+
+  CULLING::E m_culling;
+
+  FILL_MODE::E m_fillMode;
 
  private:
   /**

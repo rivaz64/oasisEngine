@@ -6,7 +6,7 @@
 #include <oaResoureManager.h>
 #include <oaActor.h>
 #include <OmniClient.h>
-#include <OmniUsdLive.h>
+//#include <OmniUsdLive.h>
 #include "pxr/usd/usd/stage.h"
 #include "pxr/usd/usdGeom/mesh.h"
 #include "pxr/usd/usdGeom/metrics.h"
@@ -32,6 +32,7 @@
 #include <oaModel.h>
 #include <oaMesh.h>
 #include <oaResoureManager.h>
+#include <oaMaterial.h>
 namespace oaEngineSDK 
 {
 
@@ -99,7 +100,7 @@ Omniverse::onStartUp()
 void 
 Omniverse::onShutDown()
 {
-  omniUsdLiveWaitForPendingUpdates();
+  omniClientLiveWaitForPendingUpdates();
 
   g_stage.Reset();
 
@@ -166,9 +167,11 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor)
   auto gc = makeSPtr<GraphicsComponent>();
   auto model = makeSPtr<Model>();
   auto mesh = makeSPtr<StaticMesh>();
+  auto newMaterial = copy(resourceManager.m_defaultMaterial);
   resourceManager.registerResourse("usd model",model);
+  resourceManager.registerResourse("default material",cast<Resourse>(newMaterial));
   model->addMesh(mesh);
-  model->addMaterial(resourceManager.m_defaultMaterial);
+  model->addMaterial(newMaterial);
   gc->setModel(model);
   actor->attachComponent(gc);
   VtValue value;
@@ -180,6 +183,8 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor)
   auto uvs = value.Get<VtVec2fArray>();
   UGmesh.GetFaceVertexIndicesAttr().Get(&value);
   auto indices = value.Get<VtArray<int>>();
+  UGmesh.GetFaceVertexCountsAttr().Get(&value);
+  auto faceCount = value.Get<VtArray<int>>();
 
   SIZE_T numOfVertex = points.size();
   mesh->setVertexNum(numOfVertex);
@@ -190,10 +195,24 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor)
       Vector2f(uvs[i].data()[0],uvs[i].data()[1])));
   }
 
+
+
   SIZE_T numOfIndices = indices.size();
-  mesh->setIndexNum(numOfIndices);
-  for(SIZE_T i=0; i<numOfIndices; ++i){
-    mesh->setIndexAt(i,indices[i]);
+  SIZE_T numOfFaces = faceCount.size();
+  uint64 currectIndex = 0;
+  //mesh->setIndexNum(numOfIndices);
+  for(SIZE_T i=0; i<numOfFaces; ++i){
+    mesh->m_index.push_back(indices[currectIndex]);
+    mesh->m_index.push_back(indices[currectIndex+1]);
+    mesh->m_index.push_back(indices[currectIndex+2]);
+    
+    if(faceCount[i] == 4){
+      mesh->m_index.push_back(indices[currectIndex+2]);
+      mesh->m_index.push_back(indices[currectIndex+3]);
+      mesh->m_index.push_back(indices[currectIndex]);
+      ++currectIndex;
+    }
+    currectIndex+=3;
   }
 
   mesh->writeBuffers();
@@ -295,14 +314,14 @@ Omniverse::addActor(WPtr<Actor> wActor)
 	}
 
   g_stage->Save();
-  omniUsdLiveProcess();
+  omniClientLiveProcess();
   //m_meshes.push_back(makeSPtr)
 }
 
 void 
 Omniverse::update()
 {
-  omniUsdLiveWaitForPendingUpdates();
+  omniClientLiveWaitForPendingUpdates();
   UsdGeomXformOp translateOp;
   GfVec3f position(0);
   GfVec3f scale(0);
@@ -344,7 +363,7 @@ Omniverse::update()
     auto pos = rotation.GetArray();
     print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
     g_stage->Save();
-    omniUsdLiveProcess();
+    omniClientLiveProcess();
   }
   
 }
