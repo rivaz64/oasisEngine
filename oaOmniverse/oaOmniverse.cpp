@@ -225,6 +225,7 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
       auto newActor = makeSPtr<Actor>();
       scene->attach(newActor);
       newActor->setName(node.GetName());
+      m_actors.push_back(newActor);
 			loadMeshFromUSD(UsdGeomMesh(node),newActor);
 		}
 	}
@@ -343,6 +344,7 @@ Omniverse::update()
     auto pos = rotation.GetArray();
     print(StringUtilities::floatToString(float(pos[0]))+" "+StringUtilities::floatToString(float(pos[1]))+" "+StringUtilities::floatToString(float(pos[2])));
     g_stage->Save();
+    omniUsdLiveProcess();
   }
   
 }
