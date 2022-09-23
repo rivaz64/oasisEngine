@@ -22,6 +22,11 @@ class OA_CORE_EXPORT GraphicsComponent :
 
   //void
   //onAttach(SPtr<Actor> actor);
+   void
+  save(Serializer& serializer) override;
+
+  void
+  load(Serializer& serializer) override;
 
   COMPONENT_TYPE::E
   getType() override; 

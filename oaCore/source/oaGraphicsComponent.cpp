@@ -11,6 +11,19 @@
 
 namespace oaEngineSDK{
 
+void 
+GraphicsComponent::save(Serializer& serializer)
+{
+  serializer.encodeString(m_model.lock()->getName());
+}
+
+void 
+GraphicsComponent::load(Serializer& serializer)
+{
+  auto modelName = serializer.decodeString();
+  setModel(cast<Model>(ResoureManager::instance().getResourse(modelName)));
+}
+
 COMPONENT_TYPE::E
 GraphicsComponent::getType()
 {

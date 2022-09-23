@@ -41,7 +41,7 @@ Actor::load(Serializer& serializer)
   setName(serializer.decodeString());
   auto& transform = GetActorTransform();
   serializer.file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
-  SIZE_T num = serializer.decodeNumber();
+  SIZE_T num = serializer.decodeSize();
   for(SIZE_T n = 0; n<num; ++n){
     auto componentType = serializer.decodeNumber();
     if(componentType == COMPONENT_TYPE::kGrpahics){
@@ -60,13 +60,13 @@ Actor::attach(SPtr<Actor> actor)
   //}
   //auto actor = wActor.lock();
   m_subActors.push_back(actor);
-  actor->m_parent = shared_from_this();
+  actor->m_parent = cast<Actor>(shared_from_this());
 }
 
 void 
 Actor::attachComponent(SPtr<Component> component)
 {
-  component->onAttach(shared_from_this());
+  component->onAttach(cast<Actor>(shared_from_this()));
   auto type = component->getType();
   if(m_components.find(type) == m_components.end()){
     m_components.insert({component->getType(),{}});
@@ -80,7 +80,7 @@ Actor::update()
 {
   for(auto& componentList : m_components){
     for(auto& component : componentList.second){
-      component->update(shared_from_this());
+      component->update(cast<Actor>(shared_from_this()));
     }
   }
 }

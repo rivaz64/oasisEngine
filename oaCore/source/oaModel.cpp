@@ -19,6 +19,7 @@ Model::Model(SIZE_T numOfMeshes)
 void 
 Model::save(Serializer& serializer)
 { 
+  serializer.encodeString(getName());
   auto num = m_meshes.size();
   serializer.encodeSize(m_meshes.size());
   for(SIZE_T n=0; n<num; ++n){
@@ -33,14 +34,17 @@ Model::save(Serializer& serializer)
 void 
 Model::load(Serializer& serializer)
 {
-  auto num = serializer.decodeNumber();
+  auto name = serializer.decodeString();
+  ResoureManager::instance().registerResourse(name,shared_from_this());
+  auto num = serializer.decodeSize();
   m_meshes.resize(num);
   m_materials.resize(num);
   for(SIZE_T n=0; n<num; ++n){
     m_meshes[n] = makeSPtr<StaticMesh>();
     m_meshes[n]->load(serializer);
     auto materialName = serializer.decodeString();
-    addMaterial(cast<Material>(ResoureManager::instance().getResourse(materialName)));
+    auto material = cast<Material>(ResoureManager::instance().getResourse(materialName));
+    m_materials[n] = material;
   }
 }
 

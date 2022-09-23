@@ -72,7 +72,8 @@ Material::set()
 
   //auto& shader = resourseManager.m_multiShaderPrograms[StringUtilities::getStringId("gBuffer")][m_shader];
   //shader->set();
-  cast<AdaptativeShader>(resourseManager.getResourse("gBuffer")).lock()->set(m_shader);
+  auto gBuffer = resourseManager.getResourse("gBuffer");
+  cast<AdaptativeShader>(gBuffer).lock()->set(m_shader);
 
   auto channels = {"diffuse","specular","normalMap","emisive"};
 

@@ -17,7 +17,7 @@ namespace oaEngineSDK{
  * @brief something that is on a scene
 */
 class OA_CORE_EXPORT LUAEXPORT Actor :
-  public SharedEnabled<Actor>, public Resourse
+  public Resourse
 {
  public:
 

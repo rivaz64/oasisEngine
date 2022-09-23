@@ -359,8 +359,8 @@ ResoureManager::loadDefaultShaders()
   //todo: cambiarlo a gbuffer
   //("animation","animVertexShader","default");
   createShaderProgram("paralax","v_vertexShader","p_paralax");
-  createShaderProgram("transparent","v_vertexShader","p_transparent");
-  cast<ShaderProgram>(resourceManager.getResourse("transparent")).lock()->setChannels({"diffuse","specular","normalMap"});
+  //createShaderProgram("transparent","v_vertexShader","p_transparent");
+  //cast<ShaderProgram>(resourceManager.getResourse("transparent")).lock()->setChannels({"diffuse","specular","normalMap"});
   createShaderProgram("debug","v_vertexDebug","p_debug");
   //createShaderProgram("GBuffer","vertexShader","GBuffer");
   //m_shaderPrograms["GBuffer"]->setChannels({"diffuse","specular","normalMap","emisive"});

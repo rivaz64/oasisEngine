@@ -30,7 +30,8 @@ enum E{
 };
 }
 
-class OA_CORE_EXPORT Resourse
+class OA_CORE_EXPORT Resourse :
+  public SharedEnabled<Resourse>
 {
  public:
 

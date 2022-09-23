@@ -127,6 +127,7 @@ class OA_CORE_EXPORT Mesh :
   {
     serializer.decodeVector(m_vertices);
     serializer.decodeVector(m_index);
+    writeBuffers();
   }
 
   RESOURSE_TYPE::E

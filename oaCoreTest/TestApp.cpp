@@ -964,40 +964,40 @@ TestApp::updateImGui()
     // action if OK
     if (ImGuiFileDialog::Instance()->IsOk())
     {
-      //String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      //String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-      //Serializer serializer;
-      //if(serializer.init(filePathName,FILE::kRead)){
-      //  SIZE_T number = serializer.decodeSize();
-      //  for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-      //    auto image = makeSPtr<Image>();
-      //    image->load(serializer);
-      //    SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-      //    texture->initFromImage(image);
-      //    resourceManagerm_textures.insert({StringUtilities::getStringId(texture->getName()),texture});
-      //  }
-      //
-      //  number = serializer.decodeSize();
-      //  for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-      //    auto material = makeSPtr<Material>();
-      //    material->load(serializer);
-      //    resourceManager.m_materials.insert({StringUtilities::getStringId(material->getName()),material});
-      //  }
-      //  
-      //  number = serializer.decodeSize();
-      //  for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-      //    auto model = makeSPtr<Model>();
-      //    model->load(serializer);
-      //    resourceManager.m_models.insert({StringUtilities::getStringId(model->getName()),model});
-      //  }
-      //
-      //  number = serializer.decodeSize();
-      //  for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-      //    auto actor = makeSPtr<Actor>();
-      //    actor->load(serializer);
-      //    m_actualScene->getRoot()->attach(actor);
-      //  }
-      //}
+      String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      Serializer serializer;
+      if(serializer.init(filePathName,FILE::kRead)){
+        SIZE_T number = serializer.decodeSize();
+        for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+          auto image = makeSPtr<Image>();
+          image->load(serializer);
+          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+          texture->initFromImage(image);
+          resourceManager.registerResourse(texture->getName(),texture);
+        }
+      
+        number = serializer.decodeSize();
+        for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+          auto material = makeSPtr<Material>();
+          material->load(serializer);
+          resourceManager.registerResourse(material->getName(),material);
+        }
+        
+        number = serializer.decodeSize();
+        for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+          auto model = makeSPtr<Model>();
+          model->load(serializer);
+          resourceManager.registerResourse(model->getName(),model);
+        }
+      
+        number = serializer.decodeSize();
+        for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+          auto actor = makeSPtr<Actor>();
+          actor->load(serializer);
+          m_actualScene->getRoot()->attach(actor);
+        }
+      }
     }
     
     // close
