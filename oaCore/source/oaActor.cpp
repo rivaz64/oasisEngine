@@ -33,6 +33,10 @@ Actor::save(Serializer& serializer)
     serializer.encodeNumber(component.first);
     component.second[0]->save(serializer);
   }
+  serializer.encodeSize(m_subActors.size());
+  for(auto& child : m_subActors){
+    child->save(serializer);
+  }
 }
 
 void 
@@ -49,6 +53,12 @@ Actor::load(Serializer& serializer)
       attachComponent(component);
       component->load(serializer);
     }
+  }
+  SIZE_T numOfChilds = serializer.decodeSize();
+  for(SIZE_T i = 0; i<numOfChilds; ++i){
+    auto newActor = makeSPtr<Actor>();
+    attach(newActor);
+    newActor->load(serializer);
   }
 }
 
@@ -173,6 +183,24 @@ Actor::getGlobalRotation()
                Math::atan2(Math::sqrt(transform.row3.y*transform.row3.y+transform.row3.z*transform.row3.z),-transform.row3.x),
                Math::atan2(transform.row1.x,transform.row2.x));
   return ans;
+}
+
+Vector3f
+Actor::getLocalLocation()
+{
+  return m_localTransform.getLocation();
+}
+
+Vector3f
+Actor::getLocalScale()
+{
+  return m_localTransform.getScale();
+}
+
+Vector3f
+Actor::getLocalRotation()
+{
+  return m_localTransform.getRotation();
 }
 
 }

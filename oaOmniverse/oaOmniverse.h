@@ -36,20 +36,20 @@ class Omniverse :
   connectToModel(const String& name, WPtr<Actor> scene) override;
 
   void
-  addActor(WPtr<Actor> actor) override;
+  addScene(WPtr<Actor> actor);
 
   void
   update() override;
 
 protected:
 
-  Omniverse() {print("child constructed"); }
-
   String m_userFolder = "omniverse://localhost/Users";
   String m_userName;
   String m_destinationPath;
   
   Vector<WPtr<Actor>> m_actors;
+
+  WPtr<Actor> m_scene;
 
   friend class OmniverseApi;
   friend class Module<OmniverseApi>;

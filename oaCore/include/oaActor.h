@@ -97,6 +97,15 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   Vector3f
   getGlobalRotation();
 
+  Vector3f
+  getLocalLocation();
+
+  Vector3f
+  getLocalScale();
+
+  Vector3f
+  getLocalRotation();
+
   /**
    * @brief gets a specific component
    * @tparam T the component to get

@@ -30,7 +30,7 @@ class OA_CORE_EXPORT OmniverseApi :
   connectToModel(const String& name, WPtr<Actor> scene) {}
 
   virtual void
-  addActor(WPtr<Actor> actor){}
+  addScene(WPtr<Actor> actor){}
 
   virtual void
   update(){}

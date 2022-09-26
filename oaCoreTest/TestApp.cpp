@@ -485,14 +485,16 @@ void TestApp::childsInImgui(SPtr<Actor> parentActor)
 {
   auto& childs = parentActor->getChilds();
   for(SPtr<Actor> actor : childs){
+    ImGui::Indent(6);
     if(ImGui::Button(actor->getName().c_str())){
       m_selectedActor = actor;
     }
     if(actor->getChilds().size()>0){
-      if(ImGui::CollapsingHeader("childs")){
+      //if(ImGui::CollapsingHeader("childs")){
         childsInImgui(actor);
-      }
+      //}
     }
+    ImGui::Unindent(6);
   }
 }
 
@@ -534,15 +536,15 @@ TestApp::updateImGui()
     if (ImGui::CollapsingHeader("transform")){
       
       //auto& transform = selectedActor->GetActorTransform();
-      Vector3f vec = selectedActor->getGlobalLocation();
+      Vector3f vec = selectedActor->getLocalLocation();
       if(ImGui::DragFloat3("location", &vec.x, .01f)){
         selectedActor->setActorLocation(vec);
       }
-      vec = selectedActor->getGlobalScale();
+      vec = selectedActor->getLocalScale();
       if(ImGui::DragFloat3("scale", &vec.x, .01f)){
         selectedActor->setActorScale(vec);
       }
-      vec = selectedActor->getGlobalRotation()*Math::RAD_TO_DEG;
+      vec = selectedActor->getLocalRotation()*Math::RAD_TO_DEG;
       
       if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
         selectedActor->setActorRotation(vec*Math::DEG_TO_RAD);
@@ -988,7 +990,7 @@ TestApp::updateImGui()
         for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
           auto model = makeSPtr<Model>();
           model->load(serializer);
-          resourceManager.registerResourse(model->getName(),model);
+          //resourceManager.registerResourse(model->getName(),model);
         }
       
         number = serializer.decodeSize();
@@ -1170,8 +1172,8 @@ TestApp::updateImGui()
     if(ImGui::Button("connect to object")){
       omniverse.connectToModel(imguiString,m_actualScene->getRoot());
     }
-    if(ImGui::Button("add actor")){
-      omniverse.addActor(m_selectedActor);
+    if(ImGui::Button("add scene")){
+      omniverse.addScene(m_actualScene->getRoot());
     }
 
   }

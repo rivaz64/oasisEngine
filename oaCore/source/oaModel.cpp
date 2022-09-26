@@ -43,8 +43,12 @@ Model::load(Serializer& serializer)
     m_meshes[n] = makeSPtr<StaticMesh>();
     m_meshes[n]->load(serializer);
     auto materialName = serializer.decodeString();
-    auto material = cast<Material>(ResoureManager::instance().getResourse(materialName));
-    m_materials[n] = material;
+    if(materialName == "defaultMaterial"){
+      m_materials[n] = ResoureManager::instance().m_defaultMaterial;
+    }
+    else{
+      m_materials[n] = cast<Material>(ResoureManager::instance().getResourse(materialName));
+    }
   }
 }
 
