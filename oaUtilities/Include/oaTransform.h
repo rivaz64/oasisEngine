@@ -30,6 +30,7 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE void
   setLocation(const Vector3f& location){
+    m_changed = true;
     m_location = location;
   }
 
@@ -48,6 +49,7 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE void
   setScale(const Vector3f& scale){
+    m_changed = true;
     m_scale = scale;
   }
 
@@ -57,6 +59,7 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE void
   setRotation(const Vector3f& rotation){
+    m_changed = true;
     m_rotation = rotation;
   }
 
@@ -75,7 +78,6 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE Vector3f&
   getScale(){
-    dirty = true;
     return m_scale;
   }
 
@@ -85,7 +87,6 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE Vector3f&
   getRotation(){
-    dirty = true;
     return m_rotation;
   }
 
@@ -95,8 +96,8 @@ class OA_UTILITY_EXPORT Transform
   */
   FORCEINLINE const Matrix4f&
   getMatrix(){
-    if(dirty){
-      dirty = false;
+    if(true){
+      //dirty = false;
       calculate();
     }
     return m_matrix;
@@ -108,8 +109,12 @@ class OA_UTILITY_EXPORT Transform
   void 
   calculate();
 
- private:
-
+ public:
+  
+  /**
+   * @brief if this actor has been modified in this frame
+  */
+  bool m_changed = false;
  
 
  private:
@@ -132,11 +137,6 @@ class OA_UTILITY_EXPORT Transform
    * @brief the transform of this Actor with origin at his parent
   */
   Matrix4f m_matrix;
-
-  /**
-   * @brief dirty flag for the getter of the transform
-  */
-  bool dirty = true;
 };
 
 }

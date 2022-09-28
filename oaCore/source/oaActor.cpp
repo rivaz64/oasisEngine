@@ -73,6 +73,16 @@ Actor::attach(SPtr<Actor> actor)
   actor->m_parent = cast<Actor>(shared_from_this());
 }
 
+void
+Actor::unattach(WPtr<Actor> wChild)
+{
+  auto child = wChild.lock();
+  auto found = find(m_subActors.begin(),m_subActors.end(),child);
+  if(found != m_subActors.end()){
+    m_subActors.erase(found);
+  }
+}
+
 void 
 Actor::attachComponent(SPtr<Component> component)
 {
@@ -98,9 +108,13 @@ Actor::update()
 void
 Actor::postUpdate()
 {
-  m_changed = false;
-  for(auto& chlid : m_subActors){
-    chlid->postUpdate();
+  m_localTransform.m_changed = false;
+  for(auto& child : m_subActors){
+    child->postUpdate();
+  }
+  auto components = getComponents<GraphicsComponent>();
+  for(auto& component : components){
+    cast<GraphicsComponent>(component)->postUpdate();
   }
 }
 
@@ -115,7 +129,6 @@ Actor::setActorLocation(const Vector3f& v)
 {
   if(m_localTransform.getLocation() != v){
     m_localTransform.setLocation(v);
-    m_changed = true;
     m_localTransform.calculate();
   }
   
@@ -126,7 +139,6 @@ Actor::setActorScale(const Vector3f& v)
 {
   if(m_localTransform.getScale() != v){
     m_localTransform.setScale(v);
-    m_changed = true;
     m_localTransform.calculate();
   }
   
@@ -137,7 +149,6 @@ Actor::setActorRotation(const Vector3f& v)
 {
   if(m_localTransform.getRotation() != v){
     m_localTransform.setRotation(v);
-    m_changed = true;
     m_localTransform.calculate();
   }
   

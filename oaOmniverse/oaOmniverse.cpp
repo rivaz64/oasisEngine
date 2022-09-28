@@ -41,44 +41,42 @@ PXR_NAMESPACE_USING_DIRECTIVE
 
 TF_DEFINE_PRIVATE_TOKENS(
 	_tokens,
-	(Root)
-  (st)
-  (DistantLight)
+	(box)
+    (DistantLight)
+    (DomeLight)
+    (Looks)
+    (Root)
+    (Shader)
+    (st)
+
+    // These tokens will be reworked or replaced by the official MDL schema for USD.
+    // https://developer.nvidia.com/usd/MDLschema
+    (Material)
+    ((_module, "module"))
+    (name)
+    (out)
+    ((shaderId, "mdlMaterial"))
+    (mdl)
+
+    // Tokens used for USD Preview Surface
+    (diffuseColor)
+    (normal)
+    (file)
+    (result)
+    (varname)
+    (rgb)
+    (RAW)
+    (sRGB)
+    (surface)
+    (PrimST)
+    (UsdPreviewSurface)
+    ((UsdShaderId, "UsdPreviewSurface"))
+    ((PrimStShaderId, "UsdPrimvarReader_float2"))
+    (UsdUVTexture)
 );
 
 using std::fill;
 
-void SetOp(UsdGeomXformable& xForm, UsdGeomXformOp& op, UsdGeomXformOp::Type opType, const GfVec3d& value, const UsdGeomXformOp::Precision precision)
-{
-	//if (!op)
-	//{
-	//	op = xForm.AddXformOp(opType, precision);
-	//	cout << " Adding " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
-	//}
-
-	//if (op.GetPrecision() == UsdGeomXformOp::Precision::PrecisionFloat)
-		//op.Set(GfVec3d(value));
-	//else
-  op.Set(value);
-
-	cout << " Setting " << UsdGeomXformOp::GetOpTypeToken(opType) << endl;
-}
-
-//static void OmniClientConnectionStatusCallbackImpl(void* userData, const char* url, OmniClientConnectionStatus status) noexcept
-//{
-//    // Let's just print this regardless
-//    {
-//        
-//        std::cout << "Connection Status: " << omniClientGetConnectionStatusString(status) << " [" << url << "]" << std::endl;
-//    }
-//    if (status == eOmniClientConnectionStatus_ConnectError)
-//    {
-//        // We shouldn't just exit here - we should clean up a bit, but we're going to do it anyway
-//        std::cout << "[ERROR] Failed connection, exiting." << std::endl;
-//        exit(-1);
-//    }
-//}
-//
 PXR_NAMESPACE_USING_DIRECTIVE
 UsdStageRefPtr g_stage;
 
@@ -160,6 +158,173 @@ Omniverse::createModel(const String& name)
   
 }
 
+bool _is_binding_stronger_than_descendents(
+    pxr::UsdShadeMaterialBindingAPI const &binding,
+    pxr::TfToken const &purpose
+) {
+    static pxr::TfToken const strength {"strongerThanDescendents"};
+
+    return pxr::UsdShadeMaterialBindingAPI::GetMaterialBindingStrength(
+        binding.GetDirectBindingRel(purpose)) == strength;
+}
+
+
+bool _is_collection_binding_stronger_than_descendents(
+    pxr::UsdShadeMaterialBindingAPI::CollectionBinding const &binding
+) {
+    static pxr::TfToken const strength {"strongerThanDescendents"};
+
+    return pxr::UsdShadeMaterialBindingAPI::GetMaterialBindingStrength(
+        binding.GetBindingRel()) == strength;
+}
+
+auto _get_collection_material_bindings_for_purpose(
+    UsdShadeMaterialBindingAPI const &binding,
+    TfToken const &purpose
+) -> Vector<UsdShadeMaterialBindingAPI::CollectionBinding> {
+  auto parent = binding.GetPrim();
+  
+  for (; not parent.IsPseudoRoot(); parent = parent.GetParent()) {
+    auto binding = pxr::UsdShadeMaterialBindingAPI {parent};
+  
+    // TODO: Check if this function works in C++
+    // XXX : Note, Normally I'd just do
+    // `UsdShadeMaterialBindingAPI.GetCollectionBindings` but, for
+    // some reason, `binding.GetCollectionBindings(purpose)` does not
+    // yield the same result as parsing the relationships, manually.
+    // Maybe it's a bug?
+    //
+    // auto material_bindings = binding.GetCollectionBindings(purpose);
+    //
+    Vector<UsdShadeMaterialBindingAPI::CollectionBinding> material_bindings;
+    auto bindings = binding.GetCollectionBindingRels(purpose);
+  
+    if (bindings.empty()) {
+      continue;
+    }
+  
+    material_bindings.reserve(bindings.size());
+  
+    for (auto const &relationship : bindings) {
+      if (relationship.IsValid()) {
+        material_bindings.emplace_back(relationship);
+      }
+    }
+  
+    if (!material_bindings.empty()) {
+      return material_bindings;
+    }
+  }
+  
+  return {};
+}
+
+UsdShadeMaterial _get_direct_bound_material_for_purpose(
+  UsdShadeMaterialBindingAPI const &binding,
+  TfToken const &purpose
+) 
+{
+  auto relationship = binding.GetDirectBindingRel(purpose);
+  auto direct = UsdShadeMaterialBindingAPI::DirectBinding {relationship};
+
+  if (!direct.GetMaterial()) {
+      return UsdShadeMaterial {};
+  }
+
+  auto material = direct.GetMaterialPath();
+  auto prim = binding.GetPrim().GetStage()->GetPrimAtPath(material);
+
+  if (!prim.IsValid()) {
+      return UsdShadeMaterial {};
+  }
+
+  return UsdShadeMaterial {prim};
+}
+
+UsdShadeMaterial get_bound_material(
+  UsdPrim const &prim,
+  TfToken material_purpose = UsdShadeTokens->allPurpose,
+  String const &collection = ""
+) 
+{
+  if (!prim.IsValid()) {
+      print("prim \"" + prim.GetPath().GetString() + "\" is not valid");
+  }
+
+
+  std::set<pxr::TfToken> purposes = {material_purpose, pxr::UsdShadeTokens->allPurpose};
+  pxr::UsdPrim parent;
+
+  for (auto const &purpose : purposes) {
+    pxr::UsdShadeMaterial material;
+
+    for (parent = prim; not parent.IsPseudoRoot(); parent = parent.GetParent()) {
+      auto binding = pxr::UsdShadeMaterialBindingAPI {parent};
+
+      if (!material || _is_binding_stronger_than_descendents(binding, purpose)) {
+        material = _get_direct_bound_material_for_purpose(binding, purpose);
+      }
+
+      for (auto const &collection_binding : _get_collection_material_bindings_for_purpose(binding, purpose)) {
+        auto binding_collection = collection_binding.GetCollection();
+
+        if (!collection.empty() && binding_collection.GetName() != collection) {
+          continue;
+        }
+
+        auto membership = binding_collection.ComputeMembershipQuery();
+
+        if (membership.IsPathIncluded(parent.GetPath()) && (!material || _is_collection_binding_stronger_than_descendents(collection_binding))) {
+          material = collection_binding.GetMaterial();
+        }
+      }
+    }
+
+    if (material) {
+      return material;
+    }
+  }
+
+  return pxr::UsdShadeMaterial {};
+}
+
+void
+readMLD(String& path){
+  
+}
+
+void 
+loadMaterial(UsdShadeMaterial& material)
+{
+  auto schema = material.GetSchemaAttributeNames();
+  print("begin");
+  for(auto token : schema){
+    print(token.GetString());
+  }
+  print("end");
+
+  SdfPathVector paths;
+  //material.GetSurfaceOutput().get(&paths);
+  for(auto path : paths){
+    print(path.GetString());
+  }
+  //.GetPrim().CreateAttribute(TfToken("info:mdl:sourceAsset:subIdentifier")
+  for(auto child : material.GetPrim().GetChildren()){
+    auto shader = UsdShadeShader(child);
+    auto source = shader.GetPrim().GetAttribute(TfToken("info:mdl:sourceAsset"));
+    VtValue val;
+    source.Get(&val);
+    auto p = val.Get<SdfAssetPath>();
+    print("path -> "+p.GetAssetPath());
+    char* data = new char[256];
+    print("assetPath->"+p.GetAssetPath());
+    print("resolvedPath->"+p.GetResolvedPath());
+    auto res = omniClientCopy(p.GetResolvedPath().c_str(),"C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/test.mdl",data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
+    
+  }
+  
+}
+
 void
 loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 {
@@ -169,7 +334,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
   auto model = makeSPtr<Model>();
   auto mesh = makeSPtr<StaticMesh>();
   auto newMaterial = resourceManager.m_defaultMaterial;
-  resourceManager.registerResourse("m_"+name,model);
+  resourceManager.registerResourse(name,model);
   //resourceManager.registerResourse("default material",cast<Resourse>(newMaterial));
   model->addMesh(mesh);
   model->addMaterial(newMaterial);
@@ -215,8 +380,13 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
     }
     currectIndex+=3;
   }
-
   mesh->writeBuffers();
+
+  UsdShadeTokens->allPurpose;
+
+  auto mat = get_bound_material(UGmesh.GetPrim());
+
+  //loadMaterial(mat);
 }
 
 void
@@ -438,6 +608,110 @@ Omniverse::addScene(WPtr<Actor> wActor)
 
 }
 
+void 
+updateTransform(Transform& transform, Vector<UsdGeomXformOp>& xFormOps)
+{
+  if(transform.m_changed){
+    for(auto& xFormOp: xFormOps){
+      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+        auto location = transform.getLocation();
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          xFormOp.Set(GfVec3f(location.x, location.y, location.z));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          xFormOp.Set(GfVec3d(location.x, location.y, location.z));
+        }
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+        auto myScale = transform.getScale();
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          xFormOp.Set(GfVec3d(myScale.x, myScale.y, myScale.z));
+        }
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+        auto myRot = transform.getRotation();
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          xFormOp.Set(GfVec3d(myRot.x, myRot.y, myRot.z));
+        }
+      }
+    }
+  }
+
+  else{
+    for(auto& xFormOp: xFormOps){
+      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          GfVec3f position(0);
+          xFormOp.Get(&position);
+          transform.setLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          GfVec3d position(0);
+          xFormOp.Get(&position);
+          transform.setLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
+        }
+        
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          GfVec3f scale(0);
+          xFormOp.Get(&scale);
+          transform.setScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          GfVec3d scale(0);
+          xFormOp.Get(&scale);
+          transform.setScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
+        }
+      }
+      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+          GfVec3f rotation(0);
+          xFormOp.Get(&rotation);
+          transform.setRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+        }
+        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+          GfVec3d rotation(0);
+          xFormOp.Get(&rotation);
+          transform.setRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
+        }
+      }
+    }
+  }
+}
+
+void
+updateComponent(WPtr<GraphicsComponent> wComponent, SdfPath parentPath)
+{
+  if(wComponent.expired()) return;
+  auto component = wComponent.lock();
+
+  auto wModel = component->getModel();
+
+  if(wModel.expired()) return;
+
+  auto model = wModel.lock();
+
+  auto modelName = model->getName();
+  auto thisPath = parentPath.AppendChild(TfToken(modelName));
+
+  auto modelPrimPath = parentPath.AppendChild(TfToken(modelName));
+  auto UGmodel = UsdGeomMesh::Define(g_stage, modelPrimPath);
+
+  bool resetXformStack = false;
+  Vector<UsdGeomXformOp> xFormOps = UGmodel.GetOrderedXformOps(&resetXformStack);
+
+  auto& transform = component->getTransform();
+
+  updateTransform(component->getTransform(),xFormOps);
+}
+
 void
 updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 {
@@ -453,85 +727,54 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
   bool resetXformStack = false;
   Vector<UsdGeomXformOp> xFormOps = UGactor.GetOrderedXformOps(&resetXformStack);
 
-  if(actor->hasChanged()){
-    for(auto& xFormOp: xFormOps){
-      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
-        auto location = actor->getLocalLocation();
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          xFormOp.Set(GfVec3f(location.x, location.y, location.z));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          xFormOp.Set(GfVec3d(location.x, location.y, location.z));
-        }
-      }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
-        auto myScale = actor->getLocalScale();
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          xFormOp.Set(GfVec3f(myScale.x, myScale.y, myScale.z));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          xFormOp.Set(GfVec3d(myScale.x, myScale.y, myScale.z));
-        }
-      }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
-        auto myRot = actor->getLocalRotation();
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          xFormOp.Set(GfVec3f(myRot.x, myRot.y, myRot.z));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          xFormOp.Set(GfVec3d(myRot.x, myRot.y, myRot.z));
-        }
-      }
-    }
-    g_stage->Save();
-  }
-  else{
-    for(auto& xFormOp: xFormOps){
-      if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          GfVec3f position(0);
-          xFormOp.Get(&position);
-          actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          GfVec3d position(0);
-          xFormOp.Get(&position);
-          actor->setActorLocation(Vector3f(position.data()[0],position.data()[1],position.data()[2]));
-        }
-        
-      }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeScale){
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          GfVec3f scale(0);
-          xFormOp.Get(&scale);
-          actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          GfVec3d scale(0);
-          xFormOp.Get(&scale);
-          actor->setActorScale(Vector3f(scale.data()[0],scale.data()[1],scale.data()[2]));
-        }
-      }
-      else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
-        if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
-          GfVec3f rotation(0);
-          xFormOp.Get(&rotation);
-          actor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
-        }
-        else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
-          GfVec3d rotation(0);
-          xFormOp.Get(&rotation);
-          actor->setActorRotation(Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]));
-        }
-      }
-    }
-  }
+  updateTransform(actor->GetActorTransform(),xFormOps);
   
   auto childs = actor->getChilds();
-  for(auto child : childs){
-    updateActor(child,thisPath);
-  }
 
+  auto usdChilds = UGactor.GetPrim().GetChildren();
+	for (const auto& usdChild : usdChilds)
+	{
+    if (usdChild.IsA<UsdGeomXform>())
+		{
+      bool existed = false;
+      for(auto child : childs){
+        if(child->getName() == usdChild.GetName().GetString()){
+          updateActor(child,UGactor.GetPath());
+          existed = true;
+          break;
+        }
+      }
+      if(!existed){
+        loadActor(actor,usdChild);
+      }
+		}
+	}
+
+  for (auto child : childs )
+	{
+    bool existed = false;
+    for(const auto& usdChild : usdChilds){
+      if (usdChild.IsA<UsdGeomXform>())
+		  {
+        if(child->getName() == usdChild.GetName().GetString()){
+          existed = true;
+          break;
+        }
+		  }
+      
+    }
+    if(!existed){
+      addActor(child,UGactor.GetPath());
+    }
+	}
+  //for(auto child : childs){
+  //  updateActor(child,thisPath);
+  //}
+  auto components = actor->getComponents<GraphicsComponent>();
+
+  for(auto& component : components){
+    updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
+  }
 }
 
 void 
@@ -564,33 +807,49 @@ Omniverse::update()
     break;
 	}
 
-  //auto usdChilds = root.GetChildren();
-	//for (const auto& usdChild : usdChilds)
-	//{
-  //  if (usdChild.IsA<UsdGeomXform>())
-	//	{
-  //    bool existed = false;
-  //    for(auto child : childs){
-  //      if(child->getName() == usdChild.GetName().GetString()){
-  //        updateActor(child,rootPrimPath);
-  //        existed = true;
-  //        break;
-  //      }
-  //    }
-  //    if(!existed){
-  //      loadActor(scene,usdChild);
-  //    }
-	//		//print("Found UsdActor: " + child.GetName().GetString() );
-  //    //loadActor(scene,child);
-	//	}
-	//}
+  auto usdChilds = root.GetChildren();
+	for (const auto& usdChild : usdChilds)
+	{
+    if (usdChild.IsA<UsdGeomXform>())
+		{
+      bool existed = false;
+      for(auto child : childs){
+        if(child->getName() == usdChild.GetName().GetString()){
+          updateActor(child,rootPrimPath);
+          existed = true;
+          break;
+        }
+      }
+      if(!existed){
+        loadActor(scene,usdChild);
+      }
+		}
+	}
+
+  for (auto child : childs )
+	{
+    bool existed = false;
+    for(const auto& usdChild : usdChilds){
+      if (usdChild.IsA<UsdGeomXform>())
+		  {
+        if(child->getName() == usdChild.GetName().GetString()){
+          existed = true;
+          break;
+        }
+		  }
+      
+    }
+    if(!existed){
+      addActor(child,root.GetPath());
+    }
+	}
 
   
   //if(UsdChilds.end()-UsdChilds.begin()==)
 
-  for(auto child : childs){
-    updateActor(child,rootPrimPath);
-  }
+  //for(auto child : childs){
+  //  updateActor(child,rootPrimPath);
+  //}
 
   g_stage->Save();
   omniClientLiveProcess();

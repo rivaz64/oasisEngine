@@ -528,6 +528,7 @@ TestApp::updateImGui()
 
   ImGui::Begin("Actor atributes");
   if(!m_selectedActor.expired()){
+
     auto selectedActor = m_selectedActor.lock();
     if(ImGui::Button("Add Component")){
       isAddingComponent = true;
@@ -578,9 +579,15 @@ TestApp::updateImGui()
             auto model = wModel.lock();
             ImGui::Text(model->getName().c_str());
             auto& transform = graphicsComponent->getTransform();
-            ImGui::DragFloat3("location Model",&transform.getLocation().x);
-            ImGui::DragFloat3("scale Model",&transform.getScale().x);
-            auto vec = transform.getRotation()*Math::RAD_TO_DEG;
+            auto vec = transform.getLocation();
+            if(ImGui::DragFloat3("location Model",&vec.x)){
+              transform.setLocation(vec);
+            }
+            vec = transform.getScale();
+            if(ImGui::DragFloat3("scale Model",&vec.x)){
+              transform.setScale(vec);
+            }
+            vec = transform.getRotation()*Math::RAD_TO_DEG;
             if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
               transform.setRotation(vec*Math::DEG_TO_RAD);
             };
@@ -647,6 +654,11 @@ TestApp::updateImGui()
       if(cameraComponent->m_debug){
         m_debugCamera = cameraComponent->getCamera();
       }
+    }
+
+    if(ImGui::Button("delete")){
+      auto parent = selectedActor->getParent().lock();
+      parent->unattach(m_selectedActor);
     }
   }
   ImGui::End();

@@ -61,6 +61,15 @@ class OA_CORE_EXPORT GraphicsComponent :
     return m_transform;
   }
 
+  void 
+  postUpdate();
+
+  FORCEINLINE bool
+  hasChanged()
+  {
+    return m_transform.m_changed;
+  }
+
  private:
 
   /**

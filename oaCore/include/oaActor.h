@@ -57,6 +57,9 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
     return m_localTransform;
   }
 
+  void
+  unattach(WPtr<Actor> child);
+
   /**
    * @brief getter for all the subActors of this Actor
    * @return 
@@ -131,11 +134,18 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
     return m_components[temp.getType()];
   }
 
-   FORCEINLINE bool
-   hasChanged()
-   {
-     return m_changed;
-   }
+  FORCEINLINE bool
+  hasChanged()
+  {
+    return m_localTransform.m_changed;
+  }
+
+  FORCEINLINE WPtr<Actor>
+  getParent()
+  {
+    return m_parent;
+  }
+   
  
  private:
 
@@ -164,10 +174,6 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   Map<COMPONENT_TYPE::E,Vector<SPtr<Component>>> m_components;
 
-  /**
-   * @brief if this actor has been modified in this frame
-  */
-  bool m_changed = false;
 
   /**
    * @brief the dirty flag of the local and global matrix

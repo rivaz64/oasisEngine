@@ -40,5 +40,11 @@ GraphicsComponent::update(WPtr<Actor> actor)
   
 }
 
+void 
+GraphicsComponent::postUpdate()
+{
+  m_transform.m_changed = false;
+}
+
 
 }
