@@ -331,8 +331,10 @@ tryLoadTextureChannel(aiMaterial* material,
     if(loadImage(newPath) /*|| 
        manager.m_textures.find(StringUtilities::getStringId(stringName)) != manager.m_textures.end()*/){
 
-      gbufferFlags |= gbufferFlag;
-      mat->setTexture(textureChannel, cast<Texture>(manager.getResourse(stringName)));
+     // gbufferFlags |= gbufferFlag;
+     // auto texture = cast<Texture>(manager.getResourse(stringName));
+     // if(!texture.expired())
+     // mat->setTexture(textureChannel, cast<Texture>(manager.getResourse(stringName)));
     }
   }
 }

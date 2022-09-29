@@ -316,9 +316,11 @@ readMLD(SPtr<Material> material, String path, String dotPath){
       OmniClientRequestId res = omniClientCopy(dotPath.c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_ErrorIfExists);
       print(omniClientGetResultString(OmniClientResult(res)));
       Loader loader;
+      print("mytexturePath->"+myPath);
       Path p = Path(myPath);
       loader.loadResource(p);
       auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
+      if(!texture.expired())
       material->setTexture("diffuse",texture);
       break;
     }
@@ -341,7 +343,9 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     print(path.GetString());
   }
   //.GetPrim().CreateAttribute(TfToken("info:mdl:sourceAsset:subIdentifier")
-  for(auto child : material.GetPrim().GetChildren()){
+  auto shaders = material.GetPrim().GetChildren();
+  if(shaders.empty()) return;
+  for(auto child : shaders){
     auto shader = UsdShadeShader(child);
     auto source = shader.GetPrim().GetAttribute(TfToken("info:mdl:sourceAsset"));
     VtValue val;
@@ -370,7 +374,7 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     char* data = new char[256];
     auto res = omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
     print(omniClientGetResultString(OmniClientResult(res)));
-    //readMLD(mat,myPath.c_str(),dotPath);
+    readMLD(mat,myPath.c_str(),dotPath);
 
   }
   
@@ -393,9 +397,14 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
   
   auto model = makeSPtr<Model>();
   auto mesh = makeSPtr<StaticMesh>();
-  auto newMaterial = resourceManager.m_defaultMaterial;
+  //auto newMaterial = resourceManager.m_defaultMaterial;
+
+  auto newMaterial = makeSPtr<Material>();
+  newMaterial->setShader(0);
+  
+
   resourceManager.registerResourse(name,model);
-  //resourceManager.registerResourse("default material",cast<Resourse>(newMaterial));
+  resourceManager.registerResourse("mat_"+name,newMaterial);
   model->addMesh(mesh);
   model->addMaterial(newMaterial);
   gc->setModel(model);
@@ -775,6 +784,7 @@ updateComponent(WPtr<GraphicsComponent> wComponent, SdfPath parentPath)
 void
 updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 {
+  return;
   if(wActor.expired()) return;
   auto actor = wActor.lock();
 
