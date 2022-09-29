@@ -113,7 +113,13 @@ class OA_CORE_EXPORT ResoureManager :
   FORCEINLINE WPtr<Resourse>
   getResourse(const String& name)
   {
-    return m_resourses[StringUtilities::getStringId(name)];
+    auto id = StringUtilities::getStringId(name);
+    if(m_resourses.find(id) != m_resourses.end()){
+      return m_resourses[StringUtilities::getStringId(name)];
+    }
+    else{
+      WPtr<Resourse>();
+    }
   }
 
   FORCEINLINE void

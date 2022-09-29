@@ -292,7 +292,8 @@ loadImage(const Path& path){
 
   //auto pitch = FreeImage_GetPitch(dib);
 
-  image->setName(ResoureManager::instance().getUniqueName(path.stem().generic_string()));
+  //image->setName(ResoureManager::instance().getUniqueName(path.stem().generic_string()));
+  image->setName(path.stem().generic_string());
 
   SPtr<Texture> texture = GraphicAPI::instance().createTexture();
 

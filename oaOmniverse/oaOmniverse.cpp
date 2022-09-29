@@ -34,8 +34,12 @@
 #include <oaResoureManager.h>
 #include <oaMaterial.h>
 #include <oaTransform.h>
+#include <oaLoader.h>
+#include <oaResoureManager.h>
 namespace oaEngineSDK 
 {
+
+String g_myPath = "C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/";
 
 PXR_NAMESPACE_USING_DIRECTIVE
 
@@ -289,12 +293,40 @@ UsdShadeMaterial get_bound_material(
 }
 
 void
-readMLD(String& path){
-  
+readMLD(SPtr<Material> material, String path, String dotPath){
+  FStream file;
+  file.open(path);
+  String str((std::istreambuf_iterator<char>(file)),
+                 std::istreambuf_iterator<char>());
+  auto tokens = StringUtilities::split(str," \n");
+  auto numOfTokens = tokens.size();
+  for(SIZE_T i = 0; i<numOfTokens; ++i){
+    if(tokens[i] == "diffuse_texture:"){
+      auto texturePath = StringUtilities::split(str,"\"")[1];
+      auto texturePathSize = texturePath.size();
+      auto myPath = g_myPath;
+      for(int i = 1;i<texturePathSize; ++i){
+        dotPath+=texturePath[i];
+      }
+      for(int i = 2;i<texturePathSize; ++i){
+        myPath+=texturePath[i];
+      }
+      print("texturePath->"+dotPath);
+      char* data = new char[256];
+      OmniClientRequestId res = omniClientCopy(dotPath.c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_ErrorIfExists);
+      print(omniClientGetResultString(OmniClientResult(res)));
+      Loader loader;
+      Path p = Path(myPath);
+      loader.loadResource(p);
+      auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
+      material->setTexture("diffuse",texture);
+      break;
+    }
+  }
 }
 
 void 
-loadMaterial(UsdShadeMaterial& material)
+loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
 {
   auto schema = material.GetSchemaAttributeNames();
   print("begin");
@@ -315,12 +347,31 @@ loadMaterial(UsdShadeMaterial& material)
     VtValue val;
     source.Get(&val);
     auto p = val.Get<SdfAssetPath>();
-    print("path -> "+p.GetAssetPath());
+    auto assetPath = p.GetAssetPath();
+    auto resolvedPath = p.GetResolvedPath();
+    String dotPath;
+    auto dif = resolvedPath.size()-assetPath.size()+2;
+
+    auto myPath = g_myPath;
+
+    for(int i = 0; i< dif; ++i){
+      dotPath+=resolvedPath[i];
+    }
+
+    for(int i = 2; i< dif; ++i){
+      if(assetPath[i]=='/') break;
+      dotPath+=assetPath[i];
+    }
+    for(int i = 2; i< assetPath.size(); ++i){
+      myPath+=assetPath[i];
+    }
+
+    print("myPath->"+myPath);
     char* data = new char[256];
-    print("assetPath->"+p.GetAssetPath());
-    print("resolvedPath->"+p.GetResolvedPath());
-    auto res = omniClientCopy(p.GetResolvedPath().c_str(),"C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/test.mdl",data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
-    
+    auto res = omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
+    print(omniClientGetResultString(OmniClientResult(res)));
+    //readMLD(mat,myPath.c_str(),dotPath);
+
   }
   
 }
@@ -329,8 +380,17 @@ void
 loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 {
   auto& resourceManager = ResoureManager::instance();
+
   auto actor = wActor.lock();
   auto gc = makeSPtr<GraphicsComponent>();
+  actor->attachComponent(gc);
+  auto existingModel = resourceManager.getResourse(name);
+  if(!existingModel.expired()){
+    gc->setModel(cast<Model>(existingModel));
+    return;
+  }
+
+  
   auto model = makeSPtr<Model>();
   auto mesh = makeSPtr<StaticMesh>();
   auto newMaterial = resourceManager.m_defaultMaterial;
@@ -339,7 +399,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
   model->addMesh(mesh);
   model->addMaterial(newMaterial);
   gc->setModel(model);
-  actor->attachComponent(gc);
+  
   VtValue value;
   UGmesh.GetPointsAttr().Get(&value);
   auto points = value.Get<VtArray<GfVec3f>>();
@@ -358,7 +418,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
     mesh->setVertexAt(i,Vertex(
       Vector4f(points[i].data()[0],points[i].data()[1],points[i].data()[2],1.0f),
       Vector4f(normals[i].data()[0],normals[i].data()[1],normals[i].data()[2],0.0f),
-      Vector2f(uvs[i].data()[0],uvs[i].data()[1])));
+      Vector2f(uvs[i].data()[0],1.f-uvs[i].data()[1])));
   }
 
 
@@ -386,7 +446,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 
   auto mat = get_bound_material(UGmesh.GetPrim());
 
-  //loadMaterial(mat);
+  loadMaterial(newMaterial,mat);
 }
 
 void
@@ -723,18 +783,38 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 
   SdfPath actorPrimPath = parentPath.AppendChild(TfToken(actorName));
   UsdGeomXform UGactor = UsdGeomXform::Define(g_stage, actorPrimPath);
-
+  SdfPathVector paths;
   bool resetXformStack = false;
   Vector<UsdGeomXformOp> xFormOps = UGactor.GetOrderedXformOps(&resetXformStack);
-
+  
   updateTransform(actor->GetActorTransform(),xFormOps);
   
   auto childs = actor->getChilds();
-
+  auto components = actor->getComponents<GraphicsComponent>();
+  
   auto usdChilds = UGactor.GetPrim().GetChildren();
 	for (const auto& usdChild : usdChilds)
 	{
-    if (usdChild.IsA<UsdGeomXform>())
+    if (usdChild.IsA<UsdGeomMesh>())
+		{
+      bool existed = false;
+      for(auto& component : components){
+        auto wModel = cast<GraphicsComponent>(component)->getModel();
+        if(wModel.expired()) continue;
+        auto model = wModel.lock();
+        if(model->getName() == usdChild.GetName().GetString()){
+          updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
+          existed = true;
+          break;
+        }
+        
+  
+      }
+      if(!existed){
+        loadMeshFromUSD(UsdGeomMesh(usdChild),actor,usdChild.GetName());
+      }
+		}
+    else if (usdChild.IsA<UsdGeomXform>())
 		{
       bool existed = false;
       for(auto child : childs){
@@ -749,7 +829,7 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
       }
 		}
 	}
-
+  
   for (auto child : childs )
 	{
     bool existed = false;
@@ -767,19 +847,41 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
       addActor(child,UGactor.GetPath());
     }
 	}
+  for(auto& component : components)
+	{
+    auto wModel = cast<GraphicsComponent>(component)->getModel();
+    if(wModel.expired()) continue;
+    auto model = wModel.lock();
+    bool existed = false;
+    for(const auto& usdChild : usdChilds){
+      if (usdChild.IsA<UsdGeomMesh>())
+		  {
+        if(model->getName() == usdChild.GetName().GetString()){
+          existed = true;
+          break;
+        }
+		  }
+      
+    }
+    if(!existed){
+      addMesh(model,actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
+    }
+   
+	}
   //for(auto child : childs){
   //  updateActor(child,thisPath);
   //}
-  auto components = actor->getComponents<GraphicsComponent>();
-
-  for(auto& component : components){
-    updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
-  }
+  //auto components = actor->getComponents<GraphicsComponent>();
+  //
+  //for(auto& component : components){
+  //  updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
+  //}
 }
 
 void 
 Omniverse::update()
 {
+
   omniClientLiveWaitForPendingUpdates();
   UsdGeomXformOp translateOp;
   GfVec3f position(0);
@@ -808,6 +910,7 @@ Omniverse::update()
 	}
 
   auto usdChilds = root.GetChildren();
+  
 	for (const auto& usdChild : usdChilds)
 	{
     if (usdChild.IsA<UsdGeomXform>())

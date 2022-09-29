@@ -273,15 +273,15 @@ createShaderProgram(const String& name, const String& vertex,
                                         const String& hull,
                                         const String& domain,
                                         const String& pixel){
-  auto& graphicsApi = GraphicAPI::instance();
-  auto& resourceManager = ResoureManager::instance();
-  auto program = graphicsApi.createShaderProgram();
-  resourceManager.registerResourse(name,program);
-  program->attach(cast<Shader>(resourceManager.getResourse(vertex)));
-  program->attach(cast<Shader>(resourceManager.getResourse(hull)));
-  program->attach(cast<Shader>(resourceManager.getResourse(domain)));
-  program->attach(cast<Shader>(resourceManager.getResourse(pixel)));
-  program->setName(name);
+  //auto& graphicsApi = GraphicAPI::instance();
+  //auto& resourceManager = ResoureManager::instance();
+  //auto program = graphicsApi.createShaderProgram();
+  //resourceManager.registerResourse(name,program);
+  //program->attach(cast<Shader>(resourceManager.getResourse(vertex)));
+  //program->attach(cast<Shader>(resourceManager.getResourse(hull)));
+  //program->attach(cast<Shader>(resourceManager.getResourse(domain)));
+  //program->attach(cast<Shader>(resourceManager.getResourse(pixel)));
+  //program->setName(name);
 }
 
 void 
