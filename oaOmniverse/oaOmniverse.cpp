@@ -1,25 +1,25 @@
 #include "oaOmniverse.h"
 #include <oaActor.h>
 #include <oaGraphicsComponent.h>
-#include <oaMesh.h>
+#include <oaStaticMesh.h>
 #include <oaModel.h>
 #include <oaResoureManager.h>
 #include <oaActor.h>
 #include <OmniClient.h>
-//#include <OmniUsdLive.h>
-#include "pxr/usd/usd/stage.h"
-#include "pxr/usd/usdGeom/mesh.h"
-#include "pxr/usd/usdGeom/metrics.h"
+#include <LiveSessionInfo.h>
+#include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/base/gf/matrix4f.h>
-#include "pxr/base/gf/vec2f.h"
-#include "pxr/usd/usdUtils/pipeline.h"
-#include "pxr/usd/usdUtils/sparseValueWriter.h"
-#include "pxr/usd/usdShade/material.h"
-#include "pxr/usd/usd/prim.h"
-#include "pxr/usd/usd/primRange.h"
-#include "pxr/usd/usdGeom/primvar.h"
-#include "pxr/usd/usdShade/input.h"
-#include "pxr/usd/usdShade/output.h"
+#include <pxr/base/gf/vec2f.h>
+#include <pxr/usd/usdUtils/pipeline.h>
+#include <pxr/usd/usdUtils/sparseValueWriter.h>
+#include <pxr/usd/usdShade/material.h>
+#include <pxr/usd/usd/prim.h>
+#include <pxr/usd/usd/primRange.h>
+#include <pxr/usd/usdGeom/primvar.h>
+#include <pxr/usd/usdShade/input.h>
+#include <pxr/usd/usdShade/output.h>
 #include <pxr/usd/usdGeom/xform.h>
 #include <pxr/usd/usdGeom/cube.h>
 #include "pxr/usd/usdShade/materialBindingAPI.h"
@@ -36,6 +36,8 @@
 #include <oaTransform.h>
 #include <oaLoader.h>
 #include <oaResoureManager.h>
+#include <oaStaticMeshComponent.h>
+
 namespace oaEngineSDK 
 {
 
@@ -82,7 +84,9 @@ TF_DEFINE_PRIVATE_TOKENS(
 using std::fill;
 
 PXR_NAMESPACE_USING_DIRECTIVE
-UsdStageRefPtr g_stage;
+
+UsdStageRefPtr g_stage = nullptr;
+LiveSessionInfo g_liveSessionInfo;
 
 static void logCallback(const char* threadName, const char* component, OmniClientLogLevel level, const char* message) noexcept
 {
@@ -120,6 +124,15 @@ Omniverse::connect()
     m_userName = getConnectedUsername();
     m_destinationPath = m_userFolder + "/" + m_userName;
   }
+  //auto sessionList = g_liveSessionInfo.GetLiveSessionList();
+  //
+  ////print(liveSessionUrl);
+  //print("secions");
+  //for (auto& secion : sessionList){
+  //  print(secion);
+  //}
+
+  //g_liveSessionInfo.SetSessionName(sessionName.c_str());
   return true;
 }
 
@@ -140,26 +153,24 @@ Omniverse::getConnectedUsername()
 }
 
 void 
-Omniverse::createModel(const String& name)
+Omniverse::createModel(const String& name, WPtr<Actor> actor)
 {
-  auto stageUrl = m_destinationPath + "/" + name + ".live";//+(doLiveEdit ? ".live" : ".usd");
+  m_stageUrl = m_destinationPath + "/" + name;//+(doLiveEdit ? ".live" : ".usd");
   
-  print("Waiting for " + stageUrl + " to delete... ");
-  omniClientWait(omniClientDelete(stageUrl.c_str(), nullptr, nullptr));
+  print("Waiting for " + m_stageUrl + " to delete... ");
+  omniClientWait(omniClientDelete(m_stageUrl.c_str(), nullptr, nullptr));
   print("finished");
   
-  g_stage = UsdStage::CreateNew(stageUrl);
+  g_stage = UsdStage::CreateNew(m_stageUrl);
   if (!g_stage){
       print("Failure to create model in Omniverse");
-      print(stageUrl.c_str());
+      print(m_stageUrl.c_str());
       return;
   }
   else {
-      print("New stage created: " + stageUrl);
+      print("New stage created: " + m_stageUrl);
   }
-
-  
-  
+  addScene(actor);
 }
 
 bool _is_binding_stronger_than_descendents(
@@ -318,7 +329,7 @@ readMLD(SPtr<Material> material, String path, String dotPath){
       Loader loader;
       print("mytexturePath->"+myPath);
       Path p = Path(myPath);
-      loader.loadResource(p);
+      loader.loadResource(p,WPtr<Actor>());
       auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
       if(!texture.expired())
       material->setTexture("diffuse",texture);
@@ -343,6 +354,7 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     print(path.GetString());
   }
   //.GetPrim().CreateAttribute(TfToken("info:mdl:sourceAsset:subIdentifier")
+  if(!material.GetPrim().IsValid()) return;
   auto shaders = material.GetPrim().GetChildren();
   if(shaders.empty()) return;
   for(auto child : shaders){
@@ -386,7 +398,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
   auto& resourceManager = ResoureManager::instance();
 
   auto actor = wActor.lock();
-  auto gc = makeSPtr<GraphicsComponent>();
+  auto gc = makeSPtr<StaticMeshComponent>();
   actor->attachComponent(gc);
   auto existingModel = resourceManager.getResourse(name);
   if(!existingModel.expired()){
@@ -401,12 +413,11 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 
   auto newMaterial = makeSPtr<Material>();
   newMaterial->setShader(0);
-  
 
   resourceManager.registerResourse(name,model);
   resourceManager.registerResourse("mat_"+name,newMaterial);
-  model->addMesh(mesh);
-  model->addMaterial(newMaterial);
+  model->setMesh(mesh);
+  model->setMaterial(newMaterial);
   gc->setModel(model);
   
   VtValue value;
@@ -427,24 +438,23 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
     mesh->setVertexAt(i,Vertex(
       Vector4f(points[i].data()[0],points[i].data()[1],points[i].data()[2],1.0f),
       Vector4f(normals[i].data()[0],normals[i].data()[1],normals[i].data()[2],0.0f),
-      Vector2f(uvs[i].data()[0],1.f-uvs[i].data()[1])));
+      Vector2f(1.f-uvs[i].data()[0],1.f-uvs[i].data()[1])));
   }
-
-
 
   SIZE_T numOfIndices = indices.size();
   SIZE_T numOfFaces = faceCount.size();
   uint64 currectIndex = 0;
   //mesh->setIndexNum(numOfIndices);
+  auto& index = mesh->getIndex();
   for(SIZE_T i=0; i<numOfFaces; ++i){
-    mesh->m_index.push_back(indices[currectIndex]);
-    mesh->m_index.push_back(indices[currectIndex+1]);
-    mesh->m_index.push_back(indices[currectIndex+2]);
+    index.push_back(indices[currectIndex]);
+    index.push_back(indices[currectIndex+1]);
+    index.push_back(indices[currectIndex+2]);
     
     if(faceCount[i] == 4){
-      mesh->m_index.push_back(indices[currectIndex+2]);
-      mesh->m_index.push_back(indices[currectIndex+3]);
-      mesh->m_index.push_back(indices[currectIndex]);
+      index.push_back(indices[currectIndex+2]);
+      index.push_back(indices[currectIndex+3]);
+      index.push_back(indices[currectIndex]);
       ++currectIndex;
     }
     currectIndex+=3;
@@ -525,17 +535,18 @@ loadActor(SPtr<Actor> parent, UsdPrim node)
 void 
 Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 {
+  m_stageUrl = m_destinationPath + "/" + name;
   m_scene = wScene;
   auto scene = wScene.lock();
-  auto stageUrl = m_destinationPath + "/" + name + ".live";
-  g_stage = UsdStage::Open(stageUrl);
+  
+  g_stage = UsdStage::Open(m_stageUrl);
   if (!g_stage){
     print("Failure to connect to model in Omniverse");
-    print(stageUrl.c_str());
+    print(m_stageUrl.c_str());
     return;
   }
   else {
-    print("connected to: " + stageUrl);
+    print("connected to: " + m_stageUrl);
   }
   SdfPath rootPrimPath = SdfPath::AbsoluteRootPath().AppendChild(_tokens->Root);
   UsdGeomXform rootPrim = UsdGeomXform::Define(g_stage, rootPrimPath);
@@ -570,9 +581,19 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
   auto model = wModel.lock();
   auto modelName = model->getName();
   //m_actors.push_back(wActor);
-  SdfPath modelPrimPath = parentPath.AppendChild(TfToken(modelName));
+  //SdfPath modelPrimPath = parentPath.AppendChild(TfToken(modelName));
+  //UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, modelPrimPath);
+  //auto numOfMeshes = model->getNumOfMeshes();
+  //for(auto i = 0; i<numOfMeshes; ++i){
+    
+  auto wMesh = model->getMesh();
+
+  if(wMesh.expired()) return;
+
+  auto mesh = wMesh.lock();
+
+  SdfPath modelPrimPath = parentPath.AppendChild(TfToken(model->getName()));
   UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, modelPrimPath);
-  auto mesh = model->getMesh(0).lock();
   if (!UGmesh){
     print("mesh not created");
     return;
@@ -625,6 +646,8 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 		valueArray.push_back(rgbFace);
 		displayColorAttr.Set(valueArray);
 	}
+  //}
+  
   
   g_stage->Save();
   omniClientLiveProcess();
@@ -657,7 +680,7 @@ addActor(WPtr<Actor> wActor,SdfPath parentPath)
   auto components = actor->getComponents<GraphicsComponent>();
 
   for(auto& component : components){
-    addMesh(cast<GraphicsComponent>(component)->getModel(),actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
+    addMesh(cast<StaticMeshComponent>(component)->getModel(),actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
   }
 
 }
@@ -675,6 +698,48 @@ Omniverse::addScene(WPtr<Actor> wActor)
     addActor(child,rootPrimPath);
   }
 
+}
+
+void 
+Omniverse::closeScene()
+{
+  g_stage = nullptr;
+  m_scene = WPtr<Actor>();
+}
+
+void 
+Omniverse::createSession(const String& name)
+{
+  g_liveSessionInfo.Initialize(m_stageUrl.c_str());
+  g_liveSessionInfo.SetSessionName(name.c_str());
+  auto liveSessionUrl = g_liveSessionInfo.GetLiveSessionUrl();
+  print("LiveSessionUrl");
+  print(liveSessionUrl);
+  UsdStageRefPtr liveStage;
+  liveStage = UsdStage::CreateNew(liveSessionUrl);
+  SdfLayerHandle liveLayer = liveStage->GetRootLayer();
+  g_stage->GetSessionLayer()->InsertSubLayerPath(liveLayer->GetIdentifier());
+  g_stage->SetEditTarget(UsdEditTarget(liveLayer));
+}
+
+void 
+Omniverse::joinToSession(const String& name)
+{
+  g_liveSessionInfo.Initialize(m_stageUrl.c_str());
+  g_liveSessionInfo.SetSessionName(name.c_str());
+  std::string liveSessionUrl = g_liveSessionInfo.GetLiveSessionUrl();
+  UsdStageRefPtr liveStage;
+  liveStage = UsdStage::Open(liveSessionUrl);
+  SdfLayerHandle liveLayer = liveStage->GetRootLayer();
+  g_stage->GetSessionLayer()->InsertSubLayerPath(liveLayer->GetIdentifier());
+  g_stage->SetEditTarget(UsdEditTarget(liveLayer));
+}
+
+void 
+Omniverse::leaveSession()
+{
+  g_stage->GetSessionLayer()->GetSubLayerPaths().clear();
+  g_stage->SetEditTarget(UsdEditTarget(g_stage->GetRootLayer()));
 }
 
 void 
@@ -759,7 +824,7 @@ void
 updateComponent(WPtr<GraphicsComponent> wComponent, SdfPath parentPath)
 {
   if(wComponent.expired()) return;
-  auto component = wComponent.lock();
+  auto component = cast<StaticMeshComponent>(wComponent.lock());
 
   auto wModel = component->getModel();
 
@@ -784,7 +849,7 @@ updateComponent(WPtr<GraphicsComponent> wComponent, SdfPath parentPath)
 void
 updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 {
-  return;
+  //return;
   if(wActor.expired()) return;
   auto actor = wActor.lock();
 
@@ -809,7 +874,7 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 		{
       bool existed = false;
       for(auto& component : components){
-        auto wModel = cast<GraphicsComponent>(component)->getModel();
+        auto wModel = cast<StaticMeshComponent>(component)->getModel();
         if(wModel.expired()) continue;
         auto model = wModel.lock();
         if(model->getName() == usdChild.GetName().GetString()){
@@ -851,7 +916,6 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
           break;
         }
 		  }
-      
     }
     if(!existed){
       addActor(child,UGactor.GetPath());
@@ -859,7 +923,7 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 	}
   for(auto& component : components)
 	{
-    auto wModel = cast<GraphicsComponent>(component)->getModel();
+    auto wModel = cast<StaticMeshComponent>(component)->getModel();
     if(wModel.expired()) continue;
     auto model = wModel.lock();
     bool existed = false;
@@ -871,12 +935,10 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
           break;
         }
 		  }
-      
     }
     if(!existed){
       addMesh(model,actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
     }
-   
 	}
   //for(auto child : childs){
   //  updateActor(child,thisPath);
@@ -899,7 +961,7 @@ Omniverse::update()
   GfVec3f rotation(0);
   auto& resourceManager = ResoureManager::instance();
 
-  if(m_scene.expired()) return;
+  if(m_scene.expired() || g_stage == nullptr) return;
 
   auto scene = m_scene.lock();
 

@@ -28,11 +28,25 @@ class Deferred :
          const Vector<SpotLight>& spotLights,
          const Vector4f& config) override;
 
+  void 
+  setScreen();
+
+  void
+  setMaterial(SPtr<Material> material);
+
+  void
+  setStaticMesh(WPtr<Model> model);
+
+  void
+  setSkeletalMesh(WPtr<SkeletalModel> model);
+
   /**
    * @brief all the vertex shaders
   */
   void
   vertex(SPtr<Actor> actor,const Frustum& frustum);
+
+  
 
   /**
    * @brief the gBuffer pass
@@ -150,7 +164,7 @@ class Deferred :
 
   SPtr<Texture> m_depthStencil;
 
-  SPtr<DebugMesh> screen;
+  SPtr<StaticMesh> screen;
 
   SPtr<Buffer> m_globalTransformBuffer;
 
@@ -166,6 +180,10 @@ class Deferred :
   SPtr<Buffer> m_configs;
 
   SPtr<Buffer> m_size;
+
+  SPtr<Buffer> m_color;
+
+  SPtr<Buffer> m_bones;
 
   //SPtr<Buffer> m_smallSize;
 

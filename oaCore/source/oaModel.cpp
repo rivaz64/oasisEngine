@@ -5,30 +5,35 @@
 */
 
 #include "oaModel.h"
-#include "oaMesh.h"
+#include "oaStaticMesh.h"
 #include "oaMaterial.h"
 #include "oaResoureManager.h"
 
 namespace oaEngineSDK{
 
-Model::Model(SIZE_T numOfMeshes)
-{
-  m_meshes.resize(numOfMeshes);
-}
-
 void 
 Model::save(Serializer& serializer)
 { 
   serializer.encodeString(getName());
-  auto num = m_meshes.size();
-  serializer.encodeSize(m_meshes.size());
-  for(SIZE_T n=0; n<num; ++n){
-    m_meshes[n]->save(serializer);
-    if(!m_materials[n].expired()){
-      auto material = m_materials[n].lock();
-      serializer.encodeString(material->getName());
-    }
+
+  if(!m_mesh.expired()){
+    serializer.encodeNumber(1);
+    auto mesh = m_mesh.lock();
+    serializer.encodeString(mesh->getName());
   }
+  else{
+    serializer.encodeNumber(0);
+  }
+
+  if(!m_material.expired()){
+    serializer.encodeNumber(1);
+    auto material = m_material.lock();
+    serializer.encodeString(material->getName());
+  }
+  else{
+    serializer.encodeNumber(0);
+  }
+  
 }
 
 void 
@@ -36,50 +41,50 @@ Model::load(Serializer& serializer)
 {
   auto name = serializer.decodeString();
   ResoureManager::instance().registerResourse(name,shared_from_this());
-  auto num = serializer.decodeSize();
-  m_meshes.resize(num);
-  m_materials.resize(num);
-  for(SIZE_T n=0; n<num; ++n){
-    m_meshes[n] = makeSPtr<StaticMesh>();
-    m_meshes[n]->load(serializer);
-    auto materialName = serializer.decodeString();
-    if(materialName == "defaultMaterial"){
-      m_materials[n] = ResoureManager::instance().m_defaultMaterial;
-    }
-    else{
-      m_materials[n] = cast<Material>(ResoureManager::instance().getResourse(materialName));
-    }
+  auto b = serializer.decodeNumber();
+
+  if(b == 1){
+    auto meshName = serializer.decodeString();
+    m_mesh = cast<StaticMesh>(ResoureManager::instance().getResourse(meshName));
   }
+
+  b = serializer.decodeNumber();
+
+  if(b == 1){
+    auto materialhName = serializer.decodeString();
+    m_material = cast<Material>(ResoureManager::instance().getResourse(materialhName));
+  }
+  
 }
 
 Vector3f 
 Model::getCenter()
 {
   Vector3f center(0,0,0);
-  float totalVertices = 0;
-  for(auto& mesh : m_meshes){
-    auto vertices = mesh->getVertex();
-    totalVertices += vertices.size();
-    for(auto& vertex : vertices){
-      center += vertex.location.xyz;
-    }
-  }
-  return center/totalVertices;
+  //float totalVertices = 0;
+  //for(auto& mesh : m_meshes){
+  //  auto vertices = mesh->getVertex();
+  //  totalVertices += vertices.size();
+  //  for(auto& vertex : vertices){
+  //    center += vertex.location.xyz;
+  //  }
+  //}
+  return center;//totalVertices;
 }
 
 float 
 Model::farestPoint(const Vector3f& point)
 {
   float maxDistance = 0;
-  for(auto& mesh : m_meshes){
-    auto vertices = mesh->getVertex();
-    for(auto& vertex : vertices){
-      auto distance = (point-vertex.location.xyz).magnitud();
-      if(maxDistance<distance){
-        maxDistance = distance;
-      }
-    }
-  }
+  //for(auto& mesh : m_meshes){
+  //  auto vertices = mesh->getVertex();
+  //  for(auto& vertex : vertices){
+  //    auto distance = (point-vertex.location.xyz).magnitud();
+  //    if(maxDistance<distance){
+  //      maxDistance = distance;
+  //    }
+  //  }
+  //}
   return maxDistance;
 }
 

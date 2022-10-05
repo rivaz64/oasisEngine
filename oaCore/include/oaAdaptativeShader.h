@@ -19,9 +19,6 @@ class OA_CORE_EXPORT AdaptativeShader :
 {
  public:
 
-  AdaptativeShader(WPtr<Shader> vertexShader) :
-    m_vertexShader(vertexShader) {}
-
   AdaptativeShader() = default;
 
   /**
@@ -39,8 +36,6 @@ class OA_CORE_EXPORT AdaptativeShader :
  protected:
 
   Vector<SPtr<Shader>> m_shaders;
-
-  WPtr<Shader> m_vertexShader;
 };
 
 }

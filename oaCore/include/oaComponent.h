@@ -13,7 +13,8 @@ namespace oaEngineSDK{
 /**
  * @brief a component an Actor can have
 */
-class OA_CORE_EXPORT Component
+class OA_CORE_EXPORT Component :
+  public enable_shared_from_this<Component>
 {
  public:
   

@@ -13,7 +13,7 @@
 #include <oaAnimationComponent.h>
 #include <oaDepthStencil.h>
 #include <oaTexture.h>
-#include <oaMesh.h>
+#include <oaStaticMesh.h>
 #include <oaSimplexNoise.h>
 #include <oaOctavesNoise.h>
 #include <oaSkeleton.h>
@@ -38,6 +38,9 @@
 #include <oaEventSystem.h>
 #include <oaTransform.h>
 #include <oaMesh.h>
+#include <oaStaticMeshComponent.h>
+#include <oaSkeletalMeshComponent.h>
+#include <oaSkeletalModel.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -105,87 +108,87 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   return 0;
 }
 
-void
-TestApp::genMorbiusTrip(){
-  auto& grapgicApi = GraphicAPI::instance();
-  m_morbiusTrip = makeSPtr<StaticMesh>();
-  m_morbModel = makeSPtr<Model>();
-  m_morbComponent = makeSPtr<GraphicsComponent>();
-  m_morbActor = makeSPtr<Actor>();
-  m_morbComponent->setModel(m_morbModel);
-  m_morbActor->attachComponent(m_morbComponent);
-  m_morbActor->GetActorTransform().setScale({1.f,1.f,1.f});
-  
-  m_morbModel->addMesh(m_morbiusTrip);
-  m_morbiusTrip->setControlPoints({
-	{ 1.0f, -0.5f, 0.0f, 0.0f },
-	{ 1.0f, -0.5f, 0.5f, 0.0f },
-	{ 0.5f, -0.3536f, 1.354f, 0.0f },
-	{ 0.0f, -0.3536f, 1.354f, 0.0f },
-	{ 1.0f, -0.1667f, 0.0f, 0.0f },
-	{ 1.0f, -0.1667f, 0.5f, 0.0f },
-	{ 0.5f, -0.1179f, 1.118f, 0.0f },
-	{ 0.0f, -0.1179f, 1.118f, 0.0f },
-	{ 1.0f, 0.1667f, 0.0f, 0.0f },
-	{ 1.0f, 0.1667f, 0.5f, 0.0f },
-	{ 0.5f, 0.1179f, 0.8821f, 0.0f },
-	{ 0.0f, 0.1179f, 0.8821f, 0.0f },
-	{ 1.0f, 0.5f, 0.0f, 0.0f },
-	{ 1.0f, 0.5f, 0.5f, 0.0f },
-	{ 0.5f, 0.3536f, 0.6464f, 0.0f },
-	{ 0.0f, 0.3536f, 0.6464f, 0.0f },
-	{ 0.0f, -0.3536f, 1.354f, 0.0f },
-	{ -0.5f, -0.3536f, 1.354f, 0.0f },
-	{ -1.5f, 0.0f, 0.5f, 0.0f },
-	{ -1.5f, 0.0f, 0.0f, 0.0f },
-	{ 0.0f, -0.1179f, 1.118f, 0.0f },
-	{ -0.5f, -0.1179f, 1.118f , 0.0f},
-	{ -1.167f, 0.0f, 0.5f , 0.0f},
-	{ -1.167f, 0.0f, 0.0f , 0.0f},
-	{ 0.0f, 0.1179f, 0.8821f , 0.0f},
-	{ -0.5f, 0.1179f, 0.8821f , 0.0f},
-	{ -0.8333f, 0.0f, 0.5f , 0.0f},
-	{ -0.8333f, 0.0f, 0.0f , 0.0f},
-	{ 0.0f, 0.3536f, 0.6464f , 0.0f},
-	{ -0.5f, 0.3536f, 0.6464f , 0.0f},
-	{ -0.5f, 0.0f, 0.5f , 0.0f},
-	{ -0.5f, 0.0f, 0.0f , 0.0f},
-	{ -1.5f, 0.0f, 0.0f , 0.0f},
-	{ -1.5f, 0.0f, -0.5f , 0.0f},
-	{ -0.5f, 0.3536f, -1.354f , 0.0f},
-	{ 0.0f, 0.3536f, -1.354f , 0.0f},
-	{ -1.167f, 0.0f, 0.0f , 0.0f},
-	{ -1.167f, 0.0f, -0.5f , 0.0f},
-	{ -0.5f, 0.1179f, -1.118f , 0.0f},
-	{ 0.0f, 0.1179f, -1.118f , 0.0f},
-	{ -0.8333f, 0.0f, 0.0f , 0.0f},
-	{ -0.8333f, 0.0f, -0.5f , 0.0f},
-	{ -0.5f, -0.1179f, -0.8821f , 0.0f},
-	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
-	{ -0.5f, 0.0f, 0.0f , 0.0f},
-	{ -0.5f, 0.0f, -0.5f , 0.0f},
-	{ -0.5f, -0.3536f, -0.6464f , 0.0f},
-	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
-	{ 0.0f, 0.3536f, -1.354f , 0.0f},
-	{ 0.5f, 0.3536f, -1.354f , 0.0f},
-	{ 1.0f, 0.5f, -0.5f , 0.0f},
-	{ 1.0f, 0.5f, 0.0f , 0.0f},
-	{ 0.0f, 0.1179f, -1.118f , 0.0f},
-	{ 0.5f, 0.1179f, -1.118f , 0.0f},
-	{ 1.0f, 0.1667f, -0.5f , 0.0f},
-	{ 1.0f, 0.1667f, 0.0f , 0.0f},
-	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
-	{ 0.5f, -0.1179f, -0.8821f , 0.0f},
-	{ 1.0f, -0.1667f, -0.5f , 0.0f},
-	{ 1.0f, -0.1667f, 0.0f , 0.0f},
-	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
-	{ 0.5f, -0.3536f, -0.6464f , 0.0f},
-	{ 1.0f, -0.5f, -0.5f , 0.0f},
-	{ 1.0f, -0.5f, 0.0f , 0.0f},
-});
-
-  //m_actualScene->getRoot()->attach(m_morbActor);
-}
+//void
+//TestApp::genMorbiusTrip(){
+//  auto& grapgicApi = GraphicAPI::instance();
+//  m_morbiusTrip = makeSPtr<StaticMesh>();
+//  m_morbModel = makeSPtr<Model>();
+//  m_morbComponent = makeSPtr<GraphicsComponent>();
+//  m_morbActor = makeSPtr<Actor>();
+//  m_morbComponent->setModel(m_morbModel);
+//  m_morbActor->attachComponent(m_morbComponent);
+//  m_morbActor->GetActorTransform().setScale({1.f,1.f,1.f});
+//  
+//  //m_morbModel->addMesh(m_morbiusTrip);
+//  m_morbiusTrip->setControlPoints({
+//	{ 1.0f, -0.5f, 0.0f, 0.0f },
+//	{ 1.0f, -0.5f, 0.5f, 0.0f },
+//	{ 0.5f, -0.3536f, 1.354f, 0.0f },
+//	{ 0.0f, -0.3536f, 1.354f, 0.0f },
+//	{ 1.0f, -0.1667f, 0.0f, 0.0f },
+//	{ 1.0f, -0.1667f, 0.5f, 0.0f },
+//	{ 0.5f, -0.1179f, 1.118f, 0.0f },
+//	{ 0.0f, -0.1179f, 1.118f, 0.0f },
+//	{ 1.0f, 0.1667f, 0.0f, 0.0f },
+//	{ 1.0f, 0.1667f, 0.5f, 0.0f },
+//	{ 0.5f, 0.1179f, 0.8821f, 0.0f },
+//	{ 0.0f, 0.1179f, 0.8821f, 0.0f },
+//	{ 1.0f, 0.5f, 0.0f, 0.0f },
+//	{ 1.0f, 0.5f, 0.5f, 0.0f },
+//	{ 0.5f, 0.3536f, 0.6464f, 0.0f },
+//	{ 0.0f, 0.3536f, 0.6464f, 0.0f },
+//	{ 0.0f, -0.3536f, 1.354f, 0.0f },
+//	{ -0.5f, -0.3536f, 1.354f, 0.0f },
+//	{ -1.5f, 0.0f, 0.5f, 0.0f },
+//	{ -1.5f, 0.0f, 0.0f, 0.0f },
+//	{ 0.0f, -0.1179f, 1.118f, 0.0f },
+//	{ -0.5f, -0.1179f, 1.118f , 0.0f},
+//	{ -1.167f, 0.0f, 0.5f , 0.0f},
+//	{ -1.167f, 0.0f, 0.0f , 0.0f},
+//	{ 0.0f, 0.1179f, 0.8821f , 0.0f},
+//	{ -0.5f, 0.1179f, 0.8821f , 0.0f},
+//	{ -0.8333f, 0.0f, 0.5f , 0.0f},
+//	{ -0.8333f, 0.0f, 0.0f , 0.0f},
+//	{ 0.0f, 0.3536f, 0.6464f , 0.0f},
+//	{ -0.5f, 0.3536f, 0.6464f , 0.0f},
+//	{ -0.5f, 0.0f, 0.5f , 0.0f},
+//	{ -0.5f, 0.0f, 0.0f , 0.0f},
+//	{ -1.5f, 0.0f, 0.0f , 0.0f},
+//	{ -1.5f, 0.0f, -0.5f , 0.0f},
+//	{ -0.5f, 0.3536f, -1.354f , 0.0f},
+//	{ 0.0f, 0.3536f, -1.354f , 0.0f},
+//	{ -1.167f, 0.0f, 0.0f , 0.0f},
+//	{ -1.167f, 0.0f, -0.5f , 0.0f},
+//	{ -0.5f, 0.1179f, -1.118f , 0.0f},
+//	{ 0.0f, 0.1179f, -1.118f , 0.0f},
+//	{ -0.8333f, 0.0f, 0.0f , 0.0f},
+//	{ -0.8333f, 0.0f, -0.5f , 0.0f},
+//	{ -0.5f, -0.1179f, -0.8821f , 0.0f},
+//	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
+//	{ -0.5f, 0.0f, 0.0f , 0.0f},
+//	{ -0.5f, 0.0f, -0.5f , 0.0f},
+//	{ -0.5f, -0.3536f, -0.6464f , 0.0f},
+//	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
+//	{ 0.0f, 0.3536f, -1.354f , 0.0f},
+//	{ 0.5f, 0.3536f, -1.354f , 0.0f},
+//	{ 1.0f, 0.5f, -0.5f , 0.0f},
+//	{ 1.0f, 0.5f, 0.0f , 0.0f},
+//	{ 0.0f, 0.1179f, -1.118f , 0.0f},
+//	{ 0.5f, 0.1179f, -1.118f , 0.0f},
+//	{ 1.0f, 0.1667f, -0.5f , 0.0f},
+//	{ 1.0f, 0.1667f, 0.0f , 0.0f},
+//	{ 0.0f, -0.1179f, -0.8821f , 0.0f},
+//	{ 0.5f, -0.1179f, -0.8821f , 0.0f},
+//	{ 1.0f, -0.1667f, -0.5f , 0.0f},
+//	{ 1.0f, -0.1667f, 0.0f , 0.0f},
+//	{ 0.0f, -0.3536f, -0.6464f , 0.0f},
+//	{ 0.5f, -0.3536f, -0.6464f , 0.0f},
+//	{ 1.0f, -0.5f, -0.5f , 0.0f},
+//	{ 1.0f, -0.5f, 0.0f , 0.0f},
+//});
+//
+//  //m_actualScene->getRoot()->attach(m_morbActor);
+//}
 
 void 
 TestApp::onDestroy()
@@ -260,7 +263,7 @@ TestApp::postInit()
   //m_lights[0].direction = {0,0,0,0};
   //m_lights[0].color = Color::WHITE;
 
-  genMorbiusTrip();
+  //genMorbiusTrip();
 
 }
 
@@ -506,18 +509,7 @@ TestApp::updateImGui()
   auto& renderer = Renderer::instance();
 
   auto shadowMap = renderer.getShadowMap();
-  /*if (api.actualGraphicAPI == GRAPHIC_API::NONE) {
-    return;
-  }
-  ImGui::Begin("Actors");
-  if(ImGui::Button("character")){
-    actualActor = character;
-  }
-  if(ImGui::Button("test Actor")){
-    actualActor = testActor;
-  }
-  ImGui::End();
-  */
+
   ImGui::Begin("shaders");
   if(ImGui::Button("ReloadShaders")){
     resourceManager.loadDefaultShaders();
@@ -554,12 +546,12 @@ TestApp::updateImGui()
 
     WPtr<Component> wComponent;
     Vector<SPtr<Component>> components;
-    components = selectedActor->getComponents<GraphicsComponent>();
+    components = selectedActor->getComponents<StaticMeshComponent>();
     if (components.size()>0){
       SIZE_T numComponents = components.size();
       for(SIZE_T i=0;i<numComponents;++i){
-        if( ImGui::CollapsingHeader(("models"+StringUtilities::intToString(i)).c_str())){
-          auto graphicsComponent = cast<GraphicsComponent>(components[i]);
+        if( ImGui::CollapsingHeader(("static mesh "+StringUtilities::intToString(i)).c_str())){
+          auto graphicsComponent = cast<StaticMeshComponent>(components[i]);
 
           if(ImGui::Button("select model")){
             if(!m_selectedModel.expired()){
@@ -567,10 +559,48 @@ TestApp::updateImGui()
             }
             else if(!m_selectedMesh.expired()){
               auto newModel = makeSPtr<Model>();
-              newModel->addMesh(m_selectedMesh.lock());
-              newModel->addMaterial(resourceManager.m_defaultMaterial);
+              newModel->setMesh(m_selectedMesh.lock());
+              newModel->setMaterial(resourceManager.m_defaultMaterial);
               resourceManager.registerResourse(m_selectedMesh.lock()->getName(),newModel);
               graphicsComponent->setModel(newModel);
+            }
+          }
+
+          auto& wModel = graphicsComponent->getModel();
+          if(!wModel.expired()){
+            auto model = wModel.lock();
+            ImGui::Text(model->getName().c_str());
+            auto& transform = graphicsComponent->getTransform();
+            auto vec = transform.getLocation();
+            if(ImGui::DragFloat3("location Model",&vec.x)){
+              transform.setLocation(vec);
+            }
+            vec = transform.getScale();
+            if(ImGui::DragFloat3("scale Model",&vec.x)){
+              transform.setScale(vec);
+            }
+            vec = transform.getRotation()*Math::RAD_TO_DEG;
+            if(ImGui::DragFloat3("rotation", &vec.x, .01f)){
+              transform.setRotation(vec*Math::DEG_TO_RAD);
+            };
+          }
+        }
+        
+      }
+      
+
+    }
+
+    components = selectedActor->getComponents<SkeletalMeshComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("skeletal mesh "+StringUtilities::intToString(i)).c_str())){
+          auto graphicsComponent = cast<SkeletalMeshComponent>(components[i]);
+
+          if(ImGui::Button("select model")){
+            if(!m_selectedSkeletalModel.expired()){
+              graphicsComponent->setModel(m_selectedSkeletalModel);
             }
           }
 
@@ -608,11 +638,15 @@ TestApp::updateImGui()
 
       }
 
-      //if(cast<SkeletalComponent>(component)->m_skeleton){
-      //  if(ImGui::Button("add socket")){
-      //    isAddingSocket = true;
-      //  }
-      //}
+      auto wSkeleton = cast<SkeletalComponent>(component)->getSkeleton();
+
+      if(!wSkeleton.expired()){
+        auto skeleton = wSkeleton.lock();
+        ImGui::Text(skeleton->getName().c_str());
+        //if(ImGui::Button("add socket")){
+        //  isAddingSocket = true;
+        //}
+      }
 
     }
 
@@ -677,7 +711,7 @@ TestApp::updateImGui()
       std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
       Path path(filePathName);
       loader = new Loader;
-      loader->loadResource(path);
+      loader->loadResource(path,m_selectedActor);
     //  //loadflags = loader->checkForLoad(path);
       delete loader;
       loader = 0;
@@ -726,7 +760,7 @@ TestApp::updateImGui()
     }
   }
 
-  if (ImGui::CollapsingHeader("meshes")){
+  if (ImGui::CollapsingHeader("static meshes")){
     for(auto mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
       if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMesh = cast<StaticMesh>(mesh);
@@ -734,21 +768,26 @@ TestApp::updateImGui()
     }
   }
   
-  if (ImGui::CollapsingHeader("models")){
-    if(ImGui::Button("Load From File")){
-      Path path;
-      //if(path.searchForPath()){
-      //  loader = new Loader;
-      //  loader->loadScene(path);
-      //  //loadflags = loader->checkForLoad(path);
-      //  delete loader;
-      //  loader = 0;
-      //}
-    }
-
+  if (ImGui::CollapsingHeader("static models")){
     for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
       if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedModel = cast<Model>(model);
+      }
+    }
+  }
+
+  if (ImGui::CollapsingHeader("skeletal meshes")){
+    for(auto mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kSkeletalMesh)){
+      if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedSkeletalMesh = cast<SkeletalMesh>(mesh);
+      }
+    }
+  }
+  
+  if (ImGui::CollapsingHeader("skeletal models")){
+    for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+      if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
+        m_selectedSkeletalModel = cast<SkeletalModel>(model);
       }
     }
   }
@@ -857,31 +896,15 @@ TestApp::updateImGui()
 
     ImGui::Begin("add component");
 
-    if(ImGui::Button("Graphics")){
-      selectedActor->attachComponent(makeSPtr<GraphicsComponent>());
+    if(ImGui::Button("Static Mesh")){
+      selectedActor->attachComponent(makeSPtr<StaticMeshComponent>());
       isAddingComponent = false;
     }
 
-    if(ImGui::Button("Skeletal")){
-      selectedActor->attachComponent(makeSPtr<SkeletalComponent>());
+    if(ImGui::Button("Skeletal Mesh")){
+      selectedActor->attachComponent(makeSPtr<SkeletalMeshComponent>());
       isAddingComponent = false;
     }
-
-    if(ImGui::Button("Animation")){
-      selectedActor->attachComponent(makeSPtr<AnimationComponent>());
-      isAddingComponent = false;
-    }
-
-    //if(ImGui::Button("Camera")){
-    //  m_selectedActor->attachComponent(makeSPtr<CameraComponent>());
-    //  m_selectedActor->getComponent<CameraComponent>()->setCamera(makeSPtr<Camera>());
-    //
-    //  m_selectedActor->getComponent<CameraComponent>()->getCamera()->init(
-    //    static_cast<float>(m_windowSize.y)/static_cast<float>(m_windowSize.x)
-    //  );
-    //
-    //  isAddingComponent = false;
-    //}
 
     ImGui::End();
   }
@@ -929,96 +952,109 @@ TestApp::updateImGui()
   //  }
   //}
 
-  ImGui::Begin("file");
-
-  if (ImGui::Button("save all"))
-    ImGuiFileDialog::Instance()->OpenDialog("save all", "Choose File", ".txt", ".");
-
-  if (ImGuiFileDialog::Instance()->Display("save all")) 
+  ImGui::Begin("scene");
   {
-    // action if OK
-    if (ImGuiFileDialog::Instance()->IsOk())
-    {
-      String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-      Serializer serializer;
-      serializer.init(filePathName,true);
-      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
-      for(auto& texture: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
-        cast<Texture>(texture).lock()->getImage()->save(serializer);
-      }
-      
-      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
-      for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
-        material.lock()->save(serializer);
-      }
-      
-      serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
-      for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
-        model.lock()->save(serializer);
-      }
-      
-      auto actors = m_actualScene->getRoot()->getChilds();
-      serializer.encodeSize(actors.size());
-      for(auto& actor : actors){
-        
-        actor->save(serializer);
-      }
+    if(ImGui::Button("new scene")){
+      m_actualScene = makeSPtr<Scene>();
+      m_actualScene->init();
+      m_selectedActor = m_actualScene->getRoot();
     }
-    
-    // close
-    ImGuiFileDialog::Instance()->Close();
-  }
 
-  if (ImGui::Button("load"))
-    ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".txt", ".");
+    if (ImGui::Button("save scene"))
+      ImGuiFileDialog::Instance()->OpenDialog("save all", "Choose File", ".txt", ".");
 
-  if (ImGuiFileDialog::Instance()->Display("load")) 
-  {
-    // action if OK
-    if (ImGuiFileDialog::Instance()->IsOk())
+    if (ImGuiFileDialog::Instance()->Display("save all")) 
     {
-      String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-      Serializer serializer;
-      if(serializer.init(filePathName,FILE::kRead)){
-        SIZE_T number = serializer.decodeSize();
-        for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-          auto image = makeSPtr<Image>();
-          image->load(serializer);
-          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-          texture->initFromImage(image);
-          resourceManager.registerResourse(texture->getName(),texture);
-        }
-      
-        number = serializer.decodeSize();
-        for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-          auto material = makeSPtr<Material>();
-          material->load(serializer);
-          resourceManager.registerResourse(material->getName(),material);
+      // action if OK
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        Serializer serializer;
+        serializer.init(filePathName,true);
+        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
+        for(auto& texture: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
+          cast<Texture>(texture).lock()->getImage()->save(serializer);
         }
         
-        number = serializer.decodeSize();
-        for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-          auto model = makeSPtr<Model>();
-          model->load(serializer);
-          //resourceManager.registerResourse(model->getName(),model);
+        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
+        for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
+          material.lock()->save(serializer);
         }
-      
-        number = serializer.decodeSize();
-        for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-          auto actor = makeSPtr<Actor>();
-          actor->load(serializer);
-          m_actualScene->getRoot()->attach(actor);
+        
+        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
+        for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+          model.lock()->save(serializer);
+        }
+        
+        auto actors = m_actualScene->getRoot()->getChilds();
+        serializer.encodeSize(actors.size());
+        for(auto& actor : actors){
+          
+          actor->save(serializer);
         }
       }
+      
+      // close
+      ImGuiFileDialog::Instance()->Close();
     }
-    
-    // close
-    ImGuiFileDialog::Instance()->Close();
+
+    if (ImGui::Button("load scene"))
+      ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".txt", ".");
+
+    if (ImGuiFileDialog::Instance()->Display("load")) 
+    {
+      // action if OK
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        Serializer serializer;
+        m_actualScene = makeSPtr<Scene>();
+        m_actualScene->init();
+        m_selectedActor = m_actualScene->getRoot();
+        if(serializer.init(filePathName,FILE::kRead)){
+          SIZE_T number = serializer.decodeSize();
+          for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+            auto image = makeSPtr<Image>();
+            image->load(serializer);
+            SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+            texture->initFromImage(image);
+            resourceManager.registerResourse(texture->getName(),texture);
+          }
+        
+          number = serializer.decodeSize();
+          for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+            auto material = makeSPtr<Material>();
+            material->load(serializer);
+            resourceManager.registerResourse(material->getName(),material);
+          }
+          
+          number = serializer.decodeSize();
+          for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+            auto model = makeSPtr<Model>();
+            model->load(serializer);
+            //resourceManager.registerResourse(model->getName(),model);
+          }
+        
+          number = serializer.decodeSize();
+          for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+            auto actor = makeSPtr<Actor>();
+            actor->load(serializer);
+            auto root = m_actualScene->getRoot();
+            root->attach(actor);
+          }
+        }
+      }
+      
+      // close
+      ImGuiFileDialog::Instance()->Close();
+    }
+
+    ImGui::End();
   }
 
-  ImGui::End();
+  
   //ImGui::Begin("material editor");
   //if(m_selectedMaterial){
   //  SPtr<Texture> texture;
@@ -1068,9 +1104,9 @@ TestApp::updateImGui()
   ImGui::Begin("Model Editor");{
     if(!m_selectedModel.expired()){
       auto selectedModel = m_selectedModel.lock();
-      SIZE_T matNum = selectedModel->getNumOfMaterials();
-      for(SIZE_T i = 0; i<matNum;++i){
-        auto& wMaterial = selectedModel->getMaterial(i);
+      //SIZE_T matNum = selectedModel->getNumOfMaterials();
+      //for(SIZE_T i = 0; i<matNum;++i){
+        auto wMaterial = selectedModel->getMaterial();
         if(!wMaterial.expired()){
           auto material = wMaterial.lock();
           if(ImGui::Button((material->getName()).c_str())){
@@ -1078,7 +1114,7 @@ TestApp::updateImGui()
           }
         }
         
-      }
+      //}
 
       if(ImGui::Button("divide")){
         Vector<SPtr<Model>> models;
@@ -1086,7 +1122,7 @@ TestApp::updateImGui()
         resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
         auto actor = makeSPtr<Actor>();
         for(auto& model : models){
-          auto component = makeSPtr<GraphicsComponent>();
+          auto component = makeSPtr<StaticMeshComponent>();
           component->setModel(model);
           actor->attachComponent(component);
         }
@@ -1178,14 +1214,23 @@ TestApp::updateImGui()
     }
 
     ImGui::InputText("name",imguiString,64);
-    if(ImGui::Button("create object")){
-      omniverse.createModel(imguiString);
+    if(ImGui::Button("create file")){
+      omniverse.createModel(imguiString,m_actualScene->getRoot());
     }
-    if(ImGui::Button("connect to object")){
+    if(ImGui::Button("open file")){
       omniverse.connectToModel(imguiString,m_actualScene->getRoot());
     }
-    if(ImGui::Button("add scene")){
-      omniverse.addScene(m_actualScene->getRoot());
+    if(ImGui::Button("close file")){
+      omniverse.closeScene();
+    }
+    if(ImGui::Button("create session")){
+      omniverse.createSession(imguiString);
+    }
+    if(ImGui::Button("join session")){
+      omniverse.joinToSession(imguiString);
+    }
+    if(ImGui::Button("leave session")){
+      omniverse.leaveSession();
     }
 
   }

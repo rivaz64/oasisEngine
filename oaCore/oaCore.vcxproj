@@ -217,8 +217,13 @@
     <ClInclude Include="include\oaShader.h" />
     <ClInclude Include="include\oaShaderProgram.h" />
     <ClInclude Include="include\oaSkeletalComponent.h" />
+    <ClInclude Include="include\oaSkeletalMesh.h" />
+    <ClInclude Include="include\oaSkeletalMeshComponent.h" />
+    <ClInclude Include="include\oaSkeletalModel.h" />
     <ClInclude Include="include\oaSkeleton.h" />
     <ClInclude Include="include\oaSound.h" />
+    <ClInclude Include="include\oaStaticMesh.h" />
+    <ClInclude Include="include\oaStaticMeshComponent.h" />
     <ClInclude Include="include\oaTexture.h" />
     <ClInclude Include="include\oaTime.h" />
     <ClInclude Include="include\oaVertexBuffer.h" />
@@ -233,6 +238,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="oaLuaFunctions.cpp" />
+    <ClCompile Include="oaSkeletalMesh.cpp" />
+    <ClCompile Include="oaSkeletalMeshComponent.cpp" />
+    <ClCompile Include="oaSkeletalModel.cpp" />
+    <ClCompile Include="oaStaticMesh.cpp" />
     <ClCompile Include="source\oaActor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -319,6 +328,7 @@
     <ClCompile Include="source\oaVertexBuffer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="StaticMeshComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="oaCore.rc" />

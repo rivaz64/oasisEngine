@@ -38,6 +38,8 @@ Material::save(Serializer& serializer)
     }
 
   }
+
+  serializer.encodeMap(m_colors);
 }
 
 void
@@ -62,6 +64,8 @@ Material::load(Serializer& serializer)
        setTexture(channel, cast<Texture>(resourseManager.getResourse(name)));
     }
   }
+
+  serializer.decodeMap(m_colors);
 }
 
 void 
@@ -85,51 +89,10 @@ Material::set()
         graphicsAPI.setTexture(texture,channelNum);
 
       }
-
     }
     ++channelNum;
   }
 
-  //auto& graphicsAPI = GraphicAPI::instance();
-  //
-  //m_shader->set();
-  
-  //switch (m_shader)
-  //{
-  //case SHADER_TYPE::kNormal:
-  //case SHADER_TYPE::kAnimation:
-  //case SHADER_TYPE::kTransparent:
-  //  if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
-  //  }
-  //  if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
-  //  }
-  //  if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
-  //  }
-  //
-  //  break;
-  //
-  //case SHADER_TYPE::kParalax:
-  //  if(m_textures.find(TEXTURE_TYPE::kDiffuse) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDiffuse],0);
-  //  }
-  //  if(m_textures.find(TEXTURE_TYPE::kSpecular) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kSpecular],1);
-  //  }
-  //  if(m_textures.find(TEXTURE_TYPE::kNormalMap) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kNormalMap],2);
-  //  }
-  //  if(m_textures.find(TEXTURE_TYPE::kDepthMap) != m_textures.end()){
-  //    graphicsAPI.setTexture(m_textures[TEXTURE_TYPE::kDepthMap],3);
-  //  }
-  //
-  //  break;
-  //
-  //default:
-  //  break;
-  //}
 }
 
 void 
@@ -164,6 +127,27 @@ Material::getTexture(const String& channel)
   else{
     return m_textures[channel];
   }
+}
+
+void 
+Material::setColor(const String& channel, const Color& color)
+{
+  if(m_colors.find(channel) == m_colors.end()){
+    m_colors.insert({channel,color});
+  }
+  else{
+    m_colors[channel] = color;
+  }
+}
+
+bool 
+Material::getColor(const String& channel, Color& color)
+{
+  if(m_colors.find(channel) == m_colors.end()){
+    return false;
+  }
+  color = m_colors[channel];
+  return true;
 }
 
 Vector<String> 

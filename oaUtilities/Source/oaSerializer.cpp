@@ -92,6 +92,20 @@ Serializer::decodeString()
   return string;
 }
 
+void 
+Serializer::encodeColor(const Color& color)
+{
+  file.write(reinterpret_cast<const char*>(&color.r),sizeof(Color));
+}
+
+Color
+Serializer::decodeColor()
+{
+  Color color;
+  file.read(reinterpret_cast<char*>(&color.r),sizeof(Color));
+  return color;
+}
+
 //
 //SPtr<Actor> 
 //Serializer::decodeActor()

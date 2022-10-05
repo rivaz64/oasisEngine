@@ -24,13 +24,25 @@ class OA_CORE_EXPORT OmniverseApi :
   getConnectedUsername() {return "";}
 
   virtual void
-  createModel(const String& name) {}
+  createModel(const String& name, WPtr<Actor> actor) {}
 
   virtual void
   connectToModel(const String& name, WPtr<Actor> scene) {}
 
   virtual void
   addScene(WPtr<Actor> actor){}
+
+  virtual void
+  closeScene(){}
+
+  virtual void
+  createSession(const String& name) {}
+
+  virtual void
+  joinToSession(const String& name) {}
+
+  virtual void
+  leaveSession() {}
 
   virtual void
   update(){}

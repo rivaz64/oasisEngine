@@ -30,13 +30,25 @@ class Omniverse :
   getConnectedUsername() override;
 
   void
-  createModel(const String& name) override;
+  createModel(const String& name, WPtr<Actor> actor) override;
 
   void
   connectToModel(const String& name, WPtr<Actor> scene) override;
 
   void
   addScene(WPtr<Actor> actor);
+
+  void
+  closeScene() override;
+
+  void
+  createSession(const String& name);
+
+  void
+  joinToSession(const String& name);
+
+  void
+  leaveSession();
 
   void
   update() override;
@@ -46,6 +58,7 @@ protected:
   String m_userFolder = "omniverse://localhost/Users";
   String m_userName;
   String m_destinationPath;
+  String m_stageUrl;
   
   Vector<WPtr<Actor>> m_actors;
 

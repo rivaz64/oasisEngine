@@ -22,6 +22,15 @@
 #include <oaLights.h>
 #include <oaSamplerState.h>
 #include <oaVertexBuffer.h>
+#include <oaVector4f.h>
+#include <oaStaticMesh.h>
+#include <oaTriangle.h>
+#include <oaStaticMeshComponent.h>
+#include <oaSkeletalMeshComponent.h>
+#include <oaAdaptativeShader.h>
+#include <oaSkeletalModel.h>
+#include <oaSkeletalMesh.h>
+#include <oaShader.h>
 
 namespace oaEngineSDK{
 
@@ -70,6 +79,11 @@ Deferred::onStartUp()
   m_tessBufer = graphicsAPI.createBuffer();
   m_tessBufer->init(sizeof(Vector4f));
   
+  m_color = graphicsAPI.createBuffer();
+  m_color->init(sizeof(Vector4f));
+
+  m_bones = graphicsAPI.createBuffer();
+  m_bones->init(sizeof(Matrix4f)*1024);
 
   //m_smallSize = graphicsAPI.createBuffer();
   //m_smallSize->init(sizeof(Vector4f));
@@ -106,14 +120,14 @@ Deferred::onStartUp()
   m_gBuffer = {m_colorTexture,m_normalTexture,m_positionTexture,m_specularTexture,m_emisiveTexture};
   m_lightBuffer = {m_diffuseLight,m_specularLight};
 
-  Vector<SimpleVertex> points{
-    SimpleVertex(Vector4f( -1.0f, 1.0f, 0.5f, 1.0f ),Vector2f(0,0)),
-    SimpleVertex(Vector4f( 1.0f, -1.0f, 0.5f, 1.0f ),Vector2f(1,1)),
-    SimpleVertex(Vector4f( -1.0f, -1.0f, 0.5f, 1.0f),Vector2f(0,1)),
-    SimpleVertex(Vector4f( 1.0f, 1.0f, 0.5f, 1.0f),  Vector2f(1,0)),
+  Vector<Vertex> points{
+    Vertex(Vector4f( -1.0f, 1.0f, 0.5f, 1.0f ),Vector2f(0,0)),
+    Vertex(Vector4f( 1.0f, -1.0f, 0.5f, 1.0f ),Vector2f(1,1)),
+    Vertex(Vector4f( -1.0f, -1.0f, 0.5f, 1.0f),Vector2f(0,1)),
+    Vertex(Vector4f( 1.0f, 1.0f, 0.5f, 1.0f),  Vector2f(1,0)),
   };
   
-  screen = makeSPtr<DebugMesh>();
+  screen = makeSPtr<StaticMesh>();
 
   screen->setIndex({0,1,2,1,0,3});
   screen->setVertex(points);
@@ -212,6 +226,86 @@ Deferred::render(WPtr<Scene> wScene,
   
 }
 
+void 
+Deferred::setScreen()
+{
+  auto& graphicsAPI = GraphicAPI::instance();
+  screen->getVertexBuffer()->set();
+  screen->getIndexBuffer()->set();
+  graphicsAPI.drawIndex(6);
+}
+
+void
+Deferred::setMaterial(SPtr<Material> material)
+{
+  auto& graphicsAPI = GraphicAPI::instance();
+  auto& resourseManager = ResoureManager::instance();
+
+  auto gBuffer = resourseManager.getResourse("gBuffer");
+  cast<AdaptativeShader>(gBuffer).lock()->set(material->getShader());
+
+  auto channels = {"diffuse","specular","normalMap","emisive"};
+
+  uint32 channelNum = 0;
+  for(auto& channel : channels){
+    auto wTexture = material->getTexture(channel);
+    if(wTexture.expired()) continue;
+    auto texture = wTexture.lock();
+    graphicsAPI.setTexture(texture,channelNum);
+    ++channelNum;
+  }
+
+  graphicsAPI.setRasterizerState(m_rasterizers[material->m_culling+material->m_fillMode]);
+  graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
+
+  Color color(0,0,0,1);
+  if(material->getColor("diffuse",color)){
+    m_color->write(&color);
+  }
+  graphicsAPI.setPSBuffer(m_color,0);
+}
+
+void
+Deferred::setStaticMesh(WPtr<Model> wModel)
+{
+  auto& graphicsAPI = GraphicAPI::instance();
+  if(wModel.expired()) return;
+  auto model = wModel.lock();
+  auto wMesh = model->getMesh();
+  auto wMaterial = model->getMaterial();
+  if(wMesh.expired() || wModel.expired()) return;
+  auto mesh = wMesh.lock();
+  auto material = wMaterial.lock();
+  mesh->getVertexBuffer()->set();
+  mesh->getIndexBuffer()->set();
+  auto& resourseManager = ResoureManager::instance();
+  cast<Shader>(resourseManager.getResourse("v_vertexShader")).lock()->set();
+  setMaterial(material);
+  graphicsAPI.drawIndex(mesh->getIndexNum());
+}
+
+void
+Deferred::setSkeletalMesh(WPtr<SkeletalModel> wModel)
+{
+  auto& graphicsAPI = GraphicAPI::instance();
+  if(wModel.expired()) return;
+  auto model = wModel.lock();
+  auto wMesh = model->getMesh();
+  auto wMaterial = model->getMaterial();
+  if(wMesh.expired() || wModel.expired()) return;
+  auto mesh = wMesh.lock();
+  auto material = wMaterial.lock();
+  mesh->getVertexBuffer()->set();
+  mesh->getIndexBuffer()->set();
+  auto& bones = mesh->getBones();
+  m_bones->write(bones.data());
+  //graphicsAPI.setVSBuffer(m_bones,3);
+  auto& resourseManager = ResoureManager::instance();
+  cast<Shader>(resourseManager.getResourse("v_animVertexShader")).lock()->set();
+  setMaterial(material);
+  graphicsAPI.drawIndex(mesh->getIndexNum());
+}
+
 void
 Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
 {
@@ -225,49 +319,26 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
   for(auto child : childs){
     actorTransform = child->getGlobalTransform();
-    auto components = child->getComponents<GraphicsComponent>();
-    for(auto& component : components){
-      auto meshComponent = cast<GraphicsComponent>(component);
-      auto wModel = meshComponent->getModel();
-      if(!wModel.expired()){
-        auto model = wModel.lock();
-        finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
-        SIZE_T meshes = model->getNumOfMeshes();
-        for(SIZE_T i = 0; i<meshes;++i){
-          
-          auto& wMesh = model->getMesh(i);
-          if(!wMesh.expired()){
-            auto mesh = wMesh.lock();
-            auto controlPoints = mesh->getControlPoints();
-            if(controlPoints){
-              graphicsAPI.setRasterizerState(m_debugRasterizer);
-              graphicsAPI.setHSBuffer(m_tessBufer,0);
-              m_globalTransformBuffer->write(finalTransform.getData());
-              graphicsAPI.setDSBuffer(m_globalTransformBuffer, 0);
-              cast<Shader>(resourseManager.getResourse("Tesselator")).lock()->set(); 
-              controlPoints->set();
-              graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::k16ContolPointPathlist);
-              graphicsAPI.draw(mesh->getNumOfControlPoints());
-            }
-            else{
-              auto mat = model->getMaterial(i).lock();
-              m_globalTransformBuffer->write(&finalTransform);
-              graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-              mesh->set();
-              mat->set();
-              graphicsAPI.setRasterizerState(m_rasterizers[mat->m_culling+mat->m_fillMode]);
-              graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
-              graphicsAPI.drawIndex(mesh->getIndexNum());
-            }
-          }
-          
-          
-        }
+    auto components = child->getGraphicComponents();
+    for(auto& wComponent : components){
+
+      if(wComponent.expired()) continue;
+      auto component = wComponent.lock();
+      finalTransform = actorTransform*component->getTransform().getMatrix();
+      m_globalTransformBuffer->write(&finalTransform);
+      graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+      if(component->getType() == COMPONENT_TYPE::kStaticMesh){
+        setStaticMesh(cast<StaticMeshComponent>(component)->getModel());
+      }
+      else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
+        setSkeletalMesh(cast<SkeletalMeshComponent>(component)->getModel());
       }
     }
     vertex(child,frustum);
   }
 }
+
+
 
 //void 
 //Deferred::gBuffer(Vector<RenderData>& toRender)
@@ -370,9 +441,7 @@ Deferred::ssao( const Vector4f& config)
   graphicsAPI.setTexture(m_normalTexture,0);
   graphicsAPI.setTexture(m_positionTexture,1);
   graphicsAPI.setTexture(m_depthStencil,2);
-  screen->set();
-  
-  graphicsAPI.drawIndex(6);
+  setScreen();
   graphicsAPI.unsetTextures(5);
 }
 
@@ -398,14 +467,12 @@ Deferred::blur(SPtr<Texture> textureIn,SPtr<Texture> textureOut)
   //graphicsAPI.setPSBuffer(m_smallSize,1);
   
   
-  screen->set();
-  graphicsAPI.drawIndex(6);
+  setScreen();
 
   graphicsAPI.setRenderTarget(textureIn);
   graphicsAPI.setTexture(textureOut,0);
   cast<Shader>(resourseManager.getResourse("VBlur")).lock()->set();
-  screen->set();
-  graphicsAPI.drawIndex(6);
+  setScreen();
   //copy(m_blur,texture);
   //auto& resourseManager = ResoureManager::instance();
   //auto& graphicsAPI = GraphicAPI::instance();
@@ -432,9 +499,7 @@ Deferred::copy(SPtr<Texture> textureIn, SPtr<Texture> textureOut)
   graphicsAPI.setRenderTarget(textureOut);
   graphicsAPI.setTexture(textureIn,0);
   
-  screen->set();
-
-  graphicsAPI.drawIndex(6);
+  setScreen();
 
   graphicsAPI.unsetTextures(5);
 }
@@ -460,9 +525,7 @@ Deferred::aplylights()
   graphicsAPI.setTexture(m_ssao,3);
   graphicsAPI.setTexture(m_downSapmle,4);
   graphicsAPI.setTexture(m_depthStencil,5);
-  screen->set();
-  
-  graphicsAPI.drawIndex(6);
+  setScreen();
   graphicsAPI.unsetTextures(5);
 }
 
@@ -485,8 +548,7 @@ Deferred::directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalL
     graphicsAPI.setTexture(m_positionTexture,1);
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
-    screen->set();
-    graphicsAPI.drawIndex(6);
+    setScreen();
   }
 
   graphicsAPI.unsetTextures(4);
@@ -514,8 +576,7 @@ Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& light
     graphicsAPI.setTexture(m_positionTexture,1);
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
-    screen->set();
-    graphicsAPI.drawIndex(6);
+    setScreen();
   }
   graphicsAPI.unsetTextures(4);
   graphicsAPI.setBlendState(m_blendState0);
@@ -542,8 +603,7 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
     graphicsAPI.setTexture(m_positionTexture,1);
     graphicsAPI.setTexture(m_specularTexture,2);
     graphicsAPI.setTexture(m_depthStencil,3);
-    screen->set();
-    graphicsAPI.drawIndex(6);
+    setScreen();
 
     //if(light.castShadows){
     //  generateShadowMap(light,scene)
@@ -639,8 +699,7 @@ Deferred::downSapmle(SPtr<Texture> texture)
   graphicsAPI.setTexture(texture,0);
   graphicsAPI.setRenderTarget(m_downSapmle);
   graphicsAPI.setPSBuffer(m_size,0);
-  screen->set();
-  graphicsAPI.drawIndex(6);
+  setScreen();
   graphicsAPI.unsetTextures(1);
 }
 
@@ -690,38 +749,38 @@ Deferred::setSize(const Vector2U& size)
 void
 Deferred::generateShadowMap(const SpotLight& light,SPtr<Actor> actor)
 {
-  auto& graphicsApi = GraphicAPI::instance();
-  auto& childs = actor->getChilds();
-  Matrix4f actorTransform;
-  Matrix4f finalTransform;
-  for(auto child : childs){
-    actorTransform = child->getGlobalTransform();
-    auto components = child->getComponents<GraphicsComponent>();
-    for(auto& component : components){
-      auto meshComponent = cast<GraphicsComponent>(component);
-      auto wModel = meshComponent->getModel();
-      if(!wModel.expired()){
-        auto model = wModel.lock();
-        finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
-        SIZE_T meshes = model->getNumOfMeshes();
-        for(SIZE_T i = 0; i<meshes;++i){
-        
-          if(model->getMaterial(i).lock()->getCastShadows()){
-            auto& wMesh =  model->getMesh(i);
-            m_globalTransformBuffer->write(&finalTransform);
-            graphicsApi.setVSBuffer(m_globalTransformBuffer, 0);
-            if(!wMesh.expired()){
-              auto mesh = wMesh.lock();
-              mesh->set();
-              graphicsApi.drawIndex(mesh->getIndexNum());
-            }
-            
-          }
-        }
-      }
-    }
-    generateShadowMap(light,child);
-  }
+  //auto& graphicsApi = GraphicAPI::instance();
+  //auto& childs = actor->getChilds();
+  //Matrix4f actorTransform;
+  //Matrix4f finalTransform;
+  //for(auto child : childs){
+  //  actorTransform = child->getGlobalTransform();
+  //  auto components = child->getComponents<GraphicsComponent>();
+  //  for(auto& component : components){
+  //    auto meshComponent = cast<GraphicsComponent>(component);
+  //    auto wModel = meshComponent->getModel();
+  //    if(!wModel.expired()){
+  //      auto model = wModel.lock();
+  //      finalTransform = actorTransform*meshComponent->getTransform().getMatrix();
+  //      SIZE_T meshes = model->getNumOfMeshes();
+  //      for(SIZE_T i = 0; i<meshes;++i){
+  //      
+  //        if(model->getMaterial(i).lock()->getCastShadows()){
+  //          auto& wMesh =  model->getMesh(i);
+  //          m_globalTransformBuffer->write(&finalTransform);
+  //          graphicsApi.setVSBuffer(m_globalTransformBuffer, 0);
+  //          if(!wMesh.expired()){
+  //            auto mesh = wMesh.lock();
+  //            mesh->set();
+  //            graphicsApi.drawIndex(mesh->getIndexNum());
+  //          }
+  //          
+  //        }
+  //      }
+  //    }
+  //  }
+  //  generateShadowMap(light,child);
+  //}
 }
 
 //SPtr<Texture>

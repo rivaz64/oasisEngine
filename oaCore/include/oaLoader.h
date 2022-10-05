@@ -35,7 +35,7 @@ class OA_CORE_EXPORT Loader
    * @return the things the file has
   */
   bool//LOADERFLAGS::E
-  loadScene(const Path& file);
+  loadScene(const Path& file,WPtr<Actor> actor);
 
   /**
    * @brief loads certain things of a file
@@ -67,7 +67,7 @@ class OA_CORE_EXPORT Loader
    * @return 
   */
   bool 
-  loadResource(const Path& path);
+  loadResource(const Path& path,WPtr<Actor> actor);
 
  private:
 

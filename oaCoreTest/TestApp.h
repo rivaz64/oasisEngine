@@ -69,23 +69,28 @@ public:
                 uint32 index1, 
                 uint32 index2);
   
-  void
-  genMorbiusTrip();
+  //void
+  //genMorbiusTrip();
 
  public:
 
+  //WPtr<Resourse> m_selected
   WPtr<Actor> m_selectedActor;
-
+  
   WPtr<Texture> m_selectedTexture;
-
+  
   WPtr<Material> m_selectedMaterial;
-
+  
   WPtr<StaticMesh> m_selectedMesh;
-
+  
+  WPtr<SkeletalMesh> m_selectedSkeletalMesh;
+  
   WPtr<Model> m_selectedModel;
 
+  WPtr<SkeletalModel> m_selectedSkeletalModel;
+  
   WPtr<Skeleton> m_selectedSkeleton;
-
+  
   WPtr<Animation> m_selectedAnimation;
 
   SPtr<Keyboard> m_keyboard;

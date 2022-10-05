@@ -27,11 +27,14 @@ Actor::save(Serializer& serializer)
   serializer.encodeString(getName());
   auto& transform = GetActorTransform();
   serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
-  SIZE_T num = m_components.size();
+  SIZE_T num = getNumOfComponents();
   serializer.encodeSize(num);
-  for(auto component : m_components){
-    serializer.encodeNumber(component.first);
-    component.second[0]->save(serializer);
+  for(auto& components : m_components){
+    for(auto& component : components.second){
+      serializer.encodeNumber(components.first);
+      component->save(serializer);
+    }
+    
   }
   serializer.encodeSize(m_subActors.size());
   for(auto& child : m_subActors){
@@ -212,6 +215,16 @@ Vector3f
 Actor::getLocalRotation()
 {
   return m_localTransform.getRotation();
+}
+
+SIZE_T
+Actor::getNumOfComponents()
+{
+  SIZE_T ans = 0;
+  for(auto& type : m_components){
+    ans += type.second.size();
+  }
+  return ans;
 }
 
 }

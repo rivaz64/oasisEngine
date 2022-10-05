@@ -7,22 +7,12 @@
 #include "oaGraphicsComponent.h"
 #include "oaResoureManager.h"
 #include "oaModel.h"
-#include "oaGraphicsComponent.h"
+#include "oaActor.h"
+
 
 namespace oaEngineSDK{
 
-void 
-GraphicsComponent::save(Serializer& serializer)
-{
-  serializer.encodeString(m_model.lock()->getName());
-}
 
-void 
-GraphicsComponent::load(Serializer& serializer)
-{
-  auto modelName = serializer.decodeString();
-  setModel(cast<Model>(ResoureManager::instance().getResourse(modelName)));
-}
 
 COMPONENT_TYPE::E
 GraphicsComponent::getType()
@@ -38,6 +28,14 @@ GraphicsComponent::update(WPtr<Actor> actor)
     component->update(actor);
   }*/
   
+}
+
+void 
+GraphicsComponent::onAttach(WPtr<Actor> wActor)
+{
+  if(wActor.expired()) return;
+  auto actor = wActor.lock();
+  actor->m_graphicComponents.push_back(cast<GraphicsComponent>(shared_from_this()));
 }
 
 void 

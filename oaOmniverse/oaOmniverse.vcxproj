@@ -124,8 +124,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(SolutionDir)lib/$(PlatformTarget)/;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\usd\debug\lib;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\omni_client_library\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>oaUtilitiesd.lib;oaCored.lib;ar.lib;arch.lib;gf.lib;js.lib;kind.lib;pcp.lib;plug.lib;sdf.lib;tf.lib;trace.lib;usd.lib;usdGeom.lib;usdUtils.lib;vt.lib;work.lib;usdShade.lib;usdLux.lib;usdPhysics.lib;omniclient.lib;python37.lib;boost_python37-vc141-mt-gd-x64-1_68.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin/$(PlatformTarget)/;$(SolutionDir)lib/$(PlatformTarget)/;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\usd\debug\lib;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\omni_client_library\debug;E:\omniverse\lib\connectsample-200.1.0\_build\target-deps\omni_usd_resolver\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>oaUtilitiesd.lib;oaCored.lib;ar.lib;arch.lib;gf.lib;js.lib;kind.lib;pcp.lib;plug.lib;sdf.lib;tf.lib;trace.lib;usd.lib;usdGeom.lib;usdUtils.lib;vt.lib;work.lib;usdShade.lib;usdLux.lib;usdPhysics.lib;omniclient.lib;python37.lib;boost_python37-vc141-mt-gd-x64-1_68.lib;shlwapi.lib;omniLiveSessionLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

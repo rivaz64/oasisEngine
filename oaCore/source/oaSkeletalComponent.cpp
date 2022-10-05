@@ -15,7 +15,8 @@ namespace oaEngineSDK{
 COMPONENT_TYPE::E
 SkeletalComponent::getType()
 {
-  return COMPONENT_TYPE::kSkeleton;
+  //return COMPONENT_TYPE::kSkeleton;
+  return COMPONENT_TYPE::E();
 }
 
 void SkeletalComponent::update(WPtr<Actor> actor)

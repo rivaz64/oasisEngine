@@ -26,7 +26,9 @@ enum E{
   kMaterial,
   kSkeleton,
   kAnimation,
-  kSound
+  kSound,
+  kSkeletalMesh,
+  kSkeletalModel
 };
 }
 

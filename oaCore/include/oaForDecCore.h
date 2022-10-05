@@ -10,14 +10,15 @@ class SamplerState;
 struct SamplerDesc;
 struct DepthStencilDesc;
 struct SimpleVertex;
-class MeshType;
-
-template<class T>
-class Mesh;
-
-typedef Mesh<Vertex> StaticMesh;
-typedef Mesh<SimpleVertex> DebugMesh;
-
+//class MeshType;
+//
+//template<class T>
+//class Mesh;
+//
+//typedef Mesh<Vertex> StaticMesh;
+//typedef Mesh<SkeletalVertex> SkeletalMesh;
+//typedef Mesh<SimpleVertex> DebugMesh;
+class StaticMesh;
 class Texture;
 class Model;
 class Material;
@@ -47,4 +48,7 @@ class Mouse;
 class Keyboard;
 class Sound;
 struct SimpleVertex;
+class SkeletalModel;
+class SkeletalMesh;
+class Resourse;
 }

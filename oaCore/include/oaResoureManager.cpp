@@ -2,7 +2,6 @@
 #include <oaPlane.h>
 #include <oaTriangle.h>
 #include "oaGraphicAPI.h"
-#include "oaMesh.h"
 #include "oaTexture.h"
 #include "oaModel.h"
 #include "oaShader.h"
@@ -12,7 +11,7 @@
 #include "oaOctree.h"
 #include "oaVertexBuffer.h"
 #include "oaAdaptativeShader.h"
-
+#include "oaStaticMesh.h"
 
 namespace oaEngineSDK{
 
@@ -377,7 +376,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("downSample","v_screen","p_downSample");
   createShaderProgram("shadowMapper","v_SimpleVertex","p_color");
   createShaderProgram("Tesselator","v_Tesselation","h_hullQuad","d_domainQuad","p_color");
-  SPtr<AdaptativeShader> gBuffer = makeSPtr<AdaptativeShader>(cast<Shader>(resourceManager.getResourse("v_vertexShader")));
+  SPtr<AdaptativeShader> gBuffer = makeSPtr<AdaptativeShader>();
   gBuffer->compile("GBuffer",{"EMISIVE","SPECULAR","NORMALS","DIFFUSE"});
   resourceManager.registerResourse("gBuffer",gBuffer);
 }
@@ -405,98 +404,98 @@ ResoureManager::separate(SPtr<Model> model,
                          Vector<SPtr<Model>>& division,
                          float size)
 {
-  Vector<uint32> indexFront;
-  Vector<uint32> indexBack;
-  Vector<Vector<uint32>> meshes;
-  Vector<Vector<uint32>> newMeshes;
-  Vector<SPtr<Model>> newModels;
-  Vector<uint32> finalIndex;
-  Vector<Vertex> finalVertex;
-  Octree tree(center);
-  auto planes = tree.getPlanes();
-  //print(StringUtilities::floatToString(center.x));
-  //print(StringUtilities::floatToString(center.y));
-  //print(StringUtilities::floatToString(center.z));
-  
-  for(int32 i = 0; i<8; ++i){
-    String name = "model"+StringUtilities::intToString(i);
-    auto newModel = makeSPtr<Model>();
-    newModel->setName(name);
-    newModels.push_back(newModel);
-  }
-
-  auto numOfMeshes = model->getNumOfMeshes();
-  
-
-  for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
-    meshes.clear();
-
-    auto mesh = model->getMesh(meshNum).lock();
-    auto& material = model->getMaterial(meshNum);
-    auto& indices = mesh->getIndex();
-    auto vertices = mesh->getVertex();
-    
-    meshes.push_back(indices);
-
-    for(auto& plane: planes){
-      for(Vector<uint32>& m : meshes){
-        indexBack.clear();
-        indexFront.clear();
-        divide(plane, vertices, m, indexBack, indexFront);
-        newMeshes.push_back(indexBack);
-        newMeshes.push_back(indexFront);
-      }
-      meshes = newMeshes;
-      newMeshes.clear();
-    }
-    
-    
-
-   
-    //auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
-    //vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
-    uint32 indexNum;
-    for(uint32 i = 0; i<8; ++i){
-      if(meshes[i].size()==0) continue;
-      auto newModel = newModels[i];
-      newModel->addMaterial(material);
-      auto newMesh = makeSPtr<StaticMesh>();
-      newModel->addMesh(newMesh);
-
-      finalIndex.clear();
-      finalVertex.clear();
-      indexNum = 0;
-      for(uint32 index : meshes[i]){
-        finalVertex.push_back(vertices[index]);
-        finalIndex.push_back(indexNum);
-        ++indexNum;
-      }
-
-      newMesh->setIndex(finalIndex);
-      newMesh->setVertex(finalVertex);
-      newMesh->writeBuffers();
-      //newMesh->create(vertexB);
-    }
-  }
-
-  for(uint32 i = 0; i<8; ++i){
-
-    SIZE_T totalTris = 0;
-    for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
-      auto mesh = model->getMesh(meshNum).lock();
-      auto& indices = mesh->getIndex();
-      totalTris += indices.size()/3;
-    }
-    if(totalTris>5000){
-      auto newCenter = tree.getCenters(size);
-      separate(newModels[i],newCenter[i],division,size/2.f);
-    }
-    else if(newModels[i]->getNumOfMeshes()>0){
-
-      division.push_back(newModels[i]);
-      print(newModels[i]->getName());
-    }
-  }
+  //Vector<uint32> indexFront;
+  //Vector<uint32> indexBack;
+  //Vector<Vector<uint32>> meshes;
+  //Vector<Vector<uint32>> newMeshes;
+  //Vector<SPtr<Model>> newModels;
+  //Vector<uint32> finalIndex;
+  //Vector<Vertex> finalVertex;
+  //Octree tree(center);
+  //auto planes = tree.getPlanes();
+  ////print(StringUtilities::floatToString(center.x));
+  ////print(StringUtilities::floatToString(center.y));
+  ////print(StringUtilities::floatToString(center.z));
+  //
+  //for(int32 i = 0; i<8; ++i){
+  //  String name = "model"+StringUtilities::intToString(i);
+  //  auto newModel = makeSPtr<Model>();
+  //  newModel->setName(name);
+  //  newModels.push_back(newModel);
+  //}
+  //
+  //auto numOfMeshes = model->getNumOfMeshes();
+  //
+  //
+  //for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
+  //  meshes.clear();
+  //
+  //  auto mesh = model->getMesh(meshNum).lock();
+  //  auto& material = model->getMaterial(meshNum);
+  //  auto& indices = mesh->getIndex();
+  //  auto vertices = mesh->getVertex();
+  //  
+  //  meshes.push_back(indices);
+  //
+  //  for(auto& plane: planes){
+  //    for(Vector<uint32>& m : meshes){
+  //      indexBack.clear();
+  //      indexFront.clear();
+  //      divide(plane, vertices, m, indexBack, indexFront);
+  //      newMeshes.push_back(indexBack);
+  //      newMeshes.push_back(indexFront);
+  //    }
+  //    meshes = newMeshes;
+  //    newMeshes.clear();
+  //  }
+  //  
+  //  
+  //
+  // 
+  //  //auto  vertexB = GraphicAPI::instancePtr()->createVertexBuffer();
+  //  //vertexB->init(vertices.data(),sizeof(Vertex),vertices.size());
+  //  uint32 indexNum;
+  //  for(uint32 i = 0; i<8; ++i){
+  //    if(meshes[i].size()==0) continue;
+  //    auto newModel = newModels[i];
+  //    newModel->addMaterial(material);
+  //    auto newMesh = makeSPtr<StaticMesh>();
+  //    newModel->addMesh(newMesh);
+  //
+  //    finalIndex.clear();
+  //    finalVertex.clear();
+  //    indexNum = 0;
+  //    for(uint32 index : meshes[i]){
+  //      finalVertex.push_back(vertices[index]);
+  //      finalIndex.push_back(indexNum);
+  //      ++indexNum;
+  //    }
+  //
+  //    newMesh->setIndex(finalIndex);
+  //    newMesh->setVertex(finalVertex);
+  //    newMesh->writeBuffers();
+  //    //newMesh->create(vertexB);
+  //  }
+  //}
+  //
+  //for(uint32 i = 0; i<8; ++i){
+  //
+  //  SIZE_T totalTris = 0;
+  //  for(uint32 meshNum = 0; meshNum<numOfMeshes; ++meshNum){
+  //    auto mesh = model->getMesh(meshNum).lock();
+  //    auto& indices = mesh->getIndex();
+  //    totalTris += indices.size()/3;
+  //  }
+  //  if(totalTris>5000){
+  //    auto newCenter = tree.getCenters(size);
+  //    separate(newModels[i],newCenter[i],division,size/2.f);
+  //  }
+  //  else if(newModels[i]->getNumOfMeshes()>0){
+  //
+  //    division.push_back(newModels[i]);
+  //    print(newModels[i]->getName());
+  //  }
+  //}
   
   
 }

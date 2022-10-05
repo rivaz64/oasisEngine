@@ -18,8 +18,11 @@ namespace oaEngineSDK{
 struct OA_UTILITY_EXPORT Vertex{
   Vertex() = default;
 
-  Vertex(const Vector4f& _location,const Vector4f& _normal,const Vector2f& _textureCord) :
-    location(_location), normal(_normal),textureCord(_textureCord){}
+  Vertex(const Vector4f& _location,const Vector2f& _textureCord) :
+    location(_location), textureCord(_textureCord){}
+
+  Vertex(const Vector4f& _location, const Vector4f& _normal, const Vector2f& _textureCord) :
+    location(_location), normal(_normal), textureCord(_textureCord){}
   /**
    * @brief the location in a tridimencional space of this vetrex
   */

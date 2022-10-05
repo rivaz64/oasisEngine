@@ -9,6 +9,7 @@
 #include "oaResourse.h"
 #include "oaFlags.h"
 #include "oaRasterizerState.h"
+#include <oaColor.h>
 
 namespace oaEngineSDK{
 
@@ -65,6 +66,12 @@ class OA_CORE_EXPORT Material :
   */
   WPtr<Texture>
   getTexture(const String& channel);
+
+  void
+  setColor(const String& channel,const Color& color);
+
+  bool
+  getColor(const String& channel,Color& color);
   
   Vector<String>
   getTextureChannels();
@@ -100,6 +107,11 @@ class OA_CORE_EXPORT Material :
    * @brief the textures used for this shader
   */
   Map<String,WPtr<Texture>> m_textures;
+
+  /**
+   * @brief the colors used for this shader
+  */
+  Map<String,Color> m_colors;
 
   /**
    * @brief the shaders program that is going to be using

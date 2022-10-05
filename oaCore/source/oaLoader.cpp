@@ -12,7 +12,7 @@
 #include <freeimage\FreeImage.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image\stb_image.h>
-#include "oaMesh.h"
+//#include "oaMesh.h"
 #include "oaModel.h"
 #include "oaResoureManager.h"
 #include "oaMaterial.h"
@@ -24,8 +24,12 @@
 #include "oaGraphicAPI.h"
 #include "oaAudioAPI.h"
 #include "oaSound.h"
-
-
+#include "oaStaticMeshComponent.h"
+#include "oaActor.h"
+#include "oaStaticMesh.h"
+#include "oaSkeletalMesh.h"
+#include "oaSkeletalModel.h"
+#include "oaSkeletalMeshComponent.h"
 
 using Assimp::Importer;
 
@@ -65,8 +69,8 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 }
 
 void
-readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
-  
+readStaticMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
+  auto mesh = makeSPtr<StaticMesh>();
   mesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
 
   auto& vertices = mesh->getVertex();
@@ -99,126 +103,164 @@ readStaticMesh(SPtr<StaticMesh> mesh, aiMesh* aMesh){
       actualVertex.textureCord.y = 1-aMesh->mTextureCoords[0][numVertex].y;
     }
   }
+  uint32 numIndices = aMesh->mNumFaces * 3;
+  mesh->setIndexNum(numIndices);
+
+  for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
+  {
+    aiFace* face = &aMesh->mFaces[t];
+    uint32 numIndice = t*3;
+
+    mesh->setIndexAt(numIndice,face->mIndices[0]);
+    mesh->setIndexAt(numIndice+1,face->mIndices[1]);
+    mesh->setIndexAt(numIndice+2,face->mIndices[2]);
+  }
+  //ResoureManager::instance().m_meshes.insert({model->getName()})
+  mesh->writeBuffers();
+  auto model = makeSPtr<Model>();
+  model->setMesh(mesh);
+  model->setMaterial(material);
+  ResoureManager::instance().registerResourse(aMesh->mName.C_Str(),mesh);
+  ResoureManager::instance().registerResourse("m_"+String(aMesh->mName.C_Str()),model);
+
+  auto component = makeSPtr<StaticMeshComponent>();
+  component->setModel(model);
+  actor->attachComponent(component);
 }
 
-//void
-//readSkeletalMesh(SPtr<Mesh<AnimationVertex>> mesh, aiMesh* aMesh){
-//
-//  auto& bones = mesh->m_bones;
-//
-//  auto& vertices = mesh->m_vertices;
-//
-//  vertices.resize( aMesh->mNumVertices);
-//  for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
-//    auto& actualVertex = vertices[numVertex];
-//
-//    actualVertex.location.x = aMesh->mVertices[numVertex].x;
-//    actualVertex.location.y = aMesh->mVertices[numVertex].y;
-//    actualVertex.location.z = aMesh->mVertices[numVertex].z;
-//
-//    actualVertex.normal.x = aMesh->mNormals[numVertex].x;
-//    actualVertex.normal.y = aMesh->mNormals[numVertex].y;
-//    actualVertex.normal.z = aMesh->mNormals[numVertex].z;
-//    
-//    actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
-//    actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
-//    actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
-//    
-//    actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
-//    actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
-//    actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
-//
-//    if(aMesh->HasTextureCoords(0)){
-//      actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
-//      actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
-//    }
-//  }
-//
-//  if(aMesh->HasBones()){
-//
-//    SIZE_T bonesNum=0;
-//
-//    for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
-//
-//      auto actualBone = aMesh->mBones[boneNum];
-//
-//      String boneName = actualBone->mName.C_Str();
-//
-//      SIZE_T boneIndex;
-//
-//      if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
-//        boneIndex = bonesNum;
-//        mesh->m_boneMaping.insert({boneName,bonesNum});
-//        bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
-//        //boneNames.push_back(boneName);
-//        ++bonesNum;
-//      }
-//      else{
-//
-//        boneIndex = mesh->m_boneMaping[boneName];
-//      }
-//
-//      //boneIndex = skeleton->boneMaping[boneName];
-//
-//      actualBone = aMesh->mBones[boneIndex];
-//
-//      for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
-//      
-//        auto& actualWeight = actualBone->mWeights[weightNum];
-//
-//        SIZE_T vertexId = actualWeight.mVertexId;
-//
-//        auto& actualVertex = vertices[vertexId];
-//
-//        for(uint8 i = 0; i < 8; ++i){
-//          if(((float*)&actualVertex.weights)[i] == 0){
-//            ((uint32*)&actualVertex.ids)[i] = boneIndex;
-//            ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
-//            break;
-//
-//          }
-//        } 
-//      }
-//    }
-//  }
-//}
+void
+readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
+
+  auto mesh = makeSPtr<SkeletalMesh>();
+
+  auto& bones = mesh->getBones();
+
+  auto smesh = mesh.get();
+
+  smesh->setVertexNum(static_cast<SIZE_T>(aMesh->mNumVertices));
+
+  auto& vertices = mesh->getVertex();
+
+  vertices.resize( aMesh->mNumVertices);
+  for(SIZE_T numVertex = 0; numVertex < aMesh->mNumVertices; ++numVertex){
+    auto& actualVertex = vertices[numVertex];
+
+    actualVertex.location.x = aMesh->mVertices[numVertex].x;
+    actualVertex.location.y = aMesh->mVertices[numVertex].y;
+    actualVertex.location.z = aMesh->mVertices[numVertex].z;
+
+    actualVertex.normal.x = aMesh->mNormals[numVertex].x;
+    actualVertex.normal.y = aMesh->mNormals[numVertex].y;
+    actualVertex.normal.z = aMesh->mNormals[numVertex].z;
+    
+    actualVertex.tangent.x = aMesh->mTangents[numVertex].x;
+    actualVertex.tangent.y = aMesh->mTangents[numVertex].y;
+    actualVertex.tangent.z = aMesh->mTangents[numVertex].z;
+    
+    actualVertex.bitangent.x = aMesh->mBitangents[numVertex].x;
+    actualVertex.bitangent.y = aMesh->mBitangents[numVertex].y;
+    actualVertex.bitangent.z = aMesh->mBitangents[numVertex].z;
+
+    if(aMesh->HasTextureCoords(0)){
+      actualVertex.textureCord.x = aMesh->mTextureCoords[0][numVertex].x;
+      actualVertex.textureCord.y = 1.f-aMesh->mTextureCoords[0][numVertex].y;
+    }
+  }
+
+  //if(aMesh->HasBones()){
+  //
+  //  SIZE_T bonesNum=0;
+  //
+  //  for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
+  //
+  //    auto actualBone = aMesh->mBones[boneNum];
+  //
+  //    String boneName = actualBone->mName.C_Str();
+  //
+  //    SIZE_T boneIndex;
+  //
+  //    bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+  //
+  //    //if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
+  //    //  boneIndex = bonesNum;
+  //    //  mesh->m_boneMaping.insert({boneName,bonesNum});
+  //    //  bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+  //    //  //boneNames.push_back(boneName);
+  //    //  ++bonesNum;
+  //    //}
+  //    //else{
+  //    //
+  //    //  boneIndex = mesh->m_boneMaping[boneName];
+  //    //}
+  //    boneIndex = boneNum;
+  //    //boneIndex = skeleton->boneMaping[boneName];
+  //
+  //    actualBone = aMesh->mBones[boneIndex];
+  //
+  //    for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
+  //    
+  //      auto& actualWeight = actualBone->mWeights[weightNum];
+  //
+  //      SIZE_T vertexId = actualWeight.mVertexId;
+  //
+  //      auto& actualVertex = vertices[vertexId];
+  //
+  //      for(uint8 i = 0; i < 8; ++i){
+  //        if(((float*)&actualVertex.weights)[i] == 0){
+  //          ((uint32*)&actualVertex.ids)[i] = boneIndex;
+  //          ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
+  //          break;
+  //
+  //        }
+  //      } 
+  //    }
+  //  }
+  //}
+
+  uint32 numIndices = aMesh->mNumFaces * 3;
+  mesh->setIndexNum(numIndices);
+
+  for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
+  {
+    aiFace* face = &aMesh->mFaces[t];
+    uint32 numIndice = t*3;
+
+    mesh->setIndexAt(numIndice,face->mIndices[0]);
+    mesh->setIndexAt(numIndice+1,face->mIndices[1]);
+    mesh->setIndexAt(numIndice+2,face->mIndices[2]);
+  }
+  //ResoureManager::instance().m_meshes.insert({model->getName()})
+  mesh->writeBuffers();
+  auto model = makeSPtr<SkeletalModel>();
+  model->setMesh(mesh);
+  model->setMaterial(material);
+  ResoureManager::instance().registerResourse(aMesh->mName.C_Str(),mesh);
+  ResoureManager::instance().registerResourse("m_"+String(aMesh->mName.C_Str()),model);
+
+  auto component = makeSPtr<SkeletalMeshComponent>();
+  component->setModel(model);
+  actor->attachComponent(component);
+}
 
 void 
-loadMeshes(SPtr<Model> model,const aiScene* loadedScene)
+loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* loadedScene)
 {
   for(uint32 numMesh = 0; numMesh < loadedScene->mNumMeshes; ++numMesh){
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
 
-    auto mesh = makeSPtr<StaticMesh>();
-
-    readStaticMesh(mesh,aMesh);
+    
 
     //model->addMaterial(ResoureManager::instance().m_materials["default"]);
 
-    /*if(aMesh->HasBones()){
-
+    if(aMesh->HasBones()){
+      readSkeletalMesh(materials[numMesh],actor,aMesh);
     }
     else{
-      readSkeletalMesh(cast<SkeletalMesh>(mesh),aMesh);
-      
-    }*/
-
-    uint32 numIndices = aMesh->mNumFaces * 3;
-    mesh->setIndexNum(numIndices);
-
-    for (uint32 t = 0; t < aMesh->mNumFaces; ++t)
-    {
-      aiFace* face = &aMesh->mFaces[t];
-      uint32 numIndice = t*3;
-
-      mesh->setIndexAt(numIndice,face->mIndices[0]);
-      mesh->setIndexAt(numIndice+1,face->mIndices[1]);
-      mesh->setIndexAt(numIndice+2,face->mIndices[2]);
+      readStaticMesh(materials[numMesh],actor,aMesh);
     }
-    //ResoureManager::instance().m_meshes.insert({model->getName()})
-    mesh->writeBuffers();
-    model->addMesh(mesh);
+
+    
   }
 }
 
@@ -327,31 +369,37 @@ tryLoadTextureChannel(aiMaterial* material,
     Path newPath;
     newPath = path.parent_path().generic_wstring();
     newPath.append(defuseName);
-    auto stringName = StringUtilities::toString(newPath.filename());
+    auto stringName = StringUtilities::toString(newPath.stem());
     if(loadImage(newPath) /*|| 
        manager.m_textures.find(StringUtilities::getStringId(stringName)) != manager.m_textures.end()*/){
 
-     // gbufferFlags |= gbufferFlag;
-     // auto texture = cast<Texture>(manager.getResourse(stringName));
-     // if(!texture.expired())
-     // mat->setTexture(textureChannel, cast<Texture>(manager.getResourse(stringName)));
+      gbufferFlags |= gbufferFlag;
+      auto texture = cast<Texture>(manager.getResourse(stringName));
+      if(!texture.expired())
+      mat->setTexture(textureChannel, cast<Texture>(manager.getResourse(stringName)));
     }
   }
 }
 
-void 
-loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
+void
+loadTextures(Vector<SPtr<Material>>& materials,const aiScene* loadedScene,const Path& path){
 
   auto& manager = ResoureManager::instance();
 
   for(uint32 numMaterial = 0; numMaterial < loadedScene->mNumMaterials; ++numMaterial){
+
     auto material = loadedScene->mMaterials[numMaterial];
+
+    for(int i = 0; i<material->mNumProperties; ++i){
+      auto propertie = material->mProperties[i];
+      print(propertie->mKey.C_Str());
+    }
 
     aiString notMyString;
 
-
     material->Get(AI_MATKEY_NAME,notMyString);
-
+    
+    
     WString MaterialName = StringUtilities::toWString(notMyString.C_Str());
 
     print(StringUtilities::toString(MaterialName));
@@ -423,12 +471,23 @@ loadTextures(SPtr<Model> model,const aiScene* loadedScene,const Path& path){
     print(StringUtilities::intToString(gbufferFlags));
     mat->setShader(gbufferFlags);
 
-    model->addMaterial(mat);
+    materials.push_back(mat);
 
     mat->setName(StringUtilities::toString(MaterialName));
 
-    manager.registerResourse(StringUtilities::toString(MaterialName),mat); //m_materials.insert({StringUtilities::getStringId(mat->getName()),mat});
+    manager.registerResourse(StringUtilities::toString(MaterialName),mat); 
+
+    aiColor3D color(0.f,0.f,0.f);
+
+    aiReturn ret = material->Get(AI_MATKEY_COLOR_DIFFUSE,color);
+
+    if(ret == aiReturn_SUCCESS){
+      mat->setColor("diffuse",Color(color.r,color.g,color.b));
+      print(StringUtilities::floatToString(color.r) + " " + StringUtilities::floatToString(color.g) + " " + StringUtilities::floatToString(color.b) + " " );
+    }
+    
   }
+
 }
 
 /*
@@ -486,9 +545,9 @@ loadTextures(SPtr<Model> model)
   
 }
 */
-/*
+
 void 
-loadSkeletons(const aiScene* loadedScene)
+loadSkeletons(const aiScene* loadedScene,const Path& path)
 {
   auto& manager = ResoureManager::instance();
 
@@ -501,10 +560,8 @@ loadSkeletons(const aiScene* loadedScene)
 
   loadSkeleton(loadedScene->mRootNode,skeleton->m_skeleton,skeleton);
 
-  manager.m_skeletons.insert({m_file.getCompletePath(),skeleton});
-
-  skeleton->m_name = m_file.getName();
-}*/
+  manager.registerResourse(String("s_")+path.stem().string(),skeleton);
+}
 /*
 void 
 loadAnimations()
@@ -607,7 +664,7 @@ Loader::load(LOADERFLAGS::E /*flags*/)
 }
 
 bool//LOADERFLAGS::E
-Loader::loadScene(const Path& file)
+Loader::loadScene(const Path& file,WPtr<Actor> wActor)
 {
   auto flags = aiProcess_Triangulate | 
                //aiProcess_GenNormals |
@@ -621,36 +678,44 @@ Loader::loadScene(const Path& file)
 
   const aiScene* importedScene = importer.ReadFile(completePath.c_str(),flags);
   
-  auto model = makeSPtr<Model>();
+  if(wActor.expired()) return true;
+  auto actor = wActor.lock();
 
+  //auto model = makeSPtr<Model>();
+  Vector<SPtr<Model>> models;
   if(!importedScene){
     //OA_DEBUG_LOG("file "+completePath+"not found");
     //__PRETTY_FUNCTION__;
     return false;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
   }
- 
-  if(importedScene->HasMeshes()){
-    m_loadedFlags |= LOADERFLAGS::kMesh;
-    loadMeshes(model,importedScene);
-  }
-
+  Vector<SPtr<Material>> materials;
   if(importedScene->HasMaterials()){
     m_loadedFlags |= LOADERFLAGS::kTexture;
-    loadTextures(model,importedScene,file);
+    loadTextures(materials,importedScene,file);
   }
 
+  if(importedScene->HasMeshes()){
+    m_loadedFlags |= LOADERFLAGS::kMesh;
+    loadMeshes(materials,actor,importedScene);
+  }
+
+  
+
   if(importedScene->HasAnimations()){
-    m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
+    loadSkeletons(importedScene,file);
+    //m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }   
   ;
-  ResoureManager::instance().registerResourse(file.stem().generic_string(),model); 
-  model->setName(file.stem().generic_string());
+  //ResoureManager::instance().registerResourse(file.stem().generic_string(),model); 
+  //model->setName(file.stem().generic_string());
+
+  
 
   return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }
 
 bool
-Loader::loadResource(const Path & path)
+Loader::loadResource(const Path & path,WPtr<Actor> actor)
 {
   auto extencion = StringUtilities::toString(path.extension());
   if(extencion == ".png" || extencion == ".jpg"){
@@ -658,7 +723,7 @@ Loader::loadResource(const Path & path)
   }
 
   if(extencion == ".obj" || extencion == ".fbx"){
-    return loadScene(path);
+    return loadScene(path,actor);
   }
 
   if(extencion == ".wav"){

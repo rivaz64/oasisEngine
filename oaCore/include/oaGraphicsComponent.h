@@ -19,16 +19,9 @@ class OA_CORE_EXPORT GraphicsComponent :
   public Component
 {
  public:
+  
 
-  //void
-  //onAttach(SPtr<Actor> actor);
-   void
-  save(Serializer& serializer) override;
-
-  void
-  load(Serializer& serializer) override;
-
-  COMPONENT_TYPE::E
+  virtual COMPONENT_TYPE::E
   getType() override; 
 
   /**
@@ -38,23 +31,8 @@ class OA_CORE_EXPORT GraphicsComponent :
   void
   update(WPtr<Actor> actor) override;
 
-  /**
-   * @brief set the model of this component
-   * @param model 
-  */
-  FORCEINLINE void
-  setModel(WPtr<Model> model){
-    m_model = model;
-  }
-
-  /**
-   * @brief gets the model of this component
-   * @return 
-  */
-  FORCEINLINE const WPtr<Model>
-  getModel(){
-    return m_model;
-  }
+  void
+  onAttach(WPtr<Actor> actor) override;
 
   FORCEINLINE Transform&
   getTransform(){
@@ -73,12 +51,7 @@ class OA_CORE_EXPORT GraphicsComponent :
  private:
 
   /**
-   * @brief the model of the component
-  */
-  WPtr<Model> m_model;
-
-  /**
-   * @brief the transform of the model
+   * @brief the transform of the component
   */
   Transform m_transform;
 };

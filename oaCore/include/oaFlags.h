@@ -121,8 +121,8 @@ namespace COMPONENT_TYPE{
 enum E{
   kNone = 0,
   kGrpahics,
-  kSkeleton,
-  kAnimation,
+	kStaticMesh,
+	kSkeletalMesh,
 	kCamera
 };
 }

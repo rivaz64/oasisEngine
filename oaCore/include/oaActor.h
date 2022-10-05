@@ -145,7 +145,15 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   {
     return m_parent;
   }
-   
+  
+  SIZE_T
+  getNumOfComponents();
+
+  FORCEINLINE const Vector<WPtr<GraphicsComponent>>&
+  getGraphicComponents()
+  {
+    return m_graphicComponents;
+  }
  
  private:
 
@@ -174,11 +182,17 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   Map<COMPONENT_TYPE::E,Vector<SPtr<Component>>> m_components;
 
+  /**
+   * @brief all the components that are going to be rendered
+  */
+  Vector<WPtr<GraphicsComponent>> m_graphicComponents;
 
   /**
    * @brief the dirty flag of the local and global matrix
   */
   //uint8 dirtyFlag = 0;
+
+  friend class GraphicsComponent;
 };
 
 }

@@ -9,7 +9,6 @@
 #include "oaPrerequisitesCore.h"
 #include "oaResourse.h"
 #include "oaSphere.h"
-#include "oaMesh.h"
 
 namespace oaEngineSDK{
 
@@ -26,12 +25,6 @@ class OA_CORE_EXPORT Model :
    * @brief default constructor for the model
   */
   Model() = default;
-
-  /**
-   * @brief if the number of meshes is known
-   * @param numOfMeshes 
-  */
-  Model(SIZE_T numOfMeshes);
 
   ~Model() = default;
 
@@ -52,43 +45,23 @@ class OA_CORE_EXPORT Model :
    * @param mesh the new mesh
   */
   FORCEINLINE void
-  addMesh(SPtr<StaticMesh> mesh){
-    m_meshes.push_back(mesh);
+  setMesh(WPtr<StaticMesh> mesh){
+    m_mesh = mesh;
   }
 
   FORCEINLINE void
-  addMaterial(WPtr<Material> material){
-    m_materials.push_back(material);
+  setMaterial(WPtr<Material> material){
+    m_material = material;
   }
 
-  FORCEINLINE SIZE_T
-  getNumOfMeshes(){
-    return m_meshes.size();
+  FORCEINLINE WPtr<StaticMesh>
+  getMesh(){
+    return m_mesh;
   }
 
-  FORCEINLINE SIZE_T
-  getNumOfMaterials(){
-    return m_meshes.size();
-  }
-
-  FORCEINLINE void
-  setNumOfMeshes(SIZE_T n){
-    return m_meshes.resize(n);
-  }
-
-  FORCEINLINE const WPtr<StaticMesh>
-  getMesh(SIZE_T n){
-    return m_meshes[n];
-  }
-
-  FORCEINLINE const WPtr<Material>
-  getMaterial(SIZE_T n){
-    return m_materials[n];
-  }
-
-  FORCEINLINE void
-  setMaterial(WPtr<Material> material,SIZE_T n){
-    m_materials[n] = material;
+  FORCEINLINE WPtr<Material>
+  getMaterial(){
+    return m_material;
   }
 
   Vector3f 
@@ -102,18 +75,12 @@ class OA_CORE_EXPORT Model :
   /**
    * @brief the materials of the model
   */
-  Vector<WPtr<Material>> m_materials;
+  WPtr<Material> m_material;
 
   /**
    * @brief the meshes of the model
   */
-  Vector<SPtr<StaticMesh>> m_meshes;
-
-  friend class Loader;
-  friend class AnimationComponent;
-  friend class GraphicsComponent;
-  friend class SkeletalComponent;
-  friend class ResoureManager;
+  WPtr<StaticMesh> m_mesh;
 };
 
 }
