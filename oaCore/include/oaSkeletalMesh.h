@@ -15,15 +15,15 @@ namespace oaEngineSDK
 */
 struct OA_CORE_EXPORT SkeletalVertex{
 
-  ///**
-  // * @brief the ids of the bones that are afecting this vertex
-  //*/
-  //Vector4U ids;
-  //
-  ///**
-  // * @brief how much each bone afects this vertex
-  //*/
-  //Vector4f weights;
+  /**
+   * @brief the ids of the bones that are afecting this vertex
+  */
+  Vector4U ids;
+  
+  /**
+   * @brief how much each bone afects this vertex
+  */
+  Vector4f weights;
 
   /**
    * @brief the location in a tridimencional space of this vetrex

@@ -299,7 +299,7 @@ Deferred::setSkeletalMesh(WPtr<SkeletalModel> wModel)
   mesh->getIndexBuffer()->set();
   auto& bones = mesh->getBones();
   m_bones->write(bones.data());
-  //graphicsAPI.setVSBuffer(m_bones,3);
+  graphicsAPI.setVSBuffer(m_bones,3);
   auto& resourseManager = ResoureManager::instance();
   cast<Shader>(resourseManager.getResourse("v_animVertexShader")).lock()->set();
   setMaterial(material);

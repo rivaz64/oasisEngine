@@ -167,55 +167,55 @@ readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
     }
   }
 
-  //if(aMesh->HasBones()){
-  //
-  //  SIZE_T bonesNum=0;
-  //
-  //  for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
-  //
-  //    auto actualBone = aMesh->mBones[boneNum];
-  //
-  //    String boneName = actualBone->mName.C_Str();
-  //
-  //    SIZE_T boneIndex;
-  //
-  //    bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
-  //
-  //    //if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
-  //    //  boneIndex = bonesNum;
-  //    //  mesh->m_boneMaping.insert({boneName,bonesNum});
-  //    //  bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
-  //    //  //boneNames.push_back(boneName);
-  //    //  ++bonesNum;
-  //    //}
-  //    //else{
-  //    //
-  //    //  boneIndex = mesh->m_boneMaping[boneName];
-  //    //}
-  //    boneIndex = boneNum;
-  //    //boneIndex = skeleton->boneMaping[boneName];
-  //
-  //    actualBone = aMesh->mBones[boneIndex];
-  //
-  //    for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
-  //    
-  //      auto& actualWeight = actualBone->mWeights[weightNum];
-  //
-  //      SIZE_T vertexId = actualWeight.mVertexId;
-  //
-  //      auto& actualVertex = vertices[vertexId];
-  //
-  //      for(uint8 i = 0; i < 8; ++i){
-  //        if(((float*)&actualVertex.weights)[i] == 0){
-  //          ((uint32*)&actualVertex.ids)[i] = boneIndex;
-  //          ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
-  //          break;
-  //
-  //        }
-  //      } 
-  //    }
-  //  }
-  //}
+  if(aMesh->HasBones()){
+  
+    SIZE_T bonesNum=0;
+  
+    for(SIZE_T boneNum = 0; boneNum < aMesh->mNumBones; ++boneNum){
+  
+      auto actualBone = aMesh->mBones[boneNum];
+  
+      String boneName = actualBone->mName.C_Str();
+  
+      SIZE_T boneIndex;
+  
+      bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+  
+      //if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
+      //  boneIndex = bonesNum;
+      //  mesh->m_boneMaping.insert({boneName,bonesNum});
+      //  bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+      //  //boneNames.push_back(boneName);
+      //  ++bonesNum;
+      //}
+      //else{
+      //
+      //  boneIndex = mesh->m_boneMaping[boneName];
+      //}
+      boneIndex = boneNum;
+      //boneIndex = skeleton->boneMaping[boneName];
+  
+      actualBone = aMesh->mBones[boneIndex];
+  
+      for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
+      
+        auto& actualWeight = actualBone->mWeights[weightNum];
+  
+        SIZE_T vertexId = actualWeight.mVertexId;
+  
+        auto& actualVertex = vertices[vertexId];
+  
+        for(uint8 i = 0; i < 8; ++i){
+          if(((float*)&actualVertex.weights)[i] == 0){
+            ((uint32*)&actualVertex.ids)[i] = boneIndex;
+            ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
+            break;
+  
+          }
+        } 
+      }
+    }
+  }
 
   uint32 numIndices = aMesh->mNumFaces * 3;
   mesh->setIndexNum(numIndices);
