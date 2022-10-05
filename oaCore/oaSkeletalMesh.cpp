@@ -3,14 +3,24 @@
 #include "oaIndexBuffer.h"
 namespace oaEngineSDK
 {
+
 void 
 SkeletalMesh::save(Serializer& serializer)
 {
+  serializer.encodeVector(m_vertices);
+  serializer.encodeVector(m_index);
+  serializer.encodeVector(m_bones);
 }
+
 void 
 SkeletalMesh::load(Serializer& serializer)
 {
+  serializer.decodeVector(m_vertices);
+  serializer.decodeVector(m_index);
+  serializer.decodeVector(m_bones);
+  writeBuffers();
 }
+
 void
 SkeletalMesh::writeBuffers()
 {
