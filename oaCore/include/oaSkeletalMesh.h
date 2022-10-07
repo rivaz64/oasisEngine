@@ -103,6 +103,11 @@ class OA_CORE_EXPORT SkeletalMesh :
     return m_index.size();
   }
 
+  FORCEINLINE SIZE_T
+  getBonesNum(){
+    return m_boneNames.size();
+  }
+
   FORCEINLINE void
   setVertexAt(SIZE_T place,SkeletalVertex vertex){
     m_vertices[place] = vertex;
@@ -138,6 +143,11 @@ class OA_CORE_EXPORT SkeletalMesh :
     return m_bones;
   }
 
+  FORCEINLINE const Matrix4f&
+  getBoneAt(SIZE_T n){
+    return m_bones[n];
+  }
+
   FORCEINLINE const SPtr<VertexBuffer>&
   getVertexBuffer()
   {
@@ -149,6 +159,32 @@ class OA_CORE_EXPORT SkeletalMesh :
   {
     return m_indexB;
   }
+
+  FORCEINLINE bool
+  hasBone(const String& name)
+  {
+    return find(m_boneNames.begin(), m_boneNames.end(), name) != m_boneNames.end();
+  }
+
+  FORCEINLINE void
+  addBone(const String& name, const Matrix4f& transform)
+  {
+    m_bones[m_boneNames.size()] = transform;
+    m_boneNames.push_back(name);
+  }
+
+  FORCEINLINE SIZE_T
+  getBoneId(const String& name)
+  {
+    return find(m_boneNames.begin(), m_boneNames.end(), name) - m_boneNames.begin();
+  }
+
+  FORCEINLINE const String&
+  getBoneName(SIZE_T id)
+  {
+    return m_boneNames[id];
+  }
+
  private:
   /**
    * @brief the vertices of this mesh
@@ -175,6 +211,12 @@ class OA_CORE_EXPORT SkeletalMesh :
   */
   Vector<Matrix4f> m_bones;
 
+  
+  /**
+   * @brief the name of each bone
+  */
+  Vector<String> m_boneNames;
+  public:
   //Map<String,uint32> m_boneMaping;
   //
   //Vector<Matrix4f> m_ofset;

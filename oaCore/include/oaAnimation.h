@@ -16,12 +16,7 @@ namespace oaEngineSDK{
 /**
  * @brief an animation channel
 */
-struct AnimNode{
-  
-  /**
-   * @brief the name of this node
-  */
-  String name;
+struct OA_CORE_EXPORT AnimChannel{
 
   /**
    * @brief the keyframes of the locations
@@ -43,13 +38,11 @@ struct AnimNode{
 /**
  * @brief a class to store animations
 */
-class Animation :
+class OA_CORE_EXPORT Animation :
   public Resourse
 {
 
  public:
-  
-  String m_name;
 
   RESOURSE_TYPE::E
   getType() override
@@ -57,7 +50,40 @@ class Animation :
     return RESOURSE_TYPE::kAnimation;
   }
   
- private:
+  FORCEINLINE void
+  setDuration(float duration)
+  {
+    m_duration = duration;
+  }
+
+  FORCEINLINE void
+  setTicksPerSecond(float ticksPerSecond)
+  {
+    m_secondsPerTick = 1.f/ticksPerSecond;
+  }
+
+  FORCEINLINE void
+  addChannel(const String& name, SPtr<AnimChannel> node)
+  {
+    m_channels.insert({name,node});
+  }
+
+  FORCEINLINE float
+  getSecondPerTicks()
+  {
+    return m_secondsPerTick;
+  }
+
+  FORCEINLINE bool 
+  hasChannel(const String& name)
+  {
+    return m_channels.find(name) != m_channels.end();
+  }
+
+  FORCEINLINE Matrix4f
+  getTransformOfChannelAtTime(const String& name, float time);
+
+ public:
 
   /**
    * @brief the ticks this animation has 
@@ -67,15 +93,13 @@ class Animation :
   /**
    * @brief how many tiks have to be executed each second
   */
-  float m_ticksPerSecond;
+  float m_secondsPerTick;
 
   /**
    * @brief the keyFrames of the animation
   */
-  Map<String,SPtr<AnimNode>> m_nodes;
+  Map<String,SPtr<AnimChannel>> m_channels;
 
-  friend class Model;
-  friend class AnimationComponent;
   friend class Loader;
 };
 

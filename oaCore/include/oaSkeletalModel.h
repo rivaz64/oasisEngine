@@ -18,23 +18,48 @@ public:
   }
 
   FORCEINLINE void
-  setMesh(WPtr<SkeletalMesh> mesh){
-    m_mesh = mesh;
+  addMesh(WPtr<SkeletalMesh> mesh){
+    m_meshes.push_back(mesh);
   }
 
   FORCEINLINE void
-  setMaterial(WPtr<Material> material){
-    m_material = material;
+  addMaterial(WPtr<Material> material){
+    m_materials.push_back(material);
+  }
+
+  FORCEINLINE void
+  setSkeleton(WPtr<Skeleton> skeleton){
+    m_skeleton = skeleton;
+  }
+
+  FORCEINLINE void
+  setAnimation(WPtr<Animation> animation){
+    m_animation = animation;
   }
 
   FORCEINLINE WPtr<SkeletalMesh>
-  getMesh(){
-    return m_mesh;
+  getMesh(SIZE_T n){
+    return m_meshes[n];
   }
 
   FORCEINLINE WPtr<Material>
-  getMaterial(){
-    return m_material;
+  getMaterial(SIZE_T n){
+    return m_materials[n];
+  }
+
+  FORCEINLINE WPtr<Skeleton>
+  getSkeleton(){
+    return m_skeleton;
+  }
+
+  FORCEINLINE WPtr<Animation>
+  getAnimation(){
+    return m_animation;
+  }
+
+  FORCEINLINE SIZE_T
+  getNumOfMeshes(){
+    return m_meshes.size();
   }
 
  private:
@@ -42,12 +67,22 @@ public:
   /**
    * @brief the materials of the model
   */
-  WPtr<Material> m_material;
+  Vector<WPtr<Material>> m_materials;
 
   /**
    * @brief the meshes of the model
   */
-  WPtr<SkeletalMesh> m_mesh;
+  Vector<WPtr<SkeletalMesh>> m_meshes;
+
+  /**
+   * @brief the skeleton of this model
+  */
+  WPtr<Skeleton> m_skeleton;
+
+  /**
+   * @brief the animation of this model
+  */
+  WPtr<Animation> m_animation;
 
 };
 

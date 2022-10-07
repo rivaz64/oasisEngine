@@ -125,7 +125,7 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   }
 
   template<class T>
-  Vector<SPtr<Component>>
+  const Vector<SPtr<Component>>&
   getComponents(){
     T temp;
     if(m_components.find(temp.getType()) == m_components.end()){

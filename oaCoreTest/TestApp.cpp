@@ -608,6 +608,13 @@ TestApp::updateImGui()
           if(!wModel.expired()){
             auto model = wModel.lock();
             ImGui::Text(model->getName().c_str());
+
+
+
+            if(ImGui::DragFloat("at time", &graphicsComponent->m_actualTime,1.f/6.f)){
+              graphicsComponent->setAtSecond(graphicsComponent->m_actualTime);
+            }
+
             auto& transform = graphicsComponent->getTransform();
             auto vec = transform.getLocation();
             if(ImGui::DragFloat3("location Model",&vec.x)){

@@ -51,4 +51,5 @@ struct SimpleVertex;
 class SkeletalModel;
 class SkeletalMesh;
 class Resourse;
+class SkeletalMeshComponent;
 }

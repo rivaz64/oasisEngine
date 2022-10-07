@@ -59,11 +59,12 @@ loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 
   sNode->transform = reinterpret_cast<Matrix4f*>(&node->mTransformation)->transposed();
 
-  skeleton->m_boneMaping.insert({sNode->name,sNode->transform});
+  skeleton->addBone(sNode);//m_boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
   for(uint32 i = 0; i < node->mNumChildren; ++i){
     sNode->childs[i] = makeSPtr<SkeletalNode>();
+    sNode->childs[i]->parent = sNode;
     loadSkeleton(node->mChildren[i],sNode->childs[i],skeleton);
   }
 }
@@ -129,7 +130,7 @@ readStaticMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
 }
 
 void
-readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
+readSkeletalMesh(SPtr<Material> material,SPtr<SkeletalModel> model, aiMesh* aMesh, const String& name){
 
   auto mesh = makeSPtr<SkeletalMesh>();
 
@@ -179,12 +180,21 @@ readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
   
       SIZE_T boneIndex;
   
-      bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
+      //bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
   
+      if(!mesh->hasBone(boneName)){
+        mesh->addBone(boneName,*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+        boneIndex = boneNum;
+      }
+      else{
+        boneIndex = mesh->getBoneId(boneName);
+      }
+
       //if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
       //  boneIndex = bonesNum;
       //  mesh->m_boneMaping.insert({boneName,bonesNum});
-      //  bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+      //  //bones.push_back(*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+      //  bones[bonesNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
       //  //boneNames.push_back(boneName);
       //  ++bonesNum;
       //}
@@ -192,10 +202,10 @@ readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
       //
       //  boneIndex = mesh->m_boneMaping[boneName];
       //}
-      boneIndex = boneNum;
+      //boneIndex = boneNum;
       //boneIndex = skeleton->boneMaping[boneName];
-  
-      actualBone = aMesh->mBones[boneIndex];
+      
+      //actualBone = aMesh->mBones[boneIndex];
   
       for(SIZE_T weightNum = 0; weightNum < actualBone->mNumWeights; ++weightNum){
       
@@ -205,12 +215,11 @@ readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
   
         auto& actualVertex = vertices[vertexId];
   
-        for(uint8 i = 0; i < 8; ++i){
+        for(uint8 i = 0; i < 4; ++i){
           if(((float*)&actualVertex.weights)[i] == 0){
             ((uint32*)&actualVertex.ids)[i] = boneIndex;
             ((float*)&actualVertex.weights)[i] = actualWeight.mWeight;
             break;
-  
           }
         } 
       }
@@ -231,20 +240,26 @@ readSkeletalMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
   }
   //ResoureManager::instance().m_meshes.insert({model->getName()})
   mesh->writeBuffers();
-  auto model = makeSPtr<SkeletalModel>();
-  model->setMesh(mesh);
-  model->setMaterial(material);
-  ResoureManager::instance().registerResourse(aMesh->mName.C_Str(),mesh);
-  ResoureManager::instance().registerResourse("m_"+String(aMesh->mName.C_Str()),model);
+  //auto model = makeSPtr<SkeletalModel>();
+  model->addMesh(mesh);
+  model->addMaterial(material);
+  
+  auto& resourceManager = ResoureManager::instance();
+  resourceManager.registerResourse(aMesh->mName.C_Str(),mesh);
+  resourceManager.registerResourse("m_"+String(aMesh->mName.C_Str()),model);
+  
+  model->setSkeleton(cast<Skeleton>(resourceManager.getResourse(String("s_")+name)));
 
-  auto component = makeSPtr<SkeletalMeshComponent>();
-  component->setModel(model);
-  actor->attachComponent(component);
+  model->setAnimation(cast<Animation>(resourceManager.getResourse(String("a_")+name)));
+
+  
+  //actor->attachComponent(component);
 }
 
 void 
-loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* loadedScene)
+loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* loadedScene,const Path& path)
 {
+  auto model = makeSPtr<SkeletalModel>();
   for(uint32 numMesh = 0; numMesh < loadedScene->mNumMeshes; ++numMesh){
 
     auto& aMesh = loadedScene->mMeshes[numMesh];
@@ -254,7 +269,8 @@ loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* l
     //model->addMaterial(ResoureManager::instance().m_materials["default"]);
 
     if(aMesh->HasBones()){
-      readSkeletalMesh(materials[numMesh],actor,aMesh);
+      readSkeletalMesh(materials[numMesh],model,aMesh,path.stem().string());
+      
     }
     else{
       readStaticMesh(materials[numMesh],actor,aMesh);
@@ -262,6 +278,12 @@ loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* l
 
     
   }
+  if(model->getNumOfMeshes() != 0){
+    auto component = makeSPtr<SkeletalMeshComponent>(model);
+    component->setAtSecond(0);
+    actor->attachComponent(component);
+  }
+  
 }
 
 bool
@@ -562,11 +584,11 @@ loadSkeletons(const aiScene* loadedScene,const Path& path)
 
   manager.registerResourse(String("s_")+path.stem().string(),skeleton);
 }
-/*
+
 void 
-loadAnimations()
+loadAnimations(const aiScene* loadedScene,const Path& path)
 {
-  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
+  const aiScene* scene = static_cast<const aiScene*>(loadedScene);
 
   for(uint32 animNum = 0; animNum < scene->mNumAnimations; ++animNum){
 
@@ -574,17 +596,17 @@ loadAnimations()
    
     auto animation = makeSPtr<Animation>();
    
-    animation->m_duration = static_cast<float>(actualAnim->mDuration);
+    animation->setDuration(static_cast<float>(actualAnim->mDuration));
    
-    animation->m_ticksPerSecond = 1.f/static_cast<float>(actualAnim->mTicksPerSecond);
+    animation->setTicksPerSecond(static_cast<float>(actualAnim->mTicksPerSecond));
    
     for(uint32 numChannel = 0; numChannel < actualAnim->mNumChannels; ++numChannel){
       
       auto actualChannel = actualAnim->mChannels[numChannel];
    
-      auto node = makeSPtr<AnimNode>();
+      auto node = makeSPtr<AnimChannel>();
    
-      node->name = actualChannel->mNodeName.C_Str();
+      //node->name = actualChannel->mNodeName.C_Str();
    
       node->locations.resize(actualChannel->mNumPositionKeys);
    
@@ -628,17 +650,13 @@ loadAnimations()
         {static_cast<float>(actualChannel->mRotationKeys[i].mTime),q};
       }
    
-      animation->m_nodes.insert({actualChannel->mNodeName.C_Str(),node});
+      animation->addChannel(actualChannel->mNodeName.C_Str(),node);
       
     }
    
-    ResoureManager::instancePtr()->m_animations.insert({m_file.getCompletePath(),animation});
-    animation->m_name = m_file.getName();
+    ResoureManager::instance().registerResourse("a_"+path.stem().string(),animation);
   }
-
 }
-
-}*/
 
 
 void
@@ -694,22 +712,19 @@ Loader::loadScene(const Path& file,WPtr<Actor> wActor)
     loadTextures(materials,importedScene,file);
   }
 
-  if(importedScene->HasMeshes()){
-    m_loadedFlags |= LOADERFLAGS::kMesh;
-    loadMeshes(materials,actor,importedScene);
-  }
-
-  
-
   if(importedScene->HasAnimations()){
     loadSkeletons(importedScene,file);
+    loadAnimations(importedScene,file);
     //m_loadedFlags |= LOADERFLAGS::kAnimation | LOADERFLAGS::kSkeleton;
   }   
-  ;
+
+  if(importedScene->HasMeshes()){
+    m_loadedFlags |= LOADERFLAGS::kMesh;
+    loadMeshes(materials,actor,importedScene,file);
+  }
+
   //ResoureManager::instance().registerResourse(file.stem().generic_string(),model); 
   //model->setName(file.stem().generic_string());
-
-  
 
   return true;//static_cast<LOADERFLAGS::E>(m_loadedFlags);
 }

@@ -285,25 +285,35 @@ Deferred::setStaticMesh(WPtr<Model> wModel)
 }
 
 void
-Deferred::setSkeletalMesh(WPtr<SkeletalModel> wModel)
+Deferred::setSkeletalMesh(WPtr<SkeletalMeshComponent> wComponent)
 {
   auto& graphicsAPI = GraphicAPI::instance();
+  if(wComponent.expired()) return;
+  auto component = wComponent.lock();
+  auto wModel = component->getModel();
   if(wModel.expired()) return;
   auto model = wModel.lock();
-  auto wMesh = model->getMesh();
-  auto wMaterial = model->getMaterial();
-  if(wMesh.expired() || wModel.expired()) return;
-  auto mesh = wMesh.lock();
-  auto material = wMaterial.lock();
-  mesh->getVertexBuffer()->set();
-  mesh->getIndexBuffer()->set();
-  auto& bones = mesh->getBones();
-  m_bones->write(bones.data());
-  graphicsAPI.setVSBuffer(m_bones,3);
-  auto& resourseManager = ResoureManager::instance();
-  cast<Shader>(resourseManager.getResourse("v_animVertexShader")).lock()->set();
-  setMaterial(material);
-  graphicsAPI.drawIndex(mesh->getIndexNum());
+  //auto wMesh = model->getMesh();
+  //auto wMaterial = model->getMaterial();
+  //if(wMesh.expired() || wModel.expired()) return;
+
+  auto numOfMeshes = model->getNumOfMeshes();
+
+  for(SIZE_T i = 0; i<numOfMeshes; ++i){
+
+    auto mesh = model->getMesh(i).lock();
+    auto material = model->getMaterial(i).lock();
+    mesh->getVertexBuffer()->set();
+    mesh->getIndexBuffer()->set();
+    auto& bones = component->getBones(i);
+    m_bones->write(bones.data());
+    graphicsAPI.setVSBuffer(m_bones,3);
+    auto& resourseManager = ResoureManager::instance();
+    cast<Shader>(resourseManager.getResourse("v_animVertexShader")).lock()->set();
+    setMaterial(material);
+    graphicsAPI.drawIndex(mesh->getIndexNum());
+  }
+  
 }
 
 void
@@ -331,7 +341,7 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
         setStaticMesh(cast<StaticMeshComponent>(component)->getModel());
       }
       else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
-        setSkeletalMesh(cast<SkeletalMeshComponent>(component)->getModel());
+        setSkeletalMesh(cast<SkeletalMeshComponent>(component));
       }
     }
     vertex(child,frustum);

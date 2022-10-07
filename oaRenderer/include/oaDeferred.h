@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <oaPrerequisitesCore.h>
 #include <oaRenderer.h>
 #include <oaScene.h>
 
@@ -38,7 +39,7 @@ class Deferred :
   setStaticMesh(WPtr<Model> model);
 
   void
-  setSkeletalMesh(WPtr<SkeletalModel> model);
+  setSkeletalMesh(WPtr<SkeletalMeshComponent> component);
 
   /**
    * @brief all the vertex shaders
