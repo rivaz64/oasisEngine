@@ -174,6 +174,8 @@ class OA_CORE_EXPORT BaseApp
   void* m_window;
 
   lua_State *luaState;
+
+  bool play = false;
 };
 
 }

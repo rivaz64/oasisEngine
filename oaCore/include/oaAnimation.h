@@ -59,7 +59,7 @@ class OA_CORE_EXPORT Animation :
   FORCEINLINE void
   setTicksPerSecond(float ticksPerSecond)
   {
-    m_secondsPerTick = 1.f/ticksPerSecond;
+    m_ticksPerSecond = ticksPerSecond;
   }
 
   FORCEINLINE void
@@ -69,9 +69,15 @@ class OA_CORE_EXPORT Animation :
   }
 
   FORCEINLINE float
-  getSecondPerTicks()
+  getTicksPerSecond()
   {
-    return m_secondsPerTick;
+    return m_ticksPerSecond;
+  }
+
+  FORCEINLINE float
+  getDuration()
+  {
+    return m_duration;
   }
 
   FORCEINLINE bool 
@@ -93,7 +99,7 @@ class OA_CORE_EXPORT Animation :
   /**
    * @brief how many tiks have to be executed each second
   */
-  float m_secondsPerTick;
+  float m_ticksPerSecond;
 
   /**
    * @brief the keyFrames of the animation

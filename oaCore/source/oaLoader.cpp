@@ -280,7 +280,7 @@ loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* l
   }
   if(model->getNumOfMeshes() != 0){
     auto component = makeSPtr<SkeletalMeshComponent>(model);
-    component->setAtSecond(0);
+    component->setAtTick(0);
     actor->attachComponent(component);
   }
   

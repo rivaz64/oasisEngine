@@ -41,6 +41,7 @@
 #include <oaStaticMeshComponent.h>
 #include <oaSkeletalMeshComponent.h>
 #include <oaSkeletalModel.h>
+#include <oaCrowdComponent.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -379,6 +380,8 @@ TestApp::onUpdate(float delta)
   //}
   m_camera->update();
 
+  
+
   newImGuiFrame();
   updateImGui();
 
@@ -510,6 +513,12 @@ TestApp::updateImGui()
 
   auto shadowMap = renderer.getShadowMap();
 
+  ImGui::Begin("game");
+  {
+    ImGui::Checkbox("play",&play);
+  }
+  ImGui::End();
+
   ImGui::Begin("shaders");
   if(ImGui::Button("ReloadShaders")){
     resourceManager.loadDefaultShaders();
@@ -611,8 +620,8 @@ TestApp::updateImGui()
 
 
 
-            if(ImGui::DragFloat("at time", &graphicsComponent->m_actualTime,1.f/6.f)){
-              graphicsComponent->setAtSecond(graphicsComponent->m_actualTime);
+            if(ImGui::DragFloat("at time", &graphicsComponent->m_actualTick,1.f/6.f)){
+              graphicsComponent->setAtTick(graphicsComponent->m_actualTick);
             }
 
             auto& transform = graphicsComponent->getTransform();
@@ -634,6 +643,12 @@ TestApp::updateImGui()
       }
       
 
+    }
+
+    wComponent = selectedActor->getComponent<CrowdComponent>();
+
+    if (!wComponent.expired() && ImGui::CollapsingHeader("crowd")){
+      //auto component
     }
 
     wComponent = selectedActor->getComponent<SkeletalComponent>();
@@ -910,6 +925,11 @@ TestApp::updateImGui()
 
     if(ImGui::Button("Skeletal Mesh")){
       selectedActor->attachComponent(makeSPtr<SkeletalMeshComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("crowd")){
+      selectedActor->attachComponent(makeSPtr<CrowdComponent>());
       isAddingComponent = false;
     }
 
@@ -1242,6 +1262,7 @@ TestApp::updateImGui()
 
   }
   ImGui::End();
+
 
 }
 

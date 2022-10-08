@@ -192,6 +192,12 @@
     <ClInclude Include="include\oaSkeletalMeshComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\oaCrowdSim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaCrowdComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\oaTexture.cpp">
@@ -336,6 +342,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaSkeletalModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaCrowdSim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oaCrowdComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
