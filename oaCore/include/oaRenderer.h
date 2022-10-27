@@ -21,9 +21,6 @@ class OA_CORE_EXPORT Renderer :
   render(WPtr<Scene> /*scene*/,
          WPtr<Camera> /*camForView*/,
          WPtr<Camera> /*camForFrustrum*/, 
-         const Vector<DirectionalLight>& /*directionalLights*/,
-         const Vector<PointLight>& /*pointLights*/,
-         const Vector<SpotLight>& /*spotLights*/,
          const Vector4f& /*config*/){}
 
   virtual void

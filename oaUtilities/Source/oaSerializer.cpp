@@ -2,6 +2,32 @@
 
 namespace oaEngineSDK{
 
+bool Serializer::open(Path path,bool write)
+{
+  //int flags;
+  //String firm;
+  //auto finalPath = m_path;
+  //finalPath += path;
+  //if(write){
+  //  flags = fstream::out | ios::binary;
+  //  firm = "oasisFile";
+  //  file.open((m_path+path).c_str(),flags);
+  //  file.write(firm.c_str(),firm.size()*sizeof(char));
+  //}
+  //else{
+  //  flags = fstream::in | ios::binary;
+  //  firm.resize(9);
+  //  SIZE_T nameData = reinterpret_cast<SIZE_T>(firm.data());
+  //  file.open(path.c_str(),flags);
+  //  file.read(reinterpret_cast<char*>(nameData),sizeof(char)*9);
+  //  if(firm != "oasisFile"){
+  //    return false;
+  //  }
+  //}
+
+  return true;
+}
+
 bool
 Serializer::init(const Path& path,bool write)
 {

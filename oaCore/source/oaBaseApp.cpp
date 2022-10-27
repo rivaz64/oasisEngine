@@ -96,7 +96,7 @@ BaseApp::onShutDown()
   //EventSystem::shutDown();
   GraphicAPI::shutDown();
   OmniverseApi::shutDown();
-  CrowdSim::shutDown();
+  //CrowdSim::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
   AudioAPI::shutDown();

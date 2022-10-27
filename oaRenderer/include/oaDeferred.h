@@ -9,7 +9,7 @@
 #include <oaPrerequisitesCore.h>
 #include <oaRenderer.h>
 #include <oaScene.h>
-
+#include <oaLights.h>
 namespace oaEngineSDK{
 
 class Deferred :
@@ -24,9 +24,6 @@ class Deferred :
   render(WPtr<Scene> scene,
          WPtr<Camera> camForView,
          WPtr<Camera> camForFrustrum, 
-         const Vector<DirectionalLight>& directionalLights,
-         const Vector<PointLight>& pointLights,
-         const Vector<SpotLight>& spotLights,
          const Vector4f& config) override;
 
   void 
@@ -40,6 +37,9 @@ class Deferred :
 
   void
   setSkeletalMesh(WPtr<SkeletalMeshComponent> component);
+
+  //void
+  //setDirectionalLight(const DirectionalLight& component,);
 
   /**
    * @brief all the vertex shaders
@@ -98,7 +98,7 @@ class Deferred :
   aplylights();
 
   void 
-  directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights);
+  directionalLight(const Matrix4f& viewMatrix);
 
   void 
   pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
@@ -211,6 +211,8 @@ class Deferred :
   Vector<SPtr<Texture>> m_shadowMaps;
 
   SPtr<Camera> m_shadowsCamera;
+
+  Vector<DirectionalLight> m_directionalLights;
 };
 
 }

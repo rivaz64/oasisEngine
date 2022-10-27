@@ -53,13 +53,13 @@ void
 loadSkeleton(aiNode* node,SPtr<SkeletalNode> sNode,SPtr<Skeleton> skeleton)
 {
 
-  sNode->name = node->mName.C_Str();
+  //sNode->name = ;
   
   print(node->mName.C_Str());
 
   sNode->transform = reinterpret_cast<Matrix4f*>(&node->mTransformation)->transposed();
 
-  skeleton->addBone(sNode);//m_boneMaping.insert({sNode->name,sNode->transform});
+  skeleton->addBone(sNode,node->mName.C_Str());//m_boneMaping.insert({sNode->name,sNode->transform});
 
   sNode->childs.resize(node->mNumChildren);
   for(uint32 i = 0; i < node->mNumChildren; ++i){
@@ -132,7 +132,11 @@ readStaticMesh(SPtr<Material> material,SPtr<Actor> actor, aiMesh* aMesh){
 void
 readSkeletalMesh(SPtr<Material> material,SPtr<SkeletalModel> model, aiMesh* aMesh, const String& name){
 
+  auto& resourceManager = ResoureManager::instance();
+
   auto mesh = makeSPtr<SkeletalMesh>();
+
+  auto skeleton = cast<Skeleton>(resourceManager.getResourse(String("s_")+name)).lock();
 
   auto& bones = mesh->getBones();
 
@@ -177,17 +181,19 @@ readSkeletalMesh(SPtr<Material> material,SPtr<SkeletalModel> model, aiMesh* aMes
       auto actualBone = aMesh->mBones[boneNum];
   
       String boneName = actualBone->mName.C_Str();
-  
+      
+      uint32 boneId = skeleton->getBoneId(boneName);
+
       SIZE_T boneIndex;
   
       //bones[boneNum] = *reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix);
   
-      if(!mesh->hasBone(boneName)){
-        mesh->addBone(boneName,*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
+      if(!mesh->hasBone(boneId)){
+        mesh->addBone(boneId,*reinterpret_cast<Matrix4f*>(&actualBone->mOffsetMatrix));
         boneIndex = boneNum;
       }
       else{
-        boneIndex = mesh->getBoneId(boneName);
+        boneIndex = mesh->getBoneId(boneId);
       }
 
       //if(mesh->m_boneMaping.find(boneName) == mesh->m_boneMaping.end()){
@@ -244,11 +250,11 @@ readSkeletalMesh(SPtr<Material> material,SPtr<SkeletalModel> model, aiMesh* aMes
   model->addMesh(mesh);
   model->addMaterial(material);
   
-  auto& resourceManager = ResoureManager::instance();
+  
   resourceManager.registerResourse(aMesh->mName.C_Str(),mesh);
   resourceManager.registerResourse("m_"+String(aMesh->mName.C_Str()),model);
   
-  model->setSkeleton(cast<Skeleton>(resourceManager.getResourse(String("s_")+name)));
+  model->setSkeleton(skeleton);
 
   model->setAnimation(cast<Animation>(resourceManager.getResourse(String("a_")+name)));
 
@@ -512,61 +518,8 @@ loadTextures(Vector<SPtr<Material>>& materials,const aiScene* loadedScene,const 
 
 }
 
-/*
-void 
-loadTextures(SPtr<Model> model)
-{
-  const aiScene* scene = static_cast<const aiScene*>(m_sceneI);
-  auto& manager = ResoureManager::instance();
-  for(uint32 numMesh = 0; numMesh < scene->mNumMeshes; ++numMesh){
-    auto aMesh = scene->mMeshes[numMesh];
-    SPtr<Mesh> oaMesh = makeSPtr<Mesh>();
-
-    aiString f;
-
-    String TextureName;
-
-    Path TextureFile;
-
-    auto material = manager.m_materials["default"];
-
-    if(m_loadedFlags & LOADERFLAGS::kAnimation){
-      material = manager.m_materials["animation"];
-    }
-
-    scene->mMaterials[aMesh->mMaterialIndex]->Get(AI_MATKEY_NAME,f);
-    //TextureName = f.data-4;
-    TextureName = f.C_Str();
-    print(TextureName);
-    TextureFile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+".png");
-    if(manager.loadTexture(TextureFile)){
-      auto mat = copy(material);
-      mat->m_diffuse = manager.m_textures[TextureFile.getCompletePath()];
-      manager.m_materials.insert({TextureName,mat});
-      model->m_materials.push_back(mat);
-
-      Path texfile;
-
-      texfile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"S.png");
-
-      if(manager.loadTexture(texfile)){
-        mat->m_specular = manager.m_textures[texfile.getCompletePath()];
-      }
-
-      texfile.setCompletePath(m_file.getDrive()+m_file.getDirection()+TextureName+"N.png");
-
-      if(manager.loadTexture(texfile)){
-        mat->m_normalMap = manager.m_textures[texfile.getCompletePath()];
-      }
-    }
-    else{
-      model->m_materials.push_back(material);
-    }
-    
-  }
-  
-}
-*/
+//void
+//loadMaterial()
 
 void 
 loadSkeletons(const aiScene* loadedScene,const Path& path)
@@ -590,6 +543,10 @@ loadAnimations(const aiScene* loadedScene,const Path& path)
 {
   const aiScene* scene = static_cast<const aiScene*>(loadedScene);
 
+  auto& manager = ResoureManager::instance();
+
+  auto skeleton = cast<Skeleton>(manager.getResourse(String("s_")+path.stem().string()).lock());
+
   for(uint32 animNum = 0; animNum < scene->mNumAnimations; ++animNum){
 
     auto actualAnim = scene->mAnimations[animNum];
@@ -609,30 +566,36 @@ loadAnimations(const aiScene* loadedScene,const Path& path)
       //node->name = actualChannel->mNodeName.C_Str();
    
       node->locations.resize(actualChannel->mNumPositionKeys);
+      print(StringUtilities::floatToString(actualChannel->mNumPositionKeys));
    
       for(uint32 i = 0; i < actualChannel->mNumPositionKeys; ++i){
-        Vector3f pos; 
+        Vector4f pos; 
         pos.x = actualChannel->mPositionKeys[i].mValue.x;
         pos.y = actualChannel->mPositionKeys[i].mValue.y;
         pos.z = actualChannel->mPositionKeys[i].mValue.z;
+        pos.z = 0;
         node->locations[i] = 
         {static_cast<float>(actualChannel->mPositionKeys[i].mTime),
         pos};
+
       }
    
       node->scales.resize(actualChannel->mNumScalingKeys);
+      print(StringUtilities::floatToString(actualChannel->mNumScalingKeys));
    
       for(uint32 i = 0; i < actualChannel->mNumScalingKeys; ++i){
-        Vector3f sca; 
+        Vector4f sca; 
         sca.x = actualChannel->mScalingKeys[i].mValue.x;
         sca.y = actualChannel->mScalingKeys[i].mValue.y;
         sca.z = actualChannel->mScalingKeys[i].mValue.z;
+        sca.z = 0;
         node->scales[i] =
         {static_cast<float>(actualChannel->mScalingKeys[i].mTime),
         sca};
       }
    
       node->rotations.resize(actualChannel->mNumRotationKeys);
+      print(StringUtilities::floatToString(actualChannel->mNumRotationKeys));
    
       for(uint32 i = 0; i < actualChannel->mNumRotationKeys; ++i){
         Quaternion q;
@@ -650,8 +613,8 @@ loadAnimations(const aiScene* loadedScene,const Path& path)
         {static_cast<float>(actualChannel->mRotationKeys[i].mTime),q};
       }
    
-      animation->addChannel(actualChannel->mNodeName.C_Str(),node);
-      
+      animation->addChannel(skeleton->getBoneId(actualChannel->mNodeName.C_Str()),node);
+      print("");
     }
    
     ResoureManager::instance().registerResourse("a_"+path.stem().string(),animation);

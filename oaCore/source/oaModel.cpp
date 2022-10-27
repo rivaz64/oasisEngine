@@ -14,6 +14,7 @@ namespace oaEngineSDK{
 void 
 Model::save(Serializer& serializer)
 { 
+  serializer.encodeNumber(getType());
   serializer.encodeString(getName());
 
   if(!m_mesh.expired()){
@@ -39,20 +40,22 @@ Model::save(Serializer& serializer)
 void 
 Model::load(Serializer& serializer)
 {
-  auto name = serializer.decodeString();
-  ResoureManager::instance().registerResourse(name,shared_from_this());
+  setName(serializer.decodeString());
   auto b = serializer.decodeNumber();
-
+  auto& resourses = ResoureManager::instance();
   if(b == 1){
     auto meshName = serializer.decodeString();
-    m_mesh = cast<StaticMesh>(ResoureManager::instance().getResourse(meshName));
+    m_mesh = cast<StaticMesh>(resourses.getResourse(meshName));
   }
 
   b = serializer.decodeNumber();
 
   if(b == 1){
     auto materialhName = serializer.decodeString();
-    m_material = cast<Material>(ResoureManager::instance().getResourse(materialhName));
+    m_material = cast<Material>(resourses.getResourse(materialhName));
+  }
+  else{
+    m_material = resourses.m_defaultMaterial;
   }
   
 }

@@ -19,6 +19,14 @@ class OA_UTILITY_EXPORT Serializer
 {
  public:
 
+  FORCEINLINE void setPath(const Path& path)
+  {
+    m_path = path;
+  }
+
+  bool 
+  open(Path path,bool write);
+
   bool 
   init(const Path& path,bool write);
 
@@ -93,6 +101,8 @@ class OA_UTILITY_EXPORT Serializer
   }
 
   FStream file;
+
+  Path m_path;
 };
 
 }

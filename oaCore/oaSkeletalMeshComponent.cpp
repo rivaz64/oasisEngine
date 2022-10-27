@@ -52,8 +52,8 @@ readNodeHeirarchy(
   )
 {
   Matrix4f nodeTransform = Matrix4f::IDENTITY;
-  if(animation->hasChannel(node->name)){
-    nodeTransform = animation->getTransformOfChannelAtTime(node->name,time);
+  if(animation->hasChannel(node->id)){
+    nodeTransform = animation->getTransformOfChannelAtTime(node->id,time);
   }
   auto globalTransform = parentTransform*nodeTransform;
 
@@ -67,8 +67,8 @@ readNodeHeirarchy(
 
     auto mesh = wMesh.lock();
 
-    if(mesh->hasBone(node->name)){
-      auto id = mesh->getBoneId(node->name);
+    if(mesh->hasBone(node->id)){
+      auto id = mesh->getBoneId(node->id);
       bones[i][id] = globalInverse*globalTransform*mesh->getBoneAt(id);
     }
   }

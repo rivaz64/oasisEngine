@@ -123,6 +123,7 @@ enum E{
   kGrpahics,
 	kStaticMesh,
 	kSkeletalMesh,
+	kDirectionalLight,
 	kCamera
 };
 }

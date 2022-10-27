@@ -1,6 +1,6 @@
 #pragma once
 #include "oaComponent.h"
-
+#include "oaVector2f.h"
 namespace oaEngineSDK
 {
 

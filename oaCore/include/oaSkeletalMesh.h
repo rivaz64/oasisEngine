@@ -105,7 +105,7 @@ class OA_CORE_EXPORT SkeletalMesh :
 
   FORCEINLINE SIZE_T
   getBonesNum(){
-    return m_boneNames.size();
+    return m_ids.size();
   }
 
   FORCEINLINE void
@@ -161,28 +161,28 @@ class OA_CORE_EXPORT SkeletalMesh :
   }
 
   FORCEINLINE bool
-  hasBone(const String& name)
+  hasBone(uint32 id)
   {
-    return find(m_boneNames.begin(), m_boneNames.end(), name) != m_boneNames.end();
+    return find(m_ids.begin(), m_ids.end(), id) != m_ids.end();
   }
 
   FORCEINLINE void
-  addBone(const String& name, const Matrix4f& transform)
+  addBone(uint32 id, const Matrix4f& transform)
   {
-    m_bones[m_boneNames.size()] = transform;
-    m_boneNames.push_back(name);
+    m_bones[m_ids.size()] = transform;
+    m_ids.push_back(id);
   }
 
   FORCEINLINE SIZE_T
-  getBoneId(const String& name)
+  getBoneId(uint32 name)
   {
-    return find(m_boneNames.begin(), m_boneNames.end(), name) - m_boneNames.begin();
+    return find(m_ids.begin(), m_ids.end(), name) - m_ids.begin();
   }
 
-  FORCEINLINE const String&
-  getBoneName(SIZE_T id)
+  FORCEINLINE uint32
+  getBoneId(SIZE_T id)
   {
-    return m_boneNames[id];
+    return m_ids[id];
   }
 
  private:
@@ -215,7 +215,7 @@ class OA_CORE_EXPORT SkeletalMesh :
   /**
    * @brief the name of each bone
   */
-  Vector<String> m_boneNames;
+  Vector<uint32> m_ids;
   public:
   //Map<String,uint32> m_boneMaping;
   //

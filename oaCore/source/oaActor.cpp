@@ -11,6 +11,7 @@
 #include "oaBuffer.h"
 #include "oaComponent.h"
 #include "oaGraphicsComponent.h"
+#include "oaStaticMeshComponent.h"
 
 namespace oaEngineSDK{
 
@@ -24,6 +25,7 @@ enum FLAGS{
 void 
 Actor::save(Serializer& serializer)
 {
+  //serializer.encodeNumber(getType());
   serializer.encodeString(getName());
   auto& transform = GetActorTransform();
   serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
@@ -34,7 +36,6 @@ Actor::save(Serializer& serializer)
       serializer.encodeNumber(components.first);
       component->save(serializer);
     }
-    
   }
   serializer.encodeSize(m_subActors.size());
   for(auto& child : m_subActors){
@@ -45,14 +46,15 @@ Actor::save(Serializer& serializer)
 void 
 Actor::load(Serializer& serializer)
 {
+  //serializer.decodeNumber();
   setName(serializer.decodeString());
   auto& transform = GetActorTransform();
   serializer.file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
   SIZE_T num = serializer.decodeSize();
   for(SIZE_T n = 0; n<num; ++n){
     auto componentType = serializer.decodeNumber();
-    if(componentType == COMPONENT_TYPE::kGrpahics){
-      auto component = makeSPtr<GraphicsComponent>();
+    if(componentType == COMPONENT_TYPE::kStaticMesh){
+      auto component = makeSPtr<StaticMeshComponent>();
       attachComponent(component);
       component->load(serializer);
     }
@@ -63,6 +65,11 @@ Actor::load(Serializer& serializer)
     attach(newActor);
     newActor->load(serializer);
   }
+}
+
+RESOURSE_TYPE::E Actor::getType()
+{
+  return RESOURSE_TYPE::kActor;
 }
 
 void
@@ -90,7 +97,13 @@ void
 Actor::attachComponent(SPtr<Component> component)
 {
   component->onAttach(cast<Actor>(shared_from_this()));
+  component->m_owner = cast<Actor>(shared_from_this());
   auto type = component->getType();
+  auto n = m_components.size();
+  for(auto i = m_components.begin(); i != m_components.end(); ++i){
+     auto f = i->first;
+     auto s = i->second;
+  }
   if(m_components.find(type) == m_components.end()){
     m_components.insert({component->getType(),{}});
   }

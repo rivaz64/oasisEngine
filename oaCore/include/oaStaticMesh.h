@@ -41,6 +41,12 @@ class OA_CORE_EXPORT StaticMesh :
   writeBuffers();
 
   FORCEINLINE void
+  addVertexNum(const Vertex& n)
+  {
+    m_vertices.push_back(n);
+  }
+
+  FORCEINLINE void
   setVertexNum(SIZE_T n)
   {
     m_vertices.resize(n);

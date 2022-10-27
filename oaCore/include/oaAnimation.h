@@ -21,12 +21,12 @@ struct OA_CORE_EXPORT AnimChannel{
   /**
    * @brief the keyframes of the locations
   */
-  Vector<Pair<float,Vector3f>> locations;
+  Vector<Pair<float,Vector4f>> locations;
 
   /**
    * @brief the keyframes of the scales
   */
-  Vector<Pair<float,Vector3f>> scales;
+  Vector<Pair<float,Vector4f>> scales;
 
   /**
    * @brief the keyframes of the rotations
@@ -63,9 +63,9 @@ class OA_CORE_EXPORT Animation :
   }
 
   FORCEINLINE void
-  addChannel(const String& name, SPtr<AnimChannel> node)
+  addChannel(uint32 id, SPtr<AnimChannel> node)
   {
-    m_channels.insert({name,node});
+    m_channels.insert({id,node});
   }
 
   FORCEINLINE float
@@ -81,13 +81,13 @@ class OA_CORE_EXPORT Animation :
   }
 
   FORCEINLINE bool 
-  hasChannel(const String& name)
+  hasChannel(uint32 id)
   {
-    return m_channels.find(name) != m_channels.end();
+    return m_channels.find(id) != m_channels.end();
   }
 
   FORCEINLINE Matrix4f
-  getTransformOfChannelAtTime(const String& name, float time);
+  getTransformOfChannelAtTime(uint32 id, float time);
 
  public:
 
@@ -104,7 +104,7 @@ class OA_CORE_EXPORT Animation :
   /**
    * @brief the keyFrames of the animation
   */
-  Map<String,SPtr<AnimChannel>> m_channels;
+  Map<uint32,SPtr<AnimChannel>> m_channels;
 
   friend class Loader;
 };
