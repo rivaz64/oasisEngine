@@ -113,6 +113,8 @@ public:
 
   Loader* loader;
 
+  
+
   bool isCreatingActor = false;
 
   bool isAddingComponent = false;

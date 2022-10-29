@@ -16,7 +16,7 @@ namespace oaEngineSDK{
 /**
  * @brief something that is on a scene
 */
-class OA_CORE_EXPORT LUAEXPORT Actor :
+class OA_CORE_EXPORT Actor :
   public Resourse
 {
  public:
@@ -28,6 +28,9 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
 
   void
   load(Serializer& serializer) override;
+
+  RESOURSE_TYPE::E
+  getType() override;
 
   /**
    * @brief makes the Actor a sub Actor of this one
@@ -198,7 +201,10 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   //uint8 dirtyFlag = 0;
 
-  //friend class GraphicsComponent;
+  friend class GraphicsComponent;
+
+  friend class Component;
+
 };
 
 }

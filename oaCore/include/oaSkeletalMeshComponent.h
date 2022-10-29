@@ -48,7 +48,10 @@ class OA_CORE_EXPORT SkeletalMeshComponent :
   }
 
   void
-  setAtSecond(float time);
+  setAtTick(float time);
+
+  void 
+  update(WPtr<Actor> actor) override;
 
 private: 
 
@@ -59,8 +62,9 @@ private:
 
   Vector<Vector<Matrix4f>> m_bones;
 
+  
 public:
-  float m_actualTime;
+  float m_actualTick;
 };
 
 }

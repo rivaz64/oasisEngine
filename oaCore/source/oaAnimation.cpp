@@ -9,14 +9,14 @@
 
 namespace oaEngineSDK{
 
-Vector3f
+Vector4f
 interpolatedLocation(SPtr<AnimChannel> channel, float time)
 {
   if(channel->locations.size() == 1){
     return channel->locations[0].second;
   }
 
-  Vector3f prevKey, nextKey;
+  Vector4f prevKey, nextKey;
   float prevTime=0, nextTime=0;
 
   for(auto& keys : channel->locations){
@@ -29,21 +29,21 @@ interpolatedLocation(SPtr<AnimChannel> channel, float time)
     prevTime = keys.first;
   }
 
-  return Vector3f::interpolate(
+  return Vector4f::interpolate(
   prevKey,
   nextKey,
   (time-prevTime)/(nextTime-prevTime)
   );
 }
 
-Vector3f
+Vector4f
 interpolatedScale(SPtr<AnimChannel> channel, float time)
 {
   if(channel->scales.size() == 1){
     return channel->scales[0].second;
   }
 
-  Vector3f prevKey, nextKey;
+  Vector4f prevKey, nextKey;
   float prevTime=0, nextTime=0;
 
   for(auto& keys : channel->scales){
@@ -56,7 +56,7 @@ interpolatedScale(SPtr<AnimChannel> channel, float time)
     prevTime = keys.first;
   }
 
-  return Vector3f::interpolate(
+  return Vector4f::interpolate(
   prevKey,
   nextKey,
   (time-prevTime)/(nextTime-prevTime)
@@ -91,13 +91,13 @@ interpolatedRotation(SPtr<AnimChannel> channel, float time)
 }
 
 Matrix4f 
-Animation::getTransformOfChannelAtTime(const String& name, float time)
+Animation::getTransformOfChannelAtTime(uint32 id, float time)
 {
-  auto channel = m_channels[name];
+  auto channel = m_channels[id];
   return
-    Matrix4f::translateMatrix(interpolatedLocation(channel,time))*
+    Matrix4f::translateMatrix(interpolatedLocation(channel,time).xyz)*
     interpolatedRotation(channel,time).toMatrix()*
-    Matrix4f::scaleMatrix(interpolatedScale(channel,time));
+    Matrix4f::scaleMatrix(interpolatedScale(channel,time).xyz);
 }
 
 }

@@ -19,7 +19,7 @@ struct SkeletalNode{
   /**
    * @brief the name of this node
   */
-  String name;
+  uint32 id;
   /**
    * @brief the transform of this node
   */
@@ -47,24 +47,27 @@ class OA_CORE_EXPORT Skeleton :
     return RESOURSE_TYPE::kSkeleton;
   }
 
-  FORCEINLINE Matrix4f//const Matrix4f&
-  getBoneTransform(const String& name)
-  {
-    Matrix4f ans = Matrix4f::IDENTITY*m_globalInverse;
-    auto wNode = m_boneMaping[name];
-    while(!wNode.expired()){
-      auto node = wNode.lock();
-      ans = node->transform*ans;
-      wNode = node->parent; 
-    }
-    return ans;
-    //return m_boneMaping[name];
-  }
+  //FORCEINLINE Matrix4f//const Matrix4f&
+  //getBoneTransform(const String& name)
+  //{
+  //  Matrix4f ans = Matrix4f::IDENTITY*m_globalInverse;
+  //  auto wNode = m_boneMaping[name];
+  //  while(!wNode.expired()){
+  //    auto node = wNode.lock();
+  //    ans = node->transform*ans;
+  //    wNode = node->parent; 
+  //  }
+  //  return ans;
+  //  //return m_boneMaping[name];
+  //}
 
   FORCEINLINE void
-  addBone(SPtr<SkeletalNode> node)
+  addBone(SPtr<SkeletalNode> node, const String& name)
   {
-    m_boneMaping.insert({node->name,node});
+    node->id = m_bones.size();
+    m_bones.push_back(node);
+    m_names.push_back(name);
+    //m_boneMaping.insert({node->id,node});
   }
 
   FORCEINLINE SPtr<SkeletalNode>
@@ -79,6 +82,12 @@ class OA_CORE_EXPORT Skeleton :
     return m_globalInverse;
   }
 
+  FORCEINLINE uint32
+  getBoneId(const String& name)
+  {
+    return find(m_names.begin(),m_names.end(),name) - m_names.end();
+  }
+
 public:
 
   /**
@@ -89,7 +98,9 @@ public:
   /**
    * @brief the mapping for the names of the bones
   */
-  Map<String,WPtr<SkeletalNode>> m_boneMaping;
+  Vector<WPtr<SkeletalNode>> m_bones;
+  Vector<String> m_names;
+  //Map<String,WPtr<SkeletalNode>> m_boneMaping;
 
   /**
    * @brief the inverse of the root

@@ -23,6 +23,7 @@
 #include "oaAudioAPI.h"
 #include "oaLua.h"
 #include "oaOmniverseApi.h"
+#include "oaCrowdSim.h"
 //#define SOL_ALL_SAFETIES_ON 1
 //#include <sol\sol.hpp>
 
@@ -95,6 +96,7 @@ BaseApp::onShutDown()
   //EventSystem::shutDown();
   GraphicAPI::shutDown();
   OmniverseApi::shutDown();
+  //CrowdSim::shutDown();
   ResoureManager::shutDown();
   InputAPI::shutDown();
   AudioAPI::shutDown();
@@ -146,6 +148,7 @@ BaseApp::run()
   loadPlugIn("oaGaInputd.dll");
   loadPlugIn("oaFmodAudiod.dll");
   loadPlugIn("oaOmniversed.dll");
+  loadPlugIn("oaCrowdsd.dll");
   auto& omnievrse = OmniverseApi::instance();
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
@@ -230,6 +233,7 @@ BaseApp::mainLoop()
 
     GraphicAPI::instancePtr()->events();
 
+    if(play)
     update(m_actualScene->getRoot());
 
     onUpdate(Time::instancePtr()->m_deltaTime);

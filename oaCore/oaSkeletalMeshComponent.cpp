@@ -4,6 +4,7 @@
 #include "oaSkeletalMesh.h"
 #include "oaSkeleton.h"
 #include "oaAnimation.h"
+#include "oaTime.h"
 
 namespace oaEngineSDK
 {
@@ -51,8 +52,8 @@ readNodeHeirarchy(
   )
 {
   Matrix4f nodeTransform = Matrix4f::IDENTITY;
-  if(animation->hasChannel(node->name)){
-    nodeTransform = animation->getTransformOfChannelAtTime(node->name,time);
+  if(animation->hasChannel(node->id)){
+    nodeTransform = animation->getTransformOfChannelAtTime(node->id,time);
   }
   auto globalTransform = parentTransform*nodeTransform;
 
@@ -66,8 +67,8 @@ readNodeHeirarchy(
 
     auto mesh = wMesh.lock();
 
-    if(mesh->hasBone(node->name)){
-      auto id = mesh->getBoneId(node->name);
+    if(mesh->hasBone(node->id)){
+      auto id = mesh->getBoneId(node->id);
       bones[i][id] = globalInverse*globalTransform*mesh->getBoneAt(id);
     }
   }
@@ -79,8 +80,10 @@ readNodeHeirarchy(
 }
 
 void
-SkeletalMeshComponent::setAtSecond(float time)
+SkeletalMeshComponent::setAtTick(float time)
 {
+  m_actualTick = time;
+
   if(m_model.expired()) return;
   auto model = m_model.lock();
 
@@ -92,9 +95,25 @@ SkeletalMeshComponent::setAtSecond(float time)
   if(wSkeleton.expired()) return;
   auto skeleton = wSkeleton.lock();
 
-  float timeInTicks = time;// * animation->getSecondPerTicks();
+  readNodeHeirarchy(skeleton->getRoot(),Matrix4f::IDENTITY,time,animation,model,m_bones,skeleton->getGlobalInverse());
+}
 
-  readNodeHeirarchy(skeleton->getRoot(),Matrix4f::IDENTITY,timeInTicks,animation,model,m_bones,skeleton->getGlobalInverse());
+void 
+SkeletalMeshComponent::update(WPtr<Actor> actor)
+{
+  if(m_model.expired()) return;
+  auto model = m_model.lock();
+
+  auto wAnimation = model->getAnimation();
+  if(wAnimation.expired()) return;
+  auto animation = wAnimation.lock();
+
+  auto newTick = m_actualTick+Time::instance().getDelta()*animation->getTicksPerSecond();
+  auto duration = animation->getDuration();
+  if(newTick > duration){
+    newTick -= duration;
+  }
+  setAtTick(newTick);
 }
 
 }

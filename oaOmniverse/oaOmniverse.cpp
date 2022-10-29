@@ -414,9 +414,8 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 
   auto newMaterial = makeSPtr<Material>();
   newMaterial->setShader(0);
-
-  resourceManager.registerResourse("m_"+name,mesh);
-  resourceManager.registerResourse(name,model);
+  resourceManager.registerResourse(name,mesh);
+  resourceManager.registerResourse("m_"+name,model);
   resourceManager.registerResourse("mat_"+name,newMaterial);
   model->setMesh(mesh);
   model->setMaterial(newMaterial);
@@ -604,6 +603,17 @@ addMaterial(WPtr<Material> wMaterial)
 }
 
 void
+addMaterial(WPtr<Material> wMaterial)
+{
+  if(wMaterial.expired()) return;
+  auto material = wMaterial.lock();
+  FStream file;
+  file.open("C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/materials/"+material->getName()+".mdl");
+  file<<"test";
+  file.close();
+}
+
+void
 addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 {
   if(wModel.expired()) return;
@@ -677,6 +687,7 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
   g_stage->Save();
   omniClientLiveProcess();
   print("mesh created");
+  addMaterial(model->getMaterial());
   //m_meshes.push_back(makeSPtr)
 }
 

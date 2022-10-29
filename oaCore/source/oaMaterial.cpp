@@ -16,6 +16,7 @@ namespace oaEngineSDK{
 void 
 Material::save(Serializer& serializer)
 {
+  serializer.encodeNumber(getType());
   serializer.encodeString(getName());
 
   serializer.encodeNumber(getShader());

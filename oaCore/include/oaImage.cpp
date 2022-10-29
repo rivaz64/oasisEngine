@@ -13,6 +13,10 @@ namespace oaEngineSDK
 void 
 Image::save(Serializer& serializer)
 {
+  //serializer.init(serializer.m_path += getName()+".oa",true);
+
+  serializer.encodeNumber(getType());
+
   serializer.encodeString(getName());
 
   serializer.file.write(reinterpret_cast<const char*>(&getSize()),

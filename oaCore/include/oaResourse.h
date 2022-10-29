@@ -28,7 +28,8 @@ enum E{
   kAnimation,
   kSound,
   kSkeletalMesh,
-  kSkeletalModel
+  kSkeletalModel,
+  kActor
 };
 }
 

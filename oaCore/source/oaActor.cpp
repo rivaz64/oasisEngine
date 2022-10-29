@@ -25,6 +25,7 @@ enum FLAGS{
 void 
 Actor::save(Serializer& serializer)
 {
+  //serializer.encodeNumber(getType());
   serializer.encodeString(getName());
   auto& transform = GetActorTransform();
   serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
@@ -35,7 +36,6 @@ Actor::save(Serializer& serializer)
       serializer.encodeNumber(components.first);
       component->save(serializer);
     }
-    
   }
   serializer.encodeSize(m_subActors.size());
   for(auto& child : m_subActors){
@@ -46,6 +46,7 @@ Actor::save(Serializer& serializer)
 void 
 Actor::load(Serializer& serializer)
 {
+  //serializer.decodeNumber();
   setName(serializer.decodeString());
   auto& transform = GetActorTransform();
   serializer.file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
@@ -64,6 +65,11 @@ Actor::load(Serializer& serializer)
     attach(newActor);
     newActor->load(serializer);
   }
+}
+
+RESOURSE_TYPE::E Actor::getType()
+{
+  return RESOURSE_TYPE::kActor;
 }
 
 void
@@ -91,12 +97,12 @@ void
 Actor::attachComponent(SPtr<Component> component)
 {
   component->onAttach(cast<Actor>(shared_from_this()));
+  component->m_owner = cast<Actor>(shared_from_this());
   auto type = component->getType();
   if(m_components.find(type) == m_components.end()){
     m_components.insert({component->getType(),{}});
   }
   m_components[type].push_back(component);
-  
 }
 
 void 

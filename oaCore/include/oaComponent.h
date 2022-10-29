@@ -43,6 +43,11 @@ class OA_CORE_EXPORT Component :
   */
   virtual COMPONENT_TYPE::E
   getType() {return COMPONENT_TYPE::kNone;}
+
+public:
+  WPtr<Actor> m_owner;
+
+  
 };
 
 }

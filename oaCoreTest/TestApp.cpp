@@ -41,12 +41,15 @@
 #include <oaStaticMeshComponent.h>
 #include <oaSkeletalMeshComponent.h>
 #include <oaSkeletalModel.h>
+#include <oaCrowdComponent.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
 #include <imgui_impl_win32.h>
 #include <oaSerializer.h>
 #include <oaOmniverseApi.h>
+#include <oaDirectionalLightComponent.h>
+#include <chrono>
 #include "ImGuiFileDialog.h"
 extern "C" {
 #include <lua\lua.h>
@@ -379,6 +382,8 @@ TestApp::onUpdate(float delta)
   //}
   m_camera->update();
 
+  
+
   newImGuiFrame();
   updateImGui();
 
@@ -412,7 +417,7 @@ TestApp::draw()
   //  renderer.render(m_actualScene,m_camera,m_debugCamera);
   //}
   //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_directionalLights,m_pointLights,m_spotLights,m_ssaoConfig);
+    renderer.render(m_actualScene,m_camera,m_camera,m_ssaoConfig);
   //}
   
   
@@ -509,6 +514,12 @@ TestApp::updateImGui()
   auto& renderer = Renderer::instance();
 
   auto shadowMap = renderer.getShadowMap();
+
+  ImGui::Begin("game");
+  {
+    ImGui::Checkbox("play",&play);
+  }
+  ImGui::End();
 
   ImGui::Begin("shaders");
   if(ImGui::Button("ReloadShaders")){
@@ -611,8 +622,8 @@ TestApp::updateImGui()
 
 
 
-            if(ImGui::DragFloat("at time", &graphicsComponent->m_actualTime,1.f/6.f)){
-              graphicsComponent->setAtSecond(graphicsComponent->m_actualTime);
+            if(ImGui::DragFloat("at time", &graphicsComponent->m_actualTick,1.f/6.f)){
+              graphicsComponent->setAtTick(graphicsComponent->m_actualTick);
             }
 
             auto& transform = graphicsComponent->getTransform();
@@ -634,6 +645,24 @@ TestApp::updateImGui()
       }
       
 
+    }
+
+    components = selectedActor->getComponents<DirectionalLightComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("directional light "+StringUtilities::intToString(i)).c_str())){
+          auto lightComponent = cast<DirectionalLightComponent>(components[i]);
+          ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
+          ImGui::DragFloat3("direction",reinterpret_cast<float*>(&lightComponent->m_light.direction),1.f/36.f,-1,1);
+        }
+      }
+    }
+
+    wComponent = selectedActor->getComponent<CrowdComponent>();
+
+    if (!wComponent.expired() && ImGui::CollapsingHeader("crowd")){
+      //auto component
     }
 
     wComponent = selectedActor->getComponent<SkeletalComponent>();
@@ -913,6 +942,16 @@ TestApp::updateImGui()
       isAddingComponent = false;
     }
 
+    if(ImGui::Button("Directioal Light")){
+      selectedActor->attachComponent(makeSPtr<DirectionalLightComponent>());
+      isAddingComponent = false;
+    }
+
+    //if(ImGui::Button("crowd")){
+    //  selectedActor->attachComponent(makeSPtr<CrowdComponent>());
+    //  isAddingComponent = false;
+    //}
+
     ImGui::End();
   }
 
@@ -979,14 +1018,23 @@ TestApp::updateImGui()
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         Serializer serializer;
         serializer.init(filePathName,true);
-        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
-        for(auto& texture: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
+        auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
+        auto materials = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial);
+        auto meshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
+        auto models = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel);
+        serializer.encodeSize(textures.size()+materials.size()+meshes.size()+models.size()+1);
+        //erializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
+        for(auto& texture : textures){
           cast<Texture>(texture).lock()->getImage()->save(serializer);
         }
         
-        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
+        //serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
         for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
           material.lock()->save(serializer);
+
+        }
+        for(auto& mesh: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
+          mesh.lock()->save(serializer);
         }
 
         serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh).size());
@@ -999,12 +1047,9 @@ TestApp::updateImGui()
           model.lock()->save(serializer);
         }
         
-        auto actors = m_actualScene->getRoot()->getChilds();
-        serializer.encodeSize(actors.size());
-        for(auto& actor : actors){
-          
-          actor->save(serializer);
-        }
+        auto root = m_actualScene->getRoot();
+        root->save(serializer);
+        
       }
       
       // close
@@ -1012,57 +1057,88 @@ TestApp::updateImGui()
     }
 
     if (ImGui::Button("load scene"))
-      ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".txt", ".");
+      ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".oa", ".");
 
     if (ImGuiFileDialog::Instance()->Display("load")) 
     {
       // action if OK
       if (ImGuiFileDialog::Instance()->IsOk())
       {
+        std::chrono::time_point<std::chrono::system_clock> start, end;
+        start = std::chrono::system_clock::now();
         String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         Serializer serializer;
-        m_actualScene = makeSPtr<Scene>();
-        m_actualScene->init();
-        m_selectedActor = m_actualScene->getRoot();
+        //m_actualScene = makeSPtr<Scene>();
+        //m_actualScene->init();
+        //m_selectedActor = m_actualScene->getRoot();
         if(serializer.init(filePathName,FILE::kRead)){
-          SIZE_T number = serializer.decodeSize();
-          for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-            auto image = makeSPtr<Image>();
-            image->load(serializer);
-            SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-            texture->initFromImage(image);
-            resourceManager.registerResourse(texture->getName(),texture);
-          }
-        
-          number = serializer.decodeSize();
-          for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-            auto material = makeSPtr<Material>();
-            material->load(serializer);
-            resourceManager.registerResourse(material->getName(),material);
-          }
+          auto n = serializer.decodeSize();
+          for(SIZE_T i = 0; i<n; ++i){
+            int type = serializer.decodeNumber();
+            if(type == RESOURSE_TYPE::kTexture){
+              auto image = makeSPtr<Image>();
+              image->load(serializer);
+              SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+              texture->initFromImage(image);
+              resourceManager.registerResourse(texture->getName(),texture);
+            }
+            else if(type == RESOURSE_TYPE::kMaterial){
+              auto material = makeSPtr<Material>();
+              material->load(serializer);
+              resourceManager.registerResourse(material->getName(),material);
+            }
+            else if(type == RESOURSE_TYPE::kStaticMesh){
+              auto mesh = makeSPtr<StaticMesh>();
+              mesh->load(serializer);
+              resourceManager.registerResourse(mesh->getName(),mesh);
+            }
+            else if(type == RESOURSE_TYPE::kModel){
+              auto model = makeSPtr<Model>();
+              model->load(serializer);
+              resourceManager.registerResourse(model->getName(),model);
+            }
+            else if(type == RESOURSE_TYPE::kActor){
+              m_actualScene = makeSPtr<Scene>();
+              m_actualScene->init();
+              m_selectedActor = m_actualScene->getRoot();
+              m_selectedActor.lock()->load(serializer);
+            }
 
-          number = serializer.decodeSize();
-          for(SIZE_T meshNum = 0; meshNum<number; ++meshNum){
-            auto mesh = makeSPtr<StaticMesh>();
-            mesh->load(serializer);
-            resourceManager.registerResourse(mesh->getName(),mesh);
           }
-          
-          number = serializer.decodeSize();
-          for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-            auto model = makeSPtr<Model>();
-            model->load(serializer);
-            //resourceManager.registerResourse(model->getName(),model);
-          }
-        
-          number = serializer.decodeSize();
-          for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-            auto actor = makeSPtr<Actor>();
-            actor->load(serializer);
-            auto root = m_actualScene->getRoot();
-            root->attach(actor);
-          }
+          end = std::chrono::system_clock::now();
+          std::chrono::duration<double> elapsed_seconds = end - start;
+          print("elapsed time: " + StringUtilities::floatToString(elapsed_seconds.count()));
+          //SIZE_T number = serializer.decodeSize();
+          //for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+          //  auto image = makeSPtr<Image>();
+          //  image->load(serializer);
+          //  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+          //  texture->initFromImage(image);
+          //  resourceManager.registerResourse(texture->getName(),texture);
+          //}
+          //
+          //number = serializer.decodeSize();
+          //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+          //  auto material = makeSPtr<Material>();
+          //  material->load(serializer);
+          //  resourceManager.registerResourse(material->getName(),material);
+          //}
+          //
+          //number = serializer.decodeSize();
+          //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+          //  auto model = makeSPtr<Model>();
+          //  model->load(serializer);
+          //  //resourceManager.registerResourse(model->getName(),model);
+          //}
+          //
+          //number = serializer.decodeSize();
+          //for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+          //  auto actor = makeSPtr<Actor>();
+          //  actor->load(serializer);
+          //  auto root = m_actualScene->getRoot();
+          //  root->attach(actor);
+          //}
         }
       }
       
@@ -1254,6 +1330,7 @@ TestApp::updateImGui()
 
   }
   ImGui::End();
+
 
 }
 

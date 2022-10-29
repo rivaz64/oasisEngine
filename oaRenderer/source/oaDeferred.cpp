@@ -31,7 +31,7 @@
 #include <oaSkeletalModel.h>
 #include <oaSkeletalMesh.h>
 #include <oaShader.h>
-
+#include <oaDirectionalLightComponent.h>
 namespace oaEngineSDK{
 
 void 
@@ -101,6 +101,7 @@ Deferred::onStartUp()
 
   m_colorTexture = graphicsAPI.createTexture();
   m_normalTexture = graphicsAPI.createTexture();
+  m_lightTexture = graphicsAPI.createTexture();
   m_positionTexture = graphicsAPI.createTexture();
   m_specularTexture = graphicsAPI.createTexture();
   m_emisiveTexture = graphicsAPI.createTexture();
@@ -159,9 +160,6 @@ void
 Deferred::render(WPtr<Scene> wScene,
          WPtr<Camera> wCamForView,
          WPtr<Camera> wCamForFrustrum, 
-         const Vector<DirectionalLight>& directionalLights,
-         const Vector<PointLight>& pointLights,
-         const Vector<SpotLight>& spotLights,
          const Vector4f& config)
 {
   if(wScene.expired() || wCamForView.expired()) return;
@@ -176,6 +174,7 @@ Deferred::render(WPtr<Scene> wScene,
   graphicsAPI.clearRenderTarget(m_positionTexture);
   graphicsAPI.clearRenderTarget(m_specularTexture);
   graphicsAPI.clearRenderTarget(m_emisiveTexture);
+  graphicsAPI.clearRenderTarget(m_lightTexture);
   graphicsAPI.clearRenderTarget(m_renderTarget);
   graphicsAPI.clearRenderTarget(m_ssao);
   graphicsAPI.clearRenderTarget(m_diffuseLight);
@@ -207,6 +206,7 @@ Deferred::render(WPtr<Scene> wScene,
   //debug(toRender);
   //gBuffer(toRender);
   m_tessBufer->write(&config);
+  m_directionalLights.clear();
   vertex(scene->getRoot(),frustrum);
   graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
   graphicsAPI.unsetShaders();
@@ -216,13 +216,13 @@ Deferred::render(WPtr<Scene> wScene,
   //gTransparents(transparents);
   
   //ssao(config);
-  //directionalLight(camForView->getViewMatrix(),directionalLights);
+  directionalLight(camForView->getViewMatrix());
   //pointLight(camForView->getViewMatrix(),pointLights);
   //spotLight(camForView->getViewMatrix(),spotLights);
   //// copy(m_colorTexture,m_renderTarget);
   ////shadows(spotLights,scene);
-  //aplylights();
-  copy(m_colorTexture,m_renderTarget);
+  aplylights();
+  //copy(m_specularLight,m_renderTarget);
   
 }
 
@@ -316,6 +316,15 @@ Deferred::setSkeletalMesh(WPtr<SkeletalMeshComponent> wComponent)
   
 }
 
+//void
+//Deferred::setDirectionalLight(SPtr<Actor> actor)
+//{
+//  m_directionalLights.push_back(DirectionalLight(actor->getGlobalTransform()*Vector4f(1,0,0,0)));
+//}
+
+//void
+
+
 void
 Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
 {
@@ -342,6 +351,11 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
       }
       else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
         setSkeletalMesh(cast<SkeletalMeshComponent>(component));
+      }
+      else if(component->getType() == COMPONENT_TYPE::kDirectionalLight){
+        auto light = cast<DirectionalLightComponent>(component)->m_light;
+        light.direction = finalTransform*light.direction;
+        m_directionalLights.push_back(light);
       }
     }
     vertex(child,frustum);
@@ -523,10 +537,6 @@ Deferred::aplylights()
   auto& graphicsAPI = GraphicAPI::instance();
   cast<Shader>(resourseManager.getResourse("lights")).lock()->set();
   
-  //m_LightLocation->write(&light);
-  //graphicsAPI.setPSBuffer(m_LightLocation,0);
-  
-  
   graphicsAPI.setPSBuffer(m_size,3);
   graphicsAPI.setRenderTarget(m_renderTarget);
   graphicsAPI.setTexture(m_colorTexture,0);
@@ -540,7 +550,7 @@ Deferred::aplylights()
 }
 
 void 
-Deferred::directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalLight>& lights)
+Deferred::directionalLight(const Matrix4f& viewMatrix)
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
@@ -549,7 +559,7 @@ Deferred::directionalLight(const Matrix4f& viewMatrix, const Vector<DirectionalL
   cast<Shader>(resourseManager.getResourse("directionalLight")).lock()->set();
   graphicsAPI.setRenderTargets(m_lightBuffer);
 
-  for(auto& light : lights){
+  for(auto& light : m_directionalLights){
     auto viewLight = light;
     viewLight.direction = (viewMatrix*viewLight.direction.normalized()).normalized();
     m_LightBuffer->write(&viewLight);
@@ -723,6 +733,7 @@ Deferred::setSize(const Vector2U& size)
   m_renderTarget->release();
   m_colorTexture->release();
   m_normalTexture->release();
+  m_lightTexture->release();
   m_positionTexture->release();
   m_specularTexture->release();
   m_emisiveTexture->release();
@@ -741,6 +752,7 @@ Deferred::setSize(const Vector2U& size)
 
   m_colorTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_normalTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  m_lightTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_positionTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_emisiveTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);

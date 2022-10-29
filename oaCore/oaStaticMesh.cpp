@@ -8,6 +8,7 @@ namespace oaEngineSDK
 void
 StaticMesh::save(Serializer& serializer) 
 {
+  serializer.encodeNumber(getType());
   serializer.encodeString(getName());
   serializer.encodeVector(m_vertices);
   serializer.encodeVector(m_index);
@@ -16,8 +17,7 @@ StaticMesh::save(Serializer& serializer)
 void
 StaticMesh::load(Serializer& serializer)
 {
-  auto name = serializer.decodeString();
-  ResoureManager::instance().registerResourse(name,shared_from_this());
+  setName(serializer.decodeString());
   serializer.decodeVector(m_vertices);
   serializer.decodeVector(m_index);
   writeBuffers();

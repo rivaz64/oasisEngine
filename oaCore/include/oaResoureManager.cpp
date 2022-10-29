@@ -395,7 +395,8 @@ ResoureManager::generateDefaultMaterials()
   m_defaultMaterial = makeSPtr<Material>();
   m_defaultMaterial->setShader(0);
   m_defaultMaterial->setName("defaultMaterial");
-  
+
+  m_defaultMaterial->setColor("diffuse",Color::CYAN);
 }
 
 void

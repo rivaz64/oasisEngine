@@ -20,12 +20,12 @@ struct DirectionalLight{
   /**
    * @brief the color of the light
   */
-  Color color;
+  Color color = Color::WHITE;
 
   /**
    * @brief the direction of the light
   */
-  Vector4f direction;
+  Vector4f direction = Vector4f(1,0,0,0);
 };
 
 /**
