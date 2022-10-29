@@ -145,6 +145,8 @@ class Deferred :
 
   SPtr<Texture> m_emisiveTexture;
 
+  SPtr<Texture> m_lightTexture;
+
   SPtr<Texture> m_downSapmle;
 
   SPtr<Texture> m_ssao;

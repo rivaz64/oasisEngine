@@ -49,6 +49,7 @@
 #include <oaSerializer.h>
 #include <oaOmniverseApi.h>
 #include <oaDirectionalLightComponent.h>
+#include <chrono>
 #include "ImGuiFileDialog.h"
 extern "C" {
 #include <lua\lua.h>
@@ -1058,6 +1059,8 @@ TestApp::updateImGui()
       // action if OK
       if (ImGuiFileDialog::Instance()->IsOk())
       {
+        std::chrono::time_point<std::chrono::system_clock> start, end;
+        start = std::chrono::system_clock::now();
         String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
         Serializer serializer;
@@ -1098,8 +1101,9 @@ TestApp::updateImGui()
             }
 
           }
-          
-
+          end = std::chrono::system_clock::now();
+          std::chrono::duration<double> elapsed_seconds = end - start;
+          print("elapsed time: " + StringUtilities::floatToString(elapsed_seconds.count()));
           //SIZE_T number = serializer.decodeSize();
           //for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
           //  auto image = makeSPtr<Image>();

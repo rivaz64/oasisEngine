@@ -101,6 +101,7 @@ Deferred::onStartUp()
 
   m_colorTexture = graphicsAPI.createTexture();
   m_normalTexture = graphicsAPI.createTexture();
+  m_lightTexture = graphicsAPI.createTexture();
   m_positionTexture = graphicsAPI.createTexture();
   m_specularTexture = graphicsAPI.createTexture();
   m_emisiveTexture = graphicsAPI.createTexture();
@@ -173,6 +174,7 @@ Deferred::render(WPtr<Scene> wScene,
   graphicsAPI.clearRenderTarget(m_positionTexture);
   graphicsAPI.clearRenderTarget(m_specularTexture);
   graphicsAPI.clearRenderTarget(m_emisiveTexture);
+  graphicsAPI.clearRenderTarget(m_lightTexture);
   graphicsAPI.clearRenderTarget(m_renderTarget);
   graphicsAPI.clearRenderTarget(m_ssao);
   graphicsAPI.clearRenderTarget(m_diffuseLight);
@@ -219,8 +221,8 @@ Deferred::render(WPtr<Scene> wScene,
   //spotLight(camForView->getViewMatrix(),spotLights);
   //// copy(m_colorTexture,m_renderTarget);
   ////shadows(spotLights,scene);
-  //aplylights();
-  copy(m_colorTexture,m_renderTarget);
+  aplylights();
+  //copy(m_specularLight,m_renderTarget);
   
 }
 
@@ -535,10 +537,6 @@ Deferred::aplylights()
   auto& graphicsAPI = GraphicAPI::instance();
   cast<Shader>(resourseManager.getResourse("lights")).lock()->set();
   
-  //m_LightLocation->write(&light);
-  //graphicsAPI.setPSBuffer(m_LightLocation,0);
-  
-  
   graphicsAPI.setPSBuffer(m_size,3);
   graphicsAPI.setRenderTarget(m_renderTarget);
   graphicsAPI.setTexture(m_colorTexture,0);
@@ -735,6 +733,7 @@ Deferred::setSize(const Vector2U& size)
   m_renderTarget->release();
   m_colorTexture->release();
   m_normalTexture->release();
+  m_lightTexture->release();
   m_positionTexture->release();
   m_specularTexture->release();
   m_emisiveTexture->release();
@@ -753,6 +752,7 @@ Deferred::setSize(const Vector2U& size)
 
   m_colorTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_normalTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  m_lightTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_positionTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_emisiveTexture->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);

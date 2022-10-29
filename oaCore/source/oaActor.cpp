@@ -99,16 +99,10 @@ Actor::attachComponent(SPtr<Component> component)
   component->onAttach(cast<Actor>(shared_from_this()));
   component->m_owner = cast<Actor>(shared_from_this());
   auto type = component->getType();
-  auto n = m_components.size();
-  for(auto i = m_components.begin(); i != m_components.end(); ++i){
-     auto f = i->first;
-     auto s = i->second;
-  }
   if(m_components.find(type) == m_components.end()){
     m_components.insert({component->getType(),{}});
   }
   m_components[type].push_back(component);
-  
 }
 
 void 
