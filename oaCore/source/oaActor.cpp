@@ -11,6 +11,7 @@
 #include "oaBuffer.h"
 #include "oaComponent.h"
 #include "oaGraphicsComponent.h"
+#include "oaStaticMeshComponent.h"
 
 namespace oaEngineSDK{
 
@@ -51,8 +52,8 @@ Actor::load(Serializer& serializer)
   SIZE_T num = serializer.decodeSize();
   for(SIZE_T n = 0; n<num; ++n){
     auto componentType = serializer.decodeNumber();
-    if(componentType == COMPONENT_TYPE::kGrpahics){
-      auto component = makeSPtr<GraphicsComponent>();
+    if(componentType == COMPONENT_TYPE::kStaticMesh){
+      auto component = makeSPtr<StaticMeshComponent>();
       attachComponent(component);
       component->load(serializer);
     }

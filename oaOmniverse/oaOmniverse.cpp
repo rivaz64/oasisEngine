@@ -1,6 +1,5 @@
 #include "oaOmniverse.h"
 #include <oaActor.h>
-#include <oaGraphicsComponent.h>
 #include <oaStaticMesh.h>
 #include <oaModel.h>
 #include <oaResoureManager.h>
@@ -28,7 +27,7 @@
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usd/modelAPI.h>
 #include <oaActor.h>
-#include <oaGraphicsComponent.h>
+#include <oaStaticMeshComponent.h>
 #include <oaModel.h>
 #include <oaMesh.h>
 #include <oaResoureManager.h>
@@ -37,6 +36,7 @@
 #include <oaLoader.h>
 #include <oaResoureManager.h>
 #include <oaStaticMeshComponent.h>
+#include <oaTexture.h>
 
 namespace oaEngineSDK 
 {
@@ -383,6 +383,7 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     }
 
     print("myPath->"+myPath);
+    print("matPath->"+String(p.GetResolvedPath().c_str()));
     char* data = new char[256];
     auto res = omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
     print(omniClientGetResultString(OmniClientResult(res)));
@@ -414,6 +415,7 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
   auto newMaterial = makeSPtr<Material>();
   newMaterial->setShader(0);
 
+  resourceManager.registerResourse("m_"+name,mesh);
   resourceManager.registerResourse(name,model);
   resourceManager.registerResourse("mat_"+name,newMaterial);
   model->setMesh(mesh);
@@ -574,17 +576,39 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 
 }
 
+void 
+addMaterial(WPtr<Material> wMaterial)
+{
+  if(wMaterial.expired()) return;
+  auto material = wMaterial.lock();
+  auto matName = material->getName();
+  auto wTexture = material->getTexture("diffuse");
+  if(wTexture.expired()) return;
+  auto texture = wTexture.lock();
+  auto fileName = g_myPath+"materials/"+matName+".mdl";
+  ofstream outfile (fileName);
+  String omniversePath =   "omniverse://127.0.0.1/files/materials/textures/"+texture->getPath().filename().string();
+  
+  outfile << "mdl 1.4;" << endl << 
+    "using ::OmniPBR import OmniPBR;" << endl << 
+    "import ::tex::gamma_mode;" << endl <<
+    "import ::state::normal;" << endl <<
+    "export material " << matName <<"(*)" << endl <<
+    " = OmniPBR(" << endl <<
+    "diffuse_texture: texture_2d(\"" << omniversePath << "\", ::tex::gamma_srgb)"
+    ");";
+  outfile.close();
+  char* data = new char[256];
+  omniClientCopy(texture->getPath().string().c_str(),omniversePath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
+  //omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
+}
+
 void
 addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 {
   if(wModel.expired()) return;
   auto model = wModel.lock();
   auto modelName = model->getName();
-  //m_actors.push_back(wActor);
-  //SdfPath modelPrimPath = parentPath.AppendChild(TfToken(modelName));
-  //UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, modelPrimPath);
-  //auto numOfMeshes = model->getNumOfMeshes();
-  //for(auto i = 0; i<numOfMeshes; ++i){
     
   auto wMesh = model->getMesh();
 
@@ -646,8 +670,9 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 		valueArray.push_back(rgbFace);
 		displayColorAttr.Set(valueArray);
 	}
+
+  addMaterial(model->getMaterial().lock());
   //}
-  
   
   g_stage->Save();
   omniClientLiveProcess();
@@ -677,10 +702,10 @@ addActor(WPtr<Actor> wActor,SdfPath parentPath)
     addActor(child,actorPrimPath);
   }
 
-  auto components = actor->getComponents<GraphicsComponent>();
+  auto components = actor->getComponents<StaticMeshComponent>();
 
   for(auto& component : components){
-    addMesh(cast<StaticMeshComponent>(component)->getModel(),actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
+    addMesh(cast<StaticMeshComponent>(component)->getModel(),actorPrimPath,cast<StaticMeshComponent>(component)->getTransform());
   }
 
 }
@@ -821,7 +846,7 @@ updateTransform(Transform& transform, Vector<UsdGeomXformOp>& xFormOps)
 }
 
 void
-updateComponent(WPtr<GraphicsComponent> wComponent, SdfPath parentPath)
+updateComponent(WPtr<StaticMeshComponent> wComponent, SdfPath parentPath)
 {
   if(wComponent.expired()) return;
   auto component = cast<StaticMeshComponent>(wComponent.lock());
@@ -865,7 +890,7 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
   updateTransform(actor->GetActorTransform(),xFormOps);
   
   auto childs = actor->getChilds();
-  auto components = actor->getComponents<GraphicsComponent>();
+  auto components = actor->getComponents<StaticMeshComponent>();
   
   auto usdChilds = UGactor.GetPrim().GetChildren();
 	for (const auto& usdChild : usdChilds)
@@ -878,7 +903,7 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
         if(wModel.expired()) continue;
         auto model = wModel.lock();
         if(model->getName() == usdChild.GetName().GetString()){
-          updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
+          updateComponent(cast<StaticMeshComponent>(component),UGactor.GetPath());
           existed = true;
           break;
         }
@@ -937,16 +962,16 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
 		  }
     }
     if(!existed){
-      addMesh(model,actorPrimPath,cast<GraphicsComponent>(component)->getTransform());
+      addMesh(model,actorPrimPath,cast<StaticMeshComponent>(component)->getTransform());
     }
 	}
   //for(auto child : childs){
   //  updateActor(child,thisPath);
   //}
-  //auto components = actor->getComponents<GraphicsComponent>();
+  //auto components = actor->getComponents<StaticMeshComponent>();
   //
   //for(auto& component : components){
-  //  updateComponent(cast<GraphicsComponent>(component),UGactor.GetPath());
+  //  updateComponent(cast<StaticMeshComponent>(component),UGactor.GetPath());
   //}
 }
 

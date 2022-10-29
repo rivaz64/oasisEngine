@@ -363,6 +363,8 @@ loadImage(const Path& path){
 
   texture->initFromImage(image);
 
+  texture->setPath(path);
+
   ResoureManager::instance().registerResourse(texture->getName(),texture);
 
   return true;

@@ -35,7 +35,7 @@ GraphicsComponent::onAttach(WPtr<Actor> wActor)
 {
   if(wActor.expired()) return;
   auto actor = wActor.lock();
-  actor->m_graphicComponents.push_back(cast<GraphicsComponent>(shared_from_this()));
+  actor->addGraphicComponent(cast<GraphicsComponent>(shared_from_this()));
 }
 
 void 

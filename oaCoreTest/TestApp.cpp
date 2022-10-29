@@ -988,6 +988,11 @@ TestApp::updateImGui()
         for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
           material.lock()->save(serializer);
         }
+
+        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh).size());
+        for(auto& mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
+          mesh.lock()->save(serializer);
+        }
         
         serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
         for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
@@ -1035,6 +1040,13 @@ TestApp::updateImGui()
             auto material = makeSPtr<Material>();
             material->load(serializer);
             resourceManager.registerResourse(material->getName(),material);
+          }
+
+          number = serializer.decodeSize();
+          for(SIZE_T meshNum = 0; meshNum<number; ++meshNum){
+            auto mesh = makeSPtr<StaticMesh>();
+            mesh->load(serializer);
+            resourceManager.registerResourse(mesh->getName(),mesh);
           }
           
           number = serializer.decodeSize();

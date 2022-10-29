@@ -154,6 +154,11 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   {
     return m_graphicComponents;
   }
+  FORCEINLINE void
+  addGraphicComponent(WPtr<GraphicsComponent> component)
+  {
+    m_graphicComponents.push_back(component);
+  }
  
  private:
 
@@ -182,6 +187,7 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   Map<COMPONENT_TYPE::E,Vector<SPtr<Component>>> m_components;
 
+  private:
   /**
    * @brief all the components that are going to be rendered
   */
@@ -192,7 +198,7 @@ class OA_CORE_EXPORT LUAEXPORT Actor :
   */
   //uint8 dirtyFlag = 0;
 
-  friend class GraphicsComponent;
+  //friend class GraphicsComponent;
 };
 
 }

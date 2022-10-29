@@ -29,7 +29,7 @@ ResoureManager::onStartUp()
   generateDefaultMaterials();
   //generateQuad();
   //generateTriangle();
-  generateCube();
+  //generateCube();
 }
 
 void
