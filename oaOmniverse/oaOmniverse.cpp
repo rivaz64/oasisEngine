@@ -575,8 +575,13 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 
 }
 
+void
+uploadCallback(void* userData, OmniClientResult result)
+{
+}
+
 void 
-addMaterial(WPtr<Material> wMaterial)
+addMaterial(WPtr<Material> wMaterial,const UsdGeomMesh& UGmesh)
 {
   if(wMaterial.expired()) return;
   auto material = wMaterial.lock();
@@ -586,31 +591,63 @@ addMaterial(WPtr<Material> wMaterial)
   auto texture = wTexture.lock();
   auto fileName = g_myPath+"materials/"+matName+".mdl";
   ofstream outfile (fileName);
-  String omniversePath =   "omniverse://127.0.0.1/files/materials/textures/"+texture->getPath().filename().string();
-  
+  String omniversePathTexture =   "omniverse://127.0.0.1/files/materials/textures/"+texture->getPath().filename().string();
+  String omniversePathMaterial =   "omniverse://127.0.0.1/files/materials/"+matName+".mdl";
   outfile << "mdl 1.4;" << endl << 
     "using ::OmniPBR import OmniPBR;" << endl << 
     "import ::tex::gamma_mode;" << endl <<
     "import ::state::normal;" << endl <<
     "export material " << matName <<"(*)" << endl <<
     " = OmniPBR(" << endl <<
-    "diffuse_texture: texture_2d(\"" << omniversePath << "\", ::tex::gamma_srgb)"
+    "diffuse_texture: texture_2d(\"" << omniversePathTexture << "\", ::tex::gamma_srgb)"
     ");";
   outfile.close();
   char* data = new char[256];
-  omniClientCopy(texture->getPath().string().c_str(),omniversePath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
-  //omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
-}
 
-void
-addMaterial(WPtr<Material> wMaterial)
-{
-  if(wMaterial.expired()) return;
-  auto material = wMaterial.lock();
-  FStream file;
-  file.open("C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/materials/"+material->getName()+".mdl");
-  file<<"test";
-  file.close();
+  omniClientWait(omniClientCopy(texture->getPath().string().c_str(),omniversePathTexture.c_str(),nullptr, uploadCallback));
+  omniClientWait(omniClientCopy(fileName.c_str(),omniversePathMaterial.c_str(),nullptr, uploadCallback));
+
+     // Create a material instance for this in USD
+  TfToken materialNameToken(matName);
+  // Make path for "/Root/Looks/Fieldstone";
+  SdfPath matPath = SdfPath::AbsoluteRootPath()
+      .AppendChild(_tokens->Root)
+      .AppendChild(_tokens->Looks)
+      .AppendChild(materialNameToken);
+  UsdShadeMaterial newMat = UsdShadeMaterial::Define(g_stage, matPath);
+
+  SdfAssetPath mdlShaderModule = SdfAssetPath("./Materials/"+matName+".mdl");
+  SdfPath shaderPath = matPath.AppendChild(materialNameToken);
+  UsdShadeShader mdlShader = UsdShadeShader::Define(g_stage, shaderPath);
+  mdlShader.CreateIdAttr(VtValue(_tokens->shaderId));
+
+  mdlShader.SetSourceAsset(mdlShaderModule, _tokens->mdl);
+  mdlShader.GetPrim().CreateAttribute(TfToken("info:mdl:sourceAsset:subIdentifier"), SdfValueTypeNames->Token, false, SdfVariabilityUniform).Set(materialNameToken);
+
+  UsdShadeOutput mdlOutput = newMat.CreateSurfaceOutput(_tokens->mdl);
+  mdlOutput.ConnectToSource(mdlShader, _tokens->out);
+ 
+
+  shaderPath = matPath.AppendChild(_tokens->PrimST);
+  UsdShadeShader primStShader = UsdShadeShader::Define(g_stage, shaderPath);
+  primStShader.CreateIdAttr(VtValue(_tokens->PrimStShaderId));
+  primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2);
+  primStShader.CreateInput(_tokens->varname, SdfValueTypeNames->Token).Set(_tokens->st);
+
+  std::string diffuseColorShaderName = matName + "DiffuseColorTex";
+  std::string diffuseFilePath = omniversePathTexture;
+  shaderPath = matPath.AppendChild(TfToken(diffuseColorShaderName));
+  UsdShadeShader diffuseColorShader = UsdShadeShader::Define(g_stage, shaderPath);
+  diffuseColorShader.CreateIdAttr(VtValue(_tokens->UsdUVTexture));
+  UsdShadeInput texInput = diffuseColorShader.CreateInput(_tokens->file, SdfValueTypeNames->Asset);
+  texInput.Set(SdfAssetPath(diffuseFilePath));
+  texInput.GetAttr().SetColorSpace(_tokens->sRGB);
+  diffuseColorShader.CreateInput(_tokens->st, SdfValueTypeNames->Float2).ConnectToSource(primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2));
+  UsdShadeOutput diffuseColorShaderOutput = diffuseColorShader.CreateOutput(_tokens->rgb, SdfValueTypeNames->Float3);
+
+  UsdShadeMaterialBindingAPI usdMaterialBinding(UGmesh);
+  usdMaterialBinding.Bind(newMat);
+  UsdShadeTokens->allPurpose;
 }
 
 void
@@ -681,14 +718,15 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 		displayColorAttr.Set(valueArray);
 	}
 
-  addMaterial(model->getMaterial().lock());
+  addMaterial(model->getMaterial().lock(),UGmesh);
   //}
   
+  
+  print("mesh created");
+  addMaterial(model->getMaterial(),UGmesh);
+  //m_meshes.push_back(makeSPtr)
   g_stage->Save();
   omniClientLiveProcess();
-  print("mesh created");
-  addMaterial(model->getMaterial());
-  //m_meshes.push_back(makeSPtr)
 }
 
 void 

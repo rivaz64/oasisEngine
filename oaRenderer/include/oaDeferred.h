@@ -101,10 +101,10 @@ class Deferred :
   directionalLight(const Matrix4f& viewMatrix);
 
   void 
-  pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& lights);
+  pointLight(const Matrix4f& viewMatrix);
 
   void
-  spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights);
+  spotLight(const Matrix4f& viewMatrix);
 
   void
   shadows(const Vector<SpotLight>& lights, SPtr<Scene> scene);
@@ -215,6 +215,8 @@ class Deferred :
   SPtr<Camera> m_shadowsCamera;
 
   Vector<DirectionalLight> m_directionalLights;
+  Vector<PointLight> m_PointLights;
+  Vector<SpotLight> m_spotLights;
 };
 
 }

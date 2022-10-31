@@ -124,6 +124,8 @@ enum E{
 	kStaticMesh,
 	kSkeletalMesh,
 	kDirectionalLight,
+	kPointLight,
+	kSpotLight,
 	kCamera
 };
 }

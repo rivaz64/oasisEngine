@@ -32,6 +32,8 @@
 #include <oaSkeletalMesh.h>
 #include <oaShader.h>
 #include <oaDirectionalLightComponent.h>
+#include <oaPointLightComponent.h>
+#include <oaSpotLightComponent.h>
 namespace oaEngineSDK{
 
 void 
@@ -207,6 +209,8 @@ Deferred::render(WPtr<Scene> wScene,
   //gBuffer(toRender);
   m_tessBufer->write(&config);
   m_directionalLights.clear();
+  m_PointLights.clear();
+  m_spotLights.clear();
   vertex(scene->getRoot(),frustrum);
   graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
   graphicsAPI.unsetShaders();
@@ -217,8 +221,8 @@ Deferred::render(WPtr<Scene> wScene,
   
   //ssao(config);
   directionalLight(camForView->getViewMatrix());
-  //pointLight(camForView->getViewMatrix(),pointLights);
-  //spotLight(camForView->getViewMatrix(),spotLights);
+  pointLight(camForView->getViewMatrix());
+  spotLight(camForView->getViewMatrix());
   //// copy(m_colorTexture,m_renderTarget);
   ////shadows(spotLights,scene);
   aplylights();
@@ -356,6 +360,17 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
         auto light = cast<DirectionalLightComponent>(component)->m_light;
         light.direction = finalTransform*light.direction;
         m_directionalLights.push_back(light);
+      }
+      else if(component->getType() == COMPONENT_TYPE::kPointLight){
+        auto light = cast<PointLightComponent>(component)->m_light;
+        light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+        m_PointLights.push_back(light);
+      }
+      else if(component->getType() == COMPONENT_TYPE::kSpotLight){
+        auto light = cast<SpotLightComponent>(component)->m_light;
+        light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+        light.location = (finalTransform*Vector4f(light.direction,0.f)).xyz;
+        m_spotLights.push_back(light);
       }
     }
     vertex(child,frustum);
@@ -576,7 +591,7 @@ Deferred::directionalLight(const Matrix4f& viewMatrix)
 }
 
 void
-Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& lights)
+Deferred::pointLight(const Matrix4f& viewMatrix)
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
@@ -586,7 +601,7 @@ Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& light
   graphicsAPI.setRenderTargets(m_lightBuffer);
 
 
-  for(auto& light : lights){
+  for(auto& light : m_PointLights){
     auto viewLight = light;
     viewLight.location = (viewMatrix*Vector4f(viewLight.location,1.0f)).xyz;
     m_LightBuffer->write(&viewLight);
@@ -603,7 +618,7 @@ Deferred::pointLight(const Matrix4f& viewMatrix, const Vector<PointLight>& light
 }
 
 void 
-Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
+Deferred::spotLight(const Matrix4f& viewMatrix)
 {
   auto& resourseManager = ResoureManager::instance();
   auto& graphicsAPI = GraphicAPI::instance();
@@ -611,7 +626,7 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
   graphicsAPI.setBlendState(m_blendState1);
   cast<Shader>(resourseManager.getResourse("spotLight")).lock()->set();
   graphicsAPI.setRenderTargets(m_lightBuffer);
-  for(auto& light : lights){
+  for(auto& light : m_spotLights){
     auto viewLight = light;
     viewLight.location = (viewMatrix*Vector4f(viewLight.location,1.0f)).xyz;
     viewLight.direction = (viewMatrix*Vector4f(viewLight.direction.normalized(),0.0f)).normalized().xyz;
@@ -628,7 +643,10 @@ Deferred::spotLight(const Matrix4f& viewMatrix, const Vector<SpotLight>& lights)
     //if(light.castShadows){
     //  generateShadowMap(light,scene)
     //}
+
   }
+  graphicsAPI.unsetTextures(4);
+  graphicsAPI.setBlendState(m_blendState0);
 }
 
 void 

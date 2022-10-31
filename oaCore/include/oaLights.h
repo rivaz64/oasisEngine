@@ -68,7 +68,7 @@ struct SpotLight{
   /**
    * @brief the direction the light is pointed at
   */
-  Vector3f direction = {0.f,1.f,0.f};
+  Vector3f direction = Vector3f(1,0,0);
 
   /**
    * @brief the angle of the light 

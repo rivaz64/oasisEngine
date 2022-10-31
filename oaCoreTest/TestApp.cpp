@@ -49,6 +49,8 @@
 #include <oaSerializer.h>
 #include <oaOmniverseApi.h>
 #include <oaDirectionalLightComponent.h>
+#include <oaPointLightComponent.h>
+#include <oaSpotLightComponent.h>
 #include <chrono>
 #include "ImGuiFileDialog.h"
 extern "C" {
@@ -262,9 +264,6 @@ TestApp::postInit()
 
   //auto& eventSystem = EventSystem::instance();
   handler.suscribe<Camera,&Camera::moveCamera>(m_camera.get());
-  //m_lights.push_back(DirectionalLight());
-  //m_lights[0].direction = {0,0,0,0};
-  //m_lights[0].color = Color::WHITE;
 
   //genMorbiusTrip();
 
@@ -401,10 +400,6 @@ TestApp::draw()
    
   //
   ////m_camera->setCamera();
-  //
-  //lights->write(&dir.x);
-  //graphicsAPI.setVSBuffer(lights,3);
-  //graphicsAPI.setPSBuffer(lights,0);
 
   auto& renderer = Renderer::instance();
 
@@ -659,6 +654,35 @@ TestApp::updateImGui()
       }
     }
 
+    components = selectedActor->getComponents<PointLightComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("directional light "+StringUtilities::intToString(i)).c_str())){
+          auto lightComponent = cast<PointLightComponent>(components[i]);
+          ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
+          ImGui::DragFloat3("location",reinterpret_cast<float*>(&lightComponent->m_light.location),1);
+          ImGui::DragFloat("intensity",reinterpret_cast<float*>(&lightComponent->m_light.intensity),6,0);
+        }
+      }
+    }
+
+    components = selectedActor->getComponents<SpotLightComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("directional light "+StringUtilities::intToString(i)).c_str())){
+          auto lightComponent = cast<SpotLightComponent>(components[i]);
+          ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
+          ImGui::DragFloat3("direction",reinterpret_cast<float*>(&lightComponent->m_light.direction),1.f/36.f,-1,1);
+          ImGui::DragFloat3("location",reinterpret_cast<float*>(&lightComponent->m_light.location),1);
+          ImGui::DragFloat("intensity",reinterpret_cast<float*>(&lightComponent->m_light.intensity),6,0);
+          ImGui::DragFloat("angle",reinterpret_cast<float*>(&lightComponent->m_light.angle),1,0,90);
+
+        }
+      }
+    }
+
     wComponent = selectedActor->getComponent<CrowdComponent>();
 
     if (!wComponent.expired() && ImGui::CollapsingHeader("crowd")){
@@ -870,46 +894,7 @@ TestApp::updateImGui()
   //ImGui::DragFloat("blur",1,.01f);
   ImGui::End();
 
-
-  ImGui::Begin("directional lights");
-  if(ImGui::Button("add light")){
-    m_directionalLights.push_back(DirectionalLight());
-  }
-  auto lightNum = m_directionalLights.size();
-  for(int32 i = 0;i<lightNum;++i){
-    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_directionalLights[i].direction.x,.01f,-1.0f,1.0f);
-    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_directionalLights[i].color.r,.01f,0.0f,1.0f);
-  }
-  ImGui::End();
-
-  ImGui::Begin("point lights");
-  if(ImGui::Button("add light")){
-    m_pointLights.push_back(PointLight());
-  }
-  lightNum = m_pointLights.size();
-  for(int32 i = 0;i<lightNum;++i){
-    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].color.r,.01f,0.0f,1.0f);
-    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].location.x,.01f);
-    ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_pointLights[i].intensity);
-  }
-  ImGui::End();
-
-  ImGui::Begin("spot lights");
-  if(ImGui::Button("add light")){
-    m_spotLights.push_back(SpotLight());
-
-  }
-  lightNum = m_spotLights.size();
-  for(int32 i = 0;i<lightNum;++i){
-    ImGui::DragFloat3(("color"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].color.r,.01f,0.0f,1.0f);
-    ImGui::DragFloat3(("location"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].location.x,.01f);
-    ImGui::DragFloat3(("direction"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].direction.x,.01f,-1.f,1.f);
-    ImGui::DragFloat(("intensity"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].intensity);
-    ImGui::DragFloat(("angle"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].angle,.01f,-1.f,1.f);
-    ImGui::Checkbox(("cast shadows"+StringUtilities::intToString(i)).c_str(),&m_spotLights[i].castShadows);
-    //ImGui::Image(shadowMap->getId(),ImVec2(100.f,100.f));
-  }
-  ImGui::End();
+  
 
   if(isCreatingActor){
     ImGui::Begin("new Actor");
@@ -944,6 +929,16 @@ TestApp::updateImGui()
 
     if(ImGui::Button("Directioal Light")){
       selectedActor->attachComponent(makeSPtr<DirectionalLightComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("Point Light")){
+      selectedActor->attachComponent(makeSPtr<PointLightComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("Spot Light")){
+      selectedActor->attachComponent(makeSPtr<SpotLightComponent>());
       isAddingComponent = false;
     }
 
