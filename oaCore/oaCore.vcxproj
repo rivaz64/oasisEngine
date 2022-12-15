@@ -210,6 +210,7 @@
     <ClInclude Include="include\oaModel.h" />
     <ClInclude Include="include\oaMouse.h" />
     <ClInclude Include="include\oaOmniverseApi.h" />
+    <ClInclude Include="include\oaPlugInManager.h" />
     <ClInclude Include="include\oaPointLightComponent.h" />
     <ClInclude Include="include\oaPrerequisitesCore.h" />
     <ClInclude Include="include\oaRasterizerState.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="oaCrowdSim.cpp" />
     <ClCompile Include="oaDirectionalLightComponent.cpp" />
     <ClCompile Include="oaLuaFunctions.cpp" />
+    <ClCompile Include="oaPlugInManager.cpp" />
     <ClCompile Include="oaPointLightComponent.cpp" />
     <ClCompile Include="oaSkeletalMesh.cpp" />
     <ClCompile Include="oaSkeletalMeshComponent.cpp" />

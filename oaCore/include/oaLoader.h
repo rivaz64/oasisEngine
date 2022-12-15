@@ -53,6 +53,9 @@ class OA_CORE_EXPORT Loader
   bool
   loadTexture(const Path& path);
 
+  bool
+  loadMergedTexture(const Path& path);
+
   /**
    * @brief reads a sound from a file
    * @param path 

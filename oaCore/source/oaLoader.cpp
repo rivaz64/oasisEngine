@@ -293,55 +293,17 @@ loadMeshes(Vector<SPtr<Material>>& materials, SPtr<Actor> actor,const aiScene* l
 }
 
 bool
-loadImage(const Path& path){
-
+loadImage(const Path& path)
+{
   if(path.extension()==L".dds"){
     if(GraphicAPI::instance().loadDDS(path)){
       return true;
     }
   }
 
-
   String s = StringUtilities::toString(path.c_str());
-  //FIBITMAP* dib(0);
-  //FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-  //
-  //auto file = s.c_str();
-  //fif = FreeImage_GetFileType(file,0);
-  //
-  //if (fif == FIF_UNKNOWN){
-  //  
-  //  fif = FreeImage_GetFIFFromFilename(file);
-  //}
-  //
-  //if (fif == FIF_UNKNOWN){
-  //  //OA_WARNING_LOG("unknown format of image"+file);
-  //  return false;
-  //}
-  //  
-  //if (FreeImage_FIFSupportsReading(fif)) {
-  //  dib = FreeImage_Load(fif, file);
-  //  if (!dib){
-  //    //OA_WARNING_LOG("file "+path.getCompletePath() + " could not be loaded");
-  //    return false;
-  //  }
-  //  dib = FreeImage_ConvertTo32Bits(dib);
-  //}
-  //
-  //
-  //
-  // auto image = makeSPtr<Image>(Vector2I(FreeImage_GetWidth(dib),FreeImage_GetHeight(dib)),
-  //                              FreeImage_GetBPP(dib),
-  //                              FORMAT::kB8G8R8A8UnormSRGB);
-  //
-  //image->fillFromPointer(FreeImage_GetBits(dib));
-
-  
-
   int32 desiredChanels = 4;
   int32 channels = 0;
-  
-  //image->m_pitch = 4;
   int32 width;
   int32 height;
   uint8* pixels = stbi_load(s.c_str(),
@@ -377,8 +339,94 @@ loadImage(const Path& path){
 }
 
 bool
+loadMergedImage(const Path& path)
+{
+  String s = StringUtilities::toString(path.c_str());
+  int32 desiredChanels = 4;
+  int32 channels = 0;
+  int32 width;
+  int32 height;
+  uint8* pixels = stbi_load(s.c_str(),
+                           &width,
+                           &height,
+                           &channels,
+                           desiredChanels);
+  if (pixels == nullptr){
+    OA_WARNING_LOG(StringUtilities::toString(path.generic_wstring()) + " is an invalid image");
+    return false;
+  }
+
+  uint8* pixels1 = new uint8[width*height*4];
+  uint8* pixels2 = new uint8[width*height*4];
+  uint8* pixels3 = new uint8[width*height*4];
+
+  for(int y = 0; y<width; ++y){
+    for(int x = 0; x<width; ++x){
+      uint8 v1 = pixels[y*width*4+x*4];
+      uint8 v2 = pixels[y*width*4+x*4+1];
+      uint8 v3 = pixels[y*width*4+x*4+2];
+      pixels1[y*width*4+x*4+0] = v1;
+      pixels1[y*width*4+x*4+1] = v1;
+      pixels1[y*width*4+x*4+2] = v1;
+      pixels2[y*width*4+x*4+0] = v2;
+      pixels2[y*width*4+x*4+1] = v2;
+      pixels2[y*width*4+x*4+2] = v2;
+      pixels3[y*width*4+x*4+2] = v3;
+      pixels3[y*width*4+x*4+1] = v3;
+      pixels3[y*width*4+x*4+0] = v3;
+    }
+  }
+
+  auto image1 = makeSPtr<Image>(Vector2I(width,height),32,FORMAT::kB8G8R8A8UnormSRGB);
+  auto image2 = makeSPtr<Image>(Vector2I(width,height),32,FORMAT::kB8G8R8A8UnormSRGB);
+  auto image3 = makeSPtr<Image>(Vector2I(width,height),32,FORMAT::kB8G8R8A8UnormSRGB);
+  image1->fillFromPointer(pixels1);
+  image2->fillFromPointer(pixels2);
+  image3->fillFromPointer(pixels3);
+  //if (image->getSize().x == 0 || image->getSize().y == 0){
+  //  //OA_WARNING_LOG(path.getCompletePath() + " is an invalid image");
+  //  return false;
+  //}
+
+  //auto pitch = FreeImage_GetPitch(dib);
+
+  //image->setName(ResoureManager::instance().getUniqueName(path.stem().generic_string()));
+  image1->setName(path.stem().generic_string()+"1");
+  image2->setName(path.stem().generic_string()+"2");
+  image3->setName(path.stem().generic_string()+"3");
+
+  SPtr<Texture> texture1 = GraphicAPI::instance().createTexture();
+  SPtr<Texture> texture2 = GraphicAPI::instance().createTexture();
+  SPtr<Texture> texture3 = GraphicAPI::instance().createTexture();
+
+  texture1->initFromImage(image1);
+  texture2->initFromImage(image2);
+  texture3->initFromImage(image3);
+
+
+  texture1->setPath(path);
+  texture2->setPath(path);
+  texture3->setPath(path);
+
+  ResoureManager::instance().registerResourse(texture1->getName(),texture1);
+  ResoureManager::instance().registerResourse(texture2->getName(),texture2);
+  ResoureManager::instance().registerResourse(texture3->getName(),texture3);
+
+  delete[] pixels1;
+  delete[] pixels2;
+  delete[] pixels3;
+
+  return true;
+}
+
+bool
 Loader::loadTexture(const Path& path){
   return loadImage(path);
+}
+
+bool Loader::loadMergedTexture(const Path& path)
+{
+  return loadMergedImage(path);
 }
 
 void
@@ -461,6 +509,14 @@ loadTextures(Vector<SPtr<Material>>& materials,const aiScene* loadedScene,const 
                           GBUFFER_FLAGS::kSpecular,
                           gbufferFlags,
                           mat);
+
+    //tryLoadTextureChannel(material,
+    //                      aiTextureType_DIFFUSE_ROUGHNESS,
+    //                      path,
+    //                      "roughtness",
+    //                      GBUFFER_FLAGS::kRoughtness,
+    //                      gbufferFlags,
+    //                      mat);
     
     //print("looking for textures");
     //material->Get(AI_MATKEY_TEXTURE(aiTextureType_AMBIENT,0),notMyString);

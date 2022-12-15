@@ -1,7 +1,6 @@
 #pragma once
 
 #include "oaPrerequisitesUtilities.h"
-#include "oaModule.h" 
 
 namespace oaEngineSDK{
 

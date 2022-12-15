@@ -219,7 +219,7 @@ BaseApp::loadPlugIn(String DLL)
     print("Could not find function: "+DLL);
     return;
   }
-  print("everything working");
+  print("loaded "+ DLL);
 #endif
 }
 

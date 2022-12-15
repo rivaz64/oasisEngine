@@ -113,10 +113,15 @@ Material::setTexture(const String& channel, WPtr<Texture> texture)
     else if(channel == "emisive"){
       m_shader |= GBUFFER_FLAGS::kEmisive;
     }
+    //else if(channel == "roughtness"){
+    //  m_shader |= GBUFFER_FLAGS::kRoughtness;
+    //}
   }
   else{
     m_textures[channel] = texture;
   }
+
+  m_onChanged.publish(shared_from_this());
 }
 
 WPtr<Texture> 

@@ -11,6 +11,7 @@
 #include "oaNoise2D.h"
 #include "oaLoader.h"
 #include "oaLights.h"
+#include <CrowdSimulator.h>
 
 namespace oaEngineSDK{
 
@@ -109,11 +110,13 @@ public:
 
   Vector<SpotLight> m_spotLights;
 
+  Vector<WPtr<Actor>> agents;
+
   Vector4f m_ssaoConfig;
 
   Loader* loader;
 
-  
+  //bool play = flase;
 
   bool isCreatingActor = false;
 
@@ -130,6 +133,10 @@ public:
   uint8 loaderFlagsActive;
 
   bool animInPlay=false;
+
+  int numOfAgents = 6;
+  SPtr<Actor> agent;
+  cwSDKtoolkit::SPtr<cwSDKtoolkit::CrowdSimulator> cw;
 
   EventHandler<const Vector3f&> handler;
 

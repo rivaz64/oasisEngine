@@ -12,6 +12,13 @@
 namespace oaEngineSDK
 {
 
+struct TextureSave
+{
+  Path dir;
+  Path omniverseDir;
+  uint32 checkPoint;
+};
+
 class Omniverse :
   public OmniverseApi
 {
@@ -53,6 +60,16 @@ class Omniverse :
   void
   update() override;
 
+  void createMDL(SPtr<Resourse> resourse);
+
+  String 
+  addTexure(const Path& path) override;
+
+  void
+  uploadFileToOmniverse(const Path& path,const Path& omniversePath) override;
+
+  Vector<TextureSave> m_textures;
+
 protected:
 
   String m_userFolder = "omniverse://localhost/Users";
@@ -63,6 +80,8 @@ protected:
   Vector<WPtr<Actor>> m_actors;
 
   WPtr<Actor> m_scene;
+
+  
 
   friend class OmniverseApi;
   friend class Module<OmniverseApi>;

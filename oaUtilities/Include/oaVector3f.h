@@ -279,6 +279,12 @@ class OA_UTILITY_EXPORT Vector3f
     return x * v.x + y * v.y + z * v.z;
   }
 
+  //FORCEINLINE Vector3f
+  //getAngles()
+  //{
+  //  return 
+  //}
+
   /**
   * @brief cross product of two vectors
   * @param v1

@@ -11,6 +11,7 @@
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/base/gf/matrix4f.h>
 #include <pxr/base/gf/vec2f.h>
+#include <pxr/base/gf/vec3f.h>
 #include <pxr/usd/usdUtils/pipeline.h>
 #include <pxr/usd/usdUtils/sparseValueWriter.h>
 #include <pxr/usd/usdShade/material.h>
@@ -23,7 +24,8 @@
 #include <pxr/usd/usdGeom/cube.h>
 #include "pxr/usd/usdShade/materialBindingAPI.h"
 #include <pxr/usd/usdLux/distantLight.h>
-#include <pxr/usd/usdLux/domeLight.h>
+#include <pxr/usd/usdLux/sphereLight.h>
+#include <pxr/usd/usdLux/diskLight.h>
 #include <pxr/usd/usdShade/shader.h>
 #include <pxr/usd/usd/modelAPI.h>
 #include <oaActor.h>
@@ -37,12 +39,15 @@
 #include <oaResoureManager.h>
 #include <oaStaticMeshComponent.h>
 #include <oaTexture.h>
+#include <oaDirectionalLightComponent.h>
+#include <oaPointLightComponent.h>
+#include <oaSpotLightComponent.h>
 
 namespace oaEngineSDK 
 {
 
 String g_myPath = "C:/Users/roriv/Documents/GitHub/oasisEngine/bin/omniverse/";
-
+String g_omniversePath;
 PXR_NAMESPACE_USING_DIRECTIVE
 
 TF_DEFINE_PRIVATE_TOKENS(
@@ -87,11 +92,35 @@ PXR_NAMESPACE_USING_DIRECTIVE
 
 UsdStageRefPtr g_stage = nullptr;
 LiveSessionInfo g_liveSessionInfo;
+void
+uploadCallback(void* userData, OmniClientResult result)
+{
+  print(StringUtilities::intToString(result));
+}
+void checkPointsCallBack(void* userData, OmniClientResult result, uint32_t numEntries, struct OmniClientListEntry const* entries)
+{
+  if(numEntries==0) return;
+  auto entry = entries[numEntries-1].relativePath;
+  auto& textures = reinterpret_cast<Omniverse*>(Omniverse::instancePtr())->m_textures;
+  int i;
+  for (i = 0; entry[i] != '='; ++i);
+  ++i;
+  String sNum;
+  for (; entry[i] != '\0'; ++i){
+    sNum +=entry[i];
+  }
+  int num = atoi(sNum.c_str());
+  if(num != textures[(int)userData].checkPoint){
+    textures[(int)userData].checkPoint = num;
+    omniClientWait(omniClientCopy(textures[*((int*)userData)].omniverseDir.string().c_str(),textures[*((int*)userData)].dir.string().c_str(),nullptr, uploadCallback,eOmniClientCopy_Overwrite));
+  }
+}
 
 static void logCallback(const char* threadName, const char* component, OmniClientLogLevel level, const char* message) noexcept
 {
     print(message);
 }
+
 
 void 
 Omniverse::onStartUp()
@@ -120,9 +149,10 @@ Omniverse::connect()
   String destinationPath;
   if (destinationPath == "")
   {
-    String m_userFolder = "omniverse://localhost/Users";
+    //m_userFolder = "omniverse://192.168.138.220/Users";
+    m_userFolder = "omniverse://localhost/Users";
     m_userName = getConnectedUsername();
-    m_destinationPath = m_userFolder + "/" + m_userName;
+    g_omniversePath = m_destinationPath = m_userFolder + "/" + m_userName;
   }
   //auto sessionList = g_liveSessionInfo.GetLiveSessionList();
   //
@@ -313,27 +343,58 @@ readMLD(SPtr<Material> material, String path, String dotPath){
   auto numOfTokens = tokens.size();
   for(SIZE_T i = 0; i<numOfTokens; ++i){
     if(tokens[i] == "diffuse_texture:"){
-      auto texturePath = StringUtilities::split(str,"\"")[1];
-      auto texturePathSize = texturePath.size();
-      auto myPath = g_myPath;
-      for(int i = 1;i<texturePathSize; ++i){
-        dotPath+=texturePath[i];
+      auto splited = StringUtilities::split(tokens[i+1],"\"");
+      if(splited.size()>1){
+        auto texturePath = splited[1];
+        auto texturePathSize = texturePath.size();
+        auto myPath = g_myPath;
+        for(int i = 1;i<texturePathSize; ++i){
+          dotPath+=texturePath[i];
+        }
+        for(int i = 2;i<texturePathSize; ++i){
+          myPath+=texturePath[i];
+        }
+        print("texturePath->"+dotPath);
+        char* data = new char[256];
+        OmniClientRequestId res = omniClientCopy(dotPath.c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_ErrorIfExists);
+        //print(omniClientGetResultString(OmniClientResult(res)));
+        reinterpret_cast<Omniverse*>(Omniverse::instancePtr())->m_textures.push_back({dotPath,myPath,1});
+        Loader loader;
+        print("mytexturePath->"+myPath);
+        Path p = Path(myPath);
+        loader.loadResource(p,WPtr<Actor>());
+        auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
+
+        if(!texture.expired())
+        material->setTexture("diffuse",texture);
       }
-      for(int i = 2;i<texturePathSize; ++i){
-        myPath+=texturePath[i];
+      
+    }
+    else if(tokens[i] == "normalmap_texture:"){
+      auto splited = StringUtilities::split(tokens[i+1],"\"");
+      if(splited.size()>1){
+        auto texturePath =splited[1];
+        auto texturePathSize = texturePath.size();
+        auto myPath = g_myPath;
+        for(int i = 1;i<texturePathSize; ++i){
+          dotPath+=texturePath[i];
+        }
+        for(int i = 2;i<texturePathSize; ++i){
+          myPath+=texturePath[i];
+        }
+        print("texturePath->"+dotPath);
+        char* data = new char[256];
+        OmniClientRequestId res = omniClientCopy(dotPath.c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_ErrorIfExists);
+        print(omniClientGetResultString(OmniClientResult(res)));
+        Loader loader;
+        print("mytexturePath->"+myPath);
+        Path p = Path(myPath);
+        loader.loadResource(p,WPtr<Actor>());
+        auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
+        if(!texture.expired())
+        material->setTexture("normalMap",texture);
+        break;
       }
-      print("texturePath->"+dotPath);
-      char* data = new char[256];
-      OmniClientRequestId res = omniClientCopy(dotPath.c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_ErrorIfExists);
-      print(omniClientGetResultString(OmniClientResult(res)));
-      Loader loader;
-      print("mytexturePath->"+myPath);
-      Path p = Path(myPath);
-      loader.loadResource(p,WPtr<Actor>());
-      auto texture = cast<Texture>(ResoureManager::instance().getResourse(p.stem().string()));
-      if(!texture.expired())
-      material->setTexture("diffuse",texture);
-      break;
     }
   }
 }
@@ -365,6 +426,9 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     auto p = val.Get<SdfAssetPath>();
     auto assetPath = p.GetAssetPath();
     auto resolvedPath = p.GetResolvedPath();
+    if(resolvedPath.size()==0){
+      continue;
+    }
     String dotPath;
     auto dif = resolvedPath.size()-assetPath.size()+2;
 
@@ -386,9 +450,10 @@ loadMaterial(SPtr<Material> mat,UsdShadeMaterial& material)
     print("matPath->"+String(p.GetResolvedPath().c_str()));
     char* data = new char[256];
     auto res = omniClientCopy(p.GetResolvedPath().c_str(),myPath.c_str(),data,OmniClientCopyCallback(),eOmniClientCopy_Overwrite);
+    reinterpret_cast<Omniverse*>(Omniverse::instancePtr())->m_textures.push_back({Path(p.GetResolvedPath()),myPath,1});
+
     print(omniClientGetResultString(OmniClientResult(res)));
     readMLD(mat,myPath.c_str(),dotPath);
-
   }
   
 }
@@ -470,6 +535,120 @@ loadMeshFromUSD(UsdGeomMesh UGmesh, WPtr<Actor> wActor,const String& name)
 }
 
 void
+loadDirectionalLight(UsdLuxDistantLight ULight, WPtr<Actor> wActor)
+{
+  auto actor = wActor.lock();
+  auto component = makeSPtr<DirectionalLightComponent>();
+  actor->attachComponent(component);
+  VtValue value;
+  ULight.GetColorAttr().Get(&value);
+  auto color = value.Get<GfVec3f>();
+  component->m_light.color = Color(color.GetArray()[0],color.GetArray()[1],color.GetArray()[2]);
+  Vector3f rot;
+  bool resetXformStack = true;
+  Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  for(auto& xFormOp: xFormOps){
+    if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        GfVec3f rotation(0);
+        xFormOp.Get(&rotation);
+        rot = Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]);
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        GfVec3d rotation(0);
+        xFormOp.Get(&rotation);
+        rot = Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]);
+      }
+    }
+  }
+  rot = rot/180.f*Math::PI;
+  component->m_light.direction = Matrix4f::rotationMatrix(rot)*Vector4f(1,0,0,0);
+}
+
+void
+loadPointLight(UsdLuxSphereLight ULight, WPtr<Actor> wActor)
+{
+  auto actor = wActor.lock();
+  auto component = makeSPtr<PointLightComponent>();
+  actor->attachComponent(component);
+  VtValue value;
+  ULight.GetColorAttr().Get(&value);
+  auto color = value.Get<GfVec3f>();
+  component->m_light.color = Color(color.GetArray()[0],color.GetArray()[1],color.GetArray()[2]);
+  ULight.GetIntensityAttr().Get(&value);
+  component->m_light.intensity = value.Get<float>();
+  Vector3f pos;
+  bool resetXformStack = true;
+  Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  for(auto& xFormOp: xFormOps){
+    if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        GfVec3f position(0);
+        xFormOp.Get(&position);
+        pos = Vector3f(position.data()[0],position.data()[1],position.data()[2]);
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        GfVec3d position(0);
+        xFormOp.Get(&position);
+        pos = Vector3f(position.data()[0],position.data()[1],position.data()[2]);
+      }
+    }
+  }
+  component->m_light.location = pos;
+}
+
+void
+loadSpotLight(UsdLuxDiskLight ULight, WPtr<Actor> wActor)
+{
+  //auto actor = wActor.lock();
+  //auto component = makeSPtr<SpotLightComponent>();
+  //actor->attachComponent(component);
+  //VtValue value;
+  //ULight.GetColorAttr().Get(&value);
+  //auto color = value.Get<GfVec3f>();
+  //component->m_light.color = Color(color.GetArray()[0],color.GetArray()[1],color.GetArray()[2]);
+  //ULight.GetIntensityAttr().Get(&value);
+  //component->m_light.intensity = value.Get<float>();
+  //ULight.GetSha
+  //component->m_light.angle =
+  //Vector3f pos;
+  // Vector3f rot;
+  //bool resetXformStack = true;
+  //Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  //for(auto& xFormOp: xFormOps){
+  //  if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+  //    if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+  //      GfVec3f position(0);
+  //      xFormOp.Get(&position);
+  //      pos = Vector3f(position.data()[0],position.data()[1],position.data()[2]);
+  //    }
+  //    else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+  //      GfVec3d position(0);
+  //      xFormOp.Get(&position);
+  //      pos = Vector3f(position.data()[0],position.data()[1],position.data()[2]);
+  //    }
+  //  }
+  //
+  //  else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+  //    if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+  //      GfVec3f rotation(0);
+  //      xFormOp.Get(&rotation);
+  //      rot = Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]);
+  //    }
+  //    else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+  //      GfVec3d rotation(0);
+  //      xFormOp.Get(&rotation);
+  //      rot = Vector3f(rotation.data()[0],rotation.data()[1],rotation.data()[2]);
+  //    }
+  //  }
+  //}
+  //component->m_light.location = pos;
+  //rot = rot/180.f*Math::PI;
+  //component->m_light.direction = (Matrix4f::rotationMatrix(rot)*Vector4f(1,0,0,0)).xyz;
+  
+}
+
+void
 loadActor(SPtr<Actor> parent, UsdPrim node)
 {
   auto newActor = makeSPtr<Actor>();
@@ -525,6 +704,16 @@ loadActor(SPtr<Actor> parent, UsdPrim node)
     if (child.IsA<UsdGeomMesh>()){
       loadMeshFromUSD(UsdGeomMesh(child),newActor,child.GetName().GetString());
     }
+    else if(child.IsA<UsdLuxDistantLight>()){
+      loadDirectionalLight(UsdLuxDistantLight(child),newActor);
+    }
+    else if(child.IsA<UsdLuxSphereLight>()){
+      loadPointLight(UsdLuxSphereLight(child),newActor);
+    }
+    //else if(child.IsA<UsdLuxDiskLight>()){
+    //  auto component = makeSPtr<SpotLightComponent>();
+    //  newActor->attachComponent(component);
+    //}
 		else if (child.IsA<UsdGeomXform>())
 		{
 			print("Found UsdActor: " + child.GetName().GetString() );
@@ -575,39 +764,92 @@ Omniverse::connectToModel(const String& name, WPtr<Actor> wScene)
 
 }
 
-void
-uploadCallback(void* userData, OmniClientResult result)
-{
-}
+
 
 void 
-addMaterial(WPtr<Material> wMaterial,const UsdGeomMesh& UGmesh)
+Omniverse::createMDL(SPtr<Resourse> resourse)
 {
-  if(wMaterial.expired()) return;
-  auto material = wMaterial.lock();
+  auto material = cast<Material>(resourse);
+  
   auto matName = material->getName();
   auto wTexture = material->getTexture("diffuse");
-  if(wTexture.expired()) return;
-  auto texture = wTexture.lock();
+  auto wNormal = material->getTexture("normalMap");
+  String textureAttr  = "";
+  String normalAttr  = "";
+  if(!wTexture.expired()){
+    auto texture = wTexture.lock();
+    String omniversePathTexture =  "./textures/"+texture->getPath().filename().string();
+    textureAttr = "\"" + omniversePathTexture + "\", ::tex::gamma_srgb";
+    omniClientWait(omniClientCopy(texture->getPath().string().c_str(),omniversePathTexture.c_str(),nullptr, uploadCallback,eOmniClientCopy_Overwrite));
+  }
+  if(!wNormal.expired()){
+    auto normal = wNormal.lock();
+    String omniversePathTexture =  "./textures/"+normal->getPath().filename().string();
+    normalAttr = "\"" + omniversePathTexture + "\", ::tex::gamma_linear";
+    omniClientWait(omniClientCopy(normal->getPath().string().c_str(),omniversePathTexture.c_str(),nullptr, uploadCallback,eOmniClientCopy_Overwrite));
+  }
   auto fileName = g_myPath+"materials/"+matName+".mdl";
   ofstream outfile (fileName);
-  String omniversePathTexture =   "omniverse://127.0.0.1/files/materials/textures/"+texture->getPath().filename().string();
-  String omniversePathMaterial =   "omniverse://127.0.0.1/files/materials/"+matName+".mdl";
-  outfile << "mdl 1.4;" << endl << 
-    "using ::OmniPBR import OmniPBR;" << endl << 
-    "import ::tex::gamma_mode;" << endl <<
-    "import ::state::normal;" << endl <<
-    "export material " << matName <<"(*)" << endl <<
-    " = OmniPBR(" << endl <<
-    "diffuse_texture: texture_2d(\"" << omniversePathTexture << "\", ::tex::gamma_srgb)"
-    ");";
+  String omniversePathMaterial =   g_omniversePath + "/files/materials/"+matName+".mdl";
+  outfile << "mdl 1.4;\n"
+    "import ::OmniPBR::OmniPBR;\n"
+    "import ::anno::author;\n"
+    "import ::anno::description;\n"
+    "import ::anno::display_name;\n"
+    "import ::anno::key_words;\n"
+    "import ::anno::version;\n"
+    "import ::tex::gamma_mode;\n"
+    "import ::state::normal;\n"
+    "\n"
+    "export material "<<matName<<"(*)\n"
+    "[[\n"
+    "    ::anno::display_name(\"Omni PBR \"),\n"
+    "    ::anno::description(\"Omni PBR, supports ORM textures\"),\n"
+    "    ::anno::version(1, 0, 0, \"\"),\n"
+    "    ::anno::author(\"NVIDIA CORPORATION\"),\n"
+    "    ::anno::key_words(string[](\"omni\", \"PBR\", \"omniverse\", \"generic\"))\n"
+    "]]\n"
+    " = ::OmniPBR::OmniPBR(\n"
+    "    diffuse_color_constant: color(0.200000003f, 0.200000003f, 0.200000003f),\n"
+    "    diffuse_texture: texture_2d("<<textureAttr<<"),\n"
+    "    albedo_desaturation: 0.f,\n"
+    "    albedo_add: 0.f,\n"
+    "    albedo_brightness: 1.f,\n"
+    "    diffuse_tint: color(1.f, 1.f, 1.f),\n"
+    "    reflection_roughness_constant: 0.5f,\n"
+    "    reflection_roughness_texture_influence: 1.f,\n"
+    "    reflectionroughness_texture: texture_2d(),\n"
+    "    metallic_constant: 0.f,\n"
+    "    metallic_texture_influence: 1.f,\n"
+    "    metallic_texture: texture_2d(),\n"
+    "    specular_level: 0.5f,\n"
+    "    enable_ORM_texture: true,\n"
+    "    ORM_texture: texture_2d(),\n"
+    "    ao_to_diffuse: 0.f,\n"
+    "    ao_texture: texture_2d(),\n"
+    "    enable_emission: false,\n"
+    "    emissive_color: color(1.f, 0.100000001f, 0.100000001f),\n"
+    "    emissive_mask_texture: texture_2d(),\n"
+    "    emissive_intensity: 40.f,\n"
+    "    bump_factor: 1.f,\n"
+    "    normalmap_texture: texture_2d("<<normalAttr<<"),\n"
+    "    detail_bump_factor: 0.300000012f,\n"
+    "    detail_normalmap_texture: texture_2d(),\n"
+    "    project_uvw: false,\n"
+    "    world_or_object: false,\n"
+    "    uv_space_index: 0,\n"
+    "    texture_translate: float2(0.f),\n"
+    "    texture_rotate: 0.f,\n"
+    "    texture_scale: float2(1.f),\n"
+    "    detail_texture_translate: float2(0.f),\n"
+    "    detail_texture_rotate: 0.f,\n"
+    "    detail_texture_scale: float2(1.f));\n";
+
   outfile.close();
-  char* data = new char[256];
 
-  omniClientWait(omniClientCopy(texture->getPath().string().c_str(),omniversePathTexture.c_str(),nullptr, uploadCallback));
-  omniClientWait(omniClientCopy(fileName.c_str(),omniversePathMaterial.c_str(),nullptr, uploadCallback));
+    omniClientWait(omniClientCopy(fileName.c_str(),omniversePathMaterial.c_str(),nullptr, uploadCallback,eOmniClientCopy_Overwrite));
 
-     // Create a material instance for this in USD
+
   TfToken materialNameToken(matName);
   // Make path for "/Root/Looks/Fieldstone";
   SdfPath matPath = SdfPath::AbsoluteRootPath()
@@ -616,7 +858,7 @@ addMaterial(WPtr<Material> wMaterial,const UsdGeomMesh& UGmesh)
       .AppendChild(materialNameToken);
   UsdShadeMaterial newMat = UsdShadeMaterial::Define(g_stage, matPath);
 
-  SdfAssetPath mdlShaderModule = SdfAssetPath("./Materials/"+matName+".mdl");
+  SdfAssetPath mdlShaderModule = SdfAssetPath("./files/materials/"+matName+".mdl");
   SdfPath shaderPath = matPath.AppendChild(materialNameToken);
   UsdShadeShader mdlShader = UsdShadeShader::Define(g_stage, shaderPath);
   mdlShader.CreateIdAttr(VtValue(_tokens->shaderId));
@@ -633,17 +875,205 @@ addMaterial(WPtr<Material> wMaterial,const UsdGeomMesh& UGmesh)
   primStShader.CreateIdAttr(VtValue(_tokens->PrimStShaderId));
   primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2);
   primStShader.CreateInput(_tokens->varname, SdfValueTypeNames->Token).Set(_tokens->st);
+  
+  //auto wTexture = material->getTexture("diffuse");
 
-  std::string diffuseColorShaderName = matName + "DiffuseColorTex";
-  std::string diffuseFilePath = omniversePathTexture;
-  shaderPath = matPath.AppendChild(TfToken(diffuseColorShaderName));
-  UsdShadeShader diffuseColorShader = UsdShadeShader::Define(g_stage, shaderPath);
-  diffuseColorShader.CreateIdAttr(VtValue(_tokens->UsdUVTexture));
-  UsdShadeInput texInput = diffuseColorShader.CreateInput(_tokens->file, SdfValueTypeNames->Asset);
-  texInput.Set(SdfAssetPath(diffuseFilePath));
-  texInput.GetAttr().SetColorSpace(_tokens->sRGB);
-  diffuseColorShader.CreateInput(_tokens->st, SdfValueTypeNames->Float2).ConnectToSource(primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2));
-  UsdShadeOutput diffuseColorShaderOutput = diffuseColorShader.CreateOutput(_tokens->rgb, SdfValueTypeNames->Float3);
+  if(!wTexture.expired()){
+    auto texture = wTexture.lock();
+    String omniversePathTexture =  "./files/materials/textures/"+texture->getPath().filename().string();
+
+    std::string diffuseColorShaderName = matName + "DiffuseColorTex";
+    std::string diffuseFilePath = omniversePathTexture;
+    shaderPath = matPath.AppendChild(TfToken(diffuseColorShaderName));
+    UsdShadeShader diffuseColorShader = UsdShadeShader::Define(g_stage, shaderPath);
+    diffuseColorShader.CreateIdAttr(VtValue(_tokens->UsdUVTexture));
+    UsdShadeInput texInput = diffuseColorShader.CreateInput(_tokens->file, SdfValueTypeNames->Asset);
+    texInput.Set(SdfAssetPath(diffuseFilePath));
+    texInput.GetAttr().SetColorSpace(_tokens->sRGB);
+    diffuseColorShader.CreateInput(_tokens->st, SdfValueTypeNames->Float2).ConnectToSource(primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2));
+    UsdShadeOutput diffuseColorShaderOutput = diffuseColorShader.CreateOutput(_tokens->rgb, SdfValueTypeNames->Float3);
+
+    String usdPreviewSurfaceShaderName = matName + "PreviewSurface";
+    shaderPath = matPath.AppendChild(TfToken(usdPreviewSurfaceShaderName));
+    UsdShadeShader usdPreviewSurfaceShader = UsdShadeShader::Define(g_stage, shaderPath);
+    usdPreviewSurfaceShader.CreateIdAttr(VtValue(_tokens->UsdPreviewSurface));
+    UsdShadeInput diffuseColorInput = usdPreviewSurfaceShader.CreateInput(_tokens->diffuseColor, SdfValueTypeNames->Color3f);
+    diffuseColorInput.ConnectToSource(diffuseColorShaderOutput);
+    //UsdShadeInput normalInput = usdPreviewSurfaceShader.CreateInput(_tokens->normal, SdfValueTypeNames->Normal3f);
+    //normalInput.ConnectToSource(normalShaderOutput);
+
+    // Set the linkage between material and USD Preview surface shader
+    UsdShadeOutput usdPreviewSurfaceOutput = newMat.CreateSurfaceOutput();
+    auto result = usdPreviewSurfaceOutput.ConnectToSource(usdPreviewSurfaceShader, _tokens->surface);
+
+  }
+}
+
+String 
+Omniverse::addTexure(const Path& path)
+{
+  String omniversePathTexture =  "./textures/"+path.filename().string();
+  uploadFileToOmniverse(path,omniversePathTexture);
+  m_textures.push_back({path,omniversePathTexture,1});
+  return omniversePathTexture;
+}
+
+void
+Omniverse::uploadFileToOmniverse(const Path& path, const Path& omniversePath)
+{
+  omniClientWait(omniClientCopy(path.string().c_str(),omniversePath.string().c_str(),nullptr, uploadCallback,eOmniClientCopy_Overwrite));
+}
+
+void 
+addMaterial(WPtr<Resourse> wMaterial,const UsdGeomMesh& UGmesh)
+{
+  if(wMaterial.expired()) return;
+  auto material = cast<Material>(wMaterial.lock());
+  
+  auto matName = material->getName();
+  auto wTexture = material->getTexture("diffuse");
+  auto wNormal = material->getTexture("normalMap");
+  String textureAttr  = "";
+  String normalAttr  = "";
+
+  if(!wTexture.expired()){
+    String omniversePathTexture = Omniverse::instance().addTexure(wTexture.lock()->getPath());
+    textureAttr = "\"" + omniversePathTexture + "\", ::tex::gamma_srgb";
+
+  }
+
+  if(!wNormal.expired()){
+    String omniversePathTexture = Omniverse::instance().addTexure(wNormal.lock()->getPath()); 
+    normalAttr = "\"" + omniversePathTexture + "\", ::tex::gamma_linear";
+  }
+
+  auto fileName = g_myPath+"materials/"+matName+".mdl";
+  ofstream outfile (fileName);
+  String omniversePathMaterial =   g_omniversePath + "/files/materials/"+matName+".mdl";
+  outfile << "mdl 1.4;\n"
+    "import ::OmniPBR::OmniPBR;\n"
+    "import ::anno::author;\n"
+    "import ::anno::description;\n"
+    "import ::anno::display_name;\n"
+    "import ::anno::key_words;\n"
+    "import ::anno::version;\n"
+    "import ::tex::gamma_mode;\n"
+    "import ::state::normal;\n"
+    "\n"
+    "export material "<<matName<<"(*)\n"
+    "[[\n"
+    "    ::anno::display_name(\"Omni PBR \"),\n"
+    "    ::anno::description(\"Omni PBR, supports ORM textures\"),\n"
+    "    ::anno::version(1, 0, 0, \"\"),\n"
+    "    ::anno::author(\"NVIDIA CORPORATION\"),\n"
+    "    ::anno::key_words(string[](\"omni\", \"PBR\", \"omniverse\", \"generic\"))\n"
+    "]]\n"
+    " = ::OmniPBR::OmniPBR(\n"
+    "    diffuse_color_constant: color(0.200000003f, 0.200000003f, 0.200000003f),\n"
+    "    diffuse_texture: texture_2d("<<textureAttr<<"),\n"
+    "    albedo_desaturation: 0.f,\n"
+    "    albedo_add: 0.f,\n"
+    "    albedo_brightness: 1.f,\n"
+    "    diffuse_tint: color(1.f, 1.f, 1.f),\n"
+    "    reflection_roughness_constant: 0.5f,\n"
+    "    reflection_roughness_texture_influence: 1.f,\n"
+    "    reflectionroughness_texture: texture_2d(),\n"
+    "    metallic_constant: 0.f,\n"
+    "    metallic_texture_influence: 1.f,\n"
+    "    metallic_texture: texture_2d(),\n"
+    "    specular_level: 0.5f,\n"
+    "    enable_ORM_texture: true,\n"
+    "    ORM_texture: texture_2d(),\n"
+    "    ao_to_diffuse: 0.f,\n"
+    "    ao_texture: texture_2d(),\n"
+    "    enable_emission: false,\n"
+    "    emissive_color: color(1.f, 0.100000001f, 0.100000001f),\n"
+    "    emissive_mask_texture: texture_2d(),\n"
+    "    emissive_intensity: 40.f,\n"
+    "    bump_factor: 1.f,\n"
+    "    normalmap_texture: texture_2d("<<normalAttr<<"),\n"
+    "    detail_bump_factor: 0.300000012f,\n"
+    "    detail_normalmap_texture: texture_2d(),\n"
+    "    project_uvw: false,\n"
+    "    world_or_object: false,\n"
+    "    uv_space_index: 0,\n"
+    "    texture_translate: float2(0.f),\n"
+    "    texture_rotate: 0.f,\n"
+    "    texture_scale: float2(1.f),\n"
+    "    detail_texture_translate: float2(0.f),\n"
+    "    detail_texture_rotate: 0.f,\n"
+    "    detail_texture_scale: float2(1.f));\n";
+
+  outfile.close();
+
+  Omniverse::instance().uploadFileToOmniverse(fileName,omniversePathMaterial);
+
+
+  //char* data = new char[256];
+  //auto matName = material->getName();
+  //auto fileName = g_myPath+"materials/"+matName+".mdl";
+  //String omniversePathMaterial =   g_omniversePath + "/files/materials/"+matName+".mdl";
+
+     // Create a material instance for this in USD
+  TfToken materialNameToken(matName);
+  // Make path for "/Root/Looks/Fieldstone";
+  SdfPath matPath = SdfPath::AbsoluteRootPath()
+      .AppendChild(_tokens->Root)
+      .AppendChild(_tokens->Looks)
+      .AppendChild(materialNameToken);
+  UsdShadeMaterial newMat = UsdShadeMaterial::Define(g_stage, matPath);
+
+  SdfAssetPath mdlShaderModule = SdfAssetPath("./files/materials/"+matName+".mdl");
+  SdfPath shaderPath = matPath.AppendChild(materialNameToken);
+  UsdShadeShader mdlShader = UsdShadeShader::Define(g_stage, shaderPath);
+  mdlShader.CreateIdAttr(VtValue(_tokens->shaderId));
+
+  mdlShader.SetSourceAsset(mdlShaderModule, _tokens->mdl);
+  mdlShader.GetPrim().CreateAttribute(TfToken("info:mdl:sourceAsset:subIdentifier"), SdfValueTypeNames->Token, false, SdfVariabilityUniform).Set(materialNameToken);
+
+  UsdShadeOutput mdlOutput = newMat.CreateSurfaceOutput(_tokens->mdl);
+  mdlOutput.ConnectToSource(mdlShader, _tokens->out);
+ 
+
+  shaderPath = matPath.AppendChild(_tokens->PrimST);
+  UsdShadeShader primStShader = UsdShadeShader::Define(g_stage, shaderPath);
+  primStShader.CreateIdAttr(VtValue(_tokens->PrimStShaderId));
+  primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2);
+  primStShader.CreateInput(_tokens->varname, SdfValueTypeNames->Token).Set(_tokens->st);
+  
+  wTexture = material->getTexture("diffuse");
+
+  if(!wTexture.expired()){
+    auto texture = wTexture.lock();
+    String omniversePathTexture =  "./files/materials/textures/"+texture->getPath().filename().string();
+
+    std::string diffuseColorShaderName = matName + "DiffuseColorTex";
+    std::string diffuseFilePath = omniversePathTexture;
+    shaderPath = matPath.AppendChild(TfToken(diffuseColorShaderName));
+    UsdShadeShader diffuseColorShader = UsdShadeShader::Define(g_stage, shaderPath);
+    diffuseColorShader.CreateIdAttr(VtValue(_tokens->UsdUVTexture));
+    UsdShadeInput texInput = diffuseColorShader.CreateInput(_tokens->file, SdfValueTypeNames->Asset);
+    texInput.Set(SdfAssetPath(diffuseFilePath));
+    texInput.GetAttr().SetColorSpace(_tokens->sRGB);
+    diffuseColorShader.CreateInput(_tokens->st, SdfValueTypeNames->Float2).ConnectToSource(primStShader.CreateOutput(_tokens->result, SdfValueTypeNames->Float2));
+    UsdShadeOutput diffuseColorShaderOutput = diffuseColorShader.CreateOutput(_tokens->rgb, SdfValueTypeNames->Float3);
+
+    String usdPreviewSurfaceShaderName = matName + "PreviewSurface";
+    shaderPath = matPath.AppendChild(TfToken(usdPreviewSurfaceShaderName));
+    UsdShadeShader usdPreviewSurfaceShader = UsdShadeShader::Define(g_stage, shaderPath);
+    usdPreviewSurfaceShader.CreateIdAttr(VtValue(_tokens->UsdPreviewSurface));
+    UsdShadeInput diffuseColorInput = usdPreviewSurfaceShader.CreateInput(_tokens->diffuseColor, SdfValueTypeNames->Color3f);
+    diffuseColorInput.ConnectToSource(diffuseColorShaderOutput);
+    //UsdShadeInput normalInput = usdPreviewSurfaceShader.CreateInput(_tokens->normal, SdfValueTypeNames->Normal3f);
+    //normalInput.ConnectToSource(normalShaderOutput);
+
+    // Set the linkage between material and USD Preview surface shader
+    UsdShadeOutput usdPreviewSurfaceOutput = newMat.CreateSurfaceOutput();
+    auto result = usdPreviewSurfaceOutput.ConnectToSource(usdPreviewSurfaceShader, _tokens->surface);
+
+  }
+
+  
 
   UsdShadeMaterialBindingAPI usdMaterialBinding(UGmesh);
   usdMaterialBinding.Bind(newMat);
@@ -663,7 +1093,7 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 
   auto mesh = wMesh.lock();
 
-  SdfPath modelPrimPath = parentPath.AppendChild(TfToken(model->getName()));
+  SdfPath modelPrimPath = parentPath.AppendChild(TfToken(mesh->getName()));
   UsdGeomMesh UGmesh = UsdGeomMesh::Define(g_stage, modelPrimPath);
   if (!UGmesh){
     print("mesh not created");
@@ -682,7 +1112,7 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 	{
 		points.push_back(GfVec3f(vertex.location.x, vertex.location.y, vertex.location.z));
     meshNormals.push_back(GfVec3f(vertex.normal.x, vertex.normal.y, vertex.normal.z));
-    valueArray.push_back(GfVec2f(vertex.textureCord.x,vertex.textureCord.y));
+    valueArray.push_back(GfVec2f(vertex.textureCord.x,1.f-vertex.textureCord.y));
 	}
 	UGmesh.CreatePointsAttr(VtValue(points));
   UGmesh.CreateNormalsAttr(VtValue(meshNormals));
@@ -718,15 +1148,110 @@ addMesh(WPtr<Model> wModel,SdfPath parentPath, Transform transform)
 		displayColorAttr.Set(valueArray);
 	}
 
-  addMaterial(model->getMaterial().lock(),UGmesh);
-  //}
-  
-  
-  print("mesh created");
+  //addMaterial(model->getMaterial().lock(),UGmesh);
+
+
+  //print("mesh created");
+  auto wMat = model->getMaterial();
   addMaterial(model->getMaterial(),UGmesh);
+  auto material = wMat.lock();
+  material->m_onChanged.suscribe<Omniverse,&Omniverse::createMDL>(
+    reinterpret_cast<Omniverse*>(Omniverse::instancePtr())
+    );
   //m_meshes.push_back(makeSPtr)
   g_stage->Save();
   omniClientLiveProcess();
+}
+
+void 
+addDirectionalLight(const DirectionalLight& light,SdfPath parentPath)
+{
+  auto lightPrimPath = parentPath.AppendChild(TfToken("directionalLight"));
+  auto ULight = UsdLuxDistantLight::Define(g_stage, lightPrimPath);
+  GfVec3f color(light.color.r,light.color.g,light.color.b);
+  VtValue attr;
+  ULight.CreateColorAttr(VtValue(color));
+  float yaw = Math::atan(-light.direction.x/light.direction.y);
+  float pitch = Math::atan(sqrt(light.direction.x*light.direction.x + light.direction.y*light.direction.y)/light.direction.z);
+  ULight.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+  bool resetXformStack = false;
+  Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  for(auto& xFormOp: xFormOps){
+    if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        xFormOp.Set(GfVec3f(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        xFormOp.Set(GfVec3d(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+      }
+    }
+  }
+  
+}
+
+void 
+addPointLight(const PointLight& light,SdfPath parentPath)
+{
+  auto lightPrimPath = parentPath.AppendChild(TfToken("PointLight"));
+  auto ULight = UsdLuxSphereLight::Define(g_stage, lightPrimPath);
+  GfVec3f color(light.color.r,light.color.g,light.color.b);
+  VtValue attr;
+  ULight.CreateColorAttr(VtValue(color));
+  ULight.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(light.location.x, light.location.y, light.location.z));
+  ULight.CreateIntensityAttr(VtValue(light.intensity));
+
+  bool resetXformStack = false;
+  Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  for(auto& xFormOp: xFormOps){
+    if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        xFormOp.Set(GfVec3f(light.location.x, light.location.y, light.location.z));
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        xFormOp.Set(GfVec3d(light.location.x, light.location.y, light.location.z));
+      }
+    }
+  }
+}
+
+void 
+addSpotLight(const SpotLight& light,SdfPath parentPath)
+{
+  auto lightPrimPath = parentPath.AppendChild(TfToken("SpotLight"));
+  auto ULight = UsdLuxDiskLight::Define(g_stage, lightPrimPath);
+  GfVec3f color(light.color.r,light.color.g,light.color.b);
+  VtValue attr;
+  ULight.CreateColorAttr(VtValue(color));
+  ULight.AddTranslateOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(light.location.x, light.location.y, light.location.z));
+  ULight.CreateIntensityAttr(VtValue(light.intensity));
+
+  auto angle = ULight.GetPrim().GetAttribute(TfToken("shaping:cone:angle"));
+
+  angle.Set(VtValue(light.angle));
+  float yaw = Math::atan(-light.direction.x/light.direction.y);
+  float pitch = Math::atan(sqrt(light.direction.x*light.direction.x + light.direction.y*light.direction.y)/light.direction.z);
+  ULight.AddRotateXYZOp(UsdGeomXformOp::PrecisionFloat).Set(GfVec3f(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+
+  bool resetXformStack = false;
+  Vector<UsdGeomXformOp> xFormOps = ULight.GetOrderedXformOps(&resetXformStack);
+  for(auto& xFormOp: xFormOps){
+    if(xFormOp.GetOpType() == UsdGeomXformOp::TypeRotateXYZ){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        xFormOp.Set(GfVec3f(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        xFormOp.Set(GfVec3d(yaw/Math::PI*180.f, pitch/Math::PI*180.f, 0));
+      }
+    }
+    else if(xFormOp.GetOpType() == UsdGeomXformOp::TypeTranslate){
+      if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionFloat){
+        xFormOp.Set(GfVec3f(light.location.x, light.location.y, light.location.z));
+      }
+      else if(xFormOp.GetPrecision() == UsdGeomXformOp::PrecisionDouble){
+        xFormOp.Set(GfVec3d(light.location.x, light.location.y, light.location.z));
+      }
+    }
+  }
 }
 
 void 
@@ -755,8 +1280,26 @@ addActor(WPtr<Actor> wActor,SdfPath parentPath)
 
   for(auto& component : components){
     addMesh(cast<StaticMeshComponent>(component)->getModel(),actorPrimPath,cast<StaticMeshComponent>(component)->getTransform());
+
+    //else if(component->getType() == COMPONENT_TYPE::k){
+    //  addMesh(cast<StaticMeshComponent>(component)->getModel(),actorPrimPath,cast<StaticMeshComponent>(component)->getTransform());
+    //}
   }
 
+  auto directionalLights = actor->getComponents<DirectionalLightComponent>();
+  for(auto& light : directionalLights){
+    addDirectionalLight(cast<DirectionalLightComponent>(light)->m_light, actorPrimPath);
+  }
+
+  auto pointLights = actor->getComponents<PointLightComponent>();
+  for(auto& light : pointLights){
+    addPointLight(cast<PointLightComponent>(light)->m_light, actorPrimPath);
+  }
+
+  auto spotLights = actor->getComponents<SpotLightComponent>();
+  for(auto& light : spotLights){
+    addSpotLight(cast<SpotLightComponent>(light)->m_light, actorPrimPath);
+  }
 }
 
 void 
@@ -906,10 +1449,11 @@ updateComponent(WPtr<StaticMeshComponent> wComponent, SdfPath parentPath)
 
   auto model = wModel.lock();
 
-  auto modelName = model->getName();
-  auto thisPath = parentPath.AppendChild(TfToken(modelName));
+  //auto modelName = model->getName();
+  auto meshName = model->getMesh().lock()->getName();
+  auto thisPath = parentPath.AppendChild(TfToken(meshName));
 
-  auto modelPrimPath = parentPath.AppendChild(TfToken(modelName));
+  auto modelPrimPath = parentPath.AppendChild(TfToken(meshName));
   auto UGmodel = UsdGeomMesh::Define(g_stage, modelPrimPath);
 
   bool resetXformStack = false;
@@ -919,6 +1463,8 @@ updateComponent(WPtr<StaticMeshComponent> wComponent, SdfPath parentPath)
 
   updateTransform(component->getTransform(),xFormOps);
 }
+
+
 
 void
 updateActor(WPtr<Actor> wActor, SdfPath parentPath)
@@ -951,7 +1497,12 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
         auto wModel = cast<StaticMeshComponent>(component)->getModel();
         if(wModel.expired()) continue;
         auto model = wModel.lock();
-        if(model->getName() == usdChild.GetName().GetString()){
+        auto wMesh = model->getMesh();
+        if(wMesh.expired()) return;
+        auto mesh = wMesh.lock();
+        auto meshName = mesh->getName();
+        auto usdName = usdChild.GetName().GetString();
+        if(meshName == usdName){
           updateComponent(cast<StaticMeshComponent>(component),UGactor.GetPath());
           existed = true;
           break;
@@ -1000,11 +1551,12 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
     auto wModel = cast<StaticMeshComponent>(component)->getModel();
     if(wModel.expired()) continue;
     auto model = wModel.lock();
+    auto mesh = model->getMesh().lock();
     bool existed = false;
     for(const auto& usdChild : usdChilds){
       if (usdChild.IsA<UsdGeomMesh>())
 		  {
-        if(model->getName() == usdChild.GetName().GetString()){
+        if(mesh->getName() == usdChild.GetName().GetString()){
           existed = true;
           break;
         }
@@ -1014,6 +1566,22 @@ updateActor(WPtr<Actor> wActor, SdfPath parentPath)
       addMesh(model,actorPrimPath,cast<StaticMeshComponent>(component)->getTransform());
     }
 	}
+
+  auto directionalLights = actor->getComponents<DirectionalLightComponent>();
+  for(auto& light : directionalLights){
+    addDirectionalLight(cast<DirectionalLightComponent>(light)->m_light, actorPrimPath);
+  }
+
+  auto pointLights = actor->getComponents<PointLightComponent>();
+  for(auto& light : pointLights){
+    addPointLight(cast<PointLightComponent>(light)->m_light, actorPrimPath);
+  }
+
+  auto spotLights = actor->getComponents<SpotLightComponent>();
+  for(auto& light : spotLights){
+    addSpotLight(cast<SpotLightComponent>(light)->m_light, actorPrimPath);
+  }
+
   //for(auto child : childs){
   //  updateActor(child,thisPath);
   //}
@@ -1093,6 +1661,13 @@ Omniverse::update()
     }
 	}
 
+  int texNum = 0;
+  for(auto& texture : m_textures)
+  {
+    //size_t path = (size_t);
+    omniClientWait(omniClientListCheckpoints(texture.omniverseDir.string().c_str(),&texNum, checkPointsCallBack));
+    ++texNum;
+  }
   
   //if(UsdChilds.end()-UsdChilds.begin()==)
 

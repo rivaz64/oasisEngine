@@ -19,7 +19,8 @@ enum E {
   kDiffuse = 1,
   kNormals = 2,
   kSpecular = 4,
-  kEmisive = 8
+  kEmisive = 8,
+  kRoughtness = 16
 };
 }
 

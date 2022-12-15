@@ -369,7 +369,7 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
       else if(component->getType() == COMPONENT_TYPE::kSpotLight){
         auto light = cast<SpotLightComponent>(component)->m_light;
         light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
-        light.location = (finalTransform*Vector4f(light.direction,0.f)).xyz;
+        light.direction = (finalTransform*Vector4f(light.direction,0.f)).xyz;
         m_spotLights.push_back(light);
       }
     }

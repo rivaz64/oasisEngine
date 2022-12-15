@@ -8,6 +8,7 @@
 
 #include "oaPrerequisitesCore.h"
 #include "oaSerializer.h"
+#include <oaEventSystem.h>
 
 namespace oaEngineSDK{
 
@@ -69,6 +70,10 @@ class OA_CORE_EXPORT Resourse :
   {
     return RESOURSE_TYPE::kNone;
   }
+
+public:
+
+  oaEngineSDK::EventHandler<SPtr<Resourse>> m_onChanged; 
 
  private:
   String m_name;

@@ -47,6 +47,14 @@ class OA_CORE_EXPORT OmniverseApi :
   virtual void
   update(){}
 
+  virtual String 
+  addTexure(const Path& path){return "";}
+
+  virtual void test() {}
+
+  virtual void
+  uploadFileToOmniverse(const Path& path,const Path& omniversePath){}
+
  protected:
 
   OmniverseApi() {print("parent constructed"); }

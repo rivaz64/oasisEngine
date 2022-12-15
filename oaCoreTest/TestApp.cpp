@@ -41,7 +41,7 @@
 #include <oaStaticMeshComponent.h>
 #include <oaSkeletalMeshComponent.h>
 #include <oaSkeletalModel.h>
-#include <oaCrowdComponent.h>
+//#include <oaCrowdComponent.h>
 #include <Windows.h>
 #include <imgui.h>
 #include <imgui_impl_dx11.h>
@@ -52,6 +52,9 @@
 #include <oaPointLightComponent.h>
 #include <oaSpotLightComponent.h>
 #include <chrono>
+#include "WanderAgent.h"
+#include <SpatialPartition.h>
+#include "TestAgent.h"
 #include "ImGuiFileDialog.h"
 extern "C" {
 #include <lua\lua.h>
@@ -111,6 +114,40 @@ LRESULT CALLBACK WindowProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
   }
 
   return 0;
+}
+
+float randomFloat()
+{
+  return static_cast<float>(rand())/static_cast<float>(RAND_MAX);
+}
+
+vector<Vector2f>
+scatter(size_t numOfPoints,Vector2f minPoint, Vector2f maxPoint)
+{
+  vector<Vector2f> ans;
+  auto length = maxPoint-minPoint;
+  ans.resize(numOfPoints);
+  for(auto& i : ans){
+    i = {randomFloat()*length.x+minPoint.x,randomFloat()*length.y+minPoint.y};
+  }
+  return ans;
+}
+
+vector<Vector2f>
+blueNoise(vector<Vector2f> points, float radii){
+  auto ans = points;
+  auto numOfPoints = points.size();
+  for(size_t i = 0; i<numOfPoints-1; ++i){
+    for(size_t o = i+1; o<numOfPoints; ++o){
+      auto d = points[i]-points[o];
+      auto dis = d.magnitud();
+      if(dis<radii){
+        ans[i] += d.normalized();
+        ans[o] = ans[o]-d.normalized();
+      }
+    }
+  }
+  return ans;
 }
 
 //void
@@ -389,6 +426,15 @@ TestApp::onUpdate(float delta)
   OmniverseApi::instance().update();
 
   m_actualScene->getRoot()->postUpdate();
+
+  if(play){
+    cw->update(.0625f);
+    int num = agents.size();
+    for(int i = 0; i<num;++i){
+      auto point = cw->getPosition(i);
+      agents[i].lock()->setActorLocation(Vector3f(point.x,0.0f,point.y));
+    }
+  }
 }
 
 void 
@@ -591,10 +637,7 @@ TestApp::updateImGui()
             };
           }
         }
-        
       }
-      
-
     }
 
     components = selectedActor->getComponents<SkeletalMeshComponent>();
@@ -658,7 +701,7 @@ TestApp::updateImGui()
     if (components.size()>0){
       SIZE_T numComponents = components.size();
       for(SIZE_T i=0;i<numComponents;++i){
-        if( ImGui::CollapsingHeader(("directional light "+StringUtilities::intToString(i)).c_str())){
+        if( ImGui::CollapsingHeader(("point light "+StringUtilities::intToString(i)).c_str())){
           auto lightComponent = cast<PointLightComponent>(components[i]);
           ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
           ImGui::DragFloat3("location",reinterpret_cast<float*>(&lightComponent->m_light.location),1);
@@ -671,44 +714,44 @@ TestApp::updateImGui()
     if (components.size()>0){
       SIZE_T numComponents = components.size();
       for(SIZE_T i=0;i<numComponents;++i){
-        if( ImGui::CollapsingHeader(("directional light "+StringUtilities::intToString(i)).c_str())){
+        if( ImGui::CollapsingHeader(("spot light "+StringUtilities::intToString(i)).c_str())){
           auto lightComponent = cast<SpotLightComponent>(components[i]);
           ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
           ImGui::DragFloat3("direction",reinterpret_cast<float*>(&lightComponent->m_light.direction),1.f/36.f,-1,1);
           ImGui::DragFloat3("location",reinterpret_cast<float*>(&lightComponent->m_light.location),1);
           ImGui::DragFloat("intensity",reinterpret_cast<float*>(&lightComponent->m_light.intensity),6,0);
-          ImGui::DragFloat("angle",reinterpret_cast<float*>(&lightComponent->m_light.angle),1,0,90);
+          ImGui::DragFloat("angle",reinterpret_cast<float*>(&lightComponent->m_light.angle),.001,-1,1);
 
         }
       }
     }
 
-    wComponent = selectedActor->getComponent<CrowdComponent>();
-
-    if (!wComponent.expired() && ImGui::CollapsingHeader("crowd")){
-      //auto component
-    }
-
-    wComponent = selectedActor->getComponent<SkeletalComponent>();
-    
-    if (!wComponent.expired() && ImGui::CollapsingHeader("skeleton")){
-      auto component = wComponent.lock();
-      if(ImGui::Button("select Skeleton")){
-        cast<SkeletalComponent>(component)->setSkeleton(m_selectedSkeleton);
-
-      }
-
-      auto wSkeleton = cast<SkeletalComponent>(component)->getSkeleton();
-
-      if(!wSkeleton.expired()){
-        auto skeleton = wSkeleton.lock();
-        ImGui::Text(skeleton->getName().c_str());
-        //if(ImGui::Button("add socket")){
-        //  isAddingSocket = true;
-        //}
-      }
-
-    }
+    //wComponent = selectedActor->getComponent<CrowdComponent>();
+    //
+    //if (!wComponent.expired() && ImGui::CollapsingHeader("crowd")){
+    //  //auto component
+    //}
+    //
+    //wComponent = selectedActor->getComponent<SkeletalComponent>();
+    //
+    //if (!wComponent.expired() && ImGui::CollapsingHeader("skeleton")){
+    //  auto component = wComponent.lock();
+    //  if(ImGui::Button("select Skeleton")){
+    //    cast<SkeletalComponent>(component)->setSkeleton(m_selectedSkeleton);
+    //
+    //  }
+    //
+    //  auto wSkeleton = cast<SkeletalComponent>(component)->getSkeleton();
+    //
+    //  if(!wSkeleton.expired()){
+    //    auto skeleton = wSkeleton.lock();
+    //    ImGui::Text(skeleton->getName().c_str());
+    //    //if(ImGui::Button("add socket")){
+    //    //  isAddingSocket = true;
+    //    //}
+    //  }
+    //
+    //}
 
     wComponent = selectedActor->getComponent<AnimationComponent>();
 
@@ -772,13 +815,28 @@ TestApp::updateImGui()
       Path path(filePathName);
       loader = new Loader;
       loader->loadResource(path,m_selectedActor);
-    //  //loadflags = loader->checkForLoad(path);
       delete loader;
       loader = 0;
-      // action
     }
-    
-    // close
+    ImGuiFileDialog::Instance()->Close();
+  }
+
+  if (ImGui::Button("load merged image"))
+    ImGuiFileDialog::Instance()->OpenDialog("merged", "Choose File", ".png,.jpg", ".");
+
+  if (ImGuiFileDialog::Instance()->Display("merged")) 
+  {
+    // action if OK
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      Path path(filePathName);
+      loader = new Loader;
+      loader->loadMergedTexture(path);
+      delete loader;
+      loader = 0;
+    }
     ImGuiFileDialog::Instance()->Close();
   }
 
@@ -1322,11 +1380,79 @@ TestApp::updateImGui()
     if(ImGui::Button("leave session")){
       omniverse.leaveSession();
     }
+    if(ImGui::Button("test")){
+      omniverse.test();
+    }
 
   }
   ImGui::End();
 
+  ImGui::Begin("crowds");
+  
+  if(ImGui::Button("crowd test")){
+    cw = cwSDKtoolkit::CrowdSimulator::create<cwSDKtoolkit::SpatialPartition>();
+    auto& resourses = ResoureManager::instance();
+    agent = makeSPtr<Actor>();
+    agent->setName("agent");
+    //m_selectedActor.lock()->attach(agent);
+    loader = new Loader;
+    loader->loadResource("C:/Users/roriv/Downloads/r2d2-lowpoly/source/r2d2 lowpoly/r2d2 lowpoly.obj",agent);
+    delete loader;
+    loader = 0;
+    
+  }
+  
+  ImGui::DragInt("number of agents",&numOfAgents);
 
+  if(ImGui::Button("cirlce")){
+    float population = numOfAgents;
+    float angle = 3.14159265358979323846f*2.f/population;
+    SPtr<Actor> newAgent ;
+    for(float i = 0; i<population;++i){
+      newAgent =makeSPtr<Actor>();
+      newAgent->setName("agent"+StringUtilities::intToString(i));
+      m_selectedActor.lock()->attach(newAgent);
+      auto comp = makeSPtr<StaticMeshComponent>();
+      comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
+      newAgent->attachComponent(comp);
+      newAgent->setActorLocation(Vector3f(std::cos(angle*i)*3.f*float(numOfAgents),0.0f,std::sin(angle*i)*3.f*float(numOfAgents)));
+      cw->addAgent<TestAgent>(cwSDKtoolkit::Vector2f(std::cos(angle*i)*3.f*float(numOfAgents),std::sin(angle*i)*3.f*float(numOfAgents)),cwSDKtoolkit::Vector2f(-std::cos(angle*i)*3.f*float(numOfAgents),-std::sin(angle*i)*3.f*float(numOfAgents)));
+      agents.push_back(newAgent);
+    }
+    newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
+  }
+  
+  if(ImGui::Button("random")){
+    float dist = sqrtf(numOfAgents)*12.f;
+    auto positions = scatter(numOfAgents,{-dist,-dist},{dist,dist});
+    for(int i = 0;i<6;++i){
+      positions = blueNoise(positions,12);
+    }
+    
+    SPtr<Actor> newAgent;
+    for(float i = 0; i<numOfAgents;++i){
+      newAgent =makeSPtr<Actor>();
+      newAgent->setName("agent"+StringUtilities::intToString(i));
+      m_selectedActor.lock()->attach(newAgent);
+      auto comp = makeSPtr<StaticMeshComponent>();
+      comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
+      newAgent->attachComponent(comp);
+      newAgent->setActorLocation(Vector3f(positions[i].x,0.0f,positions[i].y));
+      cw->addAgent<WanderAgent>(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y),cwSDKtoolkit::Vector2f(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y)));
+      agents.push_back(newAgent);
+    }
+    newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
+  }
+
+  if(ImGui::Button("step")){
+    cw->update(.25f);
+    for(int i = 0; i<numOfAgents;++i){
+      auto point = cw->getPosition(i);
+      agents[i].lock()->setActorLocation(Vector3f(point.x,0.0f,point.y));
+    }
+  }
+
+  ImGui::End();
 }
 
 }
