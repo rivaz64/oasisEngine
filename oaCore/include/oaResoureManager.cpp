@@ -313,6 +313,11 @@ ResoureManager::loadDefaultShaders()
   auto& graphicsApi = GraphicAPI::instance();
   auto& resourceManager = ResoureManager::instance();
   auto shader = graphicsApi.createPixelShader();
+
+  resourceManager.registerResourse("p_ambientLight",shader);
+  shader->compileFromFile("p_light",{});
+
+  shader = graphicsApi.createPixelShader();
   resourceManager.registerResourse("p_directionalLight",shader);
   shader->compileFromFile("p_light",{"DIRECTIONAL"});
 
@@ -368,6 +373,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("ssao","v_screen","p_ssao");
   createShaderProgram("convolution","v_screen","p_convolution");
   createShaderProgram("copy","v_screen","p_copy");
+  createShaderProgram("ambientLight","v_screen","p_ambientLight");
   createShaderProgram("directionalLight","v_screen","p_directionalLight");
   createShaderProgram("pointLight","v_screen","p_pointLight");
   createShaderProgram("spotLight","v_screen","p_spotLight");

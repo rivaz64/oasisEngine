@@ -170,9 +170,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="DireectionalLightComponent.h" />
     <ClInclude Include="include\oaActor.h" />
     <ClInclude Include="include\oaAdaptativeShader.h" />
+    <ClInclude Include="include\oaAmbientLightComponent.h" />
     <ClInclude Include="include\oaAnimation.h" />
     <ClInclude Include="include\oaAnimationComponent.h" />
     <ClInclude Include="include\oaAudioAPI.h" />
@@ -240,7 +240,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DireectionalLightComponent.cpp" />
+    <ClCompile Include="AmbientLightComponent.cpp" />
     <ClCompile Include="include\oaImage.cpp" />
     <ClCompile Include="include\oaResoureManager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

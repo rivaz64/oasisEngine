@@ -51,6 +51,7 @@
 #include <oaDirectionalLightComponent.h>
 #include <oaPointLightComponent.h>
 #include <oaSpotLightComponent.h>
+#include <oaAmbientLightComponent.h>
 #include <chrono>
 #include "WanderAgent.h"
 #include <SpatialPartition.h>
@@ -685,6 +686,17 @@ TestApp::updateImGui()
 
     }
 
+    components = selectedActor->getComponents<AmbientLightComponent>();
+    if (components.size()>0){
+      SIZE_T numComponents = components.size();
+      for(SIZE_T i=0;i<numComponents;++i){
+        if( ImGui::CollapsingHeader(("ambient light "+StringUtilities::intToString(i)).c_str())){
+          auto lightComponent = cast<AmbientLightComponent>(components[i]);
+          ImGui::DragFloat3("color",reinterpret_cast<float*>(&lightComponent->m_light.color),1.f/36.f,0,1);
+        }
+      }
+    }
+
     components = selectedActor->getComponents<DirectionalLightComponent>();
     if (components.size()>0){
       SIZE_T numComponents = components.size();
@@ -997,6 +1009,11 @@ TestApp::updateImGui()
 
     if(ImGui::Button("Spot Light")){
       selectedActor->attachComponent(makeSPtr<SpotLightComponent>());
+      isAddingComponent = false;
+    }
+
+    if(ImGui::Button("AmbientLight Light")){
+      selectedActor->attachComponent(makeSPtr<AmbientLightComponent>());
       isAddingComponent = false;
     }
 

@@ -198,9 +198,6 @@
     <ClInclude Include="include\oaCrowdComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DireectionalLightComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\oaDirectionalLightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -211,6 +208,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\oaPlugInManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oaAmbientLightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -365,9 +365,6 @@
     <ClCompile Include="oaCrowdComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DireectionalLightComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="oaDirectionalLightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -378,6 +375,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="oaPlugInManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AmbientLightComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -126,7 +126,8 @@ enum E{
 	kDirectionalLight,
 	kPointLight,
 	kSpotLight,
-	kCamera
+	kCamera,
+	kAmbientLight
 };
 }
 

@@ -13,10 +13,21 @@
 namespace oaEngineSDK{
 
 /**
+ * @brief a light that comes in all directions
+*/
+struct AmbientLight
+{
+  /**
+   * @brief the color of the light
+  */
+  Color color = Color::WHITE;
+};
+
+/**
  * @brief structure for a directional light
 */
-struct DirectionalLight{
-  
+struct DirectionalLight
+{
   /**
    * @brief the color of the light
   */
@@ -31,12 +42,12 @@ struct DirectionalLight{
 /**
  * @brief the structure fir a point that is a light source
 */
-struct PointLight{
-  
+struct PointLight
+{
   /**
    * @brief the color of the light
   */
-  Color color;
+  Color color = Color::WHITE;
 
   /**
    * @brief the point where the light is
@@ -49,11 +60,17 @@ struct PointLight{
   float intensity;
 };
 
-struct SpotLight{
-/**
+struct SpotLight
+{
+  /**
    * @brief the color of the light
   */
-  Color color;
+  Color color = Color::WHITE;
+
+  /**
+   * @brief the direction the light is pointed at
+  */
+  Vector4f direction = Vector4f(1,0,0,0);
 
   /**
    * @brief the point where the light is
@@ -64,23 +81,11 @@ struct SpotLight{
    * @brief how far he light can reach
   */
   float intensity;
-  
-  /**
-   * @brief the direction the light is pointed at
-  */
-  Vector3f direction = Vector3f(1,0,0);
 
   /**
    * @brief the angle of the light 
   */
   float angle;
-
-  /**
-   * @brief if this light generates shadows
-  */
-  bool castShadows;
 };
-
-
 
 }

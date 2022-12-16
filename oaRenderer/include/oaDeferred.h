@@ -98,6 +98,9 @@ class Deferred :
   aplylights();
 
   void 
+  ambientLight(const Matrix4f& viewMatrix);
+
+  void 
   directionalLight(const Matrix4f& viewMatrix);
 
   void 
@@ -161,7 +164,7 @@ class Deferred :
 
   Vector<SPtr<Texture>> m_gBuffer;
 
-  Vector<SPtr<Texture>> m_lightBuffer;
+  Vector<SPtr<Texture>> m_lightTexturesBuffer;
 
   SPtr<Texture> m_renderTarget;
 
@@ -214,6 +217,7 @@ class Deferred :
 
   SPtr<Camera> m_shadowsCamera;
 
+  Vector<AmbientLight> m_ambientLights;
   Vector<DirectionalLight> m_directionalLights;
   Vector<PointLight> m_PointLights;
   Vector<SpotLight> m_spotLights;
