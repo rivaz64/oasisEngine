@@ -18,205 +18,10 @@ namespace oaEngineSDK{
 void
 ResoureManager::onStartUp()
 {
-  /*
-  generateCircle(36);
-  generateCone(36);
-  generateCone(36);
-  generateCilinder(36);
-  generateTorus(36,36,.5f);*/
-  //loadDefaulTextures();
   loadDefaultShaders();
-  generateDefaultMaterials();
-  //generateQuad();
-  //generateTriangle();
-  //generateCube();
 }
 
-void
-divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
-  
-  Vector<Vertex> newPoints;
-  Vector<uint32> newIndexesFront;
-  Vector<uint32> newIndexesBack;
-  Vector<uint32> replaceIndexes;
-  Vector<uint32> finalIndexesFront;
-  Vector<uint32> finalIndexesBack;
-  SIZE_T trisNum = index.size()/3;
-  bool isFront;
-  for(SIZE_T i = 0; i<trisNum; ++i){
-    replaceIndexes.clear();
-    newIndexesFront.clear();
-    newIndexesBack.clear();
-    newPoints.clear();
-    Triangle tri(vertices[index[i*3]],vertices[index[i*3+1]],vertices[index[i*3+2]]);
-    if(tri.separate(plane,newPoints,newIndexesFront,newIndexesBack,isFront)){
-      replaceIndexes.push_back(index[i*3]);
-      replaceIndexes.push_back(index[i*3+1]);
-      replaceIndexes.push_back(index[i*3+2]);
-      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
-      vertices.push_back(newPoints[0]);
-      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
-      vertices.push_back(newPoints[1]);
-      //if(i==1)
-      //for(int32 newIndex = 0; newIndex<3; ++newIndex){
-      //  finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
-      //}
-      //else
-      for(int32 newIndex : newIndexesFront){
-        finalIndexesFront.push_back(replaceIndexes[newIndex]);
-      }
-      for(int32 newIndex : newIndexesBack){
-        finalIndexesBack.push_back(replaceIndexes[newIndex]);
-      }
-      
-    }
-    else{
-      if(isFront){
-        finalIndexesFront.push_back(index[i*3]);
-        finalIndexesFront.push_back(index[i*3+1]);
-        finalIndexesFront.push_back(index[i*3+2]);
-      }
-      else{
-        finalIndexesBack.push_back(index[i*3]);
-        finalIndexesBack.push_back(index[i*3+1]);
-        finalIndexesBack.push_back(index[i*3+2]);
-      }
-      
-    }
-  }
-  //indexFrin = finalIndexes;
-  indexFront = finalIndexesFront;
-  indexBack = finalIndexesBack;
-}
 
-void 
-ResoureManager::generateCube()
-{
-  //meshes.insert({ "cube",makeSPtr<Mesh>() });
-
-  auto cube = makeSPtr<StaticMesh>();
-
-  Vector<Vertex> vertices = {
-    Vertex( Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)),
-    Vertex( Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f)),
-    Vertex( Vector4f( .5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 1.0f)),
-    Vertex( Vector4f(-.5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f)),
-    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f)),
-    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
-    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
-    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
-    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f), Vector4f(-1.0f,0.0f, 0.0f,0.0f), Vector2f(0.0f, 0.0f)),
-    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
-    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
-    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
-    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) ),
-    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 0.0f) ),
-    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) ),
-    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) ),
-    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
-    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
-    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
-    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
-    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
-    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
-    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
-    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
-  };
-
-  Vector<uint32> index = {
-    3,1,0,
-    2,1,3,
-    
-    6,4,5,
-    7,4,6,
-    
-    11,9,8,
-    10,9,11,
-    
-    14,12,13,
-    15,12,14,
-    
-    19,17,16,
-    18,17,19,
-    
-    22,20,21,
-    23,20,22
-  };
-
-
-  cube->setVertex(vertices);
-  cube->setIndex(index);
-  cube->writeBuffers();
-  registerResourse("cubito",cube);
-  //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
-
-  //Octree tree;
-  //auto planes = tree.getPlanes();
-  //Vector<uint32> indexFront;
-  //Vector<uint32> indexBack;
-  //Vector<Vector<uint32>> meshes;
-  //meshes.push_back(index);
-  //Vector<Vector<uint32>> newMeshes;
-  //for(auto& plane: planes){
-  //  for(Vector<uint32>& m : meshes){
-  //    indexBack.clear();
-  //    indexFront.clear();
-  //    divide(plane, vertices,m,indexBack,indexFront);
-  //    newMeshes.push_back(indexBack);
-  //    newMeshes.push_back(indexFront);
-  //  }
-  //  meshes = newMeshes;
-  //  newMeshes.clear();
-  //}
-  
- 
-  //String name = "cube";//+StringUtilities::intToString(i);
-  //m_models.insert({name,makeSPtr<Model>()});
-  //auto& model = m_models[name];
-  //model->setName(name);
-  //model->addMaterial(makeSPtr<Material>());
-  //auto& material = model->getMaterial(0);
-  //material->setShader(0);
-  //m_materials.insert({"wall",material});
-  //model->addMesh(makeSPtr<Mesh>());
-  //auto& mesh = model->getMesh(0);
-  //mesh->setIndex(index);
-  //mesh->create(vertices.data(),sizeof(Vertex),vertices.size());
-}
-
-void ResoureManager::generateTriangle()
-{
-  Vector<Vector4f> vertex = {
-    Vector4f(0,1,1,0),
-    Vector4f(.5,0,1,0),
-    Vector4f(-.5,0,1,0),
-  };
-  Vector<uint32> index = {0,1,2};
-
-  Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
-
-  //Triangle tri(vertex[0].xyz,vertex[1].xyz,vertex[2].xyz);
-  Vector<Vector3f> newPoints;
-  Vector<uint32> newIndexes;
-  
-  //if(tri.separate(plane,newPoints,newIndexes)){
-  //  vertex.push_back(Vector4f(newPoints[0],0));
-  //  vertex.push_back(Vector4f(newPoints[1],0));
-  //  index = newIndexes;
-  //}
-
-  
-
-  //auto triangle = makeSPtr<Mesh>();
-  //triangle->setIndex(index);
-  //triangle->create(vertex.data(),sizeof(Vector4f),vertex.size());
-  //m_models.insert({"triangle",makeSPtr<Model>()});
-  //m_models["triangle"]->addMesh(triangle);
-  //m_models["triangle"]->setName("triangle");
-  //m_models["triangle"]->addMaterial(makeSPtr<Material>());
-
-
-}
 
 void 
 createVertexShader(const String& name){
@@ -405,6 +210,221 @@ ResoureManager::generateDefaultMaterials()
   m_defaultMaterial->setColor("diffuse",Color::CYAN);
 }
 
+String 
+ResoureManager::getUniqueName(String name)
+{
+  uint64 id = StringUtilities::getStringId(name);
+  
+  if(m_ids.find(id) == m_ids.end()){
+    m_ids.insert(id);
+    return name;
+  }
+  else{
+    int n = 2;
+    name = name+"_";
+    while(m_ids.find(StringUtilities::getStringId(name+StringUtilities::intToString(n))) != m_ids.end()){
+      ++n;
+    }
+    return name+StringUtilities::intToString(n);
+  }
+}
+
+
+}
+
+
+
+
+
+
+/*
+void
+divide(const Plane& plane, Vector<Vertex>& vertices, Vector<uint32>& index, Vector<uint32>& indexFront, Vector<uint32>& indexBack){
+  
+  Vector<Vertex> newPoints;
+  Vector<uint32> newIndexesFront;
+  Vector<uint32> newIndexesBack;
+  Vector<uint32> replaceIndexes;
+  Vector<uint32> finalIndexesFront;
+  Vector<uint32> finalIndexesBack;
+  SIZE_T trisNum = index.size()/3;
+  bool isFront;
+  for(SIZE_T i = 0; i<trisNum; ++i){
+    replaceIndexes.clear();
+    newIndexesFront.clear();
+    newIndexesBack.clear();
+    newPoints.clear();
+    Triangle tri(vertices[index[i*3]],vertices[index[i*3+1]],vertices[index[i*3+2]]);
+    if(tri.separate(plane,newPoints,newIndexesFront,newIndexesBack,isFront)){
+      replaceIndexes.push_back(index[i*3]);
+      replaceIndexes.push_back(index[i*3+1]);
+      replaceIndexes.push_back(index[i*3+2]);
+      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
+      vertices.push_back(newPoints[0]);
+      replaceIndexes.push_back(static_cast<uint32>(vertices.size()));
+      vertices.push_back(newPoints[1]);
+      //if(i==1)
+      //for(int32 newIndex = 0; newIndex<3; ++newIndex){
+      //  finalIndexes.push_back(replaceIndexes[newIndexes[newIndex]]);
+      //}
+      //else
+      for(int32 newIndex : newIndexesFront){
+        finalIndexesFront.push_back(replaceIndexes[newIndex]);
+      }
+      for(int32 newIndex : newIndexesBack){
+        finalIndexesBack.push_back(replaceIndexes[newIndex]);
+      }
+      
+    }
+    else{
+      if(isFront){
+        finalIndexesFront.push_back(index[i*3]);
+        finalIndexesFront.push_back(index[i*3+1]);
+        finalIndexesFront.push_back(index[i*3+2]);
+      }
+      else{
+        finalIndexesBack.push_back(index[i*3]);
+        finalIndexesBack.push_back(index[i*3+1]);
+        finalIndexesBack.push_back(index[i*3+2]);
+      }
+      
+    }
+  }
+  //indexFrin = finalIndexes;
+  indexFront = finalIndexesFront;
+  indexBack = finalIndexesBack;
+}
+
+void 
+ResoureManager::generateCube()
+{
+  //meshes.insert({ "cube",makeSPtr<Mesh>() });
+
+  auto cube = makeSPtr<StaticMesh>();
+
+  Vector<Vertex> vertices = {
+    Vertex( Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f( .5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f), Vector4f(-1.0f,0.0f, 0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+  };
+
+  Vector<uint32> index = {
+    3,1,0,
+    2,1,3,
+    
+    6,4,5,
+    7,4,6,
+    
+    11,9,8,
+    10,9,11,
+    
+    14,12,13,
+    15,12,14,
+    
+    19,17,16,
+    18,17,19,
+    
+    22,20,21,
+    23,20,22
+  };
+
+
+  cube->setVertex(vertices);
+  cube->setIndex(index);
+  cube->writeBuffers();
+  registerResourse("cubito",cube);
+  //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
+
+  //Octree tree;
+  //auto planes = tree.getPlanes();
+  //Vector<uint32> indexFront;
+  //Vector<uint32> indexBack;
+  //Vector<Vector<uint32>> meshes;
+  //meshes.push_back(index);
+  //Vector<Vector<uint32>> newMeshes;
+  //for(auto& plane: planes){
+  //  for(Vector<uint32>& m : meshes){
+  //    indexBack.clear();
+  //    indexFront.clear();
+  //    divide(plane, vertices,m,indexBack,indexFront);
+  //    newMeshes.push_back(indexBack);
+  //    newMeshes.push_back(indexFront);
+  //  }
+  //  meshes = newMeshes;
+  //  newMeshes.clear();
+  //}
+  
+ 
+  //String name = "cube";//+StringUtilities::intToString(i);
+  //m_models.insert({name,makeSPtr<Model>()});
+  //auto& model = m_models[name];
+  //model->setName(name);
+  //model->addMaterial(makeSPtr<Material>());
+  //auto& material = model->getMaterial(0);
+  //material->setShader(0);
+  //m_materials.insert({"wall",material});
+  //model->addMesh(makeSPtr<Mesh>());
+  //auto& mesh = model->getMesh(0);
+  //mesh->setIndex(index);
+  //mesh->create(vertices.data(),sizeof(Vertex),vertices.size());
+}
+
+void ResoureManager::generateTriangle()
+{
+  Vector<Vector4f> vertex = {
+    Vector4f(0,1,1,0),
+    Vector4f(.5,0,1,0),
+    Vector4f(-.5,0,1,0),
+  };
+  Vector<uint32> index = {0,1,2};
+
+  Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
+
+  //Triangle tri(vertex[0].xyz,vertex[1].xyz,vertex[2].xyz);
+  Vector<Vector3f> newPoints;
+  Vector<uint32> newIndexes;
+  
+  //if(tri.separate(plane,newPoints,newIndexes)){
+  //  vertex.push_back(Vector4f(newPoints[0],0));
+  //  vertex.push_back(Vector4f(newPoints[1],0));
+  //  index = newIndexes;
+  //}
+
+  
+
+  //auto triangle = makeSPtr<Mesh>();
+  //triangle->setIndex(index);
+  //triangle->create(vertex.data(),sizeof(Vector4f),vertex.size());
+  //m_models.insert({"triangle",makeSPtr<Model>()});
+  //m_models["triangle"]->addMesh(triangle);
+  //m_models["triangle"]->setName("triangle");
+  //m_models["triangle"]->addMaterial(makeSPtr<Material>());
+
+
+}
+
+
 void
 ResoureManager::separate(SPtr<Model> model,
                          const Vector3f& center, 
@@ -507,27 +527,4 @@ ResoureManager::separate(SPtr<Model> model,
   
 }
 
-
-
-String 
-ResoureManager::getUniqueName(String name)
-{
-  uint64 id = StringUtilities::getStringId(name);
-  
-  if(m_ids.find(id) == m_ids.end()){
-    m_ids.insert(id);
-    return name;
-  }
-  else{
-    int n = 2;
-    name = name+"_";
-    while(m_ids.find(StringUtilities::getStringId(name+StringUtilities::intToString(n))) != m_ids.end()){
-      ++n;
-    }
-    return name+StringUtilities::intToString(n);
-  }
-}
-
-
-}
-
+*/

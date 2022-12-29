@@ -149,12 +149,11 @@ BaseApp::run()
   loadPlugIn("oaFmodAudiod.dll");
   loadPlugIn("oaOmniversed.dll");
   loadPlugIn("oaCrowdsd.dll");
+
   auto& omnievrse = OmniverseApi::instance();
   //loadPlugIn("oaDX11Graphics.dll");
   //loadPlugIn("oaOGL_Grafics.dll");
   auto& input = InputAPI::instance();
-
- 
 
   //if(luaL_dofile(luaState, "scripts/configs.lua")){
   //  print(lua_tostring(luaState,-1));
@@ -189,6 +188,8 @@ BaseApp::run()
     m_camera->update();
 
     postInit();
+
+    //selectProject();
 
     //try {
       mainLoop();

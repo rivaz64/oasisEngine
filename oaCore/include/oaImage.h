@@ -29,6 +29,9 @@ class OA_CORE_EXPORT Image :
     init();
   }
 
+  RESOURSE_TYPE::E
+  getType() override;
+
   void
   save(Serializer& serializer) override;
 

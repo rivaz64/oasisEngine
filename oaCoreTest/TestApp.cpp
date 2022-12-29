@@ -548,6 +548,22 @@ void TestApp::childsInImgui(SPtr<Actor> parentActor)
   }
 }
 
+//void TestApp::selectingProject()
+//{
+//  GraphicAPI::instancePtr()->events();
+//  newImGuiFrame();
+//
+//  ImGui::Begin("proyect");
+//  if(ImGui::Button("new"))
+//  {
+//    //ResoureManager
+//  }
+//  ImGui::End();
+//
+//  renderImGui();
+//  GraphicAPI::instancePtr()->show();
+//}
+
 void 
 TestApp::updateImGui()
 {
@@ -1281,19 +1297,19 @@ TestApp::updateImGui()
         
       //}
 
-      if(ImGui::Button("divide")){
-        Vector<SPtr<Model>> models;
-        auto center = selectedModel->getCenter();
-        resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
-        auto actor = makeSPtr<Actor>();
-        for(auto& model : models){
-          auto component = makeSPtr<StaticMeshComponent>();
-          component->setModel(model);
-          actor->attachComponent(component);
-        }
-        actor->setName("divided");
-        m_actualScene->getRoot()->attach(actor);
-      }
+      //if(ImGui::Button("divide")){
+      //  Vector<SPtr<Model>> models;
+      //  auto center = selectedModel->getCenter();
+      //  resourceManager.separate(selectedModel,center,models,selectedModel->farestPoint(center));
+      //  auto actor = makeSPtr<Actor>();
+      //  for(auto& model : models){
+      //    auto component = makeSPtr<StaticMeshComponent>();
+      //    component->setModel(model);
+      //    actor->attachComponent(component);
+      //  }
+      //  actor->setName("divided");
+      //  m_actualScene->getRoot()->attach(actor);
+      //}
     }
     ImGui::End();
   }
@@ -1404,72 +1420,122 @@ TestApp::updateImGui()
   }
   ImGui::End();
 
-  ImGui::Begin("crowds");
-  
-  if(ImGui::Button("crowd test")){
-    cw = cwSDKtoolkit::CrowdSimulator::create<cwSDKtoolkit::SpatialPartition>();
-    auto& resourses = ResoureManager::instance();
-    agent = makeSPtr<Actor>();
-    agent->setName("agent");
-    //m_selectedActor.lock()->attach(agent);
-    loader = new Loader;
-    loader->loadResource("C:/Users/roriv/Downloads/r2d2-lowpoly/source/r2d2 lowpoly/r2d2 lowpoly.obj",agent);
-    delete loader;
-    loader = 0;
-    
-  }
-  
-  ImGui::DragInt("number of agents",&numOfAgents);
+  ImGui::Begin("project");
+  if (ImGui::Button("choose"))
+    ImGuiFileDialog::Instance()->OpenDialog("choose project", "Choose File", ".oa", ".");
 
-  if(ImGui::Button("cirlce")){
-    float population = numOfAgents;
-    float angle = 3.14159265358979323846f*2.f/population;
-    SPtr<Actor> newAgent ;
-    for(float i = 0; i<population;++i){
-      newAgent =makeSPtr<Actor>();
-      newAgent->setName("agent"+StringUtilities::intToString(i));
-      m_selectedActor.lock()->attach(newAgent);
-      auto comp = makeSPtr<StaticMeshComponent>();
-      comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
-      newAgent->attachComponent(comp);
-      newAgent->setActorLocation(Vector3f(std::cos(angle*i)*3.f*float(numOfAgents),0.0f,std::sin(angle*i)*3.f*float(numOfAgents)));
-      cw->addAgent<TestAgent>(cwSDKtoolkit::Vector2f(std::cos(angle*i)*3.f*float(numOfAgents),std::sin(angle*i)*3.f*float(numOfAgents)),cwSDKtoolkit::Vector2f(-std::cos(angle*i)*3.f*float(numOfAgents),-std::sin(angle*i)*3.f*float(numOfAgents)));
-      agents.push_back(newAgent);
-    }
-    newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
-  }
-  
-  if(ImGui::Button("random")){
-    float dist = sqrtf(numOfAgents)*12.f;
-    auto positions = scatter(numOfAgents,{-dist,-dist},{dist,dist});
-    for(int i = 0;i<6;++i){
-      positions = blueNoise(positions,12);
+  if (ImGuiFileDialog::Instance()->Display("choose project")) 
+  {
+    // action if OK
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+      m_projectPath = filePath;
+      print(filePath);
     }
     
-    SPtr<Actor> newAgent;
-    for(float i = 0; i<numOfAgents;++i){
-      newAgent =makeSPtr<Actor>();
-      newAgent->setName("agent"+StringUtilities::intToString(i));
-      m_selectedActor.lock()->attach(newAgent);
-      auto comp = makeSPtr<StaticMeshComponent>();
-      comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
-      newAgent->attachComponent(comp);
-      newAgent->setActorLocation(Vector3f(positions[i].x,0.0f,positions[i].y));
-      cw->addAgent<WanderAgent>(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y),cwSDKtoolkit::Vector2f(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y)));
-      agents.push_back(newAgent);
-    }
-    newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
+    // close
+    ImGuiFileDialog::Instance()->Close();
   }
-
-  if(ImGui::Button("step")){
-    cw->update(.25f);
-    for(int i = 0; i<numOfAgents;++i){
-      auto point = cw->getPosition(i);
-      agents[i].lock()->setActorLocation(Vector3f(point.x,0.0f,point.y));
+  if (ImGui::Button("save"))
+  {
+    Serializer serializer;
+    serializer.init(m_projectPath.string()+"/"+"OasisEngineTestProject.oa",true);
+    auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
+    serializer.encodeSize(textures.size());
+    for(auto& texture : textures){
+      cast<Texture>(texture).lock()->getImage()->save(serializer);
     }
   }
-
+  if(ImGui::Button("load"))
+  {
+    Serializer serializer;
+    serializer.init(m_projectPath.string()+"/"+"OasisEngineTestProject.oa",false);
+    auto numOfResources = serializer.decodeSize();
+    for(auto i = 0; i < numOfResources; ++i)
+    {
+      int type = serializer.decodeNumber();
+      Serializer localSerializer;
+      localSerializer.init(serializer.decodeString(),false);
+      if(type == RESOURSE_TYPE::kImage){
+        auto image = makeSPtr<Image>();
+        image->load(localSerializer);
+        SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+        texture->initFromImage(image);
+        resourceManager.registerResourse(texture->getName(),texture);
+      }
+    }
+    
+  }
   ImGui::End();
+
+  //ImGui::Begin("crowds");
+  //
+  //if(ImGui::Button("crowd test")){
+  //  cw = cwSDKtoolkit::CrowdSimulator::create<cwSDKtoolkit::SpatialPartition>();
+  //  auto& resourses = ResoureManager::instance();
+  //  agent = makeSPtr<Actor>();
+  //  agent->setName("agent");
+  //  //m_selectedActor.lock()->attach(agent);
+  //  loader = new Loader;
+  //  loader->loadResource("C:/Users/roriv/Downloads/r2d2-lowpoly/source/r2d2 lowpoly/r2d2 lowpoly.obj",agent);
+  //  delete loader;
+  //  loader = 0;
+  //  
+  //}
+  //
+  //ImGui::DragInt("number of agents",&numOfAgents);
+  //
+  //if(ImGui::Button("cirlce")){
+  //  float population = numOfAgents;
+  //  float angle = 3.14159265358979323846f*2.f/population;
+  //  SPtr<Actor> newAgent ;
+  //  for(float i = 0; i<population;++i){
+  //    newAgent =makeSPtr<Actor>();
+  //    newAgent->setName("agent"+StringUtilities::intToString(i));
+  //    m_selectedActor.lock()->attach(newAgent);
+  //    auto comp = makeSPtr<StaticMeshComponent>();
+  //    comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
+  //    newAgent->attachComponent(comp);
+  //    newAgent->setActorLocation(Vector3f(std::cos(angle*i)*3.f*float(numOfAgents),0.0f,std::sin(angle*i)*3.f*float(numOfAgents)));
+  //    cw->addAgent<TestAgent>(cwSDKtoolkit::Vector2f(std::cos(angle*i)*3.f*float(numOfAgents),std::sin(angle*i)*3.f*float(numOfAgents)),cwSDKtoolkit::Vector2f(-std::cos(angle*i)*3.f*float(numOfAgents),-std::sin(angle*i)*3.f*float(numOfAgents)));
+  //    agents.push_back(newAgent);
+  //  }
+  //  newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
+  //}
+  //
+  //if(ImGui::Button("random")){
+  //  float dist = sqrtf(numOfAgents)*12.f;
+  //  auto positions = scatter(numOfAgents,{-dist,-dist},{dist,dist});
+  //  for(int i = 0;i<6;++i){
+  //    positions = blueNoise(positions,12);
+  //  }
+  //  
+  //  SPtr<Actor> newAgent;
+  //  for(float i = 0; i<numOfAgents;++i){
+  //    newAgent =makeSPtr<Actor>();
+  //    newAgent->setName("agent"+StringUtilities::intToString(i));
+  //    m_selectedActor.lock()->attach(newAgent);
+  //    auto comp = makeSPtr<StaticMeshComponent>();
+  //    comp->setModel(cast<StaticMeshComponent>(agent->getComponent<StaticMeshComponent>().lock())->getModel());
+  //    newAgent->attachComponent(comp);
+  //    newAgent->setActorLocation(Vector3f(positions[i].x,0.0f,positions[i].y));
+  //    cw->addAgent<WanderAgent>(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y),cwSDKtoolkit::Vector2f(cwSDKtoolkit::Vector2f(positions[i].x,positions[i].y)));
+  //    agents.push_back(newAgent);
+  //  }
+  //  newAgent->attachComponent(makeSPtr<DirectionalLightComponent>());
+  //}
+  //
+  //if(ImGui::Button("step")){
+  //  cw->update(.25f);
+  //  for(int i = 0; i<numOfAgents;++i){
+  //    auto point = cw->getPosition(i);
+  //    agents[i].lock()->setActorLocation(Vector3f(point.x,0.0f,point.y));
+  //  }
+  //}
+  //
+  //ImGui::End();
 }
 
 }

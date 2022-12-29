@@ -9,27 +9,33 @@
 
 namespace oaEngineSDK
 {
-
-void 
+RESOURSE_TYPE::E
+Image::getType()
+{
+  return RESOURSE_TYPE::kImage;
+}
+void
 Image::save(Serializer& serializer)
 {
-  //serializer.init(serializer.m_path += getName()+".oa",true);
+  Path finalPath = serializer.m_path.string()+"/"+getName()+".oa";
 
   serializer.encodeNumber(getType());
+  serializer.encodeString(finalPath.string());
 
-  serializer.encodeString(getName());
+  Serializer localSerializer;
+  localSerializer.init(finalPath,true);
 
-  serializer.file.write(reinterpret_cast<const char*>(&getSize()),
+  localSerializer.file.write(reinterpret_cast<const char*>(&getSize()),
                         sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
 
-  serializer.file.write(reinterpret_cast<const char*>(getPixels()),
+  localSerializer.file.write(reinterpret_cast<const char*>(getPixels()),
                         getNumberOfBytes());
 }
 
 void 
 Image::load(Serializer& serializer)
 {
-  setName(serializer.decodeString());
+  //setName(serializer.decodeString());
 
   serializer.file.read(reinterpret_cast<char*>(&m_size),
                        sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));

@@ -27,6 +27,12 @@ class OA_UTILITY_EXPORT Serializer
   bool 
   open(Path path,bool write);
 
+  /**
+   * @brief initializes a serializer for a resource
+   * @param path the path to read/write
+   * @param write true for writing, false for reading
+   * @return if all worked correctly
+  */
   bool 
   init(const Path& path,bool write);
 

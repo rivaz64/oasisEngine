@@ -33,6 +33,7 @@ Serializer::init(const Path& path,bool write)
 {
   int flags;
   String firm;
+  m_path = path.parent_path().string();
   if(write){
     flags = fstream::out | ios::binary;
     firm = "oasisFile";

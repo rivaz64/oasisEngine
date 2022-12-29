@@ -15,8 +15,6 @@
 
 namespace oaEngineSDK{
 
-struct ModelComponent;
-
 class TestApp :
   public BaseApp
 {
@@ -134,11 +132,18 @@ public:
 
   bool animInPlay=false;
 
+  Path m_projectPath;
+
   int numOfAgents = 6;
   SPtr<Actor> agent;
   cwSDKtoolkit::SPtr<cwSDKtoolkit::CrowdSimulator> cw;
 
   EventHandler<const Vector3f&> handler;
+
+  /**
+   * @brief if a project is currently open in the engine
+  */
+  bool isProjectOpen = false;
 
   SPtr<Actor> m_morbActor;
   SPtr<GraphicsComponent> m_morbComponent;

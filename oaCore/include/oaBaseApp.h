@@ -129,10 +129,27 @@ class OA_CORE_EXPORT BaseApp
   void
   initLua();
 
+  ///**
+  // * @brief takes the user to select a project for the engine to open
+  //*/
+  //void
+  //selectProject();
+  //
+  ///**
+  // * @brief the loop for the project selection screen
+  //*/
+  //virtual void
+  //selectingProject(){}
+
   /**
    * @brief if the app is running
   */
   bool m_isRunning = true; 
+
+  /**
+   * @brief if a porject is currently open in the engine
+  */
+  bool m_projectOpen = false;
 
  protected:
 
