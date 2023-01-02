@@ -215,18 +215,39 @@ ResoureManager::getUniqueName(String name)
 {
   uint64 id = StringUtilities::getStringId(name);
   
-  if(m_ids.find(id) == m_ids.end()){
-    m_ids.insert(id);
+  if(m_resourses.find(id) == m_resourses.end()){
+    //m_ids.insert(id);
     return name;
   }
   else{
     int n = 2;
     name = name+"_";
-    while(m_ids.find(StringUtilities::getStringId(name+StringUtilities::intToString(n))) != m_ids.end()){
+    while(m_resourses.find(StringUtilities::getStringId(name+StringUtilities::intToString(n))) != m_resourses.end()){
       ++n;
     }
     return name+StringUtilities::intToString(n);
   }
+}
+
+void
+ResoureManager::deleteResourse(const String& name)
+{
+  uint64 id = StringUtilities::getStringId(name);
+  if(m_resourses.find(id) == m_resourses.end()){
+    return;
+  }
+  auto resourse = m_resourses[id];
+  auto& type = m_types[resourse->getType()];
+  auto it = type.begin();
+  for(; it != type.end(); ++it){
+    if(it->lock().get() == resourse.get()){
+      break;
+    }
+  }
+  if(it != type.end()){
+    type.erase(it);
+  }
+  m_resourses.erase(id);
 }
 
 

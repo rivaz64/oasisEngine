@@ -23,7 +23,7 @@ enum FLAGS{
 };*/
 
 void 
-Actor::save(Serializer& serializer)
+Actor::onSave(Serializer& serializer)
 {
   //serializer.encodeNumber(getType());
   serializer.encodeString(getName());

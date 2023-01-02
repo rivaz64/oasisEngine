@@ -40,9 +40,20 @@ class OA_CORE_EXPORT Resourse :
 {
  public:
 
-  virtual void
-  save(Serializer& /*serializer*/){}
+  /**
+   * @brief saves the resource serializing it
+   * @param  
+  */
+  void
+  save(Serializer& serializer);
 
+  virtual void
+  onSave(Serializer& /*serializer*/){}
+
+  /**
+   * @brief loads a serialized file
+   * @param  
+  */
   virtual void
   load(Serializer& /*serializer*/){}
 

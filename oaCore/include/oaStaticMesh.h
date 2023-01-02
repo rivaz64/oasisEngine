@@ -26,7 +26,7 @@ class OA_CORE_EXPORT StaticMesh :
   ~StaticMesh() = default;
 
   void
-  save(Serializer& serializer) override;
+  onSave(Serializer& serializer) override;
   
   void
   load(Serializer& serializer) override;

@@ -33,7 +33,7 @@ class OA_CORE_EXPORT Image :
   getType() override;
 
   void
-  save(Serializer& serializer) override;
+  onSave(Serializer& serializer) override;
 
   void
   load(Serializer& serializer) override;

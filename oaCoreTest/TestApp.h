@@ -134,6 +134,8 @@ public:
 
   Path m_projectPath;
 
+  bool m_meshScreen = false;
+
   int numOfAgents = 6;
   SPtr<Actor> agent;
   cwSDKtoolkit::SPtr<cwSDKtoolkit::CrowdSimulator> cw;

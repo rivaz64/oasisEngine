@@ -758,7 +758,7 @@ Loader::loadResource(const Path & path,WPtr<Actor> actor)
     return loadTexture(path);
   }
 
-  if(extencion == ".obj" || extencion == ".fbx"){
+  if(extencion == ".obj" || extencion == ".fbx" || extencion == ".glb"){
     return loadScene(path,actor);
   }
 

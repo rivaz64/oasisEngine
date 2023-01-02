@@ -24,7 +24,7 @@ class OA_CORE_EXPORT Actor :
   Actor() : m_localTransform(){}
 
   void
-  save(Serializer& serializer) override;
+  onSave(Serializer& serializer) override;
 
   void
   load(Serializer& serializer) override;

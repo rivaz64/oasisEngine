@@ -830,8 +830,8 @@ TestApp::updateImGui()
 
   ImGui::Begin("resources");
 
-  if (ImGui::Button("load resurse"))
-    ImGuiFileDialog::Instance()->OpenDialog("Asset", "Choose File", ".png,.jpg,.hpp,.obj,.fbx,.wav", ".");
+  if (ImGui::Button("load resourse"))
+    ImGuiFileDialog::Instance()->OpenDialog("Asset", "Choose File", ".png,.jpg,.hpp,.obj,.fbx,.glb,.wav", ".");
 
   if (ImGuiFileDialog::Instance()->Display("Asset")) 
   {
@@ -910,6 +910,10 @@ TestApp::updateImGui()
     for(auto mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
       if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMesh = cast<StaticMesh>(mesh);
+        m_meshScreen = true;
+        auto name = m_selectedMesh.lock()->getName().c_str();
+        auto nameSize =  m_selectedMesh.lock()->getName().size();
+        memcpy(imguiString,name,nameSize);
       }
     }
   }
@@ -1444,8 +1448,13 @@ TestApp::updateImGui()
     serializer.init(m_projectPath.string()+"/"+"OasisEngineTestProject.oa",true);
     auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
     serializer.encodeSize(textures.size());
+    auto staticMeshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
+    serializer.encodeSize(textures.size()+staticMeshes.size());
     for(auto& texture : textures){
       cast<Texture>(texture).lock()->getImage()->save(serializer);
+    }
+    for(auto& staticMesh : staticMeshes){
+      cast<StaticMesh>(staticMesh).lock()->save(serializer);
     }
   }
   if(ImGui::Button("load"))
@@ -1465,10 +1474,30 @@ TestApp::updateImGui()
         texture->initFromImage(image);
         resourceManager.registerResourse(texture->getName(),texture);
       }
+      if(type == RESOURSE_TYPE::kStaticMesh){
+        auto staticMesh = makeSPtr<StaticMesh>();
+        staticMesh->load(localSerializer);
+        resourceManager.registerResourse(staticMesh->getName(),staticMesh);
+      }
     }
     
   }
   ImGui::End();
+
+  if(m_meshScreen){
+    ImGui::Begin("mesh inspector");{
+      ImGui::InputText("name",imguiString,64);
+      if(ImGui::Button("delete")){
+        resourceManager.deleteResourse(m_selectedMesh.lock()->getName());
+        m_meshScreen = false;
+      }
+      if(ImGui::Button("close")){
+        m_meshScreen = false;
+      }
+      
+    }
+    ImGui::End();
+  }
 
   //ImGui::Begin("crowds");
   //

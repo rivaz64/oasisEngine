@@ -12,7 +12,7 @@
 namespace oaEngineSDK{
 
 void 
-Model::save(Serializer& serializer)
+Model::onSave(Serializer& serializer)
 { 
   serializer.encodeNumber(getType());
   serializer.encodeString(getName());

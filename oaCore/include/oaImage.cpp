@@ -15,28 +15,18 @@ Image::getType()
   return RESOURSE_TYPE::kImage;
 }
 void
-Image::save(Serializer& serializer)
+Image::onSave(Serializer& serializer)
 {
-  Path finalPath = serializer.m_path.string()+"/"+getName()+".oa";
-
-  serializer.encodeNumber(getType());
-  serializer.encodeString(finalPath.string());
-
-  Serializer localSerializer;
-  localSerializer.init(finalPath,true);
-
-  localSerializer.file.write(reinterpret_cast<const char*>(&getSize()),
+  serializer.file.write(reinterpret_cast<const char*>(&getSize()),
                         sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
 
-  localSerializer.file.write(reinterpret_cast<const char*>(getPixels()),
+  serializer.file.write(reinterpret_cast<const char*>(getPixels()),
                         getNumberOfBytes());
 }
 
 void 
 Image::load(Serializer& serializer)
 {
-  //setName(serializer.decodeString());
-
   serializer.file.read(reinterpret_cast<char*>(&m_size),
                        sizeof(Vector2I)+sizeof(int32)+sizeof(FORMAT::E));
   init();

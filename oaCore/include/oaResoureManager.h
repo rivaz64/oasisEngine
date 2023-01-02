@@ -58,6 +58,11 @@ class OA_CORE_EXPORT ResoureManager :
   String 
   getUniqueName(String name);
 
+  /**
+   * @brief gets an existing resourse by name
+   * @param name the name of the resource
+   * @return if exist returns a resource, if not a null pointer
+  */
   FORCEINLINE WPtr<Resourse>
   getResourse(const String& name)
   {
@@ -70,6 +75,11 @@ class OA_CORE_EXPORT ResoureManager :
     }
   }
 
+  /**
+   * @brief adds a new resource 
+   * @param name a proposed name, if its not unique it will add a counter
+   * @param resourse the one to register
+  */
   FORCEINLINE void
   registerResourse(const String& name, SPtr<Resourse> resourse)
   {
@@ -79,6 +89,17 @@ class OA_CORE_EXPORT ResoureManager :
     m_types[resourse->getType()].push_back(resourse);
   }
 
+  /**
+   * @brief deletes a resourse
+   * @param name 
+  */
+  void
+  deleteResourse(const String& name);
+
+  /**
+   * @brief deketes all the resourses of a same type
+   * @param type 
+  */
   FORCEINLINE void
   deleteAllResoursesOfType(RESOURSE_TYPE::E type)
   {
@@ -90,6 +111,11 @@ class OA_CORE_EXPORT ResoureManager :
     resourses.clear();
   }
 
+  /**
+   * @brief gets all the resources of a same type
+   * @param type 
+   * @return 
+  */
   FORCEINLINE Vector<WPtr<Resourse>>
   getAllResoursesOfType(RESOURSE_TYPE::E type)
   {
@@ -109,11 +135,6 @@ class OA_CORE_EXPORT ResoureManager :
    * @brief the resourses by type
   */
   Map<RESOURSE_TYPE::E,Vector<WPtr<Resourse>>> m_types;
-
-  /**
-   * @brief all the ids of the names
-  */
-  Set<uint64> m_ids;
 
   friend class Module<ResoureManager>;
 };

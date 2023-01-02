@@ -68,7 +68,7 @@ class OA_CORE_EXPORT SkeletalMesh :
   ~SkeletalMesh() = default;
 
   void
-  save(Serializer& serializer) override;
+  onSave(Serializer& serializer) override;
   
   void
   load(Serializer& serializer) override;

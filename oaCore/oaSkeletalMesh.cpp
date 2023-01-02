@@ -5,7 +5,7 @@ namespace oaEngineSDK
 {
 
 void 
-SkeletalMesh::save(Serializer& serializer)
+SkeletalMesh::onSave(Serializer& serializer)
 {
   serializer.encodeVector(m_vertices);
   serializer.encodeVector(m_index);
