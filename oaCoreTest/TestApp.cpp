@@ -1487,6 +1487,9 @@ TestApp::updateImGui()
   if(m_meshScreen){
     ImGui::Begin("mesh inspector");{
       ImGui::InputText("name",imguiString,64);
+      if(ImGui::Button("changeName")){
+        resourceManager.changeName(m_selectedMesh.lock()->getName(),imguiString);
+      }
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedMesh.lock()->getName());
         m_meshScreen = false;

@@ -91,10 +91,18 @@ class OA_CORE_EXPORT ResoureManager :
 
   /**
    * @brief deletes a resourse
-   * @param name 
+   * @param name the name of the resource to delete
   */
   void
   deleteResourse(const String& name);
+
+  /**
+   * @brief changes the name of a resourse
+   * @param name the actual name of the resourse
+   * @param newName the name that the resourse is going to have
+  */
+  void 
+  changeName(const String& name, const String& newName);
 
   /**
    * @brief deketes all the resourses of a same type

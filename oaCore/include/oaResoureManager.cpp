@@ -250,6 +250,14 @@ ResoureManager::deleteResourse(const String& name)
   m_resourses.erase(id);
 }
 
+void 
+ResoureManager::changeName(const String& name, const String& newName)
+{
+  auto resourse = getResourse(name);
+  deleteResourse(name);
+  registerResourse(newName,resourse.lock());
+}
+
 
 }
 
