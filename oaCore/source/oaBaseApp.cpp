@@ -235,7 +235,7 @@ BaseApp::mainLoop()
     GraphicAPI::instancePtr()->events();
 
     if(play)
-    update(m_actualScene->getRoot());
+    update(m_actualScene.lock()->getRoot());
 
     onUpdate(Time::instancePtr()->m_deltaTime);
 

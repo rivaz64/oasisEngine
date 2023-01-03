@@ -67,11 +67,36 @@ public:
                 Vector<Vector4f>& vertices, 
                 uint32 index1, 
                 uint32 index2);
+
+  void 
+  initMeshScene();
   
+  
+
   //void
   //genMorbiusTrip();
 
  public:
+
+  /**
+   * @brief the scene of the world
+  */
+  SPtr<Scene> m_worldScene;
+
+  /**
+   * @brief the scene for inspecting meshes
+  */
+  SPtr<Scene> m_meshScene;
+
+  /**
+   * @brief the model for the mesh inspector
+  */
+  SPtr<Model> m_meshModel;
+
+  /**
+   * @brief the material for the model of the mesh inspector
+  */
+  SPtr<Material> m_meshMaterial;
 
   //WPtr<Resourse> m_selected
   WPtr<Actor> m_selectedActor;
@@ -133,8 +158,6 @@ public:
   bool animInPlay=false;
 
   Path m_projectPath;
-
-  bool m_meshScreen = false;
 
   int numOfAgents = 6;
   SPtr<Actor> agent;

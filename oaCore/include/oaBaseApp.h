@@ -129,6 +129,11 @@ class OA_CORE_EXPORT BaseApp
   void
   initLua();
 
+  /**
+   * @brief the actual scene selected
+  */
+  WPtr<Scene> m_actualScene;
+
   ///**
   // * @brief takes the user to select a project for the engine to open
   //*/
@@ -167,11 +172,6 @@ class OA_CORE_EXPORT BaseApp
    * @brief the time that has pass since the last update
   */
   float m_deltaTime = 0;
-
-  /**
-   * @brief the actual scene selected
-  */
-  SPtr<Scene> m_actualScene;
 
   /**
    * @brief the camera for the editor

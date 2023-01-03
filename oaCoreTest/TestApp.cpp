@@ -283,11 +283,15 @@ TestApp::postInit()
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
-  m_actualScene = makeSPtr<Scene>();
+  m_worldScene = makeSPtr<Scene>();
 
-  m_actualScene->init();
+  m_actualScene = m_worldScene;
 
-  m_selectedActor = m_actualScene->getRoot();
+  m_worldScene->init();
+
+  m_selectedActor = m_worldScene->getRoot();
+
+  initMeshScene();
 
   graphicAPI.initTest();
 
@@ -426,7 +430,7 @@ TestApp::onUpdate(float delta)
 
   OmniverseApi::instance().update();
 
-  m_actualScene->getRoot()->postUpdate();
+  m_actualScene.lock()->getRoot()->postUpdate();
 
   if(play){
     cw->update(.0625f);
@@ -548,21 +552,23 @@ void TestApp::childsInImgui(SPtr<Actor> parentActor)
   }
 }
 
-//void TestApp::selectingProject()
-//{
-//  GraphicAPI::instancePtr()->events();
-//  newImGuiFrame();
-//
-//  ImGui::Begin("proyect");
-//  if(ImGui::Button("new"))
-//  {
-//    //ResoureManager
-//  }
-//  ImGui::End();
-//
-//  renderImGui();
-//  GraphicAPI::instancePtr()->show();
-//}
+void
+TestApp::initMeshScene()
+{
+  m_meshScene =  makeSPtr<Scene>();
+  m_meshScene->init();
+  auto actor = makeSPtr<Actor>();
+  auto component = makeSPtr<StaticMeshComponent>();
+  m_meshModel = makeSPtr<Model>();
+  m_meshMaterial = makeSPtr<Material>();
+  m_meshMaterial->setColor("diffuse",Color::WHITE);
+  m_meshModel->setMaterial(m_meshMaterial);
+  component->setModel(m_meshModel);
+  actor->attachComponent(component);
+  actor->attachComponent(makeSPtr<AmbientLightComponent>());
+  m_meshScene->getRoot()->attach(actor);
+
+}
 
 void 
 TestApp::updateImGui()
@@ -910,7 +916,9 @@ TestApp::updateImGui()
     for(auto mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
       if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMesh = cast<StaticMesh>(mesh);
-        m_meshScreen = true;
+        m_actualScene = m_meshScene;
+        m_selectedActor = m_meshScene->getRoot()->getChilds()[0];
+        m_meshScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMesh(m_selectedMesh);
         auto name = m_selectedMesh.lock()->getName().c_str();
         auto nameSize =  m_selectedMesh.lock()->getName().size();
         memcpy(imguiString,name,nameSize);
@@ -974,9 +982,9 @@ TestApp::updateImGui()
     isCreatingActor = true;
   }
   if(ImGui::Button("scene")){
-    m_selectedActor = m_actualScene->getRoot();
+    m_selectedActor = m_actualScene.lock()->getRoot();
   }
-  childsInImgui(m_actualScene->getRoot());
+  childsInImgui(m_actualScene.lock()->getRoot());
   ImGui::End();
 
   ImGui::Begin("configs");
@@ -1091,150 +1099,150 @@ TestApp::updateImGui()
   ImGui::Begin("scene");
   {
     if(ImGui::Button("new scene")){
-      m_actualScene = makeSPtr<Scene>();
-      m_actualScene->init();
-      m_selectedActor = m_actualScene->getRoot();
+      m_worldScene = makeSPtr<Scene>();
+      m_worldScene->init();
+      m_selectedActor = m_worldScene->getRoot();
     }
+    //
+    //if (ImGui::Button("save scene"))
+    //  ImGuiFileDialog::Instance()->OpenDialog("save all", "Choose File", ".txt", ".");
+    //
+    //if (ImGuiFileDialog::Instance()->Display("save all")) 
+    //{
+    //  // action if OK
+    //  if (ImGuiFileDialog::Instance()->IsOk())
+    //  {
+    //    String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+    //    String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+    //    Serializer serializer;
+    //    serializer.init(filePathName,true);
+    //    auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
+    //    auto materials = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial);
+    //    auto meshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
+    //    auto models = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel);
+    //    serializer.encodeSize(textures.size()+materials.size()+meshes.size()+models.size()+1);
+    //    //erializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
+    //    for(auto& texture : textures){
+    //      cast<Texture>(texture).lock()->getImage()->save(serializer);
+    //    }
+    //    
+    //    //serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
+    //    for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
+    //      material.lock()->save(serializer);
+    //
+    //    }
+    //    for(auto& mesh: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
+    //      mesh.lock()->save(serializer);
+    //    }
+    //
+    //    serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh).size());
+    //    for(auto& mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
+    //      mesh.lock()->save(serializer);
+    //    }
+    //    
+    //    serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
+    //    for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+    //      model.lock()->save(serializer);
+    //    }
+    //    
+    //    auto root = m_actualScene->getRoot();
+    //    root->save(serializer);
+    //    
+    //  }
+    //  
+    //  // close
+    //  ImGuiFileDialog::Instance()->Close();
+    //}
 
-    if (ImGui::Button("save scene"))
-      ImGuiFileDialog::Instance()->OpenDialog("save all", "Choose File", ".txt", ".");
-
-    if (ImGuiFileDialog::Instance()->Display("save all")) 
-    {
-      // action if OK
-      if (ImGuiFileDialog::Instance()->IsOk())
-      {
-        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        Serializer serializer;
-        serializer.init(filePathName,true);
-        auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
-        auto materials = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial);
-        auto meshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
-        auto models = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel);
-        serializer.encodeSize(textures.size()+materials.size()+meshes.size()+models.size()+1);
-        //erializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
-        for(auto& texture : textures){
-          cast<Texture>(texture).lock()->getImage()->save(serializer);
-        }
-        
-        //serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
-        for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
-          material.lock()->save(serializer);
-
-        }
-        for(auto& mesh: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
-          mesh.lock()->save(serializer);
-        }
-
-        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh).size());
-        for(auto& mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
-          mesh.lock()->save(serializer);
-        }
-        
-        serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
-        for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
-          model.lock()->save(serializer);
-        }
-        
-        auto root = m_actualScene->getRoot();
-        root->save(serializer);
-        
-      }
-      
-      // close
-      ImGuiFileDialog::Instance()->Close();
-    }
-
-    if (ImGui::Button("load scene"))
-      ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".oa", ".");
-
-    if (ImGuiFileDialog::Instance()->Display("load")) 
-    {
-      // action if OK
-      if (ImGuiFileDialog::Instance()->IsOk())
-      {
-        std::chrono::time_point<std::chrono::system_clock> start, end;
-        start = std::chrono::system_clock::now();
-        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        Serializer serializer;
-        //m_actualScene = makeSPtr<Scene>();
-        //m_actualScene->init();
-        //m_selectedActor = m_actualScene->getRoot();
-        if(serializer.init(filePathName,FILE::kRead)){
-          auto n = serializer.decodeSize();
-          for(SIZE_T i = 0; i<n; ++i){
-            int type = serializer.decodeNumber();
-            if(type == RESOURSE_TYPE::kTexture){
-              auto image = makeSPtr<Image>();
-              image->load(serializer);
-              SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-              texture->initFromImage(image);
-              resourceManager.registerResourse(texture->getName(),texture);
-            }
-            else if(type == RESOURSE_TYPE::kMaterial){
-              auto material = makeSPtr<Material>();
-              material->load(serializer);
-              resourceManager.registerResourse(material->getName(),material);
-            }
-            else if(type == RESOURSE_TYPE::kStaticMesh){
-              auto mesh = makeSPtr<StaticMesh>();
-              mesh->load(serializer);
-              resourceManager.registerResourse(mesh->getName(),mesh);
-            }
-            else if(type == RESOURSE_TYPE::kModel){
-              auto model = makeSPtr<Model>();
-              model->load(serializer);
-              resourceManager.registerResourse(model->getName(),model);
-            }
-            else if(type == RESOURSE_TYPE::kActor){
-              m_actualScene = makeSPtr<Scene>();
-              m_actualScene->init();
-              m_selectedActor = m_actualScene->getRoot();
-              m_selectedActor.lock()->load(serializer);
-            }
-
-          }
-          end = std::chrono::system_clock::now();
-          std::chrono::duration<double> elapsed_seconds = end - start;
-          print("elapsed time: " + StringUtilities::floatToString(elapsed_seconds.count()));
-          //SIZE_T number = serializer.decodeSize();
-          //for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-          //  auto image = makeSPtr<Image>();
-          //  image->load(serializer);
-          //  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-          //  texture->initFromImage(image);
-          //  resourceManager.registerResourse(texture->getName(),texture);
-          //}
-          //
-          //number = serializer.decodeSize();
-          //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-          //  auto material = makeSPtr<Material>();
-          //  material->load(serializer);
-          //  resourceManager.registerResourse(material->getName(),material);
-          //}
-          //
-          //number = serializer.decodeSize();
-          //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-          //  auto model = makeSPtr<Model>();
-          //  model->load(serializer);
-          //  //resourceManager.registerResourse(model->getName(),model);
-          //}
-          //
-          //number = serializer.decodeSize();
-          //for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-          //  auto actor = makeSPtr<Actor>();
-          //  actor->load(serializer);
-          //  auto root = m_actualScene->getRoot();
-          //  root->attach(actor);
-          //}
-        }
-      }
-      
-      // close
-      ImGuiFileDialog::Instance()->Close();
-    }
+    //if (ImGui::Button("load scene"))
+    //  ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".oa", ".");
+    //
+    //if (ImGuiFileDialog::Instance()->Display("load")) 
+    //{
+    //  // action if OK
+    //  if (ImGuiFileDialog::Instance()->IsOk())
+    //  {
+    //    std::chrono::time_point<std::chrono::system_clock> start, end;
+    //    start = std::chrono::system_clock::now();
+    //    String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+    //    String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+    //    Serializer serializer;
+    //    //m_actualScene = makeSPtr<Scene>();
+    //    //m_actualScene->init();
+    //    //m_selectedActor = m_actualScene->getRoot();
+    //    if(serializer.init(filePathName,FILE::kRead)){
+    //      auto n = serializer.decodeSize();
+    //      for(SIZE_T i = 0; i<n; ++i){
+    //        int type = serializer.decodeNumber();
+    //        if(type == RESOURSE_TYPE::kTexture){
+    //          auto image = makeSPtr<Image>();
+    //          image->load(serializer);
+    //          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+    //          texture->initFromImage(image);
+    //          resourceManager.registerResourse(texture->getName(),texture);
+    //        }
+    //        else if(type == RESOURSE_TYPE::kMaterial){
+    //          auto material = makeSPtr<Material>();
+    //          material->load(serializer);
+    //          resourceManager.registerResourse(material->getName(),material);
+    //        }
+    //        else if(type == RESOURSE_TYPE::kStaticMesh){
+    //          auto mesh = makeSPtr<StaticMesh>();
+    //          mesh->load(serializer);
+    //          resourceManager.registerResourse(mesh->getName(),mesh);
+    //        }
+    //        else if(type == RESOURSE_TYPE::kModel){
+    //          auto model = makeSPtr<Model>();
+    //          model->load(serializer);
+    //          resourceManager.registerResourse(model->getName(),model);
+    //        }
+    //        else if(type == RESOURSE_TYPE::kActor){
+    //          m_actualScene = makeSPtr<Scene>();
+    //          m_actualScene->init();
+    //          m_selectedActor = m_actualScene->getRoot();
+    //          m_selectedActor.lock()->load(serializer);
+    //        }
+    //
+    //      }
+    //      end = std::chrono::system_clock::now();
+    //      std::chrono::duration<double> elapsed_seconds = end - start;
+    //      print("elapsed time: " + StringUtilities::floatToString(elapsed_seconds.count()));
+    //      //SIZE_T number = serializer.decodeSize();
+    //      //for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
+    //      //  auto image = makeSPtr<Image>();
+    //      //  image->load(serializer);
+    //      //  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
+    //      //  texture->initFromImage(image);
+    //      //  resourceManager.registerResourse(texture->getName(),texture);
+    //      //}
+    //      //
+    //      //number = serializer.decodeSize();
+    //      //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
+    //      //  auto material = makeSPtr<Material>();
+    //      //  material->load(serializer);
+    //      //  resourceManager.registerResourse(material->getName(),material);
+    //      //}
+    //      //
+    //      //number = serializer.decodeSize();
+    //      //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
+    //      //  auto model = makeSPtr<Model>();
+    //      //  model->load(serializer);
+    //      //  //resourceManager.registerResourse(model->getName(),model);
+    //      //}
+    //      //
+    //      //number = serializer.decodeSize();
+    //      //for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
+    //      //  auto actor = makeSPtr<Actor>();
+    //      //  actor->load(serializer);
+    //      //  auto root = m_actualScene->getRoot();
+    //      //  root->attach(actor);
+    //      //}
+    //    }
+    //  }
+    //  
+    //  // close
+    //  ImGuiFileDialog::Instance()->Close();
+    //}
 
     ImGui::End();
   }
@@ -1400,10 +1408,10 @@ TestApp::updateImGui()
 
     ImGui::InputText("name",imguiString,64);
     if(ImGui::Button("create file")){
-      omniverse.createModel(imguiString,m_actualScene->getRoot());
+      omniverse.createModel(imguiString,m_worldScene->getRoot());
     }
     if(ImGui::Button("open file")){
-      omniverse.connectToModel(imguiString,m_actualScene->getRoot());
+      omniverse.connectToModel(imguiString,m_worldScene->getRoot());
     }
     if(ImGui::Button("close file")){
       omniverse.closeScene();
@@ -1447,7 +1455,6 @@ TestApp::updateImGui()
     Serializer serializer;
     serializer.init(m_projectPath.string()+"/"+"OasisEngineTestProject.oa",true);
     auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
-    serializer.encodeSize(textures.size());
     auto staticMeshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
     serializer.encodeSize(textures.size()+staticMeshes.size());
     for(auto& texture : textures){
@@ -1466,9 +1473,11 @@ TestApp::updateImGui()
     {
       int type = serializer.decodeNumber();
       Serializer localSerializer;
-      localSerializer.init(serializer.decodeString(),false);
+      Path resourceFile = serializer.decodeString();
+      localSerializer.init(resourceFile,false);
       if(type == RESOURSE_TYPE::kImage){
         auto image = makeSPtr<Image>();
+        image->setName(resourceFile.stem().string());
         image->load(localSerializer);
         SPtr<Texture> texture = GraphicAPI::instance().createTexture();
         texture->initFromImage(image);
@@ -1476,6 +1485,7 @@ TestApp::updateImGui()
       }
       if(type == RESOURSE_TYPE::kStaticMesh){
         auto staticMesh = makeSPtr<StaticMesh>();
+        staticMesh->setName(resourceFile.stem().string());
         staticMesh->load(localSerializer);
         resourceManager.registerResourse(staticMesh->getName(),staticMesh);
       }
@@ -1484,7 +1494,7 @@ TestApp::updateImGui()
   }
   ImGui::End();
 
-  if(m_meshScreen){
+  if(m_actualScene.lock() == m_meshScene){
     ImGui::Begin("mesh inspector");{
       ImGui::InputText("name",imguiString,64);
       if(ImGui::Button("changeName")){
@@ -1492,10 +1502,11 @@ TestApp::updateImGui()
       }
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedMesh.lock()->getName());
-        m_meshScreen = false;
+        m_actualScene = m_worldScene;
       }
       if(ImGui::Button("close")){
-        m_meshScreen = false;
+        m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
       }
       
     }
