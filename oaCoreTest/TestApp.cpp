@@ -292,7 +292,9 @@ TestApp::postInit()
   m_selectedActor = m_worldScene->getRoot();
 
   initMeshScene();
-
+  generateCube();
+  initMaterialScene();
+  initModelScene();
   graphicAPI.initTest();
 
   graphicAPI.setPrimitiveTopology(oaEngineSDK::PRIMITIVE_TOPOLOGY::kTrianlgeList);
@@ -340,25 +342,28 @@ TestApp::onUpdate(float delta)
   //
   //  m_camera->update();
   //}
-  if(m_keyboard->isKeyDown(KEY::kA)){
-    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
+  if(m_mouse->isButtonDown(BUTTON::kRight)){
+    if(m_keyboard->isKeyDown(KEY::kA)){
+      m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
+    }
+    if(m_keyboard->isKeyDown(KEY::kD)){
+      m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
+    }
+    if(m_keyboard->isKeyDown(KEY::kW)){
+      //m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
+      handler.publish(Vector3f(0,0,m_secondPerFrame));
+    }
+    if(m_keyboard->isKeyDown(KEY::kS)){
+      m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
+    }
+    if(m_keyboard->isKeyDown(KEY::kQ)){
+      m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
+    }
+    if(m_keyboard->isKeyDown(KEY::kE)){
+      m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
+    }
   }
-  if(m_keyboard->isKeyDown(KEY::kD)){
-    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
-  }
-  if(m_keyboard->isKeyDown(KEY::kW)){
-    //m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
-    handler.publish(Vector3f(0,0,m_secondPerFrame));
-  }
-  if(m_keyboard->isKeyDown(KEY::kS)){
-    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
-  }
-  if(m_keyboard->isKeyDown(KEY::kQ)){
-    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
-  }
-  if(m_keyboard->isKeyDown(KEY::kE)){
-    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
-  }
+  
   //if(!m_controlledActor){
   //  switch (input)
   //  {
@@ -567,7 +572,127 @@ TestApp::initMeshScene()
   actor->attachComponent(component);
   actor->attachComponent(makeSPtr<AmbientLightComponent>());
   m_meshScene->getRoot()->attach(actor);
+}
 
+void 
+TestApp::generateCube()
+{
+
+  cube = makeSPtr<StaticMesh>();
+
+  Vector<Vertex> vertices = {
+    Vertex( Vector4f(-.5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f( .5f, .5f, -.5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f( .5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, .5f,  .5f ,0.0f),Vector4f(0.0f,1.0f,   0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,-1.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f), Vector4f(-1.0f,0.0f, 0.0f,0.0f), Vector2f(0.0f, 0.0f)),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 0.0f)),
+    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(1.0f, 1.0f)),
+    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(-1.0f,0.0f,  0.0f,0.0f), Vector2f(0.0f, 1.0f)),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(1.0f,0.0f,   0.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f,  .5f, -.5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 0.0f) ),
+    Vertex( Vector4f( .5f, -.5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 0.0f) ),
+    Vertex( Vector4f( .5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(1.0f, 1.0f) ),
+    Vertex( Vector4f(-.5f,  .5f,  .5f,0.0f),Vector4f(0.0f,0.0f,  -1.0f,0.0f),Vector2f(0.0f, 1.0f) ),
+  };
+
+  Vector<uint32> index = {
+    3,1,0,
+    2,1,3,
+    
+    6,4,5,
+    7,4,6,
+    
+    11,9,8,
+    10,9,11,
+    
+    14,12,13,
+    15,12,14,
+    
+    19,17,16,
+    18,17,19,
+    
+    22,20,21,
+    23,20,22
+  };
+
+
+  cube->setVertex(vertices);
+  cube->setIndex(index);
+  cube->writeBuffers();
+  //Plane plane(Vector3f(.25,0,0),Vector3f(.25,1,0),Vector3f(.25,0,1));
+
+  //Octree tree;
+  //auto planes = tree.getPlanes();
+  //Vector<uint32> indexFront;
+  //Vector<uint32> indexBack;
+  //Vector<Vector<uint32>> meshes;
+  //meshes.push_back(index);
+  //Vector<Vector<uint32>> newMeshes;
+  //for(auto& plane: planes){
+  //  for(Vector<uint32>& m : meshes){
+  //    indexBack.clear();
+  //    indexFront.clear();
+  //    divide(plane, vertices,m,indexBack,indexFront);
+  //    newMeshes.push_back(indexBack);
+  //    newMeshes.push_back(indexFront);
+  //  }
+  //  meshes = newMeshes;
+  //  newMeshes.clear();
+  //}
+  
+ 
+  //String name = "cube";//+StringUtilities::intToString(i);
+  //m_models.insert({name,makeSPtr<Model>()});
+  //auto& model = m_models[name];
+  //model->setName(name);
+  //model->addMaterial(makeSPtr<Material>());
+  //auto& material = model->getMaterial(0);
+  //material->setShader(0);
+  //m_materials.insert({"wall",material});
+  //model->addMesh(makeSPtr<Mesh>());
+  //auto& mesh = model->getMesh(0);
+  //mesh->setIndex(index);
+  //mesh->create(vertices.data(),sizeof(Vertex),vertices.size());
+}
+void 
+TestApp::initMaterialScene()
+{
+  m_materialScene = makeSPtr<Scene>();
+  m_materialScene->init();
+  auto actor = makeSPtr<Actor>();
+  auto component = makeSPtr<StaticMeshComponent>();
+  m_materialModel = makeSPtr<Model>();
+  m_materialModel->setMesh(cube);
+  component->setModel(m_materialModel);
+  actor->attachComponent(component);
+  actor->attachComponent(makeSPtr<AmbientLightComponent>());
+  actor->attachComponent(makeSPtr<DirectionalLightComponent>());
+  m_materialScene->getRoot()->attach(actor);
+}
+
+void 
+TestApp::initModelScene()
+{
+  m_modelScene = makeSPtr<Scene>();
+  m_modelScene->init();
+  auto actor = makeSPtr<Actor>();
+  auto component = makeSPtr<StaticMeshComponent>();
+  actor->attachComponent(component);
+  actor->attachComponent(makeSPtr<AmbientLightComponent>());
+  actor->attachComponent(makeSPtr<DirectionalLightComponent>());
+  m_modelScene->getRoot()->attach(actor);
 }
 
 void 
@@ -874,40 +999,29 @@ TestApp::updateImGui()
     ImGuiFileDialog::Instance()->Close();
   }
 
-  //if(ImGui::Button("load resurse")){
-  //  Path path;
-  //  
-  //  //if(path.searchForPath()){
-  //  //  loader = new Loader;
-  //  //  loader->loadResource(path);
-  //  //  //loadflags = loader->checkForLoad(path);
-  //  //  delete loader;
-  //  //  loader = 0;
-  //  //}
-  //}
   if (ImGui::CollapsingHeader("textures")){
-    if(ImGui::Button("load Texture")){
-      Path path;
-      //if(path.searchForPath()){
-      //  loader = new Loader;
-      //  loader->loadTexture(path);
-      //  //loadflags = loader->checkForLoad(path);
-      //  delete loader;
-      //  loader = 0;
-      //}
-    }
     for(auto texture : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture)){
       if(!texture.expired())
       if(ImGui::ImageButton(cast<Texture>(texture).lock()->getId(),ImVec2(100,100))){
         m_selectedTexture = cast<Texture>(texture);
+        textureInspector = true;
       }
     }
   }
   
   if (ImGui::CollapsingHeader("materials")){
+    if(ImGui::Button("create material")){
+      resourceManager.registerResourse("newMat",makeSPtr<Material>());
+    }
     for(auto material : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
       if(ImGui::Button(material.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMaterial = cast<Material>(material);
+        m_actualScene = m_materialScene;
+        m_selectedActor = m_materialScene->getRoot()->getChilds()[0];
+        m_materialScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMaterial(m_selectedMaterial);
+        auto name = m_selectedMaterial.lock()->getName().c_str();
+        auto nameSize =  m_selectedMaterial.lock()->getName().size();
+        memcpy(imguiString,name,nameSize);
       }
     }
   }
@@ -927,9 +1041,18 @@ TestApp::updateImGui()
   }
   
   if (ImGui::CollapsingHeader("static models")){
+    if(ImGui::Button("create model")){
+      resourceManager.registerResourse("newModel",makeSPtr<Material>());
+    }
     for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
       if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedModel = cast<Model>(model);
+        m_actualScene = m_modelScene;
+        m_selectedActor = m_modelScene->getRoot()->getChilds()[0];
+        m_modelScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->setModel(m_selectedModel);
+        auto name = m_selectedModel.lock()->getName().c_str();
+        auto nameSize =  m_selectedModel.lock()->getName().size();
+        memcpy(imguiString,name,nameSize);
       }
     }
   }
@@ -1103,196 +1226,11 @@ TestApp::updateImGui()
       m_worldScene->init();
       m_selectedActor = m_worldScene->getRoot();
     }
-    //
-    //if (ImGui::Button("save scene"))
-    //  ImGuiFileDialog::Instance()->OpenDialog("save all", "Choose File", ".txt", ".");
-    //
-    //if (ImGuiFileDialog::Instance()->Display("save all")) 
-    //{
-    //  // action if OK
-    //  if (ImGuiFileDialog::Instance()->IsOk())
-    //  {
-    //    String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-    //    String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-    //    Serializer serializer;
-    //    serializer.init(filePathName,true);
-    //    auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
-    //    auto materials = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial);
-    //    auto meshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
-    //    auto models = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel);
-    //    serializer.encodeSize(textures.size()+materials.size()+meshes.size()+models.size()+1);
-    //    //erializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture).size());
-    //    for(auto& texture : textures){
-    //      cast<Texture>(texture).lock()->getImage()->save(serializer);
-    //    }
-    //    
-    //    //serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial).size());
-    //    for(auto& material: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial)){
-    //      material.lock()->save(serializer);
-    //
-    //    }
-    //    for(auto& mesh: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
-    //      mesh.lock()->save(serializer);
-    //    }
-    //
-    //    serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh).size());
-    //    for(auto& mesh : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh)){
-    //      mesh.lock()->save(serializer);
-    //    }
-    //    
-    //    serializer.encodeSize(resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel).size());
-    //    for(auto& model: resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
-    //      model.lock()->save(serializer);
-    //    }
-    //    
-    //    auto root = m_actualScene->getRoot();
-    //    root->save(serializer);
-    //    
-    //  }
-    //  
-    //  // close
-    //  ImGuiFileDialog::Instance()->Close();
-    //}
-
-    //if (ImGui::Button("load scene"))
-    //  ImGuiFileDialog::Instance()->OpenDialog("load", "Choose File", ".oa", ".");
-    //
-    //if (ImGuiFileDialog::Instance()->Display("load")) 
-    //{
-    //  // action if OK
-    //  if (ImGuiFileDialog::Instance()->IsOk())
-    //  {
-    //    std::chrono::time_point<std::chrono::system_clock> start, end;
-    //    start = std::chrono::system_clock::now();
-    //    String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-    //    String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-    //    Serializer serializer;
-    //    //m_actualScene = makeSPtr<Scene>();
-    //    //m_actualScene->init();
-    //    //m_selectedActor = m_actualScene->getRoot();
-    //    if(serializer.init(filePathName,FILE::kRead)){
-    //      auto n = serializer.decodeSize();
-    //      for(SIZE_T i = 0; i<n; ++i){
-    //        int type = serializer.decodeNumber();
-    //        if(type == RESOURSE_TYPE::kTexture){
-    //          auto image = makeSPtr<Image>();
-    //          image->load(serializer);
-    //          SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-    //          texture->initFromImage(image);
-    //          resourceManager.registerResourse(texture->getName(),texture);
-    //        }
-    //        else if(type == RESOURSE_TYPE::kMaterial){
-    //          auto material = makeSPtr<Material>();
-    //          material->load(serializer);
-    //          resourceManager.registerResourse(material->getName(),material);
-    //        }
-    //        else if(type == RESOURSE_TYPE::kStaticMesh){
-    //          auto mesh = makeSPtr<StaticMesh>();
-    //          mesh->load(serializer);
-    //          resourceManager.registerResourse(mesh->getName(),mesh);
-    //        }
-    //        else if(type == RESOURSE_TYPE::kModel){
-    //          auto model = makeSPtr<Model>();
-    //          model->load(serializer);
-    //          resourceManager.registerResourse(model->getName(),model);
-    //        }
-    //        else if(type == RESOURSE_TYPE::kActor){
-    //          m_actualScene = makeSPtr<Scene>();
-    //          m_actualScene->init();
-    //          m_selectedActor = m_actualScene->getRoot();
-    //          m_selectedActor.lock()->load(serializer);
-    //        }
-    //
-    //      }
-    //      end = std::chrono::system_clock::now();
-    //      std::chrono::duration<double> elapsed_seconds = end - start;
-    //      print("elapsed time: " + StringUtilities::floatToString(elapsed_seconds.count()));
-    //      //SIZE_T number = serializer.decodeSize();
-    //      //for(SIZE_T textureNum = 0; textureNum<number; ++textureNum){
-    //      //  auto image = makeSPtr<Image>();
-    //      //  image->load(serializer);
-    //      //  SPtr<Texture> texture = GraphicAPI::instance().createTexture();
-    //      //  texture->initFromImage(image);
-    //      //  resourceManager.registerResourse(texture->getName(),texture);
-    //      //}
-    //      //
-    //      //number = serializer.decodeSize();
-    //      //for(SIZE_T materialNum = 0; materialNum<number; ++materialNum){
-    //      //  auto material = makeSPtr<Material>();
-    //      //  material->load(serializer);
-    //      //  resourceManager.registerResourse(material->getName(),material);
-    //      //}
-    //      //
-    //      //number = serializer.decodeSize();
-    //      //for(SIZE_T modelNum = 0; modelNum<number; ++modelNum){
-    //      //  auto model = makeSPtr<Model>();
-    //      //  model->load(serializer);
-    //      //  //resourceManager.registerResourse(model->getName(),model);
-    //      //}
-    //      //
-    //      //number = serializer.decodeSize();
-    //      //for(SIZE_T actorNum = 0; actorNum<number; ++actorNum){
-    //      //  auto actor = makeSPtr<Actor>();
-    //      //  actor->load(serializer);
-    //      //  auto root = m_actualScene->getRoot();
-    //      //  root->attach(actor);
-    //      //}
-    //    }
-    //  }
-    //  
-    //  // close
-    //  ImGuiFileDialog::Instance()->Close();
-    //}
-
     ImGui::End();
   }
 
   
-  //ImGui::Begin("material editor");
-  //if(m_selectedMaterial){
-  //  SPtr<Texture> texture;
-  //
-  //  static const char* shaders[]{"normal","animation","paralax","transparent"};
-  //
-  //  int32 shader = m_selectedMaterial->getShader();
-  //
-  //  ImGui::Combo("shader",&shader,shaders,4);
-  //
-  //  m_selectedMaterial->setShader(static_cast<SHADER_TYPE::E>(shader));
-  //
-  //  if(ImGui::Button("select difusse")){
-  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kDiffuse,m_selectedTexture);
-  //  }
-  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDiffuse);
-  //  if(texture){
-  //    ImGui::Image(texture->getId(),ImVec2(100,100));
-  //  }
-  //
-  //  if(ImGui::Button("select normal map")){
-  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kNormalMap,m_selectedTexture);
-  //  }
-  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kNormalMap);
-  //  if(texture){
-  //    ImGui::Image(texture->getId(),ImVec2(100,100));
-  //  }
-  //
-  //  if(ImGui::Button("select specular")){
-  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kSpecular,m_selectedTexture);
-  //  }
-  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kSpecular);
-  //  if(texture){
-  //    ImGui::Image(texture->getId(),ImVec2(100,100));
-  //  }
-  //
-  //  if(ImGui::Button("select depth map")){
-  //    m_selectedMaterial->setTexture(TEXTURE_TYPE::kDepthMap,m_selectedTexture);
-  //  }
-  //  texture = m_selectedMaterial->getTexture(TEXTURE_TYPE::kDepthMap);
-  //  if(texture){
-  //    ImGui::Image(texture->getId(),ImVec2(100,100));
-  //  }
-  //}
-  //ImGui::End();
+  
 
   ImGui::Begin("Model Editor");{
     if(!m_selectedModel.expired()){
@@ -1338,41 +1276,8 @@ TestApp::updateImGui()
   //ImGui::End();
 
   
-
-  ImGui::Begin("material editor");{
-   
-    if(!m_selectedMaterial.expired()){
-      auto selectedMaterial = m_selectedMaterial.lock();
-
-      ImGui::Combo("cooling",reinterpret_cast<int*>(&selectedMaterial->m_culling),"none\0front\0back");
-
-      if (ImGui::CollapsingHeader("add")){
-        ImGui::InputText("new",imguiString,64);
-        if(!m_selectedTexture.expired()){
-          auto selectedTexture = m_selectedTexture.lock();
-          ImGui::Image(selectedTexture->getId(),ImVec2(100,100));
-        }
-        if(ImGui::Button("add texture")){
-          selectedMaterial->setTexture(imguiString,m_selectedTexture);
-        }
-      }
-      
-      for(auto& textureChannel : selectedMaterial->getTextureChannels()){
-        if(ImGui::Button(textureChannel.c_str()) && !m_selectedTexture.expired()){
-
-          selectedMaterial->setTexture(textureChannel,m_selectedTexture);
-        }
-        auto texture = selectedMaterial->getTexture(textureChannel);
-        if(!texture.expired()){
-          ImGui::Image(texture.lock()->getId(),ImVec2(100,100));
-        }
-        //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
-        //  m_selectedTexture = texture.second;
-        //}
-      }
-    }
-    ImGui::End();
-  }
+  
+  
   
 
   ImGui::Begin("lua");
@@ -1456,12 +1361,20 @@ TestApp::updateImGui()
     serializer.init(m_projectPath.string()+"/"+"OasisEngineTestProject.oa",true);
     auto textures = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kTexture);
     auto staticMeshes = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kStaticMesh);
-    serializer.encodeSize(textures.size()+staticMeshes.size());
+    auto materials = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kMaterial);
+    auto models = resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel);
+    serializer.encodeSize(textures.size()+staticMeshes.size()+materials.size()+models.size());
     for(auto& texture : textures){
       cast<Texture>(texture).lock()->getImage()->save(serializer);
     }
     for(auto& staticMesh : staticMeshes){
       cast<StaticMesh>(staticMesh).lock()->save(serializer);
+    }
+    for(auto& material : materials){
+      cast<Material>(material).lock()->save(serializer);
+    }
+    for(auto& model : models){
+      cast<Model>(model).lock()->save(serializer);
     }
   }
   if(ImGui::Button("load"))
@@ -1483,16 +1396,44 @@ TestApp::updateImGui()
         texture->initFromImage(image);
         resourceManager.registerResourse(texture->getName(),texture);
       }
-      if(type == RESOURSE_TYPE::kStaticMesh){
+      else if(type == RESOURSE_TYPE::kStaticMesh){
         auto staticMesh = makeSPtr<StaticMesh>();
         staticMesh->setName(resourceFile.stem().string());
         staticMesh->load(localSerializer);
         resourceManager.registerResourse(staticMesh->getName(),staticMesh);
       }
+      else if(type == RESOURSE_TYPE::kMaterial){
+        auto material = makeSPtr<Material>();
+        material->setName(resourceFile.stem().string());
+        material->load(localSerializer);
+        resourceManager.registerResourse(material->getName(),material);
+      }
+      else if(type == RESOURSE_TYPE::kModel){
+        auto model = makeSPtr<Model>();
+        model->setName(resourceFile.stem().string());
+        model->load(localSerializer);
+        resourceManager.registerResourse(model->getName(),model);
+      }
     }
     
   }
   ImGui::End();
+
+  if(textureInspector){
+    ImGui::Begin("texture inspector");
+    ImGui::InputText("name",imguiString,64);
+    if(ImGui::Button("changeName")){
+      resourceManager.changeName(m_selectedTexture.lock()->getImage()->getName(),imguiString);
+    }
+    if(ImGui::Button("delete")){
+      resourceManager.deleteResourse(m_selectedTexture.lock()->getName());
+      textureInspector = false;
+    }
+    if(ImGui::Button("close")){
+      textureInspector = false;
+    }
+    ImGui::End();
+  }
 
   if(m_actualScene.lock() == m_meshScene){
     ImGui::Begin("mesh inspector");{
@@ -1503,6 +1444,85 @@ TestApp::updateImGui()
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedMesh.lock()->getName());
         m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
+      }
+      if(ImGui::Button("close")){
+        m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
+      }
+      
+    }
+    ImGui::End();
+  }
+
+  if(m_actualScene.lock() == m_materialScene){
+    ImGui::Begin("material editor");{
+     
+      auto selectedMaterial = m_selectedMaterial.lock();
+
+      ImGui::InputText("name",imguiString,64);
+      if(ImGui::Button("changeName")){
+        resourceManager.changeName(selectedMaterial->getName(),imguiString);
+      }
+
+      ImGui::Combo("cooling",reinterpret_cast<int*>(&selectedMaterial->m_culling),"none\0front\0back");
+
+      if (ImGui::CollapsingHeader("add")){
+        ImGui::InputText("new",imguiString,64);
+        if(!m_selectedTexture.expired()){
+          auto selectedTexture = m_selectedTexture.lock();
+          ImGui::Image(selectedTexture->getId(),ImVec2(100,100));
+        }
+        if(ImGui::Button("add texture")){
+          selectedMaterial->setTexture(imguiString,m_selectedTexture);
+        }
+      }
+      
+      for(auto& textureChannel : selectedMaterial->getTextureChannels()){
+        if(ImGui::Button(textureChannel.c_str()) && !m_selectedTexture.expired()){
+
+          selectedMaterial->setTexture(textureChannel,m_selectedTexture);
+        }
+        auto texture = selectedMaterial->getTexture(textureChannel);
+        if(!texture.expired()){
+          ImGui::Image(texture.lock()->getId(),ImVec2(100,100));
+        }
+        //if(ImGui::ImageButton(texture.second->getId(),ImVec2(100,100))){
+        //  m_selectedTexture = texture.second;
+        //}
+      }
+      if(ImGui::Button("delete")){
+        resourceManager.deleteResourse(m_selectedMaterial.lock()->getName());
+        m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
+      }
+      if(ImGui::Button("close")){
+        m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
+      }
+    }
+    ImGui::End();
+  }
+
+  if(m_actualScene.lock() == m_modelScene){
+    ImGui::Begin("model inspector");{
+      ImGui::InputText("name",imguiString,64);
+      auto model = m_selectedModel.lock();
+      if(ImGui::Button("changeName")){
+        resourceManager.changeName(model->getName(),imguiString);
+      }
+      ImGui::Text("material");
+      if(!model->getMaterial().expired() && ImGui::Button(model->getMaterial().lock()->getName().c_str(),ImVec2(100,100))){
+        model->setMaterial(m_selectedMaterial);
+      }
+      ImGui::Text("mesh");
+      if(!model->getMesh().expired() && ImGui::Button(model->getMesh().lock()->getName().c_str(),ImVec2(100,100))){
+        model->setMesh(m_selectedMesh);
+      }
+      if(ImGui::Button("delete")){
+        resourceManager.deleteResourse(m_selectedModel.lock()->getName());
+        m_actualScene = m_worldScene;
+        m_selectedActor = m_actualScene.lock()->getRoot();
       }
       if(ImGui::Button("close")){
         m_actualScene = m_worldScene;

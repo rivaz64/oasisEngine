@@ -14,9 +14,6 @@ namespace oaEngineSDK{
 void 
 Model::onSave(Serializer& serializer)
 { 
-  serializer.encodeNumber(getType());
-  serializer.encodeString(getName());
-
   if(!m_mesh.expired()){
     serializer.encodeNumber(1);
     auto mesh = m_mesh.lock();
@@ -40,7 +37,6 @@ Model::onSave(Serializer& serializer)
 void 
 Model::load(Serializer& serializer)
 {
-  setName(serializer.decodeString());
   auto b = serializer.decodeNumber();
   auto& resourses = ResoureManager::instance();
   if(b == 1){

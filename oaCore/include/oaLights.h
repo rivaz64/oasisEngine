@@ -36,7 +36,7 @@ struct DirectionalLight
   /**
    * @brief the direction of the light
   */
-  Vector4f direction = Vector4f(1,0,0,0);
+  Vector4f direction = Vector4f(1,-1,0,0);
 };
 
 /**

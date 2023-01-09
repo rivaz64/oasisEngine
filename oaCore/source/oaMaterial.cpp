@@ -16,9 +16,6 @@ namespace oaEngineSDK{
 void 
 Material::onSave(Serializer& serializer)
 {
-  serializer.encodeNumber(getType());
-  serializer.encodeString(getName());
-
   serializer.encodeNumber(getShader());
 
   auto types = getTextureChannels();
@@ -40,15 +37,17 @@ Material::onSave(Serializer& serializer)
 
   }
 
-  serializer.encodeMap(m_colors);
+  serializer.encodeSize(m_colors.size());
+  for(auto color : m_colors){
+    serializer.encodeString(color.first);
+    serializer.encodeColor(color.second);
+  }
 }
 
 void
 Material::load(Serializer& serializer)
 {
   auto& resourseManager = ResoureManager::instance();
-
-  setName(serializer.decodeString());
 
   setShader(serializer.decodeNumber());
 
@@ -66,7 +65,12 @@ Material::load(Serializer& serializer)
     }
   }
 
-  serializer.decodeMap(m_colors);
+  SIZE_T numOfColors = serializer.decodeSize();
+  for(SIZE_T i = 0; i<numOfColors; ++i){
+    String name = serializer.decodeString();
+    Color color = serializer.decodeColor();
+    m_colors.insert({name,color});
+  }
 }
 
 void 

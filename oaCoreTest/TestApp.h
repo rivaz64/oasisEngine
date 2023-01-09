@@ -71,7 +71,14 @@ public:
   void 
   initMeshScene();
   
-  
+  void
+  generateCube();
+
+  void 
+  initMaterialScene();
+
+  void 
+  initModelScene();
 
   //void
   //genMorbiusTrip();
@@ -89,9 +96,24 @@ public:
   SPtr<Scene> m_meshScene;
 
   /**
+   * @brief the scene for inspecting materials
+  */
+  SPtr<Scene> m_materialScene;
+
+  /**
+   * @brief the scene for inspecting models
+  */
+  SPtr<Scene> m_modelScene;
+
+  /**
    * @brief the model for the mesh inspector
   */
   SPtr<Model> m_meshModel;
+
+  /**
+   * @brief the model for the material inspector
+  */
+  SPtr<Model> m_materialModel;
 
   /**
    * @brief the material for the model of the mesh inspector
@@ -127,13 +149,10 @@ public:
 
   WPtr<Camera> m_debugCamera;
 
-  Vector<DirectionalLight> m_directionalLights;
-
-  Vector<PointLight> m_pointLights;
-
-  Vector<SpotLight> m_spotLights;
+  SPtr<StaticMesh> cube;
 
   Vector<WPtr<Actor>> agents;
+
 
   Vector4f m_ssaoConfig;
 
@@ -158,6 +177,8 @@ public:
   bool animInPlay=false;
 
   Path m_projectPath;
+
+  bool textureInspector = false;
 
   int numOfAgents = 6;
   SPtr<Actor> agent;
