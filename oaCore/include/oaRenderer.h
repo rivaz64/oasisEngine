@@ -18,7 +18,7 @@ class OA_CORE_EXPORT Renderer :
  public:
 
   virtual void
-  render(WPtr<Scene> /*scene*/,
+  render(WPtr<Actor> /*scene*/,
          WPtr<Camera> /*camForView*/,
          WPtr<Camera> /*camForFrustrum*/, 
          const Vector4f& /*config*/){}

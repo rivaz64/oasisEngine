@@ -80,6 +80,8 @@ public:
   void 
   initModelScene();
 
+  void 
+  components();
   //void
   //genMorbiusTrip();
 
@@ -88,22 +90,22 @@ public:
   /**
    * @brief the scene of the world
   */
-  SPtr<Scene> m_worldScene;
+  SPtr<Actor> m_worldScene;
 
   /**
    * @brief the scene for inspecting meshes
   */
-  SPtr<Scene> m_meshScene;
+  SPtr<Actor> m_meshScene;
 
   /**
    * @brief the scene for inspecting materials
   */
-  SPtr<Scene> m_materialScene;
+  SPtr<Actor> m_materialScene;
 
   /**
    * @brief the scene for inspecting models
   */
-  SPtr<Scene> m_modelScene;
+  SPtr<Actor> m_modelScene;
 
   /**
    * @brief the model for the mesh inspector
@@ -151,6 +153,8 @@ public:
 
   SPtr<StaticMesh> cube;
 
+  Vector<String> m_actors;
+
   Vector<WPtr<Actor>> agents;
 
 
@@ -161,6 +165,8 @@ public:
   //bool play = flase;
 
   bool isCreatingActor = false;
+
+  bool isAddingActor = false;
 
   bool isAddingComponent = false;
 

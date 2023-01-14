@@ -160,7 +160,7 @@ Deferred::onStartUp()
 }
 
 void 
-Deferred::render(WPtr<Scene> wScene,
+Deferred::render(WPtr<Actor> wScene,
          WPtr<Camera> wCamForView,
          WPtr<Camera> wCamForFrustrum, 
          const Vector4f& config)
@@ -213,7 +213,7 @@ Deferred::render(WPtr<Scene> wScene,
   m_directionalLights.clear();
   m_PointLights.clear();
   m_spotLights.clear();
-  vertex(scene->getRoot(),frustrum);
+  vertex(scene,frustrum);
   graphicsAPI.setPrimitiveTopology(PRIMITIVE_TOPOLOGY::kTrianlgeList);
   graphicsAPI.unsetShaders();
   //copy(m_colorTexture,m_renderTarget);
@@ -335,7 +335,6 @@ Deferred::setSkeletalMesh(WPtr<SkeletalMeshComponent> wComponent)
 void
 Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
 {
-  auto& childs = actor->getChilds();
   auto& resourseManager = ResoureManager::instance();
 
   Matrix4f actorTransform;
@@ -343,45 +342,91 @@ Deferred::vertex(SPtr<Actor> actor,const Frustum& frustum)
   auto& graphicsAPI = GraphicAPI::instance();
   graphicsAPI.unsetRenderTargetAndDepthStencil();
   graphicsAPI.setRenderTargetsAndDepthStencil(m_gBuffer,m_depthStencil);
-  for(auto child : childs){
-    actorTransform = child->getGlobalTransform();
-    auto components = child->getGraphicComponents();
-    for(auto& wComponent : components){
 
-      if(wComponent.expired()) continue;
-      auto component = wComponent.lock();
-      finalTransform = actorTransform*component->getTransform().getMatrix();
-      m_globalTransformBuffer->write(&finalTransform);
-      graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
-      if(component->getType() == COMPONENT_TYPE::kStaticMesh){
-        setStaticMesh(cast<StaticMeshComponent>(component)->getModel());
-      }
-      else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
-        setSkeletalMesh(cast<SkeletalMeshComponent>(component));
-      }
-      else if(component->getType() == COMPONENT_TYPE::kAmbientLight){
-        auto light = cast<AmbientLightComponent>(component)->m_light;
-        m_ambientLights.push_back(light);
-      }
-      else if(component->getType() == COMPONENT_TYPE::kDirectionalLight){
-        auto light = cast<DirectionalLightComponent>(component)->m_light;
-        light.direction = finalTransform*light.direction;
-        m_directionalLights.push_back(light);
-      }
-      else if(component->getType() == COMPONENT_TYPE::kPointLight){
-        auto light = cast<PointLightComponent>(component)->m_light;
-        light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
-        m_PointLights.push_back(light);
-      }
-      else if(component->getType() == COMPONENT_TYPE::kSpotLight){
-        auto light = cast<SpotLightComponent>(component)->m_light;
-        light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
-        light.direction = (finalTransform*Vector4f(light.direction.xyz,0.f));
-        m_spotLights.push_back(light);
-      }
+  
+  actorTransform = actor->getGlobalTransform();
+  auto components = actor->getGraphicComponents();
+  for(auto& wComponent : components){
+  
+    if(wComponent.expired()) continue;
+    auto component = wComponent.lock();
+    finalTransform = actorTransform*component->getTransform().getMatrix();
+    m_globalTransformBuffer->write(&finalTransform);
+    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+    if(component->getType() == COMPONENT_TYPE::kStaticMesh){
+      setStaticMesh(cast<StaticMeshComponent>(component)->getModel());
     }
+    else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
+      setSkeletalMesh(cast<SkeletalMeshComponent>(component));
+    }
+    else if(component->getType() == COMPONENT_TYPE::kAmbientLight){
+      auto light = cast<AmbientLightComponent>(component)->m_light;
+      m_ambientLights.push_back(light);
+    }
+    else if(component->getType() == COMPONENT_TYPE::kDirectionalLight){
+      auto light = cast<DirectionalLightComponent>(component)->m_light;
+      light.direction = finalTransform*light.direction;
+      m_directionalLights.push_back(light);
+    }
+    else if(component->getType() == COMPONENT_TYPE::kPointLight){
+      auto light = cast<PointLightComponent>(component)->m_light;
+      light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+      m_PointLights.push_back(light);
+    }
+    else if(component->getType() == COMPONENT_TYPE::kSpotLight){
+      auto light = cast<SpotLightComponent>(component)->m_light;
+      light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+      light.direction = (finalTransform*Vector4f(light.direction.xyz,0.f));
+      m_spotLights.push_back(light);
+    }
+  }
+
+  auto& childs = actor->getChilds();
+  for(auto child : childs){
     vertex(child,frustum);
   }
+  
+  
+
+  //for(auto child : childs){
+  //  actorTransform = child->getGlobalTransform();
+  //  auto components = child->getGraphicComponents();
+  //  for(auto& wComponent : components){
+  //
+  //    if(wComponent.expired()) continue;
+  //    auto component = wComponent.lock();
+  //    finalTransform = actorTransform*component->getTransform().getMatrix();
+  //    m_globalTransformBuffer->write(&finalTransform);
+  //    graphicsAPI.setVSBuffer(m_globalTransformBuffer, 0);
+  //    if(component->getType() == COMPONENT_TYPE::kStaticMesh){
+  //      setStaticMesh(cast<StaticMeshComponent>(component)->getModel());
+  //    }
+  //    else if(component->getType() == COMPONENT_TYPE::kSkeletalMesh){
+  //      setSkeletalMesh(cast<SkeletalMeshComponent>(component));
+  //    }
+  //    else if(component->getType() == COMPONENT_TYPE::kAmbientLight){
+  //      auto light = cast<AmbientLightComponent>(component)->m_light;
+  //      m_ambientLights.push_back(light);
+  //    }
+  //    else if(component->getType() == COMPONENT_TYPE::kDirectionalLight){
+  //      auto light = cast<DirectionalLightComponent>(component)->m_light;
+  //      light.direction = finalTransform*light.direction;
+  //      m_directionalLights.push_back(light);
+  //    }
+  //    else if(component->getType() == COMPONENT_TYPE::kPointLight){
+  //      auto light = cast<PointLightComponent>(component)->m_light;
+  //      light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+  //      m_PointLights.push_back(light);
+  //    }
+  //    else if(component->getType() == COMPONENT_TYPE::kSpotLight){
+  //      auto light = cast<SpotLightComponent>(component)->m_light;
+  //      light.location = (finalTransform*Vector4f(light.location,1.f)).xyz;
+  //      light.direction = (finalTransform*Vector4f(light.direction.xyz,0.f));
+  //      m_spotLights.push_back(light);
+  //    }
+  //  }
+  //  vertex(child,frustum);
+  //}
 }
 
 

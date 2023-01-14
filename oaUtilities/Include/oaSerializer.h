@@ -60,6 +60,12 @@ class OA_UTILITY_EXPORT Serializer
   Color
   decodeColor(); 
 
+  void
+  encodeTransform(const Transform& transform);
+
+  Transform
+  decodeTransform();
+
 
   template<class T>
   void 

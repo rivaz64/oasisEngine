@@ -132,7 +132,7 @@ class OA_CORE_EXPORT BaseApp
   /**
    * @brief the actual scene selected
   */
-  WPtr<Scene> m_actualScene;
+  WPtr<Actor> m_actualScene;
 
   ///**
   // * @brief takes the user to select a project for the engine to open

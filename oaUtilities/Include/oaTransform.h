@@ -117,7 +117,7 @@ class OA_UTILITY_EXPORT Transform
   bool m_changed = false;
  
 
- private:
+ public:
   /**
    * @brief where the Actor is in a 3D space
   */

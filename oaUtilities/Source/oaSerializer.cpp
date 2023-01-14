@@ -1,5 +1,5 @@
 #include "oaSerializer.h"
-
+#include "oaTransform.h"
 namespace oaEngineSDK{
 
 bool Serializer::open(Path path,bool write)
@@ -131,6 +131,25 @@ Serializer::decodeColor()
   Color color;
   file.read(reinterpret_cast<char*>(&color.r),sizeof(Color));
   return color;
+}
+
+void
+Serializer::encodeTransform(const Transform& transform)
+{
+  file.write(reinterpret_cast<const char*>(&transform.m_location),sizeof(Vector3f));
+  file.write(reinterpret_cast<const char*>(&transform.m_rotation),sizeof(Vector3f));
+  file.write(reinterpret_cast<const char*>(&transform.m_scale),sizeof(Vector3f));
+}
+
+Transform
+Serializer::decodeTransform()
+{
+  Transform transform;
+  file.read(reinterpret_cast<char*>(&transform.m_location),sizeof(Vector3f));
+  file.read(reinterpret_cast<char*>(&transform.m_rotation),sizeof(Vector3f));
+  file.read(reinterpret_cast<char*>(&transform.m_scale),sizeof(Vector3f));
+  transform.calculate();
+  return transform;
 }
 
 //

@@ -3,6 +3,8 @@
 namespace oaEngineSDK
 {
 
+REGISTER_CLASS(Component,DirectionalLightComponent);
+
 COMPONENT_TYPE::E 
 DirectionalLightComponent::getType()
 {

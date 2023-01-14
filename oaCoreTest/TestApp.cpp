@@ -283,13 +283,13 @@ TestApp::postInit()
 
   //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
-  m_worldScene = makeSPtr<Scene>();
+  m_worldScene = makeSPtr<Actor>();
+
+  m_worldScene->setName("scene");
 
   m_actualScene = m_worldScene;
 
-  m_worldScene->init();
-
-  m_selectedActor = m_worldScene->getRoot();
+  m_selectedActor = m_worldScene;
 
   initMeshScene();
   generateCube();
@@ -435,7 +435,7 @@ TestApp::onUpdate(float delta)
 
   OmniverseApi::instance().update();
 
-  m_actualScene.lock()->getRoot()->postUpdate();
+  m_actualScene.lock()->postUpdate();
 
   if(play){
     cw->update(.0625f);
@@ -560,8 +560,7 @@ void TestApp::childsInImgui(SPtr<Actor> parentActor)
 void
 TestApp::initMeshScene()
 {
-  m_meshScene =  makeSPtr<Scene>();
-  m_meshScene->init();
+  m_meshScene =  makeSPtr<Actor>();
   auto actor = makeSPtr<Actor>();
   auto component = makeSPtr<StaticMeshComponent>();
   m_meshModel = makeSPtr<Model>();
@@ -571,7 +570,7 @@ TestApp::initMeshScene()
   component->setModel(m_meshModel);
   actor->attachComponent(component);
   actor->attachComponent(makeSPtr<AmbientLightComponent>());
-  m_meshScene->getRoot()->attach(actor);
+  m_meshScene->attach(actor);
 }
 
 void 
@@ -669,8 +668,7 @@ TestApp::generateCube()
 void 
 TestApp::initMaterialScene()
 {
-  m_materialScene = makeSPtr<Scene>();
-  m_materialScene->init();
+  m_materialScene = makeSPtr<Actor>();
   auto actor = makeSPtr<Actor>();
   auto component = makeSPtr<StaticMeshComponent>();
   m_materialModel = makeSPtr<Model>();
@@ -679,20 +677,28 @@ TestApp::initMaterialScene()
   actor->attachComponent(component);
   actor->attachComponent(makeSPtr<AmbientLightComponent>());
   actor->attachComponent(makeSPtr<DirectionalLightComponent>());
-  m_materialScene->getRoot()->attach(actor);
+  m_materialScene->attach(actor);
 }
 
 void 
 TestApp::initModelScene()
 {
-  m_modelScene = makeSPtr<Scene>();
-  m_modelScene->init();
+  m_modelScene = makeSPtr<Actor>();
   auto actor = makeSPtr<Actor>();
   auto component = makeSPtr<StaticMeshComponent>();
   actor->attachComponent(component);
   actor->attachComponent(makeSPtr<AmbientLightComponent>());
   actor->attachComponent(makeSPtr<DirectionalLightComponent>());
-  m_modelScene->getRoot()->attach(actor);
+  m_modelScene->attach(actor);
+}
+
+void 
+TestApp::components()
+{
+  Vector<EventHandler<>> handler;
+  for(int type = 0; type != COMPONENT_TYPE::numOfComponents; ++type){
+
+  }
 }
 
 void 
@@ -720,7 +726,11 @@ TestApp::updateImGui()
 
   ImGui::Begin("Actor atributes");
   if(!m_selectedActor.expired()){
-
+    auto actor = m_selectedActor.lock();
+    ImGui::InputText("name",imguiString,64);
+    if(ImGui::Button("changeName")){
+      actor->setName(imguiString);
+    }
     auto selectedActor = m_selectedActor.lock();
     if(ImGui::Button("Add Component")){
       isAddingComponent = true;
@@ -952,6 +962,13 @@ TestApp::updateImGui()
       }
     }
 
+    if(ImGui::Button("save")){
+      Serializer serializer;
+      serializer.init(m_projectPath.string()+"/"+m_selectedActor.lock()->getName()+".oa",true);
+      m_selectedActor.lock()->onSave(serializer);
+      m_actors.push_back(m_selectedActor.lock()->getName());
+    }
+
     if(ImGui::Button("delete")){
       auto parent = selectedActor->getParent().lock();
       parent->unattach(m_selectedActor);
@@ -1017,8 +1034,8 @@ TestApp::updateImGui()
       if(ImGui::Button(material.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMaterial = cast<Material>(material);
         m_actualScene = m_materialScene;
-        m_selectedActor = m_materialScene->getRoot()->getChilds()[0];
-        m_materialScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMaterial(m_selectedMaterial);
+        m_selectedActor = m_materialScene->getChilds()[0];
+        m_materialScene->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMaterial(m_selectedMaterial);
         auto name = m_selectedMaterial.lock()->getName().c_str();
         auto nameSize =  m_selectedMaterial.lock()->getName().size();
         memcpy(imguiString,name,nameSize);
@@ -1031,8 +1048,8 @@ TestApp::updateImGui()
       if(ImGui::Button(mesh.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedMesh = cast<StaticMesh>(mesh);
         m_actualScene = m_meshScene;
-        m_selectedActor = m_meshScene->getRoot()->getChilds()[0];
-        m_meshScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMesh(m_selectedMesh);
+        m_selectedActor = m_meshScene->getChilds()[0];
+        m_meshScene->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->getModel().lock()->setMesh(m_selectedMesh);
         auto name = m_selectedMesh.lock()->getName().c_str();
         auto nameSize =  m_selectedMesh.lock()->getName().size();
         memcpy(imguiString,name,nameSize);
@@ -1048,11 +1065,24 @@ TestApp::updateImGui()
       if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedModel = cast<Model>(model);
         m_actualScene = m_modelScene;
-        m_selectedActor = m_modelScene->getRoot()->getChilds()[0];
-        m_modelScene->getRoot()->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->setModel(m_selectedModel);
+        m_selectedActor = m_modelScene->getChilds()[0];
+        m_modelScene->getChilds()[0]->getComponent<StaticMeshComponent>().lock()->setModel(m_selectedModel);
         auto name = m_selectedModel.lock()->getName().c_str();
         auto nameSize =  m_selectedModel.lock()->getName().size();
         memcpy(imguiString,name,nameSize);
+      }
+    }
+  }
+
+  if (ImGui::CollapsingHeader("actors")){
+    for(auto actor : m_actors){
+      if(ImGui::Button(actor.c_str(),ImVec2(100,100))){
+        Serializer serializer;
+        serializer.init(m_projectPath.string()+"/"+actor+".oa",false);
+        m_worldScene = makeSPtr<Actor>();
+        m_worldScene->load(serializer);
+        m_actualScene = m_worldScene;
+        m_worldScene->setName(actor);
       }
     }
   }
@@ -1066,7 +1096,7 @@ TestApp::updateImGui()
   }
   
   if (ImGui::CollapsingHeader("skeletal models")){
-    for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kModel)){
+    for(auto model : resourceManager.getAllResoursesOfType(RESOURSE_TYPE::kSkeletalModel)){
       if(ImGui::Button(model.lock()->getName().c_str(),ImVec2(100,100))){
         m_selectedSkeletalModel = cast<SkeletalModel>(model);
       }
@@ -1104,10 +1134,15 @@ TestApp::updateImGui()
   if(ImGui::Button("new Actor")){
     isCreatingActor = true;
   }
-  if(ImGui::Button("scene")){
-    m_selectedActor = m_actualScene.lock()->getRoot();
+
+  if(ImGui::Button("add Actor")){
+    isAddingActor = true;
   }
-  childsInImgui(m_actualScene.lock()->getRoot());
+
+  if(ImGui::Button(m_worldScene->getName().c_str())){
+    m_selectedActor = m_worldScene;
+  }
+  childsInImgui(m_actualScene.lock());
   ImGui::End();
 
   ImGui::Begin("configs");
@@ -1222,9 +1257,9 @@ TestApp::updateImGui()
   ImGui::Begin("scene");
   {
     if(ImGui::Button("new scene")){
-      m_worldScene = makeSPtr<Scene>();
-      m_worldScene->init();
-      m_selectedActor = m_worldScene->getRoot();
+      m_worldScene = makeSPtr<Actor>();
+      m_actualScene = m_worldScene;
+      m_selectedActor = m_worldScene;
     }
     ImGui::End();
   }
@@ -1313,10 +1348,10 @@ TestApp::updateImGui()
 
     ImGui::InputText("name",imguiString,64);
     if(ImGui::Button("create file")){
-      omniverse.createModel(imguiString,m_worldScene->getRoot());
+      omniverse.createModel(imguiString,m_worldScene);
     }
     if(ImGui::Button("open file")){
-      omniverse.connectToModel(imguiString,m_worldScene->getRoot());
+      omniverse.connectToModel(imguiString,m_worldScene);
     }
     if(ImGui::Button("close file")){
       omniverse.closeScene();
@@ -1376,6 +1411,7 @@ TestApp::updateImGui()
     for(auto& model : models){
       cast<Model>(model).lock()->save(serializer);
     }
+    m_worldScene->save(serializer);
   }
   if(ImGui::Button("load"))
   {
@@ -1415,7 +1451,9 @@ TestApp::updateImGui()
         resourceManager.registerResourse(model->getName(),model);
       }
     }
-    
+    Serializer localSerializer;
+    localSerializer.init(m_projectPath.string()+"/"+"scene.oa",false);
+    m_worldScene->load(localSerializer);
   }
   ImGui::End();
 
@@ -1444,11 +1482,11 @@ TestApp::updateImGui()
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedMesh.lock()->getName());
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene;
       }
       if(ImGui::Button("close")){
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene;
       }
       
     }
@@ -1494,11 +1532,11 @@ TestApp::updateImGui()
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedMaterial.lock()->getName());
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene;
       }
       if(ImGui::Button("close")){
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene;
       }
     }
     ImGui::End();
@@ -1522,17 +1560,32 @@ TestApp::updateImGui()
       if(ImGui::Button("delete")){
         resourceManager.deleteResourse(m_selectedModel.lock()->getName());
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene.lock();
       }
       if(ImGui::Button("close")){
         m_actualScene = m_worldScene;
-        m_selectedActor = m_actualScene.lock()->getRoot();
+        m_selectedActor = m_actualScene.lock();
       }
       
     }
     ImGui::End();
   }
 
+  if(isAddingActor)
+  {
+    ImGui::Begin("actor to add");
+    for(auto actor : m_actors){
+      if(ImGui::Button(actor.c_str(),ImVec2(100,100))){
+        Serializer serializer;
+        serializer.init(m_projectPath.string()+"/"+actor+".oa",false);
+        auto newActor = makeSPtr<Actor>();
+        newActor->setName(actor+"_");
+        newActor->load(serializer);
+        m_selectedActor.lock()->attach(newActor);
+      }
+    }
+    ImGui::End();
+  }
   //ImGui::Begin("crowds");
   //
   //if(ImGui::Button("crowd test")){

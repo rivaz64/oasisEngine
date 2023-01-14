@@ -71,7 +71,7 @@ class OA_CORE_EXPORT ResoureManager :
       return m_resourses[StringUtilities::getStringId(name)];
     }
     else{
-      WPtr<Resourse>();
+      return WPtr<Resourse>();
     }
   }
 

@@ -25,10 +25,8 @@ enum FLAGS{
 void 
 Actor::onSave(Serializer& serializer)
 {
-  //serializer.encodeNumber(getType());
-  serializer.encodeString(getName());
   auto& transform = GetActorTransform();
-  serializer.file.write(reinterpret_cast<const char*>(&transform),sizeof(Vector3f)*3);
+  serializer.encodeTransform(transform);
   SIZE_T num = getNumOfComponents();
   serializer.encodeSize(num);
   for(auto& components : m_components){
@@ -46,18 +44,19 @@ Actor::onSave(Serializer& serializer)
 void 
 Actor::load(Serializer& serializer)
 {
-  //serializer.decodeNumber();
-  setName(serializer.decodeString());
   auto& transform = GetActorTransform();
-  serializer.file.read(reinterpret_cast<char*>(&transform),sizeof(Vector3f)*3);
+  transform = serializer.decodeTransform();
   SIZE_T num = serializer.decodeSize();
   for(SIZE_T n = 0; n<num; ++n){
     auto componentType = serializer.decodeNumber();
-    if(componentType == COMPONENT_TYPE::kStaticMesh){
-      auto component = makeSPtr<StaticMeshComponent>();
-      attachComponent(component);
-      component->load(serializer);
-    }
+    auto component = Factory<Component>::create(componentType);
+    attachComponent(component);
+    component->load(serializer);
+    //if(componentType == COMPONENT_TYPE::kStaticMesh){
+    //  auto component = makeSPtr<StaticMeshComponent>();
+    //  attachComponent(component);
+    //  component->load(serializer);
+    //}
   }
   SIZE_T numOfChilds = serializer.decodeSize();
   for(SIZE_T i = 0; i<numOfChilds; ++i){

@@ -119,7 +119,7 @@ enum E{
 
 namespace COMPONENT_TYPE{
 enum E{
-  kNone = 0,
+  kNone = -1,
   kGrpahics,
 	kStaticMesh,
 	kSkeletalMesh,
@@ -127,7 +127,8 @@ enum E{
 	kPointLight,
 	kSpotLight,
 	kCamera,
-	kAmbientLight
+	kAmbientLight,
+	numOfComponents
 };
 }
 

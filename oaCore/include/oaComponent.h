@@ -46,8 +46,6 @@ class OA_CORE_EXPORT Component :
 
 public:
   WPtr<Actor> m_owner;
-
-  
 };
 
 }

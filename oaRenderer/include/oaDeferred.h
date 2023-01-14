@@ -21,7 +21,7 @@ class Deferred :
   onStartUp() override;
 
   void
-  render(WPtr<Scene> scene,
+  render(WPtr<Actor> scene,
          WPtr<Camera> camForView,
          WPtr<Camera> camForFrustrum, 
          const Vector4f& config) override;

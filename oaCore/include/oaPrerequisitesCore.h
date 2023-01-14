@@ -3,6 +3,7 @@
 
 #include "oaPrerequisitesUtilities.h"
 #include "oaForDecCore.h"
+#include "oaFactory.h"
 
 #if OA_PLATFORM == OA_PLATFORM_WIN32
 # if OA_COMPILER == OA_COMPILER_MSVC

@@ -3,8 +3,10 @@
 namespace oaEngineSDK
 {
 
+REGISTER_CLASS(Component,PointLightComponent);
+
 COMPONENT_TYPE::E 
-oaEngineSDK::PointLightComponent::getType()
+PointLightComponent::getType()
 {
   return COMPONENT_TYPE::kPointLight;
 }

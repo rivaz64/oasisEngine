@@ -6,6 +6,8 @@
 namespace oaEngineSDK
 {
 
+REGISTER_CLASS(Component,StaticMeshComponent);
+
 COMPONENT_TYPE::E 
 StaticMeshComponent::getType()
 {

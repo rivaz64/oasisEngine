@@ -12,7 +12,7 @@
 
 namespace oaEngineSDK{
 
-
+REGISTER_CLASS(Component,GraphicsComponent);
 
 COMPONENT_TYPE::E
 GraphicsComponent::getType()
