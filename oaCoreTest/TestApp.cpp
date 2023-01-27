@@ -1411,7 +1411,10 @@ TestApp::updateImGui()
     for(auto& model : models){
       cast<Model>(model).lock()->save(serializer);
     }
-    m_worldScene->save(serializer);
+    serializer.encodeSize(m_actors.size());
+    for(auto actor : m_actors){
+      serializer.encodeString(actor);
+    }
   }
   if(ImGui::Button("load"))
   {
@@ -1451,9 +1454,13 @@ TestApp::updateImGui()
         resourceManager.registerResourse(model->getName(),model);
       }
     }
-    Serializer localSerializer;
-    localSerializer.init(m_projectPath.string()+"/"+"scene.oa",false);
-    m_worldScene->load(localSerializer);
+    SIZE_T numOfActors = serializer.decodeSize();
+    for(SIZE_T i = 0; i<numOfActors;++i){
+      m_actors.push_back(serializer.decodeString());
+    }
+    //Serializer localSerializer;
+    //localSerializer.init(m_projectPath.string()+"/"+"scene.oa",false);
+    //m_worldScene->load(localSerializer);
   }
   ImGui::End();
 
