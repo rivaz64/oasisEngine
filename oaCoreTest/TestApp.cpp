@@ -57,6 +57,11 @@
 #include <SpatialPartition.h>
 #include "TestAgent.h"
 #include "ImGuiFileDialog.h"
+#include "ImGuizmo.h"
+//#include "ImSequencer.h"
+//#include "ImZoomSlider.h"
+//#include "ImCurveEdit.h"
+//#include "GraphEditor.h"
 extern "C" {
 #include <lua\lua.h>
 #include <lua\lualib.h>
@@ -261,27 +266,13 @@ TestApp::onInit()
 void 
 TestApp::postInit()
 {
-  //SamplerDesc sampDesc;
-  //ZeroMemory( &sampDesc, sizeof(sampDesc) );
-  //sampDesc.filter = FILTER::kMinMagMipLinear;
-  //sampDesc.addressU = TEXTURE_ADDRESS_MODE::kWrap;
-  //sampDesc.addressV = TEXTURE_ADDRESS_MODE::kWrap;
-  //sampDesc.addressW = TEXTURE_ADDRESS_MODE::kWrap;
-  //sampDesc.comparison = COMPARISON_FUNC::kNever;
-  //sampDesc.minLOD = 0.0f;
-  //sampDesc.maxLOD = Math::MAX_FLOAT;
-
   auto& graphicAPI = GraphicAPI::instance();
-  
-
 
   IMGUI_CHECKVERSION();
 
   initImGui();
 
   graphicAPI.setBackgroundColor(Color::OCEAN);
-
-  //ResoureManager::instancePtr()->loadTexture(Path("textures/wall.jpg"));
 
   m_worldScene = makeSPtr<Actor>();
 
@@ -327,21 +318,6 @@ TestApp::onUpdate(float delta)
     m_camera->rotateWithMouse(mouseDelta);
   }
 
-  //if(m_controlledActor){
-  //  if (inputManager.(VK_RBUTTON))
-  //  {
-  //    m_controlledActor->getComponent<CameraComponent>()->
-  //      getCamera()->rotateWithMouse(inputManager.getMouseDelta());
-  //  }
-  //}
-  //else{
-  //  if (inputManager.getInput(VK_RBUTTON))
-  //  {
-  //    m_camera->rotateWithMouse(inputManager.getMouseDelta());
-  //  }
-  //
-  //  m_camera->update();
-  //}
   if(m_mouse->isButtonDown(BUTTON::kRight)){
     if(m_keyboard->isKeyDown(KEY::kA)){
       m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
@@ -364,71 +340,7 @@ TestApp::onUpdate(float delta)
     }
   }
   
-  //if(!m_controlledActor){
-  //  switch (input)
-  //  {
-  //  case 'A':
-  //    m_camera->moveCamera(Vector3f(-m_secondPerFrame,0,0));
-  //    break;
-  //
-  //  case 'D':
-  //    m_camera->moveCamera(Vector3f(m_secondPerFrame,0,0));
-  //    break;
-  //
-  //  case 'W':
-  //    m_camera->moveCamera(Vector3f(0,0,m_secondPerFrame));
-  //    break;
-  //
-  //  case 'S':
-  //    m_camera->moveCamera(Vector3f(0,0,-m_secondPerFrame));
-  //    break;
-  //
-  //  case 'Q':
-  //    m_camera->moveCamera(Vector3f(0,m_secondPerFrame,0));
-  //    break;
-  //
-  //  case 'E':
-  //    m_camera->moveCamera(Vector3f(0,-m_secondPerFrame,0));
-  //    break;
-  //
-  //  default:
-  //    break;
-  //  }
-  //}
-  //else{
-  //  switch (input)
-  //  {
-  //  case 'A':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(-m_secondPerFrame,0,0));
-  //    break;
-  //
-  //  case 'D':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(m_secondPerFrame,0,0));
-  //    break;
-  //
-  //  case 'W':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(0,0,m_secondPerFrame));
-  //    break;
-  //
-  //  case 'S':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(0,0,-m_secondPerFrame));
-  //    break;
-  //
-  //  case 'Q':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(0,m_secondPerFrame,0));
-  //    break;
-  //
-  //  case 'E':
-  //    m_controlledActor->GetActorTransform().move(Vector3f(0,-m_secondPerFrame,0));
-  //    break;
-  //
-  //  default:
-  //    break;
-  //  }
-  //}
   m_camera->update();
-
-  
 
   newImGuiFrame();
   updateImGui();
@@ -453,23 +365,10 @@ TestApp::draw()
   auto& graphicsAPI = GraphicAPI::instance();
 
   auto& resourseManager = ResoureManager::instance();
-   
-  //
-  ////m_camera->setCamera();
 
   auto& renderer = Renderer::instance();
 
-  //graphicsAPI.renderTest();
-
-  //if(m_controlledActor){
-  //  renderer.render(m_actualScene,m_controlledActor->getComponent<CameraComponent>()->getCamera(),m_controlledActor->getComponent<CameraComponent>()->getCamera());
-  //}
-  //else if(m_debugCamera){
-  //  renderer.render(m_actualScene,m_camera,m_debugCamera);
-  //}
-  //else{
-    renderer.render(m_actualScene,m_camera,m_camera,m_ssaoConfig);
-  //}
+  renderer.render(m_actualScene,m_camera,m_camera,m_ssaoConfig);
   
   
   renderImGui();
@@ -515,6 +414,7 @@ TestApp::newImGuiFrame()
   
   if (!api.m_actualGraphicAPI.empty()) {
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
   }
   
 }
@@ -522,9 +422,6 @@ TestApp::newImGuiFrame()
 void TestApp::renderImGui()
 {
   auto& api = GraphicAPI::instance();
-  //ImGuiIO& io = ImGui::GetIO();
-  //io.DisplaySize.x = static_cast<float>(api.m_windowWidth);
-  //io.DisplaySize.y = static_cast<float>(api.m_windowHeight);
   
   if (!api.m_actualGraphicAPI.empty()) {
     ImGui::Render();
@@ -1593,6 +1490,32 @@ TestApp::updateImGui()
     }
     ImGui::End();
   }
+
+  
+  ImGui::Begin("gizmos");
+  {
+    ImGui::Checkbox("grid",&m_hasGrid);
+    ImGui::End();
+  }
+
+  {
+    ImGuizmo::SetRect(0, 0, 1200, 800);
+    if(m_hasGrid)
+    ImGuizmo::DrawGrid((const float*)m_camera->getViewMatrix().transposed().getData(), (const float*)m_camera->getProjectionMatrix().transposed().getData(), (const float*)Matrix4f::IDENTITY.getData(), 100.f);
+      //ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Appearing);
+      //ImGui::SetNextWindowPos(ImVec2(400,20), ImGuiCond_Appearing);
+      ////ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
+      //ImGui::Begin("Gizmo", 0, gizmoWindowFlags);
+      //ImGuizmo::SetDrawlist();
+      //float windowWidth = (float)ImGui::GetWindowWidth();
+      //float windowHeight = (float)ImGui::GetWindowHeight();
+      //ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+      //ImGui::End();
+      //viewManipulateRight = ImGui::GetWindowPos().x + windowWidth;
+      //viewManipulateTop = ImGui::GetWindowPos().y;
+      //ImGuiWindow* window = ImGui::GetCurrentWindow();
+      //gizmoWindowFlags = ImGui::IsWindowHovered() && ImGui::IsMouseHoveringRect(window->InnerRect.Min, window->InnerRect.Max) ? ImGuiWindowFlags_NoMove : 0;
+   }
   //ImGui::Begin("crowds");
   //
   //if(ImGui::Button("crowd test")){

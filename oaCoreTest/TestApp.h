@@ -186,6 +186,8 @@ public:
 
   bool textureInspector = false;
 
+  bool m_hasGrid=true;
+
   int numOfAgents = 6;
   SPtr<Actor> agent;
   cwSDKtoolkit::SPtr<cwSDKtoolkit::CrowdSimulator> cw;

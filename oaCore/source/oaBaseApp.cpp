@@ -79,7 +79,7 @@ registerBaseClass(){
 }
 
 BaseApp::BaseApp()
-  : m_windowName("Oasis Engine"), m_windowSize(800,600)
+  : m_windowName("Oasis Engine"), m_windowSize(1200,800)
 {
 }
 
