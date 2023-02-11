@@ -177,7 +177,6 @@
     <ClInclude Include="include\oaCapsule.h" />
     <ClInclude Include="Include\oaColor.h" />
     <ClInclude Include="Include\oaEventSystem.h" />
-    <ClInclude Include="include\oaFactory.h" />
     <ClInclude Include="Include\oaForDecUtilities.h" />
     <ClInclude Include="Include\oaFrustum.h" />
     <ClInclude Include="Include\oaGrid2D.h" />
@@ -221,7 +220,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EventSystem.cpp" />
-    <ClCompile Include="oaFactory.cpp" />
     <ClCompile Include="oaVector4I.cpp" />
     <ClCompile Include="Source\oaAABB.cpp" />
     <ClCompile Include="source\oaCapsule.cpp" />

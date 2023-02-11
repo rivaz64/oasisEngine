@@ -108,6 +108,7 @@ ResoureManager::loadDefaultShaders()
   createPixelShader("p_copy");
   createPixelShader("p_color");
   createPixelShader("p_downSample");
+  createPixelShader("p_add");
   //createPixelShader("shadowMapper");
   //createPixelShader("directionalLight");
   //createPixelShader("pointLight");
@@ -185,6 +186,7 @@ ResoureManager::loadDefaultShaders()
   createShaderProgram("HBlur","v_screen","p_HBlur");
   createShaderProgram("VBlur","v_screen","p_VBlur");
   createShaderProgram("downSample","v_screen","p_downSample");
+  createShaderProgram("add","v_screen","p_add");
   createShaderProgram("shadowMapper","v_SimpleVertex","p_color");
   createShaderProgram("Tesselator","v_Tesselation","h_hullQuad","d_domainQuad","p_color");
   SPtr<AdaptativeShader> gBuffer = makeSPtr<AdaptativeShader>();

@@ -113,6 +113,7 @@ Deferred::onStartUp()
   m_blur = graphicsAPI.createTexture();
   m_diffuseLight = graphicsAPI.createTexture();
   m_specularLight = graphicsAPI.createTexture();
+  m_finalRender = graphicsAPI.createTexture();
   m_shadowMap = graphicsAPI.createTexture();
   m_shadowMap->init({2048,2048},BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_blendState0 = graphicsAPI.createBlendState();
@@ -160,16 +161,25 @@ Deferred::onStartUp()
 }
 
 void 
+Deferred::newFrame()
+{
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.clearRenderTarget(m_renderTarget);
+  graphicsAPI.clearDepthStencil(m_depthStencil);
+  graphicsAPI.setRenderTargetAndDepthStencil(m_renderTarget,m_depthStencil);
+}
+
+void 
 Deferred::render(WPtr<Actor> wScene,
          WPtr<Camera> wCamForView,
          WPtr<Camera> wCamForFrustrum, 
          const Vector4f& config)
 {
   if(wScene.expired() || wCamForView.expired()) return;
-
+  
   auto scene = wScene.lock();
   auto camForView = wCamForView.lock();
-
+  
   auto& graphicsAPI = GraphicAPI::instance();
   
   graphicsAPI.clearRenderTarget(m_colorTexture);
@@ -178,13 +188,13 @@ Deferred::render(WPtr<Actor> wScene,
   graphicsAPI.clearRenderTarget(m_specularTexture);
   graphicsAPI.clearRenderTarget(m_emisiveTexture);
   graphicsAPI.clearRenderTarget(m_lightTexture);
-  graphicsAPI.clearRenderTarget(m_renderTarget);
+  
   graphicsAPI.clearRenderTarget(m_ssao);
   graphicsAPI.clearRenderTarget(m_diffuseLight);
+  graphicsAPI.clearRenderTarget(m_finalRender);
   graphicsAPI.clearRenderTarget(m_specularLight);
-  graphicsAPI.clearDepthStencil(m_depthStencil);
   graphicsAPI.clearRenderTarget(m_downSapmle);
-
+  
   
   graphicsAPI.setBlendState(m_blendState0);
   
@@ -206,6 +216,7 @@ Deferred::render(WPtr<Actor> wScene,
   //scene->meshesToRender(scene->getRoot(),frustrum,toRender,transparents);
   
   setCamera(camForView);
+  
   //debug(toRender);
   //gBuffer(toRender);
   m_tessBufer->write(&config);
@@ -226,9 +237,10 @@ Deferred::render(WPtr<Actor> wScene,
   directionalLight(camForView->getViewMatrix());
   pointLight(camForView->getViewMatrix());
   spotLight(camForView->getViewMatrix());
-  //// copy(m_colorTexture,m_renderTarget);
-  ////shadows(spotLights,scene);
+  ////// copy(m_colorTexture,m_renderTarget);
+  //////shadows(spotLights,scene);
   aplylights();
+  add(m_renderTarget,m_finalRender,m_renderTarget);
   //copy(m_specularLight,m_renderTarget);
   
 }
@@ -597,6 +609,23 @@ Deferred::copy(SPtr<Texture> textureIn, SPtr<Texture> textureOut)
 
 
 
+void 
+Deferred::add(SPtr<Texture> prevTexture, SPtr<Texture> textureIn, SPtr<Texture> textureOut)
+{
+  auto& resourseManager = ResoureManager::instance();
+  auto& graphicsAPI = GraphicAPI::instance();
+  graphicsAPI.unsetRenderTargetAndDepthStencil();
+  cast<Shader>(resourseManager.getResourse("add")).lock()->set();
+  graphicsAPI.setRenderTarget(textureOut);
+  graphicsAPI.setTexture(prevTexture,0);
+  graphicsAPI.setTexture(textureIn,1);
+  graphicsAPI.setTexture(m_depthStencil,2);
+  
+  setScreen();
+
+  graphicsAPI.unsetTextures(5);
+}
+
 void
 Deferred::aplylights()
 {
@@ -605,7 +634,7 @@ Deferred::aplylights()
   cast<Shader>(resourseManager.getResourse("lights")).lock()->set();
   
   graphicsAPI.setPSBuffer(m_size,3);
-  graphicsAPI.setRenderTarget(m_renderTarget);
+  graphicsAPI.setRenderTarget(m_finalRender);
   graphicsAPI.setTexture(m_colorTexture,0);
   graphicsAPI.setTexture(m_diffuseLight,1);
   graphicsAPI.setTexture(m_specularLight,2);
@@ -833,6 +862,7 @@ Deferred::setSize(const Vector2U& size)
   m_ssao->release();
   m_diffuseLight->release();
   m_specularLight->release();
+  m_finalRender->release();
   m_downSapmle->release();
   m_shadowMap->release();
   auto iSize = Vector2I(size.x,size.y);
@@ -853,6 +883,7 @@ Deferred::setSize(const Vector2U& size)
   m_blur->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_diffuseLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_specularLight->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
+  m_finalRender->init(iSize,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   m_downSapmle->init(iSize/4,BIND::kRenderTarget,FORMAT::kR32G32B32A32Float);
   
   auto sizef = Vector2f(static_cast<float>(size.x),static_cast<float>(size.y));

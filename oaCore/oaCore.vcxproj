@@ -186,6 +186,7 @@
     <ClInclude Include="include\oaCrowdSim.h" />
     <ClInclude Include="include\oaDepthStencil.h" />
     <ClInclude Include="include\oaDirectionalLightComponent.h" />
+    <ClInclude Include="include\oaFactory.h" />
     <ClInclude Include="include\oaFlags.h" />
     <ClInclude Include="include\oaForDecCore.h" />
     <ClInclude Include="include\oaGraphicAPI.h" />

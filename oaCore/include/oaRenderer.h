@@ -17,12 +17,29 @@ class OA_CORE_EXPORT Renderer :
 {
  public:
 
+  /**
+   * @brief clears everything for rendering a new frame
+  */
+  virtual void
+  newFrame(){}
+
+  /**
+   * @brief renders a scene
+   * @param  
+   * @param  
+   * @param  
+   * @param  
+  */
   virtual void
   render(WPtr<Actor> /*scene*/,
          WPtr<Camera> /*camForView*/,
          WPtr<Camera> /*camForFrustrum*/, 
          const Vector4f& /*config*/){}
 
+  /**
+   * @brief sets the size of what is going to render
+   * @param  
+  */
   virtual void
   setSize(const Vector2U& /*size*/) {}
 

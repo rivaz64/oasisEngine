@@ -12,7 +12,7 @@
 #include "oaLoader.h"
 #include "oaLights.h"
 #include <CrowdSimulator.h>
-
+#include "imgui_internal.h"
 namespace oaEngineSDK{
 
 class TestApp :
@@ -46,6 +46,9 @@ public:
 
   void
   updateImGui();
+
+  void
+  ImGuiBehind();
 
   void
   childsInImgui(SPtr<Actor> parentActor);
@@ -187,6 +190,9 @@ public:
   bool textureInspector = false;
 
   bool m_hasGrid=true;
+
+  ImGuiContext* m_imguiState1;
+  ImGuiContext *m_imguiState2;
 
   int numOfAgents = 6;
   SPtr<Actor> agent;

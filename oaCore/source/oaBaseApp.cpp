@@ -215,11 +215,14 @@ BaseApp::loadPlugIn(String DLL)
   }
 
   Function foundFunction = reinterpret_cast<Function>(GetProcAddress(hGetProcIDDLL, "initPlugIn"));
-  if(!foundFunction())
-  {
-    print("Could not find function: "+DLL);
-    return;
+  if(foundFunction){
+    foundFunction();
   }
+  //if(!foundFunction())
+  //{
+  //  print("Could not find function: "+DLL);
+  //  return;
+  //}
   print("loaded "+ DLL);
 #endif
 }

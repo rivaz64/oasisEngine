@@ -44,6 +44,17 @@ class OA_CORE_EXPORT Component :
   virtual COMPONENT_TYPE::E
   getType() {return COMPONENT_TYPE::kNone;}
 
+  /**
+   * @brief creates a component of type
+   * @param type 
+   * @return 
+  */
+  static SPtr<Component>
+  create(uint32 type);
+
+  static const Map<uint32,String>& 
+  getNames();
+
 public:
   WPtr<Actor> m_owner;
 };

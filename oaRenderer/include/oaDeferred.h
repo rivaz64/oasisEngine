@@ -21,6 +21,9 @@ class Deferred :
   onStartUp() override;
 
   void
+  newFrame() override;
+
+  void
   render(WPtr<Actor> scene,
          WPtr<Camera> camForView,
          WPtr<Camera> camForFrustrum, 
@@ -89,6 +92,14 @@ class Deferred :
   void
   copy(SPtr<Texture> textureIn,SPtr<Texture> textureOut);
 
+  /**
+   * @brief adds a texture in front of another
+   * @param prevTexture 
+   * @param textureIn 
+   * @param textureOut 
+  */
+  void
+  add(SPtr<Texture> prevTexture,SPtr<Texture> textureIn,SPtr<Texture> textureOut);
   
 
   /**
@@ -167,6 +178,8 @@ class Deferred :
   Vector<SPtr<Texture>> m_lightTexturesBuffer;
 
   SPtr<Texture> m_renderTarget;
+
+  SPtr<Texture> m_finalRender;
 
   SPtr<Texture> m_depthStencil;
 

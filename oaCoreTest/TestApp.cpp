@@ -301,7 +301,8 @@ TestApp::postInit()
   handler.suscribe<Camera,&Camera::moveCamera>(m_camera.get());
 
   //genMorbiusTrip();
-
+//m_imguiState1 = ImGui::GetCurrentContext();
+//m_imguiState2 = ImGui::CreateContext();
 }
 
 
@@ -342,9 +343,6 @@ TestApp::onUpdate(float delta)
   
   m_camera->update();
 
-  newImGuiFrame();
-  updateImGui();
-
   OmniverseApi::instance().update();
 
   m_actualScene.lock()->postUpdate();
@@ -368,11 +366,21 @@ TestApp::draw()
 
   auto& renderer = Renderer::instance();
 
-  renderer.render(m_actualScene,m_camera,m_camera,m_ssaoConfig);
   
+  //
+  renderer.newFrame();
+  //newImGuiFrame();
   
+  //renderImGui();
+  ImGui::SetCurrentContext(m_imguiState1);
+  newImGuiFrame();
+  ImGuiBehind();
   renderImGui();
-
+  renderer.render(m_actualScene,m_camera,m_camera,m_ssaoConfig);
+  ImGui::SetCurrentContext(m_imguiState2);
+  newImGuiFrame();
+  updateImGui();
+  renderImGui();
 }
 
 void 
@@ -380,7 +388,8 @@ TestApp::initImGui()
 {
   auto& api = GraphicAPI::instance();
   if (!api.m_actualGraphicAPI.empty()) {
-    ImGui::CreateContext();
+    m_imguiState1 = ImGui::CreateContext();
+    ImGui::SetCurrentContext(m_imguiState1);
     ImGui::StyleColorsDark();
   }
   
@@ -394,6 +403,23 @@ TestApp::initImGui()
     //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)api.getWindow(), true);
     //ImGui_ImplOpenGL3_Init("#version 130");
   }
+  if (!api.m_actualGraphicAPI.empty()) {
+    m_imguiState2 = ImGui::CreateContext();
+    ImGui::SetCurrentContext(m_imguiState2);
+    ImGui::StyleColorsDark();
+  }
+  
+  if (api.m_actualGraphicAPI == "DIRECTX11") {
+    ImGui_ImplWin32_Init(m_window);
+    ImGui_ImplDX11_Init(
+      (ID3D11Device*)api.getDevice(), 
+      (ID3D11DeviceContext*)api.getContext());
+  }
+  if (api.m_actualGraphicAPI == "OPENGL") {
+    //ImGui_ImplGlfw_InitForOpenGL((GLFWwindow*)api.getWindow(), true);
+    //ImGui_ImplOpenGL3_Init("#version 130");
+  }
+
   
 
 }
@@ -414,7 +440,7 @@ TestApp::newImGuiFrame()
   
   if (!api.m_actualGraphicAPI.empty()) {
     ImGui::NewFrame();
-    ImGuizmo::BeginFrame();
+    //ImGuizmo::EndFrame();
   }
   
 }
@@ -1070,35 +1096,43 @@ TestApp::updateImGui()
 
     ImGui::Begin("add component");
 
-    if(ImGui::Button("Static Mesh")){
-      selectedActor->attachComponent(makeSPtr<StaticMeshComponent>());
-      isAddingComponent = false;
+    auto& components = Component::getNames();
+    for(auto& component : components){
+      if(ImGui::Button(component.second.c_str())){
+        selectedActor->attachComponent(Component::create(component.first));
+        isAddingComponent = false;
+      }
     }
 
-    if(ImGui::Button("Skeletal Mesh")){
-      selectedActor->attachComponent(makeSPtr<SkeletalMeshComponent>());
-      isAddingComponent = false;
-    }
-
-    if(ImGui::Button("Directioal Light")){
-      selectedActor->attachComponent(makeSPtr<DirectionalLightComponent>());
-      isAddingComponent = false;
-    }
-
-    if(ImGui::Button("Point Light")){
-      selectedActor->attachComponent(makeSPtr<PointLightComponent>());
-      isAddingComponent = false;
-    }
-
-    if(ImGui::Button("Spot Light")){
-      selectedActor->attachComponent(makeSPtr<SpotLightComponent>());
-      isAddingComponent = false;
-    }
-
-    if(ImGui::Button("AmbientLight Light")){
-      selectedActor->attachComponent(makeSPtr<AmbientLightComponent>());
-      isAddingComponent = false;
-    }
+    //if(ImGui::Button("Static Mesh")){
+    //  selectedActor->attachComponent(makeSPtr<StaticMeshComponent>());
+    //  isAddingComponent = false;
+    //}
+    //
+    //if(ImGui::Button("Skeletal Mesh")){
+    //  selectedActor->attachComponent(makeSPtr<SkeletalMeshComponent>());
+    //  isAddingComponent = false;
+    //}
+    //
+    //if(ImGui::Button("Directioal Light")){
+    //  selectedActor->attachComponent(makeSPtr<DirectionalLightComponent>());
+    //  isAddingComponent = false;
+    //}
+    //
+    //if(ImGui::Button("Point Light")){
+    //  selectedActor->attachComponent(makeSPtr<PointLightComponent>());
+    //  isAddingComponent = false;
+    //}
+    //
+    //if(ImGui::Button("Spot Light")){
+    //  selectedActor->attachComponent(makeSPtr<SpotLightComponent>());
+    //  isAddingComponent = false;
+    //}
+    //
+    //if(ImGui::Button("AmbientLight Light")){
+    //  selectedActor->attachComponent(makeSPtr<AmbientLightComponent>());
+    //  isAddingComponent = false;
+    //}
 
     //if(ImGui::Button("crowd")){
     //  selectedActor->attachComponent(makeSPtr<CrowdComponent>());
@@ -1491,7 +1525,15 @@ TestApp::updateImGui()
     ImGui::End();
   }
 
-  
+  ImGui::Begin("plugIns");
+  {
+    ImGui::InputText("dll",imguiString,64);
+    if(ImGui::Button("load")){
+      loadPlugIn(imguiString);
+    }
+    ImGui::End();
+  }
+
   ImGui::Begin("gizmos");
   {
     ImGui::Checkbox("grid",&m_hasGrid);
@@ -1499,9 +1541,7 @@ TestApp::updateImGui()
   }
 
   {
-    ImGuizmo::SetRect(0, 0, 1200, 800);
-    if(m_hasGrid)
-    ImGuizmo::DrawGrid((const float*)m_camera->getViewMatrix().transposed().getData(), (const float*)m_camera->getProjectionMatrix().transposed().getData(), (const float*)Matrix4f::IDENTITY.getData(), 100.f);
+    
       //ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Appearing);
       //ImGui::SetNextWindowPos(ImVec2(400,20), ImGuiCond_Appearing);
       ////ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImVec4)ImColor(0.35f, 0.3f, 0.3f));
@@ -1582,6 +1622,20 @@ TestApp::updateImGui()
   //}
   //
   //ImGui::End();
+}
+
+void
+TestApp::ImGuiBehind()
+{
+  ImGuizmo::BeginFrame();
+  ImGuizmo::SetRect(0, 0, 1200, 800);
+  if(m_hasGrid){
+  
+      ImGuizmo::DrawGrid((const float*)m_camera->getViewMatrix().transposed().getData(), (const float*)m_camera->getProjectionMatrix().transposed().getData(), (const float*)Matrix4f::IDENTITY.getData(), 216.f);
+
+  }
+
+    
 }
 
 }
